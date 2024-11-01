@@ -1,0 +1,136 @@
+[typedef ei_generic_item_event]		//this actually has to be a typedef, but it's basically an event
+
+ON=@Create
+attr |= attr_identified	//By default all items should be identified, unless we say otherwise
+//adjust_crafted_value	//this is handled in the crafting system core
+
+on=@click
+if (<type>==t_spawn_char) || (<type>==t_spawn_item)
+  message @030 Spawn: <damount> <more1>
+  message @0482 Min/Max/Dist/Timer: <morep>, <timer>
+  if (<tag0.spawn_array>)
+    message @0b5 <tag0.spawn_array>
+  endif
+  return 1
+endif
+
+if (<usescur>)	//show tool durability
+  //local.durability=<muldiv <usescur>,100,<usesmax>>
+  //message Tool Durability: <dlocal.durability>%		//<usescur> 
+  message uses remaining: <usescur>
+endif
+
+//if (<attr>&attr_move_never) || (<attr>&attr_static)	//whats this for?
+  //return 0
+//endif
+
+//Start adding all the ATTRS up to display
+if  !(<attr>&attr_identified) && !(<attr>&attr_move_never) && !(<attr>&attr_static)
+  args .= ", Unidentified"
+endif
+if  (<attr>&attr_newbie)
+  args .= ", Blessed"
+endif
+if (<ismagicitem>)	//check for all magical attrs/typedefs
+  args .= ", Magical"
+  //local.hue=05e
+endif
+if  (<attr>&attr_invis)
+  args .= ", Invisible"
+endif
+if (<isevent.t_crafted_item>) && !(<isempty <skillmake>>) && (<layer>)
+  if (<quality> >= 180)
+    args .= ", Exceptional"
+  endif
+endif
+if (<attr>&attr_faction) || (<isevent.t_faction_item>)
+  args .= ", Faction Item"
+endif
+if (<type>==t_poisoned_weapon) || (<isevent.t_poisoned_weapon>)
+  args .= ", Poisoned"
+endif
+//if (<isevent.t_unique_magic_item>)
+  //args .= ", Unique"
+  //local.hue=036
+//endif
+if (<isevent.t_legacy_item>)
+  args .= ", Legacy"
+endif
+if (<isevent.ei_house_lockdown>)		//these and below will set the string rather than add to it
+  args = ", Locked Down"
+endif
+if (<isevent.ei_house_secure>)
+  args = ", Secured"
+endif
+args=<streat <args>>	//get rid of the first segment
+
+if !(<isempty <args>>)
+  //message @,,0 ( <args> )
+  message @<local.hue> ( <args> )
+endif
+if !(<attr>&attr_identified)
+  message @<local.hue> <name>
+  return 1
+endif
+
+if (<type>==t_wand) 
+  message @<local.hue> <name> (<dmore2> charges) //<qval (1000 <= <src.armslore>)?(<f_passive_armslore>):>
+  return 1
+endif
+
+//if (<type>==t_enchanted_clothing) || (<isevent.t_enchanted_weapon>) 
+  //message @<local.hue> <name> (<dmore2> charges) //<qval (1000 <= <src.armslore>)?(<f_passive_armslore>):>
+  //message @<local.hue> <name> (magic faded)
+  //return 1
+//endif
+
+//if (<src.armslore> >= 1000) && ((<isweapon>) || (<isarmor>))	//players will be able to use armslore on themselves to view their equipment
+  //message @<local.hue> <name> (<f_passive_armslore>)
+  //return 1
+//endif
+
+if (<baseid> == i_runebook)	
+  if !(<isempty <tag.runebook_name>>)
+    message <tag0.runebook_name>
+  endif
+  message a <qval (<tag0.runes> <= 0)?Blank:> Runebook
+  return 1
+endif
+
+if (<local.hue>)
+  message @<local.hue> <name>
+  return 1
+endif
+
+on=@equiptest
+if (<type> != t_container) && (<type> != t_spell) && (<type> != t_spellicon) && (<bonusdex>) 
+  if (<eval (<src.dex>+<bonusdex>)> < 5) 
+    src.sysmessage You can no longer wear your <name>.
+    return 1
+  endif
+endif
+
+on=@damage
+ref1=<topobj>
+if (<attr>&attr_newbie)
+  return 1
+endif
+if (<ref1.isvalid>) && (<ref1.ischar>) && (<ref1.isplayer>)
+  if (<layer>) && (<ref1.findlayer.<layer>>) && (<ref1.findlayer.<layer>.uid> == <uid>)		//this must be equipped
+    if (<maxhits>)
+      ref1.sysmessage Your <name> may have been damaged
+      if (<muldiv <hits>,100,<maxhits>> <= 20)
+        //ref1.sysmessage Your equipment is severely damaged.
+        ref1.message Your <name> is severely damaged.
+      endif
+    endif
+  endif
+endif
+
+on=@destroy
+if (<tag0.MultiComponent>)
+  tag0.MultiComponent=
+endif
+
+[EOF]
+

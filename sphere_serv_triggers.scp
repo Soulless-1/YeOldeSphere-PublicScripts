@@ -1,0 +1,480 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2007
+//www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: 16-Nov-2006
+VERSION=0.56b
+
+//
+// This file contains function that are used as serv triggers.
+//
+
+[defname server_trigger_settings]
+shard_sunday_restart 		1		//will the shard restart on sundays automatically?
+
+[defname admin_whitelisted_ips]
+admin_whitelisted_ip0		127.0.0.1		//local is always the admin
+admin_whitelisted_ip1		
+admin_whitelisted_ip2		
+admin_whitelisted_ip3		
+admin_whitelisted_ip4		
+
+[PLEVEL 7]
+f_onserver_connection_acquired
+f_onserver_connectreq_ex
+f_onaccount_connect
+f_onaccount_create
+f_onaccount_login
+f_onaccount_delete
+f_onchar_create
+f_onchar_delete
+f_onserver_sta
+f_onserver_save
+f_onserver_save_ok
+f_onserver_save_fail
+f_onserver_save_finished
+f_onserver_exit
+f_onserver_blockip
+
+//called after an IP successifully establishes a connection with the server and passess the security checks:
+//	ARGS (RO): IP address.
+//	ARGN1 (RO): System time in milliseconds since the last connection.
+//	ARGN2 (RO): System time in milliseconds of this connection attempt.
+[FUNCTION f_onserver_connection_acquired]
+//local.diff=<eval (<argn2>-<argn1>)>
+//serv.log Connection acquired from <args>. last conn: <argn1> this conn: <argn2> diff: <dlocal.diff>
+if (<argn1> <= 0)
+  if (<dargn> != <dserv.ip>) 
+    
+    //f_writefile BannedIPs.txt,<args>
+    //f_writefile fast_connections.csv,<args>,<argn1>,<argn2>			//we can use this to build a ban list manually
+    //add write a script line to ban this IP if it meets criteria 
+  endif
+endif
+
+// called after an IP exceeds MaxConnectRequestsPerIP:
+//	ARGS (RO): IP address.
+//	ARGN1 (RO): System time in milliseconds since the last connection.
+//	ARGN2 (RO): System time in milliseconds of this connection attempt.
+//	ARGN3 (RO): Number of connection attempts since the IP History entry for this IP was (re)created.
+//	LOCAL.BAN_TIMEOUT (RW): 5 * 60 (default), seconds to keep banned the ip from new connections to the server (permanent if negative).
+//	RETURN 1: Only reject the connection.
+//	RETURN 2: Reject and ban the IP for <LOCAL.BAN_TIMEOUT> seconds.
+[FUNCTION f_onserver_connectreq_ex]
+//local.diff=<eval (<argn2>-<argn1>)>
+//serv.log Exceeding max conn per IP : <args> : last conn: <argn1> this conn : <argn2> attemps: <argn3> diff: <dlocal.diff>
+
+//Called after a connection is fully made
+[FUNCTION f_onaccount_connect]
+
+// This function is called before the account is created.
+// ARGS --> username of the account being created.
+// RETURN
+//	  0 --> normal action (create)
+//	  1 --> account not created
+[FUNCTION f_onaccount_create]
+if !(strregex(^[a-zA-Z0-9]+$,<args>))
+  serv.log Account creation attempted with invalid symbols. Only alphanumeric characters allowed.
+  return 1
+endif
+
+// This function is called after client entered the password.
+// ARGS --> username of the client logging in
+// ARGO --> the client logging in
+// RETURN
+//	  0 --> normal action (login)
+//	  1 --> disconnect the client
+[FUNCTION f_onaccount_login]
+if !(strcmpi(127.0.0.1,"<serv.account.<args>.lastip>"))	//always allow local connections
+  return 0
+endif
+if (<serv.account.<args>.plevel> > 1)
+  while !(<isempty <def.admin_whitelisted_ip<dlocal.n>>>)
+    if !(strcmpi(<serv.account.<args>.lastip>,<def0.admin_whitelisted_ip<dlocal.n>>))
+      local.adminlogin=1
+    endif
+    local.n += 1
+  endwhile
+  if !(<local.adminlogin>)
+    serv.log GM(<serv.account.<args>.plevel>) account <serv.account.<args>.name> tried to log in from an IP address that is NOT whitelisted (<serv.account.<args>.lastip>)	//, access denied!
+    //argo.sendpacket 082 04
+    return 1
+  else
+    serv.log GM(<serv.account.<args>.plevel>) account <serv.account.<args>.name> has logged in from a whitelisted IP address(<serv.account.<args>.lastip>)	//, access granted!
+  endif
+endif
+
+if (<serv.list.banned_ipaddresses.findelem "<serv.account.<args>.lastip>"> != -1)	//present in the banned ip list
+  if (<serv.list.ipban_exclusions.findelem "<serv.account.<args>.name>"> != -1)		//also present in the exclusion list
+    serv.log The IP <serv.account.<args>.lastip> has been restricted but the account <serv.account.<args>.name> is excluded and may login.
+    argo.sysmessage @026 Your IP <serv.account.<args>.lastip> has been restricted but the account <serv.account.<args>.name> is excluded and may login.
+    return 0
+  else
+    serv.log The IP <serv.account.<args>.lastip> has been restricted and cannot login.
+    argo.sysmessage @026 Your IP <serv.account.<args>.lastip> has been restricted and cannot login.
+    //argo.sendpacket 082 02
+    return 1
+  endif
+endif
+
+if (<serv.list.banned_accounts.findelem "<serv.account.<args>.name>"> != -1)	//present in banned account list
+  serv.log The account <serv.account.<args>.name> has been restricted and canont login.
+  argo.sysmessage @026 Your account <serv.account.<args>.name> has been restricted and cannot login.
+  //argo.sendpacket 082 02
+  return 1
+endif
+
+//argo.f_orion_features		//this controlls certain features of the Orion third party client that are abusive
+
+// This function is called before an account is being deleted.
+// ARGS --> username of the account being deleted.
+// RETURN
+//	  0 --> normal action (delete)
+//	  1 --> account not deleted
+[FUNCTION f_onaccount_delete]
+
+// This function is called after client have created a new char.
+// SRC   --> char being created
+// ARGN1 --> flags
+// ARGN2 --> profession chosen (1=warrior,2=mage,3=smith,4=necro,5=pally)
+// ARGN3 --> race (1=human, 2=elf, 3=gargoyle)
+// ARGS  --> account name
+// ARGO  --> the client creating the character
+[FUNCTION f_onchar_create]
+local.nametaken=<src.isusedplayername <src.name>>
+serv.log <src.account.name> creating char <src.name>(<src>). Plevel <src.account.plevel>. Name Taken Already? = <local.nametaken>
+if (<src.account.plevel> <= 1) && (<local.nametaken>)
+  src.name=<strsub 0,4 <src.strtrim <src.name>>><strsub 0,4 <dsrc>>
+  src.tag0.mustrename=1
+endif
+if (<argn3> != 1)		//only humans allowed
+  src.argn3=1  			//set to human
+  src.oskin=083ea		//make standard skin
+  src.color=<src.oskin>		
+  src.findlayer.11.remove	//remove hair
+  src.findlayer.16.remove	//remove beard
+endif
+if !(<serv.FeatureAOS>&02)		//don't allow pally or necro
+  if (<argn2>==4) || (<argn2>==5)	
+    argn2=<eval (6-<argn2>)>		//pally=warrior, necro=mage
+  endif
+endif
+if (<src.account.totalconnecttime> < <def0.young_status_expires>)
+  src.tag0.young=1
+  src.tag.name.suffix=" the Young"
+endif
+src.dam=1,4
+src.maxfood=20
+src.chaton
+src.tag0.online_menu_flags=<def0.online_menu_flag0>|<def0.online_menu_flag10>
+src.tag0.override.skillsum=10000
+
+// This function is called before client is going to delete a character.
+// SRC  --> char being deleted
+// ARGO --> the client deleting the character
+// RETURN
+//	  0 --> normal action (delete char)
+//	  1 --> denyes deletion
+[FUNCTION f_onchar_delete]
+//fixme: remove player from any faction positions
+//set houses up for sale? 
+//remove any auctions they might of had
+
+// This function is called on server startup
+[FUNCTION f_onserver_start]
+servip=127.0.0.1	//game.yeoldesphere.com
+var.server_nosave=			//saves should be allowed again
+f_serv_negotiate_razor_features		//for negotiating razor features
+
+// This function is called before server is going to save.
+// ARGN1 --> save is forced (writable)
+// ARGN2 --> save stage (for backgroud save goes 1 to 6146 [sector count + 2])
+// RETURN
+//	  0 --> normal action (save)
+//	  1 --> denyes save
+[FUNCTION f_onserver_save]
+if (<var0.server_nosave>)
+  serv.log Worldsave attempted but not allowed, the final save has taken place and the server will restart soon.
+  return 1
+endif
+serv.allclients worldsave_notification 1
+account update
+//savestatics		//this should only really happen once a day, statics should not change often
+
+[function f_worldsave_timetill]
+sysmessage <args>
+
+// This function is called after server has saved correctly (once per stage with background save).
+[FUNCTION f_onserver_save_ok]
+
+// This function is called after server hasn't saved correctly (once per stage with background save).
+[FUNCTION f_onserver_save_fail]
+
+// This function is called after server completely finished saving (also at end of background save).
+// ARGS --> Time it took to save (in seconds, 4 digit precision)
+[FUNCTION f_onserver_save_finished]
+serv.allclients worldsave_notification 0
+serv.allclients sysmessage The worldsave process took <args> seconds. There are <serv.chars> characters, <serv.items> items, and <serv.clients> clients connected on <serv.rtime>.
+
+// This function is called when a server is triggeted a shutdown, after all
+// saves and everything finished
+[FUNCTION f_onserver_exit]
+
+// This function is called when an IP is blocked from the server
+// ARGS  --> IP being blocked
+// ARGN1 --> Time to block the IP for in tenths of a second (writable)
+[FUNCTION f_onserver_blockip]
+
+[FUNCTION f_onserver_timer]
+serv.maxpings 20		//too many fast connections can set this lower
+var0.fastconn=			//reset fast connection counter
+servip=127.0.0.1	//game.yeoldesphere.com
+var0.serv_tickm += 1
+serv.allclients f_player_onserver_timerm
+
+//if (<serv.mem> > 420000)	//seems to have a performance impact when memory is too high?
+  //serv.log Server memory at <serv.mem>, shrinking memory temporariliy 
+  //serv.shrinkmem
+  //serv.log Server memory now at <serv.mem>
+//endif
+
+if (<var0.serv_tickm> > 59)
+  var0.serv_tickm=
+  var0.serv_tickh += 1
+  //var0.generate_horde_monsters += 1
+  serv.allclients f_player_onserver_timerh
+endif
+//if (<var0.generate_horde_monsters> >= 2)	//Generate horde monsters every 2 hours
+  //var0.generate_horde_monsters= 
+  //local.oldhordesize=<var0.mondains_horde_size>
+  //local.newhorde=<def0.mondains_horde_generate>
+  //local.hordespots=<eval <def0.mondains_horde_maxsize>-<var0.mondains_horde_size>>
+  //if (<local.hordespots> >= 1)
+    //local.newhorde=<qval (<local.hordespots> < <local.newhorde>)?<local.hordespots>:<local.newhorde>>
+    //f_generate_horde_monster <local.newhorde>
+  //endif
+//endif
+if (<var0.serv_tickh> > 23)
+  var0.serv_tickh=
+  var0.serv_tickd += 1
+endif
+if (<var0.serv_tickd> > 364)
+  var0.serv_tickd=
+  var0.serv_ticky += 1
+endif
+
+f_progress_time 	//the amount of time the server progresses is controlled in the environment script (default is 5 in-game minutes for every 1 real world minute)
+
+if ((<serv.rtime.format %H>==4) && (<serv.rtime.format %M>==00)) || ((<serv.rtime.format %H>==16) && (<serv.rtime.format %M>==00))  	//3:30AM or 3:30PM
+  f_champions_alternate_active_altar	//change which champion altar is activate (fixme: right now it doesnt take valor to start it, its just started when its active)
+endif
+
+// Holiday stuff
+//Activate holiday champion spawns on a schedule (6am, 12pm, 6pm, 12am)
+if ((<serv.rtime.format %H>==6) || (<serv.rtime.format %H>==12) || (<serv.rtime.format %H>==18) || (<serv.rtime.format %H>==24)) && (<serv.rtime.format %M>==00)
+  if (<serv.rtime.format %mm>==10) && (<serv.rtime.format %d> >= 17) && (<serv.rtime.format %d> <= 31)	//two weeks leading up to Halloween
+    forinstances i_champion_idol
+      if (<morem> == 12) && (<more1> != 1)	//Sleepy Hallow Spawn
+        f_champion_spawn_activate
+      endif
+    endfor
+  endif
+  if (<serv.rtime.format %mm>==12) && (<serv.rtime.format %d> >= 11) && (<serv.rtime.format %d> <= 25)	//two weeks leading up to Christmas
+    forinstances i_champion_idol
+      if (<morem> == 13) && (<more1> != 1)	//Krampus Spawn
+        f_champion_spawn_activate
+      endif
+    endfor
+  endif
+endif
+
+//if (<serv.rtime.format %mm>==12) && ((<serv.rtime.format %dd>==24) || (<serv.rtime.format %dd>==25))	//Christmas Gifts - 24th and 25th of December
+  //if (<serv.rtime.format %H>==18) && (<serv.rtime.format %M>==00)  	//6pm
+    //serv.b @0480 Dashing through the snow In a one-horse open sleigh.
+    //serv.b @0480 Over the fields we go, Laughing all the way. HoHoHoHoHo!!!
+    //serv.allclients receive_christmas_gift
+  //endif
+//endif
+
+
+// Maintenance stuff
+if (<serv.rtime.format %H>==23) && ((<serv.rtime.format %M>==00) || (<serv.rtime.format %M>==15) || (<serv.rtime.format %M>==30)) 	//11:00PM + 11:30PM maintenance notification
+  if (<def0.shard_sunday_restart>) && (strmatch(Sunday,<serv.rtime.format %A>)) 	//Sunday automatic restart
+    local.ttr=<qval (<serv.rtime.format %M>==00)?one hour:<qval (<serv.rtime.format %M>==15)?fourty five minutes:a half hour>>		//time till restart
+    serv.b @040 The server will be shutting down in <local.ttr> for routine maintenance.	
+    serv.log The server will be shutting down in <local.ttr> for routine maintenance.
+  endif
+
+
+elseif (<serv.rtime.format %H>=23) && (<serv.rtime.format %M>==44) 	//11:44PM
+  serv.b @040 Running nightly shard maintenance, reporting functions, and world cleanup. Lag may occur please be patient.
+  serv.log Running nightly shard maintenance, reporting functions, and world cleanup in 60 seconds. Lag may occur please be patient.
+
+elseif (<serv.rtime.format %H>==23) && (<serv.rtime.format %M>==45)	 //11:45PM	//run some functions before saving the last time and restarting
+
+  //f_faction_point_attrition	//FIXME: add this faciton point attrition in
+  f_factions_assign_titles	//assign all faction members their appropriate title
+  for 1 4
+    var0.faction_<dlocal._for>_points=<f_faction_total_points <local._for>>
+    var0.faction_<dlocal._for>_tithe_adjusted=	//factions may adjust tithe again
+  endfor
+
+  //f_champions_alternate_active_altar		//activate a new champion spawn if no others are active
+
+  f_bulk_order_reset_accounts		//reset everyones bulk order count so they can get more
+
+  serv.newitem i_memory	  // Start of reporting functions and cleanup (because it loops it needs an item as the source)
+  new.p=1,1,1,0
+
+  //reports		//I only see a need for some of these nightly now
+  new.f_report_accounts		
+  new.f_report_players
+  new.f_report_player_houses
+  new.f_report_player_vendors
+  //new.f_report_containers		//important because of gold (economy) 
+  //new.f_report_npcs
+  //new.f_report_treasuremaps
+
+  //cleanups
+  new.f_message_board_cleanups		//remove things like player messages, or mislinked kidnappings or bounties
+  new.f_npc_garbage_collection		//removes orphaned npcs and redistributes npcs that are sleeping
+
+  new.remove	//remove the item used to run the reports
+
+  serv.b @040 Nightly shard maintenance completed. 
+  serv.log Nightly shard maintenance completed. 
+
+  if (<def0.shard_sunday_restart>) && (strmatch(Sunday,<serv.rtime.format %A>)) 	//Sunday automatic restart after all the maintenance
+    save		// this is the last thing we do after all of the maintenance 
+    savestatics
+    serv.b @040 The world has been saved for the last time and will be restarted in 15 minutes.
+    serv.log The world has been saved for the last time and will be restarted in 15 minutes.
+    var.server_nosave=1
+  endif
+  
+endif
+
+[function f_player_onserver_timerm]	//fired on players every minute
+tag0.onlinetime += 1
+
+[function f_player_onserver_timerh]	//fired on players every hour
+if (<account.plevel> <= 1)
+  //tag.veteran_title=<f_veteran_get_title>
+endif
+tag0.veteran_coin_accrued += 1
+//serv.log <name>(<uid>) accruing a veteran coin, <muldiv <tag0.veteran_coin_accrued>,100,24>% complete.
+if (<tag0.veteran_coin_accrued> >= 24) && (<isonline>) 
+  tag0.veteran_coin_accrued=
+  if !(<findlayer.29.isvalid>)
+    serv.newitem i_bankbox
+    equip <new>
+  endif
+  serv.newitem i_veteran_coin,1,<findlayer.29> 
+endif
+
+[function f_message_board_cleanups]  
+forinstances i_bulletin_board
+  ref1=<uid>
+  if (<ref1.topobj>==<ref1>)
+    forcont <ref1> 1
+      if !(<link.isvalid>) 
+        serv.log Bulletin board cleanup : Removing invalid message <name>(<uid>)
+        remove
+      elseif (<link.isplayer>) && (strmatch(Sunday,<serv.rtime.format %A>))
+        serv.log Bulletin board cleanup : Removing player message <name>(<uid>) linked to <link.name>(<link>)
+        remove
+      endif
+    endfor 
+  endif
+endfor
+forinstances i_bounty_board_classic
+  ref1=<uid>
+  if (<ref1.topobj>==<ref1>)
+    forcont <ref1> 1
+      if !(<link.isvalid>) || !(<link.tag0.bounty>) || (<tag0.bounty_post> != 1)
+        serv.log Bounty board cleanup : Removing bounty <name>(<uid>) linked to <link.name>(<link>)
+        remove
+      endif
+    endfor
+  endif
+endfor
+
+[function f_npc_garbage_collection]
+if (<argn> == 1)	//notify with delayed start
+  serv.b @040 NPC garbage collection initiated, starting in 10 seconds. This may take a few moments, Please be patient.
+  timerf 9,serv.b @040 NPC garbage collection starting...
+  timerf 10,f_npc_garbage_collection_start 1
+else
+  f_npc_garbage_collection_start
+endif
+
+[function f_npc_garbage_collection_start]
+forchars 9999
+  if (<npc>) 
+    if (<issleeping>)
+      if (<isorphanednpc>)	//get rid of orphaned npcs, only legitimate spawned npcs should be dealt with
+        remove
+      elseif (<spawnitem>)
+        ref1=<region.uid>
+        if (<ref1.isvalid>) && (<ref1.type>==t_multi)	//this NPC was placed into a house, move it back to it's spawnpoint
+          movenear <spawnitem> 4
+        elseif (<isvendor>) || (<isguildmaster>)	//move vendors and guildmasters to their exact spawn point
+          movenear <spawnitem> 4
+        else	//move everything else near it's spawn point
+          movenear <spawnitem> <eval (<homedist>/2)>	//move it half of its spawndist away from the spawnpoint
+        endif
+      endif
+    endif
+  endif
+endfor
+if (<argn> == 1)	//notifications
+  f_npc_garbage_collection_finish
+endif
+
+[function f_npc_garbage_collection_finish]
+serv.b @040 NPC Garbage collection completed.
+
+
+// This isnt used yet, but it could be quite good
+[defname server_backup]
+server_backup_uid	 01fbbb              			//UID used to perform certain server funtions (use a plevel 7 account's char uid)
+server_backup_winrar	 c:\progra~1\winrar\winrar.exe    	//Full path to the winrar program (must be DOS format... no space)
+server_backup_password	 YourPasswordHere        		 	//password to encrypt the ziped file (remove the -hp switch to disable password encryption)
+server_backup_filename	 c:\YeOldeSphere\backup\backup      	//Full path and name of the wanted ziped file (name will take "name-date" format)
+server_backup_list	 c:\YeOldeSphere\backup\backup.lst      //Full path to the file containing the list of files to zip)
+
+[function f_server_backup]
+local.backup <sysspawn <def0.server_backup_winrar> a -r -s -m5 -k -hp<def0.server_backup_password> -ibck -ag-YY-MM-DD <def0.server_backup_filename> @<def0.server_backup_list>>
+serv.log Backup complete
+
+[function f_orion_features]
+//Orion Features
+//data for sendpacket
+sendpacket B0BF W000B W0FACE W0032 D0FFFFFFFF		//all enabled
+
+//Orion Assistant Features
+//data for sendpacket
+sendpacket B0BF W017 W0FACE W08001 D0FFFFFFFF D0FFFFF7FF D0FFFFFFFF D0FFFFFFFF		//no fast rotation
+
+[function f_account_whitelist_ips]
+f_deletefile whitelisted_ips.txt
+for 0 <eval (<serv.accounts>-1)>
+  local.account=<serv.account.<local._for>.name>
+  f_writefile whitelisted_ips.txt,<serv.account.<local.account>.lastip>
+endfor
+
+[function f_serv_blacklist_ip]
+local.filename=BanIpAddress.cmd
+set ip=%<args>
+f_writefile <local.filename>,netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - %ip%" dir=in action=block remoteip=%ip%
+f_writefile <local.filename>,netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - %ip%" dir=out action=block remoteip=%ip%
+f_writefile<local.filename>,start /b "" cmd /c del "%~f0"&exit /b
+local.spawn = <sysspawn c:/yeoldesphere/<local.filename>>
+
+
+[EOF]

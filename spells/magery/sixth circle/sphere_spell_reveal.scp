@@ -1,0 +1,37 @@
+[SPELL 48]
+DEFNAME=s_reveal
+NAME=Reveal
+SOUND=snd_spell_reveal
+RUNES=WQ
+CAST_TIME=2.0
+RESOURCES=i_reag_blood_moss,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_reveal
+SCROLL_ITEM=i_scroll_reveal
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_area
+EFFECT_ID=i_fx_bless_effect
+EFFECT=0
+DURATION=0.0
+MANAUSE=20
+SKILLREQ=MAGERY 50.0
+INTERRUPT=100.0,100.0
+
+//Reveal is used to reveal all hidden players near the target. It is similar to the Detecting Hidden skill.
+ON=@Success
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.arearadius=<eval 1+(<local.spell_strength>/200)>
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+ref1=<uid>
+if (<ref1.isvalid>) && (<ref1.ischar>) && (<src> != <uid>) && !(<ref1.isgm>) 
+  if (<ref1.flags>&statf_invisible) || (<ref1.flags>&statf_hidden)
+    effect=3,<serv.spell.48.effect_id>,6,15,1
+    flags &= ~ statf_hidden
+    flags &= ~ statf_invisible
+    update
+  endif
+endif
+
+[EOF]

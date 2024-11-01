@@ -1,0 +1,151 @@
+//changelog by Soulless
+//v2.0
+
+[plevel 1]
+changelog
+news
+log
+
+[function news]
+changelog
+
+[function log]
+if !<isgm>
+  sysmessage changelog too big, this ammount of data can not be sent to the client.
+  return 1
+endif
+changelog
+
+[function changelog]
+sdialog d_changelog
+
+[dialog d_changelog]
+300,50
+page 0
+
+resizepic 10 10 5150 340 420
+dtext 100 13 1263 <serv.servname> Changelog
+
+if (<account.plevel> >= 5) && (<account.plevel> >= 5)	//Staff options menu for developers or higher
+  resizepic 10 430 9200 340 80
+  dtext 130 440 1263 Staff Options
+
+  button 30 455 1209 1210 1 0 100
+  dtext 45 452 1000 Add an Entry
+
+  button 30 475 1209 1210 1 0 200
+  dtext 45 472 1000 Edit an Entry
+
+  button 230 455 1209 1210 1 0 300
+  dtext 245 452 1000 Remove Entry
+
+  button 230 475 1209 1210 1 0 400
+  dtext 245 472 1000 Wipe Changelog
+endif
+
+page <argn1>
+local.s=<def.br>
+dtext 250 13 1263 Page <eval <argn1>+1>
+for <eval <argn1>*10> <eval (<argn1>*10)+9>
+  if !(<isnum <serv.list.changelog.<dlocal._for>>>) 
+    local.s .= <def.br>[<eval <serv.list.changelog.count>-<local._for>>]<serv.list.changelog.<dlocal._for>><def.br>
+  endif
+endfor
+dhtmlgump 40 40 290 340 0 1 <def.bfont_black><local.s>
+
+if (<eval (<argn1>*10)+9> < <serv.list.changelog.count>)
+  button 310 405 4006 4007 1 0 <eval (<argn1>+1)+900000>
+  dtext 280 405 1000 Next
+endif
+
+checkbox 105 405 1896 1895 <qval (<tag0.flags_player>&<def0.flags_player_nochangelog>)?1:0> 1
+dtext 130 403 1000 Don't show on login
+
+if (<argn1> > 0)
+  button 20 405 4015 4016 1 0 <eval (<argn1>-1)+900000>
+  dtext 55 405 1000 Back
+endif
+
+[dialog d_changelog button]
+onbutton=0
+if (<argchk[1]> == 1)
+  src.tag0.flags_player |= <def0.flags_player_nochangelog>
+else
+  src.tag0.flags_player &=~ <def0.flags_player_nochangelog>
+endif
+
+onbutton=100
+if (<argchk[1]> == 1)
+  src.tag0.flags_player |= <def0.flags_player_nochangelog>
+else
+  src.tag0.flags_player &=~ <def0.flags_player_nochangelog>
+endif
+sdialog d_changelog
+sdialog d_new_changelog_entry
+
+onbutton=200
+src.sysmessage What entry would you like to edit?
+//src.sdialog d_changelog_edit_entry
+
+onbutton=300
+src.sysmessage Which entry would you like to remove?
+//src.dialog d_changelog_remove_entry
+
+onbutton=400
+if (<src.plevel> < 7)
+  src.sysmessage Only an owner level account can wipe this log
+  return 1
+endif
+
+onbutton=900000,999999
+argn1 -= 900000
+sdialog d_changelog <dargn1>
+
+[dialog d_new_changelog_entry]
+0,0
+page 0
+
+resizepic 165 120 9200 340 240
+dtext 250 130 1263 Add new changelog entry
+
+resizepic 180 155 3000 305 150
+dtextentrylimited 180 155 305 150 0 1 256 <serv.rtime.format %x> - 
+
+dtext  215 318 1000 Cancel Entry
+button 195 320 1209 1210 1 0 2	//cancel entry addition
+
+dtext 395 318 1000 Accept Entry
+button 375 320 1209 1210 1 0 1	//confirm entry
+
+
+[dialog d_new_changelog_entry button]
+onbutton=1
+if !(<serv.list.changelog.count>)	//list doesnt exist need to create it
+  serv.list.changelog.add <argtxt[1]>
+  return 1
+endif
+if (<isnum <argtxt[1]>>)
+  src.sysmessage Changelog entries must nost consist of only numerical characters.
+  return 1
+endif
+serv.list.changelog.0.insert <argtxt[1]>  //most recent entry always should display at the top
+
+serv.allclients sysmessage @044 <argtxt[1]>
+dialogclose d_changelog
+sdialog d_changelog
+
+local.filename=f_changelog_recent.cmd
+local.entry=<serv.list.changelog.count>
+f_writefile c:/yeoldesphere/scripts/discord/<local.filename>,curl -H "Content-Type: application/json" -d "{\"username\": \"changelog\", \"content\":\"[<dlocal.entry>] <argtxt[1]>\"}" %WEBHOOK_URL%
+f_writefile c:/yeoldesphere/scripts/discord/<local.filename>,start /b "" cmd /c del "%~f0"&exit /b
+f_update_discord_changelog
+
+onbutton=2
+src.sysmessage New changelog entry canceled
+
+[function f_update_discord_changelog]
+serv.log Sending recent changelog entry to discord channel
+local.spawn = <sysspawn c:/yeoldesphere/scripts/discord/f_changelog_to_discord.cmd>
+
+
+[EOF]

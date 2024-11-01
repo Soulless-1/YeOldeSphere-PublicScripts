@@ -1,0 +1,1515 @@
+//Crafting System by Soulless
+//All crafting uses this core portion of the system
+//12:39 PM 8/3/2022
+
+//TODO
+//crafting only consumes random amounts on fail, not half like its supposed to
+//make notice inform you when you make an exceptional item, correctly. and the makers mark message
+//calculate exceptional quality value 
+
+
+//V1.2
+//fixed repair and recycle
+//added button for enhance option (not useable yet)
+//fixed issue with listing resoruces under alternate macterials
+//made menu look more like OSI's style
+//fixed console error with recyling items
+//added check on repair to see if it's already at maximum hitpoints
+//added ability to mark items
+//added prompt for mark menu and corrected the order of some buttons
+//added specific sounds for each craft to recycle items
+//added flags for selection of crafting features
+//fixed typo when switching crafting skill
+//fixed issue with crafting always succeeding
+//fixed blank spot in menu when typedefs are a part of the skill requirements
+//fixed missing space between success and makers mark notice
+//fixed items being repaired to the players maxhits, not the items
+//changed recycling to give half the resources
+
+//v1.3
+//fixed issue with being able to craft rapidly over and over
+//made the menus more like OSIs
+//fixed a sizing issue with the menu
+
+//v1.4
+//7:40 PM 1/1/2018
+//redid the item crafting details page, now it's OSI style
+//fixed the mark item prompt, now matches the rest of the menu
+//fixed issue with multiple piles of ingots not displaying correct amount
+//fixed being sent to a blank page when lacking skill/resources
+
+//v2.0
+//2:01 AM 4/20/2018
+//fixed the success check function to show the proper % skillcheck
+//correced issues with resource selections showing up off dialog
+//added functionality to gain experiance points on crafting for each skill
+//added in consuming 50% of the base resource (resources.0) on failure
+//added new logs/boards (heartwood, banewood, deepforest, bloodbark, darkshire)
+//added new ores for blacksmithing, see resources file
+//fixed issues causing you to return to the wrong page after viewing/crafting items
+//added post crafting function to run a check after all crafting skills
+//added a pre crafting function to run a check before starting to craft
+
+//v2.5
+//9:49 PM 8/10/2018
+//added craft amount button in item details page (will craft up to amount specified or resources run out)
+//added craft max button in item details page (will craft till resources run out)
+//changed all 'sdialog/dialog' to 'f_crafting_open_dialog' to topobjrol give the system more unified topobjrol
+//added check to make sure users were not clicking buttons faster than 10ms
+
+//v3.0
+//1:50 PM 8/16/2018
+//changed the dialog to generate only a few pages with item selection based on the category you selected (old way sending too much data)
+
+//v3.5
+//4:24 AM 9/19/2018
+//added enhance to replace the enhance menu, you can enhance crafted things with rare affixes or elemental powers
+//fixed sounds topobj continuing on far after the craft is finished
+//corrected the menu bringing you to the details page after every crafted item, and not displaying the correct page if there is more than 10 items.
+//fixed issue with not being able to craft amount/max due to it not looking for secondary materials (or crafts that didn't have materials set)
+//changed experience value to be based on the difficulty rather than the skillmake and increased the value for more resources (by tiers of 6)
+//you can no longer gain experience if the crafting skill it requires is locked or set to lower
+//you now lose half the resources + 1 when failing. Instead of just 50% which is 0 for items that only require amounts of 1 for resources.
+
+//v4.0
+//fixed smelting not working with all ores and using different formulas for the menu and dclicking items
+//set the crafting system to only award exp if you are able to gain in the crafting skill you are using
+//do not consume empty bottles on failure if thats in the resources list
+//fixed exceptional and success chances. now they only display max 100 or minimum 0, but the real values are held regardless of being positive or negative
+
+//v5.0
+//changed all function names to be prefixed with f_crafting
+//updated smelting/and recyling armor function
+//fixed issues with errors on console from typedefs showing up in resources/skillmake
+//fixed 'amount crafting' and added an action check to make sure the player isn't doing anything other than just the crafting
+//fixed improper success chance and exceptional chances
+//replaced enhance menu
+//added 'use material color' button to toggle using the resource item's color
+//selection and material selection menus now only hold 8 items per page to accomodate options at the bottom
+//replaced all "cont" with "topobj" 
+//when first using a tool if it does not have maxhits/hits they will be assigned to the tool
+
+//v6.0
+//added ability to add a substitute resource for an item
+//corrected issues with tools not being required to craft
+//added exclusion for consumption on failure and success
+
+//v6.5
+//added modifier for specific items to craft more than one at a time
+
+//v7.0 
+//greatly improved the method of skillmake/resource display for item details
+//greatly improved on the method that the system tests for and consumes resources during crafting
+
+//v7.5
+//fixed issues with the how the resources show up for someone replacing multiple resources on one item
+//added option to hide the first resource in the resource selection list if required 
+//combined the resource consumption functions for loss and success into one function
+
+//v7.6
+//separated the item select menu and the item details menu out, no reason to load it unless they click on the details button
+//the 'last ten' and resource selection menus now will only be loaded if you actually are viewing that specific menu. its all based on which 'category' you view now
+//fixed an issue with the color of some items displaying the second replaceable resource, even though they are not able to use it
+//now the dialog that pops back up after the crafing is done will be controlled by the f_crafting_CRAFTNAME_post_craft
+
+
+//v8.0
+//the crafting system now uses the internal skill triggers and @skillmakeitem
+//each tool now has a tevent on it 't_tool_<craftname>' that will control opening crafting menus. these should be applied to crafting tools appropriately
+//ACTPRV now holds the crafting tool UID
+//the tool is checked for every time a skill fires @stroke. 
+//using the craftedby internal keyword instead of the tag.crafted_by
+//fixed issues with applying materials too many times
+//fixed messages not appearing properly on the notice section
+//the system is fully using the internal sphere triggers @start @fail @success @skillmakeitem etc
+//added code that will occasionally reduce maximum durability when an item is repaired
+
+//TODO
+//add farming defs (seeds, potted plants)
+//add more house addons
+//add house + boat crafting
+
+
+
+////////////////////////////////
+// Crafting system general settings
+
+[defname crafting_system_settings]			//various settings other projects have found useful
+crafting_system_crafttime			6	//how many seconds for something to be crafted, if blank it will use the skills delay settings
+crafting_system_make_amount			0	//allow the user to make a specific amount of items 
+crafting_system_make_max			0	//allow the user to make the maximum possible items
+crafting_system_internal_makeitem		0	//this will use spheres internal makeitem function, versus my custom functions
+crafting_system_fail_resource_loss		30	//what % of resources will be lost on failure?
+crafting_system_overweight_prevent		0	//are you prevented from crafting while overburdened
+
+// Materials that can substitue for another
+//these substituations should also consider AMOUNT, like a certain amount of one resource counts as another amount in a different resource
+
+crafting_system_substitute_material_i_map_blank		i_scroll_blank
+
+crafting_system_substitute_material_i_cloth		i_cloth_cut
+
+crafting_system_substitute_material_i_book_sm		i_book_lg
+//crafting_system_substitute_material_i_book_lg		0	//i_book_sm	
+
+crafting_system_substitute_material_i_log		i_board		
+crafting_system_substitute_material_i_log_hickory	i_board_oak
+crafting_system_substitute_material_i_log_ash		i_board_ash
+crafting_system_substitute_material_i_log_cedar		i_board_cedar
+crafting_system_substitute_material_i_log_walnut	i_board_walnut
+crafting_system_substitute_material_i_log_cypress	i_board_cypress
+crafting_system_substitute_material_i_log_rosewood	i_board_rosewood
+crafting_system_substitute_material_i_log_oak		i_board_oak
+crafting_system_substitute_material_i_log_maple		i_board_maple
+crafting_system_substitute_material_i_log_yew		i_board_yew
+crafting_system_substitute_material_i_log_blackwood	i_board_blackwood
+crafting_system_substitute_material_i_log_hawthorn	i_board_hawthorn
+crafting_system_substitute_material_i_log_ironwood	i_board_ironwood
+crafting_system_substitute_material_i_board_hickory	i_log_oak
+crafting_system_substitute_material_i_board_ash		i_log_ash
+crafting_system_substitute_material_i_board_cedar	i_log_cedar
+crafting_system_substitute_material_i_board_walnut	i_log_walnut
+crafting_system_substitute_material_i_board_cypress	i_log_cypress
+crafting_system_substitute_material_i_board_rosewood	i_log_rosewood
+crafting_system_substitute_material_i_board_oak		i_log_oak
+crafting_system_substitute_material_i_board_maple	i_log_maple
+crafting_system_substitute_material_i_board_yew		i_log_yew
+crafting_system_substitute_material_i_board_blackwood	i_log_blackwood
+crafting_system_substitute_material_i_board_hawthorn	i_log_hawthorn
+crafting_system_substitute_material_i_board_ironwood	i_log_ironwood
+
+crafting_system_substitute_material_i_hides_cut		i_hide
+crafting_system_substitute_material_i_hides_cut_spined	i_hide_spined
+crafting_system_substitute_material_i_hides_cut_horned	i_hide_horned
+crafting_system_substitute_material_i_hides_cut_barbed	i_hide_barbed
+crafting_system_substitute_material_i_hide		i_hides_cut
+crafting_system_substitute_material_i_hide_spined	i_hides_cut_spined
+crafting_system_substitute_material_i_hide_horned	i_hides_cut_horned
+crafting_system_substitute_material_i_hide_barbed	i_hides_cut_barbed
+
+
+// Exclusions for consuption on fail/success
+crafting_system_consume_exclusion_onfail_i_bottle_empty		1	
+//crafting_system_consume_exclusion_onfail_i_scroll_blank	1	//scrolls should be ruined, you write on them
+
+//crafting_system_consume_exclusion_onsuccess_i_bottle_empty	0
+//crafting_system_consume_exclusion_onsuccess_i_scroll_blank	0
+
+
+// Overrides for how many items are crafted at once
+crafting_system_created_item_amount_override_i_arrow_shaft	10	//up to this many will be crafted of the item if possible
+crafting_system_created_item_amount_override_i_arrow		10
+
+
+//ADD THIS TO PLAYERS
+
+[events e_crafting_system]
+
+//we need to find the ID of the material being used to craft during this step perhaps? 
+
+on=@skillmenu
+if (<args> != sm_polymorph) && (<args> != sm_summon)	// && (<args> != sm_summon_familiar)
+  return 1
+endif
+
+on=@skillmakeitem	//need to set the resource on the crafted item and apply the override material
+ref1=<src>	//character crafting
+ref2=<act>	//item crafted
+ref3=<argo>	//resource id
+ref4=<actprv>	//tool used
+
+if !(<ref1.isvalid>) || !(<ref2.isvalid>) || !(<ref1.isonline>)
+  serv.log Crafting error, invalid object reference 
+  return 1
+endif
+
+//enter failure here
+//src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>	//sysmessage
+//src.sdialog d_crafting_menu					//this message and-reopening the menu is done in the @success part of the skill itself
+
+
+ref2.name=<serv.itemdef.<ref2.baseid>.name>	//just set the name to the standard item
+ref2.craftedby=<src>		//set the crafter UID
+
+if (<def0.crafting_<ref1.action>_<ref1.dctag0.crafting_category>_resource_replace>)	//possible to replace in this crafting submenu
+  ref2.tag0.override.value=<eval {<ref2.value>}>		//set the initial value
+  for n 1 <ref2.resources.count>		//check each resource needed to make the item
+    local.resource=<ref2.resources.<dlocal.n>.key>	
+    local.amount=<ref2.resources.<dlocal.n>.val>
+    for x 0 1		//there is only 2 resources maximum to replace per crafting menu  
+      if (<def0.crafting_<ref1.action>_resource<dlocal.x>_0>)
+       local.replaceable=<def0.crafting_<ref1.action>_resource<dlocal.x>>			//store the resource that is possible to replace
+        if (<ref2.resources.<dlocal.n>.key> == <def0.crafting_<ref1.action>_resource<dlocal.x>>) 	//the item uses the resource we can replace
+          local.replaceable=<def0.crafting_<ref1.action>_resource<dlocal.x>>
+          //check here to see if there is an interchangeable resource
+          if (<ref1.tag0.matoverride_<local.replaceable>>) && (<ref1.tag0.matoverride_<local.replaceable>> != <local.replaceable>)	//we have another resource selected so use it
+            local.resource=<ref1.tag0.matoverride_<local.replaceable>>
+            ref2.tag0.override.value += <muldiv <def0.crafting_<ref1.ctag0.crafting_skill>_matvalue_bonus_<local.resource>>,<ref2.value>,100>	//add to the value, based on the material
+            ref2.f_<ref1.action>_apply_<local.resource>		//apply the material properties	 
+          endif
+        endif
+      endif
+    endfor
+  endfor
+endif
+
+src.ctag0.<src.ctag0.crafting_skill>_notice=You successfully craft the item
+// Make this item exceptional if possible
+local.exceptionalchance=<src.f_crafting_exceptional_chance <ref2.baseid>>
+if (<def0.crafting_<src.ctag0.crafting_skill>_flags>&04)		//possible to be exceptional in this craft
+  if (<R0,1000> < <local.exceptionalchance>) || (<src.isgm>)		//it was successful in being exceptional
+    local.exceptional=1
+    ref2.f_crafting_make_exceptional
+    src.ctag0.<src.ctag0.crafting_skill>_notice="You create an item of exceptional quality"
+  else
+    ref2.quality=100	//this is average (from the sphere source)
+  endif
+endif
+
+// Mark the item with the crafters name if selected to mark items (0=always mark; 1=mark exceptional; 2=no mark; 3=prompt for mark)
+if (<def0.crafting_<src.ctag0.crafting_skill>_flags>&08) //the craft allows for using a makers mark
+  if (<src.<ctag0.crafting_skill>> >= 1000)
+    if (<src.ctag0.<src.ctag0.crafting_skill>_mark_option>==0)	//Always Mark
+      ref2.name=<ref2.name> crafted by <src.name>
+      src.ctag0.<src.ctag0.crafting_skill>_notice .=" and affix your maker's mark"
+    elseif (<src.ctag0.<src.ctag0.crafting_skill>_mark_option>==1)	//Mark Exceptional
+      if (<local.exceptional>)
+        ref2.name=<ref2.name> crafted by <src.name>
+        src.ctag0.<src.ctag0.crafting_skill>_notice .=" and affix your maker's mark"
+      endif
+    //elseif (<src.ctag0.<src.ctag0.crafting_skill>_mark_option>==2)	//Don't Mark
+    elseif (<src.ctag0.<src.ctag0.crafting_skill>_mark_option>==3)	//Prompt For Mark
+       ref2.timerf 0,sdialog d_makers_mark_prompt
+    endif
+  endif
+endif
+src.ctag0.<src.ctag0.crafting_skill>_notice .="."	//just adding a period
+
+src.f_<ctag0.crafting_skill>_post_craft <ref2>		//each craft has a post crafting function to run crafting specific things
+src.ctag0.check_crafting_gains = 1			//we flag it so we check the success chance on=@skillgain to prevent 100% success gains
+src.ctag0.crafting_<src.ctag0.crafting_skill>_lastitem=<ref2.baseid>
+args=<ctag0.crafting_<src.ctag0.crafting_skill>_lastten>
+if (<ref2.baseid> != <argv[0]>)
+  src.ctag0.crafting_<src.ctag0.crafting_skill>_lastten=<ref2.baseid>,<argv[0]>,<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>,<argv[5]>,<argv[6]>,<argv[7]>,<argv[8]>,<argv[9]>
+endif
+
+if (<ref4.isvalid>)
+  if !(<ref4.isitem>) 
+    serv.log <ref4.name>(<ref4>) probably an invalid tool being used for crafting.
+  elseif !(<ref4.usescur>)
+    serv.log <ref4.name>(<ref4>) being used for crafting but no 'usescur' value.
+  elseif (<ref4.usescur> < 0)
+    serv.log <ref4.name>(<ref4>) being used for crafting but has negative 'usescur' value.
+  endif
+  ref4.usescur -= 1
+  if (<ref4.usescur> <= 0)
+    //serv.log <ref1.name> has broken for <name> using <ctag0.crafting_skill> making <ctag0.<ctag0.crafting_skill>_crafting_item>
+    local.toolid=<ref4.baseid>
+    ref4.consume
+    ref1.actprv=<qval (<ref1.findid.<local.toolid>>)?<ref1.findid.<local.toolid>>:04fffffff>	//find a new tool or clear their stored crafting tool
+    ref1.ctag0.crafting_<src.ctag0.crafting_skill>_notice=Your crafting tool has broken.
+    ref1.sysmessage <ref1.ctag0.crafting_<src.ctag0.crafting_skill>_notice>
+  endif
+endif
+
+// This is reporting so you can have information about your shards economy and the effect of crafting
+//serv.log <name> has created <local.item>(<uid>) using <ctag0.crafting_skill> (<serv.itemdef.<ctag0.<ctag0.crafting_skill>_crafting_item>.value>g).
+//local.filename=crafting_report_<serv.rtime.format %Y-%m>
+//file.close reports/crafting/<local.filename>
+//if (<file.open reports/crafting/<local.filename>.csv> != 1)
+  //f_writefile reports/crafting/<local.filename>.csv,PLAYERNAME,PLAERYUID,CRAFTSKILL,TIMEDATE,ITEMNAME,ITEMBASEID,ITEMUID,RESOURCECOST,SELLVALUE,PROFIT,PROFITPERCENTAGE
+//endif
+//local.resourcecost=<f_avgvalue <new.f_crafting_item_resource_cost>>
+//local.sellvalue=<f_avgvalue <serv.itemdef.<ctag0.<ctag0.crafting_skill>_crafting_item>.value>>
+//local.profit=<eval <local.sellvalue>-<local.resourcecost>>
+//local.profitpercentage=<qval (<local.resourcecost>)?<muldiv <local.profit>,100,<local.resourcecost>>:100>
+//serv.log <name> <local.resourcecost>g --> <local.sellvalue>g = <local.profit>g profit
+//f_writefile reports/crafting/<local.filename>.csv,<name>,<uid>,<ctag0.crafting_skill>,<serv.rtime.format %Y-%m-%d-%H%M>,<new.name>,<new.baseid>,<new.uid>,<local.resourcecost>g,<local.sellvalue>g,<local.profit>g,<local.profitpercentage>%
+
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>	//sysmessage
+src.sdialog d_crafting_menu					//this message and-reopening the menu is done in the @success part of the skill itself
+
+return 0	//ignore the internal crafting system beyond what we have done here
+	
+on=@skillgain		
+if (<serv.skill.<argn1>.flags>&skf_craft) && (<ctag0.check_crafting_gains>)	//its a crafting skill and im actually making an item
+  local.successchance=<f_crafting_success_chance <actarg2.baseid>>
+  ctag0.check_crafting_gains=
+  if (<local.successchance> >= 1000)					//you can only gain in crafting if the item wasn't 100% success chance
+    return 1
+  endif
+endif
+
+[function f_crafting_open_dialog]	//this is only called when opening the menu via a tool
+local.craft=<args>
+src.actprv=<uid>	//set the char's ACTPRV to the tool being used
+src.dialogclose d_crafting_menu
+
+if (<isempty <def.crafting_<local.craft>_0_name>>) 
+  serv.log <src.name>(<src>) attempted to call an invalid crafting menu "<local.craft>", failed.
+  return 1
+elseif !(<src.isonline>)
+  serv.log <src.name> is offline but attempted to call a crafting menu, failed.
+  return 1
+elseif (<src.action> != -1)
+  src.sysmessage You must wait to perform another action.
+  return 1
+endif
+//args=<def0.crafting_<local.craft>_require>
+//for r 0 <eval (<argv>-1)>
+//endfor
+
+if (strcmpi(<src.ctag0.crafting_skill>,<local.craft>))		//switching to another crafting skill
+  src.ctag0.crafting_category=
+endif
+src.ctag0.crafting_skill=<local.craft>
+
+if (<src.ctag0.<local.craft>_resource0> == 0) && (<def0.crafting_<local.craft>_resource0_0>)
+  src.ctag0.<local.craft>_resource0=<def0.crafting_<local.craft>_resource0_0>
+  serv.log There are multiple resources for <local.craft>, setting to the default "<def0.crafting_<local.craft>_resource0_0>"
+endif
+if (<src.ctag0.<local.craft>_resource1> == 0 ) && (<def0.crafting_<local.craft>_resource1_0>)
+  src.ctag0.<local.craft>_resource1=<def0.crafting_<local.craft>_resource1_0>
+  serv.log There are multiple secondary resources for <local.craft>, setting second resource to the default "<def0.crafting_<local.craft>_resource1_0>"
+endif
+
+src.sdialog d_crafting_menu 
+
+[typedef t_crafted_item]
+
+////////////////////////////
+//CORE DIALOG
+
+
+[dialog d_crafting_menu]
+100,50
+page 0
+
+////////////////////////////////
+//REGULAR CRAFTING MENU
+
+//BACKGROUND
+resizepic 10 10 9200 530 455
+
+//TITLE BAR
+gumppictiled 20 20 510 25 2624
+dhtmlgump 200 22 300 20 0 0 <def.bfont_white><strtoupper <ctag0.crafting_skill> Menu>
+
+///////////////////////
+//CATEGORIES AND ITEMS AREA
+gumppictiled 20 50 200 255 2624
+gumppictiled 225 50 305 255 2624
+
+//NOTICES AREA
+gumppictiled 20 310 150 50 2624
+gumppictiled 175 310 355 50 2624
+
+//ACTIONS AREA
+gumppictiled 20 365 510 90 2624
+
+checkertrans 20 20 510 435
+
+//////////////////////
+//CATEGORIES SECTION
+dhtmlgump 80 50 200 20 0 0 <def.bfont_white>CATEGORIES
+//button 25 75 4005 4006 0 21
+//button 25 75 4005 4006 1 0 1
+//dhtmlgump 60 75 160 20 0 0 <def.bfont_white>LAST TEN		//this is included in the defs now
+
+while !(<isempty <def.crafting_<ctag0.crafting_skill>_<dlocal.c>_name>>)
+  button 25 <eval (75+(<local.c>*20))> 4005 4006 1 0 <eval (<local.c>+1)>
+  dhtmlgump 60 <eval (75+(<local.c>*20))> 160 20 0 0 <def.bfont_white><def0.crafting_<ctag0.crafting_skill>_<dlocal.c>_name>
+  local.c += 1
+endwhile
+
+dhtmlgump 65 325 100 20 0 0 <def.bfont_white>NOTICES
+dhtmlgump 180 320 350 40 0 0 <def.bfont_white><qval <isempty <ctag.<ctag0.crafting_skill>_notice>>?:<ctag0.<ctag0.crafting_skill>_notice>>
+
+//////////////////////
+//BOTTOM ACTIONS SECTION
+//LEFT SIDE
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&01)
+  button 25 370 4005 4006 1 0 65533
+  args=<def0.crafting_<ctag0.crafting_skill>_recycle>
+  dhtmlgump 60 370 100 20 0 0 <def.bfont_white><strtoupper <argv[0]>>	//RECYCLE ITEM
+endif
+
+for r 0 1
+  local.baseresource=<def0.crafting_<ctag0.crafting_skill>_resource<dlocal.r>>
+  if (<local.baseresource>) 		//only display this if the player can change the base resource
+    //local.resource=<qval (<src.tag0.matoverride_<local.baseresource>> != <local.basresource>)?<src.tag0.matoverride_<local.baseresource>>:<local.basesource>>
+    local.resource=<qval (<ctag0.<ctag0.crafting_skill>_resource<dlocal.r>> != <local.baseresource>)?<ctag0.<ctag0.crafting_skill>_resource<dlocal.r>>:<local.baseresource>>
+    button 25 <eval (390+(<local.r>*20))> 4005 4006 1 0 <eval (41+<local.r>)>
+    dhtmlgump 60 <eval (390+(<local.r>*20))> 200 20 0 0 <def.bfont_white><strtoupper <serv.itemdef.<local.resource>.name>> (<rescount <local.resource>>) 
+  endif
+endfor
+
+//sub-resource could go here if being used
+  
+button 25 430 4005 4006 1 0 0 
+dhtmlgump 60 430 100 20 0 0 <def.bfont_white>EXIT
+
+//RIGHT SIDE
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&02)
+  button 280 370 4005 4006 1 0 65534
+  dhtmlgump 315 370 100 20 0 0 <def.bfont_white>REPAIR ITEM  
+endif
+  
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&08) && (<<src.ctag0.crafting_skill>> >= 1000)	//must be grandmaster to even mark something
+  button 280 390 4005 4006 1 0 65532
+  doswitch <ctag0.<ctag0.crafting_skill>_mark_option>
+    dhtmlgump 315 390 140 20 0 0 <def.bfont_white>ALWAYS MARK
+    dhtmlgump 315 390 140 20 0 0 <def.bfont_white>MARK EXCEPTIONAL
+    dhtmlgump 315 390 140 20 0 0 <def.bfont_white>DO NOT MARK
+    dhtmlgump 315 390 140 20 0 0 <def.bfont_white>PROMPT FOR MARK
+  enddo
+endif
+
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&010)
+  button 280 410 4005 4006 1 0 65538	
+  dhtmlgump 315 410 100 20 0 0 <def.bfont_white>enhance ITEM	//this is where OSI has the enhance option
+endif
+
+button 280 430 4005 4006 2 0 65535
+dhtmlgump 315 430 100 20 0 0 <def.bfont_white>MAKE LAST
+
+///////////////////////////////////////////////
+// CATEGORIES, SELECTIONS, NOTICE, and ACTIONS
+page 1
+local.c=<ctag0.crafting_category>
+local.p=1
+
+if (<local.c> == 0)		//LAST TEN ITEMS	//this will be the last 10 items 
+  //serv.b last 10
+  dhtmlgump 340 50 100 20 0 0 <def.bfont_white>SELECTIONS
+  args=<ctag0.crafting_<ctag0.crafting_skill>_lastten>
+  for i 0 9
+    if (<argv[<dlocal.i>]>)
+      button 230 <eval (75+(<local.y>*20))> 4005 4006 1 0 <eval (21+<local.i>)>	//craft item button
+      button 490 <eval (75+(<local.y>*20))> 4011 4012 1 0 <eval (31+<local.i>)>	//details button
+      dhtmlgump 265 <eval (75+(<local.y>*20))> 300 20 0 0 <def.bfont_white><serv.itemdef.<argv[<dlocal.i>]>.name>
+      local.y += 1
+    endif
+  endfor
+
+elseif (<local.c> <= 10)	//ITEM SELECTIONS	//up to 10 is the cateogries availalbe 
+  //serv.b selected a category
+  //local.c -= 1
+  dhtmlgump 340 50 100 20 0 0 <def.bfont_white>SELECTIONS
+  while !(<isempty <def.crafting_<ctag0.crafting_skill>_<dlocal.c>_<dlocal.i>>>)
+    if (<local.y> >= 9)
+      local.p += 1 
+      local.y=
+      button 400 275 4005 4006 0 <local.p>	//next page
+      dhtmlgump 440 275 100 20 0 0 <def.bfont_white>NEXT PAGE
+      page <local.p>
+      dhtmlgump 340 50 100 20 0 0 <def.bfont_white>SELECTIONS
+      if (<local.p> > 1)
+        button 230 275 4014 4015 0 <eval (<local.p>-1)>	//previous page
+      else
+        button 230 275 4014 4015 0 <local._for>
+      endif
+      dhtmlgump 265 275 100 20 0 0 <def.bfont_white>PREV PAGE
+    endif
+    button 230 <eval (75+(<local.y>*20))> 4005 4006 1 0 <eval (100+<local.i>)>		//craft item button
+    button 490 <eval (75+(<local.y>*20))> 4011 4012 1 0 <eval (2000+<local.i>)>		//details button
+    dhtmlgump 265 <eval (75+(<local.y>*20))> 300 20 0 0 <def.bfont_white><serv.itemdef.<def0.crafting_<ctag0.crafting_skill>_<dlocal.c>_<dlocal.i>>.name>
+    //if (<isempty <serv.itemdef.<def0.crafting_<ctag0.crafting_skill>_<dlocal.c>_<dlocal.i>>.skillmake>>)
+      //serv.log <ctag0.crafting_skill> : <serv.itemdef.<def0.crafting_<ctag0.crafting_skill>_<dlocal.c>_<dlocal.i>>.baseid> = no skillmake!
+    //endif
+    local.i += 1
+    local.y += 1
+  endwhile
+
+else		//RESOURCE SELECTION
+  local.r=<eval (<local.c>-20)>
+  dhtmlgump 350 50 100 20 0 0 <def.bfont_white>RESOURCES
+  button 230 255 4005 4006 1 0 99
+  dhtmlgump 265 255 250 20 0 0 <def.bfont_white><qval (<ctag0.crafting_<ctag0.crafting_skill>_ignore_materialcolor> <= 0)?USE MATERIAL COLOR:DO NOT COLOR>
+  local.y=0
+  while !(<isempty <def.crafting_<ctag0.crafting_skill>_resource<dlocal.r>_<dlocal.m>>>)
+    if !(<def0.crafting_<ctag0.crafting_skill>_resource<dlocal.r>_<dlocal.m>_hide>)
+      if (<local.y> >= 8) 
+        local.p += 1 
+        local.y=0
+        button 400 275 4005 4006 0 <local.p>	//next page
+        dhtmlgump 440 275 100 20 0 0 <def.bfont_white>NEXT PAGE
+        page <local.p>
+        dhtmlgump 350 50 100 20 0 0 <def.bfont_white>RESOURCES
+        button 230 255 4005 4006 1 0 60101
+        dhtmlgump 265 255 250 20 0 0 <def.bfont_white><def.bfont_white><qval (<ctag0.crafting_<ctag0.crafting_skill>_ignore_materialcolor> <= 0)?USE MATERIAL COLOR:DO NOT COLOR>
+        button 230 275 4014 4015 0 <eval <local.p>-1>	//previous page
+        dhtmlgump 265 275 100 20 0 0 <def.bfont_white>PREV PAGE
+      endif
+      if (<<ctag0.crafting_skill>> >= <serv.itemdef.<def0.crafting_<ctag0.crafting_skill>_resource<dlocal.r>_<dlocal.m>>.skillmake.0.val>)
+        local.canuse=1
+      endif
+      button 230 <eval (75+(<local.y>*20))> 4005 4006 1 0 <eval (50+<local.m>)>
+      dhtmlgump 265 <eval (75+(<local.y>*20))> 250 20 0 0 <qval <local.CanUse>?<def.bfont_white>:<def.bfont_gray>><serv.itemdef.<def0.crafting_<ctag0.crafting_skill>_resource<dlocal.r>_<dlocal.m>>.name>
+      //dhtmlgump 390 <eval (75+(<local.y>*20))> 250 20 0 0 <qval <local.CanUse>?<def.bfont_white>:<def.bfont_lgray>><fval <serv.itemdef.<def0.crafting_<ctag0.crafting_skill>_resource_<dlocal.m>>.skillmake.0.val>> <ctag0.crafting_skill>
+      local.y += 1
+      local.canuse=
+    endif
+    local.m += 1
+  endwhile
+
+endif
+
+[dialog d_crafting_menu button]
+
+onbutton=1,20 	//selecting category
+argn -= 1
+src.ctag0.crafting_category=<dargn>
+src.ctag0.crafting_categroy_last=<dargn>
+src.sdialog d_crafting_menu
+
+onbutton=21,30		//last 10 crafted items
+local.argv=<eval (<argn>-21)>
+args=<src.ctag0.crafting_<ctag0.crafting_skill>_lastten>
+local.item=<argv[<dlocal.argv>]>
+src.f_crafting_makeitem <local.item>
+
+onbutton=31,40		//last 10 view details
+local.b=<eval (<argn>-31)>
+args=<ctag0.crafting_<ctag0.crafting_skill>_lastten>
+src.ctag0.<src.ctag0.crafting_skill>_crafting_item=<argv[<dlocal.b>]>
+src.ctag0.crafting_category=0
+src.sdialog d_crafting_menu_details
+
+onbutton=41,42		//viewing available resources
+argn1 -= 21
+src.ctag0.crafting_category=<dargn1>
+src.sdialog d_crafting_menu
+
+onbutton=50,98		//selecting crafting material
+argn1 -= 50
+local.n=<eval (<src.ctag0.crafting_category>-20)>
+local.resource=<def0.crafting_<src.ctag0.crafting_skill>_resource<dlocal.n>_<dargn1>>		//start with ingots then make this work for scales
+if (<src.<ctag0.crafting_skill>> < <serv.itemdef.<local.resource>.skillmake.0.val>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You cannot work this strange and unusual material
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu
+  return 1
+endif
+
+//src.tag0.matoverride_<def0.crafting_<src.ctag0.crafting_skill>_resource<dlocal.n>>=<local.resource>	//we can set this when crafting the item
+src.ctag0.<src.ctag0.crafting_skill>_resource<dlocal.n>=<local.resource>
+//serv.log <src.name>(<src>) selected <local.resource> for resource<dlocal.n>
+//src.ctag0.<src.ctag0.crafting_skill>_material_exp_bonus=<argn1>
+//src.ctag0.crafting_category=<dargn1>
+src.ctag0.crafting_category=<src.ctag0.crafting_categroy_last>
+src.ctag0.<src.ctag0.crafting_skill>_notice=<serv.itemdef.<local.resource>.name> selected for crafting resource
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+src.sdialog d_crafting_menu 
+
+onbutton=99	//toggle using material color
+src.ctag0.crafting_<src.ctag0.crafting_skill>_ignore_materialcolor=<qval (<src.ctag0.crafting_<src.ctag0.crafting_skill>_ignore_materialcolor> <= 0)?1:0>
+src.sdialog d_crafting_menu		
+
+onbutton=100,1100	//select an item to craft from the main dialog
+argn -= 100
+local.c=<src.ctag0.crafting_category>	//category we picked from
+local.i=<argn>				//the item from that category
+local.item=<def0.crafting_<src.ctag0.crafting_skill>_<dlocal.c>_<dlocal.i>>	//get the item from the defs
+src.f_crafting_makeitem <local.item> 
+
+onbutton=2000,3000	//view crafting details (opens separate dialog)
+argn1 -= 2000
+local.c=<src.ctag0.crafting_category>
+local.i=<argn>
+local.item=<def0.crafting_<src.ctag0.crafting_skill>_<dlocal.c>_<dlocal.i>>
+src.ctag0.<src.ctag0.crafting_skill>_crafting_item=<local.item>		//do we need to store this?
+//serv.log <src.name> viewing <src.ctag0.crafting_skill> details for <local.item>
+src.sdialog d_crafting_menu_details 
+
+onbutton=65532		//selecting mark options
+//serv.log <src.name> using <src.ctag0.crafting_skill>
+src.ctag0.<src.ctag0.crafting_skill>_mark_option += 1
+if (<src.ctag0.<src.ctag0.crafting_skill>_mark_option> > 3)	//can't ever go higher than option 3
+  src.ctag0.<src.ctag0.crafting_skill>_mark_option=0
+endif 
+src.sdialog d_crafting_menu
+
+onbutton=65533		//recycle the item 
+//serv.log <src.name> using <src.ctag0.crafting_skill> to recycle
+src.f_crafting_recycle
+
+onbutton=65534		//repair the item
+//serv.log <src.name> using <src.ctag0.crafting_skill>
+src.f_crafting_repair
+
+onbutton=65535 	//make last
+local.item=<src.ctag.<src.ctag0.crafting_skill>_crafting_item>
+if !(<local.item>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You have not yet selected an item for <src.ctag0.crafting_skill>
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu 
+  return 1
+endif
+src.f_crafting_makeitem <local.item> 
+
+onbutton=65538	//enhance
+if !(<src.<src.ctag0.crafting_skill>_prerequisite>)
+  src.sysmessage You cannot enhance with <src.ctag0.crafting_skill> at the moment.
+  return 1
+endif
+src.targetf f_crafting_enhance <ctag0.crafting_skill>
+src.sysmessage Select the item you wish to enhance
+
+
+[dialog d_crafting_menu_details]
+100,50
+page 0
+
+
+//serv.log <name> viewing crafting details for <src.ctag0.<src.ctag0.crafting_skill>_crafting_item>, using <src.ctag0.crafting_skill>.
+//////////////////////////////////////////////////////////////////////////////
+//ITEM DETAIL CRAFTING MENU
+
+/////////////////////////////////
+//BASIC BACKGROUND AND SECTIONS
+
+//BACKGROUND
+resizepic 10 10 9200 530 455
+
+//TITLE BAR
+gumppictiled 20 20 510 25 2624
+dhtmlgump 200 22 300 20 0 0 <def.bfont_white><strtoupper <ctag0.crafting_skill> Menu>
+
+//ITEMPIC
+gumppictiled 20 50 155 155 2624
+
+//ITEMINFO
+gumppictiled 180 50 350 90 2624
+
+//SKILLS
+gumppictiled 20 210 180 25 2624
+gumppictiled 180 145 350 90 2624
+dhtmlgump 70 212 100 20 0 0 <def.bfont_white>SKILLS
+
+//MATERIALS
+gumppictiled 20 240 155 60 2624
+gumppictiled 20 305 180 25 2624
+gumppictiled 180 240 350 90 2624
+dhtmlgump 60 307 100 20 0 0 <def.bfont_white>MATERIALS
+
+//OTHER
+gumppictiled 20 335 155 60 2624
+gumppictiled 20 400 180 25 2624
+gumppictiled 180 335 350 90 2624
+dhtmlgump 75 402 100 20 0 0 <def.bfont_white>OTHER
+
+//BOTTOM OPTIONS
+gumppictiled 20 430 510 25 2624
+checkertrans 20 20 510 435
+
+
+/////////////////////////
+
+//VARIETY OF SECTIONS
+local.item=<src.ctag0.<src.ctag0.crafting_skill>_crafting_item>
+
+//ITEMPIC
+//serv.log <name> <src.name> <ctag0.<ctag0.crafting_skill>_crafting_item>
+local.resource_canreplace=<def0.crafting_<ctag0.crafting_skill>_<dctag0.crafting_category>_resource_replace>
+//serv.log <name> using <ctag0.crafting_skill>, category <dctag0.crafting_category>, resource <qval (<local.resource_canreplace>)?can:cannot> be replaced.
+
+if (<local.resource_canreplace>)
+  if !(<isempty <def.crafting_<ctag0.crafting_skill>_resource0_0>>) && (<serv.itemdef.<ctag0.<ctag0.crafting_skill>_crafting_item>.resources.1.key> == <def0.crafting_<ctag0.crafting_skill>_resource0_0>) 
+    serv.newitem <ctag0.<ctag0.crafting_skill>_resource0>
+    local.color=<new.color>
+    new.remove
+  endif
+  if !(<isempty <def.crafting_<ctag0.crafting_skill>_resource1_0>>) && (<serv.itemdef.<ctag0.<ctag0.crafting_skill>_crafting_item>.resources.1.key> == <def0.crafting_<ctag0.crafting_skill>_resource1_0>) 
+    serv.newitem <ctag0.<ctag0.crafting_skill>_resource1>
+    local.color=<new.color>
+    new.remove
+  endif
+endif
+
+tilepichue 60 70 <eval id(<serv.itemdef.<local.item>.dispid>)> <dlocal.color>
+
+//ITEM INFO
+dhtmlgump 185 53 100 20 0 0 <def.bfont_white>ITEM
+dhtmlgump 345 53 255 50 0 0 <def.bfont_white><serv.itemdef.<local.item>.name> 
+
+dhtmlgump 185 80 140 20 0 0 <def.bfont_white>Success chance:
+local.SuccessChance=<f_crafting_success_chance <local.item>>
+dhtmlgump 440 80 140 20 0 0 <def.bfont_white><fval <local.SuccessChance>>%		//<fval <qval (<local.SuccessChance> <= 1000)?<qval (<local.SuccessChance> <= 0)?0:<local.SuccessChance>>:1000>>%	//<fval <local.SuccessChance>>
+
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&04)
+  dhtmlgump 185 95 140 20 0 0 <def.bfont_white>Exceptional chance:
+  local.ExceptionalChance=<f_crafting_exceptional_chance <local.item>>
+  dhtmlgump 440 95 140 20 0 0 <def.bfont_white><fval <local.ExceptionalChance>>%	//<fval <qval (<local.ExceptionalChance> <= 1000)?<qval (<local.ExceptionalChance> <= 0)?0:<local.ExceptionalChance>>:1000>>%
+endif
+
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&020)
+  if (<f_crafting_success_chance <local.item>> < 1000) && !(<skilllock.<ctag0.crafting_skill>>) && !(<<ctag0.crafting_skill>> >= <level_skillcap>)
+    dhtmlgump 185 120 140 20 0 0 <def.bfont_white>Experience value:
+    dhtmlgump 440 120 140 20 0 0 <def.bfont_white><df_crafting_experience_value <local.item>>
+  else
+    dhtmlgump 185 120 340 20 0 0 <def.bfont_gray>No experience, too easy or no skillgain possible.
+  endif
+endif
+
+//SKILL LIST
+local.s=1	//start in position 1, 0 lists an array of skills
+while (!<isempty <serv.itemdef.<local.item>.skillmake.<dlocal.s>>>)
+  //if (<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>)
+    //if (<resourcetype <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>> != <def.res_itemdef>)	//no items in the skill list
+      if (strmatch(t_*,<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>))
+        //dhtmlgump 185 <eval 135+(<local.s>*15)> 125 20 0 0 <def.bfont_white><serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>
+      elseif (<serv.skill.<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>>)
+        dhtmlgump 185 <eval 135+(<local.s>*15)> 125 20 0 0 <def.bfont_white><serv.skill.<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>.name>
+        dhtmlgump 440 <eval 135+(<local.s>*15)> 125 20 0 0 <def.bfont_white><fval <serv.itemdef.<local.item>.skillmake.<dlocal.s>.val>>
+      endif
+    //endif
+  //endif  
+  local.s += 1
+endwhile
+
+//RESOURCE LIST
+//local.resource_list_item=<def.div_left>
+//local.resource_list_amount=<def.div_left>
+local.resource_list=<def.div_right>
+for r 1 <serv.itemdef.<local.item>.resources.count>
+
+  local.resource=<serv.itemdef.<local.item>.resources.<dlocal.r>.key>	//just the regular resource we're working with
+  local.amount=<serv.itemdef.<local.item>.resources.<dlocal.r>.val>
+
+  if (<def0.crafting_<src.ctag0.crafting_skill>_<src.dctag0.crafting_category>_resource_replace>)	//possible to replace in this crafting submenu
+    if (<serv.itemdef.<local.item>.resources.<dlocal.r>.key> == <def0.crafting_<src.ctag0.crafting_skill>_resource0>) 	//this is the resource we can replace
+      if (<def0.crafting_<src.ctag0.crafting_skill>_resource0_0>) && (<src.ctag0.<src.ctag0.crafting_skill>_resource0> != <def0.crafting_<src.ctag0.crafting_skill>_resource0>)  //we have selected an alternate resource
+        local.resource=<src.ctag0.<src.ctag0.crafting_skill>_resource0>
+      endif
+    elseif (<serv.itemdef.<local.item>.resources.<dlocal.r>.key> == <def0.crafting_<src.ctag0.crafting_skill>_resource1>) 
+      if (<def0.crafting_<src.ctag0.crafting_skill>_resource1_0>) && (<src.ctag0.<src.ctag0.crafting_skill>_resource1> != <def0.crafting_<src.ctag0.crafting_skill>_resource1>) 
+        local.resource=<src.ctag0.<src.ctag0.crafting_skill>_resource1>
+      endif
+    endif
+  endif
+
+  local.retains_color=1		//everything retains its color here?
+  local.baseid=<serv.itemdef.<local.resource>.baseid>
+  local.dispid=<serv.itemdef.<local.resource>.dispid>
+  //serv.b <local.resource> <local.baseid> <local.dispid>
+  //serv.log <src.name> viewing <src.ctag0.crafting_skill> details for <serv.itemdef.<local.item>.name>, resource = <local.resource>  //local.resource/local.dispid = <local.resource>/<local.dispid>
+
+  if !(<def0.crafting_system_substitute_material_<local.baseid>>)
+    local.resource=<serv.itemdef.<local.resource>.name>
+  else
+    args=<def0.crafting_system_substitute_material_<local.baseid>>
+    local.resource=<serv.itemdef.<local.resource>.name> or <serv.itemdef.<args>.name>
+  endif
+  
+  local.resource_amount=<serv.itemdef.<local.item>.resources.<dlocal.r>.val>
+
+  //dhtmlgump 185 <eval 225+(<local.r>*15)> 255 20 0 0 <def.bfont_white><local.resource>	//this wont work, goes beyond the material section, must be just one htmlgump
+  //dhtmlgump 440 <eval 225+(<local.r>*15)> 155 20 0 0 <def.bfont_white><local.resource_amount>
+  //local.resource_list_item .= <local.resource><def.br>
+  //local.resource_list_amount .= <local.resource_amount><def.br>
+  local.resource_list .= <local.resource>                <dlocal.resource_amount><def.br>
+endfor
+        
+//dhtmlgump 185 240 300 90 0 0 <def.bfont_white><local.resource_list_item>
+//dhtmlgump 450 240 40 90 0 0 <def.bfont_white><local.resource_list_amount>
+dhtmlgump 185 240 300 90 0 0 <def.bfont_white><local.resource_list>
+
+//OTHER INFO
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&08)
+  dhtmlgump 185 335 250 20 0 0 <def.bfont_white>This item may holds its maker's mark
+endif
+if (<local.retains_color>)
+  dhtmlgump 185 355 300 20 0 0 <def.bfont_white>*The item retains the color of this material
+endif
+
+button 20 432 4014 4015 1 0 1	//backpage
+dhtmlgump 60 432 100 20 0 0 <def.bfont_white>BACK
+
+if (<def0.crafting_system_make_max>)
+  button  140 432 4005 4006 1 0 2	//make number
+  dhtmlgump 180 432 100 20 0 0 <def.bfont_white>MAKE MAX
+endif
+
+if (<def0.crafting_system_make_amount>)
+  button 260 432 4005 4006 1 0 3	//make number
+  dhtmlgump 300 432 100 20 0 0 <def.bfont_white>MAKE NUMBER
+endif
+
+button 400 432 4005 4006 1 0 4	//make item
+dhtmlgump 440 432 100 20 0 0 <def.bfont_white>MAKE NOW
+
+[dialog d_crafting_menu_details button]
+
+onbutton=1		//back to main menu
+src.sdialog d_crafting_menu
+
+onbutton=2 	//craft max amount		//These havent been touched or active for a long time, probably needs fixing
+if (<src.findid.i_crafting_item>)
+  src.sysmessage You must wait to perform another action.
+  src.sdialog d_crafting_menu
+  return 1
+elseif (<src.findid.i_crafting_amount>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You are already crafting the max amount of something.
+  src.sysmessage <ctag0.<src.ctag0.crafting_skill>_notice>
+  return 1
+elseif !(<src.f_<ctag0.crafting_skill>_prerequisite>)
+  src.sysmessage <ctag0.<src.ctag0.crafting_skill>_notice>
+   src.sdialog d_crafting_menu
+  return 1
+elseif (<def0.crafting_system_overweight_prevent>) && (<src.weight> >= <src.maxweight>) && !(<src.isgm>) 
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You are too overburdened to craft anything.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu
+  return 1
+endif
+src.sdialog d_crafting_menu
+src.sdialog d_crafting_max
+
+onbutton=3	//craft amount		//These havent been touched or active for a long time, probably needs fixing
+if (<src.findid.i_crafting_item>)
+  src.sysmessage You must wait to perform another action.
+  src.sdialog d_crafting_menu
+  return 1
+elseif (<src.findid.i_crafting_amount>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You are already crafting an amount of something.
+  src.sysmessage <ctag0.<src.ctag0.crafting_skill>_notice>
+  return 1
+elseif !(<src.f_<ctag0.crafting_skill>_prerequisite>)
+  src.sysmessage <ctag0.<src.ctag0.crafting_skill>_notice>
+   src.sdialog d_crafting_menu
+  return 1
+elseif (<def0.crafting_system_overweight_prevent>) && (<src.weight> >= <src.maxweight>) && !(<src.isgm>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You are too overburdened to craft anything.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu
+  return 1
+endif
+src.sdialog d_crafting_menu
+src.ctag0.crafting_amount=
+src.sdialog d_crafting_amount
+
+onbutton=4		//craft an item from details page
+local.item=<src.ctag.<src.ctag0.crafting_skill>_crafting_item>
+src.f_crafting_makeitem <local.item>
+
+
+////////////////////////////////////
+// START TO CRAFT THE ITEM
+
+[function f_crafting_makeitem]		//the main menu craft button, make last, and details craft button all use this function
+local.item=<args>
+
+if !(<local.item>) 
+  src.ctag0.<src.ctag0.crafting_skill>_notice=Unknown error, please page a GM
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu
+  return 1
+elseif (<src.action> != -1)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You must wait to perform another action.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu
+  return 1
+elseif !(<src.f_<ctag0.crafting_skill>_prerequisite>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=<ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+   src.sdialog d_crafting_menu
+  return 1
+elseif (<def0.crafting_system_overweight_prevent>) && (<src.weight> >= <src.maxweight>) && !(<src.isgm>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You are too overburdened to craft anything.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+   src.sdialog d_crafting_menu
+  return 1
+elseif !(<src.f_crafting_skill_test <local.item>>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You lack the skill to craft <serv.itemdef.<local.item>.name>
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu
+  return 1
+elseif !(<src.f_crafting_resource_test <local.item>>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=You do not have the required resources to craft <serv.itemdef.<local.item>.name>.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu
+  return 1
+endif
+
+src.ctag0.<src.ctag0.crafting_skill>_crafting_item=<local.item>		//do we need to store this?
+src.makeitem <local.item> 
+
+////////////////////////////////////////////////
+//CHECK SKILLS ARE SUFFICIENT TO CRAFT
+
+[function f_crafting_skill_test]
+local.item=<args>
+if !(<local.item>) || !(<serv.itemdef.<local.item>.skillmake>)
+  return 0
+endif
+
+local.s=1
+
+while !(<isempty <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>>)
+  if (<resourcetype <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>> != <def.res_itemdef>)	//no items in the skill list
+    if (strmatch(t_*,<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>))
+      if !(<isneartype <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key> 3>) && !(<findtype <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>>)
+        ctag0.crafting_missing_typedef=<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>
+      endif
+    elseif (<serv.skill.<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>>)
+      if (<<serv.skill.<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>.key>> < <eval <serv.itemdef.<local.item>.skillmake.<dlocal.s>.val>>)
+        return 0
+      endif
+    endif
+  endif
+  local.s += 1
+endwhile
+return 1
+
+/////////////////////////////////////////////////////
+// CHECK TO SEE IF THEY HAVE THE RESOURCES TO CRAFT
+
+[function f_crafting_resource_test]
+//argv0 = item baseid
+local.item=<argv[0]>	//itemid
+
+if !(<serv.itemdef.<local.item>.resources.count>)
+  return 0		//if the item has no resources required always fail
+endif
+
+for n 1 <serv.itemdef.<local.item>.resources.count>		//check each resource needed to make the item
+  local.oresource=<serv.itemdef.<local.item>.resources.<dlocal.n>.key>	//just the regular resource we're working with
+  local.resource=<local.oresource>
+  local.amount=<serv.itemdef.<local.item>.resources.<dlocal.n>.val>
+  tag0.matoverride_<local.resource>=					//clear this to start out
+  if (<def0.crafting_<ctag0.crafting_skill>_<dctag0.crafting_category>_resource_replace>)	//possible to replace in this crafting submenu
+    if (<serv.itemdef.<local.item>.resources.<dlocal.n>.key> == <def0.crafting_<ctag0.crafting_skill>_resource0>) 	//this is the resource we can replace
+      if (<def0.crafting_<ctag0.crafting_skill>_resource0_0>) && (<ctag0.<ctag0.crafting_skill>_resource0> != <def0.crafting_<ctag0.crafting_skill>_resource0>)  //we have selected an alternate resource
+        tag0.matoverride_<local.resource>=<ctag0.<ctag0.crafting_skill>_resource0>		//we set the material override here also
+        local.resource=<ctag0.<ctag0.crafting_skill>_resource0>
+      endif
+    elseif (<serv.itemdef.<local.item>.resources.<dlocal.n>.key> == <def0.crafting_<ctag0.crafting_skill>_resource1>) 
+      if (<def0.crafting_<ctag0.crafting_skill>_resource1_0>) && (<ctag0.<ctag0.crafting_skill>_resource1> != <def0.crafting_<ctag0.crafting_skill>_resource1>) 
+        tag0.matoverride_<local.resource>=<ctag0.<ctag0.crafting_skill>_resource1>		//we set the material override here also
+        local.resource=<ctag0.<ctag0.crafting_skill>_resource1>
+      endif
+    endif
+  endif
+
+  if (<def0.crafting_system_substitute_material_<local.resource>>)	//determine if there is a substitute resource, and if we need to use it
+    if (<rescount <local.resource>> < <local.amount>)	//we don't have enough of the original resource, try a substitute?  
+      tag0.matoverride_<local.oresource>=<def0.crafting_system_substitute_material_<local.resource>>
+      local.resource=<def0.crafting_system_substitute_material_<local.resource>>
+    endif
+  endif
+
+  //serv.log <name> calling f_crafting_resource_test with the following arguments : <args>
+  //serv.log f_crafting_resource_test <local.resource> <local.amount>
+  if (<rescount <local.resource>> < <local.amount>)	//we have less than we need
+    return 0
+  endif
+endfor
+return 1	//succeed if nothing failed above
+
+/////////////////////////////		
+// CONSUME THE RESOURCES
+
+//THIS IS NO LONGER USED, WE USE TAG.MATOVERRIDE
+[function f_crafting_resources_consume]		//if the resource we're using in crafting is alternative, also apply those resource properties to the new item
+//argv0 = item baseid
+//argv1	= percentage consumed
+local.item=<argv[0]>	//itemid
+local.val=<argv[1]>	//% value consumed
+
+for n 1 <serv.itemdef.<local.item>.resources.count>		//check each resource needed to make the item
+
+  local.resource=<serv.itemdef.<local.item>.resources.<dlocal.n>.key>	//just the regular resource we're working with
+  local.amount=<serv.itemdef.<local.item>.resources.<dlocal.n>.val>
+
+  if (<def0.crafting_<ctag0.crafting_skill>_<dctag0.crafting_category>_resource_replace>)	//possible to replace in this crafting submenu
+    if (<serv.itemdef.<local.item>.resources.<dlocal.n>.key> == <def0.crafting_<ctag0.crafting_skill>_resource0>) 	//this is the resource we can replace
+      if (<def0.crafting_<ctag0.crafting_skill>_resource0_0>) && (<ctag0.<ctag0.crafting_skill>_resource0> != <def0.crafting_<ctag0.crafting_skill>_resource0>)  //we have selected an alternate resource
+        local.resource=<ctag0.<ctag0.crafting_skill>_resource0>
+        ctag0.crafting_resource0_override=<local.resource>
+      endif
+    elseif (<serv.itemdef.<local.item>.resources.<dlocal.n>.key> == <def0.crafting_<ctag0.crafting_skill>_resource1>) 
+      if (<def0.crafting_<ctag0.crafting_skill>_resource1_0>) && (<ctag0.<ctag0.crafting_skill>_resource1> != <def0.crafting_<ctag0.crafting_skill>_resource1>) 
+        local.resource=<ctag0.<ctag0.crafting_skill>_resource1>
+        ctag0.crafting_resource1_override=<local.resource>
+      endif
+    endif
+  endif
+
+  if (<def0.crafting_system_substitute_material_<local.resource>>)	//determine if there is a substitute resource, and if we need to use it
+    if !(<restest <serv.itemdef.<local.item>.resources.<dlocal.n>.val><local.resource>>)	//none of these, try substitute resource 
+      local.resource=<def0.crafting_system_substitute_material_<local.resource>>
+    endif
+  endif
+
+  if (<def0.crafting_system_consume_exclusion_onsuccess_<local.resource>> != 1)		//make sure this item isnt excluded from consumption on crafting
+    local.amount_override=<def0.crafting_system_created_item_amount_override_<local.item>>
+
+    //serv.log <name> calling f_crafting_resources_consume to consume with the following arguments : <args>
+    //serv.log <name> using <ctag0.crafting_skill> to make <ctag0.<ctag0.crafting_skill>_crafting_item>
+    //serv.log f_crafting_resources_consume <local.resource> <local.amount>
+
+    if !(<local.resource>) || !(<local.amount>)
+      serv.log f_crafting_resources_consume called with invalid arguments not allowed.
+      return 1
+    endif
+
+    if (<local.amount_override>)
+      local.amount_available=<rescount <local.resource>>
+      local.amount=<qval (<local.amount_override> < <local.amount_available>)?<local.amount_override>:<local.amount_available>>
+      ctag0.crafting_amount_override=<local.amount>
+    endif
+
+    consume <local.resource> <qval (<isempty <argv[1]>>)?<local.amount>:<muldiv <argv[1]>,<local.amount>,100>>
+  endif
+
+endfor
+
+/////////////////////////////
+// RECYCLE THE RESOURCES
+
+[function f_crafting_recycle]
+args=<def0.crafting_<ctag0.crafting_skill>_recycle>
+src.<argv[1]>	// calls whatever function is in the specific crafting defs
+
+
+/////////////////////////////
+//REPAIR THE ITEM
+
+[function f_crafting_repair]
+targetf f_crafting_repair_targ
+sysmessage What item would you like to repair?
+
+[function f_crafting_repair_targ]
+if !(<canpackaccess <argo>>) && !(<canbankaccess <argo>>)
+  ctag0.<ctag0.crafting_skill>_notice=You can not repair something that isn't with you.
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  sdialog d_crafting_menu
+  return 1
+//elseif (<argo.attr>&attr_newbie)
+  //ctag0.<ctag0.crafting_skill>_notice=It is not possible to repair that item.
+  //sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  //sdialog d_crafting_menu
+  //return 1
+elseif (strcmpi(<serv.skill.<argo.skillmake.1.key>.key>,<ctag0.crafting_skill>))
+  ctag0.<ctag0.crafting_skill>_notice=You can not repair that item with <ctag0.crafting_skill>
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  sdialog d_crafting_menu 
+  return 1
+elseif (<argo.hits> >= <argo.maxhits>)
+  ctag0.<ctag0.crafting_skill>_notice=That item is already in full repair.
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  sdialog d_crafting_menu 
+  return 1
+endif
+
+local.amount=<eval ((100-((100*<argo.hits>)/<argo.maxhits>))*<argo.resources.1.val>)/100>
+if (<argo.tag0.matoverride_<argo.resources.1.key>>)
+  local.resource=<argo.tag0.matoverride_<argo.resources.1.key>>
+else
+  local.resource=<argo.resources.1.key>
+endif
+
+if (<<ctag0.crafting_skill>> < <serv.itemdef.<local.resource>.skillmake.1.val>)
+  ctag0.<ctag0.crafting_skill>_notice=You cannot work this strange and unusual material
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  sdialog d_crafting_menu
+  return 1
+elseif (<rescount <local.resource>> < <local.amount> )
+  ctag0.<ctag0.crafting_skill>_notice=You do not have the required resources to repair <argo.name>
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  sdialog d_crafting_menu
+  return 1
+endif
+
+
+anim <def0.crafting_<ctag0.crafting_skill>_anim>
+sound <streat <def0.crafting_<ctag0.crafting_skill>_sound>>
+sound <strarg <def0.crafting_<ctag0.crafting_skill>_sound2>>
+
+local.repairchance=<f_crafting_success_chance <argo.baseid>>
+local.weakenchance=<eval ((40+(<argo.maxhits>-<argo.hits>))-(<<ctag0.crafting_skill>>/100))>
+if !(<argo.attr>&attr_newbie>)
+  if (<R1,100> < <local.weakenchance>)
+    if (<<ctag0.crafting_skill>> >= 900)
+      local.damage=1
+    elseif (<<ctag0.crafting_skill>> >= 700)
+      local.damage=2
+    else
+      local.damage=3
+    endif
+    local.damage=<qval (<argo.maxhits> < <local.damage>)?<argo.maxhits>:<local.damage>>
+    argo.maxhits -= <local.damage>
+    if (<argo.maxhits> <= 0)
+      argo.remove
+      sysmessage That item has broken!
+      return 1
+    endif
+    if (<argo.maxhits> <= <local.damage>)
+      sysmessage That item has been repaired many times, and will break if repairs are attempted again.
+    endif
+  endif
+endif
+
+if (<local.repairchance> <= <R1,1000>)
+  consume <local.resource> <eval (<local.amount>/2)>
+  ctag0.<ctag0.crafting_skill>_notice=You fail to repair the <argo.name>
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  sdialog d_crafting_menu
+  return 1
+endif
+
+consume <local.resource> <local.amount>
+argo.hits=<argo.maxhits>
+ctag0.<ctag0.crafting_skill>_notice=You repair the <argo.name>
+sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+sdialog d_crafting_menu 
+
+[function f_crafting_success_chance]
+//person with 50 crafting chanmail leggings : (50-36.7)*2 = 13.3*2 = 26.6%
+//skill of char - skillreq of item * 2
+if !(<args>) || (<isempty <args>>)
+  serv.log <name>(<uid>) called f_crafting_success_chance with invalid args: <args>
+  return 1
+endif
+
+local.skillkey=<serv.skill.<serv.itemdef.<args>.skillmake.1.key>.name>	
+local.skillreq=<serv.itemdef.<args>.skillmake.1.val>
+local.successchance=<eval (<<local.skillkey>>-<local.skillreq>)*2>
+if (<local.SuccessChance> > 1000)
+  local.SuccessChance=1000
+elseif (<local.successChance> < 0)
+  local.successchance=0
+endif
+return <local.SuccessChance>
+
+[function f_crafting_exceptional_chance]
+local.successchance=<f_crafting_success_chance <args>>
+local.skillkey <serv.skill.<serv.itemdef.<args>.skillmake.1.key>.name>	
+local.ExceptionalChance=<eval (<local.successchance>-<qval (<<local.skillkey>> < 950 )? 600 : 450 >)>
+if (<local.ExceptionalChance> > 1000)
+  local.ExceptionalChance=1000
+elseif (<local.ExceptionalChance> < 0)
+  local.Exceptionalchance=0
+endif
+return <local.ExceptionalChance>
+
+[function f_crafting_experience_value]
+if (<skilllock.<ctag0.crafting_skill>>)
+  return 0
+endif
+local.n=<eval (((1000-<f_crafting_success_chance <args>>)/10)/4)>
+local.n += <muldiv <ctag0.<ctag0.crafting_skill>_material_exp_bonus>*4,<local.n>,100>
+local.n *= <eval ((<serv.itemdef.<args>.resources.0.val>/6)+1)>
+local.n += 1
+return <local.n>
+
+[dialog d_makers_mark_prompt]
+220,260
+
+page 0 
+resizepic 0 0 9200 220 170
+resizepic 10 10 9350 200 150
+//gumppictiled 10 10 200 150 2624
+//checkertrans 10 10 200 150
+//dhtmlgump 20 20 180 80 0 0 Do you wish to place your maker's mark on this <serv.itemdef.<ctag0.<src.ctag0.crafting_skill>_crafting_item>.name>?
+dhtmlgump 20 20 180 80 0 0 Do you wish to place your maker's mark on this <name>?
+
+
+dhtmlgump 65 125 140 25 0 0 No
+button 30 125 4005 4006 1 0 0
+
+dhtmlgump 165 125 140 25 0 0 Yes 
+button 130 125 4005 4006 1 0 1
+
+
+[dialog d_makers_mark_prompt button]
+
+onbutton=1
+//ref1=<ctag0.last_item_crafted>
+ref1=<uid>
+ref1.name=<ref1.name> crafted by <src.name>
+args=<explode ".",<src.ctag0.<src.ctag0.crafting_skill>_notice>>	//remove the period 
+src.ctag0.<src.ctag0.crafting_skill>_notice=<argv[0]>			
+src.ctag0.<src.ctag0.crafting_skill>_notice .= " and affix your maker's mark."	
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+src.dialogclose d_crafting_menu
+src.sdialog d_crafting_menu
+
+onbutton=0
+//no mark affixed
+
+////////////////////////
+// Crafting amount/max
+
+[dialog d_crafting_amount]
+220,260
+
+page 0
+resizepic 0 0 9200 220 170
+//checkertrans 10 10 200 150
+dhtmlgump 20 20 180 80 0 0 <def.bfont_white>How many of <serv.itemdef.<ctag0.<src.ctag0.crafting_skill>_crafting_item>.name> would you like to craft?
+
+resizepic 20 85 3000 170 25
+dtextentrylimited 20 85 180 30 0 1 25
+
+dhtmlgump 65 125 140 25 0 0 <def.bfont_white>Cancel
+button 30 125 4005 4006 1 0 0
+
+dhtmlgump 165 125 140 25 0 0 <def.bfont_white>OK
+button 130 125 4005 4006 1 0 1
+
+[dialog d_crafting_amount button]
+
+onbutton=1
+consume i_crafting_amount
+serv.newitem i_crafting_amount
+new.more2=<argtxt[1]>
+new.morep=<p>
+equip <new>
+sysmessage Crafting <dargtxt[1]> <serv.itemdef.<ctag0.<ctag0.crafting_skill>_crafting_item>.name>s.
+dialogclose d_crafting_menu
+
+[dialog d_crafting_max]
+220,260
+
+page 0
+resizepic 0 0 9200 220 170
+//checkertrans 10 10 200 150
+dhtmlgump 20 20 180 80 0 0 <def.bfont_white>Would you like to craft the maximum possible of <serv.itemdef.<ctag0.<ctag0.crafting_skill>_crafting_item>.name>s?
+
+//resizepic 20 85 3000 170 25
+//dtextentrylimited 20 85 180 30 0 1 25
+
+dhtmlgump 65 125 140 25 0 0 <def.bfont_white>No
+button 30 125 4005 4006 1 0 0
+
+dhtmlgump 165 125 140 25 0 0 <def.bfont_white>Yes
+button 130 125 4005 4006 1 0 1
+
+[dialog d_crafting_max button]
+
+onbutton=1
+consume i_crafting_amount
+serv.newitem i_crafting_amount
+new.more2=1000000
+new.morep=<p>	
+equip <new>
+sysmessage Crafting maximum amount of <serv.itemdef.<ctag0.<ctag0.crafting_skill>_crafting_item>.name> possible.
+dialogclose d_crafting_menu
+
+
+/////////////////////////////////////////
+// Memory item for amount/max crafting
+
+[itemdef i_crafting_amount]
+id=i_memory
+type=t_eq_script
+layer=layer_special
+name=Automtatic Crafting
+
+on=@create
+timer=0
+
+on=@timer
+if (<topobj.action> != -1)
+  remove
+  return 1
+elseif (<topobj.p.x><topobj.p.y> != <morex><morey>)
+  remove
+  return 1
+elseif !(<topobj.isonline>)
+  remove
+  return 1
+elseif (<more1> >= <more2>) || !(<topobj.f_crafting_resource_test>)
+  remove
+  return 1
+endif
+
+topobj.dialogclose d_crafting_menu
+serv.newitem i_crafting_item
+topobj.equip <new>
+topobj.f_<topobj.ctag0.crafting_skill>_pre_craft
+more1 += 1
+timer=6
+return 1
+
+on=@destroy
+topobj.sysmessage Crafting <dmore1> <serv.itemdef.<topobj.ctag0.<topobj.ctag0.crafting_skill>_crafting_item>.name>s complete.
+
+/////////////////////////////////////
+// Enhance Item Function
+
+[function f_crafting_enhance]
+if (<argo.topobj> != <src>) || (<findlayer.<argo.layer>>==<argo>)
+  src.sysmessage You cannot enhance that where it is
+  return 1
+elseif !(<argo.layer>) || (<argo.isevent.t_crafted_item>)
+  src.sysmessage That cannot be enhanced.
+  return 1
+elseif (<argo.isevent.t_enhanced_item>) 
+  src.sysmessage That item has been enhanced already.
+  return 1
+elseif (strcmpi(<args>,<serv.skill.<argo.skillmake.0.key>.key>))
+  src.sysmessage You cannot enhance that with that with <args>.
+  return 1
+endif
+
+sysmessage What would you like to enhance the <argo.name> with.
+ctag0.enhanceing=<argo>,<args>
+targetf f_crafting_enhance_targ
+
+[function f_crafting_enhance_targ]
+//argv[1]		//skill we're using to enhance
+ref1=<argo>		//material we're using to enhance
+args=<ctag0.enhanceing>	
+ctag0.enhanceing=
+ref2=<argv[0]>		//item we're enhanceing
+
+if (<ref2.topobj> != <uid>)
+  src.sysmessage you cannot enhance that where it is
+  return 1
+elseif (strcmpi(<ref1.type>,<serv.itemdef.<ref2.resources.0.key>.type>))
+  src.sysmessage you cannot enhance using that item with 
+  return 1
+elseif (<src.<argv[1]>> < <serv.itemdef.<ref1.baseid>.skillmake.0.val>)
+  src.sysmessage You cannot with with this strange and unusual material.
+  return 1
+endif
+
+ref1.consume <muldiv 75,<ref2.resources.0.val>,100>
+local.name=<ref2.name>
+ref2.f_<ctag0.crafting_skill>_apply_<ref1.baseid>
+ref2.events=+t_enhanced_item
+ref2.tag0.enhanced_with=<ref1.baseid>
+ref2.modar -= <muldiv 25,<ref2.modar>,100>
+ref2.maxhits -= <muldiv 25,<ref2.maxhits>,100>
+ref2.hits=<ref2.maxhits>
+ref2.name=<local.name>
+src.f_<src.ctag0.crafting_skill>_post_craft <ref2>
+src.sound 02a
+src.anim 11
+return 1
+
+[typedef t_enhanced_item]
+
+[function f_crafting_make_exceptional]
+if !(<isitem>) || !(<layer>)
+  return 1
+endif
+local.n=<R10,15>
+maxhits += <muldiv <local.n>,<maxhits>,100>
+hits=<maxhits>
+modar += <muldiv <local.n>,<qval (<isweapon>)?<dam.hi>:<armor.hi>>,100>
+quality=200	
+tag0.override.value=<qval (<tag0.override.value>)?<tag0.override.value>:<value>>	//only set this here if it has not been set somewhere else
+tag0.override.value += <muldiv <local.n>,<value>,100>
+name=exceptional <name> 
+events=+t_exceptional_item
+
+///////////////////////////////////
+//RESOURCE COST TO MAKE AN ITEM
+
+[function f_crafting_item_resource_cost]		
+local.r=1
+while <serv.itemdef.<baseid>.resources.<dlocal.r>.key>	//figure out what resource we're looking for
+  args=<serv.itemdef.<serv.itemdef.<baseid>.resources.<dlocal.r>.key>.value>
+  local.amount=<serv.itemdef.<baseid>.resources.<dlocal.r>.val>
+  if (<argv[0]>)
+    local.lo += <eval <argv[0]>*<local.amount>>
+  endif
+  if (<argv[1]>)
+    local.hi += <eval <argv[1]>*<local.amount>>
+  endif
+  local.r += 1
+endwhile
+return <qval (0 < <local.lo>)?<local.lo>><qval (<local.lo> && <local.hi>)?,:><qval (0 < <local.hi>)?<local.hi>:>
+
+[typedef t_exceptional_item]
+
+////////////////////////////////////////////////
+//OLD FUNCTIONS
+
+
+
+
+///////////////////////////// REMOVE THIS WHEN WE DONT NEED IT ANYMORE
+//CRAFT THE ITEM
+
+[comment OLD function f_crafting_makeitem]
+ref1=<ctag0.crafting_tool>
+local.item=<ctag0.<ctag0.crafting_skill>_crafting_item>
+
+local.successchance=<f_crafting_success_chance <local.item>>
+if (<local.successchance> < 1000)	//gain skill on items that don't have 100% success chance
+  skillgain <ctag0.crafting_skill>
+endif
+
+if (<R0,1000> > <local.successchance> ) && !(<isgm>)	//failed to craft the item
+  f_crafting_resources_consume <local.item>,<def0.crafting_system_fail_resource_loss>
+  ctag0.<ctag0.crafting_skill>_notice You fail to craft the <serv.itemdef.<local.item>.name>
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  sdialog d_crafting_menu <ctag0.crafting_lastpage>
+  //serv.log <name> has failed to create <local.item> using <ctag0.crafting_skill>.
+  return 1
+endif
+
+f_crafting_resources_consume <local.item>	//consume the resources before we make the new item.
+
+local.amount_override=<ctag0.crafting_amount_override>	//set here if we have any overrides for how much gets created
+ctag.crafting_amount_override=		//clear out amount override
+
+local.resource0_override=<ctag0.crafting_resource0_override>	//set any resource overrides so we can apply materials
+local.resource1_override=<ctag0.crafting_resource1_override>
+ctag0.crafting_resource0_override=		//clear out any resource overrides
+ctag0.crafting_resource1_override=
+
+
+
+
+if (<def0.crafting_<ctag0.crafting_skill>_flags>&020)	// If exp is enabled give them some experience points
+  if (<f_crafting_success_chance <local.item>> < 1000) && !(<skilllock.<ctag0.crafting_skill>>) && !(<<ctag0.crafting_skill>> >= <level_skillcap>)
+    local.exp=<f_crafting_experience_value <new.baseid>>
+    f_gain_exp <local.exp>
+  endif
+endif
+
+[function f_crafting_tool_get]
+ref1=<uid>
+ref2=<actprv>
+local.craftname=<ctag0.crafting_skill>
+local.toolevent=<def0.crafting_<local.craftname>_tool>
+if (<ref2.isvalid>) && (<ref2.topobj> == <src>))
+  if (<ref2.istevent.t_tool_<local.craftname>>) || (<ref2.isevent.t_tool_<local.craftname>>)
+    return <ref2>
+  endif
+endif
+return 0
+
+[function f_crafting_tool_find]
+ref1=<uid>
+local.craftname=<ctag0.crafting_skill>
+for l 0 1 	//they have one equipped?
+  ref2=<ref1.findlayer.<dlocal.l>>
+  if (<ref2.istevent.t_tool_<local.craftname>>) || (<ref2.isevent.t_tool_<local.craftname>>)
+    return <ref2>
+  endif
+endfor
+if (<ref1.findlayer.21.isvalid>) 	//they have on in their backpack?
+  forcont <ref1.findlayer.21> 0 
+    ref2=<uid>
+    if (<ref2.istevent.t_tool_<local.craftname>>) || (<ref2.isevent.t_tool_<local.craftname>>)
+      return <ref2>
+    endif
+  endfor
+endif
+return 0
+
+
+
+
+
+
+[EOF]
+
+    

@@ -1,0 +1,35 @@
+//This is taken care of in scripts/custom/systems/healing.scp
+//https://uo2.stratics.com/skill-guides/skills-and-professions/veterinary/
+//https://www.uoguide.com/Veterinary
+
+[SKILL 39]
+DEFNAME=Skill_Vet
+KEY=Veterinary
+TITLE=Veterinarian
+PROMPT_MSG=What animal would you like to heal?
+DELAY=2.0
+STAT_STR=30
+STAT_INT=125
+STAT_DEX=40
+BONUS_STR=20
+BONUS_DEX=20
+BONUS_INT=60
+BONUS_STATS=20
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+
+ON=@Start
+//act = targ
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You apply the bandages, but they barely help.
+
+ON=@Abort
+src.sysmessage You stop applying the bandages.
+	
+[EOF]

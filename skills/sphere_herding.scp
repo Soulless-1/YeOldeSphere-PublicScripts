@@ -1,0 +1,83 @@
+//https://uo2.stratics.com/skill-guides/skills-and-professions/herding/
+//7:34 PM 3/28/2018
+
+
+[SKILL 20]
+DEFNAME=Skill_Herding
+KEY=Herding
+TITLE=Shepherd
+FLAGS=skf_scripted
+PROMPT_MSG=
+DELAY=2.0
+STAT_STR=125
+STAT_INT=50
+STAT_DEX=50
+BONUS_STR=25
+BONUS_DEX=45
+BONUS_INT=30
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start
+//act = target
+//actprv = shepherd's crook
+ref1=<actprv>
+
+if !(<act.isvalid>) || !(<act.ischar>) || !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_weapon_mace_crook)
+  return 1
+elseif !(<src.findtype.t_weapon_mace_crook>)
+  src.sysmessage You do not have a herding tool
+  return 1 
+elseif (<src.distance <src.actp>> > 10) 	
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <src.actp>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif (<src.act.owner>)
+  src.sysmessage That animal looks tame already
+  return 1
+endif
+if !(<src.f_skillsucceed herding>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+on=@fail
+src.sysmessage You don't seem to be able to persuade that to move.
+
+on=@abort
+src.sysmessage You give up trying to persuade that to move.
+
+on=@success
+act.goto <src.actp>
+sysmessage The animal walks where it was instructed to.
+
+[function f_herding_animal_select]
+if !(<argo.isvalid>) 
+  return 1
+elseif (<distance <argo>> > 8)
+  sysmessage That is too far away.
+  return 1
+elseif !(<canseelos <argo>>)
+  sysmessage Target cannot be seen.
+  return 1
+elseif !(<argo.ischar>)
+  sysmessage You don't seem to be able to persuade that to move.
+  return 1
+elseif (<argo.npc> != brain_animal)
+  sysmessage That is not a herdable animal.
+  return 1
+endif
+act=<argo>
+src.targetfg f_herding_animal_goto
+src.sysmessage Click where you wish the animal to go.
+
+[function f_herding_animal_goto]
+actp=<targp>
+action=herding
+
+
+[EOF]

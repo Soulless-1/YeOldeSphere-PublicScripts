@@ -1,0 +1,103 @@
+//Map function by Soulless
+//v1.0
+//8:44 PM 8/8/2018
+
+[defname map_function_settings]
+map_gump_0		5593
+map_gump_1		5594
+map_gump_2		5595
+map_gump_3		5596
+map_gump_4		5597
+map_gump_5		5598
+map_gump_frame		5599
+
+[plevel 1]
+worldmap
+whereami
+
+[function whereami]
+worldmap
+
+[function worldmap]
+if (<indungeon>)
+  sysmessage There is no map for this place
+  return 1
+endif
+sdialog d_worldmap
+
+[dialog d_worldmap]
+100,25
+PAGE 0
+resizepic 100 100 5054 410 465
+gumppic 110 110 <def0.map_gump_<p.m>>
+gumppic 105 105 <def0.map_gump_frame>
+
+gumppic 83 77 1417	//globe border
+gumppic 95 85 5608	//globe
+//gumppic 470 510 9004	//waxseal
+
+page 1
+if (<p.m>==0)
+  tilepichue 200 250 0a0f 93		//Britain	//Runes are Towns
+  tilepichue 275 145 0a0f 93		//Minoc 
+  tilepichue 305 175 0a0f 93 	  	//Vesper
+  tilepichue 130 190 0a0f 93		//Yew
+  tilepichue 365 300 0a0f 93		//Magincia
+  tilepichue 130 300 0a0f 93		//Skara brae
+  tilepichue 190 450 0a0f 93		//Jhelom
+  tilepichue 230 355 0a0f 93		//Trinsic
+  tilepichue 365 215 0a0f 93		//Nujel'm 
+  tilepichue 420 200 0a0f 93		//Moonglow
+  tilepichue 255 205 0a0f 93		//Cove
+  tilepichue 190 180 0a0f 93		//Wind
+  tilepichue 360 335 0a0f 93		//Ocllo 
+  tilepichue 310 415 0a0f 93		//Serpent's hold
+  tilepichue 290 300 0a0f 1172		//Buccaneer's Den
+
+  tilepichue 195 200 01ae2 1172		//Despise	//Skulls are dungeons
+  tilepichue 250 125 01ae2 1172		//Wrong
+  tilepichue 135 250 01ae2 1172		//Shame
+  tilepichue 450 460 01ae2 1172		//Hythloth
+  tilepichue 180 350 01ae2 1172		//Destard
+  tilepichue 315 425 01ae2 1172		//Fire dungeon
+  tilepichue 275 185 01ae2 1172		//Covetous
+  tilepichue 255 110 01ae2 1172		//Ice Dungeon
+  tilepichue 405 145 01ae2 1172		//Deceit
+
+  tilepichue 345 125 01f14 15		//Sacrifice
+  tilepichue 185 160 01f14 15		//Justice
+  tilepichue 405 155 01f14 15		//Honesty
+  tilepichue 200 180 01f14 15		//Chaos
+  tilepichue 230 185 01f14 15		//Compassion
+  tilepichue 205 330 01f14 15		//Spirituality
+  tilepichue 215 430 01f14 15		//Honesty
+  tilepichue 405 450 01f14 15		//Humility
+
+endif
+
+
+//real map = 5120 x 4096
+//gump map = 385 x 385
+//tilepichue <eval (<src.p.x>/12)> <eval (<src.p.y>/10)> 09ea 73
+tilepichue <eval 88+((<src.p.x>*100)/1329)> <eval 100+((<src.p.y>*100)/1063)> 09ea 73
+
+//resizepic 110 480 3000 380 65
+dtext 130 500 1263 You're in: <src.region.name>, x<src.p.x> y<src.p.y>
+//Map Key
+
+tilepichue 110 515 0a0f 93
+dtext 140 517 1263 Guarded City
+
+tilepichue 215 515 0a0f 1172
+dtext 245 517 1263 Un-Guarded City
+
+tilepichue 350 520 01ae2 1172
+dtext 370 517 1263 Dungeon
+
+tilepichue 110 540 01f14 15
+dtext 140 535 1263 Shrine
+
+tilepichue 215 540 09ea 73
+dtext 245 535 1263 You
+
+[EOF]

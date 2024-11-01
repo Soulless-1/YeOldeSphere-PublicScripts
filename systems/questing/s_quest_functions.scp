@@ -1,0 +1,195 @@
+
+///////////////////////////////////////
+// general functions for quest system
+
+[function f_quest_eligible]
+local.q=<argn>	
+if (<def0.quest<dlocal.q>_chainprev>)
+  args=<def0.quest<dlocal.q>_chainprev>
+  for x 0 <eval <argv>-1>
+    if !(<f_quest_iscompleted <dargv[<dlocal.x>]>>) 
+      local.n=1
+    endif
+  endfor
+endif
+if !(<local.n>) && !(<f_quest_iscompleted <dlocal.q>>)
+  return 1
+  else
+  return 0
+endif
+
+[function f_quest_delivery_check]
+forcharlayer 30		
+  if (<baseid>==i_quest_tracker) && (!<isempty <tag.receiver>>)	//always a text string
+    if !(strcmpi(<args>,<tag0.receiver>))
+      return <uid>	//get the quest memory item
+    endif
+  endif
+endfor
+
+[function f_quest_chain_current]
+local.q=<argn>	
+if (<def0.quest<dlocal.q>_chainprev>)
+  args=<def0.quest<dlocal.q>_chainprev>
+  for x 0 <eval <argv>-1>
+    if !(<f_quest_iscompleted <argv[<dlocal.x>]>>) 
+      return <dargv[<dlocal.x>]>
+    endif
+  endfor
+endif
+
+[function f_quest_accept]				//accept the quest and add to the quest log
+local.q=<argv[0]>
+if (<serv.list.quest_log<src>.findelem <dlocal.q>> != -1) 
+  src.sysmessage You are already on that quest.
+  return 1
+elseif (<serv.list.quest_log<src>.count> >= <def0.quests_maxlog>)
+  src.sysmessage You cannot accept any more quests.
+  return 1
+endif
+serv.newitem i_quest_tracker		//make the memory tracking item and equip it
+ref1=<new>
+new.color=<local.q>		//quest set right before we add the objective tags
+new.link=<uid>		//link it to the quest giver
+new.f_quest_memory_addobjectives <uid>,<src>
+ref1.name=Quest <dlocal.q> Memory
+src.equip <ref1>
+serv.list.quest_log<src>.add <local.q>	//add the quest to the quest log
+src.sysmessage You have accepted the quest.
+//src.sound 05b4
+
+[function f_quest_memory_addobjectives]	//tags the quest memory item with the objective reqs so we don't need to reference it defs again
+ref1=<uid>	//memory item
+ref2=<argv[0]>	//npc
+ref3=<argv[1]>	//player
+tag0.quest<ref1.dcolor>_objectiveamount=<def0.quest<ref1.dcolor>_objectiveamount>
+for 1 <def0.quest<dcolor>_objectiveamount>
+  args=<def0.quest<ref1.dcolor>_objective<dlocal._for>_type>,<explode " ",<def0.quest<ref1.dcolor>_objective<dlocal._for>>>
+  tag0.quest<ref1.dcolor>_objective<dlocal._for>=<argv[0]>,<argv[2]>,<argv[1]>	//type,chardef/itemdef,amount
+  tag0.quest<ref1.dcolor>_objective<dlocal._for>_count=<argv[1]>		//the count
+  if (<argv[0]>==3)	//we've got a delivery quest here, give them the item to deliver
+    tag0.receiver=<def0.quest<ref1.dcolor>_objective<dlocal._for>_receiver>
+    serv.newitem <argv[2]>,<argv[1]>,<ref3.findlayer.21>
+  elseif (<argv[0]>==4)		//this is an escort quest
+    link=<ref2>			//link to the npc
+    tag0.escortto=<argv[1]>	//set the location
+    serv.newitem i_quest_escort_following
+    new.timerms=10
+    new.link=<ref3>
+    ref2.equip <new>
+  endif
+endfor
+
+[function f_quest_find_memory]		//this is what we will use everywhere to find progress and such
+ref1=<uid>
+local.q=<argn>
+forcharlayer 30		
+  if (<baseid>==i_quest_tracker) && (<color>==<local.q>)	//check specific quest memory
+    ref1.ctag0.quest_memory=<uid>	//tag the last quest memory just so we don't have to run this again if we need it soon
+    return <uid>
+  endif
+endfor
+
+[function f_quest_progress]
+ref1=<args>	//argo of the memory item for the quest
+ref2=<uid>
+if (<ref1>)
+  local.q=<ref1.dcolor>
+  for n 1 <ref1.tag0.quest<dlocal.q>_objectiveamount>
+    args=<ref1.tag0.quest<dlocal.q>_objective<dlocal.n>>
+    if (<argv[0]>==1)	//obtain item quest
+      local.x += <ref1.topobj.rescount <argv[1]>>
+    elseif (<argv[0]>==2)	//kill
+      local.x += <eval <argv[2]>-<ref1.tag0.quest<ref1.dcolor>_objective<dlocal.n>_count>>
+    elseif (<argv[0]>==3) && (<ref2.baseid>==<ref1.tag0.receiver>)	//deliverables
+      local.x += <ref1.topobj.rescount <argv[1]>>
+    elseif (<argv[0]>==4) 	//just an escort
+      if !(strcmpi(<ref2.region.name>,<argv[2]>))
+        return 100
+      else
+        return 0
+      endif
+    endif
+    local.y += <argv[2]>
+  endfor
+  return <muldiv <local.x>,100,<local.y>>	//return 0-100
+else
+  return 0		//return nothing (no quest memory item)
+endif
+
+[function f_quest_resign]				//remove the quest from the player's quest log, automatically removes it from serv.list
+ref1=<f_quest_find_memory <argn>>		//clear the memory tracking item
+serv.log quest memory for quest <argn> on <src.name> found : <ref1>
+serv.list.quest_log<uid>.<serv.list.quest_log<uid>.findelem <argn>>.remove	//remove it from the quest log list
+//sound 05b3
+ref1.remove	
+sysmessage You have resigned from the quest.
+
+[function f_quest_isaccepted]			//return 1 if the player is currently on the quest
+if (<serv.list.quest_log<uid>.findelem <argn>> != -1) 
+  return 1
+  else
+  return 0
+endif
+
+[function f_quest_complete]			//complete the quest and add it to the finished list
+src.f_quest_remove_items <argn>
+src.f_quest_receive_reward <argn>
+f_quest_dismiss_followers <argn>
+ref1=<src.f_quest_find_memory <argn>>
+serv.list.quest_log<src>.<serv.list.quest_log<src>.findelem <argn>>.remove
+if (<argn> < 135) || (<argn> > 147)
+  serv.list.quest_completed<src>.add <argn>	//add it to the finished quest log (except escort quests)
+endif
+ref1.remove
+src.sysmessage You have completed the quest!				//remove memory item
+
+[function f_quest_remove_items]		//this should remove any quest items you had to obtain or deliver
+ref1=<uid>	//player
+local.q=<argn>
+for n 1 <def0.quest<dlocal.q>_objectiveamount>
+  if (<def0.quest<dlocal.q>_objective<dlocal.n>_type>==1) || (<def0.quest<dlocal.q>_objective<dlocal.n>_type>==3)
+    args=<explode " ",<def0.quest<dlocal.q>_objective<dlocal.n>>>
+    ref1.consume <argv[0]> <argv[1]>
+  endif
+endfor
+
+[function f_quest_receive_reward]	//this should give you all rewards you were promised
+ref1=<uid>	//player
+local.q=<argn>
+for n 1 <def0.quest<dlocal.q>_prizes>
+  args=<explode " ",<def0.quest<dlocal.q>_prizeid<dlocal.n>>>
+  if (<def0.quest<dlocal.q>_prizetype<dlocal.n>>==1)	//this is an item we receive
+    serv.newitem <argv[0]>
+    ref1.bounce <new>
+  elseif (<def0.quest<dlocal.q>_prizetype<dlocal.n>>==3)
+    ref1.<argv[0]>
+  endif
+endfor
+
+[function f_quest_dismiss_followers]
+ref1=<uid>	//NPC (escort)
+local.q=<argn>	
+ref1.findid.i_quest_escort_following.more1=1
+ref1.findid.i_quest_escort_following.timer=1
+
+
+[function f_quest_iscompleted]			//return 1 if the player has completed their quest
+if (<serv.list.quest_completed<uid>.findelem <argn>> != -1) 
+  return 1
+  else
+  return 0
+endif
+
+[function f_quest_set_escortlocation]
+tag0.quests=1
+tag0.quest1=<R135,147>
+while !(strcmpi(<region.name>,<def.quest_<dtag0.quest1>_objective1>)
+  tag0.quest1=<R135,147>
+endwhile
+
+
+
+
+
+[EOF]

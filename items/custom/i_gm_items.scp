@@ -1,0 +1,136 @@
+
+
+[itemdef i_player_map]
+defname=i_player_map
+id=i_map
+type=t_script
+
+on=@create
+color=0489
+
+on=@dclick
+sdialog d_player_map
+return 1
+
+[dialog d_player_map]
+
+100,50
+
+page 0
+
+resizepic 10 10 9200 405 405
+gumppic 20 20 5593
+f_generate_player_map
+for n 0 <eval (<serv.list.player_map.count>-1)>
+  ref1=<serv.list.player_map.<dlocal.n>>
+  if (<ref1.p.x> < 5120)
+    tilepichue <eval ((<ref1.p.x>*100)/1329)> <eval 15+((<ref1.p.y>*100)/1063)> 09ea 70	
+  endif
+endfor
+serv.list.player_map.clear
+
+[function f_generate_player_map]
+for n 0 <eval (<serv.clients>-1)>
+  ref1=<serv.client.<dlocal.n>.uid>
+  serv.list.player_map.add <ref1>  
+endfor
+
+
+[itemdef i_healer_map]
+defname=i_healer_map
+id=i_map
+type=t_script
+
+on=@create
+color=0481
+
+on=@dclick
+sdialog d_healer_map
+return 1
+
+[dialog d_healer_map]
+
+100,50
+
+page 0
+
+resizepic 10 10 9200 405 405
+gumppic 20 20 5593
+f_generate_healer_map
+for n 0 <eval (<serv.list.healer_map.count>-1)>
+  ref1=<serv.list.healer_map.<dlocal.n>>
+  if (<ref1.p.x> < 5120)
+    tilepichue <eval ((<ref1.p.x>*100)/1329)> <eval 15+((<ref1.p.y>*100)/1063)> 09ea 92	
+  endif
+endfor
+for n 0 <eval (<serv.list.evilhealer_map.count>-1)>
+  ref1=<serv.list.evilhealer_map.<dlocal.n>>
+  if (<ref1.p.x> < 5120)
+    tilepichue <eval ((<ref1.p.x>*100)/1329)> <eval 15+((<ref1.p.y>*100)/1063)> 09ea 34	
+  endif
+endfor
+serv.list.healer_map.clear
+serv.list.evilhealer_map.clear
+
+[function f_generate_healer_map]
+forinstances i_worldgem_bit
+  if !(<cont>) 
+    if (<more1> == c_h_healer) || (<more1>==c_h_healer_f) || (<more1>==c_h_heal_wander) || (<more1>==c_h_heal_wander_f)
+      serv.list.healer_map.add <uid>  
+    elseif (<more1> == c_h_healer_evil) || (<more1> == c_h_healer_evil_f)
+      serv.list.evilhealer_map.add <uid> 
+    endif
+  endif
+endfor
+
+[itemdef i_travel_book_gm]
+name=GM Travel Book
+id=i_spellbook
+type=t_sign_gump
+
+on=@create
+color=0480
+
+subsection=Custom
+category=GM Items
+description=GM Travel Book
+
+on=@dclick
+sdialog d_gm_travel_book
+
+
+[dialog d_gm_travel_book]
+
+100,50
+
+page 0
+
+resizepic 10 10 9200 405 405
+//gumppic 20 20 5593
+for 725
+  button <eval (24+<local.x>)> <eval (23+<local.y>)> 03 04 1 0 <eval (<local._for>+1)>
+  local.x += 15
+  if (<local.x> >= 375)
+   local.y += 13
+   local.x=
+  endif
+endfor
+gumppic 20 20 5593
+
+tilepichue <eval ((<src.p.x>*100)/1329)> <eval (15+((<src.p.y>*100)/1063))> 09ea 73
+
+[dialog d_gm_travel_book button]
+
+onbutton=1,9999
+//x = 0 - 5120
+//y = 0 - 4096
+argn1 -= 1
+local.x=<eval <argn1>-(((<argn1>-1)/25)*25)>
+local.y=<eval (((<argn1>-1)/25)+1)>
+src.go <eval ((<local.x>*204)-102)> <eval ((<local.y>*141)-70)>
+src.z=<serv.map(<src.p.x>,<src.p.y>).terrain.z>
+src.sysmessage Grid x<dlocal.x>y<dlocal.y> <src.p>
+sdialog d_gm_travel_book
+
+
+[EOF]

@@ -1,0 +1,37 @@
+[SKILL 25]
+DEFNAME=Skill_Magery
+KEY=Magery
+TITLE=Mage
+FLAGS=skf_magic
+PROMPT_MSG=
+STAT_STR=20
+STAT_INT=125
+STAT_DEX=40
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=15
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+VALUES=1,20,80
+//DELAY=1.0 // based on skill and difficulty.
+
+ON=@Fail
+//src.message The spell fizzles.
+
+ON=@Abort
+//src.sysmessage You stop casting the spell.
+//src.message The spell fizzles.
+src.message @0482,3,0,0 *spell fizzles*
+src.sound 05c
+src.effect=2,i_fx_smoke_small,6,15,0
+return 1	//do not consume resources on abort, only fail
+
+ON=@Success
+if (<serv.spell.<actarg1>.flags>&spellflag_damage) 
+  if !(<serv.spell.<actarg1>.flags>&spellflag_field) && !(<serv.spell.<actarg1>.flags>&spellflag_area)
+    src.skillgain evaluatingintel
+  endif
+endif
+
+
+[EOF]

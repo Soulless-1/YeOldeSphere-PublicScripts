@@ -1,0 +1,41 @@
+[SPELL 22]
+// NOTE: Teleport sound/effect_id is handled by Sphere.ini settings
+DEFNAME=s_teleport
+NAME=Teleport
+SOUND=01fe
+RUNES=RP
+CAST_TIME=1.3
+RESOURCES=i_reag_blood_moss,i_reag_mandrake_root
+RUNE_ITEM=i_rune_teleport
+SCROLL_ITEM=i_scroll_teleport
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_playeronly
+EFFECT_ID=i_fx_smoke
+EFFECT=0
+DURATION=0.0
+MANAUSE=9
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+//Used to teleport to travel short distance. This is useful for crossing rivers, getting on top of buildings, or getting out of sticky situations.
+//10 Tile Range, Limited by line of sight.
+
+on=@start
+if !(<src.isgm>) 
+  if (<src.distance <src.targp>> > 10)
+    src.sysmessage That is too far away.
+    return 1
+  endif
+endif
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+
+on=@success
+forchars 2
+  if (<uid> != <src>) && (<owner>==<src>) && !(<flags>&statf_invul)
+    go <src.targp>
+  endif
+endfor
+
+[EOF]

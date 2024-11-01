@@ -1,0 +1,31 @@
+[SPELL 49]
+DEFNAME=s_chain_lightning
+NAME=Chain Lightning
+SOUND=snd_spell_chain_lightning
+RUNES=VOG
+CAST_TIME=2.3
+RESOURCES=i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_chain_lightning
+SCROLL_ITEM=i_scroll_chain_lightning
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_targ_obj|spellflag_harm|spellflag_damage|spellflag_area|spellflag_resist|spellflag_playeronly
+EFFECT_ID=0
+EFFECT=10,20
+DURATION=0.0
+MANAUSE=40
+SKILLREQ=MAGERY 60.0
+INTERRUPT=100.0,100.0
+
+//Chain Lightning drops a series of Lightning bolts to the area surrounding your target. (5x5 Area)
+//Formula: 27 + 1d22 / Targets in the area of effect, caster included.
+ON=@Success
+local.arearadius=2
+
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_energy>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<R20,30>	//<eval 27 + { 1 22}>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+//effect=1,1,6,15,1
+
+[EOF]

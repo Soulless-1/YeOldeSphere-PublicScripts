@@ -1,0 +1,117 @@
+//http://uo.stratics.com/content/skills/anat.shtml
+//http://www.uoguide.com/Anatomy
+//4:32 PM 3/27/2018
+
+[SKILL 1]
+DEFNAME=SKILL_ANATOMY
+KEY=Anatomy
+TITLE=Biologist
+FLAGS=skf_scripted
+PROMPT_MSG=Whom shall I examine?
+DELAY=1.0
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+BONUS_STATS=50
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+STAT_STR=15
+STAT_INT=125
+STAT_DEX=15
+
+ON=@Select
+// Fires when a player selects the skill in the menu.
+// RETURN 1   - Prevent using the skill
+// RETURN 0/2 - Allow skill to be used
+
+on=@start
+// Fires when the skill begins.
+// RETURN 1    = Prevent using the skill
+// RETURN 0/2  = Allow skill to be used
+// ACTION = -1 = Fail (@Fail).
+// ACTDIFF     = Skill required to succeed (0-100). Set to a negative value to fail the skill.
+// ACT		= target
+// ACTPRV 	= tool
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<act> == <src>)
+  message You know yourself quite well enough already.
+  return 1
+endif
+if !(<f_skillsucceed anatomy>)  
+  actdiff=65535		//way beyond what anyone would have
+else
+  actdiff=0
+endif
+
+on=@fail    
+// Fires when a character fails the skill
+// RETURN 1    = Prevent skill gain
+// RETURN 0/2  = Allow skill gain
+act.message You cannot quite get a sense of their physical characteristics.
+
+ON=@Abort
+// Fires when a character aborts the skill (going into war mode, for example)
+src.sysmessage You fail to examine the creature fully.
+
+on=@gain
+// Fires when a character has a chance of gaining skill
+// ARGN2       = The chance to gain skill (0-1000, writable)
+// ARGN3       = The maximum skill level the character can gain to (writable)
+// RETURN 1    = Block skill gain
+// RETURN 0/2  = Allow skill gain calculation to continue
+
+ON=@UseQuick
+// Fires when the skill is used with the USEQUICK function
+// ARGN2    = Skill difficulty (0-100, writable)
+// ARGN3    = Whether or not attempt is successful (writable)
+// RETURN 1 = Fail the skill attempt without skill gain
+// RETURN 0 = Succeed the skill attempt without skill gain
+// RETURN 2 = Proceed with skill gain (use ARGN3 to set fail or success)
+
+on=@success
+// Fires when the skill successfully finishes
+// RETURN 1    = Abort the skill
+// RETURN 0/2  = Proceed with allowing player to gain skill
+local.s=<eval <act.str>/10>
+if (<local.s> > 10)
+  local.s=10
+endif
+local.d=<eval <act.dex>/10>
+if (<local.d> > 10)
+  local.d=10
+endif
+doswitch <local.s>
+  local.msg1=like they would have trouble lifting small objects
+  local.msg1=rather Feeble
+  local.msg1=somewhat weak
+  local.msg1=to be of normal strength
+  local.msg1=somewhat strong
+  local.msg1=very strong
+  local.msg1=extremely strong
+  local.msg1=extraordinarily strong
+  local.msg1=strong as an ox
+  local.msg1=one of the strongest people you have ever seen
+  local.msg1=superhumanly strong
+enddo
+doswitch <local.d>
+  local.msg2=like they barely manage to stay standing.
+  local.msg2=very clumsy.
+  local.msg2=somewhat uncoordinated.
+  local.msg2=moderately dextrous.
+  local.msg2=somewhat agile.
+  local.msg2=very agile.
+  local.msg2=extremely agile.
+  local.msg2=extraordinarily agile.
+  local.msg2=moves like quicksilver.
+  local.msg2=one of the fastest people you have ever seen.
+  local.msg2=superhumanly agile.
+enddo
+act.message That looks <local.msg1> and <local.msg2>
+if (<src.anatomy> >= 650)
+  act.message This being is at <muldiv <act.hits>,100,<act.maxhits>>% endurance
+endif
+
+
+
+[EOF]

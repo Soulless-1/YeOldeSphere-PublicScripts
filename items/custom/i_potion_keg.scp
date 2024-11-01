@@ -1,0 +1,153 @@
+//OSI Style potion keg by Soulless
+//v1.0
+//12:17 PM 4/5/2019
+
+
+[ITEMDEF i_keg_potion]
+NAME=potion keg
+ID=i_KEG_WOOD
+TYPE=t_potion_keg
+VALUE={200 300}
+WEIGHT=40
+RESOURCES=8 i_BOARD, 1 i_BARREL_TAP, 1 i_BARREL_HOOPS
+SKILLMAKE=TINKERING 65.0,t_tinker_tools
+CATEGORY=Unique Items
+SUBSECTION=Tinker
+DESCRIPTION=empty potion Keg
+		
+on=@create
+name=empty <name>
+morey=100
+
+[ITEMDEF i_keg_potion_huge]
+NAME=huge potion keg
+ID=i_KEG_WOOD
+TYPE=t_potion_keg
+VALUE={200 300}
+WEIGHT=40
+RESOURCES=16 i_BOARD, 2 i_BARREL_TAP, 2 i_BARREL_HOOPS
+SKILLMAKE=TINKERING 85.0,t_tinker_tools
+CATEGORY=Unique Items
+SUBSECTION=Tinker
+DESCRIPTION=empty potion Keg
+
+on=@create
+name=empty <name>
+morey=250
+
+[ITEMDEF i_keg_potion_mega]
+NAME=mega potion keg
+ID=i_KEG_WOOD
+TYPE=t_potion_keg
+VALUE={200 300}
+WEIGHT=40
+RESOURCES=32 i_BOARD, 3 i_BARREL_TAP, 3 i_BARREL_HOOPS
+SKILLMAKE=TINKERING 99.0,t_tinker_tools
+CATEGORY=Unique Items
+SUBSECTION=Tinker
+DESCRIPTION=empty potion Keg
+	
+on=@create
+name=empty <name>
+morey=500
+	
+[typedef t_potion_keg]
+//morep=number of potions stored, more1=baseid, more2=strength, morex=amount, morez=maxamount
+
+on=@click
+message <name> (<dmorex>/<dmorey>)
+return 1
+
+ON=@Dclick
+if !(<morey>)
+  morey=100	//every keg must have a morey for the max amount 
+endif
+if (<morex> <= 0)	//empty potion keg
+  src.sysmessage This potion keg is empty.
+  return 1
+elseif (!<src.findid.i_bottle_empty>)	//has potions in it so check for empty potions to fill
+  src.sysmessage You do not have any empty potions on hand to fill.
+  return 1
+endif
+src.consume i_bottle_empty 1
+serv.newitem <more1>,1,<src>		//dclick a keg with potions will attempt to fill empty bottles in your bag
+morex -= 1
+sound 576
+if (<morex> <= 0)	//we're out of potions, clear all the properties
+  name=
+  name=empty <name>
+  more1=
+  more2=
+  color=
+endif
+return 1
+
+on=@Dropon_Self
+if (<morex> <= 0) && (<argo.type> != t_potion)		//can't use an empty potion on an empty keg
+  src.sysmessage You can't use this on an empty keg
+  return 1
+
+elseif (<argo.type>==t_potion)				//adding more potions to the keg
+  //we're dropping potions onto a keg, we need to check for the max amount possible and only allow a certain amount
+  if (<more1>) && (<argo.baseid> != <more1>) 	//already a more1 set, compare them
+    src.sysmessage You can't mix potion types!
+    return 1
+  elseif (<morex> >= <morey>) 	//max amount you can put in a keg
+    src.sysmessage There's no space for further potions!
+    return 1
+  endif
+
+  local.amount=<eval <morey>-<morex>>	//figure out how much room we got
+  local.amount=<qval (<argo.amount><=<local.amount>)?<argo.amount>:<local.amount>>	
+  local.n=<eval (<more2>*<morex>)+<argo.more2>>	//start 
+  morex += <local.amount>		//add the potion
+  more1=<argo.baseid>
+  more2=<eval <local.n>/<morex>>  
+  color=<f_get_potion_keg_color <argo>>
+  name=<argo.name> Potion Keg
+  serv.newitem=i_bottle_empty,<local.amount>,<src>
+  sound 576
+  src.sysmessage You fill up the keg with a <src.targ.name> Potion!
+  f_get_potion_keg_color <argo>
+  argo.consume <local.amount>
+  return 1
+
+elseif (<argo.baseid>==i_bottle_empty)			//filling potions up from the keg
+  local.amount=<qval (<argo.amount><=<morex>)?<argo.amount>:<morex>>
+  serv.newitem <more1>,<local.amount>,<src>
+  src.consume <argo.baseid> <local.amount>
+  morex -= <local.amount>
+  if (<morex> <= 0)	//we're out of potions, clear all the properties
+    name=
+    more1=
+    more2=
+    color=
+  endif
+  sound 576
+  return 1
+endif
+
+[function f_get_potion_keg_color]
+ref1=<args>	//the potion we just dropped into the keg
+if (<ref1.color> != 0)
+  return <ref1.color>
+elseif (<ref1.dispid>==i_bottle_blue)
+  return 060
+elseif (<ref1.dispid>==i_bottle_orange)
+  return 02b
+elseif (<ref1.dispid>==i_bottle_yellow)
+  return 030
+elseif (<ref1.dispid>==i_bottle_purple)
+  return 010
+elseif (<ref1.dispid>==i_bottle_black)
+  return 0323
+elseif (<ref1.dispid>==i_bottle_green)
+  return 040
+elseif (<ref1.dispid>==i_bottle_red)
+  return 027
+elseif (<ref1.dispid>==i_bottle_white)
+  return 03e9
+endif
+
+
+[EOF]

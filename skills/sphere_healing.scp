@@ -1,0 +1,38 @@
+//v1.0
+//2:35 PM 4/5/2018
+
+[SKILL 17]
+DEFNAME=Skill_Healing
+KEY=Healing
+TITLE=Healer
+FLAGS=skf_scripted
+PROMPT_MSG=Who will you use the bandages on?
+DELAY=3.0,1.0
+EFFECT=2.0,20.0
+ADV_RATE=1.0,1.0,1.0    //10.0,100.0,250.0
+STAT_STR=10
+STAT_INT=125
+STAT_DEX=10
+BONUS_STATS=20
+BONUS_STR=0
+BONUS_DEX=30
+BONUS_INT=70
+
+
+//FIXME: Move all the bandaging stuff into this script
+on=@start
+//act = target
+//actprv = bandage
+ref1=<actprv>
+local.delay=100
+
+if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_bandage)
+  return 1
+elseif !(<findtype.t_bandage>)
+  sysmessage You do not have any clean bandages.
+  return 1 
+endif
+return 0
+
+
+[EOF]

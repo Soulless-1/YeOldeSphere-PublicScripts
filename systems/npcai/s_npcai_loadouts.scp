@@ -1,0 +1,172 @@
+[function npcai_loadout_mage]
+magery=80.0	//{25.0 80.0}
+magicresistance=80.0	//{25.0 80.0}
+evaluatingintel=80.0	//{25.0 80.0}
+wrestling={25.0 80.0}
+make_spellcaster 1,5
+local.c=colors_all
+serv.newitem=i_robe,1,<uid>
+new.color=<local.c>
+serv.newitem=i_hat_wizards,1,<uid>
+new.color=<local.c>
+serv.newitem=i_sandals,1,<uid>
+new.color=<local.c>
+serv.newitem=i_spellbook,1,<uid>
+
+[function npcai_loadout_warrior]
+swordsmanship=80.0	//{25.0 80.0}
+tactics=80.0	//{25.0 80.0}
+parrying=80.0	//{25.0 80.0}
+serv.newitem=i_platemail_helm,1,<uid>
+serv.newitem=i_platemail_gorget,1,<uid>
+serv.newitem=i_platemail_chest,1,<uid>
+serv.newitem=i_platemail_arms,1,<uid>
+serv.newitem=i_platemail_gloves,1,<uid>
+serv.newitem=i_platemail_leggings,1,<uid>
+serv.newitem=i_shield_kite_metal,1,<uid>
+serv.newitem=i_sword_long,1,<uid>
+
+[function npcai_loadout_blacksmith]
+blacksmithing={25.0 80.0}
+mining={25.0 80.0}
+armslore={25.0 80.0}
+local.c=colors_all
+serv.newitem random_footwear,1,<uid>
+serv.newitem i_pants_short,1,<uid>
+new.color=<local.c>
+serv.newitem random_male_tops,1,<uid>
+new.color=<local.c>
+serv.newitem i_apron_half,1,<uid>
+new.color=colors_brown
+serv.newitem i_hammer_smith,1,<uid>
+
+[function npcai_loadout_miner]
+mining={25.0 80.0}
+local.c=colors_all
+serv.newitem random_footwear,1,<uid>
+serv.newitem i_pants_short,1,<uid>
+new.color=<local.c>
+serv.newitem random_male_tops,1,<uid>
+new.color=<local.c>
+serv.newitem i_pickaxe,1,<uid>
+
+[function npcai_loadout_naked]
+
+
+[function npcai_loadout_resurrected]
+serv.newitem i_robe,1,<uid>
+
+[function npcai_loadout_graveyarder]
+macefighting={25.0 80.0}
+tactics={25.0 80.0}
+parrying={25.0 80.0}
+local.c=colors_neutral
+serv.newitem i_bone_helmet,1,<uid>
+serv.newitem i_bone_chest,1,<uid>
+serv.newitem i_bone_arms,1,<uid>
+serv.newitem i_bone_gloves,1,<uid>
+serv.newitem i_bone_leggings,1,<uid>
+serv.newitem i_mace,1,<uid>
+serv.newitem i_shield_wood,1,<uid>
+serv.newitem i_cape,1,<uid>
+new.color=<local.c>
+
+[function npcai_loadout_tamer]
+taming={25.0 80.0}
+animallore={25.0 80.0}
+local.c=colors_all
+serv.newitem random_footwear,1,<uid>
+serv.newitem i_pants_short,1,<uid>
+new.color=<local.c>
+serv.newitem random_male_tops,1,<uid>
+new.color=<local.c>
+serv.newitem i_shepherds_crook,1,<uid>
+
+[function npcai_loadout_archer]
+archery={25.0 80.0}
+tactics={25.0 80.0}
+serv.newitem random_footwear,1,<uid>
+serv.newitem i_pants_short,1,<uid>
+new.color=<local.c>
+serv.newitem random_male_tops,1,<uid>
+new.color=<local.c>
+serv.newitem i_leather_tunic,1,<uid>
+serv.newitem i_leather_leggings,1,<uid>
+serv.newitem i_bow,1,<uid>
+
+/////////////////////////////
+// Faction militia loadouts
+
+[function npcai_loadout_faction_spearman]
+fencing={100.0 120.0}
+tactics={100.0 120.0}
+parrying={100.0 120.0}
+healing={100.0 120.0}
+anatomy={100.0 120.0}
+serv.newitem i_chainmail_coif,1,<uid>
+serv.newitem i_leather_gorget,1,<uid>
+serv.newitem i_chainmail_tunic,1,<uid>
+serv.newitem i_platemail_arms,1,<uid>
+serv.newitem i_leather_gloves,1,<uid>
+serv.newitem i_chainmail_leggings,1,<uid>
+serv.newitem i_surcoat,1,<uid>
+serv.newitem i_spear,1,<uid>
+serv.newitem i_boots_calf,1,<uid>
+
+[function npcai_loadout_faction_knight]
+swordsmanship={100.0 120.0}
+tactics={100.0 120.0}
+parrying={100.0 120.0}
+healing={100.0 120.0}
+anatomy={100.0 120.0}
+serv.newitem i_platemail_helm,1,<uid>
+serv.newitem i_leather_gorget,1,<uid>
+serv.newitem i_platemail_chest,1,<uid>
+serv.newitem i_platemail_arms,1,<uid>
+serv.newitem i_leather_gloves,1,<uid>
+serv.newitem i_platemail_leggings,1,<uid>
+serv.newitem i_sash,1,<uid>
+serv.newitem i_cape,1,<uid>
+serv.newitem i_sword_long,1,<uid>
+serv.newitem i_shield_kite_metal,1,<uid>
+serv.newitem i_boots_calf,1,<uid>
+
+[function npcai_loadout_faction_archer]
+archery={100.0 120.0}
+tactics={100.0 120.0}
+parrying={100.0 120.0}
+healing={100.0 120.0}
+anatomy={100.0 120.0}
+serv.newitem i_leather_cap,1,<uid>
+serv.newitem i_studded_gorget,1,<uid>
+serv.newitem i_studded_tunic,1,<uid>
+serv.newitem i_studded_sleeves,1,<uid>
+serv.newitem i_studded_gloves,1,<uid>
+serv.newitem i_studded_leggings,1,<uid>
+serv.newitem i_doublet,1,<uid>
+serv.newitem i_bow,1,<uid>
+serv.newitem i_boots_calf,1,<uid>
+
+[function npcai_loadout_faction_mage]
+magery={100.0 120.0}
+tactics={100.0 120.0}
+parrying={100.0 120.0}
+healing={100.0 120.0}
+anatomy={100.0 120.0}
+make_spellcaster 1,8
+serv.newitem i_backpack,1,<uid>
+serv.newitem i_hat_wizards,1,<uid>
+serv.newitem i_leather_gorget,1,<uid>
+serv.newitem i_leather_tunic,1,<uid>
+serv.newitem i_leather_sleeves,1,<uid>
+serv.newitem i_leather_gloves,1,<uid>
+serv.newitem i_leather_leggings,1,<uid>
+serv.newitem i_robe,1,<uid>
+serv.newitem i_sandals,1,<uid>
+
+
+
+[eof]
+
+
+

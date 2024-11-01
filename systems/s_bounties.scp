@@ -1,0 +1,414 @@
+//Bounty System by Soulless
+//v1.0
+//innocent players with gold in their bank can place bounties on players whom have killed them
+//heads expire after 24 hours
+//after 30 days without murdering a bounty will be removed
+//fixed adding/removing bounties
+//fixed display of killers on the place bounty dialog
+//fixed the division of the bounty on multiple killers
+
+
+[events e_bounty_system]
+
+on=@death
+ref1=<uid>
+if (<ref1.attacker>)						//must have attackers to report one
+  for n <eval (<ref1.attacker>-1)> 0	
+    if (<attacker.<dlocal.n>.elasped> < 60)				//elapsed attacker time (must have done damage in the last 60 seconds)
+      ref2=<attacker.<dlocal.n>>					//attacker
+      if (<ref2.npc>) && (<ref2.owner>)				//was a pet owned by someone
+        ref2=<ref2.owner>					
+      endif
+      if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2> != <ref1>) && !(<ref2.npc>) && !(<ref2.isgm>)			//this is a valid player attacker
+        if !(<ref1.iscriminal>) && !(<ref1.ismurderer>) //&& (<ref1.distance <ref2>> <= 25) 				//cant be criminal, murderer, or really far away
+          if (<ref1.isharmedby <ref2>>) && !(<ref2.isaggrievedby <ref1>>) && (<ref1.notogetflag <ref2>> <= 1) && !(<ref1.f_reported_murderer_recently <ref2>>)	 //i was harmed by them, innocent to them, and havent reported them recently
+            serv.log <ref1.name> receiving a murder report dialog for <ref2.name>
+            if !(<var0.noreportmurders>)
+              ref1.f_report_murder <ref2>
+            endif 
+          endif
+        endif
+      endif
+    endif
+  endfor 
+endif
+
+on=@murdermark
+argn1=<kills>	//we handle murder marks up above, just set it to the current kill count
+
+on=@ItemDropOn_Char
+if (<act.baseid>==i_flesh_head)  && (strmatch(c_h_guard*,<argo.baseid>))	// (<argo.baseid>==c_h_guard) || (<argo.baseid>==c_h_guard_f) || (<argo.baseid>==c_h_guard_order) || (<argo.baseid>==c_h_guard_order_f) || (<argo.baseid>==c_h_guard_chaos) || (<argo.baseid>==c_h_guard_chaos_f)
+  ref1=<act.link>
+  if (<ref1.tag0.bounty>)
+    if (!(strcmpi(<account>,<ref1.account>)) || (<account.lastip>==<ref1.account.lastip>)) && !(<isgm>) //dont let same account/ip address clients collect bounty
+      argo.say Thou cannot claim the bounty on this head, begone!
+      return 1
+    endif
+    argo.say Tis a minor criminal, thank thee. thy reward of <ref1.dtag0.bounty> hath been deposited in thy bank account.
+    gold += <ref1.tag0.bounty>
+    sound 037
+    ref1.tag0.bounty=
+    act.consume
+    serv.log <name>(<uid>) has collected the bounty of <ref1.dtag0.bounty> on <ref1.name>(<ref1>)
+    foristances i_bounty_board
+      f_remove_bounty <ref1>
+    endfor
+  endif
+endif
+
+on=@resurrect
+//formula for statloss -= (100.0 - (4.0 + (ShortTermMurders / 5.0))) / 100.0; 
+//Resurrecting With 5 Short Term Counts : 5% 
+//Resurrecting With 10 Short Term Counts : 6% 
+//Resurrecting With 20 Short Term Counts : 8% 
+//Resurrecting With 30 Short Term Counts : 10% 
+//Resurrecting With 40 Short Term Counts : 12% 
+//Resurrecting With 55+ Short Term Counts : 15%
+//if (<findid.i_murder_short_term.isvalid>)  
+  //ref1=<uid>
+  //local.murders=<findid.i_murder_short_term.more1>
+  //local.statloss=<eval (4+(<local.murders>/5))*10>
+  //ref1.ostr -= <muldiv <local.statloss>,<ref1.ostr>,100>
+  //ref1.odex -= <muldiv <local.statloss>,<ref1.odex>,100>
+  //ref1.oint -= <muldiv <local.statloss>,<ref1.oint>,100>
+  //for 0 48
+    //local.skill=<serv.skill.<dlocal._for>.key>
+    //ref1.<local.skill> -= <muldiv <local.statloss>,<ref1.local.skill>,100>
+  //endfor
+//endif
+
+[function f_report_murder]
+ref1=<args>	//murderer
+ref1.timerf 4,trysrc <uid> dialog d_report_murder		//need to give the client 4 seconds for the death screen to end
+serv.newitem i_murder_report_cooldown
+new.timer=300			//keep this item so they cannot report this person more than once in 5 minutes
+new.link=<ref1>
+equip <new>
+
+[itemdef i_murder_report_cooldown]
+defname=i_murder_report_cooldown
+name=Murder Report Cooldown
+id=i_scroll_blank
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove		
+return 1
+
+[function f_reported_murderer_recently]
+ref1=<uid>	//player that reported them
+ref2=<args>	//reported murderer
+forcharlayer layer_special
+  if (<baseid>==i_murder_report_cooldown) && (<link>==<ref2>)
+    return <timer>
+  endif
+endfor
+return 0
+
+[itemdef i_murder_short_term]
+defname=i_murder_short_term
+id=i_flesh_head_2
+name=Short Term Murder
+type=t_eq_script
+layer=layer_special
+weight=0
+
+on=@timer
+more1 -= 1
+if (<more1> <= 0)
+  remove
+  return 1
+endif
+timer=4*60*60	//8*60*60
+return 1
+
+[itemdef i_murder_long_term]
+defname=i_murder_long_term
+id=i_flesh_head_2
+name=Long Term Murder
+type=t_eq_script
+layer=layer_special
+weight=0
+
+on=@timer
+more1 -= 1
+topobj.kills=<more1>
+if (<more1> <= 0)
+  remove
+  return 1
+endif
+timer=16*60*60		//40*60*60
+return 1
+
+[dialog d_report_murder]
+
+250, 100
+
+gumppic 10 10 1140
+
+dhtmlgump 70 60 270 250 0 0 <def.bfont_size5> Would you like to report <name> as a murderer?
+
+if (<findid.i_murder_long_term.isvalid>)
+  //if (<findid.i_murder_long_term.more1> > <serv.MurderMinCount>)
+  if (<kills> > <serv.MurderMinCount>)
+    dhtmlgump 70 110 270 250 0 0 Optional Bounty: (<src.gold> max)
+    gumppic 70 130 1141 
+    dtextentrylimited 80 130 150 20 1947 1 9 	//<eval <gold>/20>
+    dhtmlgump 70 160 300 250 0 0 <def.bfont_size5>amount will be deducted from your bank
+  endif
+endif
+
+
+button 210 200 1144 1145 1 0 0
+button 130 200 1147 1148 1 0 1
+
+[dialog d_report_murder button]
+
+onbutton=1
+if !(<src.memoryfind.<uid>>)
+  src.sysmessage This murder report dialog has expired.
+  return 1
+endif
+sysmessage You have been reported for a murder!
+src.sysmessage You have reported <name> as a murderer!
+//serv.newitem i_murder_report_cooldown			//cooldown after being reporting or after being killed?
+//src.equip <new>
+//new.timer=300
+//new.link=<uid>
+if (<findid.i_npc_guild_thieves>)
+  findid.i_npc_guild_thieves.remove
+  sysmessage You have been suspended by the Thieves Guild.
+endif
+
+if !(<findid.i_murder_short_term>)
+  serv.newitem i_murder_short_term
+  equip <new>
+endif
+findid.i_murder_short_term.more1 += 1
+findid.i_murder_short_term.timer=8*60*60	//each short term murder is 8 hours
+if !(<findid.i_murder_long_term>)
+  serv.newitem i_murder_long_term
+  equip <new>
+endif
+findid.i_murder_long_term.more1 += 1
+findid.i_murder_long_term.timer=40*60*60	//each long term murder is 40 hours
+if (<findid.i_murder_long_term.more1> == 5)
+  sysmessage You are now known as a murderer!
+  tag0.online_menu_flags |= <def0.online_menu_flag11>
+endif
+kills=<findid.i_murder_long_term.more1>		//set our kills to the proper amount
+
+//f_writefile c:/yeoldesphere/scripts/discord/f_murder_report_recent.cmd,curl -H "Content-Type: application/json" -d "{\"username\": \"PvP\", \"content\":\"<name> has been reported for a murder... \"}" %WEBHOOK_URL%
+local.discordmsg = <name> has been reported for a murder...
+
+if (<kills> > <eval (<serv.MurderMinCount>+1)>)
+  if !(<isempty <argtxt[1]>>)
+    if !(<isnum <argtxt[1]>>)
+      src.sysmessage only numerical values are valid entries.
+      sdialog d_report_murder
+      return 1
+    elseif (<src.gold> < <argtxt[1]>)
+      src.sysmessage You do not have sufficient funds to place that bounty.
+      sdialog d_report_murder
+      return 1 
+    endif
+    src.gold -= <argtxt[1]>
+    tag0.bounty += <argtxt[1]>
+    sysmessage <src.name> has placed a bounty of <argtxt[1]>gp on your head!
+    src.sysmessage You have placed a bounty of <argtxt[1]>gp on <name>'s head!
+    src.sysmessage The guards of Britannia will now pay <tag0.bounty>gp for their head.
+    //f_writefile c:/yeoldesphere/scripts/discord/f_murder_report_recent.cmd,curl -H "Content-Type: application/json" -d "{\"username\": \"PvP\", \"content\":\"<name> now has a bounty of <tag0.bounty> gold on their head. \"}" %WEBHOOK_URL%
+    local.discordmsg .= " and now has a bounty of <dtag0.bounty> gold on their head."
+    f_bounty_board_update
+  endif
+endif
+f_writefile c:/yeoldesphere/scripts/discord/f_murder_report_recent.cmd,curl -H "Content-Type: application/json" -d "{\"username\": \"PvP\", \"content\":\"<local.discordmsg> \"}" %WEBHOOK_URL%
+f_writefile c:/yeoldesphere/scripts/discord/f_murder_report_recent.cmd,start /b "" cmd /c del "%~f0"&exit /b
+f_update_discord_reported_murder	
+
+
+[function f_bounty_board_update]
+forinstances i_bounty_board
+  f_add_bounty <link>
+endfor
+
+[function f_update_discord_reported_murder]
+serv.log Sending murder report to discord channel
+local.spawn = <sysspawn c:/yeoldesphere/scripts/discord/f_murder_report_to_discord.cmd>
+
+/////////////////////////////////////////////////////
+////////////////////BOUNTY BOARD/////////////////////
+/////////////////////////////////////////////////////
+
+
+[itemdef i_bounty_board]
+id=i_bulletin_board
+name=Bounty Board
+type=t_normal
+
+on=@create
+attr=010
+color=021a
+
+on=@dclick
+sdialog d_bounty_board
+return 1
+
+[dialog d_bounty_board]
+150, 50
+page 0
+
+resizepic 90 60 0141e 370 420
+
+dtext 190 62 026 BOUNTY
+gumppic 245 50 9804
+dtext 315 62 026 BOARD
+
+page 1
+
+dhtmlgump 120 110 315 330 0 0 <def.center><def.bfont_size7><def.u>PUBLIC NOTICE <def.br> OUTLAWS BEWARE!<def.ue> <def.br> <def.bfont_size4> <region.name> lawlessness will no longer be tolerated. the <region.name> city council has hired the services of several notable bounty hunters to clean up the outlaw element operating in the surrounding area and within the city. <def.br2> Local guards have been duly deputized and sworn to keep the peace. With these new procedures and incentives we intend to restore law & order; Bring the heads of these disreputable outlaws to guard members to collect your bounty. <def.br> <def.bfont_size7><def.u>JUSTICE COMES <def.br> TO <STRTOUPPER <REGION.NAME>>!<def.ue><def.centere>
+
+ref1=<f_onlineplayers_highest tag0.bounty>
+if (<ref1.isvalid>) && (<ref1.tag0.bounty>)
+  dtext 180 375 026 Public Enemy #1: <ref1.name>
+  button 200 418 1209 1210 1 0 2000
+  dtext 220 415 030 View All Bounties
+else
+  dtext 180 390 026 There are no Bounties currently
+endif
+
+if (<argn1> < 2) && (<argn> < 65535)
+  return 0	//no need for the rest of the dialog if your on page 0 or 1
+endif
+
+page <argn>
+local.p=<eval (<argn>-2)*20>
+for 20
+  ref1=<src>
+  if (<local.p> < <serv.clients>)
+    ref2=<serv.client.<dlocal.p>.uid>
+    if (<ref2.tag0.bounty>)
+      dtext 125 <eval 130+(<local.y>*20)> <ref2.f_noto_gumpcolor <ref1>> <eval <local.y>+1>. <ref2.name>
+      dtext 260 <eval 130+(<local.y>*20)> 030 <ref2.dtag0.bounty>gp
+      button 400 <eval 133+(<local.y>*20)> 5603 5607 1 0 <eval <local.p>+1>
+      local.y += 1
+    endif
+    local.p += 1
+  endif
+endfor
+
+if (<local.p> < <serv.clients>) 
+  button 420 455 4006 4007 1 0 <eval (<argn>+1)+2000>
+endif
+
+if (<argn> > 2) && (<argn> < 65535)
+  button 100 455 4015 4016 1 0 <eval (<argn>-1)+2000>
+endif
+
+page 65535
+ref1=<src.ctag0.viewing_bounty>
+local.message=<ref1.name> must die! <def.br>The foul scum known as <ref1.name> is a <qval <ref1.kills>?shameless butcher:vile criminal>. For <ref1.sex he/she> is responsible for <qval <ref1.kills>?<ref1.kills> murders:shameless acts>.
+local.message .=" A bounty is hereby offered of <ref1.dtag0.bounty> gold pieces for <ref1.sex his/her> head!<def.br><def.br>A description:<def.br><ref1.sex His/Her> hairstyle is <qval <ref1.findlayer.11>?<ref1.findlayer.11.name>:bald> <ref1.sex <qval <ref1.findlayer.16>?with a <ref1.findlayer.16.name>:with a clean shaven face>/>. <qval <ref1.isonline>?<ref1.sex He/She> was last seen in the <ref1.region.name> area.:> <def.br><def.br>If you kill <ref1.sex him/her>, remove the head, and give it to a guard to claim your reward.<def.br><def.br>By order of Lord British"
+dhtmlgump 120 110 315 330 0 0 <local.message>
+
+button 120 455 4016 4017 1 0 	//fixme: why is this a button that just goes to a page? 
+dtext 155 455 026 Back
+
+[dialog d_bounty_board button]
+
+onbutton=1,1999
+argn -= 1
+ref1=<serv.client.<dargn1>.uid>
+src.ctag0.viewing_bounty=<ref1>
+src.sdialog d_bounty_board 65535
+
+onbutton=2000,3999
+argn -= 1998
+sdialog d_bounty_board <argn>
+
+onbutton=65535
+sdialog d_bounty_board 2
+
+
+[itemdef i_bounty_board_classic]
+id=i_bulletin_board
+name=Bounty Board
+type=t_bboard
+
+on=@click
+message <name> with <count> posted bounties
+return 1
+
+on=@create
+attr=010
+
+on=@timer
+f_bounty_board_cleanup
+more1 += 1	//this keeps track of the days
+timer=24*60*60
+return 1
+
+[function f_add_bounty]
+f_remove_bounty <args>
+ref1=<args>
+serv.newitem 0eb0
+new.type=t_message
+new.tag.bounty_post=1
+new.link=<ref1>
+new.timestamp=<serv.time>
+new.author=<ref1.name>
+new.name=<ref1.dtag0.bounty>gp Reward
+new.body.0=A price on <ref1.name>
+new.body.1=The foul scum known as <ref1.name>
+dorand 16
+  new.body.2=cannot be redeemed.
+  new.body.1=must fall to preserve us.
+  new.body.1=shall not slay again!
+  new.body.1=hath slain too many!
+  new.body.1=is a killer of the worst sort.
+  new.body.1=is a shameless butcher.
+  new.body.1=must be taken care of
+  new.body.1=hath murdered one too many!
+  new.body.1=hath no conscience!
+  new.body.1=hath cowardly slain many.
+  new.body.1=must be stopped
+  new.body.1=is a bloodthirsty monster.
+  new.body.1=cannot be redeemed.
+  new.body.1=is a cruel, casual  killer.
+  new.body.1=sheds innocent blood!
+  new.body.1=must die for all our sakes.
+enddo
+new.body.3=<ref1.sex He/She> is responsible for <ref1.kills> murders!
+new.body.4=Lord British sets a price of 
+new.body.5=<ref1.dtag0.bounty>gp for <ref1.sex his/her> head!
+new.cont=<uid>
+new.update
+
+[function f_remove_bounty]
+forcont <uid> 0 
+  if (<link>==<args>)
+    remove
+  endif
+endfor
+
+[function f_bounty_board_cleaup]
+forcont <uid> 0
+  if !(<link.tag0.bounty>)
+    remove
+  endif
+  //if (<serv.time>-<timestamp> > 30) 
+    //link.tag0.bounty=
+  //endif
+endfor
+
+[function reportmurders]  
+if (<isempty <args>>)
+  var0.noreportmurders=<qval (<var0.noreportmurders> == 1)?0:1>
+else
+  var0.noreportmurders=<qval (<argn> <= 0)?1:0>
+endif
+sysmessage Murder reporting system <qval (<var0.noreportmurders> == 1)?disabled:enabled>.
+
+
+[EOF]

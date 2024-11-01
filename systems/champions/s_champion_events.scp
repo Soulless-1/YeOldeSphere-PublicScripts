@@ -1,0 +1,140 @@
+//Champion Spawn System by Soulless
+//v1.0
+//1:35 PM 1/8/2022
+
+[regiontype r_champion_spawn]
+
+on=@enter
+if (<def0.champion_young_players> == 1) && (<tag0.champactive>) && ((<src.tag0.young> >= 1) || ((<src.owner>) && (<src.owner.tag0.young>==1)))
+  src.sysmessage The power here prevents you from entering.
+  return 1
+elseif (<def0.champion_young_players> == 2) && (<tag0.champactive>)  && ((<src.tag0.young> >= 1) || ((<src.owner>) && (<src.owner.tag0.young>==1)))
+  if !(<src.npc>) 
+    src.tag0.young=
+    src.tag0.name.suffix=
+    src.tag0.champ_restore_young=1
+    src.message @026 The power in this area prevents your young status from protecting you.
+  endif
+  return 1
+endif
+src.events=+e_champion_spawn_area
+
+on=@exit
+ref1=<src.region.uid>
+if (<src.npc>) 
+  if (<src.isevent.e_champion_spawn_monster>) || (<src.isevent.e_champion_boss>)
+    src.movenear <ref1> 5
+    return 1
+  endif
+endif
+if (<src.tag0.champ_restore_young> == 1)
+  src.tag0.champ_restore_young=
+  src.tag0.young=1
+  src.tag0.name.suffix=" the Young"
+  src.message @044 Your young player status protects you once again.
+endif
+src.events=-e_champion_spawn_area
+
+
+[events e_champion_spawn_area]
+
+on=@spellcast
+if (<argn1> == 32) || (<argn1> == 52)
+  src.sysmessage The power here prevents you from casting this spell.
+  return 1
+endif
+
+[events e_champion_spawn_monster]
+
+on=@death
+ref1=<attacker.max>	//person who did the most damage gets Valor
+ref2=<findid.i_memory_champion_spawn.link>	//champion's idol
+if (<ref1.isvalid>) && (<ref1.tag0.virtue_valor> < 21000) && (<ref2.isvalid>)
+  doswitch <eval (<ref2.more2>/4)>
+    local.amount=40
+    local.amount=80
+    local.amount=120
+    local.amount=160
+  enddo
+  ref1.sysmessage You have gained some Valor.
+  ref1.tag0.virtue_valor += <local.amount>
+  if (<ref1.tag0.virtue_valor> > 21000)
+    ref1.tag0.virtue_valor=21000
+  endif
+endif
+
+on=@deathcorpse
+ref1=<argo>		//corpse
+if !(<R99>)
+  serv.newitem i_power_scroll_wondrous
+  new.more2={{2 6} 5 {9 10} 2 {14 22} 9 {24 33} 10 {35 36} 2 {38 48} 11}		//no crafting power scrolls
+  new.name=<new.name> of <serv.skill.<new.more2>.name> (<eval (<new.more1>/10)> skill)
+  new.cont=<ref1>
+endif
+
+[events e_champion_boss]
+
+on=@hit
+//if !(<R5>)
+  //local.attacker=<R0,<eval (<attacker>-1)>>
+  //ref1=<attacker.<local.attacker>> 
+  //say switch attacker, position <local.attacker>, <ref1.name>(<ref1>)
+  //attacker.<local.attacker>.threat=65535
+//endif
+
+on=@death
+ref1=<uid>
+ref2=<tag0.champion_idol>
+if (<ref1.baseid>==c_harrower)	//only the true harrower should do this
+  return 0	
+endif
+if (<ref2.isvalid>)	
+  ref2.f_champion_spawn_deactivate	//if there was a champ altar
+  serv.newitem i_moongate_black		//make gate to star chamber
+  new.attr=attr_decay|attr_move_never
+  new.type=t_telepad
+  new.morep=5144,1760
+  new.timer=60
+  new.p=<ref2.p>
+endif
+for n 0 <eval (<ref1.attacker>-1)>
+  ref2=<ref1.attacker.<dlocal.n>>
+  local.damagedone=<ref1.attacker.<ref1.attacker.id <ref2>>.damage>
+  if (<ref2.isvalid>) && (<local.damagedone> >= 500)
+    ref2.sysmessage You have gained some Valor.
+    ref2.tag0.virtue_valor += 800
+    if (<ref2.tag0.virtue_valor> > 21000)
+      ref2.tag0.virtue_valor=21000
+    endif
+  endif
+endfor
+//ref1.f_champion_remove_npc_attackers	//get rid of the npc attackers so we don't reward them	(we can just check during the rewards to make sure they are players)
+ref1.f_champion_give_rewards		//give players on attacker list a reward
+
+on=@deathcorpse
+ref1=<argo>				//corpse
+ref2=<tag0.champion_idol>		//champion idol
+ref1.tag0.nosac=1
+ref1.timer=<eval (<serv.DecayTimer>*60)*2>
+ref1.f_champion_gold_explosion		//explode a bunch of gold around the champion
+ref1.f_champion_corpse_additem i_gold,{7500 10000},1,1
+ref1.f_champion_corpse_additem random_jewel,{15 30},1,5
+ref1.f_champion_corpse_additem random_reagent,{15 30},1,5
+ref1.f_champion_corpse_additem random_potion,{5 10},1,5
+ref1.f_champion_corpse_additem random_upper_scroll,{1 3},1,5
+ref1.f_champion_corpse_additem i_magic_wand,1,1,5
+ref1.f_champion_corpse_additem random_rare_armor_great,1,1,5
+ref1.f_champion_corpse_additem random_rare_weapon_great,1,1,5
+ref1.f_champion_corpse_additem random_rare_armor_ultra,1,1,5
+ref1.f_champion_corpse_additem random_rare_weapon_ultra,1,1,5
+//if (<f_champion_bonus_loot>)	//typically for holiday champions
+  //ref1.f_champion_corpse_additem random_small_statue,1,1,5
+  //ref1.f_champion_corpse_additem random_bones,1,1,5
+  //ref1.f_champion_corpse_additem random_rare_armor_ultra,1,1,10
+  //ref1.f_champion_corpse_additem random_rare_weapon_ultra,1,1,10
+  //ref1.f_champion_corpse_additem random_rare_dyetub,1,1,4
+  //ref1.f_champion_corpse_additem random_item_dyetub,1,1,2
+//endif
+
+
+[EOF]

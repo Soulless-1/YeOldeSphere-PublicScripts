@@ -1,0 +1,2046 @@
+//Champions and Bosses by Soulless
+//v1.0
+//4:39 AM 2/11/2022
+
+
+///////////////////////////
+// Original 6 Champions
+
+//////////////////////////
+// Barracoon the Piper
+
+[comment notes]
+Barracoon the Piper will turn any attacker (regardless of whether the attacker has levied any damage to him, or has used a non-damaging aggressive spell) into a Ratman for a period of time. 
+This may be prevented by casting incognito, applying savage kin paint, or casting the Polymorph spell. It's presently unknown whether a character can stay unaffected by polymorphing into 
+the same gender, but a character can polymorph into the opposite gender to remain unaffected by Baracoon's polymorph attack, to not go gray, and to continue using a mount.
+
+Barracoon's slayer vulnerability is Repond. Vermin Slayer talismans also increase the melee damage done to Barracoon in the same manner of a Repond Slayer.
+
+When Barracoon spawns, he appears in his human form and casts spells very quickly. These spells lack Evaluating Intelligence to do significant damage, though they can disrupt targets. 
+Barracoon will turn into a Ratman himself after he has received some damage. Slayer weapons, spellbooks, and talismans will not effect Barracoon until he has turned into a rat.
+
+[chardef c_barracoon]
+name=Barracoon the Piper
+id=0190
+armor=70
+dam=29, 38
+tevents=e_champion_barracoon
+//damphysical={100}
+can=mt_walk|mt_run|mt_usehands|mt_equip
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+	color=083EC	
+	str={283, 425}
+	dex={72, 150}
+	int={505, 750}
+	maxhits={12000}
+	maxstam={102, 300}
+	maxmana={505, 750}
+	//damphysical={100}
+	resphysical={65, 75}
+	resfire={70, 80}
+	rescold={65, 80}
+	respoison={70, 75}
+	resenergy={70, 80}
+	magicresistance={100.0}
+	tactics={118.3, 120.2}
+	wrestling={118.4, 122.7}
+	Fame=22500
+	Karma=-22500
+	make_spellcaster 1,8
+
+on=@npcrestock
+	item=i_shirt_fancy
+	color=colors_green
+	item=i_pants_long
+	color=colors_yellow
+	item=i_hat_jester
+	color=colors_yellow
+	item=i_cape
+	color=colors_pink
+	item=i_sandals
+
+[chardef c_barracoon_ratform]
+name=Barracoon the Piper
+id=c_ratman
+armor=70
+dam=29, 38
+tevents=e_champion_barracoon
+//damphysical={100}
+can=mt_walk|mt_run|mt_usehands|mt_equip
+
+[events e_champion_barracoon]		//need this because barracoon has two chardefs
+	
+on=@gethit
+if (<baseid> == c_barracoon_ratform)
+  argn1 /= 2		//take half damage while in rat form
+endif
+
+ref1=<uid>	//store uid of barracoon
+
+if (<R1,100> <= 60)
+  ref2=<src>
+  if !(<ref2.findid.i_barracoon_polymorphed_attacker>)
+    if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2.isplayer>) 	//a valid target
+      if !(<ref2.findid.i_rune_polymorph>) && (<ref1.distance <ref2>> <= 15) 
+        ref2.f_barracoon_polymorph_attacker 180
+      endif
+    endif
+  endif
+endif
+
+if (<ref1.hits> <= 500) 	//turn into rat form when below 500 health, reduce damage done to him
+  if (<ref1.baseid> != c_barracoon_ratform)
+    ref1.body c_barracoon_ratform
+    ref1.update
+    ref1.sound 03d
+  endif
+endif
+
+on=@hit
+ref1=<uid>
+if (<R1,100> <= 20)		//20% chance spawn more ratmen
+  local.rats=<R3,6>
+  if (<ref1.tag0.ratmen_spawned> < 16)
+    for <local.rats>
+      serv.newnpc { c_ratman 4 c_ratman_w_sword 4 c_ratman_archer 2 c_ratman_mage 1 }
+      ref2=<new>
+      ref2.movenear <ref1> 5
+      ref2.attack <src>		//attack the person who triggered the ratman to spawn
+      serv.newitem i_barracoon_ratman_minion
+      new.link=<ref1>
+      new.timer=5
+      ref2.equip <new>
+    endfor
+    ref1.sound 03d
+    ref1.tag0.ratmen_spawned += <local.rats>
+  endif
+endif
+
+on=@spellcast
+if (<body> == c_barracoon_ratform)
+  argn3 /= 2
+endif
+
+[function f_barracoon_polymorph_attacker]
+consume i_barracoon_polymorphed_attacker
+serv.newitem i_barracoon_polymorphed_attacker
+new.timer <args>
+new.equip
+
+[itemdef i_barracoon_polymorphed_attacker]
+defname=i_barracoon_polymorphed_attacker
+id=i_pet_ratman
+name=Barracoon Polymorphed Attacker
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.flags |= statf_polymorph
+src.body=c_barracoon_polymorphed_attacker
+src.update
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.flags &= ~ statf_polymorph
+src.body=<src.obody>
+src.update
+
+[chardef c_barracoon_polymorphed_attacker]
+name=Barracoon Polymorphed Attacker
+defname=c_barracoon_polymorphed_attacker
+id=c_ratman
+sound=437
+dam=4,5
+armor=28
+can=mt_walk|mt_run|mt_usehands|mt_equip
+
+[itemdef i_barracoon_ratman_minion]
+defname=i_barracoon_ratman_minion
+id=i_memory
+name=Barracoon Ratman Minion
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+ref1=<link>
+if !(<ref1.isvalid>)
+  topobj.remove
+  return 1
+endif
+topobj.home=<link.p>
+topobj.homedist=15
+timer=5
+return 1
+
+on=@unequip
+if (<link.isvalid>) && (<link.tag0.ratmen_spawned> >= 1)
+  link.tag0.ratmen_spawned -= 1
+endif
+
+
+///////////////////////////////
+// Rikktor 
+
+[comment notes]
+Rikktor is a very large Dragon boss. He is very slow moving, yet has the potential to do an incredible amount of damage very quickly with his Earthquake attack and melee combat. 
+Rikktor does not cast spells.
+
+The closer you are to Rikktor, the more damage his Earthquake attack will do. Melee characters are advised to take caution when fighting him up close as the Earthquake attack can do 100+ damage.
+
+Rikktor's slayer vulnerability is Reptile. While he does have a slayer, Rikktor will fall much quicker to the Mind Blast spell, as his resists are extremely high with the exception of cold.
+
+[chardef 172]
+defname=c_rikktor
+soundnotice=02c3
+soundidle=02d2
+soundhit=02c7
+soundgethit=02d1
+sounddie=02cc
+name=Rikktor
+dam=28, 55
+armor=130
+can=mt_walk|mt_run
+
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={701, 900}
+        dex={201, 350}
+        int={51, 100}
+        maxhits={15000}
+        maxstam={203, 650}
+        //damphysical={25}
+        //damfire={50}
+        //damenergy={25}
+        resphysical={80, 90}
+        resfire={80, 90}
+        rescold={30, 40}
+        respoison={80, 90}
+        resenergy={80, 90}
+        anatomy={100.0}
+        magicresistance={140.2, 160.0}
+        tactics={100.0}
+        wrestling={118.4, 123.9}
+        Fame=22500
+        Karma=-22500
+
+on=@hit
+if (<R1,100> <= 20) 
+  ref1=<uid>
+  ref1.sound 02f3
+  forchars 10
+    if (<isplayer>) || ((<npc>) && (<owner>) && (<owner.isplayer>))
+      local.modifier=<eval (10-<ref1.distance <uid>>)>	//was 11-
+      local.mindamage=<eval (<local.modifier>*5)>
+      local.mindamage=<qval (<local.mindamage> < 10)?10:<local.mindamage>)>
+      local.maxdamage=<eval (<local.modifier>*10)>
+      local.maxdamage=<qval (75 < <local.maxdamage>)?75:<local.maxdamage>)>
+      //say @026 <eval {<local.mindamage> (<local.maxdamage>}>dmg
+      damage <eval {<local.mindamage> (<local.maxdamage>}> dam_physical <ref1>
+    endif
+  endfor
+endif
+
+
+/////////////////////////
+// Mephitis
+
+[comment notes]
+Mephitis has a tangling web attack. She will ensnare a victim with a web, paralyzing the victim, and then pull the victim to her melee attack range. She does a considerable amount of damage 
+and is very fast.
+
+She is easily dispatched with a pool of Energy Vortices. Fighting using spells and melee can be dangerous due to her paralyzing webs and high damage.
+
+[chardef 173]
+defname=c_mephitis
+id=173
+name=Mephitis
+can=mt_walk|mt_run
+sound=0183
+dam=21, 33
+armor=80
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={505, 1000}
+        dex={102, 300}
+        int={402, 600}
+        maxhits={12000}
+        maxstam={105, 600}
+        //damphysical={50}
+        //dampoison={50}
+        resphysical={75, 80}
+        resfire={60, 70}
+        rescold={60, 70}
+        respoison={100}
+        resenergy={60, 70}
+        magicresistance={70.7, 140.0}
+        tactics={97.6, 100.0}
+        wrestling={97.6, 100.0}
+	poisoning=120.0
+        Fame=22500
+        Karma=-22500
+
+on=@gethit
+ref1=<uid>
+if (<R1,100> <= 20)
+  ref2=<attacker.<eval {0 (<attacker>-1)}>>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2.isplayer>) && (<ref1.distance <ref2>> <= 8)
+    ref1.f_mephitis_ensnare_victim <ref2>
+  endif
+endif
+
+[function f_mephitis_ensnare_victim]
+ref1=<args>
+src.damage <R25,50> dam_god
+ref1.paralyzechar 5
+ref1.go <p>
+ref1.message You are wrapped in spider webbing and cannot move!
+
+
+
+////////////////////////
+// Neira the Necromancer
+
+[comment notes]
+Despite the official backgound on Neira, this undead boss does not move much. She will stand still until attacked up close. She will then move about while trying to avoid melee 
+combat. Barracoon the Piper also exhibits this behavior.
+
+Like the Dark Father of dungeon Doom, Neira will throw Unholy Bones at her attackers. The situation around her quickly can become chaotic and uncontrollable with dozens of creatures
+ that spawn during combat. As an added bonus, she casts Necromancy spells, including the detested Blood Oath. Be careful when attacking her on a melee character because you may get 
+Blood Oathed and instantly kill yourself.
+
+As Neira's slayer vulnerability is Undead, she will fall quickly to multiple Flamestrike while equipped with slayer spellbook. The Magery spell Earthquake also does a large amount of 
+damage to her. It is advised that during a raid situation, Earthquakes should be used to shorten the time needed to drop her. Earthquaking will cause a great deal of spawn to build 
+around her, which can lead to problems.
+
+[chardef c_neira]
+defname=c_neira
+id=401
+name=Neira the Necromancer
+sound=0580
+sounddie=057f
+tevents=+e_poison_immunity
+dam=25, 35
+armor=30
+can=mt_walk|mt_run|mt_equip|mt_usehands
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+	color=083EC
+        str={305, 425}
+        dex={72, 150}
+        int={505, 750}
+        maxhits={4800}
+        maxstam={102, 300}
+        //damphysical={100}
+        resphysical={25, 30}
+        resfire={35, 45}
+        rescold={50, 60}
+        respoison={30, 40}
+        resenergy={20, 30}
+        evaluatingintel={120.0}
+        magery={120.0}
+        meditation={120.0}
+        magicresistance={150.0}
+        tactics={97.6, 100.0}
+        wrestling={97.6, 100.0}
+	swordsmanship={97.6, 100.0}
+        Fame=22500
+        Karma=-22500
+	itemnewbie=i_hooded_shroud
+	color=0455
+	itemnewbie=i_scimitar
+	color=027
+	itemnewbie=i_mt_skeletal_mount
+
+on=@npcrestock
+	item=i_gold,{1800 3000}
+	item=i_treasure_map6,1,R10
+	//item=i_neiras_bloody_sword,1
+	//item=i_pet_skeletal_steed,1,R100
+
+on=@hit
+ref1=<uid>
+if (<R1,100> <= 10)		//10% drop or throw a an unholy bone
+  ref2=<attacker.<eval {0 (<attacker>-1)}>>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2.isplayer>) && (<ref1.distance <ref2>> <= 15)
+    ref1.f_neira_throw_unholy_bone <ref2>
+  endif
+endif
+
+on=@gethit
+ref1=<uid>
+if (<R1,100> <= 10)		//10% drop or throw a an unholy bone
+  ref2=<attacker.<eval {0 (<attacker>-1)}>>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref1.distance <ref2>> <= 15)
+    ref1.f_neira_throw_unholy_bone <ref2>
+  endif
+endif
+
+[function f_neira_throw_unholy_bone]
+ref1=<args>
+sound 048f
+serv.newitem i_unholy_bone
+new.link=<ref1>
+new.timer=<R5,10>
+new.p=<ref1.p>
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_bone W<p.x> W<p.y> B<eval (<p.z>+12)> W<new.p.x> W<new.p.y> B<eval (<new.p.z>+6)> B03 B16 00 00 00 B0 D0496 D0
+
+[itemdef i_unholy_bone]
+defname=i_unholy_bone
+id=i_bone
+name=Unholy Bone
+type=t_unholy_bone
+
+on=@create
+attr=attr_move_never
+color=0497
+
+[typedef t_unholy_bone]
+
+on=@dclick
+if (<more1> >= 3)
+  src.sysmessage You destroy the bone pile.
+  serv.newitem i_gold,<R25,100>
+  new.p=<p>
+  remove
+elseif !(<R3>)
+  src.sysmessage You damage the bone pile.
+  more1 += 1
+endif
+return 1
+
+on=@timer
+serv.newnpc {c_skeleton 1 c_zombie 1 c_wraith 1 c_spectre 1 c_ghoul 1 c_mummy 1 c_bogle 1 c_rotting_corpse 1 c_bone_knight 1 c_skeleton_knight 1 c_lich 1 c_lich_lord 1}
+new.home=<p>
+new.homedist=15
+new.p=<p>
+new.attack <link>
+remove
+return 1
+
+////////////////////////
+// Semidar 
+
+[comment notes]
+Semidar has the area effect of a normal succubus. However, this area effect does much more damage to male characters than female characters. It is not uncommon to be killed immediately 
+by the area effect. Male characters are advised to either polymorph into a female, or take on the necromatic Wraith Form. Doing so will eliminate a certain amount of damage dealt to male characters.
+
+She also does double damage reflect to male characters who attack her with direct damage, again unless they are polymorphed into a female.
+
+Semidar is both an incredibly fast moving boss and fast spell caster.
+
+[chardef 174]
+defname=c_semidar
+name=Semidar
+sound=04B0
+dam=29, 35
+armor=20
+can=mt_walk|mt_run|mt_usehands
+tevents=+e_life_drain
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={502, 600}
+        dex={102, 200}
+        int={601, 750}
+        maxhits={10000}
+        maxstam={103, 250}
+        //damphysical={75}
+        //damfire={25}
+        resphysical={75, 90}
+        resfire={65, 75}
+        rescold={60, 70}
+        respoison={65, 75}
+        resenergy={65, 75}
+        evaluatingintel={95.1, 100.0}
+        magery={90.1, 105.0}
+        meditation={95.1, 100.0}
+        magicresistance={120.2, 140.0}
+        tactics={90.1, 105.0}
+        wrestling={90.1, 105.0}
+        Fame=24000
+        Karma=-24000
+	make_spellcaster 1,8
+
+on=@gethit
+if (<src.ismale>) 
+  if (<argn2>&dam_physical) 
+    src.damage <eval (<argn1>*2)> dam_physical <uid>	//fixme: this is 20x?
+  endif	
+endif
+
+on=@spelleffect
+if (<src.ismale>)
+  if (<serv.spell.<argn1>.flags>&spellflag_harm) && (<src> != <uid>)
+    events=-e_spell_magic_reflection
+    src.spelleffect <argn1> <argn2> <src>
+    effect=3,i_fx_glow,6,15,1
+    src.f_magic_reflection_effect <uid>,<argn1>
+    return 1
+  endif
+endif
+
+
+/////////////////////////////
+// Lord Oaks
+
+[comment notes]
+Lord Oaks will take very little damage by any means while Silvani is alive. While it is possible to kill him without first killing Silvani, it will 
+take a vast amount of time. Lord Oaks will ressurrect blue characters in the same way of an Ethereal Warrior. However, if you are blue with negative 
+karma, he will most likely kill you upon ressurrection.
+
+Lord Oaks' slayer vulnerability is Fey, which currently is only available on the Pixie Swatter artifact. On some shards, Animal Tamers with Alchemy and 
+high Enhance Potions mod are used to quickly kill this boss.
+
+The skull of Enlightenment, which upon Oaks' death is given to the player who dealt the highest amount of damage, is highly sought after. This skull is 
+regarded as the ticket to the Harrower.
+
+Lord Oaks is exclusively located in the Lost Lands of T2A, north of the Tortoise Champion Spawn area. Lord Oaks' also spawns in Ilshenar Spirituality, 
+north of the moongate. The Ilshenar spawn, however, will not grant the skull of Enlightenment.
+
+A very small number of Lord Oaks corpses will contain a Dirt Patch, a highly sought after rare item. Lord Oaks and The True Harrower are the only 
+creatures known to drop this item as loot.
+         
+
+[chardef 175]
+defname=c_lord_oaks
+name=Lord Oaks
+dam=25,35
+armor=100
+soundnotice=02f8
+soundidle=02f8
+soundhit=02f5
+soundgethit=02f9
+sounddie=02f7
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={403, 850}
+        dex={101, 150}
+        int={503, 800}
+        maxhits={12000}
+        maxstam={202, 400}
+        //damphysical={75}
+        //damfire={25}
+        resphysical={85, 90}
+        resfire={60, 70}
+        rescold={60, 70}
+        respoison={80, 90}
+        resenergy={80, 90}
+        anatomy={75.1, 100.0}
+        evaluatingintel={120.1, 130.0}
+        magery={120.0}
+        meditation={120.1, 130.0}
+        magicresistance={100.5, 150.0}
+        tactics={100.0}
+        wrestling={100.0}
+        //chivalry={100.0}
+        Fame=22500
+        Karma=22500
+	timerf 0,f_lord_oaks_summon_silvani
+
+
+on=@gethit
+ref1=<uid>
+ref2=<tag0.lord_oaks_queen>
+
+if (<ref2.isvalid>)
+  argn /= 5
+  if (<R1,100> <= 5)
+    ref2.home=<p>
+    ref2.homedist=15
+    say You shall never defeat me as long as I have my queen!
+  endif
+endif
+
+if (<tag0.lord_oaks_pixies_spawned> < 6)
+  if (<R1,100> <= 10)
+    serv.newnpc c_pixie
+    new.movenear <uid> 5
+    new.home=<p>
+    new.homedist=15  
+    ref3=<ref1.attacker.max>
+    if (<ref3.isvalid>)
+      new.attack <ref3>
+    endif
+  endif
+endif
+
+on=@hit
+if (<R1,100> <= 5)
+  dorand 2
+    say I grant life, and I can sap it as easily.
+    say You'll go nowhere unless I deem it should be so.
+  enddo
+endif
+
+[function f_lord_oaks_summon_silvani]
+serv.newnpc c_silvani
+ref1=<new>
+tag0.lord_oaks_queen=<ref1>
+ref1.movenear <uid> 5
+say You shall never defeat me as long as I have my queen!
+
+
+/////////////////////
+// Silvani
+
+[comment notes]
+When attacked, the pixies of the forest will come to Lord Oaks aid, as will their queen, Silvani. Adventurers should beware: battling the forest lord can be physically and mentally draining. 
+And those that do manage to defeat such a noble creature may find themselves feeling a little less karmic than usual.
+
+[chardef 176]
+defname=c_silvani
+name=Silvani
+sound=0467
+dam=27, 38
+armor=50
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={253, 400}
+        dex={157, 850}
+        int={503, 800}
+        maxhits={600}
+        //damphysical={75}
+	//rescold={25}
+        resphysical={45, 55}
+        resfire={30, 40}
+        rescold={30, 40}
+        respoison={40, 50}
+        resenergy={40, 50}
+        evaluatingintel={100.0}
+        magery={97.6, 107.5}
+        meditation={100.0}
+        magicresistance={100.5, 150.0}
+        tactics={97.6, 100.0}
+        wrestling={97.6, 100.0}
+        Fame=20000
+        Karma=20000
+
+on=@npcrestock
+	item=i_gold,{2250 2750}
+	
+
+
+//////////////////////////
+// The Harrower 
+
+[comment notes]
+The Harrower was first referenced when Tentacles of the Harrower appeared in Khaldun Dungeon.
+
+It took until the advent of Felucca Champion Spawns for the full Harrower to be seen.
+
+At the time, the Harrower was by far the strongest and most reviled creature to appear in the land of Sosaria. His strength was so great that he can strike down an unprepared adventures in a single blow and even the most well equipped 3 or less. Only by defeating the 6 champions and obtaining their special skulls can he be summoned.
+
+Defeating the Harrower grants stat scrolls, which increase the maximum total stats a character can gain. The highest-level stat scrolls are +25s, and the lowest are +5s.
+
+[chardef 146]
+defname=c_harrower
+name=The Harrower
+soundnotice=044d
+soundidle=-1
+soundhit=-1
+soundgethit=044d
+sounddie=044e
+dam=27, 38
+armor=85
+can=mt_walk|mt_run|mt_usehands
+tevents=e_harrower
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={900, 1000}
+        dex={125, 135}
+        int={1000, 2000}
+        maxhits=30000
+	maxmana=5000
+        //damphysical={50}
+	//resenergy={50}
+	wrestling={90.1, 100.0}
+	tactics={90.2, 110.0}
+	magicresistance={120.2, 160.0}
+	magery=120.0
+	evaluatingintel=120.0
+	meditation=120.0
+	fame=22500
+	karma=-22500
+	make_spellcaster 4,7
+
+[chardef c_harrower_true_form]
+defname=c_harrower_true_form
+name=The True Harrower
+id=c_bog_thing
+soundnotice=044d
+soundidle=-1
+soundhit=-1
+soundgethit=044d
+sounddie=044e
+dam=27, 38
+armor=100
+can=mt_usehands	//mt_walk|mt_run
+tevents=e_harrower
+
+on=@create
+        events=+e_champion_boss
+	events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+        color=0497
+	npc=brain_monster
+        str={900, 1000}
+        dex={125, 135}
+        int={1000, 2000}
+        maxhits=65000
+	maxmana=5000
+        //damphysical={50}
+	//resenergy={50}
+	wrestling={90.1, 100.0}
+	tactics={90.2, 110.0}
+	magicresistance={120.2, 160.0}
+	magery=120.0
+	evaluatingintel=120.0
+	meditation=120.0
+	fame=22500
+	karma=-22500
+	make_spellcaster 4,7
+
+[events e_harrower]
+
+on=@gethit
+ref1=<uid>
+if (<R1,100> <= 15)
+  ref2=<attacker.<eval {0 (<attacker>-1)}>>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2.isplayer>) && (<ref1.distance <ref2>> <= 8)
+    ref1.f_harrower_grab_player <ref2>
+  endif
+endif
+
+if (<R1,100> <= 5)
+  dorand 3
+    say You fight like a Mongbat.
+    say You dare to defeat me?
+    say Approach and partake! 		//Come get some.	<--- this one seems pretty silly, like Duke Nukem.
+  enddo
+endif
+
+on=@death
+ref1=<uid>
+if (<ref1.baseid> != c_harrower_true_form)
+  body=c_harrower_true_form
+  maxhits=65000
+  hits=<maxhits>
+  mana=<maxmana>
+  color 0497
+  action=-1
+  serv.newnpc c_man_invisible
+  ref2=<new>
+  for n 0 7
+    ref2.p=<ref1.p>
+    local.offset=<qval (<local.offset>==0)?1:0>
+    local.dist=<eval (6+(3*<local.offset>))>
+    local.dir=<truedir <local.n>>
+    for <local.dist>
+      if (<ref2.canmove <local.dir>>) 
+        ref2.move <local.dir> 1
+      endif
+    endfor
+    serv.newnpc c_harrower_tentacle
+    new.tag0.harrower=<ref1>
+    new.p=<ref2.p>
+  endfor
+  ref2.remove
+  say Behold my true form!
+  sound 044es
+  return 1
+endif
+
+var0.harrower=				//true harrower actually dies
+forchars 10
+  if (<baseid>==c_harrower_tentacle)	//all the tentacles around him will die also
+    hits=0		
+  endif
+endfor
+
+[function f_harrower_grab_player]
+ref1=<args>
+src.damage <R25,50> dam_god
+ref1.go <p>
+
+[function f_harrower_tentacle_place]
+
+[comment harrower tentacle notes]
+9 Tentacles of the Harrower spread around him and be unable to walk anymore. These are not normal Tentacles however, they will heal the Harrower 
+in addition to themselves. They also have some magical force which nullifies ranged damage (for example, from magic or arrows). Maximum 
+damage can only be achieved by standing next to the Tentacles.
+
+Various tactics have proven effective against the Tentacles, including white wyrms (though the tamers must be capable and quick), cross-healing melee
+fighters ("dexers"), and mages casting spells from very close range, then running away before they take damage from the Tentacles's "life sucking" attack.
+
+[chardef c_harrower_tentacle]
+defname=c_harrower_tentacle
+name=Tentacles of the Harrower
+id=c_corpser
+soundnotice=05e
+soundidle=0101
+soundhit=-1
+soundgethit=0289
+sounddie=01c2
+dam=13,20
+armor=100
+can=mt_usehands	//mt_walk|mt_run
+
+on=@create
+	events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+	color=0485
+        str={901, 1001}
+        dex={126, 140}
+        int={1001, 2000}
+        maxhits={541, 600}
+	maxmana=5000
+	resphysical=20
+	resfire=20
+	rescold=20
+	respoison=20	
+	resenergy=20
+	meditation=100.0
+	magicresistance={120.1, 140.0}
+	swordsmanship={90.1, 100.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=15000
+	karma=-15000
+        serv.newitem i_harrower_tentacle_life_drain
+        equip <new>
+        new.timer=1
+
+//on=@gethit
+//if (<src.distance <uid>> > 1)	//cannot be hurt from ranged attacks.
+  //if !(<argn2>&dam_magic)
+    //return 1
+  //endif
+//endif
+
+//on=@spelleffect
+//if (<argn1> != 49) && (<argn1> != 55)	//only meteor swarm and chain lightning have an effect 
+  //return 1
+//endif
+
+on=@hit
+f_harrower_tentacle_life_drain <src>
+
+[itemdef i_harrower_tentacle_life_drain]
+defname=i_harrower_tentacle_life_drain
+name=Harrower Tentacle Life Drain
+id=i_memory
+type=t_eq_script
+
+on=@timer
+topobj.f_harrower_tentacle_life_drain
+timer=5
+return 1
+
+[function f_harrower_tentacle_life_drain]
+ref1=<uid>
+ref2=<tag0.harrower>
+anim 1
+forchars 6
+  if (<uid> != <ref1>) && !(<npc>==brain_monster) && !(<flags>&statf_invul) && !(<flags>&statf_stone)
+    if (<baseid> != c_harrower_tentacle) &&  (<baseid> != c_harrower) && (<baseid> != c_harrower_true_form)
+      local.amount=<R14,30>
+      local.lifedrained += <local.amount> 
+      damage <local.amount> dam_magic <ref1>
+      effect=3,0374a,10,15,5013,0455
+      sound 01f1
+    endif
+  endif
+endfor
+for n 1 2
+  ref<dlocal.n>.hits += <local.lifedrained>
+  if (<ref<dlocal.n>.hits> > <ref<dlocal.n>.maxhits>)
+    ref<dlocal.n>.hits=<ref<dlocal.n>.maxhits>
+  endif
+endfor
+
+
+//////////////////////////
+// Newer Champions? Look at this later
+
+//////////////////////////
+// Abyssal Infernal
+
+[comment notes]
+Fiendish Calling: Summons weak versions of Lava Elementals, Burning Gargoyles, Efreets, and Fire Elementals in small groups (5% chance) (3x - 5x)
+Meteors: Calls down the fury of burning meteors to devastate the battlefield in a raw display of power
+Condemnation: Condemns players to the Pit by teleporting them to one of the 5 lava pits around in lair, temporarily stunning them and doing continuous damage
+Mark of One: Greatly reduces the targets HP
+says "You will burn to a pile of ash!" when specials happen
+
+[chardef 713]
+defname=c_abyssal_infernal
+Name=Abyssal Infernal
+armor=40
+dam=11, 18
+soundhit=05d4
+sounddie=05d5
+soundgethit=05d6
+soundidle=05d7
+can=mt_walk|mt_run|mt_usehands|mt_equip
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+ 	str={1165, 1262}
+	dex={104, 143}
+	int={572, 675}
+	maxhits={30000}
+	//damphysical={60}
+	//damfire={ 20}
+	//damenergy={20}
+	resphysical={45, 55}
+	resfire={70, 90}
+	rescold={55, 65}
+	respoison={30, 40}
+	resenergy={65, 76}
+	anatomy={110.1, 119.3}
+	magicresistance={120.0}
+	tactics={111.0, 117.6}
+	wrestling={111.0, 120.0}
+	magery={109.0, 129.6}
+	evaluatingintel={113.6, 135.2}
+	meditation={100.0}
+	Fame=28000
+	Karma=-28000
+
+on=@hit
+if (<R1,100> <= 5)
+  f_abyssal_infernal_fiendish_calling
+elseif (<R1,100> <= 5)
+  timerf 3,f_abyssal_infernal_meteor
+  say You will burn to a pile of ash!
+  elseif (<R1,100> <= 5)
+    ref1=<attacker.<eval {0 (<attacker>-1)}>>
+    if (<ref1.isvalid>) && (<ref1.ischar>) && (<ref1.isplayer>) && (<ref1.distance <ref2>> <= 15)
+    ref1.f_abyssal_infernal_condemnation
+  endif
+endif
+
+[function f_abyssal_infernal_fiendish_calling]
+ref1=<uid>
+local.npc=<eval {c_hellhound 1 c_elem_lava 1 c_nightmare 1 c_phoenix 1 c_elem_fire 1 c_fire_gargoyle 1 c_gargoyle 1 c_hellcat 1}>	//ADDME: c_firesteed 1 
+for <R3,5>
+  serv.newnpc <local.npc>
+  new.maxhits /= 2
+  new.hits=<new.maxhits>
+  new.taming=0		//these shouldnt be tamable
+  new.movenear <ref1> 5
+  new.home=<ref1.p>
+  new.homedist=10
+  new.attack <ref1.attacker.<R0,<ref1.attacker>>>
+endfor
+
+[function f_abyssal_infernal_meteor]
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<p.x> W<p.y> B<eval(<p.z>+125)> W<p.x> W<p.y> B<eval (<p.z>+12)> B01 B16 00 00 00 B0 D0 D0
+effectLocation <eval (<p.x>-1)>,<p.y>,<p.z>,2,i_fire_column,6,30,0,0,0
+effectLocation <p.x>,<eval (<p.y>-1)>,<p.z>,2,i_fire_column,6,30,0,0,0
+effectLocation <eval (<p.x>+1)>,<p.y>,<p.z>,2,i_fire_column,6,30,0,0,0
+effectLocation <p.x>,<eval (<p.y>+1)>,<p.z>,2,i_fire_column,6,30,0,0,0
+timerfms 500,effectLocation <eval (<p.x>-1)>,<eval (<p.y>-1)>,<p.z>,2,03709},6,30,0,0,0
+timerfms 500,effectLocation <eval (<p.x>-1)>,<eval (<p.y>+1)>,<p.z>,2,03709,6,30,0,0,0
+timerfms 500,effectLocation <eval (<p.x>+1)>,<eval (<p.y>-1)>,<p.z>,2,03709,6,30,0,0,0
+timerfms 500,effectLocation <eval (<p.x>+1)>,<eval (<p.y>+1)>,<p.z>,2,03709,6,30,0,0,0
+timerfms 1750,circle_effect,i_fx_explode,1,1,0,0
+timerfms 1800,effectLocation <eval (<p.x>-2)>,<p.y>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>-2)>,<eval (<p.y>-1)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>-2)>,<eval (<p.y>+1)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <p.x>,<eval (<p.y>-2)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>-1)>,<eval (<p.y>-2)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>+1)>,<eval (<p.y>-2)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>+2)>,<p.y>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>+2)>,<eval (<p.y>-1)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>+2)>,<eval (<p.y>+1)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <p.x>,<eval (<p.y>+2)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>-1)>,<eval (<p.y>+2)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1800,effectLocation <eval (<p.x>+1)>,<eval (<p.y>+2)>,<p.z>,2,i_fx_explode,6,5,0,0480,0
+timerfms 1900,sector.allclients effect 4 2
+timerf 2,f_abyssal_infernal_meteor_impact
+sound 0349
+
+[function f_abyssal_infernal_meteor_impact]
+forclients 10
+  damage <R35,50> dam_fire
+endfor
+for 0 10
+  timerfms <eval (<local._for>*100)>,circle_effect,03709,<dlocal._for>,0,0,0
+endfor
+timerfms 1250,circle_effect,i_fx_explode,10,1,048d,4
+sound 044b
+
+[function f_abyssal_infernal_condemnation]
+ref1=<uid>
+serv.newitem i_abyssal_infernal_condemed_player
+new.morep=<ref1.p>
+new.more1=5
+new.timer=3
+ref1.equip <new>
+dorand 4 //5
+  ref1.go 4567,3559,30
+  ref1.go 4583,3618,30
+  ref1.go 4604,3613,30
+  ref1.go 4631,3559,30
+  //ref1.go 6949,701,32
+  //ref1.go 6941,761,32
+  //ref1.go 7015,688,32
+  //ref1.go 7043,751,32
+  //ref1.go 6999,798,32
+enddo
+ref1.sound <ref1.sex 1088/814>
+
+[itemdef i_abyssal_infernal_condemed_player]
+defname=i_abyssal_infernal_condemed_player
+id=i_memory
+name=Abyssal Infernal Condemed Player
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<more1> <= 0)
+  topobj.go <morep>
+  topobj.sysmessage You can move again!
+  remove
+endif
+topobj.damage <R1,5> dam_fire
+topobj.effect=3,0376a,9,32,0,0,013af
+more1 -= 1
+timer=3
+return 1
+
+
+///////////////////////////////
+// Chief Paroxysmus
+
+[comment notes]
+Has a Lethal Poison area hit, which seems to affect everyone on the same screen. Mages are advised to keep the spell Arch Cure ready. Orange petal offer absolutely no protection against 
+
+this special attack.
+He summons his targets to him on a regular basis.
+He "eats" summons and pets, refreshing him to full health even from being near death. This can include mounts when you dismount or die.
+His melee attacks seem to often poison the target.
+He is found at first with three other creatures that are smaller, and less dangerous, versions of himself.
+
+[chardef 0100]
+defname=c_chief_paroxysmus
+name=Chief Paroxysmus
+dam=27, 31
+//damphysical={80}
+//dampoison={20}
+sounddie=056f
+soundhit=0570
+soundidle=0571
+soundnotice=0572
+soundgethit=0573
+can=mt_walk|mt_run|mt_usehands|mt_equip
+
+on=@create
+	events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+	npc=brain_monster
+        str={1232, 1400}
+        dex={76, 82}
+        int={76, 85}
+        maxhits={50000}
+	resphysical={75, 85}
+        resfire={40, 50}
+        rescold={50, 60}
+        respoison={55, 65}
+        resenergy={50, 60}				
+        wrestling={120.0}
+        tactics={120.0}
+        magicresistance={120.0}
+        anatomy={120.0}
+        poisoning={120.0}
+        Fame=25000
+        Karma=-25000
+	timerf 0,f_chief_paroxysmus_spawn_minions
+
+on=@hit
+if (<src.owner>) 
+  hits += <src.hits>
+  if (<hits> > <maxhits>)
+    hits=<maxhits>
+  endif
+  src.damage <src.hits>
+  sound 0574
+endif
+
+on=@gethit
+ref1=<uid>
+if (<R1,100> <= 60)		//60% chance to pull the target in
+  for n 0 <eval <ref1.attacker>-1>
+    ref2=<attacker.<dlocal.n>>
+    ref2.go <ref1.p>
+  endfor
+endif
+
+[function f_chief_paroxysmus_spawn_minions]
+ref1=<uid>
+for 3
+  serv.newnpc c_Bulbous_Putrification
+  ref2=<new>
+  serv.newitem i_chief_paroxysmus_minion
+  new.link=<ref1>
+  new.timer=1
+  ref2.equip <new>
+  ref2.movenear <ref1> 3
+endfor
+
+[itemdef i_chief_paroxysmus_minion]
+defname=i_chief_paroxysmus_minion
+id=i_memory
+name=Chief Paroxysmus Minion
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+ref1=<link>
+if !(<ref1.isvalid>)
+  topobj.remove
+  return 1
+endif
+topobj.home=<link.p>
+topobj.homedist=15
+timer=5
+return 1
+
+
+////////////////////// 
+// Crimson Dragon
+
+[comment notes]
+During the War of Shadows Chapter of the Warriors of Destiny event cycle, a Crimson Dragon would appear as a kind of "boss monster" after the spawn had otherwise been defeated. These creatures were extremely powerful. They could turn Dragons wild. Other pets were effective, however.
+
+They would "smack talk" to players, saying such things as the following:
+Pathetic Mortals!
+You cannot comprehend my power!
+Sweet Death, embrace mine enemies!
+
+Their attacks were heavily fire-based. Their breath attack did 60 points of damage, minimum, and typically followed another attack. It was rare for a Player Character to survive one of those deadly combination attacks. They could on occasion knock a mounted character off of his or her mount. Their "Vas Flam" ("Rise Flames") spell caused deadly walls of fire to spring forth from them.
+The Crimson Dragons bore obvious similarities to The Six, which had appeared earlier in the event cycle.
+
+[chardef 197]
+defname=c_crimson_dragon
+name=Crimson Dragon
+dam=20,25	//8,10
+armor=70
+sound=362
+can=mt_walk|mt_run
+
+on=@create
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={2034, 2140}
+        dex={215, 256}
+        int={1025, 1116}
+        maxhits={25000}
+        //damphysical={50}
+        //damfire={50}
+        resphysical={80, 85}
+        resfire={100}
+        rescold={50, 60}
+        respoison={80, 85}
+        resenergy={80, 85}
+        evaluatingintel={110.2, 125.3}
+        magery={110.9, 125.5}
+        magicresistance={116.3, 125.0}
+        tactics={111.7, 126.3}
+        wrestling={120.5, 128.0}
+        meditation={119.4, 130.0}
+        anatomy={118.7, 125.0}
+        detectinghidden={120.0}
+        Fame=20000
+        Karma=-20000
+
+on=@hit
+if (<R1,100> <= 10)
+  say Vas Flam
+  timerf 3,f_crimson_dragon_fire_wall
+elseif (<R1,100> <= 5)
+  dorand 3
+    Say Pathetic Mortals!
+    Say You cannot comprehend my power!
+    Say Sweet Death, embrace mine enemies!
+  enddo
+elseif (<R1,100> <= 5)
+  say Vas Ort Flam
+  timerf 3,f_crimson_dragon_flamewave
+endif
+
+on=@gethit
+if (<src.npc>==brain_dragon)
+  src.f_pet_release
+  src.emote decided to go wild
+endif
+
+
+
+[function f_crimson_dragon_fire_wall]
+ref1=<uid>
+local.dir=<truedir <ref1.dir>>
+sector.allclients effect 4 2
+serv.newitem i_memory
+ref2=<new>
+ref2.p=<ref1.p>
+for n 0 8
+  ref2.move <local.dir> 1
+  if (<ref1.dir>==6) || (<ref1.dir>==2)
+    serv.newitem i_fx_field_fire
+    new.attr=attr_move_never|attr_decay
+    new.timer=<eval 60-(<local.n>*2)>
+    new.p=<ref2.p>
+  elseif (<ref1.dir>==0) || (<ref1.dir>=4)
+    serv.newitem i_fx_field_fire_ns
+    new.attr=attr_move_never|attr_decay
+    new.timer=<eval 60-(<local.n>*2)>
+    new.p=<ref2.p>
+  else
+    serv.newitem i_fx_field_fire
+    new.attr=attr_move_never|attr_decay
+    new.timer=<eval 60-(<local.n>*2)>
+    new.p=<ref2.p>
+    serv.newitem i_fx_field_fire_ns
+    new.attr=attr_move_never|attr_decay
+    new.timer=<eval 60-(<local.n>*2)>
+    new.p=<ref2.p>
+  endif
+endfor
+ref2.remove
+ref1.sound 0208
+ref1.sound 0307
+
+[function f_crimson_dragon_flamewave]
+forclients 15
+  damage <R35,50> dam_fire
+endfor
+for n 0 15
+  timerfms <eval (<local.n>*100)>,f_crimson_dragon_flamewave_effect,<dlocal.n>
+endfor
+sound 044b
+
+[function f_crimson_dragon_flamewave_effect]	
+for dx -<argv[0]> <argv[0]>
+  for dy -<argv[0]> <argv[0]>
+    float.dist=<floatval sqrt(<eval (<local.dX>@2)+(<local.dY>@2)>)>
+    if (<float.dist> > <floatval <qval <argv[1]>?0:<argv[0]>-0.5>>) && (<float.dist> < <floatval <argv[0]>+0.5>)
+      local.absX=<eval <p.x>+<local.dx>>
+      local.absY=<eval <p.y>+<local.dy>>
+      timerfms <R100,200>,effectLocation <local.absx>,<local.absy>,<p.z>,2,i_fire_column,6,30,0,{1355 1360},5
+    endif
+  endfor
+endfor
+
+
+////////////////////////
+// Dread Horn
+
+[comment notes]
+Hoof stomp attack that does the earthquake effect on nearby players
+
+Teleports players nearby and casts lethal poison on them
+
+For groups of mages, pumping out endless Earth Elementals is a simple but effective way to beat Dread Horn. He will dispel some, but the elementals deal/take OK damage because 
+of the armor/damage types, and their aggressive AI will usually keep Dread Horn from targeting the mages. Two mages with lots of Mana Regeneration should be able to cast enough
+ elementals to take him down. Tamers will want to take pets with excellent poison resistance and good physical resistance, so as to reduce the amount of pet healing required. 
+The constant poisoning can make it difficult to heal pets before they die. The Cu Sidhe's ability to sometimes cure itself of poison can be helpful in this regard. Arctic Ogre 
+Lords are also quite popular since they have 100% poison resist (this eliminates 60% of Dread Horn's melee damage).
+
+[chardef 257]
+defname=c_dread_horn
+Name=Dread Horn
+sound=0A8
+dam=21, 28 
+damphysical={ 40 }
+dampoison={ 60 }
+can=mt_walk|mt_run
+
+on=@create
+	npc=brain_monster
+	str={878, 993 }
+	dex={581, 683 }
+	int={1200, 1300 }
+	maxhits={50000 }
+	maxstam={507, 669 }
+	maxmana={1200, 1300 }
+	resphysical={ 40, 55 }
+	resfire={50, 65 }
+	rescold={ 50, 65 }
+	respoison={ 65, 75 }
+	resenergy={ 60, 75 }
+	wrestling={ 90.0 }
+	tactics={ 90.0 }
+	magicresistance={ 110.0 }
+	poisoning={ 120.0 }
+	magery={ 110.0 }
+	evaluatingintel={ 110.0 }
+	meditation={ 110.0 }
+	spellweaving={ 120.0}
+	Fame=32000
+	Karma=-32000
+
+on=@hit
+if (<R1,100> <= 10)
+  say Vas Flam
+  timerf 3,f_dread_horn_hoof_stomp
+elseif (<R1,100> <= 5)
+  timerf 3,f_dread_horn_teleport_poison_attacker
+endif
+
+[function f_dread_horn_hoof_stomp]
+ref1=<uid>
+forchars 10
+  if !(<npc>) || ((<npc>) && (<owner>))
+    spelleffect s_earthquake 1000 <ref1>
+  endif
+endfor
+say @025,3,0,0 *Dreadhorns eyes light up, his mouth almost a grin, as he slams one hoof to the ground!*
+sound 02f3
+
+[function f_dread_horn_teleport_poison_attacker]
+ref1=<uid>
+for n 0 <eval <ref1.attacker>-1>
+  ref2=<ref1.attacker.<dlocal.n>>
+  ref2.movenear <ref1> 1
+  ref2.poison 1250
+  ref1.effect 3,0374a,10,15,5021
+  ref1.sound 01fe
+  ref1.sound 0474
+endfor
+
+
+///////////////////////////////////
+// Ilhenir the Stained
+
+[chardef c_ilhenir]
+defname=c_ilhenir
+name=Ilhenir the Stained
+id=0103
+sounddie=0584
+soundhit=0580
+soundidle=0582
+soundnotice=0581
+soundgethit=0583
+dam=21, 28
+armor=44
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+	npc=brain_monster
+	Str={1105, 1350}
+	Dex={82, 160}
+	Int={505, 750}
+	Maxhits={9000}
+	DamPhysical={60}
+	Damfire={20}
+	DamPoison={20}
+	ResPhysical={55, 65}
+	ResFire={50, 60}
+	ResCold={55, 65}
+	ResPoison={70, 90}
+	ResEnergy={65, 75}
+	EvaluatingInt={100}
+	Magery={100}
+	Meditation={0}
+	Poisoning={5.4}
+	Anatomy={117.5}
+	MagicResistance={120.0}
+	Tactics={119.9}
+	Wrestling={119.9}
+	Fame=50000
+	Karma=-50000
+
+on=@gethit
+if (<R1,100> <= 5)
+  src.sysmessage A corrosive gas seeps out of your enemy's skin!
+endif
+
+
+//////////////////////////
+// Lady Melisande
+
+[comment notes]
+Has an area effect spell which makes her difficult to fight with a melee fighter(i.e Swordsman, Macer, Fencer). This "putrid nausea" attack reduces swing 
+speed by 60, Hit Chance Increase by 60, Defense Chance Increase by 60 and Faster Casting by 5 for 30 seconds, so mages and archers should definitely stand 
+at a distance.
+
+Uses Necromancy spells, including revenant.
+Has a retinue of several (5) evil satyrs.
+Talks a scary smack talk.
+
+The Satyrs' discordance ability can severely weaken players, so at the beginning attack cautiously and control the situation. Using Energy Fields in the 
+right places will help keep Lady Melisande at a distance, and allow the satyrs to be killed one by one. In a party with no mages, use other luring 
+techniques.
+
+BEST TACTIC: Have a Tamer wearing high resist armour with a Cu Sidhe taking damage and Mages try to keep the tamer alive and dispel the revenant if it is 
+summoned. With this tactic she can be defeated by 3 players.
+
+RICHWARF TACTIC: Use a Tamer(s) with a Greater Dragon(s) as they have a lot more HP. This works better with a tamer mage so s/he can heal with the mage 
+as well. This tactic can be done solo but is harder. It is also thought 3+ tamers will make light work, just remember the more dragons present in the 
+party, the faster Melisande can be defeated.
+
+
+[chardef 0102]
+defname=c_lady_melisande
+name=a lady melisande
+sound=451
+dam=11, 18
+armor=50
+can=mt_walk|mt_run|mt_usehands|mt_equip
+
+on=@create
+	npc=brain_monster
+        str={400, 1000}
+        dex={300, 400}
+        int={1500, 1700}
+        maxhits={100000}	
+        //damphysical={50}
+        //damenergy={50}
+        resphysical={40, 60}
+        resfire={40, 50}
+        rescold={55, 65}
+        respoison={70, 75}
+        resenergy={70, 80}
+        wrestling={100.0, 105.0}
+        tactics={100.0, 105.0}
+        magicresistance={120.0}
+        magery={120.0}
+        evaluatingintel={120.0}
+        meditation={120.0}
+        necromancy={120.0}
+        spiritspeak={120.0}
+        Fame=25000
+        Karma=-25000
+
+on=@hit
+if (<R1,100> <= 5)
+  f_lady_melisande_spawn_helper
+  say Noooooo!  You shall never defeat me.  Even if I should fall, my tree will sustain me and I will rise again.
+
+elseif (<R1,100> <= 5)
+  f_lady_melisande_spawn_minions
+  say @025,3,0,0 *A twisted satyr scrambles onto the branch beside you and attacks!*
+
+elseif (<R1,100> <= 5)
+  dorand 2
+    say Muahahahaha!  I'll feast on your flesh.
+    say Muahahaha!  Your life essence is MINE!
+  enddo
+  say @025,3,0,0 *An unholy aura surrounds Lady Melisande as her wounds begin to close.*
+  effect 0376a,9,32,0
+  sound 01f2
+endif
+
+[function f_lady_melisande_spawn_helper]	//these minions need to discord players
+ref1=<uid>
+  serv.newnpc {c_reaper 1 c_dryad 1 c_harpy_stone 1}
+  ref2=<new>
+  serv.newitem i_lady_melisande_minions
+  new.link=<ref1>
+  new.timer=1
+  ref2.equip <new>
+  ref2.movenear <ref1> 3
+endfor
+
+
+[function f_lady_melisande_spawn_minion]	//these minions need to discord players
+ref1=<uid>
+for 1 5
+  serv.newnpc c_satyr
+  ref2=<new>
+  ref2.name Enslaved Satyr
+  serv.newitem i_lady_melisande_minion
+  new.link=<ref1>
+  new.timer=1
+  ref2.equip <new>
+  ref2.movenear <ref1> 3
+endfor
+
+[itemdef i_lady_melisande_minion]
+defname=i_lady_melisande_minion
+id=i_memory
+name=Lady Melisande Minion
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+ref1=<link>
+if !(<ref1.isvalid>)
+  topobj.remove
+  return 1
+endif
+topobj.home=<link.p>
+topobj.homedist=15
+timer=5
+return 1
+
+
+/////////////////////////
+// Medusa
+
+[comment notes]
+Medusa randomly releases one of the petrified creatures after receiving damage. These guardians can be Ophidian Justicars, Ophidian Warrior, Ophidian Zealot, Ophidian Enforcer, Wailing 
+Banshee, Ogre Lord, Dragon and Undead Gargoyle.
+
+Drops Medusa Statue and Medusa Blood (base ingredient for Elixir of Rebirth). Players can receive minor Gargoyle Artifacts and major Gargoyle Artifacts (like Slither) in their backpacks when 
+Medusa is killed.
+
+Blue Medusa Scales can be snatched from Medusa by using a blade on her (up to 5 times yielding 2-3 scales), although this will aggravate her. Skinning her corpse will normally yield 5 
+greyish-blue scales. On rare occasions 5 "normal" blue scales can be cut from her corpse making the theoretical maximal yield of blue scales 20. The greyish-blue scales make for less effective 
+Gorgon Lens than the blue scales.
+
+It is advisable to avoid wearing Undead Slayer items as this will double Medusa's melee damage. From October 2010 on Medusa was buffed resulting in her using magical skills much more effectively.
+
+[chardef 728]
+defname=c_medusa
+name=Medusa
+dam=21, 28
+armor=60
+sound=1554
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+	npc=brain_monster
+        str={1235, 1391}
+        dex={128, 139}
+        int={537, 664}
+        maxhits={60000}
+        //damphysical={60}
+        //damfire={20}
+        //damenergy={20}
+        resphysical={55, 65}
+        resfire={55, 65}
+        rescold={55, 65}
+        respoison={80, 90}
+        resenergy={60, 75}
+        anatomy={110.6, 116.1}
+        evaluatingintel={100.0, 114.4}
+        magery={100.0}
+        meditation={118.2, 127.8}
+        magicresistance={120.0}
+        tactics={111.9, 134.5}
+        wrestling={119.7, 128.9}
+        Fame=22000
+        Karma=-22000
+
+
+
+
+
+
+/////////////////////////
+// Meraktus the Tormented
+
+[chardef c_meraktus]
+defname=c_meraktus
+Name=Meraktus the Tormented
+id=263
+Sound=680
+can=mt_walk|mt_run|mt_usehands
+Dam=16, 30
+armor=28 
+
+on=@create
+	npc=brain_monster
+	color=0x835
+	Str={1419, 1438}
+	Dex={309, 413}
+	Int={129, 131}
+	Maxhits={4100, 4200}
+	DamPhysical={100}
+	ResPhysical={65, 90}
+	ResFire={65, 70}
+	ResCold={50, 60}
+	ResPoison={40, 60}
+	ResEnergy={50, 55}
+	Anatomy={0}
+	MagicResistance={107.0, 111.3}
+	Tactics={107.0, 117.0}
+	Wrestling={100.0, 105.0}
+	Fame=70000
+	Karma=-70000
+
+
+////////////////////////////////
+// Monstrous Interred Crizzle
+
+[comment notes]
+He has an area effect spell that reduces movement speed, decreases Faster Casting by 5, Faster Cast Recovery by 5 and Swing Speed Increase by 60.
+When damaged, the Monstrous Interred Grizzle spills an acidious fluid that greatly damages ones armor if stepped on.
+
+Best fought with a mage or an archer. Easy with mages EVing and EQing. Another effective method of killing him is have a Cu Sidhe and stand one tile away from the Cu Sidhe and vet heal. 
+Although this is a long battle it makes it possible for a tamer to solo him (take LOTS of bandaids).
+
+[chardef c_interred_grizzle_monstrous]
+defname=c_interred_grizzle_monstrous
+id=0103
+name=Monstrous Interred Grizzle	
+sound=589
+dam=27, 31
+armor=80
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+	npc=brain_monster
+        str={1198, 1207}
+        dex={127, 135}
+        int={595, 646}
+        maxhits={50000}
+        //damphysical={60}
+        //damfire={20}
+        //damenergy={20}
+        resphysical={48, 52}
+        resfire={77, 82}
+        rescold={56, 61}
+        respoison={32, 40}
+        resenergy={69, 71}
+        wrestling={112.6, 116.9}
+        tactics={118.5, 119.2}
+        magicresistance={120}
+        anatomy={111.0, 111.7}
+        magery={100.0}
+        evaluatingintel={100}
+        meditation={100}
+        spellweaving={ 100.0}
+        Fame=24000
+        Karma=-24000
+
+
+/////////////////////////////
+// Primeval Liche
+
+[comment notes]
+Howl of the Lich - A howl so powerful it creates a cold blast radius causing cold damage to all players and their pets.
+Creeping Death - Occasionally, the Primeval Lich will call creatures of the darkness to his aid:
+Up to six lightning strikes will randomly assault players and pets within a 15 tile radius of the Lich
+A shadow dweller will spawn at each point near the impact of those lightning strikes and attack players and pets within range
+Unholy Touch - The Lich's touch will corrupt the target's soul, temporarily lowering some skills and attributes.
+Teleport Taunt - The Lich should taunt players out of attack range when they attack the lich with ranged weapons or magic.
+
+[chardef 830]
+defname=c_primeval_lich
+defname2=c_primeval_liche
+name=Primeval Lich
+sound=061e
+dam=17, 21
+armor=80
+can=mt_walk|mt_run
+
+
+on=@create
+	npc=brain_monster
+        str={500}
+        dex={100}
+        int={1000}
+        maxhits={30000}
+        maxmana={5000}
+        //damphysical={20}
+        //damfire={20}
+	//rescold={20}
+        //damenergy={20}
+        //dampoison={20}
+        resphysical={30}
+        resfire={30}
+        rescold={30}
+        respoison={30}
+        resenergy={20}
+        evaluatingintel={90, 120.0}
+        magery={90, 120.0}
+        meditation={100, 120.0}
+        necromancy={120.0}
+        spiritspeak={120.0}
+        magicresistance={120, 140.0}
+        tactics={90, 120}
+        wrestling={100, 120}
+        Fame=28000
+        Karma=-28000
+
+
+///////////////////////
+// Serado the Awakened
+
+[comment notes]
+Serado the Awakened is an ancient and extremely powerful Yamandon. He is the Champion of the Sleeping Dragon Champion Spawn in the Tokuno Islands.
+
+Its attacks are heavily poison-based, including an area effect Lethal poison attack that is particularly deadly. He will also call down lightning to strike those near him.
+
+[chardef c_serado]
+defname c_serado
+name=Serado the Awakened
+id=249
+dam=29, 35
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+	npc=brain_monster
+	color=096C
+        str={1000}
+        dex={150}
+        int={300}
+        maxhits={9000}
+        maxmana={300}
+        //damphysical={70}
+        //dampoison={20}
+        //damenergy={10}
+        resphysical={30}
+        resfire={60}
+        rescold={60}
+        respoison={90}
+        resenergy={50}
+        magicresistance={120.0}
+        tactics={120.0}
+        wrestling={70.0}
+        poisoning={150.0}
+        Fame=22500
+        Karma=-22500
+
+
+///////////////////////////////
+// Shimmering Effusion
+
+[comment notes]
+The Shimmering Effusion is the Peerless boss for the Prism of Light dungeon, which is located on the north end of the island on which the city of Nujel'm is located.
+
+The Effusion can be killed solo. When acquiring the keys area peacemaking is an asset.
+
+This is not a too difficult fight. Spawns various creatures during the fight. Has a very high magery skill level. Drops Captured Essence, Crystalline Ring, various ingredients, Shimmering 
+Crystals, and more.
+
+Always kill the summoned creatures first. Especially the Corporeal Brumes take a while to kill and have high physical resists. If you fail to kill the summoned creatures quickly the spawn 
+can get out of hand. Barding skills help a lot. If too many creatures have spawned leave the main room through the red moon gate. Lure the spawn away from the teleporter tile and go back
+killing the spawn one by one. Beyond the red moon gate there is also an ankh. Be careful with the second moon gate: It leads out of the peerless area and there is no way back.
+
+[chardef c_shimmering_effusion]
+name=Shimmering Effusion
+id=0105	
+dam=27, 31
+can=mt_walk|mt_run
+
+on=@create
+	npc=brain_monster
+        str={500, 550}
+        dex={350, 400}
+        int={1500, 1600}
+        maxhits={20000}
+        //damphysical={20}
+        //damfire={20}
+	//damcold={20}
+        //dampoison={20}
+        //damenergy={20}
+        resphysical={60, 80}
+        resfire={60, 80}
+        rescold={60, 80}
+        respoison={60, 80}
+        resenergy={60, 80}
+        wrestling={100.0, 105.0}
+        tactics={100.0, 105.0}
+        magicresistance={150}
+        magery={150.0}
+        evaluatingintel={150.0}
+        meditation={120.0}
+        spellweaving={ 120.0}
+        Fame=30000
+        Karma=-30000
+
+///////////////////////////
+// Slasher of Veils
+
+[comment notes]
+Luring the slasher into the temple with the virtue symbol on the floor will weaken its power considerably.
+
+It is immune to Word of Death Spellweaving spell.
+
+It is surprisingly quite susceptible to paralyze spell, as well as earthquake.
+
+The Slasher of Veils is using the words of power *Mu Ort* and *Mur Kal Ort* from time to time. In the Gargoyle language "Mu Ort" means Compassion magic and "Mur Kal Ort" something 
+like mass casting. However, its yet unknown, what the slasher wish to express, nor which spells are associated with them.
+
+
+[chardef 741]
+defname=c_slasher_of_veils
+name=The Slasher of Veils
+soundidle=1589
+soundnotice=1586
+soundgethit=1588
+sounddie=1587
+dam=10, 15
+can=mt_walk|mt_run
+
+on=@create
+	npc=brain_monster
+        str={967, 1145}
+        dex={129, 139}
+        int={967, 1145}
+        maxhits={100000}
+        maxmana={10000}
+        //damphysical={20}
+        //damfire={20}
+	//rescold={20}
+        //dampoison={20}
+        //damenergy={20}
+        resphysical={65, 75}
+        resfire={70, 80}
+        rescold={70, 80}
+        respoison={70, 80}
+        resenergy={70, 80}
+        anatomy={116.1, 120.6}
+        evaluatingintel={113.8, 124.7}
+        magery={110.1, 123.2}
+        spellweaving={ 110.1, 123.2}
+        meditation={118.2, 127.8}
+        magicresistance={110.0, 123.2}
+        tactics={112.2, 122.6}
+        wrestling={118.9, 128.6}
+        Fame=35000
+        Karma=-35000
+
+///////////////////////////
+// Stygian Dragon
+
+[comment notes]
+Stygian Dragon is one of the peerless monsters found in the Stygian Abyss Dungeon. You need to collect 4 Draconic orb (lesser).png Draconic Orbs from the Stygian Dragon Lair Entrance 
+Mini-Champ and use them on the altar at 128º N, 67º W inside the Stygian Abyss Dungeon. As in any peerless, a party of ten can enter the lair at once.
+
+[chardef 826]
+defname=c_stygian_dragon
+name=Stygian Dragon
+sound=362
+dam=33, 55
+armor=60
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+	npc=brain_monster
+        str={702}
+        dex={250}
+        int={180}
+        maxhits={30000}
+        maxstam={431}
+        maxmana={180}
+        //damphysical={25}
+        //damfire={50}
+        //damenergy={25}
+        resphysical={80, 90}
+        resfire={80, 90}
+        rescold={60, 70}
+        respoison={80, 90}
+        resenergy={80, 90}
+        anatomy={100.0}
+        magicresistance={150.0, 155.0}
+        tactics={120.7, 125.0}
+        wrestling={115.0, 117.7}
+        Fame=15000
+        Karma=-15000
+
+
+
+/////////////////////////
+// Travesty
+
+[comment notes]
+Travesty is the Peerless boss for the dungeon called The Citadel, located in the Tokuno Islands.
+
+She is a Changeling, first appearing as a small, floating, butterfly-like creature, then transforming into the form of the players attacking her.
+
+She has the ability to change into her opponent. Spawns assassins when she gets low on health. Best fought with a Mage, or tamer, but can be fought with any type.
+
+If someone in your party has Discordance skill, it is advisable they stay away from Travesty or she will mimic their skill, increasing the difficulty of the fight greatly.
+
+[chardef c_travesty]
+defname=c_travesty
+name=Travesty
+id=0108
+dam=25, 30
+armor=50
+can=mt_walk|mt_run|mt_usehands
+
+on=@create
+	npc=brain_monster
+        str={909, 949}
+        dex={901, 948}
+        int={903, 947}
+        maxhits={35000}
+        //damphysical={100}
+        resphysical={52, 67}
+        resfire={51, 68}
+        rescold={51, 69}
+        respoison={51, 70}
+        resenergy={50, 68}
+        wrestling={100.1, 119.7}
+        tactics={102.3, 118.5}
+        magicresistance={101.2, 119.6}
+        anatomy={100.1, 117.5}
+        Fame=8000
+        Karma=-8000
+
+
+//////////////////////////////
+// Twaulo
+
+[chardef c_twaulo]
+defname=c_twalo
+id=101
+name=Twaulo
+sound=679
+can=mt_walk|mt_run|mt_usehands
+armor=65,75
+dam=19,24
+
+on=@create
+	color=0455
+	Str={1751, 1950}
+	Dex={251, 450}
+	Int={801,1000}
+	Maxhits=7500
+	title=of the Glade
+        ResPhysical=65, 75}
+        ResFire={45, 55}
+        ResCold={50, 60}
+        ResPoison={50, 60}
+        ResEnergy={50, 60}
+        Meditation=0 
+        Anatomy={95.1, 115.0}
+        Archery={95.1, 100.0}
+        MagicResistance={50.3, 80.0}
+        Tactics={90.1, 100.0}
+        Wrestling={95.1, 100.0}
+        Fame = 50000;
+        Karma = 50000
+
+
+////////////////////////////////////////////
+// Custom Champions
+
+
+
+/////////////////////////////
+// Krampus (Christmas boss)
+
+[chardef c_krampus]
+defname=c_krampus
+name=Krampus the Shadow of Saint Nicholas
+id=c_primeval_lich
+sound=061e
+dam=17, 21
+armor=80
+can=mt_walk|mt_run
+
+
+on=@create
+	color=0b2d
+        events=+e_champion_boss
+        events=+e_auto_cure
+        events=+e_auto_dispel
+        tag0.unbardable=1
+	npc=brain_monster
+        str={500}
+        dex={100}
+        int={1000}
+        maxhits={30000}
+        maxmana={5000}
+        //damphysical={20}
+        //damfire={20}
+	//rescold={20}
+        //damenergy={20}
+        //dampoison={20}
+        resphysical={30}
+        resfire={30}
+        rescold={30}
+        respoison={30}
+        resenergy={20}
+        evaluatingintel={90, 120.0}
+        magery={90, 120.0}
+        meditation={100, 120.0}
+        necromancy={120.0}
+        spiritspeak={120.0}
+        magicresistance={120, 140.0}
+        tactics={90, 120}
+        wrestling={100, 120}
+        Fame=28000
+        Karma=-28000
+
+on=@hit
+ref1=<uid>
+if (<R1,100> <= 10)		//10% drop or throw a an unholy bone
+  ref2=<attacker.<eval {0 (<attacker>-1)}>>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2.isplayer>) && (<ref1.distance <ref2>> <= 15)
+    ref1.f_neira_throw_unholy_bone <ref2>
+  endif
+endif
+
+on=@gethit
+ref1=<uid>
+if (<R1,100> <= 10)		//10% drop or throw a an unholy bone
+  ref2=<attacker.<eval {0 (<attacker>-1)}>>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2.isplayer>) && (<ref1.distance <ref2>> <= 15)
+    ref1.f_neira_throw_unholy_bone <ref2>
+  endif
+endif
+
+on=@deathcorpse
+serv.newitem i_dye_tub_rare,1,<argo>
+serv.newitem i_dye_tub_rare,1,<argo>
+
+
+
+
+
+[EOF]

@@ -1,0 +1,85 @@
+//Bank check by Soulless
+//5:44 PM 4/24/2018
+
+[speech write_checks]
+on=*write check*
+on=*make check*
+on=*banker check*
+  if (<src.flags>&statf_dead)
+    return 1
+  endif
+  dorand 3
+    say Sure thing <src.name>, and how much should I make it out for?
+    say I can help you with that <src.name>, what's the amount?
+    say Certainly, and what amount will that be for today, <src.name>?
+  enddo
+src.sysmessage Check amount: 
+src.promptconsole f_write_check
+
+[function f_write_check]
+ctag0.writingcheck=
+
+if (<isempty <args>>) || !(<isnum <args>>)
+  Sysmessage You must enter a valid number to write a check.
+  return 1
+elseif (<gold> < <argn>)
+  sysmessage You don't have enough funds to cover that check.
+  return 1
+endif
+
+ctag0.writingcheck=<args>
+sdialog d_write_check_confirm
+    
+[itemdef i_bank_check]
+id=i_deed
+name=Check
+type=t_script
+
+on=@click
+message <name> for <dmore1>g
+return 1
+
+on=@create
+color=036
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can not use this where it is
+  return 1
+elseif (<cont> != <src.findlayer.29>)
+  src.sysmessage That must be in your bank box to use it.
+  return 1
+endif
+src.sound {036 037}
+src.findlayer.29.newgold <more1>
+src.findlayer.29.update
+remove
+return 1
+
+[dialog d_write_check_confirm]
+150,100
+
+page 0
+resizepic 10 10 9200 520 120
+resizepic 20 20 3000 500 100
+dtext 200 30 1263 Check Confirmation
+dtext 50 50 0 Are you sure you want to write a check in the amount of: <dctag0.writingcheck>?
+
+button 125 75 243 242 1 0 0	//cancel
+button 300 75 249 248 1 0 1
+
+[dialog d_write_check_confirm button]
+
+onbutton=1
+if (<gold> < <ctag0.writing_check>)
+  sysmessage You don't have enough funds to cover that check.
+  return 1
+endif
+gold -= <ctag0.writingcheck>
+serv.newitem i_bank_check
+new.more1=<ctag0.writingcheck>
+new.bounce
+new.resendtooltip
+ctag0.writingcheck=
+
+[EOF]

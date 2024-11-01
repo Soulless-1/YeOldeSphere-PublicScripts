@@ -1,0 +1,439 @@
+//House System by Soulless
+//v1.9
+//12:31 PM 1/31/2019
+
+
+[typedef ei_house_multi]
+
+on=@timer
+if (<def0.house_can_decay>)		//if house decay is on lets call the collapse function
+  serv.log <name>(<uid>) owned by <owner.name>(<owner>) at <p> has collapsed.
+  timer 86400	//set the timer to 1 day should there be an issue with the collapse function	<--- what is this doing here? 
+  f_house_collapse
+  return 1
+endif
+
+on=@redeed
+//argn1=ID of the deed (Default=i_deed)
+//argn2=1 (Default = 1). If set to 1 all items will be moved to the Moving Crate (and Addons redeeded).
+//argn3=1 If set to 1 the Moving Crate will be transfered to Owner's Bank (if there is any).
+//    Note: the crate is moved to the OWNER's bank, not SRC.
+//    If argn2 = 0 then argn3 will be not used regardless of the value it has.
+//SRC = Player doing the redeed (If Any). When the multi is being removed there is no SRC (also when an Addon is being redeeded from internal functions).
+//ARGO = The deed.
+//return 1 will prevent the deed from being created, but will not block the code from argn2 and argn3
+if !(<def0.house_redeed_crate>)
+  argn2=0
+endif
+
+on=@destroy
+serv.log House <name>(<uid>) removed at <region.name>(<p>)
+
+
+[typedef ei_ship_multi]
+
+
+[typedef t_house_sign]
+
+on=@create
+timerf 0,f_house_initialize
+
+
+ON=@Click
+if (<link> != 04fffffff)
+  if !(<uid.<link.owner>.isvalid>) || !(<uid.<link.owner>.isplayer>)
+    message Abandoned House,
+  else
+    message <link.name> Owned by <uid.<link.owner>.name>, 
+  endif
+  if (<link.housetype>==house_guild)
+    message [<uid.<link.tag0.guildstone>.abbrev>] Guild House,
+  elseif (<def0.house_secure_public>)
+    message <qval (<link.housetype>==house_private)?This is a private home:This house is open to the public>
+  endif
+  if (<def0.house_decay_showtime>)
+    if (<def0.house_decay_showtime> == 1)
+      message <link.f_house_age_message> 
+    elseif (<def0.house_decay_showtime> == 2) || (<src.isgm>)
+      local.timeleft=<qval (<link.timer> <= 3600)?<eval (<link.timer>/60)> minutes:<qval (<link.timer> < 86400)?<eval ((<link.timer>)/60)/60)> hours:<eval (((<link.timer>)/60)/60)/24)> days>>  
+      message <link.f_house_age_message> <qval (<def0.house_can_decay>)?(<local.timeleft>):>
+    endif
+  endif
+  
+  if (<link.tag0.demolish>)
+    message @044 Demolition Scheduled in <QVAL (<eval <link.timer>/86400> < 1)? <eval (<link.timer>%86400)/3600> hours and <eval ((<link.timer>%86400)%3600)/60> minutes.:<eval <link.timer>/86400> days>
+  elseif (<link.region.tag0.forsale>)
+    message @044 FOR SALE <link.dtag0.forsale>gp
+  endif
+  return 1
+endif
+
+on=@dclick
+if !(<tag0.house_menu>)
+  tag0.house_menu=d_house_menu
+endif
+if (<link> != 04fffffff)
+  if (<link.owner> == <src>) || (<link.getcoownerpos <src>> >= 0) || (<link.getfriendpos <src>> >= 0)  || (<link.f_house_isowner <src>>) || (<src.isgm>)
+    if (<def0.house_sign_inside_only>) && (<src.region.uid> != <link>) && !(<src.isgm>)
+      src.sysmessage You must be standing on your doorstep to access the house menu.
+      return 1
+    endif
+
+   if (<def0.house_can_decay>) && !(<def0.house_property_tax>) && !(<src.isgm>) 	
+     if (<eval ((((<def0.house_can_decay>*24)*60)*60)-<link.timer>)> >= 3600)		//atleast an hour since it has last been refreshed
+       link.timer=<eval (((<def0.house_can_decay>*24)*60)*60)>	//refresh the property if its a friend of the property
+       link.tag0.last_refreshed=<serv.time>
+       src.sysmessage This house and it's contents have been refreshed.
+     endif
+   endif
+
+    src.sysmessage Welcome back to the house, friend!
+    if (<def0.house_menu_era>==3) 
+      link.sdialog d_house_menu
+    elseif (<def0.house_menu_era>==2)
+      link.sdialog d_house_menu_renaissance
+    elseif (<def0.house_menu_era>==1)
+      link.sdialog d_house_menu_secondage
+    else
+      link.sdialog d_house_menu_custom
+    endif    
+    return 1
+  endif
+
+  if !(<link.tag0.forsale>)
+    link.sdialog d_house_visitor
+    return 1
+  else
+    link.sdialog d_house_visitor	//make for sale menu
+    return 1
+  endif
+
+endif
+
+on=@destroy
+serv.log <link.name>(<link>) removed at <p>.
+
+////////////////////////
+// Base House Components
+
+[typedef ei_house_component]
+
+
+////////////////////////
+// Deeds
+
+[typedef t_deed]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is
+  return 1
+endif
+
+ON=@TargOn_Ground
+if !(<src.isgm>)
+  if !(strmatch(*ship*,<baseid>))
+    if !(<def0.placement_ilshenar_facet>) && (<src.targp.m>==2)
+      src.sysmessage Housing cannot be created on the Ilshenar facet.
+      trigger @TargOn_Cancel
+      return 1
+    endif
+  endif
+endif
+
+ON=@TargOn_Char
+src.sysmessage You must place your house on ground.
+trigger @TargOn_Cancel
+return 1
+
+ON=@TargOn_Item
+src.sysmessage You must place your house on ground.
+trigger @TargOn_Cancel
+return 1
+
+ON=@TargOn_Cancel
+if (<dispid>==i_gold)
+  src.sdialog d_house_placement_tool
+  remove
+endif
+
+////////////////////////
+// House Containers
+
+[typedef ei_house_container]
+
+
+////////////////////////
+// Locked Down Items
+
+[typedef ei_house_lockdown]
+
+//on=@click
+//message (Locked Down)
+
+on=@dclick
+ref1=<region.uid>)
+if (<layer>) && (<type> != t_container)
+  //src.sysmessage It appears to be locked to the structure.
+  return 1
+endif
+if (<type>==t_dye_vat) || (<type>==t_dye_vat_rare) || (<type>==t_dye_bucket_rare)
+  if !(<ref1.f_house_isfriend <src>>) && !(<src.isgm>)
+    src.sysmessage It appears to be locked to the structure.
+    return 1
+  endif
+endif
+
+on=@PickUp_Ground   
+if !(<src.isgm>)
+  //src.sysmessage It appears to be locked to the structure.
+  return 1
+endif
+
+on=@equiptest
+//src.sysmessage It appears to be locked to the structure.
+return 1
+
+//on=@dropon_self
+//if (<type> != t_container) 
+  //argo.p=<p>	//cannot drop items and combine them on others
+  //argo.fixheight
+  //return 1
+//endif
+ 
+//on=@PickUp_Self
+//if (!<src.isgm>)
+  //src.sysmessage It appears to be locked to the structure.
+  //return 1
+//endif
+
+on=@destroy
+ref1=<region.uid>
+if (<ref1.isvalid>) 
+  if (<serv.list.house_<ref1>_lockdown.findelem <uid>> != -1)
+    serv.list.house_<ref1>_lockdown.<serv.list.house_<ref1>_lockdown.findelem <uid>>.remove
+  endif
+endif
+serv.log Locked down item removed: <name> (<uid>) @ <p> (<region.name>
+
+
+
+////////////////////////
+// Secure Containers
+
+
+[typedef ei_house_secure]
+
+//on=@click
+//message (Locked Down & Secure)
+
+
+on=@PickUp_Ground   
+if (!<src.Isgm>)
+  return 1
+endif
+
+on=@dropon_self
+ref1=<region.uid>
+if !(<ref1>) || (!(<f_house_can_access <src>>) && !(<src.isgm>))
+  message That is secure.
+  return 1
+endif
+if (<def0.house_storage_limit>)
+  if (<ref1.f_house_storage_used> >= <ref1.maxstorage>)
+    src.sysmessage You have reached the maximum secure storage at this property.
+    return 1
+  endif
+endif
+ 
+on=@PickUp_Self
+ref1=<region.uid>
+if !(<ref1>) || (!(<f_house_can_access <src>>) && !(<src.isgm>))
+  message That is secure.
+  return 1
+endif
+
+on=@dclick
+ref1=<region.uid>
+if !(<ref1>) || (!(<f_house_can_access <src>>) && !(<src.isgm>))
+  message That is secure.
+  return 1
+endif
+
+on=@destroy
+ref1=<region.uid>
+if (<ref1.isvalid>) 
+  if (<serv.list.house_<ref1>_secure.findelem <uid>> != -1)
+    serv.list.house_<ref1>_secure.<serv.list.house_<ref1>_secure.findelem <uid>>.remove
+  endif
+endif
+serv.log Locked down item removed: <name> (<uid>) @ <p> (<region.name>
+
+
+////////////////////////
+// House Doors
+
+[typedef ei_house_door]
+
+on=@dclick
+ref1=<region.uid>
+if (<src.npc>)
+  return 1
+endif
+if !(<def0.house_keyless_doors>)
+  if (<timer>==-1)
+    src.message You quickly unlock, open, and relock the door.	//only say this if we have the key
+  endif
+else
+  type=t_door	//always make doors in keyless system regular doors
+  if !(<f_house_can_access <src>>)	//this is a secure door
+    if (<f_house_door_isbehind <src>>) && (<src.canseelos <uid>>)	//we're inside, we can use it from the inside
+      src.message That is locked, but is usable from the inside.
+      return 0
+    endif
+    src.sysmessage That is secure.	//deny access
+    return 1  
+  endif
+endif
+
+if (<def0.house_can_decay>) && !(<def0.house_property_tax>) && !(<src.isgm>)		
+  if (<eval ((((<def0.house_can_decay>*24)*60)*60)-<ref1.timer>)> >= 3600)		//atleast an hour since it has last been refreshed
+    if (<ref1.f_house_isowner <src>>) || (<ref1.f_house_iscoowner <src>>) || (<ref1.f_house_isfriend <src>>) 
+      ref1.timer=<eval (((<def0.house_can_decay>*24)*60)*60)>	//refresh the property if its a friend of the property
+      ref1.tag0.last_refreshed=<serv.time>
+      src.sysmessage This house and it's contents have been refreshed.
+    endif
+  endif
+endif
+
+
+
+/////////////////////
+// House Telepad
+
+[typedef ei_house_telepad]
+//this is handled in the telepad typedef
+
+on=@step
+if !(<argn1>)
+  type=t_script		//right now telepads do not work as they should, this event is attached on all telepads though
+  sound 01f0
+  src.timerf 1,f_house_telepad_go,<uid>
+endif
+
+[function f_house_telepad_go]
+ref1=<args>
+if (<distance <ref1>> < 1)	//standing on it
+  go=<ref1.morep>
+  effect=3,i_fx_smoke,6,30,0
+  sound 01ef
+endif
+
+////////////////////////
+// Moving Crate
+
+[typedef ei_moving_crate]
+
+
+////////////////////////
+// Custom event for house trading
+
+[typedef t_house_trade_deed]
+
+on=@click
+message House Transfer Contract
+message House Name: <link.name>
+message Owner: <uid.<link.more1>.name>
+message Location: <link.sextantp> 
+return 1
+
+on=@timer
+if (<cont.type> != t_eq_trade_window)
+  timerf 1,trigger @Timer
+else
+  uid.<more1>.events=-e_house_trade
+  remove
+endif
+timer=1
+return 1
+
+on=@HouseTraded
+ref1=<more2>		//New Owner
+ref2=<link.owner>	//Old Owner
+if (<eval (<ref1.account_houses>+1)> > <serv.MaxHousesAccount>)
+  ref1.sysmessage This account has reached the maximum amount of houses allowable.
+  ref2.sysmessage That account has reached the maximum amount of houses allowable.
+  return 1
+elseif (<eval (<ref1.houses>+1)> > <serv.MaxHousesPlayer>)
+  ref1.sysmessage This character has reached the maximum amount of houses allowable.
+  ref2.sysmessage That character has reached the maximum amount of houses allowable.
+  return 1
+elseif (<ref1.f_house_last_added> < <def0.house_placement_time>)
+  ref1.sysmessage You cannot receive another house transfer right now.
+  ref2.sysmessage They cannot receive another house transfer right now.
+  return 1
+endif
+//serv.b <ref2.name> transfered <link.name> to <ref1.name>
+ref1.events=-e_house_trade
+ref2.events=-e_house_trade
+link.tag.lasttransfer=<serv.rtime>
+ref2.delhouse <uid>
+//ref1.addhouse <uid>	//this is taken care of when you set the owner it looks like
+ref1.account.tag0.house_last_added=<serv.time>
+link.owner=<ref1>
+link.delban -1
+link.delcoowner -1
+link.delaccess -1
+link.delfriend -1
+ref1.sysmessage <ref2.name> has transferred ownership of this property to you. The number of houses you own is now <ref1.houses>.
+ref2.sysmessage You transfer the property to <ref1.name>. The number of houses you own is now <ref2.houses>.
+remove
+return 1
+
+/////////////////////////////////
+// Backwards compatibility 
+
+
+[typedef t_house_door]
+
+on=@dclick
+if (!<def0.house_keyless_doors>)
+  type=t_door_locked
+else
+  type=t_door
+  if !(<f_house_can_access <src>>)
+    src.sysmessage That is secure.
+    return 1
+  endif
+endif
+
+[typedef t_moving_crate]
+
+[typedef t_house_container]
+
+[typedef t_house_lockdown]
+
+[typedef t_house_secure]
+
+[typedef t_house_component]
+
+[typedef ei_house_addon]
+
+[typedef t_house_corpse_decay]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[EOF]

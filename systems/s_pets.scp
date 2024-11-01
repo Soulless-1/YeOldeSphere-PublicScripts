@@ -1,0 +1,804 @@
+//pretty simple bonding system by Soulless
+//v1.0
+//3:48 PM 11/1/2019
+
+//http://web.archive.org/web/20000831175231fw_/http://uo.stratics.com/strat/tamer.shtml
+
+[plevel 1]
+petlist
+
+[function petlist]
+if (<flags>&statf_dead) || (<flags>&statf_freeze)
+  sysmessage You cannot use this function in your current state.
+  return 1
+elseif (<curfollower> != <f_follower_list_count>)
+  serv.log <name> curfollower (<curfollower>) not the same as f_follower_list_count (<f_follower_list_count>) adjusting it
+  curfollower = <f_follower_list_count>
+endif
+sdialog d_pet_list
+
+[events e_pet_system]
+
+on=@environchange
+//if (<isonline>) && (<owner>) && (<owner> != <uid>) && !(<flags>&statf_conjured) && !(<isevent.e_player_vendor>)
+  //if !(<src.cansee <src.owner>>) 
+    //say <name> looks around with concern...
+  //endif
+//endif
+
+
+on=@regenstat
+if (<sector.number> <= 0)
+  if !(<owner>) 		//do not remove player pets, remove unowned ones 
+    serv.log <name>(<uid>) owned by <qval (<owner>)?<owner.name>(<owner>):nobody> being removed in sector 0 
+    remove
+    return 1
+  endif
+endif
+if (<local.statid>==3)		//statid 3 = food/hunger
+  ref1=<owner>
+  if (<ref1.isvalid>) && (<ref1> != <uid>) && !(<ref1.npc>) && !(<flags>&statf_conjured) && !(<isevent.e_player_vendor>) && (<isonline>) 
+    ref2=<region.uid>
+    if (<ref2.isvalid>) && (<ref2.type>==t_multi) && (<ref2.f_house_isfriend <ref1>>)		//when pets inside a house that their master is friended at, they get fed
+      return 1
+    endif
+    //serv.log Pet <name>(<uid>) owned by <ref1.name> losing food point. (<food>/<maxfood>)
+    if !(<cansee <ref1>>) && (<ref1.distance <src>> > 40)
+      say @0482,3,0,0 *<name> looks around with concern...*
+      if (<food> >= 2)
+        local.value *= 2
+        serv.log Pet <name>(<uid>) is lonely without their master, losing another double food points. Food :<dfood>/<dmaxfood>	
+      endif
+    endif
+    emote appear to be <f_pet_hunger_level>
+    local.hunger=<muldiv <food>,100,<maxfood>>	//get % of hunger
+    if (<local.hunger> <= 10)	//starving
+      if !(<R<local.hunger>>) && (<sector.number> > 1) 	
+	serv.log <name> @<p> is abandoning their master <ref1.name>. (food <dfood>/<dmaxfood>)
+        say <name> decides they are better off as their own master.
+        ref1.sysmessage You sense that <name> has deserted you.
+        f_pet_release
+      endif
+    endif 
+  endif
+endif
+
+on=@receiveitem
+if !(<ishumanoid>)	//maybe humanoids can use items? potions, bandages, things like this?
+  if (<baseid> != c_horse_pack) && (<baseid> != c_llama_pack) && !(<src.isgm>)
+    if (<owner> != <src>)
+      src.sysmessage It doesn't seem to want that from you.
+      return 1
+    elseif !(<argo.isfood>)
+      src.sysmessage Your pet cannot eat that.
+      return 1
+    elseif !(<caneat <argo>>)
+      src.sysmessage Your pet does not want to eat that.
+      return 1
+    elseif (<food> >= <maxfood>)
+      src.sysmessage Your pet is completely stuffed and cannot eat more.
+      return 1
+    endif
+  endif
+endif
+
+on=@eat
+ref1=<owner>	//my owner
+if (<ref1.isvalid>) && !(<bonded>) && !(<ref1.f_pet_control_chance <uid>> < 0)	////&& (<ref1.taming> >= <taming>) || (<src.isgm>)	 //pet bonding for pets	
+  if !(<findid.i_pet_bonding>)	
+    ref1.sysmessage Your pet has started forming a bond with you.
+    serv.newitem i_pet_bonding
+    new.link=<ref1>
+    new.tag0.timestamp=<serv.rticks>
+    equip <new>
+  elseif (<eval (<serv.rticks>-<findid.i_pet_bonding.tag0.timestamp>)> >= 604800) || (<ref1.isgm>)
+    ref1.sysmessage Your pet has bonded with you!
+    bonded=1
+    //ref1.tag0.bonded_pet=<uid>	//i dont believe players can only have one bonded pet?
+    events=+e_pet_bonded
+    findid.i_pet_bonding.remove		//dont need this anymore
+  else
+    local.n=<eval (604800-(<serv.rticks>-<findid.i_pet_bonding.tag0.timestamp>))>
+    local.d=<eval (<local.n>/86500)>
+    local.h=<eval (((<local.n>/60)/60)-(<local.d>*24))>
+    ref1.sysmessage Your pet is in the process of forming a bond with you. Time remaining: <qval (<local.n> <= 86400)?<local.h> hours:<local.d> days <local.h> hours>.
+  endif
+  //timerf 1,trysrc <ref1> message <f_pet_feeding_message>
+  timerf 1,trysrc <ref1> f_pet_feeding_message
+endif
+
+on=@npcactwander
+tag0.override.moverate=0
+tag0.override.movedelay=0
+
+on=@npcactfollow
+tag0.override.moverate=10
+tag0.override.movedelay=300
+
+on=@npcactattack
+tag0.override.moverate=10
+tag0.override.movedelay=300
+
+on=@attack
+if (<bonded>) && (<flags>&statf_dead)
+  return 1
+endif
+if (<owner>) && (<owner> != <npc>)
+  //serv.log <name>(<uid>) owned by <owner.name>(<owner>) attacking <src.name>(<src>) @<p>
+  ref1=<attacker.target>		//current target
+  attacker.<attacker.id.<ref1>>.threat=0
+  attacker.<attacker.id.<src>>.threat=100
+  attacker.target=<src>
+endif
+
+on=@death
+ref1=<owner>
+if (<sector.number> <= 1) && (<owner>)			//this is the area where they are parked, dont let them die here
+  hits=<maxhits>
+  //serv.log prevented <name>(<uid>) pet of <owner.name>(<owner>) dying at sector <sector.number> when it shouldn't have.
+  //return 1
+  serv.log <name>(<uid>) owned by <owner.name>(<owner>) dying at sector <sector.number>
+endif
+if (<ref1.isvalid>)
+  if !(<bonded>)
+    ref1.f_follower_remove <uid> 	//make sure they are removed from the owners follower count
+  else					//otherwise its a pet that stays with us
+    f_clear_all_bad_memories	
+    attacker.clear
+    flags &= ~ statf_war
+    act=<ref1>				//set act to owner
+    action=100				//set action to following (108 = guarding)
+  endif
+endif
+
+on=@destroy
+ref1=<owner>
+if (<ref1.isvalid>) 
+  ref1.f_follower_remove <uid>	//make sure they are removed from the owners follower count
+endif
+
+on=@resurrect
+f_clear_all_bad_memories
+attacker.clear
+flags &= ~ statf_war
+act=<owner>	//target owner
+action=100	//set to following (108 = guarding)
+
+[function bondingtime]
+ref1=<findid.i_pet_bonding>
+if (<ref1.isvalid>)
+  return <eval (<serv.rticks>-<ref1.tag0.timestamp>)> 
+endif
+return 0
+
+[function timetilbond]
+ref1=<findid.i_pet_bonding>
+if (<ref1.isvalid>)
+  return <eval (604800-(<serv.rticks>-<ref1.tag0.timestamp>))> 
+endif
+return 0
+
+
+[function f_pet_setowner]
+if (<isempty <args>>) || (<args> <= 0)
+  return 1
+elseif !(<npc>)
+  return 1
+endif
+ref1=<uid>			//pet uid
+ref2=<ref1.memoryfind.<args>>	//pet memory on npc
+ref3=<args>			//new owner
+if (<ref3.isvalid>)		//new owner uid is valid	
+  if (<ref1.spawnitem>)
+    ref1.spawnitem.delobj <ref1>	//remove it from the spawn item
+    ref1.flags &= ~ statf_spawned	//remove the spawn flag
+  endif
+  ref1.homedist=32767			//must be set before setting 'home'
+  ref1.home=-1,-1			//no home coordinates
+  //if (<ref1.owner>)
+    //ref1.f_pet_release			//release it from the old owner if it has one
+  //endif
+  ref1.consume i_pet_recently_released	//remove this memory, it works to delete released NPCs
+  if (<ref2.isvalid>)
+    ref2.remove
+  endif
+  if !(<ref1.flags>&statf_conjured) && (<ref1.npc> != brain_berserk)	//some of this is not required for summoned pets
+    ref1.tag0.oldbrain=<ref1.npc> 					//for if someone releases this creature, it should be the same brain it was before being tamed
+    ref1.tag0.oldkarma=<ref1.karma>					//like wise it should revert to its 'old ways'
+    ref1.tag0.setownerp=<ref1.p>					//to help control people releasing hundreds of NPCs in one area while training animal taming
+    ref1.npc=brain_animal	
+    ref1.karma=0	
+  endif
+  ref1.events=+e_pet_system
+  serv.newitem i_memory			//now we finally set it as a pet
+  new.color=<def0.memory_ipet>
+  new.link=<ref3>
+  new.attr=attr_newbie
+  ref1.equip <new>
+  ref1.act=				//clear its current act
+  ref1.action=100			//make it do nothing
+  ref3.f_follower_add <ref1>		//add it to player's followers
+endif
+
+[function f_pet_owner_enemy]
+ref1=<uid>
+forcharmemorytype memory_fight
+  ref2=<link>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref1.canseelos <ref2>>)
+    return <ref2>
+  endif
+endfor
+forcharmemorytype memory_aggrieved
+  ref2=<link>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref1.canseelos <ref2>>)
+    return <ref2>
+  endif
+endfor
+forcharmemorytype memory_irritatedby
+  ref2=<link>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref1.canseelos <ref2>>)
+    return <ref2>
+  endif
+endfor
+return 0
+
+[itemdef i_pet_bonding]
+name=Bonding With owner
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+[events e_pet_bonded]
+
+on=@petdesert	//should players bonded pets desert them??
+//bonded=
+//events=-e_pet_bonded
+return 1		//do not let bonded pets desert owner
+
+ON=@Death
+oskin=<color>
+
+ON=@Resurrect
+color=<oskin>
+
+[function f_pet_feeding_message]
+//return Your pet looks happier.	//this looks like the only messages pets have
+local.f=<muldiv <food>,100,<maxfood>>
+local.f=<muldiv <local.f>,4,100>
+doswitch <local.f>
+  message Your pet eats the food, but is still extremely hungry.
+  message Your pet eats the food, and is more satiated.
+  message Your pet eats the food, and is less hungry.
+  message Your pet is quite full after consuming the food.
+  message Your pet manages to eat the food, but is stuffed.
+enddo
+
+[function f_pet_food_level]
+local.f=<muldiv <food>,100,<maxfood>>
+local.f=<muldiv <local.f>,7,100>
+return <local.f>
+
+[function f_pet_hunger_level]
+local.food=<muldiv <food>,100,<maxfood>>
+local.food=<muldiv <local.food>,7,100>
+local.food=<qval (8 < <local.food>)?8:<local.food>>
+doswitch <local.food>
+  return Starving
+  return Very Hungry
+  return Hungry
+  return Fairly Content
+  return Content
+  return Fed
+  return Well Fed
+  return Stuffed
+enddo
+
+[DIALOG d_pet_release]
+150,50
+page 0
+
+resizepic 10 10 9200 295 140
+resizepic 20 20 3000 275 120
+dhtmlgump 30 23 256 76 1 1 <def.bfont_balack>Are you sure you want to release your pet named <name>? Summoned Pets will vanish permanently!
+
+button 35 105 4005 4006 1 0 1
+dtext 70 105 0 CONTINUE
+
+button 175 105 4005 4006 1 0 0
+dtext 210 105 0 CANCEL
+
+[DIALOG d_pet_release button]
+
+ON=1
+f_pet_release
+
+ON=0
+
+[function f_pet_release]
+ref1=<uid>
+ref2=<owner>
+if (<ref1.isvalid>) && (<ref2.isvalid>)
+  if (<ref2.findlayer.25>) && (<ref2.findlayer.25.more2>==<ref1>)
+    ref2.dismount	//from what I understand, it will not dismount you
+  endif
+  if (<ref1.tag0.oldbrain>)
+    ref1.npc=<ref1.tag0.oldbrain>
+    ref1.tag0.oldbrain=
+  endif
+  if (<ref1.tag0.oldkarma>)
+    ref1.karma=<ref1.tag0.oldkarma>
+    ref1.tag0.oldkarma=
+  endif
+  ref3=<ref1.memoryfind.<ref2>>		//my memory of my owner
+  ref3.color &= ~ <def0.memory_ipet>
+  //ref3.color |= <def0.memory_oldmaster>	//are we using this? keep it simple...
+  ref1.home=
+  ref1.homedist=
+  ref1.act=
+  ref1.action=067	//set to wander
+  ref1.tag0.override.moverate=
+  ref1.tag0.override.movedelay= 
+  ref1.bonded=
+  if (<ref1.isevent.e_pet_system>)
+    ref1.events=-e_pet_system
+  endif
+  ref1.consume i_pet_recently_released
+  ref3=<region.uid>
+  if !((<ref3.isvalid>) && (<ref3.owner>) && (<ref3.owner.isplayer>))	//assumed to be in a player house then
+    serv.newitem i_pet_recently_released
+    new.link=<ref2>
+    new.timer=60*60*24	//In 24 hours it will be removed if no one re-tames it.
+    if (<ref1.tag0.setownerp>) && (<ref1.distance <ref1.tag0.setownerp>> <= 50)
+       new.more1=1
+       new.timer=30*60	//released nearby its 'setownerp' location, remove it sooner
+       //serv.log Pet <ref1.name>(<ref1>) was released within 50 tiles of its "tamed" location (<ref1.tag0.setownerp>)
+    endif
+    ref1.equip <new>
+  endif
+  ref2.f_follower_remove <ref1>
+  //serv.log <ref1.name>(<ref1>) owned by <ref2.name>(<ref2>) released (f_pet_release) <region.name>(<region>) 
+  if (<ref1.flags>&statf_conjured)
+    ref1.remove
+  endif
+endif
+
+[itemdef i_pet_recently_released]
+defname=i_pet_recently_released
+id=i_memory
+name=Recently Released Pet
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<more1>)	//this means the pet NPC should be removed (was released close to its spawn)
+  topobj.remove
+else
+  remove	//just get rid of this memory and the NPC garbage cleanup will take care of it later
+endif
+return 1
+
+///////////////////////////
+// Secure Pet Transfer
+
+[function f_pet_can_own]	//can we own this pet?
+ref1=<args>			//this it NPC in question
+if (<ref1.isvalid>) 
+  if (<ref1.bonded>) && (<ref1.owner> == <src>)		//this mainly for shrunken bonded pets that are grandfathered in
+    return 1
+  endif
+  if (<ref1.baseid> != c_ostard_frenzied) && (<ref1.baseid> != c_swamp_dragon)	//these can always be owned
+    return 1
+  endif
+  if (<f_pet_control_chance <ref1>> <= 0)		
+    return 0
+  endif
+  //if (<ref1.taming> > 291) && (<taming> < <ref1.taming>)	//this is OSI style
+    //return 0
+  //endif
+endif
+return 1		//if we didnt fail the above check's we can own it
+
+[function f_pet_trade]
+ref1=<args>		//pet
+ref2=<argo>		//target of trade
+
+if !(<ref2.isplayer>) || (<ref2>==<src>)
+  src.sysmessage You cannot trade a pet to that target.
+  return 1
+elseif (<src.findtype.t_eq_trade_window>) || (<ref2.findtype.t_eq_trade_window>)
+  src.sysmessage You cannot begin a trade while one is in progress.
+  return 1
+elseif !(<ref2.f_pet_can_own <ref1>>)
+  src.sysmessage The pet refuses to be transferred because it will not obey <ref2.name>.
+  return 1
+//elseif (<ref2.tag0.young> == 1) && (<tag0.young> == 0)			//doesn't matter cause shrink potions exist
+  //src.sysmessage As a young player, you may not transfer pets to older players.
+  //return 1
+//elseif (<tag0.young> == 0) && (<ref2.tag0.young> == 1)			//doesn't matter cause shrink potions exist
+  //src.sysmessage As an older player, you may not transfer pets to young players.
+  //return 1
+endif
+
+if (<ref1.isvalid>)
+  src.events=+e_pet_trade
+  ref2.events=+e_pet_trade
+  serv.newitem <ref1.icon>
+  new.attr=010
+  new.color=<ref1.color>
+  new.link=<ref1>		//pet
+  new.more2=<ref2>	//target we're trading to
+  new.type=t_pet_trade_deed
+  src.trysrc <ref2> f_pet_TradeWindow <new>
+endif
+
+[function f_pet_TradeWindow]	 //function by Terrikate
+ref1=<uid>
+ref2=<src>
+ref3=<args>
+if (<ref1>==<ref2>) || !((<ref1.isplayer>) && (<ref1.isplayer>))
+  return 1
+endif
+for 2
+  serv.newitem i_bulletin_board
+  local.tw_<dlocal._for>=<new>
+  new.type=t_eq_trade_window
+  new.name=Pet trade with <qval <local._for>==1?<ref2.name>:<ref1.name>>
+  ref<dlocal._for>.equip <new>
+endfor
+uid.<local.tw_1>.link=<local.tw_2>
+uid.<local.tw_2>.link=<local.tw_1>
+ref1.sendpacket 06F W02F B0 D<ref2> D<local.tw_1> D<local.tw_2> 01 <f_pet_TradeWindow_PacketSplit <ref2.name>>
+ref2.sendpacket 06F W02F B0 D<ref1> D<local.tw_2> D<local.tw_1> 01 <f_pet_TradeWindow_PacketSplit <ref1.name>>
+if (<ref3>)
+  ref3.cont=<local.tw_1>
+  ref3.update
+endif
+
+[function f_pet_TradeWindow_PacketSplit]
+local.l=<eval strlen(<args>)>
+args=<asc <args>>
+for <eval (30-<local.l>)>
+  args .= " 00"
+endfor
+return <args>
+
+
+[events e_pet_trade]
+
+on=@TradeAccepted
+if (<argn1>)
+for 1 <argn1>
+  if (<ref<dlocal._for>>)
+    if (<ref<dlocal._for>.type>==t_pet_trade_deed)
+      uid.<ref<dlocal._for>>.trigger @petTraded
+      uid.<ref<dlocal._for>>.remove
+    endif
+  endif
+endfor
+endif
+events=-e_pet_trade
+
+on=@tradeclose
+ref1=<src.findtype.t_pet_trade_deed>
+ref2=<uid.<argo.findlayer.0>.findtype.t_pet_trade_deed>
+if (<ref1.isvalid>) 
+  ref1.remove
+endif
+if (<ref2.isvalid>)
+  ref2.remove
+endif
+src.events=-e_pet_trade
+argo.events=-e_pet_trade
+
+[typedef t_pet_trade_deed]
+
+on=@click
+message Pet Name: <link.name>
+message Owner: <link.owner.name>
+return 1
+
+on=@timer
+if (<cont.type> != t_eq_trade_window)
+  timerf 1,trigger @Timer
+else
+  uid.<more1>.events=-e_pet_trade
+  remove
+endif
+timer=1
+return 1
+
+on=@petTraded
+ref1=<more2>		//New Owner
+ref2=<link.owner>	//Old Owner
+if (<link.taming> > 291) && (<ref2.taming> < <link.taming>)
+  src.sysmessage The pet refuses to be transferred because it will not obey <ref2.name>.
+  ref2.sysmessage The pet will not accept you as a master because it does not trust you.
+  return 1
+elseif (<eval (<ref1.curfollower>+<link.controlslots>)> > <ref1.maxfollower>)
+  ref1.sysmessage You have too many followers to control that creature.
+  ref2.sysmessage They have too many followers to control that creature.
+  return 1
+elseif !(<link.isvalid>) || !(<link.isonline>)	//dead, shrunk or mounted likely
+  ref1.sysmessage That creature is no longer available for transfer.
+  ref2.sysmessage Your creature is not longer available for transfer.
+  return 1
+endif
+if (<ref2.mount> == <link>)
+  ref2.dismount	//make sure they are not mounted on the pet after they started the transfer
+endif
+ref2.f_follower_remove <link>
+link.setowner <ref1>
+ref1.f_follower_add <link>
+link.bark 3
+link.act=<link.owner>
+link.action=100		//set to following (108 = guarding)
+link.bonded=		//reset bonding
+link.events=-e_pet_bonded
+ref1.sysmessage <ref2.name> has transferred the allegiance of <link.name> to you.
+ref2.sysmessage You have transferred your pet to <ref1.name>.
+remove
+return 1
+
+on=@dropon_char
+//remove
+//return 1
+
+[dialog d_pet_list]
+
+
+250,200
+resizepic 0 0 9200 600 300
+dtext 80 15 1263 Your Current Pets
+
+dtext 60 40 1263 Name
+dtext 265 40 1263 Location
+if (<serv.list.player_<src>_followers.count> >= 1)
+  for n <eval <serv.list.player_<src>_followers.count>-1> 0
+    ref1=<serv.list.player_<src>_followers.<dlocal.n>>
+    if !(<ref1.isvalid>) || !(<ref1.ischar>) || (<ref1.owner> != <src>) || (<ref1.ishuman>) 
+      serv.log <src.name>(<src>) attempting to view an invalid pet <qval (<ref1.isvalid>)?<ref1.name>(<ref1>):N/A>, removing it from their pet list.
+      serv.list.player_<src>_followers.<dlocal.n>.remove
+    else
+      radio 40 <eval 60+(17*<local.n>)> 210 211 0 <eval <local.n>+1>
+      dcroppedtext 65 <eval 60+(17*<local.n>)> 100 25 1000 <ref1.name>
+      dtext 270  <eval 60+(17*<local.n>)> 1000 <qval (<ref1.isonline>)? <ref1.region.name> (<ref1.p>):<qval (<src.findlayer.25.more2>==<ref1>)?Mounted:Null>> 
+    endif
+  endfor
+endif
+if (<curfollower> != <f_follower_list_count>)	//make sure curfollower matches the amount of npcs on the follower list
+  serv.log <name> curfollower (<curfollower>) not the same as f_follower_list_count (<f_follower_list_count>) adjusting it
+  curfollower = <f_follower_list_count>
+endif  
+
+button 20 270 4006 4007 1 0 1
+dtext 50 270 1000 Summon
+
+button 120 270 4006 4007 1 0 2
+dtext 150 270 1000 Release
+
+button 540 270 4018 4019 1 0 0
+
+[dialog d_pet_list button]
+
+onbutton=0	//okay
+
+onbutton=1	//summon
+ref1=<serv.list.player_<src>_followers.<eval <argchkid>-1>>
+if !(<ref1.isvalid>) || !(<ref1.isonline>)
+  src.sysmessage You cannot summon this pet right now.
+  return 1
+elseif (<src.findlayer.25>) && (<src.findlayer.25.more2>==<ref1>)
+  src.sysmessage You cannot summon a pet you are currently riding.
+  return 1
+elseif (<ref1.owner> != <src>)
+  src.sysmessage This pet is not yours to summon.
+  return 1
+endif
+
+src.act=<ref1>
+src.actarg1=204
+src.actprv=<src>
+src.action=25
+
+
+//anim 17
+//say @<speechcolor>,3,0,0 Por Xen
+//src.timerf 2,f_pet_summon <ref1>
+//serv.newitem i_pet_summoning
+//new.link=<src>
+//new.timer=2
+//ref1.equip <new>
+
+onbutton=2	//release
+ref1=<serv.list.player_<src>_followers.<eval <argchkid>-1>>
+if !(<ref1.isvalid>) || !(<ref1.isonline>)
+  src.sysmessage You cannot release this pet right now.
+  return 1
+elseif (<src.findlayer.25>) && (<src.findlayer.25.more2>==<ref1>)
+  src.sysmessage You cannot release a pet you are currently riding.
+  return 1
+elseif (<ref1.owner> != <src>)
+  src.sysmessage This pet is not yours to release.
+  return 1
+endif
+ref1.dialog d_pet_release
+
+[function f_pet_summon]
+ref1=<args>
+if !(<ref1.isvalid>) || !(<ref1.isonline>)
+  src.sysmessage You cannot summon this pet right now.
+  return 1
+elseif (<src.findlayer.25>) && (<src.findlayer.25.more2>==<ref1>)
+  src.sysmessage You cannot release a pet you are currently riding.
+  return 1
+elseif (<ref1.owner> != <src>)
+  src.sysmessage This pet is not yours to release.
+  return 1
+endif
+ref1.go <src.p>
+ref1.sound 01fc
+
+[itemdef i_pet_summoning]	// this wont work in sleeping sectors
+defname=i_pet_summoning
+name=Summoning a Pet
+id=i_rune_recall
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<topobj.isonline>) && (<topobj.owner> == <link>)
+  topobj.go <link.p>
+  sound 01fc
+endif
+remove
+return 1
+
+[function f_follower_add]
+ref1=<args>
+if !(<ref1.isvalid>) || !(<ref1.ischar>) 
+  serv.log <name>(<uid>) tried to add an invalid object(<args>) to their follower list, function canceled.
+  return 1
+endif
+if (<serv.list.player_<uid>_followers.findelem <args>> == -1)
+  serv.list.player_<uid>_followers.add <ref1>
+  curfollower += <ref1.controlslots>
+  //serv.log <name>(<uid>) added <ref1.name>(<ref1>) to their follower list. "follower list count: <f_follower_list_count> = curfollower: <curfollower>"
+endif
+if (<curfollower> != <f_follower_list_count>)
+  serv.log <name> curfollower (<curfollower>) not the same as f_follower_list_count (<f_follower_list_count>) adjusting it
+  curfollower = <f_follower_list_count>
+endif
+
+[function f_follower_remove]
+ref1=<args>
+if (<serv.list.player_<uid>_followers.findelem <args>> >= 0)
+  serv.list.player_<uid>_followers.<serv.list.player_<uid>_followers.findelem <args>>.remove
+  curfollower -= <ref1.controlslots>
+  if (<curfollower> <= -1)
+    curfollower=0
+  endif
+  if (<curfollower> != <f_follower_list_count>)
+    serv.log <name> curfollower (<curfollower>) not the same as f_follower_list_count (<f_follower_list_count>) adjusting it
+    curfollower = <f_follower_list_count>
+  endif  
+  //serv.log <name>(<uid>) removed <qval ((<ref1.isvalid>) && (<ref1.ischar>))?<ref1.name>(<ref1>):invalid object(<args>)> from their follower list. "follower list count: <f_follower_list_count> = curfollower: <curfollower>"
+endif
+
+[function f_follower_add_nearby]	//the same as above but for pets within 4 tiles of char
+ref1=<uid>
+forchars 4
+  if (<owner>) && (<owner>==<ref1>)
+    ref1.f_follower_add <uid>
+  endif
+endfor
+
+[function f_follower_remove_nearby]
+ref1=<uid>
+forchars 4
+  if (<owner>) && (<owner>==<ref1>)
+    ref1.f_follower_remove <uid>	
+  endif
+endfor
+
+[function f_animal_trainer_sold]	//run this after an animal trainer sold a pet to add the event and increase players followers
+ref1=<uid>
+forchars 4
+  if (<owner>) && (<owner>==<ref1>)
+    events=+e_pet_system
+    ref1.f_follower_add <uid>
+  endif
+endfor
+
+
+[function f_follower_list_count]
+ref1=<uid>
+if (<serv.list.player_<ref1>_followers.count> >= 1)
+  for <eval (<serv.list.player_<ref1>_followers.count>-1)> 0
+    ref2=<serv.list.player_<ref1>_followers.<dlocal._for>>
+    if (<ref2.isvalid>)
+      local.controlslots=<ref2.tag0.controlslots>
+    endif
+    local.controlslots=<qval (<local.controlslots> <= 0)?1:<local.controlslots>>
+    local.followers += <local.controlslots>
+  endfor
+  return <local.followers>
+endif
+return 0
+
+// pets that are friends will only accept movement commands from players who are friends
+
+[function f_pet_friend_targ]
+ref1=<argo>			//target to add/remove
+args=<explode " ",<args>>	//break the arguments apart
+ref2=<argv[0]>			//pet we're working with
+ref3=<ref2.memoryfind.<ref1>>	//memory item on the pet (color = memory_friend)
+local.operation=<argv[1]>	//1 = add, 0 = remove
+
+//serv.b <name> trying to <qval (<local.operation>==1)?add:remove> <ref1.name> as a friend on <ref2.name>
+
+if (<local.operation> == 1)	//friend a player
+  if (<ref1.npc>)			//is not a player
+    ref2.message @03b2,3,0,0 *looks confused*  
+    ref2.bark 1
+    return 1
+  elseif (<ref3.isvalid>) && (<ref3.color>&memory_friend)	//already a friend
+    ref2.message @03b2,3,0,0 *looks confused* 
+    ref2.bark 1
+    return 1
+  endif
+  ref2.f_petfriend <ref1>
+  sysmessage <ref2.name> will now accept movement commands from <ref1.name>.
+
+else	//remove a friend
+  if (<ref1.npc>)			//is not a player
+    ref2.message @03b2,3,0,0 *looks confused* 
+    ref2.bark 1
+    return 1
+  elseif !(<ref3.isvalid>) || !(<ref3.color>&memory_friend)
+    ref2.message @03b2,3,0,0 *looks confused* 
+    ref2.bark 1
+    return 1
+  endif
+  ref3.color &= ~ memory_friend
+  sysmessage <ref2.name> will now no longer movement commands from <ref1.name>.
+endif
+
+[function f_pet_control_chance]
+ref1=<args>	//the pet we're trying to control
+if !(<ref1.isvalid>)
+  return 0
+endif
+if (<isgm>)
+  return 1000
+elseif (<ref1.taming> <= 291) || (<ref1.flags>&statf_conjured)  || (<ref1.bonded> == <uid>)
+  return 990
+endif
+local.TamingDifficulty=<eval (<taming>-<ref1.taming>)>
+if (<local.TamingDifficulty> > 0)
+  local.TamingModifier=<eval (6*<local.TamingDifficulty>)>
+else
+  local.TamingModifier=<eval (28*<local.TamingDifficulty>)>
+endif
+local.LoreDifficulty=<eval (<animallore>-<ref1.taming>)>
+if (<local.LoreDifficulty> > 0)
+  local.LoreModifier=<eval (6*<local.LoreDifficulty>)>
+else
+  local.LoreModifier=<eval (14*<local.LoreDifficulty>)>
+endif
+//Local.SkillBonus=<eval ((<local.TamingModifier>+<local.LoreModifier>)/2)>		//this is the OSI calculation that takes both Taming + Animal lore into account
+Local.SkillBonus=<local.LoreModifier>							//we're just using animal lore here
+local.ControlChance=<eval (700+<local.SkillBonus>)>
+//local.ControlChance=<qval (990 < <local.ControlChance>)?990:<qval (<local.ControlChance> < 200)?200:<local.ControlChance>>>
+local.ControlChance=<qval (990 < <local.ControlChance>)?990:<qval (<local.ControlChance> < 0)?0:<local.ControlChance>>>
+return <local.ControlChance>
+
+
+
+
+
+
+
+
+  
+
+[EOF]

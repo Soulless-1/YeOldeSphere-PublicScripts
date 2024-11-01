@@ -1,0 +1,262 @@
+//NPC Guilds by Soulless
+//v1.0
+//6:22 PM 1/4/2022
+
+
+///////////////////////////
+// Thieves Guild
+
+[itemdef i_npc_guild_thieves]
+defname=i_npc_guild_thieves
+id=i_memory
+name=Member of the Thieves Guild
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.events=+e_npc_guild_member_thieves
+
+on=@timer
+return 1
+
+on=@unequip
+src.events=-e_npc_guild_member_thieves
+
+[itemdef i_disguise_kit]
+defname=i_disguise_kit
+id=0e05
+name=disguise kit
+type=t_normal
+
+on=@dclick
+ref1=<src.findid.i_npc_guild_thieves>
+if (<topobj> != <src>)
+  src.sysmessage That must be in your pack for you to use it.
+  return 1
+elseif !(<ref1.isvalid>) && !(<src.isgm>)
+  src.sysmessage Only members of the thieves guild are trained to use this item. 
+  return 1
+elseif (<ref1.isvalid>) && (<src.findid.i_npc_guild_thieves.more2>==1)
+  src.sysmessage You are currently suspended from the thieves guild. They would frown upon your actions.
+  return 1
+elseif (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot disguise yourself while icognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot disguise yourself while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot disguise yourself while in beastform.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot disguise yourself while in monster form.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot disguise yourself while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot disguise yourself as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>) 
+  src.sysmessage You cannot disguise yourself while wearing tribal paint.
+  return 1
+endif
+
+sdialog d_disguise_kit
+return 1
+
+[defname disguise_kit_selections]
+//hair
+disguise_kit_hair0	i_hair_short,50700
+disguise_kit_hair1	i_hair_pageboy,60710
+disguise_kit_hair2	i_hair_long,60701
+disguise_kit_hair3	i_hair_receding,60901
+disguise_kit_hair4	i_hair_ponytail,60702
+disguise_kit_hair5	i_hair_2_pigtails,50706
+disguise_kit_hair6	i_hair_mohawk,50703
+disguise_kit_hair7	i_hair_krisna,60713
+disguise_kit_hair8	i_hair_none
+//beards
+disguise_kit_beard0	i_beard_vandyke,50906
+disguise_kit_beard1	i_beard_mustache,50808
+disguise_kit_beard2	i_beard_short,50802
+disguise_kit_beard3	i_beard_long_med,50905
+disguise_kit_beard4	i_beard_short_med,50904
+disguise_kit_beard5	i_beard_long,50801
+disguise_kit_beard6	i_beard_none
+
+[DIALOG d_disguise_kit]
+150,50
+
+page 0
+resizepic 100 10 2600 400 385
+dtext 235 25 0 THIEF DISGUISE KIT
+
+button 140 355 4005 4007 1 0 1
+dtext 175 355 0 OKAY
+
+button 255 355 4005 4007 1 0 2
+dtext 290 355 0 APPLY
+
+page 1	//hair
+for h 0 7
+  args=<def0.disguise_kit_hair<dlocal.h>>
+  radio <eval 125+<local.x>> <eval 70+<local.y>> 1896 1895 0 <eval <local.h>+1>
+  dtext <eval 145+<local.x>> <eval 68+<local.y>> 0 <strarg <serv.itemdef.<argv[0]>.name>>
+  resizepic <eval 220+<local.x>> <eval 60+<local.y>> 2620 50 50
+  gumppic <eval 155+<local.x>> <eval 15+<local.y>> <argv[1]>
+  local.x += 200
+  if (<local.x> >= 400)
+    local.x=
+    local.y += 55
+  endif
+  local.r += 1
+endfor
+radio 325 <eval 70+<local.y>> 1896 1895 0 9
+dtext 345 <eval 68+<local.y>> 0 none
+
+button 155 320 251 250 0 2
+dtext 180 320 0 Facial Hair Selections
+
+page 2	//beards
+local.x=
+local.y=
+for b 0 5
+  args=<def0.disguise_kit_beard<dlocal.b>>
+  radio <eval 125+<local.x>> <eval 70+<local.y>> 1896 1895 0 <eval <local.b>+10>
+  dtext <eval 145+<local.x>> <eval 68+<local.y>> 0 <strarg <serv.itemdef.<argv[0]>.name>>
+  resizepic <eval 220+<local.x>> <eval 60+<local.y>> 2620 50 50
+  gumppic <eval 155+<local.x>> <eval 15+<local.y>> <argv[1]>
+  local.x += 200
+  if (<local.x> >= 400)
+    local.x=
+    local.y += 55
+  endif
+  local.r += 1
+endfor
+radio 325 <eval 70+<local.y>> 1896 1895 0 16
+dtext 345 <eval 68+<local.y>> 0 none
+
+button 155 320 251 250 0 1
+dtext 180 320 0 Hair Style Selections
+
+[dialog d_disguise_kit button]
+
+onbutton=0,1
+if (<more1>)
+  src.sysmessage Disguises wear off after 2 hours.
+else
+  src.sysmessage You're looking good.
+endif
+more1=
+
+onbutton=2
+local.page=<qval (<argchkid> < 10)?1:2>
+local.disguise_type=<qval (<argchkid> < 10)?hair:beard>
+local.layer=<qval (<argchkid> < 10)?11:16>
+local.radio=<qval (<argchkid> < 10)?<argchkid>:<eval <argchkid>-9>>
+ref1=<src.findlayer.<local.layer>>
+
+if (<ref1.isvalid>) && (<ref1.isevent.t_disguise_kit_hairbeard>)	//found a disguised item already
+  ref1.dispid=<def0.disguise_kit_<local.disguise_type><eval <local.radio>-1>>
+  ref1.timer=60*60*2
+  ref1.update
+else		//add a new disguise item and store any old hair info
+  serv.newitem <def0.disguise_kit_<local.disguise_type><eval <local.radio>-1>>
+  new.events=+t_disguise_kit_hairbeard
+  if (<ref1>)	//already has some hair, that isn't a disguise 
+    new.more1=<ref1.dispid>
+    new.more2=<ref1.color>
+    new.timestamp=<ref1.timer>
+  endif
+  new.cont=<src>
+  new.timer=60*60*2
+endif
+src.consume i_disguise_kit_incognito
+serv.newitem i_disguise_kit_incognito
+//src.spelleffect s_incognito 1000
+//src.findid.i_rune_incognito.timer=60*60*2
+//src.events=+e_thieves_disguise
+new.oname=<src.name>
+src.name=<src.sex #NAMES_HUMANMALE/#NAMES_HUMANFEMALE>
+src.flags |= statf_incognito
+src.tag.name.prefix=" "
+src.tag.name.suffix=" "
+new.equip
+new.timer=60*60*2	//last as long as the latest disguise item
+more1=1		//indicates the disguise kit was recently used
+sdialog d_disguise_kit <local.page>
+
+[typedef t_disguise_kit_hairbeard]
+
+on=@timer
+if !(<more1>)
+  remove
+endif
+dispid=<more1>	//restore the old item and color
+color=<more2>
+timer=<timestamp>	//restore old timer for growth
+events=-t_disguise_kit_hairbeard
+//topobj.consume i_rune_incognito
+//topobj.events=-e_thieves_disguise
+update
+topobj.consume i_disguise_kit_incognito
+return 1
+
+[itemdef i_disguise_kit_incognito]	//this incognito lasts through death
+defname=i_disguise_kit_incognito
+name=disguise kit incognito
+id=i_rune_incognito
+type=t_eq_script	//t_spell
+layer=layer_special	//layer_spell_incognito 
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.flags &=~ statf_incognito
+src.name=<oname>
+src.tag.name.prefix=
+src.tag.name.suffix=
+ref1=<src.findlayer.11>
+ref2=<src.findlayer.16>
+if (<ref1.isvalid>) && (<ref1.isevent.t_disguise_kit_hairbeard>)
+  ref1.timer=0
+endif
+if (<ref2.isvalid>) && (<ref2.isevent.t_disguise_kit_hairbeard>)
+  ref2.timer=0
+endif
+
+
+
+
+////////////////////////////
+// Huntsman Guild
+
+[itemdef i_npc_guild_huntsman]
+defname=i_npc_guild_huntsman
+id=i_memory
+name=Member of the huntsman Guild
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.events=+e_npc_guild_member_huntsman
+
+on=@timer
+return 1
+
+on=@unequip
+src.events=-e_npc_guild_member_huntsman
+
+
+
+
+
+
+
+
+
+
+[EOF]

@@ -1,0 +1,77 @@
+//Player Vendors by Soulless
+//v1.0
+//2:47 PM 5/21/2021
+
+
+[chardef c_player_vendor]
+name=#names_humanmale
+id=c_man
+desires=i_gold
+can=mt_nonmover|mt_equip|mt_usehands
+
+on=@create
+npc=brain_human
+color=colors_skin
+events=+e_player_vendor
+speech=s_player_vendor
+flags |= statf_invul|statf_freeze
+str={50 100}
+dex={50 100}
+int={50 100}
+itemnewbie=random_male_hair
+color=colors_hair
+itemnewbie=random_facial_hair
+color=match_hair
+itemnewbie=random_male_pants
+color=colors_all
+itemnewbie=random_male_tops
+color=colors_all
+itemnewbie={random_footwear 1 random_footwear 1}
+color=colors_all
+itemnewbie=random_hats,1,R3
+color=colors_all
+itemnewbie=i_cape,1,R3
+color=colors_all
+itemnewbie={3520 1 3717 1 3720 1 3778 1 3834 1 3920 1 3933 1 3936 1 3939 1 3940 1 4020 1 5113 1 5118 1 5126 1 5186 1},1,R3
+color=colors_all
+itemnewbie=i_bankbox
+itemnewbie=i_backpack
+events=+t_player_vendor_container
+
+[chardef c_player_vendor_f]
+name=#names_humanfemale
+id=c_woman
+desires=i_gold
+can=mt_nonmover|mt_equip
+
+on=@create
+npc=brain_human
+color=colors_skin
+events=+e_player_vendor
+speech=s_player_vendor
+flags |= statf_invul|statf_freeze
+str={50 100}
+dex={50 100}
+int={50 100}
+itemnewbie=random_female_hair
+color=colors_hair
+itemnewbie=random_female_tops
+color=colors_all
+itemnewbie=random_female_pants
+color=colors_all
+itemnewbie={random_footwear 1 random_footwear 1}
+color=colors_all
+itemnewbie=random_hats,1,R3
+color=colors_all
+itemnewbie=i_cape,1,R3
+color=colors_all
+itemnewbie={3520 1 3717 1 3720 1 3778 1 3834 1 3920 1 3933 1 3936 1 3939 1 3940 1 4020 1 5113 1 5118 1 5126 1 5186 1},1,R3
+color=colors_all
+itemnewbie=i_bankbox
+itemnewbie=i_backpack
+events=+t_bag_vendor
+events=+t_player_vendor_container
+
+
+
+[EOF]

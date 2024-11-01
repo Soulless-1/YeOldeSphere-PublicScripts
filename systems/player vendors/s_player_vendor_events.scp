@@ -1,0 +1,63 @@
+//Player Vendors by Soulless
+//v1.0
+//2:47 PM 5/21/2021
+
+
+[events e_player_vendor]
+
+on=@click
+message @035 <name>
+message shop name: <tag0.player_vendor_shopname>
+return 1
+
+on=@dclick
+if (<src.distance <uid>> <= <def0.player_vendor_maxdistance>)	//&& (<src.canseelos <uid>>) 
+  if (<owner> == <src>) || (<src.isgm>)
+    sdialog d_player_vendor
+  else
+    findlayer.21.open
+    message take a look at my goods.
+  endif
+  face <src>
+  forcont <findlayer.21> 1
+    if (<type>==t_container)
+      canmask=can_i_dcignorelos|can_i_dcignoredist
+    endif
+  endif
+  return 1
+endif
+
+on=@gethit
+return 1
+
+on=@spelleffect
+return 1
+
+on=@attack
+return 1
+
+on=@hittry
+return 1
+
+on=@ReceiveItem
+//f_player_vendor_receive_item <argo>
+if (<argo.type> == t_gold) && ((<owner> == <src>)  || (<src.isgm>))
+  message I'll take that to fund my services.
+  //gold += <argo.amount>
+  //findlayer.29.bounce <argo>
+  //argo.remove
+  argo.cont=<findlayer.29>
+  argo.update
+endif
+return 1
+
+on=@npcactfollow
+return 1
+
+on=@petdesert
+return 1
+
+on=@destroy
+owner.tag0.vendors -= 1
+
+[EOF]

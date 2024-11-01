@@ -1,0 +1,1324 @@
+//House System by Soulless
+//v1.9
+//12:31 PM 1/31/2019
+
+[plevel 1]
+houselist
+shiplist
+
+
+[function f_house_initialize]
+if (<link> != 04fffffff)
+  link.region.flags=region_flag_nobuilding|region_flag_insta_logout
+  link.region.events=+r_house_system
+  link.tag0.builton=<serv.rtime>
+  link.name=An Unnamed House
+  link.events=+ei_house_multi
+  link.timer=<qval (<def0.house_can_decay> <= 0)?-1:<def0.house_can_decay>*24*60*60>
+  link.housetype=house_public		//always default to public
+  link.f_house_recode_doors_telepads 1	//code the doors to co-owner access at the start
+  if (<def0.house_keyless_doors>)
+    link.f_house_remove_keys
+  endif
+  resendtooltip
+  link.owner.consume i_house_placement_confirm
+  serv.newitem i_house_placement_confirm
+  new.link=<link>
+  new.timer=60
+  link.owner.equip <new>
+  trysrc <new.topobj> link.sdialog d_house_placement_confirm 
+  serv.log <link.name>(<link>) placed and awaiting confirmation in <link.region.name>(<link.p>)
+  //trysrc <link.owner> new.sdialog d_house_placement_confirm 
+  local.dist=<f_max <link.multiregion>>	//get the distance of the furthest wall
+  link.f_house_placement_move_chars <local.dist>
+endif
+
+[function f_multi_onplacement_check]
+//return 0 // Use default checks (wich values may be modified with the bellow locals)
+//return 1 // Prevents the multi from being placed.
+//return 6 // Allows the multi to be placed without default placement checks.
+//local.check_BlockRadius=-1, 1, -1, 1    // Default: an area of +1 in each direction
+//local.check_MultiRadius=0, -5, 0, 5    // Default: 5 tiles in both North and South	
+// Values are: West, North, East, South
+//local.id=m_xxx        // Read Only
+//local.p=position    // Read Only
+
+//local.Check_MultiRadius=-1,-1,1,1	//these don't really matter for our custom check
+//local.Check_MultiRadius=0,-4, 0, 4
+
+if (<findid.i_house_placement_cooldown>)
+  sysmessage You must wait a bit longer before attempting to place a house again
+  return 1
+endif
+serv.newitem i_house_placement_cooldown
+new.timer=3
+equip <new>
+
+local.MultiRegion=<serv.itemdef.<local.id>.multiregion>
+local.Type=<serv.itemdef.<local.id>.type>
+
+if !(<isgm>)		//if we're not a GM then we are restricted to certain placement rules
+
+  args=<local.p>	//start with the target location
+  args=<qval (<argv> <= 2)?<args>,0:<args>>,<local.multiregion>		//x,y,z,-x,-y,+x,+y	
+  //serv.b <args>							//0,1,2, 3, 4, 5, 6
+  args=<argv[0]>,<eval (<argv[1]>-<argv[6]>)>,<argv[2]>,<argv[3]>,<argv[4]>,<argv[5]>,<argv[6]>
+
+  local.Center=<argv[0]>,<argv[1]>,<argv[2]>					//these are accurate specific locations
+  local.NorthBoundary=<argv[0]>,<eval (<argv[1]>+<argv[4]>)>,<argv[2]>
+  local.EastBoundary=<eval (<argv[0]>+<argv[5]>)>,<argv[1]>,<argv[2]>
+  local.SouthBoundary=<argv[0]>,<eval (<argv[1]>+<argv[6]>)>,<argv[2]>
+  local.WestBoundary=<eval (<argv[0]>+<argv[3]>)>,<argv[1]>,<argv[2]>
+  local.NorthWestBoundary=<eval (<argv[0]>+<argv[3]>)>,<eval (<argv[1]>+<argv[4]>)>,<argv[2]>
+  local.NorthEastBoundary=<eval (<argv[0]>+<argv[5]>)>,<eval (<argv[1]>+<argv[4]>)>,<argv[2]>
+  local.SouthEastBoundary=<eval (<argv[0]>+<argv[5]>)>,<eval (<argv[1]>+<argv[6]>)>,<argv[2]>
+  local.SouthWestboundary=<eval (<argv[0]>+<argv[3]>)>,<eval (<argv[1]>+<argv[6]>)>,<argv[2]>
+
+  local.AvgBoundaryDistance=<eval (((-1*<argv[3]>)+(-1*<argv[4]>)+<argv[5]>+<argv[6]>)/4)>		//average distance of all walls (not very useful for accuracy)
+  local.MaxBoundaryDistance=<f_max <eval (-1*<argv[3]>)>,<eval (-1*<argv[4]>)>,<argv[5]>,<argv[6]>>	//max distance out of all the walls
+
+  args=<local.NorthWestBoundary>,<local.SouthEastBoundary>	
+  local.xDist=<eval (<argv[3]>-<argv[0]>)>		//find out how many tiles from west to east
+  local.yDist=<eval (<argv[4]>-<argv[1]>)>		//found out how many tiles from north to south
+  local.Area=<eval (<local.xDist>*<local.yDist>)>	//calculate the area from those two values
+  local.RegionFlags=<targp.region.flags>
+  local.zIndex=<targp.z>	// Z index
+
+  args=<local.NorthWestBoundary>	//start at the northwest corner
+  
+  if (<local.type> == t_multi)		//this is assumed to be a structure on land then (aka a house)
+    args=<eval (<argv[0]>-1)>,<eval (<argv[1]>-4)>,<argv[2]>	//we must start 1 tiles to the west and 4 tiles to the north for houses
+    local.xCoord=<argv[0]>	//we need this to start  	
+    local.xDist += 2		// for houses +2 to check 2 tiles on the x axis (left & right side)
+    local.yDist += 8		// for houses +8 to check 4 tiles on the y axis (back & front)
+
+    if (<distance <targp>> > 10)
+      sysmessage That is too far away.
+      return 1
+    elseif (<local.RegionFlags>) && ((<local.RegionFlags>&region_flag_nobuilding) || (<local.RegionFlags>&region_flag_guarded))
+      sysmessage Housing cannot be created in this area.
+      return 1
+    elseif (<eval (<account_houses>+1)> > <serv.MaxHousesAccount>)
+      sysmessage This account has reached the maximum amount of houses allowable.
+      return 1
+    elseif (<eval (<houses>+1)> > <serv.MaxHousesPlayer>)
+      sysmessage This character has reached the maximum amount of houses allowable.
+      return 1
+    elseif (<f_house_last_added> < <def0.house_placement_time>) 
+      sysmessage You cannot place another house right now. 
+      return 1
+    endif
+    serv.newitem i_memory	//place a probe item in the center
+    new.p=<local.center>
+    local.CharBlocking=<new.f_house_placement_char_check <local.MaxBoundaryDistance>>	//look for chars blocking the placement
+    new.remove	//remove the probe item
+    if (<local.CharBlocking>)
+      sysmessage <uid.<local.CharBlocking>.name> is in the way.
+      return 1
+    endif
+	  
+    for x 0 <local.xDist>		
+      local.yCoord=<argv[1]>	//reset y coordinate 	
+      for y 0 <local.yDist>
+        local.components=<serv.map(<local.xCoord>,<local.yCoord>).components>				
+        local.terrain=<serv.map(<local.xCoord>,<local.yCoord>).terrain>
+        local.statics=<serv.map(<local.xCoord>,<local.yCoord>).statics>
+        if (<local.components>)		//this means it's too close to another player's house
+          //sysmessage Housing cannot be created in this area
+          sysmessage This location is too close to another house.
+          return 1
+        endif
+        if (<local.y> > 2) && (<local.y> < <eval (<local.yDist>-2)>)
+          if (<local.terrain>)
+            local.TerrainFlags=<serv.tiledata.terrain(<local.terrain>).flags>
+            local.TerrainZ=<serv.map(<local.xCoord>,<local.yCoord>).terrain.z>
+            local.zDiff=<eval (<local.zIndex>-<local.TerrainZ>)>
+            local.zDiff=<qval (<local.zDiff> < 0)?<eval (-1*<local.zDiff>)>:<local.zDiff>>
+            if (<local.TerrainFlags>&tilef_impassable)	//Impassible terrain is blocking this house 
+              //sysmessage Housing cannot be created in this area
+              sysmessage This location is blocked by impassible terrain
+              return 1
+            elseif (<local.terrain> > 0071) && (<local.terrain> < 0078)	//this would place it too close to a road
+              //sysmessage Housing cannot be created in this area.
+              sysmessage This location is too close to a road or path.
+              return 1
+            elseif (<local.zDiff> > 1)	//the land Z index isn't uniform enough
+              sysmessage Terrain is too bumpy to place structure here.
+              return 1
+            endif
+          endif 
+          if (<local.statics>) 
+            for n <eval (<local.statics>-1)> 0 
+              local.id=<serv.map(<local.xCoord>,<local.yCoord>).statics.<dlocal.n>.id>
+              local.flags=<serv.map(<local.xCoord>,<local.yCoord>).statics.<dlocal.n>.tflags>
+              if (<local.flags>&tilef_wall) || (<local.flags>&tilef_impassable) || (<local.flags>&tilef_window)	//Blocked by impassible statics (walls, fences, trees, etc)
+                //sysmessage Housing cannot be created in this area
+                sysmessage This location is by <serv.itemdef.<local.id>.name> (<local.xCoord>,<local.yCoord>)
+                return 1
+              endif
+            endfor
+          endif
+        endif
+
+        //local.staticsCheck=<qval (<local.y> > 2) && (<local.y> < <eval (<local.yDist>-2)>)?1:0>
+        //effectLocation <local.xCoord>,<local.yCoord>,<local.zIndex>,2,i_paver_stone,1,32,0,<qval (<local.staticsCheck>)?026:035>,0	//just a visual aid to see the area being checked
+        local.yCoord += 1 	//proceed +1 south
+      endfor
+      local.xCoord += 1		//proceed +1 east
+    endfor
+
+  elseif (<local.type> == t_ship)		//it's a ship on water
+    local.xCoord=<argv[0]>	//we need this to start  
+
+    if (<distance <targp>> > 10)
+      sysmessage That is too far away.
+      return 1
+    elseif (<local.RegionFlags>) && (<local.RegionFlags>&region_flag_underground)
+      sysmessage A ship can not be created here.
+      return 1
+    elseif (<eval (<account_ships>+1)> > <serv.MaxShipsAccount>)
+      sysmessage This account has reached the maximum amount of ships allowable.
+      return 1
+    elseif (<eval (<ships>+1)> > <serv.MaxShipsPlayer>)
+      sysmessage This character has reached the maximum amount of ships allowable.
+      return 1
+    elseif (<f_ship_last_added> < <def0.house_placement_time>) 
+      sysmessage You cannot place another ship right now. 
+      return 1
+    endif	
+
+    for x 0 <local.xDist>		
+      local.yCoord=<argv[1]>	//reset y coordinate 	
+      for y 0 <local.yDist>
+        local.Components=<serv.map(<local.xCoord>,<local.yCoord>).components>				
+        local.Terrain=<serv.map(<local.xCoord>,<local.yCoord>).terrain>
+        local.Statics=<serv.map(<local.xCoord>,<local.yCoord>).statics>
+
+        if !(<local.statics>) && (<local.terrain>)
+          local.terrainflags=<serv.tiledata.terrain(<local.terrain>).flags>
+          if !(<local.terrainflags>&tilef_wet)
+            sysmessage A ship cannot be created here.
+            return 1
+           endif
+        endif
+
+        if !(<local.terrain>) && (<local.statics>) 
+          for n <eval (<local.statics>-1)> 0 
+            local.id=<serv.map(<local.xCoord>,<local.yCoord>).statics.<dlocal.n>.id>
+            local.flags=<serv.map(<local.xCoord>,<local.yCoord>).statics.<dlocal.n>.tflags>
+            if !(<local.flags>&tilef_wet)	//Blocked by a non water static
+              sysmessage A ship cannot be created here.
+              return 1
+            endif
+          endfor
+        endif
+
+        //effectLocation <local.xCoord>,<local.yCoord>,<local.zIndex>,2,i_paver_stone,1,32,0,026,0	//just a visual aid to see the area being checked
+        local.yCoord += 1
+      endfor
+      local.xCoord += 1
+    endfor
+
+  endif
+
+endif
+
+return 6		//if we have gotten here then everything is valid, allow the multi placement
+
+[function f_house_add_list]
+ref1=<region.uid>
+ref2=<argo>
+if !(<ref2.isvalid>) || !(<ref2.ischar>)
+  return 1
+elseif (<ref2>==<src>)
+  src.sysmessage You cannot add yourself to any list.
+  return 1
+elseif (<ref2.npc>)
+  src.sysmessage You cannot add them to any list.
+  return 1
+endif
+
+if (<ref1.GetAccessPos <ref2>> >= 0)
+  src.sysmessage <ref2.name> is on the access list.
+  src.sysmessage remove them from this list before adding them to another.
+  return 1
+
+elseif (<ref1.GetFriendPos <ref2>> >= 0)
+  src.sysmessage <ref2.name> is a friend of this property.
+  src.sysmessage remove them from this list before adding them to another.
+  return 1
+
+elseif (<ref1.GetCoownerPos <ref2>> >= 0)
+  src.sysmessage <ref2.name> is a co-owner of this property.
+  src.sysmessage remove them from this list before adding them to another.
+  return 1
+
+elseif (<ref1.GetBanPos <ref2>> >= 0)
+  src.sysmessage <ref2.name> is on the ban list.
+  src.sysmessage remove them from this list before adding them to another.
+  return 1
+
+elseif (<ref1.isowner <ref2>>)
+  src.sysmessage <ref2.name> is the owner of this property.
+  return 1
+
+elseif (<argn> == 1)
+  if (<ref1.Coowners> >= <def0.house_coowners_max>)
+    src.sysmessage You already have the maximum number of Co-Owners permitted for this property. (<ddef0.max_co_owners>)
+    src.sysmessage Remove someone from the list and try again.
+    return 1
+  else
+    ref1.AddCoowner=<ref2>
+    ref2.delhouse <ref1>	//remove the incorrectly added house from their house list, core nonsense
+    serv.log <ref2.name>(<ref2>) was added to the co-owner list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+    src.sysmessage <ref2.name> has been added as a Co-Owner for this property.
+    ref2.sysmessage You have been made a Co-Owner for this property.
+    return 1 
+  endif
+
+elseif (<argn> == 2)
+  if (<ref1.Friends> >= <def0.house_friends_max>)
+    src.sysmessage You already have the maximum number of Friends permitted for this property. (<ddef0.max_friends>)
+    src.sysmessage Remove someone from the list and try again.
+    return 1
+  else
+    ref1.AddFriend=<ref2>
+    ref2.delhouse <ref1>	//remove the incorrectly added house from their house list
+    serv.log <ref2.name>(<ref2>) was added to the friend list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+    src.sysmessage <ref2.name> has been added as a Friend for this property.
+    ref2.sysmessage You have been made a Friend for this property.
+    return 1
+  endif
+
+elseif (<argn> == 3)
+  if (<ref1.Accesses> >= 10)
+    src.sysmessage Your Access list is full. 
+    src.sysmessage Remove someone from the list and try again.
+    return 1
+  else
+    ref1.AddAccess=<ref2>
+    ref2.delhouse <ref1>	//remove the incorrectly added house from their house list
+    serv.log <ref2.name>(<ref2>) was added to the access list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+    src.sysmessage <ref2.name> has been granted access to the property.
+    ref2.sysmessage You have been granted access to the property.
+    return 1
+  endif
+
+elseif (<argn> == 4)
+ if (<ref2.isgm> >= 1)
+    src.sysmessage Uh oh...a bigger boot may be required.	//You cannot ban staff from your house.
+    return 1
+  elseif (<ref1.owner>==<ref2>) || (<ref1.GetCoownerPos <ref2>> >= 0) || (<ref1.GetFriendPos <ref2>> >= 0)
+    src.sysmessage  You cannot ban a friend of the house!	//you cannot ban that person.
+    return 1
+  elseif (<ref2.baseid>==c_player_vendor) || (<ref2.baseid>==c_player_vendor_f)
+    src.sysmessage You ban eject a vendor.
+    return 1
+  endif
+
+  if (<ref1.Bans> >= 10)
+    src.sysmessage The ban limit for this house has been reached!	//Your Ban list is full. 
+    //src.sysmessage Remove someone from the list and try again.
+    return 1
+  else
+    ref1.AddBan=<ref2>
+    if (<ref1> == <ref2.region.uid>) && (<ref1.f_house_isinside <ref2>>)
+      ref2.go <ref1.link.p>
+      ref2.move s
+    endif
+    serv.log <ref2.name>(<ref2>) was added to the ban list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+    src.sysmessage <ref2.name> has been banned from this house.
+    ref2.sysmessage You have been banned from this house.
+    return 1
+
+  endif
+endif
+
+
+[function f_house_remove_list]
+ref1=<region.uid>
+ref2=<argo>
+if (<ref2>==<src>)
+  src.sysmessage You cannot remove yourself from a house list.
+  return 1
+elseif (<ref2.isvalid>) && !(<ref2.isplayer>)
+  src.sysmessage You cannot remove them from any house list.
+  return 1
+endif
+
+if (<argn> == 1)
+  ref1.DelCoowner=<ref2>
+  serv.log <ref2.name>(<ref2>) was removed from the co-owner list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+  src.sysmessage <ref2.name> has been removed as a Co-Owner for this property.
+  ref2.sysmessage You are no longer a Co-Owner for this property.
+  return 1 
+elseif (<argn> == 2)
+  ref1.DelFriend=<ref2>
+serv.log <ref2.name>(<ref2>) was removed from the friend list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+  src.sysmessage <ref2.name> has been removed as a Friend for this property.
+  ref2.sysmessage You are no longer a Friend for this property.
+  return 1
+elseif (<argn> == 3)
+  if (<ref1.GetAccessPos <ref2>> < 0)
+    src.sysmessage They are not on the access list.
+    return 1
+  endif
+  ref1.DelAccess=<ref2>
+  ref2.go <ref1.link.p>
+  ref2.move s
+  serv.log <ref2.name>(<ref2>) was removed from the access list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+  src.sysmessage <ref2.name>'s access to the property has been revoked.
+  ref2.sysmessage Your access to the property has been revoked.
+  return 1
+elseif (<argn> == 4)
+  if (<ref1.GetBanPos <ref2>> < 0)
+    src.sysmessage They are not on the ban list.
+    return 1
+  endif
+  ref1.DelBan=<ref2>
+  serv.log <ref2.name>(<ref2>) was removed from the ban list on <ref1.name>(<ref1.p>) by <src.name>(<src>)
+  src.sysmessage <ref2.name> has been unbanned from the property.
+  ref2.sysmessage You have been unbanned from this property.
+  return 1
+endif
+
+[function f_house_eject]
+if !(<argo.isvalid>) || !(<argo.region.isvalid>) 	//must have targeted something dynamic
+  return 1
+endif
+
+ref1=<src.region.uid>
+ref2=<argo.region.uid>
+if  !(<argo.isvalid>) || !(<argo.ischar>)
+  return 1
+elseif (<ref1> != <ref2>) || !(<ref1.f_house_isinside <argo>>)
+  sysmessage You may not eject someone who is not in your house!
+  return 1
+elesif (<argo.baseid>==c_player_vendor) || (<argo.baseid>==c_player_vendor_f)
+  sysmessage You cannot eject a vendor.
+  return 1
+elseif (<argo.isgm>)
+  sysmessage Uh oh...a bigger boot may be required!	//You cannot eject staff from your house.
+  return 1
+elseif (<ref1.owner>==<argo>) || (<ref1.GetCoownerPos <argo>> >= 0) || (<ref1.GetFriendPos <argo>> >= 0)
+  sysmessage You cannot eject a friend of the house!
+  return 1
+endif
+argo.go <uid.<ref1.link>.p>
+sysmessage <argo.name> has been ejected from this house
+argo.sysmessage You have been ejected from this house.
+
+[function f_render_list]
+if (<isempty <argv[2]>>)	//must be either veiwing or removing
+  return 0
+endif
+ref1=<owner>
+dtext 160 130 1000 <strtoupper <argv[1]> list>
+if (<<argv[0]>> > 0)
+  for 0 <eval <<argv[0]>>-1>
+    ref2=<<argv[1]>.<dlocal.c>>
+    if !(<argv[2]>)		//viewing
+      dtext 30 <eval 155+(<local.y>*15)> 1000 *<ref2.name>
+      elseif (<argv[2]>)	//removing
+      if (<ref1>==<src>)
+        button 25 <eval 155+(<local.y>*15)> 4005 4007 1 0 <eval <local.c>+10000>
+      endif
+      dtext <eval <qval (<ref1>==<src>)?60:30>+(<local.x>*100)> <eval 155+(<local.y>*15)> 1000 *<ref2.name>
+    endif
+    local.y += 1
+    local.c += 1
+    if (<local.y> > 13)
+      local.x += 1
+      local.y=
+    endif
+  endfor
+endif
+
+[function f_house_convert]
+ref1=<owner>
+if (<baseid>==m_tower)
+  local.xy=16x14
+else
+  args=<multiregion>	//argv0=topX, argv1=topY, argv2=bottomX, argv3=bottomY
+  local.x=<eval (<argv[2]>-<argv[0]>)+1> 
+  local.y=<eval (<argv[3]>-<argv[1]>)>
+  local.xy=<dlocal.x>x<dlocal.y>
+endif
+
+forchars <eval ((<argv[2]>+<argv[3]>)/2)+2>
+  if (<region.uid>==<uid>)
+    //if (strmatch(<obody>,<def0.vendor_body_male>)) || (strmatch(<obody>,<def0.vendor_body_female>))
+	if (<obodu=y>==<def0.vendor_body_male>) || (<obodu=y>==<def0.vendor_body_female>)
+      ref1.sysmessage Warning! There are vendors in the building.
+      ref1.sysmessage To continue, remove them and select convert again.
+      return 1
+    endif
+  endif
+endfor
+
+movealltocrate 01
+movingcrate.cont=<ref1.findlayer.29>
+movingcrate.update
+ref2=<movingcrate>
+local.is=<increasedstorage>
+local.p=<p>
+local.o=<owner>
+removeallcomps
+remove
+serv.newitem m_foundation_<local.xy>
+new.increasedstorage=<local.is>
+new.movingcrate=<ref2>
+ref2.link=<new>
+new.p=<local.p>
+new.owner=<local.o>
+new.multicreate
+if (<def0.house_can_decay>)
+  new.events=+ei_house_decay
+  new.timer=<eval (((<def0.house_can_decay>*24)*60)*60)>
+endif
+
+[function f_house_rename]
+ref1=<ctag0.f_house_rename>
+ctag0.f_house_rename=
+ref1.name=<args>
+ref1.link.resendtooltip
+sysmessage Sign changed.
+
+[function f_house_change_sign_hanger]
+ref1=<uid>
+ref2=<link.owner>
+for 0 <eval <ref2.houses>-1>
+  if (<ref2.house.<dlocal._for>.comp.2> == <ref1>)
+    ref1=<ref2.house.<dlocal._for>.comp.0>
+    ref1.dispid=<argn>
+    ref1.update
+    return 1
+  endif
+endfor
+
+[function f_house_change_sign_post]
+ref1=<uid>	//house
+ref2=<argo>	//item we'
+foritems 2
+  if (<baseid>==i_wall_wood) && (<link>==<ref1.link>)
+    dispid=<def0.house_signpost_<dargn>>
+    update
+  endif
+endfor
+
+[function f_house_move]
+if !(<argo.isvalid>) || !(<argo.region.isvalid>) 	//must have targeted something dynamic
+  return 1
+endif
+
+ref1=<argo>		//item we're moving
+ref2=<argo.region.uid>	//house its in
+local.dir=<argn>
+
+if !(<ref2.isvalid>) 
+  return 1
+elseif !(<ref2.f_house_isinside <ref1>>) || (<ref2> != <src.region.uid>)
+  src.sysmessage That is not in your house.
+  return 1
+elseif (<ref1.ischar>) || (<ref1.topobj.ischar>) 
+  src.sysmessage You cannot move living things.
+  return 1
+elseif !(<ref2.f_house_isowner <src>>) && !(<ref2.GetCoownerPos <src>> >= 0) && !(<src.isgm>)
+  src.sysmessage You must be in your house to do that.
+  return 1
+elseif (<argo.isevent.ei_house_component>)
+  src.sysmessage You cannot move that.
+  return 1
+endif
+
+
+local.components=<serv.map(<ref2.p.x>,<ref2.p.y>,<ref2.p.z>,<ref2.p.map>).components>
+
+if (<local.dir> == 8)	//movedown
+  local.minz=<eval (<serv.map(<ref2.p.x>,<ref2.p.y>,<ref2.p.z>,<ref2.p.map>).components.0.z>-1)>
+  if (<eval (<ref1.z>-1)> < <local.minz>)
+    src.sysmessage You cannot move that any lower.
+    return 1
+  endif
+  ref1.z -= 1
+  return 1
+
+elseif (<local.dir> == 9)	//moveup
+
+  local.maxz=<eval (<serv.map(<ref2.p.x>,<ref2.p.y>,<ref2.p.z>,<ref2.p.map>).components.<eval (<local.components>-1)>.z>+20)>
+  if (<eval (<ref1.z>+1)> > <local.maxz>)
+   src.sysmessage You cannot move that any higher.
+    return 1
+  endif
+  ref1.z += 1
+  //serv.b <ref1.z> / <local.maxz>
+  return 1
+
+elseif (<local.dir> == 10)	//flips
+  ref1.flip
+  return 1
+
+endif
+
+
+if (<local.dir> == 0) 		//move north
+  local.p=<ref1.p.x>,<eval (<ref1.p.y>-1)>,<ref1.p.z>,<ref1.p.m>
+elseif (<local.dir> == 2) 	//move east
+  local.p=<eval (<ref1.p.x>+1)>,<ref1.p.y>,<ref1.p.z>,<ref1.p.m>
+elseif (<local.dir> == 4) 	//move south
+  local.p=<ref1.p.x>,<eval (<ref1.p.y>+1)>,<ref1.p.z>,<ref1.p.m>
+elseif (<local.dir> == 6)	//move west
+  local.p=<eval (<ref1.p.x>-1)>,<ref1.p.y>,<ref1.p.z>,<ref1.p.m>
+endif
+
+local.components=<serv.map(<local.p>).components>
+if !(<local.components>)
+  src.sysmessage You cannot move that any further.
+  return 1
+endif
+
+for n 0 <eval (<local.components>-1)>
+  local.id=<serv.map(<local.p>).components.<dlocal.n>.id>
+  local.type=<qval (<local.id>)?<serv.itemdef.<local.id>.type>:0>
+  local.z=<serv.map(<local.p>).components.<local.n>.z>
+  if (<local.type> == t_wall) 
+    src.sysmessage You cannot move that any further.
+    return 1
+  endif
+  if (<local.z> <= <ref1.p.z>)
+    local.foundation=1
+  endif
+endfor
+
+if !(<local.foundation>)
+  src.sysmessage you cannot move that there.
+  return 1
+endif
+
+ref1.p=<local.p>
+ref1.update
+
+[function f_house_declare_guild]
+ref1=<src.ctag0.guildhouse>
+if !(<argo.isitem>) 
+  src.sysmessage That is not a valid guild stone.
+  return 1
+elseif (<argo.type> != t_stone_guild) || (<argo.region.uid> != <ref1>) ||  (<argo.topobj.ischar>)
+  src.sysmessage That is not a valid guild stone.
+  return 1
+endif
+ref1.tag0.guildstone=<argo>
+ref1.housetype=house_guild
+src.sysmessage This building is now the guildhouse for <argo.name>
+
+[function f_house_value]
+local.v=<value>
+local.v += <muldiv <serv.VendorMarkup>,<local.v>,100>
+if (<increasedstorage>)
+  for 0 <eval (<increasedstorage>/20)>
+    local.n=<eval (20*<local._for>)>
+    local.v += <muldiv <local.n>,<local.v>,100>
+  endfor
+endif
+if (<def0.house_property_tax> > 0 ) && !(<tag0.house_tax_exempt>)
+  local.t=<muldiv <def0.house_property_tax>,<value>,100>
+endif
+return <eval (<local.v>+<local.t>+<tag0.construction_cost>)>
+
+[function f_house_lockdown]
+if !(<argo.isvalid>) || !(<argo.region.isvalid>) 	//must have targeted something dynamic
+  return 1
+endif
+
+ref1=<argo>		//item we're locking down
+ref2=<argo.region.uid>	//house its in
+
+if !(<ref2.isvalid>) || !(<ref1.isvalid>) 
+  return 1
+elseif !(<ref2.f_house_isinside <ref1>>) || (<ref2> != <src.region.uid>)
+  src.sysmessage That is not in your house
+  return 1
+elseif !(<ref2.f_house_isowner <src>>) && !(<ref2.GetCoownerPos <src>> >= 0) && !(<src.isgm>)
+  src.sysmessage You must be in your house to do that.
+  return 1
+elseif !(<ref1.isitem>) 
+  src.sysmessage You can not lockdown living things.
+  return 1
+elseif (<ref1.isevent.ei_house_lockdown>)
+  src.sysmessage That is already locked down.
+  return 1
+elseif (<ref1.region.uid> != <ref2>) || (<ref1.attr>&attr_move_never) || (<ref1.isevent.ei_house_component>) || (<ref1.isevent.ei_house_addon>) || (<ref1.isevent.ei_house_secure>)|| (<ref1.type>==t_spell) || (<ref1.topobj> != <ref1>) 
+  src.sysmessage You cannot lock that down!
+  return 1
+//elseif (<ref2.f_house_storage_used> >= <ref2.maxstorage>)	//we're not using this here
+  //src.sysmessage Your house has reached it's storage limit.
+  //return 1
+elseif (<ref2.f_house_lockdowns_used> >= <ref2.tag0.maxlockdowns>)
+  src.sysmessage The maximum number of locked down items has been reached : <ref2.tag0.maxlockdowns>
+  return 1
+endif
+
+ref1.attr &= ~attr_decay
+ref1.timer=-1
+//ref2.lockitem <ref1>
+if (<serv.list.house_<ref2>_lockdown.findelem <ref1>> == -1)
+  serv.list.house_<ref2>_lockdown.add <ref1>
+endif
+ref1.events=+ei_house_lockdown
+ref1.message (locked down)
+ref1.update
+
+
+[function f_house_secure]
+if !(<argo.isvalid>) || !(<argo.region.isvalid>) 	//must have targeted something dynamic
+  return 1
+endif
+
+ref1=<argo>		//item were securing
+ref2=<argo.region.uid>	//house its in
+
+//local.components=<serv.map(<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,<ref1.p.map>).components>
+//local.minz=<serv.map(<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,<ref1.p.map>).components.0.z>
+//local.maxz=<serv.map(<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,<ref1.p.map>).components.<eval (<local.components>-1)>.z>
+
+if !(<ref2.isvalid>) || !(<ref1.isvalid>) 
+  return 1
+elseif !(<ref2.f_house_isinside <ref1>>) || (<ref2> != <src.region.uid>)
+  src.sysmessage That is not in your house
+  return 1
+elseif !(<ref2.f_house_isowner <src>>) && !(<ref2.f_house_iscoowner <src>>) && !(<src.isgm>) 
+  src.sysmessage You must be in your house to do that.
+  return 1
+elseif !(<isempty <ref1.tag.house_access>>) && !(<ref1.f_house_can_access <src>>)
+  src.sysmessage You lack the privledges to change the security on that.
+  return 1
+elseif !(<ref1.isitem>) 
+  src.sysmessage You can not secure living things.
+  return 1
+endif
+
+if (<ref1.type>==t_door) || (<ref1.type>==t_door_locked) //(strmatch(t_door*,<ref1.type>)) // || (<argo.type>==t_telepad)
+  if !(<def0.house_keyless_doors>)
+    src.sysmessage You cannot lock that down!
+  else
+    argo.dialog d_house_secure_recode		//if its a door or telepad set the access level
+    argo.message (secured)
+    if !(<argo.isevent.ei_house_component>)
+      argo.events=+ei_house_secure	//doors not added with the multi need this
+    endif
+  endif
+  return 1
+endif
+
+if (<argo.isevent.ei_house_lockdown>) 
+  src.sysmessage That is already locked down and cannot be secured.
+  return 1
+elseif (<argo.region.uid> != <ref2>) || (<argo.attr>&attr_move_never) || (<argo.isevent.ei_house_component>) || (<argo.isevent.ei_house_addon>) || (<argo.topobj> != <argo>) 
+  src.sysmessage You cannot lock that down!
+  return 1
+//elseif (<ref2.f_house_storage_used> >= <ref2.maxstorage>)
+  //src.sysmessage Your house has reached it's storage limit.
+  //return 1
+elseif !(<argo.isevent.ei_house_secure>) && (<ref2.f_house_secures_used> >= <ref2.tag0.maxsecures>)
+  src.sysmessage The maximum number of secured items has been reached : <ref2.tag0.maxsecures>
+  return 1
+endif
+
+argo.attr &= ~attr_decay
+argo.timer=-1
+if (<argo.type> != t_container) && (<argo.type> != t_container_locked)
+  //ref2.lockitem <argo>
+  if (<serv.list.house_<ref2>_lockdown.findelem <argo>> == -1)
+    serv.list.house_<ref2>_lockdown.add <argo>
+  endif
+  argo.events=+ei_house_lockdown
+  argo.message (locked down)
+  return 1
+endif
+//ref2.secure <argo>
+if (<serv.list.house_<ref2>_secure.findelem <argo>> == -1)
+  serv.list.house_<ref2>_secure.add <argo>
+endif
+argo.events=+ei_house_secure
+argo.sdialog d_house_secure_recode
+argo.message (secured)
+argo.update
+
+
+[function f_house_release]
+if !(<argo.isvalid>) || !(<argo.region.isvalid>) 	//must have targeted something dynamic
+  return 1
+endif
+
+ref1=<argo>
+ref2=<argo.region.uid>
+
+if !(<ref1.isvalid>) 
+  return 1
+elseif !(<ref2.f_house_isinside <ref1>>) || (<ref2> != <src.region.uid>)
+  src.sysmessage That is not inside your house.
+  return 1
+elseif !(<ref2.f_house_isowner <src>>) && !(<ref2.f_house_iscoowner <src>>) && !(<src.isgm>) 
+  src.sysmessage You must be in your house to do that.
+  return 1
+elseif (<ref1.region.uid> != <ref2>) || (<ref1.attr>&attr_move_never) || (strmatch(t_door*,<ref1.type>)) || (<ref1.isevent.ei_house_addon>)
+  src.sysmessage You cannot release that.
+  return 1
+elseif !(<ref1.isevent.ei_house_lockdown>) && !(<ref1.isevent.ei_house_secure>))
+  src.sysmessage That is not locked down or secured.
+  return 1
+endif
+
+if (<def0.house_items_decay>)
+  ref1.attr |= attr_decay
+  ref1.timer=<eval <serv.decaytimer>*60>
+endif
+//if (<ref2.GetLockedItemPos <ref1>> >= 0) 	//locked down item
+if (<serv.list.house_<ref2>_lockdown.findelem <ref1>> != -1)  || ((<ref1.type> != t_container) && (<ref1.isevent.ei_house_lockdown>))
+  //ref2.unlockitem <ref1>
+  if (<serv.list.house_<ref2>_lockdown.findelem <ref1>> != -1)
+    serv.list.house_<ref2>_lockdown.<serv.list.house_<ref2>_lockdown.findelem <ref1>>.remove
+  endif
+  ref1.events=-ei_house_lockdown
+  ref1.tag0.multilockdown=
+  ref1.message (no longer locked down)
+  if (<ref1.link.isvalid>) && (<ref1.link.type>==t_multi)
+    ref1.link=04fffffff
+  endif
+  ref1.update
+  return 1
+//elseif (<ref2.GetSecuredContainerPos <ref1>> >= 0) 	//secured container
+elseif (<serv.list.house_<ref2>_secure.findelem <ref1>> != -1)  || ((<ref1.type>==t_container) && (<ref1.isevent.ei_house_secure>))
+  if !(<ref1.f_house_can_access <src>>)
+    src.sysmessage You lack the privledges to change the security on that.
+    return 1
+  endif
+  //ref2.release <ref1>
+  if (<serv.list.house_<ref2>_secure.findelem <ref1>> != -1)
+    serv.list.house_<ref2>_secure.<serv.list.house_<ref2>_secure.findelem <ref1>>.remove
+  endif
+  ref1.events=-ei_house_secure
+  ref1.tag0.multilockdown=
+  ref1.tag0.house_access=
+  ref1.message (no longer secure)
+  if (<ref1.link.isvalid>) && (<ref1.link.type>==t_multi)
+    ref1.link=04fffffff
+  endif
+  ref1.update
+  return 1
+endif
+
+[function f_house_can_access]
+ref1=<region.uid>
+ref2=<args>
+if !(<ref1.isvalid>)
+  serv.log <ref2.name>(<ref2>) trying to access something inside a house region that doesn't exist @ <p>.
+  return 0
+endif
+local.AccessLevel = <ref1.f_house_get_priv <ref2>>
+//serv.log <ref2.name>(<ref2>) trying to access <name>(<uid>) in <ref1.name>(<ref1>) @ <ref1.p>. 
+//serv.log <ref2.name> access level :  <Local.accesslevel> <--> <name> access level : <tag0.house_access>
+if (<tag0.house_access> == house_access_all) || (<ref2.isgm>)
+  return 1
+elseif (<tag0.house_access> == house_access_guild)
+  if ((<local.AccessLevel> == house_access_guild) && (<ref2.guild> == <ref1.owner.guild>)) || (<ref1.f_house_isowner <ref2>>)  
+    return 1
+  endif
+elseif (<tag0.house_access> == house_access_friend)
+  if (<local.AccessLevel> <= house_access_friend) || (<ref1.f_house_isfriend <ref2>>)
+    return 1
+  endif
+elseif (<tag0.house_access> == house_access_coowner)
+  if (<local.AccessLevel> <= house_access_coowner) || (<ref1.f_house_iscoowner <ref2>>)
+    return 1
+  endif
+elseif (<tag0.house_access> == house_access_owner)
+  if (<local.AccessLevel> == house_access_owner) || (<ref1.f_house_isowner <ref2>>)
+    return 1
+  endif
+endif
+return 0
+ 
+[function f_house_get_priv]
+//serv.log checking house privs for <src.name> (<src>)
+if (<src.npc>)
+  return 0		//npcs don't have any privs
+elseif (<src.guild>)
+  if (<owner.guild> == <src.guild>)	//guild doors are specifically for 
+    local.priv=<src.guild.memberfromuid.<src>.priv>
+    if (<local.priv>==1) || (<local.priv>==2) // 1 = member, 2 = master
+      return house_access_guild 
+    endif
+  endif
+elseif (<getFriendpos <src>> >= 0)
+  return house_access_friend
+elseif (<getCoownerpos <src>> >= 0)
+  return house_access_coowner
+elseif (<IsOwner <src>>)
+  return house_access_owner
+endif
+return 10
+
+[function f_house_recode_doors_telepads]
+if !(<comps>)
+ return 1
+endif
+for 0 <eval (<comps>-1)>
+  ref1=<comp.<dlocal._for>>
+  if (<ref1.type>==t_door) || (<ref1.type>==t_door_locked) || (<ref1.type>==t_telepad)
+    ref1.tag0.house_access=<argn>	//house_access_owner
+  endif 
+endfor
+
+[function f_house_trade]
+ref1=<args>		//house
+ref2=<argo>		//target of trade
+
+if !(<ref2.isvalid>) || !(<ref2.isplayer>) || (<ref2>==<src>)
+  src.sysmessage You cannot trade a house to that target.
+  return 1
+endif
+
+if (<src.findtype.t_eq_trade_window>) || (<ref2.findtype.t_eq_trade_window>)
+  src.sysmessage You cannot begin a trade while one is in progress.
+  return 1
+endif
+
+//if (<src.distance <ref1.link> > 2) || (<ref2.distance <ref1.link> > 2)
+  //src.sysmessage In order to transfer the house, you and the recipient must both be outside of the building and within two paces of the house sign.
+  //return 1
+//endif
+
+src.sysmessage Trade offer sent to <ref2.name>.
+src.events=+e_house_trade
+ref2.events=+e_house_trade
+serv.newitem i_deed
+new.attr=010
+new.color=0480
+new.link=<ref1>		//house
+new.more2=<ref2>	//target we're trading to
+new.type=t_house_trade_deed
+src.trysrc <ref2> f_house_trade_window <new>
+
+[function f_house_trade_window]	 //function by Terrikate
+ref1=<uid>
+ref2=<src>
+ref3=<args>
+if (<ref1>==<ref2>) || !((<ref1.isplayer>) && (<ref1.isplayer>))
+  return 1
+endif
+for 2
+  serv.newitem i_bulletin_board
+  local.tw_<dlocal._for>=<new>
+  new.type=t_eq_trade_window
+  new.name=House trade with <qval <local._for>==1?<ref2.name>:<ref1.name>>
+  ref<dlocal._for>.equip <new>
+endfor
+uid.<local.tw_1>.link=<local.tw_2>
+uid.<local.tw_2>.link=<local.tw_1>
+ref1.sendpacket 06F W02F B0 D<ref2> D<local.tw_1> D<local.tw_2> 01 <f_house_trade_window_split_packets <ref2.name>>
+ref2.sendpacket 06F W02F B0 D<ref1> D<local.tw_2> D<local.tw_1> 01 <f_house_trade_window_split_packets <ref1.name>>
+if (<ref3>)
+  ref3.cont=<local.tw_1>
+  ref3.update
+endif
+
+[function f_house_trade_window_split_packets]
+local.l=<eval strlen(<args>)>
+args=<asc <args>>
+for <eval (30-<local.l>)>
+  args .= " 00"
+endfor
+return <args>
+
+
+[function f_house_isfriend]
+ref1=<region.uid>
+ref2=<args>
+if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1.GetFriendPos <ref2>> >= 0) || (<ref1.f_house_iscoowner <ref2>>) || (<ref1.f_house_isowner <ref2>>) // || (<ref1.GetFriendPos <ref2>> >= 0)
+  return 1
+else
+  return 0
+endif
+
+[function f_house_iscoowner]
+ref1=<region.uid>
+ref2=<args>
+if (<ref1.isvalid>) && (<ref2.isvalid>) &&  (<ref1.GetCoownerPos <ref2>> >= 0)  || (<ref1.f_house_isowner <ref2>>)
+  return 1
+else
+  return 0
+endif
+
+[function f_house_isowner]
+ref1=<region.uid>
+ref2=<args>
+if (<ref1.isvalid>) && (<ref2.isvalid>) && ((<def0.house_account_ownership>) && !(strcmpi(<ref1.owner.account>,<ref2.account>))) || (<owner>==<ref2>) || (<ref2.isgm>)
+  return 1
+else
+  return 0
+endif
+
+
+[function f_house_isbanned]
+ref1=<region.uid>
+ref2=<args>
+if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1.GetBanPos <ref2>> >= 0) 
+  return 1
+else
+  return 0
+endif
+
+
+[function f_house_remove_keys]			//loop through co-owners, friends
+ref1=<uid>	//house calls this function
+ref2=<argv[0]>	//first argument is the uid of the person we're removing keys from
+if !(<ref2>)
+  ref2=<owner>
+endif
+ref3=<ref2.findlayer.29>	//bank of the person we're removing keys from
+forcont <ref2>,2
+  if (<type>==t_key) && (<link>==<ref1>)	//remove keys on the person
+    remove
+  endif
+endfor
+if (<argv[1]> != -1)
+  forcont <ref3>,2
+    if (<type>==t_key) && (<link>==<ref1>)	//remove keys in their bank
+      remove
+    endif
+  endfor
+endif
+
+[function f_house_add_key]
+ref1=<uid>	//house calls this function
+ref2=<argv[0]>	//first argument is the uid of the person we're giving keys too
+if !(<ref2>)
+  ref2=<owner>
+endif
+ref3=<ref2.findlayer.29>	//bank of the person we're adding keys to
+serv.newitem i_key_copper,1,<ref2>
+new.more1=<ref1>
+new.link=<ref1>
+if (<argv[1]> > 0)
+  serv.newitem i_key_copper,1,<ref3>
+  new.more1=<ref1>
+  new.link=<ref1>
+endif
+
+[function f_house_get_decay_stage]
+ref1=<args>		//uid of the house we're getting the age on (this seems incorrect)
+local.stagedays=<eval (<def0.house_can_decay>/6)>		//how many days between stages
+local.daysleft=<eval (<timer>/86400)>		//days left
+local.daysgone=<eval (<def0.house_can_decay>-<local.daysleft>)>
+return <eval (<local.daysgone>/<local.stagedays>)>
+
+[function f_house_age_message]
+if !(<def0.house_can_decay>) || ((<def0.house_can_decay>) && (<link.tag0.house_nodecay>))
+  return This structure is Ageless.
+endif
+local.decaystage=<f_house_get_decay_stage>
+
+local.decaystage=<qval (5 < <local.decaystage>)?5:<local.decaystage>>		//can't go any further than "danger of collapsing"
+
+doswitch <local.decaystage>
+  return This structure is like new.
+  return This structure is slightly worn.
+  return This structure is somewhat worn.
+  return This structure is fairly worn.
+  return This structure is greatly worn.
+  return This structure is in danger of collapsing.
+enddo
+
+[function f_house_collapse]
+ref1=<uid>
+ref2=<owner>
+local.z=<ref1.z>	//this is ground level for this situation
+
+if (<ref1.tag0.house_nodecay>)	 
+  serv.log f_house_collapse called on <ref1.name> owned by <ref2.name>, though it's tagged as NO_DECAY
+  timer=-1
+  return 1	//this shouldnt happen, ageless houses should have their timers set to -1
+endif
+ref2.sysmessage Your house <ref1.name> in <ref1.region.name> has collapsed...
+
+local.dist=<f_max <ref1.multiregion>>	//argv0=topX, argv1=topY, argv2=bottomX, argv3=bottomY
+local.dist *= 2
+
+forchars <local.dist>
+  if (<region.uid> == <ref1>)
+    if (<baseid>==c_player_vendor) | (<baseid>==c_player_vendor_f)
+      remove
+    endif
+  endif
+endfor
+
+foritems <local.dist>	//check as far as the furthest possible wall
+  if (<region.uid> == <ref1>)
+    if (<uid> != <ref1>) && !(<isevent.ei_house_component>) && !(<isevent.ei_house_door>) && !(<isevent.ei_house_telepad>)	//dot remove the house itself yet
+      if (<attr>&attr_static) || (<attr>&attr_move_never)	//these are things that would never be lootable
+        remove
+      else				//now drop all the lootable items in the house
+        events=-ei_house_container	//remove all events that would make it impossible for players to loot
+        events=-ei_house_lockdown
+        events=-ei_house_secure
+        tag0.house_access=
+        attr |= attr_decay
+        //timer=<eval ((<serv.DecayTimer>*60)*2)>	//base server decay timer for everything (x2 incase there is a lot of items)
+	timer=60*30					//30 minute decay timer for items dropped
+        local.height=<eval ((<z>-<local.z>)-5)>
+        if (<local.height> >= 20)	//it's above the first floor
+          local.addz=<eval ((<local.height>/20)*5)>
+          z=<eval (<local.z>+<local.addz>)>
+        endif
+      endif
+    endif
+  endif
+endfor
+
+remove //now remove the house multi
+
+
+[function f_house_lockdowns_used]
+//return <eval (<lockdowns>+<getsecureditems>)>
+local.lockdowns=<serv.list.house_<uid>_lockdown.count>
+local.lockdowns=<qval (<local.lockdowns> < 0)?0:<local.lockdowns>>
+local.secures=<serv.list.house_<uid>_secure.count>
+local.secures=<qval (<local.secures> < 0)?0:<local.secures>>
+return <eval (<local.lockdowns>+<local.secures>)>
+
+[function f_house_secures_used]
+//return <eval (<lockdowns>+<getsecureditems>)>
+local.secures=<serv.list.house_<uid>_secure.count>
+local.secures=<qval (<local.secures> < 0)?0:<local.secures>>
+return <local.secures>
+
+[function f_house_storage_used]
+//return <eval (<lockdowns>+<getsecureditems>)>
+local.storageused=<eval (<f_house_lockdowns_used>+<f_house_secures_used>)>
+local.storageused=<qval (<local.storageused> < 0)?0:<local.storageused>>
+return <local.storageused>
+
+[function f_house_movingcrate_check]
+forcont <uid> 1
+  if (<isevent.t_house_addon>)
+    remove
+  endif
+  events=-ei_house_lockdown
+  events=-ei_house_secure
+endfor
+
+/////////////////////////
+// Some GM Commands
+
+[function fix_house_lockdowns]
+foritems 9999
+  if (<type>==t_multi) || (<type>==t_multi_custom) 
+    ref1=<uid> 
+    ref1.fix_house_lockdowns2
+  endif
+endfor
+
+[function fix_house_lockdowns2]
+ref1=<uid>
+if (<ref1.owner>) && (<ref1.owner.isplayer>)
+  foritems 99
+    if (<region.uid>==<ref1>) && (<uid> != <ref1>) && (<type> != t_door) && (<type> != t_door_locked) && (<type> != t_sign_gump) && (<type> != t_stone_guild) && (<type> != t_multi)
+      if (<baseid> != i_trash_barrel)
+        ref1.fix_house_lockdowns3 <uid>
+      endif
+    endif
+  endfor
+endif
+
+[function fix_house_lockdowns3]
+ref1=<region.uid>
+ref2=<args>
+serv.log <ref2.name>
+ref2.tag0.multilockdown=
+ref2.link=04fffffff    
+ref2.attr &= ~ 001000000 
+ref2.attr &= ~ 002000000
+if (<type> == t_container)
+  if (<serv.list.house_<ref1>_secure.findelem> != -1)
+    serv.list.house_<ref1>_secure.<serv.list.house_<ref1>_secure.findelem <ref2>>.remove
+  endif
+  serv.list.house_<ref1>_secure.add <ref2>
+  ref2.events=+ei_house_secure
+  ref2.message (secured)
+else
+  if (<serv.list.house_<ref1>_lockdown.findelem> != -1)
+    serv.list.house_<ref1>_lockdown.<serv.list.house_<ref1>_secure.findelem <ref2>>.remove
+  endif
+  serv.list.house_<ref1>_lockdown.add <ref2>
+  ref2.events=+ei_house_lockdown
+  ref2.message (locked down)
+endif
+
+
+// Is the player on the inside of the door?
+[function f_house_door_isbehind]	//FIXME: 32 conditions are too many, write another function to nest inside this one to determine door direction
+ref1=<region.uid>	//house
+ref2=<args>	//player
+//FIXME This should be using a deflist holding door information regarding what direction its FRONT is facing so you can determine what the backward direction is and figure out if someone is behind the door on the unsecure side
+if (<ref1.isvalid>) && ((<ref1.type>==t_multi) || (<ref1.type>==t_multi_custom))
+
+  //north facing doors
+  if (<dispid>==068b) || (<dispid>==0689) || (<dispid>==01ff1) || (<dispid>==01ff3) || (<dispid>==0679) || (<dispid>==067b) || (<dispid>==06c9) || (<dispid>==06cb) || (<dispid>==0699) || (<dispid>==069b) || (<dispid>==06a9) || (<dispid>==06ab) || (<dispid>==06b9) || (<dispid>==06bb) || (<dispid>==06d9) || (<dispid>==06db) || (<dispid>==06e9) || (<dispid>==06eb)
+    if (<ref2.p.y> > <p.y>)	//one tile south means player is behind it
+      return 1
+    endif
+  //east facing doors
+  elseif (<dispid>==068d) || (<dispid>==068f) || (<dispid>==01ff5) || (<dispid>==01ff7) || (<dispid>==0676) || (<dispid>==067d) || (<dispid>==067f) || (<dispid>==06cd) || (<dispid>==06cf) || (<dispid>==069d) || (<dispid>==069f) || (<dispid>==06ad) || (<dispid>==06af) || (<dispid>==06bd) || (<dispid>==06bf) || (<dispid>==06dd) || (<dispid>==06df) || (<dispid>==06ed) || (<dispid>==06ef)
+    if (<ref2.p.x> < <p.x>)	//one tile west means player is behind it
+      return 1
+    endif
+
+  //south facing doors
+  elseif (<dispid>==0687) || (<dispid>==i_door_metal_bar) || (<dispid>==01fef) || (<dispid>==i_door_metal_bar_2) || (<dispid>==0677) || (<dispid>==i_door_metal) || (<dispid>==06c7) || (<dispid>==i_door_metal_2) || (<dispid>==0697) || (<dispid>==i_door_rattan) || (<dispid>==06a7) || (<dispid>==i_door_wood) || (<dispid>==06b7) || (<dispid>==i_door_wood_4) || (<dispid>==06d7) || (<dispid>==i_door_wood_2) || (<dispid>==06e7) || (<dispid>==i_door_wood_3)
+    if (<ref2.p.y> < <p.y>)	//one tile west means player is behind it
+      return 1
+    endif
+
+  //west facing doors
+  elseif (<dispid>==0678) || (<dispid>==0681) || (<dispid>==0683) || (<dispid>==0691) || (<dispid>==0693) || (<dispid>==01ff9) || (<dispid>==01ffb) || (<dispid>==06d1) || (<dispid>==06d3) || (<dispid>==06a1) || (<dispid>==06a3) || (<dispid>==06b1) || (<dispid>==06b3) || (<dispid>==06c1) || (<dispid>==06c3) || (<dispid>==06e1) || (<dispid>==06e3) || (<dispid>==06f1) || (<dispid>==06f3)
+    if (<ref2.p.x> > <p.x>)	//one tile west means player is behind it
+      return 1
+    endif
+  endif
+endif
+return 0
+
+[function f_house_isinside]
+ref1=<uid>	//house uid
+ref2=<args>	//item
+local.components=<serv.map(<ref2.p.x>,<ref2.p.y>,<ref2.p.z>,<ref2.p.map>).components>
+local.minz=<eval (<serv.map(<ref2.p.x>,<ref2.p.y>,<ref2.p.z>,<ref2.p.map>).components.0.z>-1)>
+local.maxz=<eval (<serv.map(<ref2.p.x>,<ref2.p.y>,<ref2.p.z>,<ref2.p.map>).components.<eval (<local.components>-1)>.z>+21)>
+//ref2.say myz <ref2.z> minz <local.minz> maxz <local.maxz>
+if !(<local.components>) || (<ref2.z> <= <local.minz>) || (<ref2.z> >= <local.maxz>)
+  return 0
+endif
+return 1
+
+[comment OLD f_house_isinside]
+ref1=<uid>
+ref2=<args>
+if (<ref2.z> > <ref1.z>)
+  return 1
+endif
+return 0
+
+[function houselist]
+if (<flags>&statf_dead) || (<flags>&statf_freeze)
+  sysmessage You cannot use this function in your current state.
+  return 1
+endif
+sdialog d_house_list
+
+[function account_houses]	//will find the total amount of houses the account has
+for n 0 <eval (<account.chars>-1)>
+  ref1=<account.char.<dlocal.n>>
+  local.houses += <ref1.houses>
+  ref1=		//clear it just incase it tries to add more
+endfor
+return <local.houses>
+
+[function account_ships]	//will find the total amount of ships the account has
+for n 0 <eval (<account.chars>-1)>
+  ref1=<account.char.<dlocal.n>>
+  local.ships += <ref1.ships>
+endfor
+return <local.ships>
+
+[function f_house_change_locks]
+sysmessage The locks on your front door have been changed, and new master keys have been placed in your bank and your backpack.
+
+[function f_house_item_dropon_ground]
+ref1=<uid>		//item
+ref2=<args>		//player dropping it
+ref3=<region.uid>	//house if any
+if (<ref3.isvalid>) && (<ref3.type>==t_multi)	//must be in house region
+    if (<ref3.f_house_isfriend <ref2>>) && (<ref3.f_house_isinside <ref1>>)
+      ref1.attr &= ~ attr_decay
+      ref1.timer=-1
+      //serv.log <ref1.name> dropped by house friend <ref2.name>(<ref2>) in <ref3.name>(<ref3>)
+    endif
+  endif
+endif
+
+[function f_house_last_added]	//returned in minutes 
+//if !(<account.tag0.house_last_added>)
+  //return 10080	//if they never placed a house, return that they have "waited the full time"
+//endif
+local.last_added=<eval (((<serv.time>-<account.tag0.house_last_added>)/10)/60)>	
+return <local.last_added>
+
+[function f_ship_last_added]	//returned in minutes 
+//if !(<account.tag0.ship_last_added>)
+  //return 10080	//if they never placed a ship, return that they have "waited the full time"
+//endif
+local.last_added=<eval (((<serv.time>-<account.tag0.ship_last_added>)/10)/60)>	
+return <local.last_added>
+
+[function refresh_housing]
+local.timer=<eval (((<def0.house_can_decay>*24)*60)*60)>
+foritems 999999
+  if (<type>==t_multi) && (<type> != t_ship)
+    ref1=<owner>
+    if (<ref1.isvalid>) && (<owner.isplayer>)
+      timer=<local.timer>
+    endif
+  endif
+endfor	
+sysmessage All houses refreshed to <local.timer>
+
+[function f_house_placement_char_check]
+ref1=<uid>
+local.dist=<args>
+forchars <args>
+  if (<uid> != <src>)
+    return <uid>
+  endif
+endfor
+return 0
+
+[function f_house_placement_move_chars]
+ref1=<uid>
+local.dist=<args>
+forchars <args>
+  go <ref1.link.p>	//move them to the house sign if they are in the area
+endfor
+
+[function f_house_fixlockdowns]
+ref1=<region.uid>
+serv.list.house_<ref1>_lockdown.clear
+serv.list.house_<ref1>_secures.clear
+foritems 100
+  ref2=<uid>
+  if (<ref2.region.uid> == <ref1>)
+    if (<isevent.ei_house_lockdown>)		//its locked down so add it to the list
+      if (<serv.list.house_<ref1>_lockdown.findelem <ref2>> == -1)
+        serv.list.house_<ref1>_lockdown.add <ref2>
+      endif
+      ref2.events=+ei_house_lockdown
+      ref2.message (locked down)
+      ref2.timer=-1
+    elseif (<isevent.ei_house_secure>)		//its secure, so add it to the list
+      if (<serv.list.house_<ref1>_secure.findelem <ref2>> == -1)
+        serv.list.house_<ref1>_secure.add <ref2>
+      endif
+      ref2.events=+ei_house_secure
+      ref2.message (secured)
+      ref2.timer=-1
+    endif
+  endif
+endfor
+
+
+
+
+
+[EOF]
+
+

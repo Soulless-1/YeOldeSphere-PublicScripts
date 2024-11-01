@@ -1,0 +1,144 @@
+//New Craftables by Soulless
+//v1.0
+//12:25 AM 1/13/2022
+
+[itemdef i_iron_golem_craftable]
+defname=i_iron_golem_craftable
+name=iron golem
+id=i_pet_irongolem
+type=t_figurine
+tdata3=c_iron_golem_craftable
+resources=1 i_clockwork_assembly, 1 i_power_crystal, 50 i_ingot_iron, 50 i_ingot_bronze, 5 i_gears
+skillmake=70.0 tinkering
+
+[chardef c_iron_golem_craftable]
+defname=c_iron_golem_craftable
+id=c_iron_golem
+name=Iron Golem
+soundidle=542
+soundnotice=541
+soundhit=562
+soundgethit=320
+sounddie=545
+ICON=i_pet_irongolem
+ARMOR=55
+DAM=13,24
+RESOURCES=1 i_ore_iron
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+RESDISPDNID=c_man
+RESLEVEL=2
+RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Iron Golem (craftable)
+
+ON=@Create
+	tag0.controlslots=3
+	NPC=brain_animal
+	FAME={100 3000}
+	KARMA={-5000 -6999}
+	STR={251 350}
+	MAXHITS={151 210}
+	resphysical={35 55}
+	resfire={50 60}
+	rescold={10 30}
+	respoison={10 25}
+	resenergy={30 40}
+	INT={101 150}
+	DEX={76 100}
+	MAGICRESISTANCE={150.0 190.0}
+	TACTICS={60.0 100.0}
+	WRESTLING={60.0 100.0}
+
+[itemdef i_lantern_revealing]
+defname=i_lantern_revealing
+name=lantern of revealing
+id=i_lantern_lit	
+type=t_script
+skillmake=tinkering 95.1
+resources=i_lantern, i_scroll_reveal 10
+
+on=@create
+more1=50
+
+on=@click
+if !(<more1>) 
+  more1=50
+endif
+message <name> (<dmore1> charges)
+return 1
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage you cannot use that where it is
+  return 1
+elseif (<src.findid.i_lantern_revealing_cooldown>)
+  src.sysmessage You cannot use this again so soon.
+  return 1
+elseif (<more1> <= 0)
+  src.sysmessage The lantern has no more charges
+  return 1
+endif
+more1 -= 1
+serv.newitem i_lantern_revealing_cooldown
+new.timer=3
+src.equip <new>
+forchars 10
+  if !(<isgm>) 
+    if (<flags>&statf_hidden)
+      local.chance=<eval (1200+<R200>)-100>
+      local.difficulty=<eval (<hiding>+<R200>)-100>
+      if (<local.chance> > <local.difficulty>)
+        flags &= ~ statf_hidden
+        update
+        sysmessage You have been revealed!
+        src.sysmessage You have found <name>
+        local.detected=1
+      endif
+    elseif (<flags>&statf_invisible)
+      flags &= ~ statf_invisible
+      update
+      sysmessage You have been revealed!
+      src.sysmessage You have found <name>
+      local.detected=1
+    endif
+  endif
+endfor
+if !(<local.detected>)
+  src.sysmessage You can see nothing hidden here.
+endif
+return 1
+
+on=@dropon_self	
+if (<argo.baseid>==i_scroll_reveal)
+  if (<more1> >= 50)	
+    src.sysmessage This lantern can hold no more charges.
+    return 1
+  endif
+
+  local.amount=<argo.amount>
+  local.amount_required=<eval (((50-<more1>)/5)+1)>
+
+  //serv.b <local.amount> / <local.amount_required>
+
+
+  src.sysmessage you've added <local.amount> charges to the lantern.
+  return 1
+endif
+
+[itemdef i_lantern_revealing_cooldown]
+defname=i_lantern_revealing_cooldown
+name=Lantern of Revealing Cooldown
+id=i_rune_reveal
+type=t_eq_script
+
+on=@timer
+remove
+return 1
+
+
+
+[eof]
+

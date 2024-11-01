@@ -1,0 +1,259 @@
+//Travel System by Soulless v1.0
+//5:54 PM 3/31/2018
+
+[defname travel_stone_settings]
+travel_stone_delay		10		//how long is the delay to travel
+travel_stone_interrupt		1		//does taking damage interrupt the travel countdown?
+travel_stone_distance		5		//how close must you remain to the travel stone? (0 disables)
+travel_stone_cost		0		//how much does it cost for a single travel?
+travel_stone_res		3		//0=off, 1=on, 2=no crim/pk, 3=on but no crim/pk in guard zones
+travel_stone_criminal		1		//can criminals use the stone?
+travel_stone_murderer		1		//can murderers use the stone?
+
+
+
+travel_location_0		Towns			
+travel_location_0_0		Britain,05d,1419 1697 0 0
+travel_location_0_1		Serpent's Hold,05d,3005 3369 15 0
+travel_location_0_2		Buccaneer's Den,027,2708 2167 0 0
+travel_location_0_3		Cove,05d,2269 1206 0 0
+travel_location_0_4		Jhelom,05d,1396 3780 0 0	
+travel_location_0_5		Magincia,05d,3734 2188 20 0
+travel_location_0_6		Minoc,05d,2471 540 0 0
+travel_location_0_7		Moonglow,05d,4442 1171 0 0	
+travel_location_0_8		Nujel'm,05d,3756 1212 0 0	
+travel_location_0_9		Ocllo (New Players),64,3675 2513 0 0 
+travel_location_0_10		Skara Brae,05d,632 2233 0 0
+travel_location_0_11		Trinsic,05d,1867 2780 0 0
+travel_location_0_12		Vesper,05d,2894 684 0 0
+travel_location_0_13		Yew,05d,546 992 0 0
+travel_location_0_14		Delucia,05d,5221 4050 40 0
+travel_location_0_15		Papua,05d,5726 3207 -2 0
+
+travel_location_1		Dungeons
+travel_location_1_0		Covetous,027,2499 922 0 0
+travel_location_1_1		Deceit,027,4111 434 5 0	
+travel_location_1_2		Despise,027,1301 1077 0 0
+travel_location_1_3		Destard,027,1176 2639 0 0	
+travel_location_1_4		Fire Dungeon,027,5769 2905 14
+travel_location_1_5		Hythloth,027,4722 3825 0 0
+travel_location_1_6		Ice Dungeon,027,2000 78 4 0
+travel_location_1_7		Orc Dungeon,027,1015 1429 0 0 
+travel_location_1_8		Shame,027,514 1563 0 0	
+travel_location_1_9		Terathan Keep,027,5431 3116 -60 0
+travel_location_1_10		Wrong,027,2044 238 10 0
+travel_location_1_11
+
+travel_location_2		Special	
+travel_location_2_0		Minoc Territory,027,2479 90 0 0
+travel_location_2_1		Yew Waterfalls,027,1322 525 35 0
+travel_location_2_2		Northern Territory,027,2161 803 0 0
+travel_location_2_3		Great Desert,027,1800 852 -1 0
+travel_location_2_4		Ice Isle,027,4290 754 0 0
+travel_location_2_5		Fire Temple,027,4589 3646 78 0
+travel_location_2_6		Adventure Island,027,1041 3212 0 0	
+travel_location_2_7		Britain Blacksmith's Guild,027,1363 1781 15 0 0
+travel_location_2_8		Cyclops Valley,027,5128 3147 97 0
+travel_location_2_9
+
+travel_location_3
+
+[itemdef i_travel_book]
+name=Travel Book
+id=i_spellbook
+type=t_sign_gump
+tevents=+t_travel_stone_object
+
+on=@create
+color=069
+
+subsection=Custom
+category=GM Items
+description=Travel Book
+
+[itemdef i_travel_stone]
+name=Travel Stone
+id=i_gravestone_18
+type=t_sign_gump
+tevents=+t_travel_stone_object
+
+on=@create
+color=069
+attr=010
+
+subsection=Custom
+category=Service Stones
+description=Travel Stone
+
+
+[typedef t_travel_stone_object]
+
+on=@dclick
+if (<src.distance <uid>> > 3) && !(<src.isgm>) 
+  src.sysmessage You can not reach the travel stone.
+  return 1
+elseif (<src.findid.i_travel_stone_memory>)
+  src.sysmessage You are already using a travel stone.
+  return 1
+elseif (<src.iscriminal>) && !(<def0.travel_stone_criminal>)
+  src.sysmessage Criminals cannot use the travel stone.
+  return 1
+elseif (<src.ismurderer>) && !(<def0.travel_stone_murderer>)
+  src.sysmessage Murderer's cannot use the travel stone.
+  return 1
+endif
+
+if (<src.flags>&statf_dead) && (<def0.travel_stone_res>)
+  if ((<src.iscriminal>) || (<src.ismurderer>)) && (<def0.travel_stone_res>==2)
+    src.sysmessage Criminals and murderers cannot resurrect via travel stone.
+    return 1
+  elseif ((<src.iscriminal>) || (<src.ismurderer>)) && (<region.flags>&region_flag_guarded) && (<def0.travel_stone_res>==3)
+    src.sysmessage Criminals and murderers cannot resurrect via travel stone in guarded regions.
+    return 1
+  endif
+  src.resurrect
+  return 1
+endif
+
+sdialog d_travel_stone
+return 1
+
+
+
+[DIALOG d_travel_stone]
+0,0
+page 0
+
+resizepic 66 92 5054 480 75
+//resizepic 76 102 3500 460 55
+
+dtext 220 105 1263 <serv.servname> Travel System
+
+dtext 140 125 1000 Choose your Category
+while !(<isempty <def.travel_location_<dlocal.c>>>)
+  resizepic 80 <eval 170+(<local.c>*18)> 3000 200 20
+  button 90 <eval 172+(<local.c>*18)> 1209 1210 0 <eval <local.c>+1>
+  dtext 115 <eval 169+(<local.c>*18)> 1000 <def0.travel_location_<dlocal.c>>
+  local.c += 1
+endwhile
+
+dtext 340 125 1000 Select your Location
+for 0 <eval <local.c>-1>
+page <eval <local._for>+1>
+  while !(<isempty <def.travel_location_<dlocal._for>_<dlocal.l>>>)
+    resizepic 325 <eval 170+(<local.l>*18)> 3000 200 20
+    button 335 <eval 172+(<local.l>*18)> 1209 1210 1 0 <eval ((<local._for>*100)+<local.l>)+1>
+    args=<def.travel_location_<dlocal._for>_<dlocal.l>>
+    dtext 360 <eval 169+(<local.l>*18)> <qval (<argv[1]>)?<argv[1]>:1000> <argv[0]>
+    local.l += 1
+  endwhile
+local.l=
+endfor
+
+[dialog d_travel_stone button]
+
+onbutton=1,100000
+if (<src.distance <uid>> > 3)
+  src.sysmessage You can not reach the travel stone.
+  return 1
+endif
+
+if (<src.gold> < <def0.travel_stone_cost>) && !(<src.isgm>)
+  src.sysmessage You cannot afford to pay the travel cost of <def0.travel_stone_cost>.
+  return 1
+else
+  src.gold -= <def0.travel_stone_cost>
+endif
+
+argn1 -= 1
+local.c=<eval <argn>/100>	//travel category
+local.l=<eval <argn>-(<local.c>*100)>	//travel location
+
+local.c=<eval <argn>/100>	//travel category
+local.l=<eval <argn>-(<local.c>*100)>	//travel location
+
+args=<def0.travel_location_<dlocal.c>_<dlocal.l>>
+
+if (<src.isgm>)
+  src.go <argv[2]>
+  return 1
+endif
+
+serv.newitem i_travel_stone_memory
+new.morep=<argv[2]>
+new.link=<uid>
+new.more1=<def0.travel_stone_delay>
+src.equip <new>
+new.timer=1
+if (<def0.travel_stone_interrupt>)
+  src.events=+e_travel_stone_interrupt
+endif
+
+[itemdef i_travel_stone_memory]
+id=i_memory
+name=Using Travel Stone
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+if (<def0.travel_stone_interrupt>)
+  src.events=+e_travel_stone_interrupt
+endif
+
+on=@timer
+if (<more1> <= 0)
+  topobj.go <morep>
+  remove
+  return 1
+endif
+if (<distance <link>> > <def0.travel_stone_distance>)
+  topobj.sysmessage you have wandered too far from the travel stone.
+  remove
+  return 1
+endif
+topobj.message <dmore1>
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+if (<def0.travel_stone_interrupt>)
+  src.events=+e_travel_stone_interrupt
+endif
+
+[function remove_travel_stones]
+forinstances i_travel_stone
+  remove
+endfor
+
+[function place_travel_stones]
+remove_travel_stones
+while !(<isempty <def.travel_location_<dlocal.n>>>)
+  while !(<isempty <def.travel_location_<dlocal.n>_<dlocal.x>>>)
+    args=<def0.travel_location_<dlocal.n>_<dlocal.x>>
+    serv.newitem i_travel_stone
+    new.attr=010
+    new.p=<argv[2]>
+    new.move w 3
+    //new.fix
+    local.x += 1
+  endwhile
+  local.x=
+  local.n += 1
+endwhile
+
+[events e_travel_stone_interrupt]
+
+on=@gethit
+consume i_travel_stone_memory
+events=-e_travel_stone_interrupt
+sysmessage <src.name> interrupted your travel countdown.
+
+
+[EOF]
+
+
+
+
+
+

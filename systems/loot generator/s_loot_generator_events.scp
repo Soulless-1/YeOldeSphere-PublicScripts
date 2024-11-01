@@ -1,0 +1,129 @@
+
+[events e_loot_generator]
+
+on=@death
+ref1=<uid>					//monster dying
+ref2=<attacker.max>				//person who did the most damage is the 'killer'
+
+if (<ref2.isvalid>) 				//we've found a killer
+  ref3=<ref2.findid.i_memory_bonus_loot_roll>	
+  if (<ref3.isvalid>) && (<ref3.more1> >= 1)	//they have bonus loot rolls on them
+    ref3.more1 -= 1
+    if (<ref3.more1> <= 0)
+      ref3.remove
+      ref2.sysmessage You bonus loot rolls have ran out.
+    endif
+    local.bonusloot=1
+    ref2.sysmessage @046 Spending a bonus loot roll! (<ref3.dmore1> remaining)
+  endif
+endif
+  
+for <eval (1+<local.bonusloot>)>		//one time always, and another for bonus loot chance
+  if (<ref1.isvalid>) && (<ref1.ismonster>) 
+    if !(<ref1.findlayer.21>)
+      serv.newitem i_backpack			//need to have a backpack for the loot
+      ref1.equip <new>
+    endif
+
+    local.dropodds=<ref1.f_npcloot_getodds>				//get odds for standard magical armor, weapons, wands, etc
+    local.dropquality=<ref1.f_npcloot_getlevel>			//determines what tier the standard magical armor and weapons 
+    local.raredyeodds=<ref1.f_npcraredye_getodds>			//odds to drop something like a rare dye tub, hair dyes, skindyes, etc		
+    local.raredecoodds=<ref1.f_npcraredeco_getodds>			//odds to drop rare decorations
+    //local.raremiscdrops=??????
+    local.uniqueodds=<ref1.f_npcloot_unique_getodds>			//get odds for unique magic item drops
+    local.powerscrollodds=<ref1.f_npcpowerscroll_getodds>		//odds for advancement items such as powerscrolls
+    local.tmapodds=<ref1.f_npctreasuremap_getodds>			//treasure maps
+    local.tmaplevel=<ref1.f_npctreasuremap_getlevel>
+		
+    //serv.log <ref1.name>(<ref1>) has died @<p> and has 1 out of <local.dropodds> odds to drop magic items (<local.dropquality>).	
+
+    //the standard bread and butter magic items
+    if !(<R<local.dropodds>>)					//magic wands
+      serv.newitem i_wand_<R1,4>,1,<findlayer.21>
+      new.f_make_magic_wand 100
+      serv.log <ref1.name>(<ref1>), dropped a magic wand(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    if !(<R<local.dropodds>>) 					//magic armor
+      serv.newitem i_bag,1,<findlayer.21>
+      ref4=<new>
+      serv.newitem random_armor,1,<ref4>
+      new.f_make_magic_armor <tag0.base_difficulty>
+      serv.log <ref1.name>(<ref1>), dropped a magic armor(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    if !(<R<local.dropodds>>) 					//magic weapons
+      serv.newitem i_bag,1,<findlayer.21>
+      ref4=<new>
+      serv.newitem random_weapon,1,<ref4>
+      new.f_make_magic_weapon <tag0.base_difficulty>
+      serv.log <ref1.name>(<ref1>), dropped a magic weapon(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    //these are mostly cosmetic but highly sought after
+    if !(<R<local.raredyeodds>>)
+      dorand 4
+        serv.newitem i_dye_bucket_rare,1,<findlayer.21>		//low charge smaller dye tubs for players
+        serv.newitem i_dye_tub_rare,1,<findlayer.21>			//normal size rare dye tubs
+        serv.newitem i_hair_dye_rare,1,<findlayer.21>			//dye your hair permanently with this 
+        serv.newitem i_body_paint_rare,1,<findlayer.21>		//you can temporarily paint your skin until death with this
+      enddo
+      serv.log <ref1.name>(<ref1>), dropped a <new.name>(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    if !(<R<local.raredecoodds>>)
+      serv.newitem rare_deco_all,1,<findlayer.21>
+      serv.log <ref1.name>(<ref1>), dropped a rare decoration(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    //these are more unique and coveted items
+    if !(<R<local.uniqueodds>>)	 						//magic skill bonus jewelry
+      serv.newitem i_bag,1,<findlayer.21>
+      ref4=<new>
+      ref4.color=0480
+      serv.newitem random_jewelry,1,<ref4>
+      new.f_make_enchanted_Jewelry <ref1.tag0.base_difficulty>
+      serv.log <ref1.name>(<ref1>), dropped a magic jewelry(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    if !(<R<local.powerscrollodds>>)						//drop skillcap deeds 1 out of 250
+      serv.newitem { i_power_scroll_exalted 3 i_power_scroll_mythical 2 i_power_scroll_legendary 1 },1,<findlayer.21>
+      //new.more2={{1 6} 5 {9 10} 2 {14 22} 9 {24 33} 10 {35 36} 2 {38 48} 11}			//no crafting power scrolls
+      new.more2={0 48}										//all power scrolls can drop
+      new.name=<new.name> of <serv.skill.<new.more2>.name> (<eval (<new.more1>/10)> skill)
+      serv.log <ref1.name>(<ref1>), dropped a <new.name>(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    if !(<R<local.powerscrollodds>>) 						//drop skillsum deeds 1 out of 200
+      serv.newitem i_deed_skillsum_increase,1,<findlayer.21>
+      serv.log <ref1.name>(<ref1>), dropped a skillsum deed(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+    if !(<R<f_npctreasuremap_getodds>>)					
+      serv.newitem i_treasure_map<dlocal.tmaplevel>,1,<findlayer.21>
+      serv.log <ref1.name>(<ref1>), dropped a level <local.tmaplevel> treasure map(<new.uid>), at <region.name>(<p>)
+      local.drop=1
+    endif
+
+  endif
+
+  if !(<isempty <def.rare_drop_<baseid>0>>) 	//we have unique rares we can potentially drop
+    f_npc_drop_specific_rare 			//add any specific rares 
+  endif
+
+endif
+
+if (<def0.rare_drop_sparkle>) && (<local.drop> >= 1)
+  effectlocation <ref1.p.x>,<ref1.p.y>,<eval (<ref1.p.z>+1)>,2,i_fx_sparkle_2,3,128,1
+endif
+
+
+[EOF]

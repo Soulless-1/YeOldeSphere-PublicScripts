@@ -1,0 +1,182 @@
+[SPELL 52]
+DEFNAME=s_gate_travel
+NAME=Gate Travel
+SOUND=snd_spell_gate_travel
+RUNES=VRP
+CAST_TIME=4.0	//3.3
+RESOURCES=i_reag_black_pearl,i_reag_mandrake_root,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_gate_travel
+SCROLL_ITEM=i_scroll_gate_travel
+FLAGS=spellflag_targ_item|spellflag_playeronly|spellflag_field|spellflag_scripted 
+EFFECT_ID=i_moongate_blue
+EFFECT=0
+DURATION=60,60
+MANAUSE=40
+SKILLREQ=MAGERY 60.0
+INTERRUPT=100.0,100.0
+
+//Cast gate travel on any marked recall rune to create your own temporary blue moongate.
+on=@start
+//serv.log <act> <actarg1> <actarg2> <actarg3> <actprv>
+argn3=<serv.spell.s_gate_travel.cast_time>
+//if (<src.recentpvp> < 300)
+  //src.sysmessage @027 Wouldst thou flee during the heat of battle??
+  //return 1
+//elseif (<src.flags>&statf_criminal) && !(<src.isgm>)
+  //src.sysmessage @027 Thou'rt a criminal and cannot escape so easily...
+  //return 1
+//endif
+
+if !(<act.morep>) || (<act.morex> == -1) || (<act.morey> == -1)		//runes must have a marked location
+  src.sysmessage That rune does not have a marked location.
+  return 1
+endif
+
+if (<act.isvalid>) && (<act.morep>)
+  src.sysmessage <sextantp.<act.morep>>
+endif
+
+if !(<src.isgm>)		//GMs can travel anywhere
+  serv.newnpc c_man_invisible		//send a probe item to gather the region flags
+  new.p=<act.morep>
+  new.timerf 0,remove
+  local.z=<new.p.z>
+  ref1=<new.region.uid>
+  if (<new.region.flags>&region_antimagic_all) || (<new.region.flags>&region_antimagic_recall_in)
+    src.sysmessage An anti-magic filed disturbs the spell.
+    local.block=1
+  elseif (<new.p.m> != <src.p.m>) || ((<new.inlostlands>) && !(<src.inlostlands>)) || (!(<new.inlostlands>) && (<src.inlostlands>)) 
+    src.sysmessage You are not allowed to travel there.
+    local.block=1
+  elseif !(<new.canmove>)        
+    src.sysmessage That location is blocked.
+    local.block=1
+  elseif (<ref1.isvalid>) && (<ref1.type>==t_multi)	//we're teleporting into a multi region (house)
+    if !(<def0.house_courtyard_recall>)
+      src.sysmessage That location is blocked.
+      local.block=1
+    elseif (<local.z> > <ref1.p.z>)
+      src.sysmessage That location is blocked.
+      local.block=1
+    endif
+  endif
+  new.remove
+  if (<local.block>)
+    return 1
+  endif
+endif
+
+
+on=@success
+serv.newitem <serv.spell.s_gate_travel.effect_id>
+ref1=<new>
+ref1.timerf 2,dispid <serv.spell.s_gate_travel.effect_id>
+ref1.attr=023
+ref1.timer=<serv.spell.s_gate_travel.duration>
+ref1.type=t_spell
+ref1.events=+t_gate_travel_spell	//using our own type for more control
+ref1.more1=<src>			//set the spell/gate owner
+ref1.p=<src.p>
+serv.newitem <serv.spell.s_gate_travel.effect_id>
+ref2=<new>
+ref2.type=t_spell
+ref2.events=+t_gate_travel_spell
+ref2.more1=<src>		
+ref2.attr=023
+ref2.timer=<serv.spell.s_gate_travel.duration>
+ref1.link=<ref2>
+ref2.link=<ref1>
+ref2.p=<src.act.morep>
+ref2.color=<ref2.f_moongate_get_color>
+ref2.name=<qval (<ref2.color>==05d)?a blue moongate:a red moongate>
+ref1.color=<ref1.f_moongate_get_color>
+ref1.name=<qval (<ref1.color>==05d)?a blue moongate:a red moongate>
+src.sysmessage You open a magical gate to another location.
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+
+[function f_moongate_get_color]
+if (<link.region.flags>&region_flag_guarded) || (<link.region.flags>&region_flag_safe) || (<link.region.flags>&region_flag_no_pvp)
+  return 05d
+else
+  return 027
+endif
+
+[typedef t_gate_travel_spell]
+
+on=@step
+if (<src.isplayer>) && (<argn1>==0)
+  if (<src.findid.i_faction_town_sigil>)
+    src.sysmessage That spell is restricted while carrying a sigil.
+    return 0
+  endif
+  if (<more1> != <src>) && (<link.isvalid>)
+    if (<src.ctag0.gate_travel_approved> != <more1>) 
+      sdialog d_gate_travel_approve
+    else
+      if (<argn1>==0)
+        src.go <link.p>
+       endif
+    endif
+  else
+    if (<link.isvalid>) && (<argn1>==0) 
+      src.go <link.p>
+    endif
+  endif
+endif
+
+[DIALOG d_gate_travel_approve]
+150,50
+
+page 0
+ref1=<link.region.uid>
+resizepic 10 10 9200 420 330
+resizepic 20 19 3000 400 310
+if (<ref1.isvalid>) && (<ref1.type>==t_multi)	//this is a player house or boat
+  dhtmlgump 30 60 377 52 0 0 Dost thou wish to step into the moongate that leads into a strange house? Continue to enter the gate, Cancel to stay here.
+  if !(<ref1.f_house_isfriend <src>>)
+    dhtmlgump 30 210 377 52 0 0 WARNING: If you proceed you can be attacked freely!
+  endif
+else
+  dhtmlgump 30 60 377 52 0 0 Dost thou wish to step into the moongate? Continue to enter the gate, Cancel to stay here
+  dhtmlgump 30 210 377 52 0 0 WARNING: Moongates often lead to dangerous areas. Travel at your own risk!
+endif
+button 30 130 4005 4006 1 0 0
+dtext 70 130 0 CANCEL
+button 30 170 4005 4006 1 0 1
+dtext 70 170 0 CONTINUE
+
+[dialog d_gate_travel_approve button]
+
+onbutton=0
+
+onbutton=1
+ref1=<uid>
+src.ctag0.gate_travel_approved=<ref1.more1>
+if (<src.distance <ref1>> < 1)	//they are still standing on it
+  src.go <link.p>
+endif
+
+[itemdef i_moongate_summoning_fx]
+defname=i_moongate_summoning_fx
+name=moongate
+id=01af4
+type=t_telepad
+
+on=@create
+timerd=3
+
+on=@timer
+if (<dispid> >= 01afb)
+  id=<serv.spell.s_gate_travel.effect_id>
+else
+  dispid += 1
+  timerd=3
+endif
+update
+return 1
+
+
+[EOF]

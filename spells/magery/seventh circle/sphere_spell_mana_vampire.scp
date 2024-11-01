@@ -1,0 +1,37 @@
+[SPELL 53]
+DEFNAME=s_mana_vampire
+NAME=Mana Vampire
+SOUND=snd_spell_mana_vampire
+RUNES=OS
+CAST_TIME=2.3
+RESOURCES=i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk
+RUNE_ITEM=i_rune_mana_vampire
+SCROLL_ITEM=i_scroll_mana_vampire
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_resist
+EFFECT_ID=i_fx_curse
+EFFECT=0
+DURATION=0.0
+MANAUSE=40
+SKILLREQ=MAGERY 60.0
+INTERRUPT=100.0,100.0
+
+//Mana Vampire drains the mana of your target and gives it to you.
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval (<src.evaluatingintel>-<magicresistance>)/10>
+local.maxmana=<eval (<src.maxmana>-<src.mana>)>
+if (<isplayer>)
+  local.effect /= 2
+endif
+local.effect=<qval (<local.effect> <= 0)?0:<qval ( 120 < <local.effect>)?120:<local.effect>>>	//can't be less than 0 mana
+local.effect=<qval (<mana> < <local.effect>)?<mana>:<local.effect>>				//no more than the target has
+local.effect=<qval (<local.maxmana> < <local.effect>)?<local.maxmana>:<local.effect>>		//no more than the caster can get
+mana -= <local.effect>
+src.mana += <local.effect>
+src.mana=<qval (<src.maxmana> < <src.mana>)?<src.maxmana>:<src.mana>>
+effect=3,<serv.spell.53.effect_id>,6,15,1,1
+return 1	
+
+[EOF]

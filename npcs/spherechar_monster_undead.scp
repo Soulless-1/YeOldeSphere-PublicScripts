@@ -1,0 +1,1322 @@
+//Undead monsters go here
+//4:22 AM 4/1/2018
+
+
+[CHARDEF 3]
+DEFNAME=c_zombie
+NAME=Zombie
+SOUND=471
+ICON=i_pet_ZOMBIE
+CAN=MT_WALK
+dam=3, 7
+armor=18
+RESOURCES=10 t_eerie_stuff
+FOODTYPE=20 t_meat_raw
+DESIRES=i_gold,t_meat_raw, t_corpse
+AVERSIONS=t_TRAP
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Zombie
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={46, 70}
+dex={31, 50}
+int={26, 40}
+maxhits={28, 42}
+resphysical={15, 20}
+rescold={20, 30}
+respoison={5, 10}
+magicresistance={15.1, 40.0}
+tactics={35.1, 50.0}
+wrestling={35.1, 50.0}
+fame=600
+karma=-600
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item={random_body_parts_1 1 random_body_parts_2 1},R100
+	item=random_bones,R100
+
+
+[CHARDEF 24]
+DEFNAME=c_lich
+DEFNAME2=c_liche
+NAME=Lich
+SOUND=03e9
+ICON=i_pet_LICH
+dam=24, 26
+armor=50
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=
+DESIRES=t_bone,i_gold,t_wand,t_reagent
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Lich
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={171, 200}
+dex={126, 145}
+int={276, 305}
+maxhits={103, 120}
+resphysical={40, 60}
+resfire={20, 30}
+rescold={50, 60}
+respoison={55, 65}
+resenergy={40, 50}
+necromancy={89, 99.1}
+spiritspeak={90.0, 99.0}
+evaluatingintel={100.0}
+magery={70.1, 80.0}
+meditation={85.1, 95.0}
+magicresistance={80.1, 100.0}
+tactics={70.1, 90.0}
+fame=8000
+karma=-8000
+make_spellcaster 2,4
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	item=random_reagent_necro,{15 25}
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[CHARDEF 79]
+DEFNAME=c_lich_lord
+DEFNAME2=c_liche_lord
+NAME=Lich Lord
+sound=412
+ICON=i_pet_LICH
+dam=11, 13
+armor=50
+RESOURCES=
+CAN=MT_WALK
+DESIRES=t_bone,i_gold,t_wand,t_reagent,e_undead
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Lich Lord
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={416, 505}
+dex={146, 165}
+int={566, 655}
+maxhits={250, 303}
+resphysical={40, 50}
+resfire={30, 40}
+rescold={50, 60}
+respoison={50, 60}
+resenergy={40, 50}
+necromancy={90, 110.0}
+spiritspeak={90.0, 110.0}
+evaluatingintel={90.1, 100.0}
+magery={90.1, 100.0}
+magicresistance={150.5, 200.0}
+tactics={50.1, 70.0}
+wrestling={60.1, 80.0}
+fame=18000
+karma=-18000
+make_spellcaster 5,8
+
+ON=@NPCRestock
+	item=i_gold,{450 600}
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	item=random_reagent_necro,{50 80}
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+
+[CHARDEF 78]
+defname=c_lich_ancient
+defname2=c_liche_ancient
+NAME=Ancient Lich
+sound=412
+ICON=i_pet_LICH
+dam=15, 27
+armor=60
+RESOURCES=
+CAN=MT_WALK
+DESIRES=t_bone,i_gold,t_wand,t_reagent,e_undead
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Ancient Lich
+
+ON=@Create
+faction=faction_undead
+npc=brain_monster
+str={216, 305}
+dex={96, 115}
+int={966, 1045}
+maxhits={560, 595}
+resphysical={55, 65}
+resfire={25, 30}
+rescold={50, 60}
+respoison={50, 60}
+resenergy={25, 30}
+evaluatingintel={120.1, 130.0}
+magery={120.1, 130.0}
+meditation={100.1, 101.0}
+Poisoning={100.1, 101.0}
+magicresistance={175.2, 200.0}
+tactics={90.1, 100.0}
+wrestling={75.1, 100.0}
+necromancy={120.1, 130.0}
+spiritspeak={120.1, 130.0}
+fame=23000
+karma=-23000
+make_spellcaster 5,8
+
+ON=@NPCRestock
+	item=i_gold,{1500 1700}
+	item=random_reagent_necro,{150 200}
+	//item={random_fourth_circle 1 random_fifth_circle 1},2
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+
+[CHARDEF 26]
+DEFNAME=c_spectre
+NAME=Spectre
+SOUND=0482
+ICON=i_pet_GHOUL
+dam=7, 11
+armor=28
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP
+FOODTYPE=
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Spectre
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+color=04001
+str={76, 100}
+dex={76, 95}
+int={36, 60}
+maxhits={46, 60}
+resphysical={25, 30}
+rescold={15, 25}
+respoison={10, 20}
+evaluatingintel={55.1, 70.0}
+magery={55.1, 70.0}
+magicresistance={55.1, 70.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+fame=4000
+karma=-4000
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=random_reagent,10
+
+[CHARDEF 50]
+DEFNAME=c_skeleton
+NAME=Skeleton
+SOUND=048d
+ICON=i_pet_SKELETON
+CAN=MT_WALK
+dam=3, 7
+armor=16
+RESOURCES=8 i_reag_bone
+FOODTYPE=
+DESIRES=t_bone,i_gold
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Skeleton
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={56, 80}
+dex={56, 75}
+int={16, 40}
+maxhits={34, 48}
+resphysical={15, 20}
+resfire={5, 10}
+rescold={25, 40}
+respoison={25, 35}
+resenergy={5, 15}
+magicresistance={45.1, 60.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+fame=450
+karma=-450
+
+ON=@NPCRestock
+	item=i_gold,{25 50}
+	item=random_bone_armor
+
+[CHARDEF 56]
+DEFNAME=c_skeleton_w_axe
+NAME=Skeleton
+SOUND=048d
+ICON=i_pet_SKELETON
+DAM=6,12
+ARMOR=8
+RESOURCES=8 i_reag_bone
+CAN=MT_WALK|MT_USEHANDS|MT_RUN
+FOODTYPE=
+DESIRES=t_bone,i_gold
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Skeleton (Axe)
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={56, 80}
+dex={56, 75}
+int={16, 40}
+maxhits={34, 48}
+resphysical={15, 20}
+resfire={5, 10}
+rescold={25, 40}
+respoison={25, 35}
+resenergy={5, 15}
+magicresistance={45.1, 60.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+fame=450
+karma=-450
+
+ON=@NPCRestock
+	item=i_gold,{25 50}
+	item=random_bone_armor
+
+[CHARDEF 57]
+defname=c_bone_knight
+DEFNAME2=c_skeleton_w_sword
+NAME=Bone Knight
+SOUND=451
+ICON=i_pet_SKELETON
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP
+dam=8, 18
+armor=40
+RESOURCES=8 i_reag_bone
+DESIRES=t_bone,i_gold
+FOODTYPE=
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Bone Knight
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={196, 250}
+dex={76, 95}
+int={36, 60}
+maxhits={118, 150}
+resphysical={35, 45}
+resfire={20, 30}
+rescold={50, 60}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={85.1, 100.0}
+wrestling={85.1, 95.0}
+fame=3000
+karma=-3000
+
+on=@npcrestock
+	item=i_gold,{175 225}
+	item=random_platemail_armor
+
+
+[CHARDEF 0900]
+DEFNAME=c_skeletonarcher
+NAME=Skeleton Archer
+ID=c_SKELETON_W_AXE
+sound=451
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+DAM=2,8
+ARMOR=8
+RESOURCES=8 i_reag_bone
+BLOODCOLOR=042
+FOODTYPE=
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Skeleton Archer
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={56, 80}
+dex={56, 75}
+int={16, 40}
+maxhits={34, 48}
+resphysical={15, 20}
+resfire={5, 10}
+rescold={25, 40}
+respoison={25, 35}
+resenergy={5, 15}
+magicresistance={45.1, 60.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+archery={45.1, 55.0}
+fame=450
+karma=-450
+
+ON=@NPCRestock
+	item=i_gold,{25 50}
+	item=i_bow
+	item=i_arrow,{25 35}
+	item=random_bone_armor
+
+[CHARDEF 148]
+DEFNAME=c_skeletal_mage
+DEFNAME2=c_skeleton_mage
+NAME=Skeletal Mage
+sound=451
+dam=3, 7
+ARMOR=38
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+RESOURCES=8 i_reag_bone
+BLOODCOLOR=042
+TEVENTS=e_Undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Skeleton Mage
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={76, 100}
+dex={56, 75}
+int={186, 210}
+maxhits={46, 60}
+resphysical={35, 40}
+resfire={20, 30}
+rescold={50, 60}
+respoison={20, 30}
+resenergy={30, 40}
+evaluatingintel={60.1, 70.0}
+magery={60.1, 70.0}
+magicresistance={55.1, 70.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+necromancy={89, 99.1}
+spiritspeak={90.0, 99.0}
+fame=3000
+karma=-3000
+make_spellcaster 1,3
+
+ON=@NPCRestock
+	item=i_gold,{125 150}
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	item=random_reagent,3
+	item=random_reagent_necro,{3 10}
+
+
+[CHARDEF 147]
+DEFNAME=c_skeleton_knight
+NAME=Skeletal Knight
+dam=8, 18
+armor=40
+sound=451
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+RESOURCES=8 i_reag_bone
+BLOODCOLOR=042
+TEVENTS=e_Undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Skeleton Knight
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={196, 250}
+dex={76, 95}
+int={36, 60}
+maxhits={118, 150}
+resphysical={35, 45}
+resfire={20, 30}
+rescold={50, 60}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={85.1, 100.0}
+wrestling={85.1, 95.0}
+fame=3000
+karma=-3000
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=random_platemail_armor
+
+
+[CHARDEF c_bone_magi]
+DEFNAME=c_bone_magi
+NAME=Bone Magi
+id=c_skeleton_mage
+dam=3, 7
+armor=38
+RESOURCES=8 i_reag_bone
+BLOODCOLOR=042
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+TEVENTS=e_Undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Bone Magi
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={76, 100}
+dex={56, 75}
+int={186, 210}
+maxhits={46, 60}
+resphysical={35, 40}
+resfire={20, 30}
+rescold={50, 60}
+respoison={20, 30}
+resenergy={30, 40}
+evaluatingintel={60.1, 70.0}
+magery={60.1, 70.0}
+magicresistance={55.1, 70.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+necromancy={89, 99.1}
+spiritspeak={90.0, 99.0}
+fame=3000
+karma=-3000
+
+ON=@NPCRestock
+	item=i_gold,{125 150}
+	//item={random_fourth_circle 1 random_fifth_circle 1}	
+	item=random_reagent,3
+	item=random_reagent_necro,{3 10}
+
+[CHARDEF 154]
+DEFNAME=c_mummy
+NAME=Mummy
+SOUND=471
+ICON=i_pet_mummy
+dam=13, 23
+armor=50
+CAN=MT_WALK|MT_USEHANDS
+MOVERATE=110
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+BLOODCOLOR=042
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=01
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Mummy
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={346, 370}
+dex={71, 90}
+int={26, 40}
+maxhits={208, 222}
+resphysical={45, 55}
+resfire={10, 20}
+rescold={50, 60}
+respoison={20, 30}
+resenergy={20, 30}
+magicresistance={15.1, 40.0}
+tactics={35.1, 50.0}
+wrestling={35.1, 50.0}
+fame=4000
+karma=-4000
+
+ON=@NpcRestock
+	item=i_gold,[275 325}
+	item=random_potion
+	item=random_jewel
+	item=i_reag_garlic,5
+	item=i_bandage,10
+	//item=tm_magic_items
+	//item=i_treasure_map1,R99
+	//item=i_seed_fragrant
+	//item=i_see_peculiar
+
+[chardef 310]
+defname=c_Wailing_Banshee
+NAME=Wailing Banshee
+SOUND=0482
+ICON=i_pet_wailingbanshee
+dam=10, 14
+armor=19
+CAN=MT_WALK|MT_FLY
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+BLOODCOLOR=042
+//RESDISPDNID=c_spectre
+//RESLEVEL=3
+//RESDISPDNHUE=01
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Wailing Banshee
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={126, 150}
+dex={76, 100}
+int={86, 110}
+maxhits={76, 90}
+resphysical={50, 60}
+resfire={25, 30}
+rescold={70, 80}
+respoison={30, 40}
+resenergy={40, 50}
+magicresistance={70.1, 95.0}
+tactics={45.1, 70.0}
+wrestling={50.1, 70.0}
+fame=1500
+karma=-1500
+
+ON=@NpcRestock
+	item=i_gold,{50 100}
+
+[chardef 309]
+defname=c_patchwork_skeleton
+NAME=Patchwork Skeleton
+SOUND=048d
+ICON=i_pet_patchwork_sklt
+dam=18, 22
+armor=54
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+BLOODCOLOR=042
+//RESDISPDNID=c_skeleton
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Patchwork Skeleton
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={96, 120}
+dex={71, 95}
+int={16, 40}
+maxhits={58, 72}
+resphysical={55, 65}
+resfire={50, 60}
+rescold={70, 80}
+respoison={100}
+resenergy={40, 50}
+magicresistance={70.1, 95.0}
+tactics={55.1, 80.0}
+wrestling={50.1, 70.0}
+fame=500
+karma=-500
+
+ON=@NpcRestock
+	item=i_gold,{50 100}
+
+[chardef 305]
+defname=c_Gore_Fiend
+NAME=Gore Fiend
+SOUND=224
+ICON=i_pet_gorefiend
+dam=15, 21
+armor=24
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_headless
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Gore Fiend
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={161, 185}
+dex={41, 65}
+int={46, 70}
+maxhits={97, 111}
+resphysical={35, 45}
+resfire={25, 35}
+rescold={15, 25}
+respoison={5, 15}
+resenergy={30, 40}
+magicresistance={40.1, 55.0}
+tactics={45.1, 70.0}
+wrestling={50.1, 70.0}
+fame=1500
+karma=-1500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+
+
+[chardef 304]
+defname=c_flesh_golem
+NAME=Flesh Golem
+SOUND=684
+ICON=i_pet_fleshgolem
+resphysical={50, 60}
+armor=34
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_skeleton
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Flesh Golem
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={176, 200}
+dex={51, 75}
+int={46, 70}
+maxhits={106, 120}
+dam={18, 22}
+resfire={25, 35}
+rescold={15, 25}
+respoison={60, 70}
+resenergy={30, 40}
+magicresistance={50.1, 75.0}
+tactics={55.1, 80.0}
+wrestling={60.1, 70.0}
+fame=1000
+karma=-1800
+
+ON=@NpcRestock
+	item=i_gold,{125 175}
+
+[CHARDEF 153]
+DEFNAME=c_ghoul
+NAME=Ghoul
+SOUND=0482
+ICON=i_pet_ZOMBIE
+FOODTYPE=
+CAN=MT_WALK
+dam=7, 9
+armor=28
+TEVENTS=e_Undead
+BLOODCOLOR=042
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Ghoul
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+str={76, 100}
+dex={76, 95}
+int={36, 60}
+maxhits={46, 60}
+maxmana=0
+resphysical={25, 30}
+rescold={20, 30}
+respoison={5, 10}
+resenergy={10, 20}
+magicresistance={45.1, 60.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+fame=2500
+karma=-2500
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=random_weapon
+
+[CHARDEF 748]
+DEFNAME=c_wraith
+NAME=Wraith
+SOUND=0482
+ICON=i_pet_GHOUL
+FOODTYPE=
+CAN=MT_WALK
+dam=7, 11
+armor=28
+TEVENTS=e_Undead
+BLOODCOLOR=042
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Wraith
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+color=04001
+str={76, 100}
+dex={76, 95}
+int={36, 60}
+maxhits={46, 60}
+resphysical={25, 30}
+rescold={15, 25}
+respoison={10, 20}
+evaluatingintel={55.1, 70.0}
+magery={55.1, 70.0}
+magicresistance={55.1, 70.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+fame=4000
+karma=-4000
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=random_reagent,10
+
+[CHARDEF c_bogle]
+DEFNAME=c_bogle
+ID=c_spectre
+NAME=Bogle
+SOUND=0482
+ICON=i_pet_GHOUL
+dam=7, 11
+armor=28
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP
+FOODTYPE=
+BLOODCOLOR=042
+TEVENTS=e_undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Bogle
+
+ON=@Create
+faction=faction_undead
+NPC=brain_monster
+color=04001
+str={76, 100}
+dex={76, 95}
+int={36, 60}
+maxhits={46, 60}
+resphysical={25, 30}
+rescold={15, 25}
+respoison={10, 20}
+evaluatingintel={55.1, 70.0}
+magery={55.1, 70.0}
+magicresistance={55.1, 70.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 55.0}
+fame=4000
+karma=-4000
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=random_reagent,10
+
+[CHARDEF 251]
+Name=Revenant Lion
+DEFNAME=c_revenant_lion
+SOUND=0515
+dam=18, 24
+ARMOR=18
+CAN=MT_WALK|MT_RUN
+ICON=i_pet_ravlion
+//RESDISPDNID=c_dog
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Ravenant Lion
+
+on=@create
+faction=faction_undead
+NPC=BRAIN_MONSTER
+str={276, 325}
+dex={156, 175}
+int={76, 105}
+maxhits={251, 280}
+resphysical={40, 60}
+resfire={20, 30}
+rescold={50, 60}
+respoison={55, 65}
+resenergy={40, 50}
+evaluatingintel={80.1, 90.0}
+magery={80.1, 90.0}
+poisoning={120.1, 130.0}
+magicresistance={70.1, 90.0}
+tactics={60.1, 80.0}
+wrestling={80.1, 88.0}
+fame=4000
+karma=-4000
+
+on=@npcrestock
+	item=i_gold,{500 700}
+	//item=tm_magic_items,2
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	item=random_bones
+	item={random_body_parts_1 1 random_body_parts_2 1},R100
+	item=random_reagent_necro,{6 8}
+
+[CHARDEF 252]
+defname=c_lady_of_the_snow
+DEFNAME2=c_lady_of_snow
+Name=Lady of the Snow
+sound=0482
+ICON=i_pet_ladysnow
+CAN=MT_WALK|MT_RUN
+dam=13, 20
+ARMOR=18
+CATEGORY=New Monsters
+//RESDISPDNID=c_woman
+//RESLEVEL=3
+//RESDISPDNHUE=33
+SUBSECTION=SE
+DESCRIPTION=Lady of Snow
+SOUND=snd_elementl_airelem5
+
+on=@create
+faction=faction_undead
+NPC=BRAIN_MONSTER
+str={276, 305}
+dex={106, 125}
+int={471, 495}
+maxhits={596, 625}
+resphysical={45, 55}
+resfire={40, 55}
+rescold={70, 90}
+respoison={60, 70}
+resenergy={65, 85}
+magery={95.1, 110.0}
+magicresistance={90.1, 105.0}
+tactics={80.1, 100.0}
+wrestling={80.1, 100.0}
+necromancy={90, 110.0}
+spiritspeak={90.0, 110.0}
+fame=15200
+karma=-15200
+
+on=@npcrestock
+	item=i_gold,{800 1000}
+	//item=tm_magic_items,3
+	item=random_reagent,3
+
+
+[chardef 03ca]
+defname=c_Restless_Soul
+defname2=c_grim_reaper
+name=restless soul
+soundidle=0107
+soundnotice=01bf
+sounddie=0fd
+BLOODCOLOR=042
+can=mt_walk|mt_run|mt_usehands
+dam=1, 10
+armor=6
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	color=0453
+	str={26, 40}
+	dex={26, 40}
+	int={26, 40}
+	maxhits={16, 24}
+	resphysical={15, 25}
+	resfire={5, 15}
+	rescold={25, 40}
+	respoison={5, 10}
+	resenergy={10, 20}
+	magicresistance={20.1, 30.0}
+	swordsmanship=20.1, 30.0}
+	tactics={20.1, 30.0}
+	wrestling={20.1, 30.0}
+	fame=500
+	karma=-500
+
+on=@npcrestock
+	item=i_gold,{25 50}
+	
+	
+[chardef 155]
+defname=c_Rotting_Corpse
+name=Rotting Corpse
+sound=471
+can=mt_walk|mt_run|mt_equip|mt_usehands
+BLOODCOLOR=042
+dam=8, 10
+armor=40
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	str={301, 350}
+	dex={75}
+	int={151, 200}
+	maxhits={1200}
+	maxstam={150}
+	maxmana={0}
+	resphysical={35, 45}
+	resfire={20, 30}
+	rescold={50, 70}
+	respoison={40, 50}
+	resenergy={20, 30}
+	poisoning={ 120.0}
+	magicresistance={250.0}
+	tactics={100.0}
+	wrestling={90.1, 100.0}
+	fame=6000
+	karma=-6000
+
+on=@npcrestock
+	item=i_gold,{1000 1250}
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+[chardef c_mummy_unfrozen]
+defname=c_mummy_unfrozen
+name=Unfrozen Mummy
+id=c_mummy
+sound=01D7
+can=mt_walk|mt_run|mt_equip|mt_usehands
+BLOODCOLOR=042
+dam=16, 20
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	color=0480
+	str={450, 500}
+	dex={200, 250}
+	int={800, 850}
+	maxhits={1500}
+	resphysical={35, 40}
+	resfire={20, 30}
+	rescold={60, 80}
+	respoison={20, 30}
+	resenergy={70, 80}
+	wrestling={90.0, 100.0}
+	tactics={100.0}
+	magicresistance={250.0}
+	magery={50.0, 60.0}
+	evaluatingintel={50.0, 60.0}
+	meditation={80.0}
+	fame=25000
+	karma=-25000
+
+
+[chardef c_Shade]
+defname=c_Shade
+name=Shade
+id=c_wraith
+sound=0482
+can=mt_walk|mt_run|mt_equip|mt_usehands
+BLOODCOLOR=042
+dam=7, 11
+armor=28
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	color=04001
+	str={76, 100}
+	dex={76, 95}
+	int={36, 60}
+	maxhits={46, 60}
+	resphysical={25, 30}
+	rescold={15, 25}
+	respoison={10, 20}
+	evaluatingintel={55.1, 70.0}
+	magery={55.1, 70.0}
+	magicresistance={55.1, 70.0}
+	tactics={45.1, 60.0}
+	wrestling={45.1, 55.0}
+	fame=4000
+	karma=-4000
+
+on=@npcrestock
+	item=i_gold,{50 100}
+	item=random_reagent,10
+
+[chardef 722]
+defname=c_Undead_Guardian
+name=undead guardian
+sound=1606
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=8, 18
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	str={212}
+	dex={76}
+	int={56}
+	maxhits={138}
+	resphysical={38}
+	resfire={24}
+	rescold={58}
+	respoison={28}
+	resenergy={38}
+	magicresistance={66.6}
+	tactics={86.2}
+	wrestling={86.9}
+	fame=3000
+	karma=-3001
+
+on=@npcrestock
+	item=i_gold,{1000 1300}
+	//item=tm_magic_items,{4 5}
+	item=random_reagent_necro,{5 10}
+	item=i_undying_flesh
+	item=i_bone_armor_blue
+	item=i_pottery_fragments
+	item=i_tattered_scroll
+	
+[chardef c_Undead_Guardian_putrid]
+defname=c_Undead_Guardian_putrid
+id=c_undead_guardian
+name=putrid undead guardian
+sound=1606
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=3, 7
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	str={79}
+	dex={63}
+	int={187}
+	maxhits={553}
+	resphysical={40}
+	resfire={23}
+	rescold={57}
+	respoison={29}
+	resenergy={39}
+	magicresistance={62.7}
+	tactics={45.4}
+	wrestling={50.7}
+	fame=3000 
+	karma=-3001
+
+on=@npcrestock
+	item=i_gold,{1000 1300}
+	item=random_reagent_necro,{5 10}
+	item=i_undying_flesh
+
+
+[chardef c_Skeletal_Lich]	
+defname=c_skeletal_lich
+defname2=c_skeletal_liche
+name=skeletal lich
+id=c_patchwork_skeleton
+sound=048D
+dam=8, 10 
+armor=40 
+can=mt_walk|mt_run|
+BLOODCOLOR=042
+
+on=@create
+	faction=faction_undead
+	color=1345
+	npc=brain_monster
+	str={ 301, 350 }
+	dex={ 75 }
+	int={ 151, 200 }
+	maxhits={ 1200 }
+	maxstam={ 150 }
+	maxmana={ 0 }
+	resPhysical={35, 45 }
+	resFire={0, 30 }
+	resCold={50, 70 }
+	resPoison={40, 50 }
+	resEnergy={20, 30 }
+	EvaluatingIntel={127.2 }
+	Magery={127.2 }
+	Necromancy={100.0, 120.0 }
+	MagicResistance={187.1 }
+	Tactics={91.7 }
+	Wrestling={98.5 }
+	fame=6000
+	karma=-6000
+
+on=@npcrestock
+	//unknown
+
+[chardef c_Wight]
+defname=c_Wight
+name=Wight
+id=252
+sound=0482
+can=mt_walk|mt_run|mt_usehands
+dam=13, 20
+armor=19
+BLOODCOLOR=042
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	color=1153
+	str={150, 200}
+	dex={50, 60}
+	int={150, 200}
+	maxhits={150, 250}
+	//resphysical={35, 45}
+	resfire={30, 40}
+	rescold={50, 60}
+	respoison={40, 50}
+	resenergy={50, 60}
+	magicresistance={40.0, 50.0}
+	tactics={45.0, 55.0}
+	wrestling={50.0, 60.0}
+	magery={60.0, 80.0}
+	meditation={50.0, 60.0}
+	necromancy={40.0, 69.3}
+	spiritspeak={40.8, 68.9}
+	fame=1500
+	karma=-1500
+
+ON=@NpcRestock
+	item=i_gold,{50 100}
+
+
+[chardef c_Undead_Gargoyle]
+defname=c_Undead_Gargoyle
+name=Undead Gargoyle
+id=722
+sound=372
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=15, 27
+armor=32
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	str={250, 350}
+	dex={120, 140}
+	int={250, 350}
+	maxhits={200, 300}
+	//resphysical={45, 55}
+	resfire={30, 40}
+	rescold={40, 55}
+	respoison={55, 65}
+	resenergy={40, 50}
+	evaluatingintel={90.1, 110.0}
+	magery={120}
+	magicresistance={100.1, 120.0}
+	tactics={60.1, 70.0}
+	wrestling={60.1, 70.0}
+	necromancy={70, 120}
+	spiritspeak={62.9, 113.7}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{900 1200}
+	item=i_undead_gargoyle_medallion,R99
+	item=i_undead_gargoyle_horns,R99
+	item=random_bones
+	//ITEM=random_scroll_mysticisim
+	item=random_reagents,{3 6}
+
+[chardef c_Pestilent_Bandage]
+// Neither Stratics nor UOGuide have much description 
+// beyond being a Grey Mummy. BodyValue, Sound and 
+// Hue are all guessed until they can be verified.
+// Loot and Fame/Karma are also guesses at this point.
+defname=c_Pestilent_Bandage
+name=pestilent bandage
+id=154
+sound=471 
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=13, 23
+armor=28 
+BLOODCOLOR=042
+
+on=@create	
+	faction=faction_undead
+	npc=brain_monster
+	color=0515 
+	str={691, 740}
+	dex={141, 180}
+	int={51, 80}
+	maxhits={415, 445}
+	//resphysical={45, 55}
+	resfire={10, 20}
+	rescold={50, 60}
+	respoison={20, 30}
+	resenergy={20, 30}
+	poisoning={ 0.0, 10.0}
+	anatomy={0}
+	magicresistance={75.0, 80.0}
+	tactics={80.0, 85.0}
+	wrestling={70.0, 75.0}
+	fame=20000
+	karma=-20000
+
+ON=@NpcRestock
+	item=i_gold,[275 325}
+	item=random_potion
+	item=random_jewel
+	item=i_reag_garlic,5
+	item=i_bandage,10
+	//item=tm_magic_items
+	//item=i_treasure_map1,R99
+	//item=i_seed_fragrant
+	//item=i_see_peculiar
+
+[chardef 740]
+defname=c_dream_wraith
+name=dream wraith
+sound=0482
+soundhit=05f1
+sounddie=05f2
+soundgethit=05f3
+soundidle=05f4
+can=mt_walk|mt_run|mt_usehands|mt_equip
+dam=18,25
+armor=55
+desires=t_coin,t_gold,t_gem,t_wand,t_potion,t_scroll,t_reagent
+aversions=t_trap,r_civilization
+tevents=e_undead
+category=monsters
+subsection=undeads
+description=wraith, dream
+
+on=@create
+    npc=brain_monster
+    bloodcolor=colors_green
+    fame=4000
+    karma=-4000
+    str={200 300}
+    maxhits={550 650}
+    dex={100 200}
+    int={600 700}
+    resphysical={0 10}
+    rescold={30 50}
+    resenergy={20 30}
+    resfire={40 50}
+    respoison={40 50}
+    archery={50.0 70.0}
+    anatomy={0.0 10.0}
+    evaluatingintel={100.0 120.0}
+    fencing={50.0 70.0}
+    macefighting={50.0 70.0}
+    magery={100.0 120.0}
+    magicresistance={120.0 150.0}
+    meditation={100.0 110.0}
+    necromancy={90.0 100.0}
+    parrying={70.0 90.0}
+    swordsmanship={50.0 70.0}
+    tactics={70.0 80.0}
+    wrestling={90.0 100.0}
+
+
+
+
+[EOF]

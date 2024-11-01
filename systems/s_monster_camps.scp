@@ -1,0 +1,567 @@
+//Monster Camps by Soulless
+//v1.0
+//11:43 PM 5/27/2021
+
+
+
+///////////////////////////////
+// Monster Camp Multis
+
+
+[itemdef m_monster_camp]	//this is a custom monster camp
+defname=m_monster_camp
+id=i_memory
+name=Monster Camp
+type=t_multi
+can=can_o_nosleep
+
+category=Multis
+subsection=Misc
+description=Monster Camp
+
+multiregion=-8,-8,8,8
+component=i_fire_pit,0,0,0
+component=i_fire,0,0,3
+component=i_monster_camp_chest,2,-3
+component=i_guillotine,-4,0
+component=0428,-3,-3
+component=i_gruesomestandard_2,3,3
+component=i_stump,-3,2
+component=i_flesh_head,-3,2,9
+component=i_flesh_upper_body,0,6
+component=i_barrel_water,6,0
+component=i_flesh_entrails,0,-7
+
+on=@create
+timerf 0,f_monster_camp_setup
+
+[itemdef m_monster_camp_brigand]
+defname=m_monster_camp_brigand
+id=i_memory
+name=Brigand Camp
+type=t_multi
+can=can_o_nosleep
+
+category=Multis
+subsection=Monster Camps
+description=Brigand Camp
+
+multiregion=-8,-8,8,8
+component=i_fire_pit,0,0,0
+component=01e94,0,0,1
+component=i_monster_camp_chest,0,-4
+component=i_monster_camp_box,2,-4,4
+component=i_sign_post,-3,-3,0	//chain post
+component=i_monster_camp_chains,-2,-2,0	//chains
+component=i_monster_camp_spawner,-4,-4	//west grusome standard
+component=i_monster_camp_spawner2,5,-4	//west grusome standard
+component=i_monster_camp_spawner,-4,6	//east grusome standard
+component=i_monster_camp_spawner2,5,6	//east grusome standard
+
+on=@create
+timerf 0,f_monster_camp_setup { c_h_brigand 1 c_h_brigand_f 1}
+
+[itemdef m_monster_camp_orc]
+defname=m_monster_camp_orc
+id=m_blue_tent
+name=Orc Camp
+type=t_multi
+can=can_o_nosleep
+
+category=Multis
+subsection=Monster Camps
+description=Orc Camp
+
+multiregion=-8,-8,8,8
+component={ m_blue_tent 1 m_green_tent 1},0,0,0
+component=i_monster_camp_chest,0,-2
+component=i_monster_camp_box,2,-2,4
+component={ 0de3 1 0fac 1},0,8	//camp fire or firepit		
+component={ 0974 1 01e95 1},0,8	//cauldron or rabbit on a spit
+component=i_monster_camp_chains,-2,-2,0	//chains
+component=i_monster_camp_spawner,-4,-4	//west grusome standard
+component=i_monster_camp_spawner2,5,-4	//west grusome standard
+component=i_monster_camp_spawner,-4,6	//east grusome standard
+component=i_monster_camp_spawner2,5,6	//east grusome standard
+
+on=@create
+events=+t_monster_camp
+timerf 0,f_monster_camp_setup {c_orc_lord 1 c_orc 1 c_orc_w_club 1 c_orc_captain 1 }
+
+[itemdef m_monster_camp_ratman]
+defname=m_monster_camp_ratman
+id=i_memory
+name=Ratman Camp
+type=t_multi
+can=can_o_nosleep
+
+category=Multis
+subsection=Monster Camps
+description=Ratman Camp
+
+multiregion=-8,-8,8,8
+component={ m_blue_tent 1 m_green_tent 1},0,0,0
+component=i_monster_camp_chest,0,-2
+component=i_monster_camp_box,2,-2,4
+component={ 0de3 1 0fac 1},0,8	//camp fire or firepit		
+component={ 0974 1 01e95 1},0,8	//cauldron or rabbit on a spit
+component=i_monster_camp_chains,-2,-2,0	//chains
+component=i_monster_camp_spawner,-4,-4	//west grusome standard
+component=i_monster_camp_spawner2,5,-4	//west grusome standard
+component=i_monster_camp_spawner,-4,6	//east grusome standard
+component=i_monster_camp_spawner2,5,6	//east grusome standard
+
+on=@create
+timerf 0,f_monster_camp_setup { c_ratman 1 c_ratman_w_sword 1 c_ratman_w_mace 1}
+
+[itemdef m_monster_camp_lizardman]
+defname=m_monster_camp_lizardman
+id=i_memory
+name=Lizardman Camp
+type=t_multi
+can=can_o_nosleep
+
+category=Multis
+subsection=Monster Camps
+description=Lizardman Camp
+
+multiregion=-8,-8,8,8
+component={ m_blue_tent 1 m_green_tent 1},0,0,0
+component=i_monster_camp_chest,0,-2
+component=i_monster_camp_box,2,-2,4
+component={ 0de3 1 0fac 1},0,8	//camp fire or firepit		
+component={ 0974 1 01e95 1},0,8	//cauldron or rabbit on a spit
+component=i_monster_camp_chains,-2,-2,0	//chains
+component=0428,-4,-4	//west grusome standard
+component=0429,5,-4	//west grusome standard
+component=0428,-4,6	//east grusome standard
+component=0429,5,6	//east grusome standard
+
+on=@create
+timerf 0,f_monster_camp_setup {c_lizardman 1 c_lizardman_spear 1 c_lizardman_mace 1}
+
+
+//////////////////////////
+// Monster camp setup
+
+[function f_monster_camp_setup]	
+if !(<isempty <argv[1]>>)		
+  morex=<argv[1]>
+else
+  morex={5 10}
+endif
+if !(<isempty <argv[0]>>)	
+  f_monster_camp_initialize <argv[0]>
+else
+  dorand 9	//uses regular humanoids and sphere custom humanoids
+    f_monster_camp_initialize {c_ratman 1 c_ratman_w_sword 1 c_ratman_w_mace 1 c_ratman_archer 1 c_ratman_mage 1}
+    f_monster_camp_initialize {c_orc_lord 1 c_orc 1 c_orc_w_club 1 c_orc_captain 1 c_orc_mage 1 c_orc_bomber 1 c_orc_scout 1}
+    f_monster_camp_initialize {c_lizardman 1 c_lizardman_spear 1 c_lizardman_mace 1}
+    f_monster_camp_initialize {c_h_brigand 1 c_h_brigand_f 1 c_h_evilmage 1 c_h_evilmage_f 1 c_h_bandit_m 1 c_h_bandit_f 1 c_h_dreadlord 1 c_h_dreadlord_captain 1}
+    f_monster_camp_initialize {c_h_sprite 1 c_h_sprite_mage 1 c_h_sprite_sorc 1 c_h_sprite_archer 1}
+    f_monster_camp_initialize {c_h_barbarian_warrior 1 c_h_barbarian_chieftan 1 c_h_barbarian_shaman 1 c_h_barbarian_warrioress 1}
+    f_monster_camp_initialize {c_h_warlock 1 c_h_witch 1 c_h_witch_high 1}
+    f_monster_camp_initialize {c_h_woodelf_elite_ranger 1 c_h_woodelf_elite_warrior 1 c_h_woodelf_ranger 1 c_h_woodelf_hunter 1 c_h_woodelf_archer 1 c_h_woodelf_fighter 1}
+    f_monster_camp_initialize {c_darkelf_war_sword 1 c_darkelf_fight_mace 1 c_darkelf_grunt 1 c_darkelf_fight_sword 1 c_darkelf_war_axe 1}
+  enddo
+endif
+
+
+[function f_monster_camp_initialize]
+ref1=<uid>
+ref1.removeallcomps
+ref1.multicreate
+ref1.attr=013
+ref1.morex=4
+ref1.timer=6*60*60		//monster camps disappear in about 6 hours	
+ref1.events=+t_monster_camp
+foritems 6
+  if (<type>==t_monster_camp_spawner)
+    more1=<args>
+  endif
+endfor
+
+[typedef t_monster_camp]	//really just a placeholder
+
+[itemdef i_monster_camp_spawner]
+defname=i_monser_camp_spawner
+id=0428
+type=t_monster_camp_spawner
+
+[itemdef i_monster_camp_spawner2]
+defname=i_monser_camp_spawner
+id=0429
+type=t_monster_camp_spawner
+
+[typedef t_monster_camp_spawner]
+
+on=@create
+timer=1
+
+on=@timer
+if !(<isempty <more1>>)
+  serv.newnpc <more1>
+  ref1=<new>
+  serv.newitem i_monster_camp_monster_memory
+  new.link=<uid>
+  ref1.events=+e_monster_camp_npc
+  ref1.equip <new>
+  ref1.home=<p>
+  ref1.homedist=5
+  ref1.p=<p>
+endif
+return 1
+
+on=@destroy
+ref1=<uid>
+forchars 20	
+  if (<findid.i_monster_camp_monster_memory.isvalid>) && (<findid.i_monster_camp_monster_memory.link>==<ref1>)
+    remove
+  endif
+endfor
+
+[events e_monster_camp_npc]	//really just a placeholder
+
+[itemdef i_monster_camp_chains]
+defname=i_monster_camp_chains
+id=01a07
+type=t_normal
+
+on=@create
+timer=1
+
+on=@timer
+serv.newnpc {c_kidnapped_noble 1 c_kidnapped_noble_f 1}
+ref1=<new>
+more1=<link>	//chains will 
+link=<ref1>
+ref1.flags |= statf_freeze
+ref1.events=+e_kidnapped_noble
+serv.newitem i_kidnapped_noble_memory
+new.link=<uid>
+new.timer=1
+ref1.equip <new>
+ref1.p=<p>
+forinstances i_bulletin_board
+  f_kidnapped_noble_message_add <ref1>
+endfor
+return 1
+
+on=@destroy
+serv.log (<link.isvalid>) && (<link.findid.i_kidnapped_noble_memory.isvalid>)
+if (<link.isvalid>) && (<link.findid.i_kidnapped_noble_memory.isvalid>)  // && (<link.findid.i_kidnapped_noble_memory.isvalid>)
+  serv.log Monster camp chains destroyed <uid> @ <topobj.p>. link = <link>. noble memory = <link.findid.i_kidnapped_noble_memory>
+  ref1=<link.findid.i_kidnapped_noble_memory>
+  if (<ref1.isvalid>) && (<ref1.more1> != 2)	//remove NPC if not being escorted
+    ref1.topobj.remove  
+  endif
+endif
+forchars 0	//incase the noble was freed but no escorted accepted	
+  if (<findid.i_kidnapped_noble_memory.isvalid>) && (<findid.i_kidnapped_noble_memory.link>==04fffffff)
+    remove	
+  endif
+endfor
+
+[function f_kidnapped_noble_message_add]
+if (<topobj> != <uid>) 
+  return 1
+endif
+f_kidnapped_noble_message_remove <args>
+ref1=<args>
+serv.newitem 0eb0
+new.type=t_message
+new.link=<ref1>	
+new.timestamp=<f_get_timestamp>  
+dorand 2
+  new.name=#names_humanmale	
+  new.name=#names_humanfemale
+enddo
+new.author=<new.name>
+dorand 9
+  new.name=Help Us!!
+  new.name=Help us, please!
+  new.name=Adventurers needed!
+  new.name=Seeking assistance
+  new.name=In need of aid
+  new.name=A friend was kidnapped!
+  new.name=Can anyone assist us?
+  new.name=A Kidnapping!
+  new.name=Help!
+enddo
+new.body.0=Help us please! <ref1.name> hath
+new.body.1=been kidnapped by <ref1.f_monster_camp_type>!
+new.body.2=We believe that <ref1.sex he/she> is held at
+new.body.3=<ref1.sextantp>
+new.cont=<uid>
+new.update
+
+[function f_kidnapped_noble_message_remove]
+if (<topobj> == <uid>)
+  forcont <uid> 0 
+    if (<link>==<args>)
+      remove
+    endif
+  endfor
+endif
+
+
+[itemdef i_monster_camp_chest]
+id=i_chest_metal
+
+on=@create
+dispid={ 09ab 1 0e41 1 0e43 1 }
+events=+t_monster_camp_chest
+
+[itemdef i_monster_camp_box]
+id=i_crate_md
+
+on=@create
+dispid={ 09a8 1 09a9 1 09aa 1 0e77 1 }
+events=+t_monster_camp_chest
+
+[typedef t_monster_camp_chest]
+
+on=@click
+message <name>
+return 1
+
+on=@dclick
+ref1=<region.uid>
+if (<ref1.morey>)	//these chests are never locked so using this doesnt matter
+  src.sysmessage You must kill the enemies nearby before opening this...
+  return 1
+endif
+type=t_container
+if !(<morex>)	//if its never been looted load it up
+  if !(<R3>)	//25% chance to blow up
+    src.damage <R15,30>,dam_god,<uid>
+    src.effect=2,i_fx_explode,6,15,1
+    src.sound=snd_spell_explosion
+    message You set off a trap!
+    src.message @027 Your skin blisters from the heat
+  endif
+  serv.newitem i_gold,<eval 4*{1 50}>,<uid>
+  for 4
+    serv.newitem random_jewel,<eval 4*{1 3}>,<uid>
+    serv.newitem random_scroll,1,<uid>
+  endfor
+  morex=1
+  //src.sysmessage Inside you find all the loot they have been hoarding from nearby raids...
+endif
+
+[itemdef i_monster_camp_monster_memory]
+defname=i_monster_camp_monster_memory
+defname2=i_monster_camp_memory
+id=i_memory
+name=monster_camp NPC
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+topobj.remove
+return 1
+
+on=@destroy
+topobj.remove
+return 1
+
+
+///////////////////////////////
+// The kidnapping victim
+
+
+[chardef c_kidnapped_noble]
+defname=c_kidnapped_noble
+name=#names_humanmale
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run|can_o_nosleep
+tevents=e_kidnapped_noble
+tspeech=spk_kidnapped_noble
+
+category=Monster Camps
+subsection=NPCs
+Description=Kidnapping Victim
+
+on=@create
+npc=brain_human
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+itemnewbie=random_male_hair
+color=colors_hair
+itemnewbie=random_facial_hair
+color=match_hair
+
+on=@npcrestock
+item=random_light
+item=i_shirt_fancy
+color=colors_all
+item=i_pants_long
+color=colors_all
+color=colors_neutral
+item=i_cape
+color=colors_all
+item=i_sash
+color=colors_all
+item=random_boots
+item=i_sword_long
+item=backpack_loaded
+
+[chardef c_kidnapped_noble_f]
+defname=c_kidnapped_noble_f
+name=#names_humanfemale
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run|can_o_nosleep
+tevents=e_kidnapped_noble
+tspeech=spk_kidnapped_noble
+
+category=Monster Camps
+subsection=NPCs
+Description=Kidnapping Victim (female)
+
+on=@create
+npc=brain_human
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+itemnewbie=random_female_hair
+color=colors_hair
+
+on=@npcrestock
+item=random_light
+item=i_dress_full
+color=colors_neutral
+item=i_cape
+color=colors_all
+item=i_sash
+color=colors_all
+item=random_boots
+item=i_sword_long
+item=backpack_loaded
+
+[events e_kidnapped_noble]
+
+on=@dclick
+if (<findid.i_kidnapped_noble_memory.isvalid>) && (<findid.i_kidnapped_noble_memory.more1>==0)
+  findid.i_kidnapped_noble_memory.link.link=04fffffff	//need to clear the link on the shackles (or just remove them)
+  findid.i_kidnapped_noble_memory.link=04fffffff
+  findid.i_kidnapped_noble_memory.more1=1
+  findid.i_kidnapped_noble_memory.tag.destination=<f_nearest_town>
+  say The Chains are now open! I was kidnapped from <findid.i_kidnapped_noble_memory.tag.destination>, will you help me get home?
+  return 1
+endif
+
+
+on=@regionenter
+if (<findid.i_kidnapped_noble_memory.isvalid>) && (<findid.i_kidnapped_noble_memory.more1>==2)
+  if !(strcmpi(<findid.i_kidnapped_noble_memory.tag.destination>,<argo.region.name>))
+    ref1=<findid.i_kidnapped_noble_memory.link>
+    say We have arrived! I thank thee, <ref1.name>! I have no further need of they services. Here is thy pay.
+    ref1.newgold {375 425}
+    findid.i_kidnapped_noble_memory.more1=3
+    findid.i_kidnapped_noble_memory.timer=300	//delete after 5 minutes 
+    //tag0.override.moverate=
+    //tag0.override.movedelay=
+    act=
+    action=103
+  endif
+endif
+
+on=@death
+f_kidnapped_noble_message_remove <uid>
+if (<findid.i_kidnapped_noble_memory.isvalid>) && (<findid.i_kidnapped_noble_memory.link.isvalid>)
+  findid.i_kidnapped_noble_memory.link.link=04fffffff
+endif
+
+on=@destroy
+f_kidnapped_noble_message_remove <uid>
+if (<findid.i_kidnapped_noble_memory.isvalid>) && (<findid.i_kidnapped_noble_memory.link.isvalid>)
+  findid.i_kidnapped_noble_memory.link.link=04fffffff
+endif
+
+[itemdef i_kidnapped_noble_memory]
+defname=i_kidnapped_noble_memory
+id=i_memory
+name=Kidnapped Noble
+type=t_eq_script
+layer=layer_special
+//more1=0 kidnapped noble still chained up
+//more1=1 kidnapped noble unchained
+//more1=2 kidnapped noble being escorted
+
+on=@timer
+if (<more1>==3)	//waiting to be deleted
+  topobj.remove
+elseif (<more1>==2)	//being escorted
+  if !(<topobj.incombat>)
+    if (<link.distance <topobj>> > 30) || (<link.flags>&statf_dead)
+      topobj.act=
+      topobj.action=101    //Staying
+      topobj.tag.override.movedelay=
+      topobj.tag.override.moverate=
+      more2 += 1
+      if (<more2> >= 900)	//15 minutes standing left alone
+        topobj.remove	
+      endif
+    elseif (<topobj.action> != 100)
+      topobj.act=<link>
+      topobj.action=100    //Following
+      //topobj.tag.override.movedelay=200
+      //topobj.tag.override.moverate=400
+    endif
+  endif
+  timer=5
+elseif (<more1>==1)	//released from chains
+  topobj.say I am waiting for my escort to <tag.kidnapped_noble_destination>, If thou art interested, check the local bulletin board for details, or just say 'I will take thee.'
+  timer=45
+elseif (<more1>==0)	//chained up
+  dorand 3
+    topobj.say Help a poor prisoner!
+    topobj.say Help! Please!
+    topobj.say Quickly, I beg Thee! Unlock my chains! If thou dost look at me close thou canst see them.
+  enddo
+  timer=45
+endif
+return 1
+
+on=@destroy	//remove post if this npc is deleted, or this item
+ref1=<topobj.uid>
+forinstances i_bulletin_board
+  f_kidnapped_noble_message_remove <ref1>
+endfor
+
+
+[speech spk_kidnapped_noble]
+
+on=I will take thee
+if (<findid.i_kidnapped_noble_memory.isvalid>) && (<findid.i_kidnapped_noble_memory.more1>==2)
+  return 1	//already being escorted
+endif
+findid.i_kidnapped_noble_memory.more1=2
+findid.i_kidnapped_noble_memory.link=<src>
+findid.i_kidnapped_noble_memory.timer=0
+flags &= ~ statf_freeze
+say Lead on! Payment will be made when are arrive in <findid.i_kidnapped_noble_memory.tag.destination>.
+ref1=<uid>
+forinstances i_bulletin_board
+  f_kidnapped_noble_message_remove <ref1>
+endfor
+
+[function f_monster_camp_type]
+ref1=<findid.i_kidnapped_noble_memory.link.more1>	//chains are linked to the camp, baseid is set as the more1
+if (<ref1.baseid>==m_monster_camp_brigand)
+  return scoundrelly brigands
+elseif (<ref1.baseid>==m_monster_camp_orc)
+  return evil orcs
+elseif (<ref1.baseid>==m_monster_camp_ratman)
+  return vile ratmen
+elseif (<ref1.baseid>==m_monster_camp_lizardman)
+  return dastardly lizardmen
+endif
+
+
+
+
+[EOF]

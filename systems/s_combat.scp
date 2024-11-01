@@ -1,0 +1,631 @@
+﻿//Combat System by Soulless
+//v2.0
+//11:58 AM 12/7/2020 
+//Ideal CombatFlags=01|080|00100
+
+[defname combat_system]
+combat_speed_scale	 	15000	//15,000 is the UOT2A standard, lower = faster
+combat_monster_flee	 	10	//the % of life which an npc will flee at
+combat_lose_stamina		0	//you will lose stamina every time you swing a weapon (weight / 10 + 1)
+combat_item_damage		2	//% chance that an item will get damaged in combat
+
+combat_swingspeed_pvm		100	//adjusted final swing speed % players vs monsters (lower = faster)
+combat_swingspeed_pvp		100	//adjusted final swing speed % players vs players (lower = faster)
+combat_hitchance_pvm		150	//adjusted final hit chance % players vs monsters (higher = better)	
+combat_hitchance_pvp		150	//adjusted final hit chance % players vs players (higher = better)
+combat_damage_pvm		100	//adjusted final hit damage % players vs monsters (higher = more)
+combat_damage_pvp		100	//adjusted final damage done from players to players (higher = more)
+combat_armor_absorb		100	//the % of damage absorbed from attacks (physical only)
+
+[events e_combat_system]
+//swing_equipping	0	// we are recoiling our weapon.
+//swing_ready		1	// we can swing at any time.
+//swing_swinging	2	// we are swinging our weapon.
+//anim 9 anim for attacks
+
+on=@hitcheck
+if (<argn1> == swing_ready)		//about to swing, we're getting ready
+  if !(<npc>) && (<action> == archery)	//you must be standing still for a moment with archery
+    local.lenservtime = <eval ((strlen (<serv.time>))-1)>
+    local.lasteventwalk = <strsub 0 <local.lenservtime> <i.lasteventwalk>>
+    local.standingstill = <eval (<serv.time>-<local.lasteventwalk>)>
+    if (<local.standingstill> < 10)
+      swing=swing_ready
+      return 1		//do nothing cause we havent stood still
+    endif
+  endif
+elseif (<argn1> == swing_swinging)	//we're actualling swinging our weapon!
+  if !(<npc>) && (<action> == archery)
+    if !(<canseelos <src>>)		//can no longer see target
+      swing=swing_ready
+      return 1
+    endif
+  endif
+endif
+
+// Trying To Hit Someone
+on=@hittry
+local.CombatType=<f_combat_type <src>>
+argn1=<f_combat_swingspeed>
+argn1=<muldiv <def0.combat_swingspeed_<local.CombatType>>,<argn1>,100>
+local.hitchance=<f_combat_hitchance <src>>
+local.hitchance=<muldiv <def0.combat_hitchance_<local.CombatType>>,<local.hitchance>,100>
+if (<findid.i_buff_hitchance>)
+  local.hitchance += 15
+endif
+
+if (<R1,100> < <local.hitchance>) || (<isgm>)
+  actdiff=1  //hit
+else
+  actdiff=-1  //miss
+endif
+if ((<flags>&statf_hidden) || (<flags>&statf_invisible)) && !(<isgm>)
+  reveal
+endif
+if (<npc>)
+  face <src>
+endif
+
+on=@hitmiss		
+ref1=<weapon>
+if (<local.arrow>)
+  local.arrowhandled=1
+endif
+skillgain <action>	//you gain on skill fail as well	
+skillgain tactics
+//if (<ref1.isvalid>) && (<ref1.isaxe>)
+  //skillgain lumberjacking
+//endif
+
+
+
+///////////////////////
+// Parry Chance
+
+on=@HitParry		//fires before @hit
+//serv.log =================================================
+argn1=0		//we're not going to use % of damage
+argn2 |= dam_fixed
+local.damage=<src.f_combat_damage>		//we need to set the damage here, since it fires before @hit
+//serv.log <src.name>'s <qval (<src.weapon.isvalid>)?<src.weapon.name>:fists> can do <local.damage> damage to <name>
+if (<argo.isvalid>) && (<argo.type>==t_shield) && (<src.ischar>) && (<src> != <uid>)
+  Local.ItemParryDamageChance=3
+  local.ParryChance=<f_combat_blockchance>
+  local.ShieldAbsorb=<f_combat_shield_absorb>
+  //serv.log <name> has <local.parrychance>% chance to block <local.ShieldAbsorb> damage of <src.name>'s <dlocal.damage>
+  //say (<R1,100> < <local.ParryChance>)
+  if (<R1,100> < <local.ParryChance>)
+    //serv.log <name> blocked <dlocal.ShieldAbsorb> damage from <src.name>'s attack with <qval (<src.weapon.isvalid>)?<src.weapon.name>:fists>
+    local.damage -= <local.ShieldAbsorb>
+    effect=3,i_fx_glow,6,15,1
+    skillgain parrying
+  elseif (<parrying> < 100)
+    skillgain parrying
+  endif
+endif
+
+
+///////////////////////
+// Hitting Someone
+
+on=@hit
+argn2 |= dam_fixed
+local.ItemDamageChance=<def0.combat_item_damage>  //% chance to damage items during combat
+//argn1=<f_combat_damage>	//already set in @hit? 
+local.CombatType=<f_combat_type <src>>
+//serv.log combat type <local.CombatType>
+argn1=<muldiv <def0.combat_damage_<local.CombatType>>,<argn1>,100>
+//serv.log <name>'s attack carried <argn1> damage to @hit trigger
+if !(<weapon>)	
+  if (<anatomy> >= 800) && (<wrestling> >= 800)
+    //disarm
+    //Active state: You get yourself ready to disarm your opponent. (Next time you are within range of your target you will attempt to Disarm, using 15 stamina each attempt)
+    //Inactive state: You decide to not try to disarm anyone. (You will not attempt to Disarm until reactivated)
+    //Effect on target: Targets weapon is dropped from their hand to their main pack.
+    //stun
+    //Activation: In the UO Client hit alt-O to bring up the options screen. Go to the macros tab and make a new macro. Once you pick a key assignment scroll down to [SecondaryAbility]. When you want to stun someone toggle the ability using this hotkey. Every wrestling attempt while this is active will attempt to stun the target. Each attempt will cost 15 stamina.
+    //Active state: You get yourself ready to stun your opponent.(Next time you are within range of your target you will attempt to Stun Punch, using 15 stamina each attempt)
+    //Inactive state: You decide to not try to stun anyone.(You will not attempt to Stun Punch until reactivated)
+    //Effect on target: Target is stunned for a 4 second duration.
+  endif
+elseif (<weapon.baseid>==i_axe) || (<weapon.baseid>==i_axe_battle) || (<weapon.baseid>==i_axe_two_hand) || (<weapon.baseid>==i_axe_battle_large) || (<weapon.baseid>==i_axe_double) || (<weapon.baseid>==i_axe_exec) || (<weapon.baseid>==i_halberd) || (<weapon.baseid>==i_bardiche)		//Effect on target: Intelligence is reduced by %25 for a duration of 30 seconds. Once concussed, target cannot receive a concussion again for the duration of the effect.
+  if (<eval (<anatomy>/40)> >= <R1,100>) && !(<src.findid.i_combat_special_concussion_blow>)					//Note: Event with zero anatomy there is a small chance to deliver a concussion blow as your stats give you a small boost to anatomy and thus a chance to paralyze a target. 
+    serv.newitem i_combat_special_concussion_blow
+    new.timer=30
+    new.more1=<eval (<src.int>/4)>
+    src.equip <new>
+    src.maxmana -= <new.more1>
+    sysmessage You have delivered a concussion!
+    src.sysmessage You feel disoreinted!
+    src.sound 0308
+  endif
+elseif (<weapon.type>==t_weapon_mace_smith) || (<weapon.type>==t_weapon_mace_staff) 
+  src.stamina -= 4		//every hit from mace weapon reduces stamina
+  if (<weapon.layer>==2)	//Effect on target: 50% Damge bonus on successful application.
+    src.stamina=<qval (<src.stamina> < 0)?0:<src.stamina>>
+    if (<eval (<anatomy>/40)> >= <R1,100>)		
+      argn1 += <eval (<argn1>/2)>	
+      sysmessage You have delivered a crushing blow!
+      src.sysmessage You take extra damage from the crushing attack!
+      src.sound 011c
+    endif 
+  endif
+elseif (<weapon.baseid>==i_spear) || (<weapon.baseid>==i_spear_short) || (<weapon.baseid>==i_pitchfork)	//  Effect on target: Target is paralyzed unable to move or cast spells. Potions, bandages and wands are still functional.
+  if !(<src.findid.i_combat_special_paralyzing_blow>) && (<eval (<anatomy>/40)> >= <R1,100>)			//  Paralysis is unbreakable in any way for a 4 second duration. Once paralyzed, target cannot be paralyzed again for the duration of the effect.	
+    src.tag.nomovetill=<eval (<serv.time>+40)>
+    serv.newitem i_combat_special_paralyzing_blow
+    new.timer=2
+    src.equip <new>
+    sysmessage You deliver a paralyzing blow!
+    src.sysmessage The attack has temporarily paralyzed you!
+    src.sound 011c
+  endif
+endif
+
+if (<argo.isvalid>) 
+  ref1=<qval (<local.arrow>)?<local.arrow>:<argo>>		//is this an arrow or a regular weapon?
+  if (<ref1.isevent.t_poisoned_weapon>) && !(<src.findid.i_rune_poison>)
+    local.poisonchance=<eval (<poisoning>/4)>
+    local.poisonchance=<qval (<local.poisonchance> < 100)?100:<local.poisonchance>>
+    if (<R1,1000> < <local.poisonchance>)
+      local.poisonstrength=<ref1.tag0.poisonstrength>
+      if !(<npc>) && (<local.poisonstrength> >= 1000)
+        local.poisonstrength=999		//can't go above deadly poison 
+      endif
+      if (<local.arrow>)			//arrows dont have charges they just run out eventually
+        local.arrowhandled=1			//we need to wait for the source fix for the arrow uid to be correct
+      else
+        ref1.tag0.poisoncharges -= 1
+        if (<ref1.tag0.poisoncharges> <= 0)
+          ref1.events=-t_poisoned_weapon
+          ref1.tag0.poisonstrength=
+          sysmessage Your poison weapon has run out of charges.
+        endif
+      endif
+      if !(<src.canbepoisoned>)
+        trysrc <uid> src.message @03b2,3,0,0 *The poison seems to have no effect*
+      else
+        src.poison <local.poisonstrength>
+      endif
+    endif
+  endif
+  //FIXME: add a thing here to remove the poison properties from the arrow that was shot (on the target)
+
+  if (<weapon.isevent.t_enchanted_weapon>) && (<weapon.more2>) && !(<findid.<serv.spell.<weapon.morem>.rune_item>>) && (<weapon.timer> == -1)
+    weapon.more2 -= 1
+    src.timerfms 0,spelleffect <weapon.morem>,600,<uid>,<weapon>	//happens immediatly after damage takes place
+    src.sound <serv.spell.<weapon.morem>.sound>
+    if (<serv.spell.<weapon.morem>.effect_id>)
+      src.effect=3,<serv.spell.<weapon.morem>.effect_id>,6,15,1
+    endif
+    weapon.timer=1
+  endif
+
+endif
+
+
+
+//skillgain anatomy
+//if (<weapon.isvalid>) && (<weapon.isaxe>)
+  //skillgain lumberjacking
+//endif
+
+
+on=@spelleffect
+//not used right now
+
+on=@gethit
+argn2 |= dam_fixed
+local.ItemDamageChance=<def0.combat_item_damage>
+
+ref1=<src>	//your attacker
+
+//serv.log <src.name>'s attack hit <name> for <argn1> damage in the @gethit trigger
+if (<argn2>&dam_physical) && !(<argn2>&dam_god) && !(<argn2>&dam_magic) && !(<argn2>&dam_poison)		//armor absorb just physical damage
+  local.HitLocation=<f_combat_hit_location>
+  local.ItemDamageLayer=<def0.<local.HitLocation>>
+  //local.LowestPossibleDamage=<eval ((<qval (<src.weapon.isvalid>)?<src.weapon.dam.lo>:<dam.lo>>)/4)+1>
+  local.ArmorAbsorb=<f_combat_armor_absorb <local.hitlocation>>	 
+  //serv.log <src.name> hit <name>'s <qval (<findlayer.<local.hitlocation>.isvalid>)?<findlayer.<local.hitlocation>.name>:<def0.armor_<local.hitlocation>_name>> for <dargn1>, it absorbs <local.ArmorAbsorb> damage out of <dargn1>
+  //serv.b @026 <local.ArmorAbsorb>
+  local.ArmorAbsorb=<muldiv <def0.combat_armor_absorb>,<local.ArmorAbsorb>,100>
+  //serv.b @044 <local.ArmorAbsorb>
+  argn1 -= <local.ArmorAbsorb>  
+endif
+
+argn1=<qval (<argn1> < 0)?0:<argn1>>				//we can't do less than 0 damage
+argn1 += <strarg <src.f_combat_special_damage <uid>>>		//add the extra damage from unique weapons
+argn2 |= <streat <src.f_combat_special_damage <uid>>>		//add the damage type flags from unique weapons
+
+	
+if (<ref1.owner>) && (<ref1.owner> != <owner>) 		//hit by a char with an owner, and it's not the same as my owner
+  ref2=<ref1.owner>				
+  if (<ref1> != <uid>) && (<ref2.isvalid>) && (<ref2.ischar>) 	//i got hit by a char with an owner
+    attacker.add <ref2>	
+    if (<argn1> > 0)
+      //serv.log <ref2.name> | dam <attacker.<attacker.id.<ref2>>.dam> + <argn1> == <eval (<attacker.<attacker.id.<ref2>>.dam> + <argn1>)> | <hits> - <argn1> = <eval (<hits> - <argn1>)>  | <hits>/<maxhits>
+      attacker.<attacker.id.<ref2>>.dam += <argn1>		//add the damage we just did to our owners total
+      attacker.<attacker.id.<ref2>>.elapsed=1			//reset their attacker timer
+      if (<isevent.e_champion_boss>)
+        tag0.damage<ref2> += <argn1>				//tag on bos
+      endif
+    endif
+  endif
+endif
+
+if (<isevent.e_champion_boss>) && (<src.isplayer>)
+  tag0.damage<ref1> += <argn1>	//permanent tag on champion bosses for damage (needed for giving rewards)
+endif
+
+if (<ref1.can>&mt_nonfatal) 	//creatures that are non fatal will never kill you
+  local.ItemDamageChance=0
+  if (<argn1> >= <hits>)
+    argn1=0
+  endif
+endif
+
+if (<ref1.weapon.isvalid>) && (<ref1.weapon.tag0.hiteffect>)
+  effect <ref1.weapon.tag0.hiteffect>
+endif
+
+//if !(<npc>) && !(<ref1.npc>) && (<ref1> != <uid>) && (<isonline>)
+  //ref1.ctag0.recentpvp=<serv.time>
+//endif
+
+on=@npcactfight
+if (<def0.combat_monster_flee>) && (<npc>) && ((<can>&mt_walk) || (<can>&mt_run))
+  if !(<isevent.e_npcai>) && !(<isevent.e_champion_boss>) && !(<isevent.e_harrower>) && !(<isundead>)
+    local.healthafterhit=<eval (<hits>-<argn1>)>
+    if (<local.healthafterhit>)
+      if (<muldiv <local.healthafterhit>,100,<maxhits>> < <def0.combat_monster_flee>)	//ERROR HERE MULDIV DEVIDING BY 0
+        argn2=-100	//Run away! Run away!
+      else
+        argn2=100
+      endif
+    endif
+  endif
+endif
+
+//on=@combatdelete
+//if (<npc>)
+  //doswitch <argn2>)
+    //local.reason=forced (unctagorized)
+    //local.reason=max fight time (elapsed)
+    //local.reason=distance/los
+    //local.reason=char doesnt exist
+    //local.reason=forced (ingame/script)
+  //enddo
+  //serv.log Deleting <src.name>(<src>) from <name>(<uid>) attacker list. <qval (<argn1>==0)?Sphere:Script> reason : <local.reason> 
+  //if !(<src.npc>) && (<isevent.e_champion_boss>) 	//never remove attackers from champions
+    //serv.log Preventing deletion of <src.name>(<src>) from <name>(<uid>) attacker list. <qval (<argn1>==0)?Sphere:Script> reason : <local.reason> 
+    //attacker.<attacker.id <src>>.elapsed=0		//reset attacker elapsed time
+    //return 1
+  //endif
+//endif
+
+
+/////////////////////////////////
+// General Combat Functions
+
+[function f_combat_canhit]
+ref1=<args>
+local.distance=<distance <ref1>> 	// storing the distance between me and my target.
+if !(<ref1.isvalid>) || (<ref1.isitem>)            	// if invalid or not a character
+  return 0
+elseif !(<ref1>) || (<ref1> == <uid>)      // i cannot hit the 'air' or myself.
+  return 0
+elseif !(<cansee>) || !(<canseelos <ref1>>) 
+  return 0
+elseif !(<isonline>) || (<flags>&statf_dead) || (<flags>&statf_stone) || (<flags>&statf_freeze) || (<flags>&statf_sleeping) || (<ref1.flags>&statf_dead) || (<ref1.flags>&statf_invul) || (<ref1.flags>&statf_stone) || (<ref1.hits> < 1 )
+  return 0
+elseif ((<tag0.young>) || (<ref1.tag0.young>)) && (<ref1.isplayer>)	//one of us us young and the target is a player
+  return 0
+elseif (<region.isvalid>) && (<ref1.region.isvalid>) && ((<region.safe>) || (<ref1.region.safe>))                // i cannot hit if my region is safe or the target is on a safe region...
+  return 0
+elseif (<region.nopvp>) || (<ref1.region.nopvp>)              // ... same for nopvp regions.
+  if ((<memoryfindtype.memory_ipet.link.isplayer>) || (<isplayer>)) && ((<ref1.memoryfindtype.memory_ipet.link.isplayer>) || (<ref1.isplayer>))
+    return 0
+  endif
+endif
+return 1
+
+[function f_combat_swingspeed]
+//FORMULA: Attack Speed= 15,000 ÷ ( [Dexterity +100] x Weapon Speed )
+local.base=<qval (<weapon>)?<weapon.speed>:25>
+local.speed=<fval (<def0.combat_speed_scale>*10)/((<stamina>+100)*<local.base>)> 	//calculate speed from stamina and weapon
+//if (<weapon.isvalid>) && (<weapon.layer>==2)
+  //local.speed *= 2	//two handed weapons are slower?
+//endif
+local.speed -= 10		//in sphere it adds an animation delay of 1.0 second, account for that here.
+local.speed=<qval (<local.speed> < 0)?0:<local.speed>> 	//nothing can be quicker than 0.0 seconds
+//serv.log <name>(<uid>) swing speed <local.speed>
+
+return <local.speed>
+
+[function f_combat_hitchance]
+ref1=<argv[0]>	//argv0=defender
+//FORMULA: Hit Chance= ( Attacker's Weapon Ability + 50 ) ÷ ( [Defender's Weapon Ability + 50] x 2 )
+local.attackerskill=<<qval (<weapon>)?<weapon.skill>:wrestling>>
+local.defenderskill=<ref1.<qval (<ref1.weapon>)?<ref1.weapon.skill>:wrestling>>
+local.n=<eval (<local.attackerskill>+500)>
+local.x=<eval (<local.defenderskill>+500)*2>
+//serv.log <local.n> / <local.x> = <feval <floatval ((<local.n> / <local.x>)*100)>>	//using floatval
+local.hitchance=<muldiv <local.n>,100,<local.x>>
+//local.n += <eval (<tag0.level>*2)>
+if (<local.n> < 5)
+  local.n=5	//always 5% chance atleast
+endif
+return <local.hitchance>
+ 
+[function f_combat_damage]        //(tactics + str)% of weapon damage		
+//FORMULA: Randomly determine base damage, within weapon's damage range.
+//FORMULA: % of Base Damage that is Dealt= Tactics + 50 //tactics modifier
+//FORMULA: STR % Bonus= STR ÷ 5
+//FORMULA: Anatomy % Bonus= Anatomy ÷ 5
+//FORMULA: Total Damage / 2	(Telamon from UOR stated this)
+ref1=<weapon>		//this is the weapon
+//local.BaseDamage=<eval {<serv.chardef.<baseid>.dam>}>		//get their base damage from the body chardef
+local.BaseDamage=<eval {<dam>}>
+if (<ref1.isvalid>)	//we have a weapon use it instead
+  //local.BaseDamage=<eval {<serv.itemdef.<ref1.baseid>.dam>}>		//get the base damage from the weapon's itemdef
+  local.BaseDamage=<eval {<ref1.dam>}>
+  local.BaseDamage += <ref1.modar>		//apply possible 1.0 damage bonus for each ModAR point
+endif
+local.TacticsModifier=<eval ((<tactics>+500)/10)>			//% damage that will go through 
+local.TacticsModifier=<qval (150 < <local.TacticsModifier>)?150:<qval (<local.TacticsModifier> < 50 )?50:<local.TacticsModifier>>>
+local.StrBonus=<eval (<str>/5)>					//apply bonuses		//+ damage from str
+local.StrBonus=<qval (20 < <local.StrBonus>)?20:<qval (<local.StrBonus> < 2 )?2:<local.StrBonus>>>
+local.AnatomyBonus=<eval (<anatomy>/50)>				//+ damage from anatomy
+local.AnatomyBonus=<qval (20 < <local.AnatomyBonus>)?20:<qval (<local.AnatomyBonus> < 2 )?2:<local.AnatomyBonus>>>
+if (<ref1.isvalid>) && (<ref1.isaxe>)
+  local.LumberJackingBonus=<eval (((<lumberjacking>/100)-2)+<qval (<lumberjacking> < 1000)?0:1>)>
+  local.LumberJackingBonus=<qval (<local.LumberJackingBonus> < 0)?0:<local.LumberJackingBonus>>
+endif
+
+argn1=<muldiv <local.TacticsModifier>,<local.BaseDamage>,100>	//set the base damage based on tactics modifier
+argn1 += <muldiv <local.StrBonus>,<local.BaseDamage>,100>		//add the below bonuses based on the original base damage value
+argn1 += <muldiv <local.AnatomyBonus>,<local.BaseDamage>,100>
+argn1 += <muldiv <local.LumberJackingBonus>,<local.BaseDamage>,100>
+argn1 /= 2		//Telamon from UOR stated final damage result is halved
+if (<ref1.isvalid>) && (<ref1.hits>) 
+  local.Durability=<muldiv <ref1.hits>,100,<ref1.maxhits>>		//durability will affect the final damage value
+  local.Effectiveness=<qval (<local.Durability> < 10)?10:<qval (100 < <local.Durability>)?100:<local.durability>>>		//minimum 10% effectiveness? 
+  argn1=<muldiv <local.Effectiveness>,<local.BaseDamage>,100>	//the weapon is only as effective if it's been taken care of
+endif
+return <argn1>
+
+[function f_combat_blockchance]
+if (<findlayer.2.type>==t_shield)
+  return <eval (<parrying>/20)>  
+else
+  return 0
+endif
+
+[function f_combat_shield_absorb]
+ref1=<findlayer.2>
+if (<action> == archery)		//archery absorbs full AR of the shield
+  return <eval ({<ref1.armor>}+<ref1.modar>)>
+else
+  return <eval (({<ref1.armor>}+<ref1.modar>)/2)>
+endif
+
+[function f_combat_hit_location]
+local.n=<R1,100>
+if (<local.n> < 44)
+  return layer_chest
+elseif (<local.n> < 58)
+  return layer_arms
+elseif (<local.n> < 72)
+  return layer_helm
+elseif (<local.n> < 86)
+  return layer_pants
+elseif (<local.n> < 93)
+  return layer_collar
+else
+  return layer_gloves
+endif
+
+[function f_combat_get_armor_value]
+ref1=<findlayer.<args>>		//piece of armor
+local.armor=<serv.chardef.<baseid>.armor>	//get their natural AR value
+if (<ref1.isvalid>)  	//if they have armor on use that instead
+  local.armor=<eval ({<ref1.armor>}+<ref1.modar>)>
+  if (<ref1.maxhits>) 
+    local.durability=<muldiv <ref1.hits>,100,<ref1.maxhits>>			//durability will affect the final armor value
+  endif
+  local.Effectiveness=<qval (<local.durability> < 10)?10:<qval (100 < <local.durability>)?100:<local.durability>>>		//minimum 10% effectiveness? 
+  local.armor=<muldiv <local.Effectiveness>,<local.armor>,100>	//the armor is only as effective if it's been taken care of
+endif
+local.armor=<qval (<local.armor> < 1)?1:<local.armor>>		//must have an armor rating of atleast 1
+local.armor=<muldiv <def0.armor_<args>_percent>,<local.armor>,100>
+return <local.armor>
+
+[function f_combat_armor_absorb]			
+//args=location we got hit
+//serv.log <name> was hit in the <args> location	
+local.armor=<f_combat_get_armor_value <args>>		//if they have armor on lets gets the real value of that 
+local.absorb=<R<eval (<local.armor>/2)>,<local.armor>>
+return <local.absorb>
+
+[function f_combat_swing_animation]
+ref1=<args>
+if (<ref1.isvalid>) && (<canseelos <ref1>>)
+  if (<action> != archery) && (<distance <ref1>> <= 1)
+    anim 9
+  elseif (<action> == archery) && (<distance <ref1>> >= <serv.ArcheryMinDist>) && (<distance <ref1>> <= <serv.ArcheryMaxDist>)
+    anim 9
+  endif
+endif
+
+[function f_combat_type]
+ref1=<args>
+if ((<npc>) && !(<owner>)) || ((<ref1.npc>) && !(<ref1.owner>))	
+  return pvm
+else
+  return pvp
+endif
+
+
+
+///////////////////////////////////
+// Special Combat Move Memories
+
+
+[itemdef i_combat_special_concussion_blow]
+defname=i_combat_special_concussion_blow
+name=Concussion Blow
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.maxmana += <more1>
+if (<src.mana> > <src.maxmana>)
+  src.mana=<src.maxmana>
+endif
+
+[itemdef i_combat_special_crushing_blow]	//this one isnt really needed??
+defname=i_combat_special_crushing_blow
+name=Crushing Blow
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[itemdef i_combat_special_paralyzing_blow]
+defname=i_combat_special_paralyzing_blow
+name=Paralyzing Blow
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.tag.nomovetill=
+src.flags &= ~ statf_freeze
+
+[function f_combat_detail_message]
+//args = location info
+src.sysmessage <args>
+
+[function f_combat_get_ammo_type]
+if (<findlayer.2.baseid> == i_bow)
+  return i_arrow
+else
+  return i_xbolt
+endif
+return 0
+
+[function f_combat_unpoison_arrows]
+forconttype <args> 1
+  tag0.poisonstrength=
+  tag0.poisoncharges=
+  events=-t_poisoned_weapon
+  color=
+endfor
+
+[function f_combat_special_damage]
+//default = attacker, ref1 = target
+ref1=<args>		
+if (<damphysical>)
+  local.damagetype |= dam_physical
+  local.damage += <eval ({(<damphysical>*1) (<damphysical>*6)}-<local.resist>)>
+  local.damage -= <eval {(<ref1.resphysical>*1) (<resphysical>*6)}>
+  local.damage=<qval (<local.damage> < 0)?0:<local.damage>>
+endif
+if (<damfire>)
+  local.damagetype |= dam_fire
+  local.damage += <eval ({(<damfire>*1) (<damfire>*6)}-<local.resist>)>
+  local.damage -= <eval {(<ref1.resfire>*1) (<resfire>*6)}>
+  local.damage=<qval (<local.damage> < 0)?0:<local.damage>>
+  //ref1.effect=3,i_fx_heal_effect,6,15,1,0489
+endif
+if (<damcold>)
+  local.damagetype |= dam_cold
+  local.damage += <eval ({(<damcold>*1) (<damcold>*6)}-<local.resist>)>
+  local.damage -= <eval {(<ref1.rescold>*1) (<rescold>*6)}>
+  local.damage=<qval (<local.damage> < 0)?0:<local.damage>>
+  //ref1.effect=3,i_fx_vortex,6,15,1,0481
+endif
+if (<dampoison>)
+  local.damagetype |= dam_poison
+  local.damage += <eval ({(<dampoison>*1) (<dampoison>*6)}-<local.resist>)>
+  local.damage -= <eval {(<ref1.respoison>*1) (<respoison>*6)}>
+  local.damage=<qval (<local.damage> < 0)?0:<local.damage>>
+  //ref1.effect=3,i_fx_curse,6,15,1,044
+endif
+if (<damenergy>)
+  local.damagetype |= dam_energy
+  local.damage += <eval ({(<damenergy>*1) (<damenergy>*6)}-<local.resist>)>
+  local.damage -= <eval {(<ref1.resenergy>*1) (<resenergy>*6)}>
+  local.damage=<qval (<local.damage> < 0)?0:<local.damage>>
+  //ref1.effect=3,i_fx_sparkle_2,6,15,1
+endif
+if (<ref1.isundead>) && (<tag0.damundead>)
+  local.damagetype |= dam_physical
+  local.damage += <eval {(<tag0.damundead>*1) (<tag0.damundead>*6)}>
+  //ref1.effect=3,i_fx_curse,6,15,1
+endif
+if (<ref1.isdragon>) && (<tag0.damdragon>)
+  local.damagetype |= dam_physical
+  local.damage += <eval {(<tag0.damdragon>*1) (<tag0.damdragon>*6)}> 
+endif
+return <local.damage>,<local.damagetype>
+
+
+[function f_combat_special_damage_effects]
+
+[function combatanalytics]
+targetf f_combatanalytics_targ <argn>
+sysmessage Select a target to get combat analytics for.
+return 1
+
+[function f_combatanalytics_targ]
+ref1=<argo>		//person wholding the weapon
+ref2=<ref1.weapon>		//weapon they are holding
+ref3=<uid>		//person getting the analytics
+if !(<ref2.isvalid>) 
+  ref3.sysmessage @037 No weapon to run analytics on.
+  return 1
+endif
+local.oldHits=<ref2.hits>
+local.speed=<ref1.f_combat_swingspeed>
+ref1.sysmessage @037 Running combat analytics on <ref1.name> using <qval (<ref2.isvalid>)?a <ref2.name>:their fists>.
+for <argn>
+  if (<ref2.hits> >= 1)
+    local.hits += 1
+    local.damage=<ref1.f_combat_damage>
+    local.damageTotal += <local.damage>
+    local.timeTotal += <local.speed>
+    if (<ref2.isvalid>) && (<R1,100> <= <def0.combat_item_damage>)
+      ref2.hits -= 1  
+    endif
+  endif
+endfor
+local.timeTotal /= 10
+local.DPS=<eval (<local.damageTotal>/<local.timeTotal>)>
+local.timeTotal=<eval (<local.timeTotal>/60)>
+local.DPM=<qval (0 < <local.timeTotal>)?<eval (<local.damageTotal>/<local.timeTotal>)>:N/A>
+
+ref3.sysmessage @037 <ref1.name> swung <ref2.name> <dargn> times for a total of <local.damageTotal> damage. Combat time: <local.TimeTotal> minutes.
+ref3.sysmessage @037 Damage per second <local.DPS>, damage per minute <local.DPM>
+if (<ref2.isvalid>) 
+  local.durability=<muldiv <ref2.hits>,100,<ref2.maxhits>>
+  ref3.sysmessage @037 Ending durability <local.durability>% (<ref2.hits> / <ref2.maxhits>)
+  ref2.hits=<local.oldHits>
+endif
+
+
+
+
+[EOF]

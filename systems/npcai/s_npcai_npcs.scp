@@ -1,0 +1,301 @@
+
+
+/////////////////////////////////
+// Sid 6 is a regular bot
+[CHARDEF c_sid6]
+DEFNAME=C_sid6
+NAME=#names_humanmale //the Simulant	//#npcai_names	//SID6.0 NPCai
+id=c_man
+can=mt_walk|mt_run|mt_equip|mt_usehands
+tevents=e_npcai
+
+category=NPCai
+subsection=Bots
+description=Sid6 (Civillian)
+
+
+ON=@Create
+  	tag0.override.movedelay=425
+	COLOR=colors_skin
+	STR=100
+	DEX=100
+	INT=100
+	NPC=brain_human
+	healing=80.0	//{25.0 50.0}
+	anatomy=80.0	//{25.0 50.0}
+	itemnewbie=i_bandage,100
+	itemnewbie=i_potion_heal,50
+	itemnewbie=i_potion_cure,25 
+	itemnewbie=random_mountedrideable,R2
+	itemnewbie=random_male_hair
+	color=colors_hair
+	itemnewbie=random_facial_hair
+	color=match_hair
+	itemnewbie=i_npcai
+	itemnewbie=i_waypoint_navigation
+	morex=1
+	
+
+
+ON=@NPCRestock
+	trysrc <uid> f_simulated_player_outfit<R0,244>
+
+[comment]
+	dorand 9
+          npcai_loadout_resurrected
+	  npcai_loadout_naked
+          npcai_loadout_tamer
+	  npcai_loadout_miner
+          npcai_loadout_blacksmith
+	  npcai_loadout_archer
+	  npcai_loadout_warrior
+	  npcai_loadout_mage
+	  npcai_loadout_graveyarder
+        enddo
+
+
+
+
+//////////////////
+// The OTHER Sid
+
+
+[CHARDEF c_sid6_2]
+DEFNAME=C_sid6_2
+DEFNAME2=C_sid6_bad
+NAME=#names_humanmale	//#npcai_names	//SID6.0 NPCai (bad)
+id=c_man
+can=mt_walk|mt_run|mt_equip|mt_usehands
+tevents=e_npcai
+
+category=NPCai
+subsection=Bots
+description=Sid6 (Civillian) (BAD)
+
+
+ON=@Create	
+	karma=-9999
+  	tag0.override.movedelay=425
+	COLOR=colors_skin
+	STR=100
+	DEX=100
+	INT=100
+	NPC=brain_human
+	healing=80.0	//{25.0 50.0}
+	anatomy=80.0	//{25.0 50.0}
+	itemnewbie=i_bandage,100
+	itemnewbie=i_potion_heal,50
+	itemnewbie=i_potion_cure,25 
+	itemnewbie=random_mountedrideable,R2
+	itemnewbie=random_male_hair
+	color=colors_hair
+	itemnewbie=random_facial_hair
+	color=match_hair
+	itemnewbie=i_npcai
+	itemnewbie=i_waypoint_navigation
+
+
+ON=@NPCRestock
+	dorand 9
+          npcai_loadout_resurrected
+	  npcai_loadout_naked
+          npcai_loadout_tamer
+	  npcai_loadout_miner
+          npcai_loadout_blacksmith
+	  npcai_loadout_archer
+	  npcai_loadout_warrior
+	  npcai_loadout_mage
+	  npcai_loadout_graveyarder
+        enddo
+
+
+//////////////////////////
+// Faction Sids
+
+[CHARDEF c_sid6_3]
+DEFNAME=C_sid6_3
+NAME=#names_humanmale	//#npcai_names	//SID6.0 NPCai
+id=c_man
+can=mt_walk|mt_run|mt_equip|mt_usehands
+tevents=e_npcai
+
+category=NPCai
+subsection=Bots
+description=Sid6 (Civillian)
+
+
+ON=@Create	
+        //events=+e_factions_npc
+	events=+e_factions_bot
+	flags |= statf_conjured
+	tag0.faction=<R1,4>
+	timerf 0,char_dyelayers  <def0.faction_<dtag0.faction>_colors>
+	tag0.faction_rank=<f_faction_get_rank>
+	tag0.faction_title=<f_faction_get_title>
+  	tag0.override.movedelay=425
+	COLOR=colors_skin
+	STR=100
+	DEX=100
+	INT=100
+	NPC=brain_human
+	healing=80.0	//{25.0 50.0}
+	anatomy=80.0	//{25.0 50.0}
+	itemnewbie=i_bandage,100
+	itemnewbie=i_potion_heal,50
+	itemnewbie=i_potion_cure,25 
+	itemnewbie=random_mountedrideable,R2
+	itemnewbie=i_robe
+	name=Faction Robe
+	itemnewbie=random_male_hair
+	color=colors_hair
+	itemnewbie=random_facial_hair
+	color=match_hair
+	itemnewbie=i_npcai
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	dorand 4
+	  npcai_loadout_faction_archer
+ 	  npcai_loadout_faction_spearman
+	  npcai_loadout_faction_knight
+	  npcai_loadout_faction_mage		
+        enddo
+
+
+
+
+////////////////////////
+//squad npc
+
+[CHARDEF c_squadguy]
+DEFNAME=C_squadguy
+NAME=squadguy
+id=c_man
+can=mt_walk|mt_run|mt_equip|mt_usehands|mt_shove
+
+ON=@Create	
+ 	COLOR=colors_skin
+	STR=60
+	DEX=45
+	INT=45
+	NPC=brain_human
+	itemnewbie=random_male_hair
+	color=colors_hair
+	itemnewbie=random_facial_hair
+	color=match_hair
+
+ON=@NPCRestock
+	ref1=<uid>
+	dorand 9
+	  npcai_loadout_warrior
+	  npcai_loadout_mage
+	  npcai_loadout_blacksmith
+	  npcai_loadout_miner
+	  npcai_loadout_naked
+	  npcai_loadout_resurrected
+	  npcai_loadout_graveyarder
+	  npcai_loadout_tamer
+	  npcai_loadout_archer
+        enddo
+	healing={25.0 50.0}
+	anatomy={25.0 50.0}
+	item=i_bandage,100
+	item=i_potion_heal,50
+	item=i_potion_cure,25 
+
+on=@npclookatchar
+if (!<findid.i_memory_squad>) &&  (<src.findid.i_memory_squad_leader>)
+  f_squad_join <src>
+endif
+
+
+[CHARDEF c_soulless_guard]
+DEFNAME=C_soulless_guard
+NAME=Personal Guard
+id=c_man
+can=mt_walk|mt_run|mt_equip|mt_usehands|mt_shove
+
+ON=@Create	
+ 	COLOR=colors_skin
+	STR=100
+	DEX=100
+	INT=100
+	NPC=brain_human
+	itemnewbie=random_male_hair
+	color=colors_hair
+	itemnewbie=random_facial_hair
+	color=match_hair
+	itemnewbie=i_platemail_helm
+	COLOR=0455
+	itemnewbie=i_platemail_gorget
+	COLOR=0455
+	itemnewbie=i_armor_female_plate
+	COLOR=0455
+	itemnewbie=i_platemail_arms
+	COLOR=0455
+	itemnewbie=i_platemail_gloves
+	COLOR=0455
+	itemnewbie=i_platemail_leggings
+	COLOR=0455
+	itemnewbie=i_cape
+	COLOR=0455
+	itemnewbie=i_halberd
+	itemnewbie=random_coin_purse
+
+on=@npclookatchar
+if (!<findid.i_memory_squad>) &&  (<src.findid.i_memory_squad_leader>)
+  f_squad_join <src>
+endif
+
+
+
+
+
+
+[function soullessguards]
+for <argn>
+  serv.newnpc c_soulless_guard
+  ref1=<new>
+  ref1.strip
+  ref1.tag0.override.movedelay 500
+  ref1.name=Game Master
+  serv.newitem i_robe_gm
+  new.color=026
+  ref1.equip <new>
+  ref1.p=<p>
+  ref1.movenear <uid> 5
+endfor
+for <argn>
+  serv.newnpc c_soulless_guard
+  ref1=<new>
+  ref1.strip
+  ref1.tag0.override.movedelay 500
+  ref1.name=Counselor
+  serv.newitem i_robe_gm
+  new.color=062
+  ref1.equip <new>
+  ref1.p=<p>
+  ref1.movenear <uid> 5
+endfor
+
+
+
+
+
+
+[function makesquadguys]
+for <argn>
+  serv.newnpc c_squadguy
+  new.tag0.override.movedelay 500
+  new.p=<p>
+  new.movenear <uid> 5
+endfor
+
+
+
+[EOF]
+
+
+
+
+

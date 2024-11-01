@@ -1,0 +1,129 @@
+//Polling Stone by Soulless
+//v1.0
+//11:08 PM 8/18/2017
+
+[itemdef i_polling_stone]
+id=0edb
+name=Polling Stone
+type=t_script
+
+on=@create
+attr=attr_static
+color=0488
+
+on=@click
+message @07a1 <name>
+return 1
+
+on=@dclick
+sdialog d_polling_system
+return 1
+
+[dialog d_polling_system]
+175,25
+
+page 0
+
+resizepic 10 10 9200 420 450
+//resizepic 20 20 3000 400 430
+//resizepic 50 60 5054 355 370
+//checkertrans 20 20 400 430
+
+dtext 140 30 1263 <serv.servname> Polling System
+
+if (<src.isgm>) //&& (<src.account.lastip>==<serv.servip>)
+  resizepic 10 460 9200 420 100
+  //resizepic 20 470 3000 400 80
+  //checkertrans 20 470 400 80
+
+  button 40 480 1209 1210 0 99
+  dtext 60 478 1263 Make a Poll
+
+  button 40 500 1209 1210 1 0 101
+  dtext 60 498 1263 Close the Poll
+
+  dtext 100 520 0387 Current Poll SID: <dtag0.poll_sid>
+endif
+
+page 1
+if (<tag0.voted_<src.account.lastip>>==<tag0.poll_sid>)
+  local.voted=1
+endif
+
+if !(<isempty <tag.polling_text1>>)
+  dhtmlgump 65 75 335 45 0 0 <def0.bfont_white><tag.polling_text<eval <local._for>+1>>
+endif
+
+for 1 5
+  if !(<isempty <tag.polling_text<eval <local._for>+1>>>)
+    if !(<local.voted>)
+      if (<local._for> > 0) && (!<tag0.poll_closed>) && (<src.tag0.poll_voted> != <tag0.poll_sid>)	//butons for voting
+        button  25 <eval 85+(<local._for>*60)> 4006 4007 1 0 <dlocal._for>
+        dhtmlgump 150 <eval 58+(<local._for>*60)> 150 30 0 0 <def0.bfont_lgray> Polling Choice <dlocal._for>
+        resizepic 60 <eval 75+(<local._for>*60)> 3000 335 45
+      endif
+    endif 
+    if (<local.voted>)
+      dtext  35 <eval 85+(<local._for>*60)> 1263 <dtag0.vote_choice<dlocal._for>>
+      resizepic 55 <eval 70+(<local._for>*60)> 9200 345 55 
+      gumppictiled 64 <eval 78+(<local._for>*60)> <eval (335 * ((<tag0.vote_choice<dlocal._for>>*100)/<tag0.vote_total>)) / 100> 36 1416	//87
+      gumppictiled <eval 60+(335 * ((<tag0.vote_choice<dlocal._for>>*100)/<tag0.vote_total>)) / 100> <eval 78+(<local._for>*60)> 1 36 3002
+    endif
+    dhtmlgump 65 <eval 77+(<local._for>*60)> 335 45 0 0 <def0.bfont_<qval <local.voted>?white:black>><tag.polling_text<eval <local._for>+1>>
+  endif
+endfor
+
+page 99
+dtext 150 58 1000 Poll Title?
+for 0 5
+  resizepic 35 <eval 75+(<local._for>*60)> 3000 360 45  
+  dtextentrylimited 40 <eval 75+(<local._for>*60)> 350 45 0 <eval <local._for>+1> 115 <tag.polling_text<eval <local._for>+1>>
+  if (<local._for> > 0)
+    dtext 150 <eval 58+(<local._for>*60)> 1000 Polling Option <dlocal._for>
+  endif
+endfor
+
+button 40 428 4015 4016 0 1
+dtext 80 428 1263 Back
+
+button 300 428 4006 4007 1 0 100
+dtext 340 428 1263 Confirm
+
+  
+[dialog d_polling_system button]
+onbutton=1,5
+if (<tag0.<src.account.name>_voted> >= 1)
+  src.spelleffect s_ligtning 1000
+  src.sound snd_spell_lightning
+  return 1
+endif
+
+tag0.vote_choice<dargn> += 1
+tag0.vote_total += 1
+tag0.voted_<src.account.lastip>=<tag0.poll_sid>
+sdialog d_polling_system
+
+onbutton=100
+for 6
+  if !(<isempty <argtxt[<local._for>]>>)
+    tag0.polling_text<dlocal._for>=<argtxt[<local._for>]>
+  else
+    tag0.polling_text<local._for>=
+  endif
+endfor
+tag0.poll_sid=<R9><R9><R9><R9><R9><R9><R9>
+sdialog d_polling_system
+
+onbutton=101
+if !(<tag0.poll_sid>)
+  src.sysmessage No poll to close.
+else
+  cleartags
+  src.sysmessage Poll closed.
+endif
+sdialog d_polling_system
+
+
+
+
+[EOF]

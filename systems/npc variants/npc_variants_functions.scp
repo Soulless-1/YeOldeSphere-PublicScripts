@@ -1,0 +1,17 @@
+//NPC Variants by Soulless
+//v1.0
+//12:02 AM 1/14/2022
+
+
+[function f_npc_variant_setup]
+if (<def0.npc_variant_<baseid>>)
+  args=<def0.npc_variant_<baseid>>
+  serv.log Turning <name>(<uid>) into an NPC variant : <argv[0]>, it will be <argv[2]>% stronger
+  name=<argv[0]>
+  color=<argv[1]>
+  f_make
+  if !(<isempty <argv[3]>>) && (<argv[3]> != 0)
+    events=+<argv[3]>
+  endif
+
+endif

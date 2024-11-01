@@ -1,0 +1,608 @@
+//Anti-AFK Captcha System by Soulless
+//v1.0
+//8:01 PM 2/24/2020
+
+[defname anti_afk_settings]
+anti_afk_active			1
+anti_afk_skill0			mining
+anti_afk_skill1			lumberjacking
+anti_afk_skill2			fishing
+anti_afk_checktime		60		
+anti_afk_characters		a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+
+[events e_anti_afk_macroing]
+
+on=@login
+if (<def0.anti_afk_active> >= 1)
+  if (<findid.i_anti_afk_memory>)
+    f_anti_afk_check
+  endif
+endif
+
+on=@skillfinish
+if (<def0.anti_afk_active> >= 1)
+  if (<findid.i_anti_afk_memory>)
+    sysmessage You can't do much in your current state.
+    return 1
+  endif
+  if !(<isgm>) 
+    while !(<isempty <def.anti_afk_skill<dlocal.s>>>)
+      if (<serv.skill.<argn1>.key> == <def0.anti_afk_skill<dlocal.s>>)
+        local.lastchecked=<eval ((<serv.time>-<account.tag0.anti_afk_lastcheck>)/10)/60>
+        serv.log <name> antiafk-check (<serv.time>-<account.tag0.anti_afk_lastcheck>) ; <local.lastchecked>  >= <def0.anti_afk_checktime>
+        if (<local.lastchecked>  >= <def0.anti_afk_checktime>)
+          account.tag0.anti_afk_lastcheck=<serv.time>
+          f_anti_afk_check
+        endif
+      endif
+      local.s += 1
+    endfor
+  endif
+endif
+
+
+[function f_anti_afk_check]
+if !(<isonline>) 
+  serv.log Trying to anti-afk check an offline player <name>(<uid>). 
+  return 1
+endif
+dialogclose d_anti_afk_captcha
+ctag0.captcha=<f_captcha_random_character>,<f_captcha_random_character>,<f_captcha_random_character>,<f_captcha_random_character>,<f_captcha_random_character>
+if !(<findid.i_anti_afk_memory>)
+  serv.newitem i_anti_afk_memory
+  new.more1=<def0.anti_afk_checktime>
+  new.timer=0
+  new.equip
+endif
+dialog d_anti_afk_captcha
+//promptconsole f_anti_afk_check_legacy_input
+//stone=1	//this could be abused
+//flags |= statf_freeze
+//serv.log Checking <name> for anti-afk macroing <action.name>
+nomove 60
+
+[dialog d_anti_afk_captcha]
+150,200
+nomove
+noclose
+page 0
+resizepic 0 0 9200 500 250
+
+dtext 160 8 1263 Anti-AFK Macroing System
+dtext 125 27 1000 Please enter the below characters in order
+resizepic 55 50 2620 395 110 
+for l 0 4
+  args=<ctag0.captcha>
+  f_captcha_<argv[<dlocal.l>]> <eval ((<local.l>*75)+50)+<R3,6>>,<R55,70>
+endfor
+ctag.captcha=<f_shmush_args <ctag.captcha>>
+resizepic 175 160 2620 150 50
+dtextentrylimited 225 170 200 20 030 1 5
+button 450 210 4006 4007 1 0 1	//confirm button
+dtext 400 210 1263 Confirm
+
+[dialog d_anti_afk_captcha button]
+
+onbutton=1
+local.captcha=<ctag.captcha>
+if (strcmpi(<local.captcha>,<argtxt[1]>))
+  f_anti_afk_check
+  sysmessage @026,3,1,1 CAPTCHA failed, try again!
+  //serv.log Anti-AFK captcha failed by <name> "<argtxt[1]> != <local.captcha>"
+else
+  sysmessage @044,3,1,1 CAPTCHA passed!
+  //serv.log Anti-AFK captcha passed by <name> "<argtxt[1]> == <local.captcha>"
+  findid.i_anti_afk_memory.remove
+  //promptconsole
+  //stone=	//only needed if they are stoned above
+  //flags &= ~ statf_freeze
+  nomove=
+endif
+
+[itemdef i_anti_afk_memory]
+defname=i_anti_afk_memory
+id=i_memory
+name=Anti AFK Check
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<more1> <= 0)
+  topobj.account.tag0.anti_afk_captcha_failed += 1
+  topobj.account.tag0.anti_afk_lastcheck=	//clear this, they were disconnected for not passing the captcha, so we'll check them again 
+  //topobj.stone=
+  //flags &= ~ statf_freeze
+  topobj.nomove=
+  topobj.disconnect
+  serv.log <topobj.name>(<topobj>) Disconnected due to suspected AFK Macroing 
+  remove
+  return 1
+endif
+topobj.sysmessage <dmore1>
+more1 -= 1
+timer=1
+return 1
+
+[function f_anti_afk_check_legacy_input]
+local.captcha=<ctag.captcha>
+if (<findid.i_anti_afk_memory>)
+  if (strcmpi(<args>,<local.captcha>))
+    f_anti_afk_check
+    sysmessage @026,3,1,1 CAPTCHA failed, try again!
+    //serv.log Anti-AFK captcha failed by <name> "<args> != <local.captcha>"
+    promptconsole f_anti_afk_check_legacy_input
+  else
+    sysmessage @044,3,1,1 CAPTCHA passed!
+    //serv.log Anti-AFK captcha passed by <name> "<args> == <local.captcha>"
+    dialogclose d_anti_afk_captcha
+    findid.i_anti_afk_memory.remove
+    promptconsole
+    //stone=
+    //flags &= ~ statf_freeze
+  endif
+endif
+
+[function f_captcha_random_character]
+args=<def0.anti_afk_characters>
+return <argv[<R0,25>]>
+
+/////////////////////////////////////
+// Letters that are rendered
+
+[function f_captcha_a]
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R0,2>)> <eval (<argn2>+<R62,64>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R62,64>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,20>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R29,31>)> <eval (<argn2>+<R45,47>)> <R6250,6256>
+tilepic <eval (<argn>+<R31,33>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R28,30>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R28,30>)> <R6250,6256>
+tilepic <eval (<argn>+<R20,22>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R7,9>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R52,54>)> <R6250,6256>
+
+[function f_captcha_b]
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R61,63>)> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R34,36>)> <R6250,6256>
+tilepic <eval (<argn>+<R22,24>)> <eval (<argn2>+<R31,33>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R24,26>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R16,18>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R13,15>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R21,23>)> <eval (<argn2>+<R41,43>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R48,50>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R19,21>)> <eval (<argn2>+<R60,61>)> <R6250,6256>
+tilepic <eval (<argn>+<R13,15>)> <eval (<argn2>+<R62,64>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R62,64>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R45,47>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R20,22>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+
+[function f_captcha_c]
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R34,36>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R26,28>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R56,58>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R15,17>)> <R6250,6256>
+
+[function f_captcha_d]
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R10,12>)> <R6250,6256>
+tilepic <eval (<argn>+<R27,29>)> <eval (<argn2>+<R16,18>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R59,61>)> <R6250,6256>
+tilepic <eval (<argn>+<R7,9>)> <eval (<argn2>+<R38,40>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R61,63>)> <R6250,6256>
+tilepic <eval (<argn>+<R29,31>)> <eval (<argn2>+<R54,56>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R46,48>)> <R6250,6256>
+tilepic <eval (<argn>+<R33,35>)> <eval (<argn2>+<R26,28>)> <R6250,6256>
+tilepic <eval (<argn>+<R29,31>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R22,24>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R10,12>)> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R7,9>)> <eval (<argn2>+<R47,49>)> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R56,58>)> <R6250,6256>
+
+[function f_captcha_e]
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+
+[function f_captcha_f]
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+
+[function f_captcha_g]
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R34,36>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R49,51>)> <R6250,6256>
+tilepic <eval (<argn>+<R19,21>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R56,58>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R38,40>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R38,40>)> <R6250,6256>
+tilepic <eval (<argn>+<R42,44>)> <eval (<argn2>+<R38,40>)> <R6250,6256>
+
+[function f_captcha_h]
+tilepic <eval (<argn>+0> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+
+[function f_captcha_i]
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R0,2>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R1,3>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+
+[function f_captcha_j]
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R23,25>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R54,56>)> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R45,47>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+
+[function f_captcha_k]
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R29,31>)> <R6250,6256>
+tilepic <eval (<argn>+<R21,23>)> <eval (<argn2>+<R23,25>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R16,18>)> <R6250,6256>
+tilepic <eval (<argn>+<R29,31>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R22,24>)> <eval (<argn2>+<R41,43>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R48,50>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R54,56>)> <R6250,6256>
+tilepic <eval (<argn>+<R33,35>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+
+[function f_captcha_l]
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+
+[function f_captcha_m]
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R15,17>)> <R6250,6256>
+tilepic <eval (<argn>+<R19,21>)> <eval (<argn2>+<R22,24>)> <R6250,6256>
+tilepic <eval (<argn>+<R23,25>)> <eval (<argn2>+<R29,31>)> <R6250,6256>
+tilepic <eval (<argn>+<R29,31>)> <eval (<argn2>+<R22,24>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R16,18>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R10,12>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R17,19>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R25,27>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R33,35>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R40,42>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R47,49>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R54,56>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+
+[function f_captcha_n]
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R15,17>)> <R6250,6256>
+tilepic <eval (<argn>+<R19,21>)> <eval (<argn2>+<R22,24>)> <R6250,6256>
+tilepic <eval (<argn>+<R23,25>)> <eval (<argn2>+<R29,31>)> <R6250,6256>
+tilepic <eval (<argn>+<R27,29>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R31,33>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R35,37>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R48,50>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R39,41>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R30,32>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R21,23>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+
+[function f_captcha_o]
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R34,36>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R31,33>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R26,28>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R56,58>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+
+[function f_captcha_p]
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R22,24>)> <eval (<argn2>+<R15,17>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R31,33>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R54,56>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R45,47>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,20>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R23,25>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+
+[function f_captcha_q]
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R34,36>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R31,33>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R26,28>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R56,58>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R33,35>)> <eval (<argn2>+<R46,48>)> <R6250,6256>
+tilepic <eval (<argn>+<R41,43>)> <eval (<argn2>+<R54,56>)> <R6250,6256>
+tilepic <eval (<argn>+<R46,48>)> <eval (<argn2>+<R59,61>)> <R6250,6256>
+
+[function f_captcha_r]
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R22,24>)> <eval (<argn2>+<R15,17>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R31,33>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R36,38>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R54,56>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R45,47>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,20>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R23,25>)> <R6250,6256>
+tilepic <eval (<argn>+<R10,12>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R40,42>)> <R6250,6256>
+tilepic <eval (<argn>+<R22,24>)> <eval (<argn2>+<R46,48>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R62,64>)> <R6250,6256>
+
+[function f_captcha_s]
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R17,19>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R13,15>)> <eval (<argn2>+<R26,28>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R15,17>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,20>)> <eval (<argn2>+<R31,33>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R34,36>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R44,46>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R28,30>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R21,23>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R52,54>)> <R6250,6256>
+tilepic <eval (<argn>+<R13,15>)> <eval (<argn2>+<R26,28>)> <R6250,6256>
+
+[function f_captcha_t]
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R35,37>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R7,9>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+<R9,11>)> <R6250,6256>
+
+[function f_captcha_u]
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R34,36>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R49,51>)> <R6250,6256>
+tilepic <eval (<argn>+<R19,21>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R25,27>)> <eval (<argn2>+<R56,58>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R50,52>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R20,22>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R33,35>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R25,27>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R17,19>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+
+[function f_captcha_v]
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R60,61>)> <R6250,6256>
+tilepic <eval (<argn>+<R35,37>)> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+-2> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R33,35>)> <R6250,6256>
+tilepic <eval (<argn>+<R27,29>)> <eval (<argn2>+<R33,35>)> <R6250,6256>
+tilepic <eval (<argn>+<R20,22>)> <eval (<argn2>+<R47,49>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R46,48>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R20,22>)> <R6250,6256>
+tilepic <eval (<argn>+<R0,2>)> <eval (<argn2>+<R20,22>)> <R6250,6256>
+tilepic <eval (<argn>+<R3,5>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R27,29>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R40,42>)> <R6250,6256>
+tilepic <eval (<argn>+<R7,9>)> <eval (<argn2>+<R39,41>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,20>)> <eval (<argn2>+<R52,54>)> <R6250,6256>
+
+[function f_captcha_w]
+tilepic <eval (<argn>+-2> <eval (<argn2>+<R11,13>)> <R6250,6256>
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R59,61>)> <R6250,6256>
+tilepic <eval (<argn>+<R23,25>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R60,61>)> <R6250,6256>
+tilepic <eval (<argn>+<R47,49>)> <eval (<argn2>+<R12,14>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R48,50>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R48,50>)> <R6250,6256>
+tilepic <eval (<argn>+<R42,44>)> <eval (<argn2>+<R33,35>)> <R6250,6256>
+tilepic <eval (<argn>+<R1,3>)> <eval (<argn2>+<R33,35>)> <R6250,6256>
+tilepic <eval (<argn>+<R19,21>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R27,29>)> <eval (<argn2>+<R41,43>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R12,14>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R52,54>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+<R41,43>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+tilepic <eval (<argn>+<R44,46>)> <eval (<argn2>+<R25,27>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+<R46,48>)> <eval (<argn2>+19> <R6250,6256>
+tilepic <eval (<argn>+<R4,6>)> <eval (<argn2>+<R53,55>)> <R6250,6256>
+tilepic <eval (<argn>+<R3,5>)> <eval (<argn2>+<R44,46>)> <R6250,6256>
+tilepic <eval (<argn>+0> <eval (<argn2>+<R24,26>)> <R6250,6256>
+tilepic <eval (<argn>+<R5,7>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+-1> <eval (<argn2>+<R16,18>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R62,64>)> <R6250,6256>
+
+[function f_captcha_x]
+tilepic <eval (<argn>+<R8,10>)> <eval (<argn2>+<R63,65>)> <R6250,6256>
+tilepic <eval (<argn>+<R47,49>)> <eval (<argn2>+<R64,66>)> <R6250,6256>
+tilepic <eval (<argn>+<R27,29>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R7,9>)> <eval (<argn2>+<R13,15>)> <R6250,6256>
+tilepic <eval (<argn>+<R46,48>)> <eval (<argn2>+<R13,15>)> <R6250,6256>
+tilepic <eval (<argn>+<R13,15>)> <eval (<argn2>+<R55,57>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,20>)> <eval (<argn2>+<R49,51>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R30,32>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R24,26>)> <R6250,6256>
+tilepic <eval (<argn>+<R42,44>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R23,25>)> <eval (<argn2>+<R43,45>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R19,21>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R25,27>)> <R6250,6256>
+tilepic <eval (<argn>+<R21,23>)> <eval (<argn2>+<R31,33>)> <R6250,6256>
+tilepic <eval (<argn>+<R42,44>)> <eval (<argn2>+<R57,59>)> <R6250,6256>
+tilepic <eval (<argn>+<R36,38>)> <eval (<argn2>+<R49,51>)> <R6250,6256>
+tilepic <eval (<argn>+<R30,32>)> <eval (<argn2>+<R42,44>)> <R6250,6256>
+
+[function f_captcha_y]
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R16,18>)> <R6250,6256>
+tilepic <eval (<argn>+<R19,21>)> <eval (<argn2>+<R23,25>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R30,32>)> <R6250,6256>
+tilepic <eval (<argn>+<R29,31>)> <eval (<argn2>+<R23,25>)> <R6250,6256>
+tilepic <eval (<argn>+<R34,36>)> <eval (<argn2>+<R16,18>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R37,39>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R44,46>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R52,54>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R60,61>)> <R6250,6256>
+
+[function f_captcha_z]
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R40,42>)> <eval (<argn2>+<R9,11>)> <R6250,6256>
+tilepic <eval (<argn>+<R37,39>)> <eval (<argn2>+<R17,19>)> <R6250,6256>
+tilepic <eval (<argn>+<R32,34>)> <eval (<argn2>+<R24,26>)> <R6250,6256>
+tilepic <eval (<argn>+<R26,28>)> <eval (<argn2>+<R31,33>)> <R6250,6256>
+tilepic <eval (<argn>+<R21,23>)> <eval (<argn2>+<R38,40>)> <R6250,6256>
+tilepic <eval (<argn>+<R14,16>)> <eval (<argn2>+<R45,47>)> <R6250,6256>
+tilepic <eval (<argn>+<R11,13>)> <eval (<argn2>+<R52,54>)> <R6250,6256>
+tilepic <eval (<argn>+<R9,11>)> <eval (<argn2>+<R58,60>)> <R6250,6256>
+tilepic <eval (<argn>+<R18,19>)> <eval (<argn2>+<R58,60>)> <R6250,6256>
+tilepic <eval (<argn>+<R24,26>)> <eval (<argn2>+<R58,60>)> <R6250,6256>
+tilepic <eval (<argn>+<R31,33>)> <eval (<argn2>+<R58,60>)> <R6250,6256>
+tilepic <eval (<argn>+<R39,41>)> <eval (<argn2>+<R58,60>)> <R6250,6256>
+
+[EOF]
+

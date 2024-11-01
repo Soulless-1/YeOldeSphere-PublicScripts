@@ -1,0 +1,815 @@
+//New Ores by Soulless
+//v1.0
+//6:11 AM 1/17/2022
+
+
+[defname color_custom_ore]
+color_o_meteoric	1255
+color_o_midnight	1755
+color_o_adamantine	0482
+color_o_mystic		1366
+color_o_amaranth	1374
+color_o_magma		1359
+color_o_evil		1370
+color_o_ardent		1265
+color_o_tumult		2118
+
+
+[ITEMDEF i_ore_meteoric]
+defname=i_ore_meteoric
+defname2=i_ore_mercury
+ID=i_ore_iron
+NAME=meteoric ore
+SKILLMAKE=MINING 105.0
+TDATA1=i_ingot_meteoric
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_meteoric
+
+[ITEMDEF i_ore_midnight]
+defname=i_ore_midnight
+ID=i_ore_iron
+NAME=midnight ore
+SKILLMAKE=MINING 105.0
+TDATA1=i_ingot_midnight
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_midnight
+
+[ITEMDEF i_ore_adamantine]
+defname=i_ore_adamantine
+defname2=i_ore_titanium
+ID=i_ore_iron
+NAME=adamantine ore
+SKILLMAKE=MINING 110.0
+TDATA1=i_ingot_adamantine
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_adamantine
+
+[ITEMDEF i_ore_mystic]
+defname=i_ore_mystic
+ID=i_ore_iron
+NAME=mystic ore
+SKILLMAKE=MINING 110.0
+TDATA1=i_ingot_mystic
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_mystic
+
+[ITEMDEF i_ore_amaranth]
+defname=i_ore_amaranth
+defname2=i_ore_purplehaze
+ID=i_ore_iron
+NAME=amaranth ore
+SKILLMAKE=MINING 115.0
+TDATA1=i_ingot_amaranth
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_amaranth
+
+[ITEMDEF i_ore_magma]
+defname=i_ore_magma
+ID=i_ore_iron
+NAME=magma ore
+SKILLMAKE=MINING 115.0
+TDATA1=i_ingot_magma
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_magma
+
+[ITEMDEF i_ore_evil]
+defname=i_ore_evil
+ID=i_ore_iron
+NAME=evil ore
+SKILLMAKE=MINING 120.0
+TDATA1=i_ingot_evil
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_evil
+
+[ITEMDEF i_ore_ardent]
+defname=i_ore_ardent
+defname2=i_ore_order
+ID=i_ore_iron
+NAME=ardent ore
+SKILLMAKE=MINING 120.0
+TDATA1=i_ingot_ardent
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_ardent
+
+[ITEMDEF i_ore_tumult]
+defname=i_ore_tumult
+defname2=i_ore_chaos
+ID=i_ore_iron
+NAME=tumult ore
+SKILLMAKE=MINING 125.0
+TDATA1=i_ingot_tumult
+VALUE=5,7
+
+ON=@Create
+	COLOR=color_o_tumult
+
+//////////////////////
+// Ingots
+
+[ITEMDEF i_ingot_meteoric]
+DEFNAME=i_ingot_meteoric
+DEFNAME2=i_ingot_mercury
+ID=i_ingot_iron
+NAME=meteoric ingot
+RESOURCES=i_ore_meteoric
+SKILLMAKE=MINING 105.0
+TDATA1=105.0
+TDATA2=110.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=Meteoric ingot
+
+ON=@Create
+	COLOR=color_o_meteoric
+
+[ITEMDEF i_ingot_midnight]
+DEFNAME=i_ingot_midnight
+ID=i_ingot_iron
+NAME=midnight ingot
+RESOURCES=i_ore_midnight
+SKILLMAKE=MINING 105.0
+TDATA1=105.0
+TDATA2=110.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=midnight ingot
+
+ON=@Create
+	COLOR=color_o_midnight
+
+[ITEMDEF i_ingot_adamantine]
+DEFNAME=i_ingot_adamantine
+DEFNAME2=i_ingot_titanium
+ID=i_ingot_iron
+NAME=adamantine ingot
+RESOURCES=i_ore_adamantine
+SKILLMAKE=MINING 110.0
+TDATA1=110.0
+TDATA2=115.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=adamantine ingot
+
+ON=@Create
+	COLOR=color_o_adamantine
+
+[ITEMDEF i_ingot_mystic]
+DEFNAME=i_ingot_mystic
+ID=i_ingot_iron
+NAME=mystic ingot
+RESOURCES=i_ore_mystic
+SKILLMAKE=MINING 110.0
+TDATA1=110.0
+TDATA2=115.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=mystic ingot
+
+ON=@Create
+	COLOR=color_o_mystic
+
+[ITEMDEF i_ingot_amaranth]
+DEFNAME=i_ingot_amaranth
+DEFNAME2=i_ingot_purplehaze
+ID=i_ingot_iron
+NAME=amaranth ingot
+RESOURCES=i_ore_amaranth
+SKILLMAKE=MINING 115.0
+TDATA1=115.0
+TDATA2=120.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=amaranth ingot
+
+ON=@Create
+	COLOR=color_o_amaranth
+
+[ITEMDEF i_ingot_magma]
+DEFNAME=i_ingot_magma
+ID=i_ingot_iron
+NAME=magma ingot
+RESOURCES=i_ore_magma
+SKILLMAKE=MINING 115.0
+TDATA1=115.0
+TDATA2=120.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=magma ingot
+
+ON=@Create
+	COLOR=color_o_magma
+
+[ITEMDEF i_ingot_evil]
+DEFNAME=i_ingot_evil
+ID=i_ingot_iron
+NAME=evil ingot
+RESOURCES=i_ore_evil
+SKILLMAKE=MINING 120.0
+TDATA1=120.0
+TDATA2=125.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=evil ingot
+
+ON=@Create
+	COLOR=color_o_evil
+
+[ITEMDEF i_ingot_ardent]
+DEFNAME=i_ingot_ardet
+DEFNAME2=i_ingot_order
+ID=i_ingot_iron
+NAME=ardent ingot
+RESOURCES=i_ore_ardent
+SKILLMAKE=MINING 120.0
+TDATA1=120.0
+TDATA2=125.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=ardent ingot
+
+ON=@Create
+	COLOR=color_o_ardent
+
+[ITEMDEF i_ingot_tumult]
+DEFNAME=i_ingot_tumult
+DEFNAME2=i_ingot_chaos
+ID=i_ingot_iron
+NAME=tumult ingot
+RESOURCES=i_ore_tumult
+SKILLMAKE=MINING 125.0
+TDATA1=125.0
+TDATA2=130.0
+VALUE=5,7
+CATEGORY=Items by Professions
+SUBSECTION=Blacksmiths
+DESCRIPTION=tumult ingot
+
+ON=@Create
+	COLOR=color_o_tumult
+
+
+//////////////////////
+// Fishing Resources
+
+[itemdef i_fish_prize]
+defname=i_fish_prize
+id=i_fish_small
+name=Prize Fish
+type=t_fish_special
+CATEGORY=Region Resources
+SUBSECTION=Fishing
+description=Prize Fish
+
+on=@create
+morex=s_cunning
+morey=1000
+color={91 95}
+
+[itemdef i_fish_wondrous]
+defname=i_fish_wondrous
+id=i_fish_small
+name=Wondrous Fish
+type=t_fish_special
+CATEGORY=Region Resources
+SUBSECTION=Fishing
+description=Wondrous Fish
+
+on=@create
+morex=s_agility
+morey=1000
+color={56 60}
+
+[itemdef i_fish_rare]
+defname=i_fish_rare
+id=i_fish_small
+name=Truly Rare Fish
+type=t_fish_special
+CATEGORY=Region Resources
+SUBSECTION=Fishing
+description=Rare Fish
+
+on=@create
+morex=s_strength
+morey=1000
+color={41 45}
+
+[itemdef i_fish_peculiar]
+defname=i_fish_peculiar
+id=i_fish_small
+name=Highly Peculiar Fish
+type=t_fish_special
+CATEGORY=Region Resources
+SUBSECTION=Fishing
+description=Peculiar Fish
+
+on=@create
+morex=s_refresh
+morey=100
+color={721 725}
+
+
+//////////////////////
+// Tailoring Resources
+
+[defname reinforced_gem_cloth_colors]
+color_cloth_weaved_amber		0869
+color_cloth_weaved_citrine		0981	
+color_cloth_weaved_ruby			07ca	
+color_cloth_weaved_tourmaline		0bad		
+color_cloth_weaved_amethyst		07c3	
+color_cloth_weaved_emerald		07c7
+color_cloth_weaved_sapphire		07c9
+color_cloth_weaved_star_sapphire	0ba4
+color_cloth_weaved_diamond		0bb4
+
+
+[itemdef i_cloth_weaved_amber]
+defname=i_cloth_weaved_amber
+defname2=i_cloth_reinforced_amber
+id=i_cloth
+name=amber weaved cloth
+type=t_cloth
+skillmake=105.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_amber
+category=Items by professions
+subsection=Tailor
+description=Amber Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_amber
+
+[itemdef i_cloth_weaved_citrine]
+defname=i_cloth_weaved_citrine
+defname2=i_cloth_reinforced_citrine
+id=i_cloth
+name=citrine weaved cloth
+type=t_cloth
+skillmake=105.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_citrine
+category=Items by professions
+subsection=Tailor
+description=Citrine Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_citrine
+
+[itemdef i_cloth_weaved_ruby]
+defname=i_cloth_weaved_ruby
+defname2=i_cloth_reinforced_ruby
+id=i_cloth
+name=ruby weaved cloth
+type=t_cloth
+skillmake=110.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_ruby
+category=Items by professions
+subsection=Tailor
+description=Ruby Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_ruby
+
+[itemdef i_cloth_weaved_tourmaline]
+defname=i_cloth_weaved_tourmaline
+defname2=i_cloth_reinforced_tourmaline
+id=i_cloth
+name=tourmaline weaved cloth
+type=t_cloth
+skillmake=110.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_tourmaline
+category=Items by professions
+subsection=Tailor
+description=Tourmaline Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_tourmaline
+
+[itemdef i_cloth_weaved_amethyst]
+defname=i_cloth_weaved_amethyst
+defname2=i_cloth_reinforced_amethyst
+id=i_cloth
+name=amethyst weaved cloth
+type=t_cloth
+skillmake=115.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_amethyst
+category=Items by professions
+subsection=Tailor
+description=Amethyst Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_amethyst
+
+[itemdef i_cloth_weaved_emerald]
+defname=i_cloth_weaved_emerald
+defname2=i_cloth_reinforced_emerald
+id=i_cloth
+name=emerald weaved cloth
+type=t_cloth
+skillmake=115.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_emerald
+category=Items by professions
+subsection=Tailor
+description=Emerald Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_emerald
+
+[itemdef i_cloth_weaved_sapphire]
+defname=i_cloth_weaved_sapphire
+defname2=i_cloth_reinforced_sapphire
+id=i_cloth
+name=sapphire weaved cloth
+type=t_cloth
+skillmake=120.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_sapphire
+category=Items by professions
+subsection=Tailor
+description=Sapphire Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_sapphire
+
+[itemdef i_cloth_weaved_star_sapphire]
+defname=i_cloth_weaved_star_sapphire
+defname2=i_cloth_reinforced_star_sapphire
+id=i_cloth
+name=star sapphire weaved cloth
+type=t_cloth
+skillmake=120.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_star_sapphire
+category=Items by professions
+subsection=Tailor
+description=Star Sapphire Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_star_sapphire
+
+[itemdef i_cloth_weaved_diamond]
+defname=i_cloth_weaved_diamond
+defname2=i_cloth_reinforced_diamond
+id=i_cloth
+name=diamond weaved cloth
+type=t_cloth
+skillmake=125.0 tailoring
+resources=2 i_cloth,2 i_thread,10 i_gem_diamond
+category=Items by professions
+subsection=Tailor
+description=Diamond Reinforced Cloth
+
+on=@create
+color=color_cloth_weaved_diamond
+
+
+///////////////////////////////////
+// Bowcraft / Carpentry Resources
+
+[defname color_custom_logs]
+color_l_hickory		0b0c	
+color_l_ash		07a9
+color_l_cedar		07b0
+color_l_walnut		0baf	
+color_l_cypress		0b79	
+color_l_rosewood	09b8
+color_l_oak		04a7
+color_l_maple		0827
+color_l_yew		082e
+color_l_blackwood	08db
+color_l_hawthorn	0ac6
+color_l_ironwood	0997
+
+[itemdef i_log_hickory]
+defname=i_log_hickory
+name=hickory log
+id=i_log
+type=t_log
+tdata1=i_board_hickory
+skillmake=65.0 lumberjacking
+
+on=@create
+color=color_l_hickory
+
+[itemdef i_log_ash]
+defname=i_log_ash
+name=ash log
+id=i_log
+type=t_log
+tdata1=i_board_ash
+skillmake=70.0 lumberjacking
+
+on=@create
+color=color_l_ash
+
+[itemdef i_log_cedar]
+defname=i_log_cedar
+name=cedar log
+id=i_log
+type=t_log
+tdata1=i_board_cedar
+skillmake=75.0 lumberjacking
+
+on=@create
+color=color_l_cedar
+
+[itemdef i_log_walnut]
+defname=i_log_walnut
+name=walnut log
+id=i_log
+type=t_log
+tdata1=i_board_walnut
+skillmake=80.0 lumberjacking
+
+on=@create
+color=color_l_walnut
+
+[itemdef i_log_cypress]
+defname=i_log_cypress
+name=cypress log
+id=i_log
+type=t_log
+tdata1=i_board_cypress
+skillmake=85.0 lumberjacking
+
+on=@create
+color=color_l_cypress
+
+[itemdef i_log_rosewood]
+defname=i_log_rosewood
+name=rosewood log
+id=i_log
+type=t_log
+tdata1=i_board_rosewood
+skillmake=90.0 lumberjacking
+
+on=@create
+color=color_l_rosewood
+
+[itemdef i_log_oak]
+defname=i_log_oak
+name=oak log
+id=i_log
+type=t_log
+tdata1=i_board_oak
+skillmake=95.0 lumberjacking
+
+on=@create
+color=color_l_oak
+
+[itemdef i_log_maple]
+defname=i_log_maple
+name=maple log
+id=i_log
+type=t_log
+tdata1=i_board_maple
+skillmake=100.0 lumberjacking
+
+on=@create
+color=color_l_maple
+
+[itemdef i_log_yew]
+defname=i_log_yew
+name=yew log
+id=i_log
+type=t_log
+tdata1=i_board_yew
+skillmake=105.0 lumberjacking
+
+on=@create
+color=color_l_yew
+
+[itemdef i_log_blackwood]
+defname=i_log_blackwood
+name=blackwood log
+id=i_log
+type=t_log
+tdata1=i_board_blackwood
+skillmake=110.0 lumberjacking
+
+on=@create
+color=color_l_blackwood
+
+[itemdef i_log_hawthorn]
+defname=i_log_hawthorn
+name=hawthorn log
+id=i_log
+type=t_log
+tdata1=i_board_hawthorn
+skillmake=115.0 lumberjacking
+
+on=@create
+color=color_l_hawthorn
+
+[itemdef i_log_ironwood]
+defname=i_log_ironwood
+name=ironwood log
+id=i_log
+type=t_log
+tdata1=i_board_ironwood
+skillmake=120.0 lumberjacking
+
+on=@create
+color=color_l_ironwood
+
+// Boards
+
+[itemdef i_board_hickory]
+defname=i_board_hickory
+name=hickory board
+id=i_board
+type=t_board
+skillmake=65.0 lumberjacking
+
+on=@create
+color=color_l_hickory
+
+[itemdef i_board_ash]
+defname=i_board_ash
+name=ash board
+id=i_board
+type=t_board
+skillmake=70.0 lumberjacking
+
+on=@create
+color=color_l_ash
+
+[itemdef i_board_cedar]
+defname=i_board_cedar
+name=cedar board
+id=i_board
+type=t_board
+skillmake=75.0 lumberjacking
+
+on=@create
+color=color_l_cedar
+
+[itemdef i_board_walnut]
+defname=i_board_walnut
+name=walnut board
+id=i_board
+type=t_board
+skillmake=80.0 lumberjacking
+
+on=@create
+color=color_l_walnut
+
+[itemdef i_board_cypress]
+defname=i_board_cypress
+name=cypress board
+id=i_board
+type=t_board
+skillmake=85.0 lumberjacking
+
+on=@create
+color=color_l_cypress
+
+[itemdef i_board_rosewood]
+defname=i_board_rosewood
+name=rosewood board
+id=i_board
+type=t_board
+skillmake=90.0 lumberjacking
+
+on=@create
+color=color_l_rosewood
+
+[itemdef i_board_oak]
+defname=i_board_oak
+name=oak board
+id=i_board
+type=t_board
+skillmake=95.0 lumberjacking
+
+on=@create
+color=color_l_oak
+
+[itemdef i_board_maple]
+defname=i_board_maple
+name=maple board
+id=i_board
+type=t_board
+skillmake=100.0 lumberjacking
+
+on=@create
+color=color_l_maple
+
+[itemdef i_board_yew]
+defname=i_board_yew
+name=yew board
+id=i_board
+type=t_board
+skillmake=105.0 lumberjacking
+
+on=@create
+color=color_l_yew
+
+[itemdef i_board_blackwood]
+defname=i_board_blackwood
+name=blackwood board
+id=i_board
+type=t_board
+skillmake=110.0 lumberjacking
+
+on=@create
+color=color_l_blackwood
+
+[itemdef i_board_hawthorn]
+defname=i_board_hawthorn
+name=hawthorn board
+id=i_board
+type=t_board
+skillmake=115.0 lumberjacking
+
+on=@create
+color=color_l_hawthorn
+
+[itemdef i_board_ironwood]
+defname=i_board_ironwood
+name=ironwood board
+id=i_board
+type=t_board
+skillmake=120.0 lumberjacking
+
+on=@create
+color=color_l_ironwood
+
+///////////////////////////////////
+// Bone Crafting items
+
+[defname color_custom_logs]
+color_b_haunted		083a	//skeletons, bone magi
+color_b_brutish		0842	//orcs, orc lords
+color_b_fiendish	0851	//stone harpy, gargoyle,
+color_b_giants		084d	//ogre,troll, ettin bones
+color_b_demonic		0846
+
+[itemdef i_reag_bone_haunted]
+defname=i_reag_bone_haunted
+name=haunted bone
+id=i_reag_bone
+type=t_reagent
+
+on=@create
+color=color_b_haunted
+
+[itemdef i_reag_bone_brutish]
+defname=i_reag_bone_brutish
+name=brutish bone
+id=i_reag_bone
+type=t_reagent
+
+on=@create
+color=color_b_brutish
+
+[itemdef i_reag_bone_giants]
+defname=i_reag_bone_giants
+name=giants bone
+id=i_reag_bone
+type=t_reagent
+
+on=@create
+color=color_b_giants
+
+[itemdef i_reag_bone_demonic]
+defname=i_reag_bone_demonic
+name=demonic bone
+id=i_reag_bone
+type=t_reagent
+
+on=@create
+color=color_b_demonic
+
+[itemdef i_reag_bone_draconian]
+defname=i_reag_bone_draconian
+name=demonic bone
+id=i_reag_bone
+type=t_reagent
+
+on=@create
+color=color_b_draconian
+
+
+
+
+[EOF]

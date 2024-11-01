@@ -1,0 +1,228 @@
+//Grave digging by Soulless V1.0
+//fixed issue with gravedigging memory not equipping
+//fixed grave being disturbed at the same time as uncovering bones
+//fixed catacombs entrance and exit
+//adjusted loot for various corpses being ungraved
+//you can no longer dig in graves while riding a mount
+//now checking for distance on start and stroke versus just movement
+
+[defname grave_digging_ini]		
+grave_digging_undead1  			{ c_skeleton 1 c_zombie 1 c_spectre 1 }
+grave_digging_undead1_msg		You have disturbed the undead.
+grave_digging_undead2			{ c_liche 1 c_skeleton_mage 1 }
+grave_digging_undead2_msg		You have disturbed the dead greatly.
+grave_digging_undead3			{ c_liche_lord 1 c_mummy 1}
+grave_digging_undead3_msg		You've almost been drug into the grave.	// by the dead.
+
+
+[events e_grave_digging]
+
+on=@itemtargon_ground
+
+if (<act.baseid>==i_pickaxe) || (<act.baseid>==i_shovel)
+
+  for <src.targp.statics>
+   local.staticid=<src.targp.statics.<eval <local._for> +-1>>
+  endfor
+  if (strmatch("grave*","<serv.itemdef.<local.staticid>.name>"))
+    serv.newitem i_gold
+    new.p=<src.targp>
+    ref1=<new.check_grave_node>
+    new.remove
+    if !(<ref1>) 
+      serv.newitem i_worldgem_bit
+      new.type=t_normal
+      new.timer=36000
+      new.attr=attr_decay|attr_invis
+      new.amount=<R1,4>
+      new.p=<src.targp>
+      new.update
+      ref1=<new>
+    endif
+
+    if (<findlayer.25>)
+      sysmessage You can't gravedig while riding.
+      return 1
+    endif
+   
+    if (<distance <targp>> > 2)
+      sysmessage That is too far away.
+      return 1
+    endif
+
+    if (<findid.i_grave_digging>)	
+      sysmessage you are already digging in a grave.
+      return 1
+    endif
+
+    if (<ref1.amount> <= 0)
+      sysmessage This grave has already been excavated.  
+      return 1
+    endif
+
+    serv.newitem i_grave_digging
+    new.link=<ref1>
+    equip <new>
+    return 1
+  endif
+endif
+
+[function check_grave_node]
+foritems 0
+  if (<baseid>==i_worldgem_bit)
+     return <uid>
+  endif
+endfor
+
+[itemdef i_grave_digging]
+name=grave digging
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+more1=<R3,4>
+cont.sysmessage You start digging in the gravesite.
+timer=1
+
+on=@timer
+if (<cont.distance <link>> > 2)
+  cont.sysmessage That is too far away.
+  remove
+endif
+
+if !(<more1>)
+  cont.excavate_grave <link>
+  remove
+endif
+
+cont.anim 11
+cont.sound <R293,294>
+more1 -= 1
+timer=1
+return 1
+
+[function excavate_grave]
+ref1=<args>
+
+if <ref1.amount> <= 0
+  sysmessage This grave is empty.   //double check incase two people are digging at once
+  return 1
+endif
+
+if !(<R99>)	//this is the main purpose of gravedigging, rare monsters and loot in the catacombs
+  sysmessage You've uncovered an entrance to some underground catacombs.
+  serv.newitem i_hole
+  new.attr=012
+  new.timer=<eval <serv.DecayTimer>*60>
+  new.p=<ref1.p>
+  new.fix
+  new.type=t_catacombs_entrance
+  serv.newitem 07a9	//stone stairs - se corner
+  new.type=t_catacombs_exit
+  new.attr=012
+  new.timer=<eval <serv.DecayTimer>*60>
+  new.p=5904 400 0 0 
+  new.fix
+  ref1.amount=0
+return 1
+endif
+
+if !(<R3>) && (<ref1.amount> >= 1)
+  local.disturbed_undead=<R1,3>
+  serv.newnpc <def0.grave_digging_undead<dlocal.disturbed_undead>>
+  sysmessage <def0.grave_digging_undead<dlocal.disturbed_undead>_msg>
+  new.movenear <uid> 3
+  new.home=<ref1.p>
+  new.homedist=4
+  ref1.amount -= 1
+  return 1
+endif
+
+if !(<skillusequick mining,70>)
+  sysmessage You dig in the grave for a while but cannot find anything.
+  if (<ref1.amount>==1)
+    sysmessage In your attempts to excavate the grave you've destroyed it's contents.
+    ref1.amount=0
+    serv.newitem random_bones
+    new.p=<ref1.p>
+    new.fix
+  endif
+  return 1
+endif
+
+sysmessage You've excavated the decayed bones from this grave.
+serv.newitem i_bones
+ref2=<new>
+ref2.stock_excavated_corpse
+ref2.attr=012
+ref2.timer=<eval <serv.DecayTimer>*60>
+ref2.p=<ref1.p>
+ref2.fix
+ref1.amount=0
+return 1
+
+[typedef t_catacombs_entrance]
+
+on=@step
+if !(<src.brain>) && !(<argn1>==1)
+  src.go underground graveyard
+  src.tag.catacomb_entrance=<p>
+  src.events=+e_underground_graveyard
+endif
+
+[function load_excavated_corpse]		//quick way to load items into the chest without making templates with lots of lines
+for <argv[2]>
+  serv.newitem <argv[0]>,<argv[1]>
+  new.color=<argv[3]>
+  new.cont=<uid>
+  new.update
+endfor
+
+[function stock_excavated_corpse]
+dorand 2
+  local.sex=male
+  local.sex=female
+enddo
+//items that come standard on all corpses
+  load_excavated_corpse,random_body_parts_1,1,1
+  load_excavated_corpse,random_body_parts_2,1,1
+  load_excavated_corpse,random_light,1,1
+  load_excavated_corpse,random_footwear,1,1
+  load_excavated_corpse,random_<qval !<R1>?male:female>_tops,1,1,colors_all
+  load_excavated_corpse,random_pants,1,1,colors_all
+  load_excavated_corpse,random_coin_purse,1,1
+
+if !<R9>	//noble's corpse
+  load_excavated_corpse,random_jewel,{3 4},5
+  load_excavated_corpse,i_gold,{100 1000},1
+  load_excavated_corpse,random_jewelry,1,4
+
+elseif !<R6>	//adventurer's corpse
+  load_excavated_corpse,i_gold,{100 500},1
+  load_excavated_corpse,i_bandage,{1 5},1
+  load_excavated_corpse,random_scroll,1,3
+  load_excavated_corpse,random_potion,1,5
+  load_excavated_corpse,random_head_armor,1,1
+  load_excavated_corpse,random_neck_armor,1,1
+  load_excavated_corpse,random_chest_armor,1,1
+  load_excavated_corpse,random_arm_armor,1,1
+  load_excavated_corpse,random_hand_armor,1,1
+  load_excavated_corpse,random_leg_armor,1,1
+  load_excavated_corpse,random_weapon,1,1
+
+else 	//peasent's corpse
+
+endif
+
+
+
+[events e_underground_graveyard]
+
+
+
+	
+
+
+[EOF]
+

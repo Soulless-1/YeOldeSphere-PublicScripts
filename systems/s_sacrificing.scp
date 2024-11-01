@@ -1,0 +1,309 @@
+//Ticket barrel and Sacrifice By Soulless
+//v1.0
+//Allows players to sacrifice corpses and trash to buy items from the ticket barrel
+//4:21 PM 6/21/2021
+
+
+
+[defname token_barrel_items]	//id,cost,name,desc
+
+token_barrel_payfrombank	1
+
+token_barrel_item0		random_pet_statue,5000,Random Pet Statue,This is a random pet statue that will make a sound when dclicked or stepped on.
+//token_barrel_item1		i_mystery_bag,10000,Mystery Bag,This bag contains random items in it and the potential chance to win one of the other greater items on this stone.
+token_barrel_item1		i_deed_bless_clothing,15000,Clothing Bless Deed,This deed can be used to bless a single clothing item. You cannot bless magical or rare clothing.
+token_barrel_item2		i_scroll_power_hour,20000,Power Hour Scroll,This scroll will give you 2x chance to gain skill for 60 minutes
+token_barrel_item3		i_scroll_bonus_loot_roll,20000,Bonus Loot Scroll,This scroll will give you 30 bonus loot rolls that will last for 60 minutes.
+//token_barrel_item4		i_dye_tub_rare,30000,Rare Colored Dye Tub,This is a dyetub that comes in a rare color, you can dye item tubs with this. (20-30 charges)
+//token_barrel_item5		i_dye_tub_jewelry,35000,Jewelry Dye Tub,This is a dye tub that can be used on jewelry items. (10-20 charges)
+//token_barrel_item6		i_dye_tub_book,35000,Book Dye Tub,This is a non-colored dye tub that can be used on book items. (10-20 charges)
+//token_barrel_item7		i_dye_tub_furniture,35000,Furniture Dye Tub,This is a non-colored dye tub that can be used on furniture items.(10-20 charges)
+//token_barrel_item8		i_dye_tub_armor,40000,Armor Dye Tub,This is a non-colored  dye tub that can be used on armor items. (10-20 charges)
+//token_barrel_item9		i_dye_tub_weapon,40000,Weapon Dye Tub,This is a non-colored dye tub that can be used on weapon items. (10-20 charges)
+//token_barrel_item10		i_dye_tub_animal,40000,Animal Dye Tub, This is a non-colored  dye tub that can be used on pets you own. (10-20 charges)
+token_barrel_item4		i_deed_pet_bonding,50000,Pet Bonding Deed,This deed will instantly make any pet you own bond with you.
+//token_barrel_item12		i_house_stables,75000,House Stable Post,This is a stable post that will allow you to store up to five of your pets keeping them healthy and fed.
+token_barrel_item5		i_ethereal_mount_selector,250000,Ethereal Mount,This is an ethereal mount selector that will let you pick one ethereal of your choosing.		
+token_barrel_item6
+
+
+//////////////////
+// Token Barrel //
+//////////////////
+
+[ITEMDEF i_token_barrel]
+name=Token Barrel
+id=i_barrel_open
+type=t_normal
+
+ON=@Create
+attr=010
+color=045e
+
+ON=@Dclick
+src.soundp 555
+sdialog d_token_barrel
+return 1
+
+[dialog d_token_barrel]
+150,50
+
+page 0
+resizepic 50 15 5054 430 460	
+
+dtext 175 35 1263 <serv.servname> Token Barrel
+
+while !(<isempty <def.token_barrel_item<dlocal.n>>>)
+  local.p += 1
+  page <local.p>
+  for 0 14
+    if !(<isempty <def.token_barrel_item<dlocal.n>>>)
+      args=<def0.token_barrel_item<dlocal.n>>
+      button 95 <eval 80+(<local.y>*20)> 212 212 1 0 <eval <local.n>+1000>
+      dtext 100 <eval 80+(<local.y>*20)> 1000 ?
+      button 120 <eval 80+(<local.y>*20)> 4006 4007 1 0 <eval <local.n> +1>
+      dtext 160 <eval 78+(<local.y>*20)> 1263 <argv[2]>
+      dtext 320 <eval 78+(<local.y>*20)> 1000 <argv[1]> Tokens
+      local.y += 1
+      local.n += 1 
+      if (<local.y> > 15)
+        local.y=
+        button 415 435 4006 4007 0 <eval <local.p>+1>	//forward one page
+      endif
+    endif
+  endfor
+  if (<local.p> > 1)
+    button 85 435 4015 4016 0 <eval <local.p>-1>	//backward one page
+  endif
+endwhile
+
+dtext 175 435 1000 You have <qval (<def0.token_barrel_payfrombank> != 0)?<dsrc.tokens>:<src.findlayer.21.rescount.i_reward_token>> reward tokens. 
+
+
+[dialog d_token_barrel button]
+onbutton=1,999
+argn -= 1
+args=<def0.token_barrel_item<dargn>>
+if (<src.tokens> < <argv[1]>) && !(<src.isgm>)
+  src.sysmessage you do not have enough tokens to purchase that reward.
+  sdialog d_token_barrel
+  return 1
+endif
+
+src.consumetokens <argv[1]>
+serv.newitem <argv[0]>
+src.bounce <new>
+sound 022a
+sdialog d_token_barrel
+
+onbutton=1000,1999
+argn -= 1000
+//args=<def0.token_barrel_item<dargn>>
+sdialog d_token_barrel
+dialog d_token_barrel_details <dargn>
+
+
+[dialog d_token_barrel_details]
+150,50
+page 0
+
+page <argn1>
+resizepic 65 10 5054 225 225
+resizepic 75 20 3000 205 205
+args=<streat <streat <def0.token_barrel_item<dargn1>>>>
+dtext 100 30 1263 <argv[0]>
+
+dhtmlgump 90 50 190 180 0 1 <def0.bfont_black><argv[<eval (<argv>-1)>]>
+
+
+[plevel 1]
+sac
+sacall
+
+[function sac]
+if (<flags>&statf_freeze) || (<flags>&statf_dead)
+  sysmessage You cannot make a sacrifice right now.
+  return 1
+endif
+targetf f_sac_targ
+sysmessage Select a corpse to sacrifice
+
+[function f_sac_targ]
+if !(<argo.isvalid>) 		//stop if no target selected
+  return 1
+elseif !(<argo.isitem>)
+  sysmessage You may not sacrifice a living being.	//can't sacrifice living creatures
+  return 1
+elseif (<flags>&statf_freeze) || (<flags>&statf_dead)
+  sysmessage You cannot make a sacrifice right now.
+  return 1
+elseif !(<argo.more2>)
+  sysmessage That corpse cannot be sacrificed.
+  return 1
+elseif (<argo.type> != t_corpse) || (<argo.link> != 04fffffff)	//can't sacrifice things that aren't corpses or player corpses
+  sysmessage You cannot sacrifice <argo.name>.
+  return 1
+elseif !(<canseelos <argo>>) && !(<isgm>)
+  sysmessage You can't see that corpse to sacrifice it.
+  return 1
+elseif (<argo.tag0.nosac> >= 1)
+  sysmessage That corpse cannot be sacrificed.
+  return 1
+endif
+
+ref1=<argo.more2>	//the corpses killer
+if (<ref1.isvalid>) && (<ref1.npc>) && (<ref1.owner>) 
+  ref1=<ref1.owner>	//if its a pet, the owner counts as the killer
+endif
+
+if (<ref1.isvalid>) && (<ref1> != <uid>) && !(<isgm>) 
+  sysmessage You can only sacrifice corpses that belong to you.
+  return 1
+endif
+
+
+//local.str=<serv.chardef.<argo.morex>.str>
+//local.amount=<eval {(<local.str>/40),(<local.str>/20)}+1>
+local.amount=<eval {(<argo.tag0.base_difficulty>/4),(<argo.tag0.base_difficulty>/2)}+1>
+tokens + <local.amount>
+sound 500
+sysmessage You have received <dlocal.amount> reward tokens for sacrificing <argo.name>
+argo.effect=2,0377a,3,15,0,04f2,0
+argo.remove
+
+[function sacall]
+ref1=<uid>
+if (<ref1.flags>&statf_freeze) || (<ref1.flags>&statf_dead)
+  ref1.sysmessage You cannot make a sacrifice right now.
+  return 1
+endif
+
+foritems 15
+  if (<type> == t_corpse) && (<link> == 04fffffff) && (<ref1.canseelos <uid>>) && (<tag0.nosac> <= 0)
+    if (<uid.<more2>.isvalid>) && (<uid.<more2>.ischar>) 
+      ref2=<more2>	//the corpses killer
+      if (<ref2.isvalid>) && (<ref2.npc>) && (<ref2.owner>) 
+        ref2=<ref2.owner>	//if its a pet, the owner counts as the killer
+      endif
+      if !(<ref2.isvalid>) || (<ref2> == <ref1>) || (<ref1.isgm>)
+        //local.str=<serv.chardef.<morex>.str>
+        local.amount=<eval {(<tag0.base_difficulty>/4),(<tag0.base_difficulty>/2)}+1>
+        local.total += <local.amount>
+        effect=2,0377a,3,15,0,04f2,0
+        remove
+      endif
+    endif
+  endif
+endfor
+if (<local.total>)
+  ref1.tokens + <local.total>
+  ref1.sysmessage You have received <dlocal.total> reward tokens for sacrificing corpses.
+  ref1.sound 500
+endif
+
+[function trash]
+sysmessage Trash function is disabled.
+return 1
+if (<flags>&statf_dead)
+  sysmessage The dead cannot trash things
+  return 1
+endif
+targetf f_trash_targ
+sysmessage Select an item to trash
+
+[function f_trash_targ]
+if !(<argo.isitem>)
+  sysmessage You may not trash a living being.	//can't trash living creatures
+  return 1
+elseif (<argo.topobj> != <uid>)
+  sysmessage You must have the item on your person.
+  return 1
+elseif !(<argo.istrash>)
+  sysmessage You can't trash that type item
+  return 1
+endif
+local.amount=<R1,5>
+sysmessage You have received <dlocal.amount> reward tokens for trashing <argo.name>
+tokens + <dlocal.amount>
+argo.remove
+sound 500
+
+[function istrash]
+if (<baseid> == i_reward_token) && (<type> == t_deed) && (<type> == t_gold) && (<type> == t_container)
+  return 0
+elseif (<attr>&attr_newbie) && (<attr>&attr_blessed)
+  return 0
+elseif (<type> == t_reagent) && (<type> === t_ingot) && (<type> == t_ore) && (<type> == t_log) && (<type> == t_shaft) && (<type> == t_weapon_arrow) && (<type> == t_weapon_bolt)
+  return 0
+endif
+return 1
+
+[itemdef i_reward_token]
+id=i_gem_ruby
+name=Reward Tokens
+dropsound=0033
+type=t_reward_token
+weight=0
+
+on=@create
+color=051
+
+[typedef t_reward_token]
+
+on=@dclick
+src.sysmessage These appear to be tokens to exchange at the token barrel for rewards
+return 1
+
+[function tokens]
+if (strmatch(-*,<args>))		//remove tokens
+  consumetokens <streat <explode -=,<args>>>
+elseif (strmatch(+*,<args>))		//adding tokens
+  newtokens <streat <explode +=,<args>>>
+elseif <argn>				//setting total tokens
+  local.tokens=<tokens>
+  if (<argn> < <local.tokens>)
+    consumetokens <eval (<local.tokens>-<argn>)>
+  else
+    while (<local.tokens> < <args>)
+      local.needed=<eval (<args>-<local.tokens>)>
+      local.amount=<qval (<local.needed> <= <serv.ItemsMaxAmount>)?<local.needed>:60000>
+      serv.newitem i_reward_token
+      new.amount=<local.amount>
+      new.cont=<findlayer.29>
+      local.tokens += <local.amount>
+    endwhile
+  endif
+endif
+local.amount += <findlayer.21.rescount.i_reward_token>
+local.amount += <findlayer.29.rescount.i_reward_token>		//otherwise we just return the amount
+return <local.amount>
+
+[function newtokens]
+while (<local.tokens> < <args>)
+  local.needed=<eval (<args>-<local.tokens>)>
+  local.amount=<qval (<local.needed> <= <serv.ItemsMaxAmount>)?<local.needed>:60000>
+  serv.newitem i_reward_token
+  new.amount=<local.amount>
+  new.cont=<findlayer.21>
+  local.tokens += <local.amount>
+endwhile
+//sound 033
+
+[function consumetokens]
+if !(<isempty <args>>) && !(<args> < 0)
+  local.bagtokens=<findlayer.21.rescount.i_reward_token>
+  local.banktokens=<findlayer.29.rescount.i_reward_token>
+  //if (<eval (<local.bagtokens> + <local.banktokens>)> < <args>)
+    //message You do not have enough Reward tokens to cover this purchase.
+    //return 1
+  //endif  
+  if (<local.bagtokens> >= <args>)
+    findlayer.21.contconsume i_reward_token <args> 
+  else
+    findlayer.21.contconsume i_reward_token <local.bagtokens> 
+    findlayer.29.contconsume i_reward_token <eval (<args>-<local.bagtokens>)>
+  endif
+  //sound 034
+endif
+
+[EOF]

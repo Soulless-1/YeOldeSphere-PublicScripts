@@ -1,0 +1,89 @@
+//https://www.uoguide.com/Snooping
+//https://uo2.stratics.com/skill-guides/skills-and-professions/snooping/
+
+[SKILL 28]
+DEFNAME=Skill_Snooping
+KEY=Snooping
+TITLE=Pickpocket
+PROMPT_MSG=
+FLAGS=skf_scripted
+DELAY=2.0
+STAT_STR=30
+STAT_INT=50
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=100
+BONUS_INT=0
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start
+//act = target
+//actprv = none
+ref1=<act.topobj>	//char holding the container
+
+if !(<act.isvalid>) || !(<act.isitem>) || (<act.type> != t_container) || !(<ref1.isvalid>)	
+  return 1
+elseif (<ref1> == <src>)
+  src.sysmessage You catch yourself red handed	
+  return 1
+elseif (<src.distance <ref1>> > 1)
+  src.sysmessage That is too far away.
+  return 1
+elseif (<ref1.isgm>) || ((<ref1.isplayer>) && (<ref1.account.plevel> > <src.account.plevel>)) 
+  src.sysmessage You cannot peek into the container.
+  return 1  
+elseif (<src.flags>&statf_invul) || (<ref1.flags>&statf_stone) 
+  src.sysmessage You cannot perform negative acts on your target.
+  return 1
+endif
+if (<src.account.plevel> <= 1)
+  if (<ref1> != <src>) && (<src.snooping> < <R10,1000>)
+    ref1.sysmessage You notice <src.name> attempting to peek into your belongings!
+  endif
+endif
+if !(<src.f_skillsucceed snooping>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+if (<src.flags>&statf_hidden) && (<eval <src.hiding>/2> < <R10,1000>)
+  src.reveal
+endif
+src.sysmessage You fail to peek into the container.
+
+ON=@Abort
+src.sysmessage You give up trying to peek into the container.
+
+on=@success
+//serv.log <src.name>(<src>) trying to open <act.name>(<act>)
+act.open
+act.topobj.f_irritatedby <src>
+src.karma -= 8
+//src.sysmessage You have lost a little karma.	//this should be taken care of in the gainkarma function
+
+[function f_snoop_notice]
+ref1=<argv[0]>
+ref2=<argv[1]>
+if (<uid> != <ref1>) && (<ref1.snooping> < <R10,1000>)
+  sysmessage You notice <ref1.name> attempting to peek into <qval (<ref2>==<uid>)?your:<ref2.name>'s> belongings.
+endif
+
+[comment]
+Formula:
+MinSkill = 0
+MaxSkill = 100
+Snooping = Character Skill Snooping
+if(Snooping < MinSkill)
+return false //Too difficult
+if(Snooping >= MaxSkill)
+return true //No challenge
+
+Chance % Success = (Snooping - MinSkill) / (MaxSkill - MinSkill)
+Chance = Chance % Success >= RandomDouble(0.0, 1.0)
+
+
+[EOF]

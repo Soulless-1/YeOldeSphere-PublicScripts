@@ -1,0 +1,324 @@
+//Player Vendors by Soulless
+//v1.0
+//2:47 PM 5/21/2021
+
+
+[dialog d_player_vendor]
+50,150
+page 0
+
+resizepic 10 9 9200 620 145
+dtext 20 20 0 # of UO days my salary is paid for: 
+dtext 280 20 0 <f_player_vendor_gamedays_paid>
+
+dtext 20 40 0 Earth days:
+dtext 280 40 0 <f_player_vendor_earthdays_paid>
+
+dtext 20 60 0 Gold held for you:
+dtext 280 60 0 <dtag0.owners_gold>
+
+dtext 20 80 0 Gold held in my account: 
+dtext 280 80 0 <findlayer.29.rescount i_gold>
+
+dtext 20 100 0 My charge per earth day is:
+dtext 280 100 0 <f_player_vendor_earthday_charge>
+
+//dtext 20 120 0 Advertising contract: 			//is this a uorenaissance.com custom thing?
+//dtext 280 120 0 <f_player_vendor_advertising_contract_daysleft>
+
+button 440 20 4005 4006 1 0 1
+dtext 480 20 0 See goods
+
+button 440 45 4005 4006 1 0 2
+dtext 480 45 0 Customize
+
+button 440 70 4005 4006 1 0 3
+dtext 480 70 0 Open Paperdoll
+
+button 440 95 4005 4006 1 0 4
+dtext 480 95 0 Shop Details
+
+button 440 120 4005 4006 1 0 0
+dtext 480 120 0 CANCEL
+
+[dialog d_player_vendor button]
+
+onbutton=0
+f_player_vendor_farewell
+
+onbutton=1
+findlayer.21.open
+
+onbutton=2
+sdialog d_player_vendor_customize
+
+onbutton=3
+src.openpaperdoll <uid>
+
+onbutton=4
+sdialog d_player_vendor_shop_details
+
+
+[dialog d_player_vendor_customize]
+100,50
+page 0
+
+//BACKGROUND
+resizepic 10 40 9200 630 400
+
+//TITLE BAR
+//gumppictiled 20 20 510 25 2624
+dhtmlgump 225 55 300 20 0 0 VENDOR CUSTOMIZATION MENU
+
+//////////////////////
+//CATEGORIES SECTION
+while !(<isempty <def.player_vendor_clothing_<dlocal.c>_0>>)
+  dhtmlgump 25 <eval 75+(<local.c>*25)> 160 25 1 0 <def0.player_vendor_clothing_<dlocal.c>_name>
+  button 185 <eval 75+(<local.c>*25)> 4005 4006 1 0 <eval <local.c>+1>
+  local.c += 1
+endwhile
+
+//////////////////////
+//ACTIONS SECTION
+//LEFT SIDE
+
+button 25 395 4005 4006 1 0 65535		//select the clothing item
+dhtmlgump 60 395 200 20 0 0 OKAY
+
+button 280 395 4005 4006 1 0 0 
+dhtmlgump 315 395 100 20 0 0 CANCEL
+
+//////////////////////
+//SELECTIONS SECTION
+
+local.c=<src.ctag0.player_vendor_customizing>
+resizepic 225 75 3000 400 275
+local.i=
+local.p=1
+
+page 1
+while !(<isempty <def.player_vendor_clothing_<dlocal.c>_<dlocal.i>>>)
+  if (<local.y> >= 3)
+    local.p += 1 
+    local.y=
+    button 600 330 4005 4007 0 <local.p>	//next page
+    dhtmlgump 560 330 100 20 0 0 NEXT
+    page <local.p>
+    if (<local.p> > 1)
+      button 220 330 4014 4016 0 <eval <local.p>-1>	//previous page
+    else
+      button 220 330 4014 4016 0 <local._for>
+    endif
+    dhtmlgump 260 330 100 20 0 0 PREV
+  endif
+  local.baseid=<def0.player_vendor_clothing_<dlocal.c>_<dlocal.i>>
+  dhtmlgump <eval 230+(<local.x>*150)> <eval 75+(<local.y>*55)> 300 20 0 0 <serv.itemdef.<local.baseid>.name>
+  radio <eval 230+(<local.x>*150)> <eval 90+(<local.y>*55)> 210 211 0 <eval 100+<local.i>>	//equip the item
+  if !(<def0.player_vendor_clothing_<dlocal.c>_nopic>)
+    tilepichue <eval 250+(<local.x>*150)> <eval 100+(<local.y>*55)> <eval id(<serv.itemdef.<local.baseid>.dispid>)> <dlocal.color>
+  endif
+  
+  dhtmlgump 380 260 300 20 0 0 Color
+  radio 380 275 210 211 0 65530
+
+  dhtmlgump 520 260 300 20 0 0 Remove
+  radio 520 275 210 211 0 65531	
+
+
+  local.i += 1
+  local.x += 1
+  if (<local.x> > 2)
+    local.x=
+    local.y += 1
+  endif
+
+endwhile
+
+local.y=
+local.c=
+
+
+[dialog d_player_vendor_customize button]
+
+onbutton=0
+sdialog d_player_vendor
+
+onbutton=1,20 	//pick clothing category
+argn -= 1
+src.ctag0.player_vendor_customizing=<dargn>
+sdialog d_player_vendor_customize
+
+onbutton=65535	//depending on what the checkbox is equip item, color, or remove item
+sdialog d_player_vendor_customize
+
+if (<argchkid> != -1) && (<argchkid> <= 1000)
+  local.c=<src.ctag0.player_vendor_customizing>
+  local.i=<eval (<argchkid>-100)>
+  local.item=<def0.player_vendor_clothing_<local.c>_<local.i>>
+  //serv.log <src.name>(<src>) customizing <name>(<uid>), equipping a <local.item> on the vendor.
+  if (!<isempty <local.item>>)
+    args=<def0.player_vendor_clothing_<src.dctag0.player_vendor_customizing>_layers>
+    for 0 <eval (<argv>-1)>
+      ref1=<findlayer.<argv[<dlocal._for>]>>
+      if (<ref1.isvalid>)
+        ref1.remove
+      endif
+    endfor
+    serv.newitem <local.item>
+    new.attr=010
+    new.color=colors_all
+    equip <new>
+  endif
+  return 1
+
+elseif (<argchkid> != -1) && (<argchkid> == 65530)
+  args=<def0.player_vendor_clothing_<src.dctag0.player_vendor_customizing>_layers>
+  for 0 <eval (<argv>-1)>
+    ref1=<findlayer.<argv[<dlocal._for>]>>
+    if (<ref1.isvalid>)
+      //serv.log <src.name>(<src>) customizing <name>(<uid>), coloring <ref1.name>
+      src.f_huepicker <ref1>
+    endif
+  endfor
+  return 1
+
+elseif (<argchkid> == 65531)
+  args=<def0.player_vendor_clothing_<src.dctag0.player_vendor_customizing>_layers>
+  //serv.b <argchkid>
+  for 0 <eval (<argv>-1)>
+    ref1=<findlayer.<argv[<dlocal._for>]>>
+    if (<ref1.isvalid>)
+      ref1.remove
+    endif
+  endfor
+  return 1
+endif
+
+[comment this is for buttons instead of radios]
+
+onbutton=100,1000	//change clothes
+local.c=<src.ctag0.player_vendor_customizing>
+local.i=<argn1>-100
+local.item=<def0.player_vendor_clothing_<local.c>_<local.i>>
+serv.newitem <local.item>
+args=<def0.player_vendor_clothing_<src.dctag0.player_vendor_customizing>_layers>
+for 0 <eval (<argv>-1)>
+  ref1=<findlayer.<argv[<dlocal._for>]>>
+  if (<ref1.isvalid>)
+    ref1.remove
+  endif
+endfor
+new.color=colors_all
+equip <new>
+sdialog d_player_vendor_customize
+
+onbutton=2000	//color clothes
+sdialog d_player_vendor_customize
+args=<def0.player_vendor_clothing_<src.dctag0.player_vendor_customizing>_layers>
+for 0 <eval (<argv>-1)>
+  ref1=<findlayer.<argv[<dlocal._for>]>>
+  if (<ref1.isvalid>)
+    src.f_huepicker <ref1>
+  endif
+endfor
+
+onbutton=3000	//remove clothes
+args=<def0.player_vendor_clothing_<src.dctag0.player_vendor_customizing>_layers>
+for 0 <eval (<argv>-1)>
+  ref1=<findlayer.<argv[<dlocal._for>]>>
+  if (<ref1.isvalid>)
+    ref1.remove
+  endif
+endfor
+sdialog d_player_vendor_customize
+
+
+[DIALOG d_player_vendor_shop_details]
+75,150
+page 0
+
+resizepic 10 10 9200 625 350
+dtext 87 18 0 Shop Name: <tag0.player_vendor_shopname>
+
+button 580 20 4005 4006 1 0 1
+dtext 510 20 0 Shop Name
+
+while !<isempty <def.player_vendor_shopdetails_category_<dlocal.c>_name>>
+  tilepic <eval 55+<local.x>> <eval 70+<local.y>> <def.player_vendor_shopdetails_category_<dlocal.c>_tilepic>
+  checkbox <eval 60+<local.x>> <eval 100+<local.y>> 210 211 <qval (<tag0.player_vendor_shop_details>&<def0.player_vendor_shopdetails_category_<dlocal.c>_flag>)?1:0> <eval <local.c>+1>
+  dtext <eval 30+<local.x>> <eval 120+<local.y>> 0 <def.player_vendor_shopdetails_category_<dlocal.c>_name>
+  local.c += 1
+  local.x += 150
+  if (<local.x> >= 600)
+    local.y += 100
+    local.x=
+  endif
+endwhile
+
+
+
+[DIALOG d_player_vendor_shop_details button]
+
+onbutton=1
+src.ctag0.rename_vendor=<uid>
+src.sysmessage Enter a name to be used when describing your shop.
+src.promptconsole f_player_vendor_rename_shop
+
+onbutton=0
+while !<isempty <def.player_vendor_shopdetails_category_<dlocal.f>_flag>>
+  if (<argchk[<eval <local.f>+1>]> == 1)
+    local.flags |= <def0.player_vendor_shopdetails_category_<local.f>_flag>
+  endif
+  local.f += 1
+endwhile
+tag0.player_vendor_shop_details=<local.flags>
+sdialog d_player_vendor
+
+
+[dialog d_player_vendor_purchase_confirm]
+250,200
+page 0
+
+resizepic 10 10 9200 345 140
+
+dtext 35 20 0 You have agreed to purchase:
+dtext 35 40 0 <qval (!<isempty <tag.player_vendor_description>>)?<tag0.player_vendor_description>:an item without a description>
+dtext 35 60 0 for the amount of:
+dtext 35 80 0 <tag0.player_vendor_price>
+
+button 30 115 4005 4006 1 0 1
+dtext 65 115 0 OKAY
+
+button 185 115 4005 4006 1 0 0
+dtext 220 115 0 CANCEL
+
+
+[dialog d_player_vendor_purchase_confirm button]
+
+onbutton=1	//purchase item
+f_player_vendor_purchase_confirmed
+
+
+[DIALOG d_player_vendor_dismiss]
+150,50
+page 0
+
+resizepic 10 10 9200 295 140
+resizepic 20 20 3000 275 120
+dhtmlgump 30 23 256 76 1 1 <def.bfont_balack>Are you sure you want to dismiss your vendor named <name>?
+
+button 35 105 4005 4006 1 0 1
+dtext 70 105 0 CONINTUE
+
+button 175 105 4005 4006 1 0 0
+dtext 210 105 0 CANCEL
+
+[DIALOG d_player_vendor_dismiss button]
+
+ON=1
+f_player_vendor_dismiss
+
+ON=0
+
+
+[EOF]

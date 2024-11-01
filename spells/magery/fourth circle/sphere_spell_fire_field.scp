@@ -1,0 +1,31 @@
+[SPELL 28]
+DEFNAME=s_fire_field
+NAME=Fire Field
+SOUND=0
+RUNES=IFG
+CAST_TIME=1.5
+RESOURCES=i_reag_black_pearl,i_reag_spider_silk,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_fire_field
+SCROLL_ITEM=i_scroll_fire_field
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_fx_targ|spellflag_damage|spellflag_field|spellflag_playeronly|spellflag_resist //spellflag_harm <-- can be reflected
+EFFECT_ID=i_fx_heal_effect
+EFFECT=2
+DURATION=1*30.0,2*30.0
+MANAUSE=11
+SKILLREQ=MAGERY 30.0
+INTERRUPT=100.0,100.0
+
+//Creates a 5 tile wide, temporary wall of fire. Creatures on the tiles will take minimum spell damage for each second they remain there. If you cast this on another player, or another player runs through your fire field, it's considered an aggressive action and you will be criminally flagged.
+ON=@Success
+LOCAL.FieldWidth=5
+sound 020c
+
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.duration=<eval 4+((<local.spell_strength>/10)/2)>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+sound snd_spell_fire_field
+
+[EOF]

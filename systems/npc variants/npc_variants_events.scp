@@ -1,0 +1,8 @@
+//NPC Variants by Soulless
+//v1.0
+//12:02 AM 1/14/2022
+
+[events e_gateway_demon]
+
+//on=@npactfight
+//something here

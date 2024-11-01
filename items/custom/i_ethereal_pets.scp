@@ -1,0 +1,418 @@
+//Ethereal Mounts by Soulless
+//v2.0
+//11:21 PM 2/16/2023
+
+//minor updates and improvement in code
+//add lootable version with charges
+
+
+[defname ethereal_settings]
+ethereal_cast_time 	4	//how long is the summon time for the ethereal mount
+ethereal_cast_freeze	0	//does the player freeze on casting ethereal mounts?
+ethereal_cast_interrup	1	//can you be interrupted while summoning your ethereal mount?
+
+/////////////////////////////////////////
+// Ethereal Mount Selector Ball
+
+[itemdef i_ethereal_mount_selector]
+defname=i_ethereal_mount_selector
+name=Ethereal Mount Selector
+id=i_crystal_ball
+type=t_script
+
+on=@create
+attr=attr_newbie
+color=0901
+
+on=@dclick
+if (<topobj.uid> != <src.uid>)
+  src.sysmessage You can not use this where it is
+  return 1
+endif
+sdialog d_ethereal_mount_selector
+return 1
+
+[defname ethereal_mount_selector]
+ethereal_mount0		i_ethereal_horse
+ethereal_mount1		i_ethereal_llama
+ethereal_mount2		i_ethereal_ostard_forest
+ethereal_mount3		i_ethereal_ostard_desert
+ethereal_mount4		i_ethereal_ostard_frenzied
+ethereal_mount5		i_ethereal_polar_bear
+ethereal_mount6	
+
+[dialog d_ethereal_mount_selector]
+200, 150
+resizepic 0 5 9200 300 220
+dtext 40 25 1263 Please select your Ethereal Mount
+
+while !(<isempty <def.ethereal_mount<dlocal.n>>>)
+  button 40 <eval (60+(20*<local.n>))> 1209 1210 1 0 <eval <local.n>+1>
+  dtext 60 <eval (55+(20*<local.n>))> 1000 <serv.itemdef.<def0.ethereal_mount<dlocal.n>>.name>
+  local.n += 1
+endfor
+
+[dialog d_ethereal_mount_selector button]
+onbutton=1,20
+argn1 -= 1
+serv.newitem <def0.ethereal_mount<dargn1>>
+new.bounce <src>
+consume
+
+//////////////////////////////
+// Ethereal Statuettes
+
+[itemdef i_ethereal_horse]
+defname=i_ethereal_horse
+name=Ethereal Horse Statuette
+id=i_pet_horse
+type=t_ethereal_statuette
+layer=layer_special
+tdata1=c_horse_tan
+tdata2=i_mt_horse_tan
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Horse Statuette
+
+[itemdef i_ethereal_llama]
+defname=i_ethereal_llama
+name=Ethereal Llama Statuette
+id=i_pet_llama
+type=t_ethereal_statuette
+layer=layer_special
+tdata1=c_llama
+tdata2=i_mt_llama
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Llama Statuette
+
+[itemdef i_ethereal_ostard_forest]
+defname=i_ethereal_ostard_forest
+defname2=i_ethereal_ostard
+name=Ethereal Forest Ostard Statuette
+id=i_pet_ostard_forest
+type=t_ethereal_statuette
+layer=layer_special
+tdata1=c_ostard_forest
+tdata2=i_mt_ostard_forest
+
+on=@create
+color=0455
+attr=04
+
+[itemdef i_ethereal_ostard_desert]
+defname=i_ethereal_ostard_desert
+name=Ethereal Desert Ostard Statuette
+id=i_pet_ostard_desert
+type=t_ethereal_statuette
+tdata1=c_ostard_desert
+tdata2=i_mt_ostard_desert
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Ostard Statuette
+
+[itemdef i_ethereal_ostard_frenzied]
+defname=i_ethereal_ostard_frenzied
+defname2=i_ethereal_zostrich
+name=Ethereal Frenzied Ostard Statuette
+id=i_pet_ostard_zostrich
+type=t_ethereal_statuette
+tdata1=c_ostard_zostrich
+tdata2=i_mt_ostard_zostrich
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Zostrich Statuette
+
+[itemdef i_ethereal_unicorn]
+defname=i_ethereal_unicorn
+name=Ethereal Unicorn Statuette
+id=i_pet_unicorn
+type=t_ethereal_statuette
+tdata1=c_unicorn
+tdata2=i_mt_unicorn
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Unicorn Statuette
+
+[itemdef i_ethereal_ridgeback]
+defname=i_ethereal_ridgeback
+name=Ethereal Ridgeback Statuette
+id=i_pet_ridgeback
+type=t_ethereal_statuette
+tdata1=c_ridgeback
+tdata2=i_mt_ridgeback
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Ridgeback Statuette
+
+[itemdef i_ethereal_kirin]
+defname=i_ethereal_kirn
+name=Ethereal Kirin Statuette
+id=i_pet_kirin
+type=t_ethereal_statuette
+tdata1=c_kirin
+tdata2=i_mt_kirn
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Kirin Statuette
+
+[itemdef i_ethereal_beetle]
+defname=i_ethereal_beetle
+name=Ethereal Beetle Statuette
+id=i_pet_giantbeetle
+type=t_ethereal_statuette
+tdata1=c_giant_beetle
+tdata2=i_mt_giant_beetle
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Beetle Statuette
+
+[itemdef i_ethereal_swamp_dragon]
+defname=i_ethereal_swamp_dragon
+name=Ethereal Swamp Dragon Statuette
+id=i_pet_swampdragon
+type=t_ethereal_statuette
+tdata1=c_swamp_dragon
+tdata2=i_mt_swamp_dragon
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Swamp Dragon Statuette
+
+[itemdef i_ethereal_hiryu]
+defname=i_ethereal_hiryu
+name=Ethereal Hiryu Statuette
+id=i_pet_hiryu
+type=t_ethereal_statuette
+tdata1=c_hiryu
+tdata2=i_mt_hiryu
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Hiryu Statuette
+
+[itemdef i_ethereal_cusidhe]
+defname=i_ethereal_cusidhe
+name=Ethereal Cu Sidhe Statuette
+id=i_pet_wolf
+type=t_ethereal_statuette
+tdata1=c_cu_sidhe
+tdata2=i_mt_cu_sidhe
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Cu Sidhe Statuette
+
+[itemdef i_ethereal_polar_bear]
+defname=i_ethereal_polar_bear
+name=Ethereal Polar Bear Statuette
+id=i_pet_bear_polar
+type=t_ethereal_statuette
+tdata1=c_bear_polar
+tdata2=i_mt_bear_polar
+
+on=@create
+color=0455
+attr=04
+
+category=Ethereal
+subsection=Ethereal pets
+description=Ethereal Polar Bear Statuette
+
+//////////////////////////////////////////////
+// Typedef and Supporting Functions/Events
+
+[typedef t_ethereal_statuette]	
+
+on=@click
+src.sysmessage You see a real ethereal statuette.
+
+on=@dclick
+if (<topobj.uid> != <src.uid>)
+  src.sysmessage You can't use that where it is.
+  return 1
+elseif (<src.findlayer.25>)
+  src.sysmessage Please dismount first.
+  return 1
+elseif !(<src.canmount>)
+  src.sysmessage You are not physically capable of riding.
+  return 1
+elseif (<src.findid.i_ethereal_summoning_memory>)
+  src.sysmessage You are already summoning an ethereal mount.
+  return 1
+elseif (<eval (<src.curfollower>+1)> > <src.maxfollower>)
+  src.sysmessage You have too many followers to summon your mount.
+  return 1
+endif
+
+if (<def0.ethereal_cast_time>) && !(<src.isgm>)	//we have a cast time
+  if (<def0.ethereal_cast_freeze>)		//and we cannot move
+    src.nomove <def0.ethereal_cast_time>
+  endif
+  serv.newitem i_ethereal_summoning_memory
+  new.more1=<def0.ethereal_cast_time>
+  new.more2=<uid>
+  src.equip <new>
+  new.timer=1
+  src.anim 16
+else
+  src.f_mount_ethereal <uid>		//just equip it immediately
+endif
+return 1
+
+on=@unequip
+type=t_ethereal_statuette	//for when it is t_eq_script it still has this typedef attached as an event
+link=04fffffff
+
+[itemdef i_ethereal_summoning_memory]
+defname=i_ethereal_summoning_memory
+id=i_memory
+name=Ethereal Casting Memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.events=+e_summoning_ethereal
+
+on=@timer
+more1 -= 1
+if !(<more1>)
+  topobj.f_mount_ethereal <more2>
+  if (<def0.ethereal_cast_freeze>)
+    topobj.nomove 0
+  endif
+  remove
+  return 1
+endif
+topobj.anim 16
+timer=1
+return 1
+
+on=@unequip
+src.events=-e_summoning_ethereal
+
+[function f_mount_ethereal]
+ref1=<args>	//mount item
+if (<ref1.topobj> != <uid>)
+  sysmessage You cannot use that were it is.
+  return 1
+elseif !(<canmount>)	//double check here incase of cast time
+  sysmessage You are not physically capable of riding.
+  return 1
+endif
+serv.newnpc <ref1.tdata1>
+ref2=<new.uid>
+ref2.setowner <uid>
+if (<ref1.color> == 0) || (<ref1.color> == 0455)
+  ref1.color=0455	
+  ref2.color=04555
+else
+  ref2.color=<ref1.color>
+endif
+ref2.p=<p>
+mount <ref2>
+findlayer.25.link=<ref1>			
+events=+e_ethereal_mount
+ref1.type=t_eq_script
+equip <ref1>
+ref1.removefromview
+
+[events e_summoning_ethereal]
+
+on=@gethit
+consume i_ethereal_summoning_memory
+sysmessage You have been disrupted while attempting to summon your ethereal mount!
+effect=3,i_fx_smoke_small,6,45,0
+sound 05c
+
+[events e_ethereal_mount]	//added when mounting the etheral from the item
+
+on=@dismount
+ref1=<findlayer.25>		//mount item
+ref2=<ref1.more2>		//mounted npc
+ref3=<ref1.link>		//ethereal statuette
+events=-e_ethereal_mount
+if !(<ref3.isvalid>)
+  serv.log WARNING! Ethereal dismounted but there was no statue for it
+else
+  ref3.cont=<findlayer.21>
+  ref3.type=t_ethereal_statuette 
+endif
+ref1.remove
+ref2.remove
+return 0
+
+[events e_riding_ethereal_mount]		//remove this some day
+
+on=@dismount
+events=-e_riding_ethereal_mount	//old event
+ref1=<findlayer.25>		//mount item
+ref2=<ref1.more2>		//mounted npc
+ref3=<ref1.link>		//ethereal statuette
+events=-e_ethereal_mount
+if !(<ref3.isvalid>)
+  serv.log WARNING! Ethereal dismounted but there was no statue for it
+else
+  ref3.cont=<findlayer.21>
+  ref3.type=t_ethereal_statuette 
+endif
+ref1.remove
+ref2.remove
+return 0
+
+
+
+[EOF]
+

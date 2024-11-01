@@ -1,0 +1,20 @@
+[SKILL 31]
+DEFNAME=Skill_Archery
+KEY=Archery
+TITLE=Archer
+FLAGS=skf_fight|skf_ranged
+PROMPT_MSG=
+DELAY=2.0	//2.0,0.1
+STAT_STR=40
+STAT_INT=30
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=95
+BONUS_INT=5
+BONUS_STATS=10
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+
+on=@success
+src.skillgain tactics
+
+[EOF]

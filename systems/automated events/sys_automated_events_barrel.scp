@@ -1,0 +1,133 @@
+[defname event_barrel_prizes]
+
+event_prize1			i_dye_tub			//the event reward ID or TEMPLATE
+event_prize1_name		Black Dyetub		//the event reward name that will show up on the dialog
+event_prize1_price		2500				//the event point price
+event_prize1_amount		1					//if there is an amount to this prize add it here
+event_prize1_color		01					//if there is an amount to this prize add it here
+
+event_prize2			i_dye_tub
+event_prize2_name		Rare Colored Dyetub
+event_prize2_price		7500
+event_prize2_color		{0aea 0b7a}
+event_prize2_tag		nodye
+
+event_prize3			0
+event_prize3_name		0
+event_prize3_price		0
+
+event_prize4			0
+event_prize4_name		0
+event_prize4_price		0
+
+event_prize5			0
+event_prize5_name		0
+event_prize5_price		0
+
+event_prize6			0
+event_prize6_name		0
+event_prize6_price		0
+
+event_prize7			0
+event_prize7_name		0
+event_prize7_price		0
+
+event_prize8			0
+event_prize8_name		0
+event_prize8_price		0
+
+event_prize9			0
+event_prize9_name		0
+event_prize9_price		0
+
+event_prize10			0
+event_prize10_name		0
+event_prize10_price		0
+
+event_prize11			0
+event_prize11_name		0
+event_prize11_price		0
+
+event_prize12			0
+event_prize12_name		0
+event_prize12_price		0
+
+
+
+
+[itemdef i_event_barrel]
+id=i_barrel_open
+name=Event Barrel
+type=t_script
+
+
+on=@create
+	color=010
+	attr=010
+
+on=@dclick
+	sound 555
+	sdialog d_event_barrel 9000
+	return 1
+
+[dialog d_event_barrel]
+0,0
+page 0
+resizepic 50 18 9270 437 454	//used to be 9260
+resizepic 64 32 3000 411 425
+resizepic 83 47 3500 368 42
+resizepic 83 96 3500 369 335
+dtext 190 57 09 <serv.servname> Event Barrel
+
+dtext 175 80 09 You have <src.dtag0.event_points> event points
+
+page <argn1>
+
+for 15
+   if <def0.event_prize<eval <local._for>+((<argn1>-9000)*15)>>
+   button 105 <eval (95+(<local._for>*20))> 1209 1210 1 0 <eval <local._for>+((<argn1>-9000)*15)>
+   dtext 125 <eval (90+(<local._for>*20))> 09 <def0.event_prize<eval <local._for>+((<argn1>-9000)*15)>_name>
+   dtext 345 <eval (90+(<local._for>*20))> 1000 <ddef0.event_prize<eval <local._for>+((<argn1>-9000)*15)>_price> Points
+   endif
+   if !<def0.event_prize<eval (<local._for>+((<argn1>-9000)*15))+1>>	//determine if there is a next page
+   local.no_next_page=1
+   endif	
+endfor 
+
+if <argn1> > 9000
+button 75 430 4015 4016 1 0 <eval <argn1>-1>	//backward one page
+endif
+
+if !<local.no_next_page>
+button 425 430 4006 4007 1 0 <eval <argn1>+1>	//forward one page
+endif
+
+[dialog d_event_barrel button]
+onbutton=1,8999
+
+if <src.tag0.event_points> < <def0.event_prize<argn>_price>
+src.sysmessage @<def0.automated_event_message_color> You do not have enough event points to cover this purchase.
+return 1
+endif
+
+src.tag0.event_points -= <def0.event_prize<argn>_price>
+serv.newitem <def0.event_prize<argn>>
+if <def0.event_prize<argn>_amount>
+new.amount = <def0.event_prize<argn>_amount>
+endif
+if <def0.event_prize<argn>_color>
+new.color = <def0.event_prize<argn>_color>
+endif
+  if !<isempty <def0.event_prize<argn>_tag>>
+  new.tag.<def0.event_prize<argn>_tag>=1
+  endif
+new.bounce <src>
+src.sound <def0.automated_event_finish_snd>
+
+
+onbutton=9000,9999		//scroll right
+
+dialog d_event_barrel <argn1>
+
+
+[EOF]

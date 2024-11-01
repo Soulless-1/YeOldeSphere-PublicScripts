@@ -1,0 +1,848 @@
+//Part of Soulless' function package
+//v1.0
+//11:47 AM 6/23/2021
+
+
+[comment]
+f_moving		//for @move trigger
+f_tag_accounts
+f_hue_picker
+f_health_regen_rate
+f_shmush_args
+f_color_moongate
+f_min
+f_max
+f_avgvalue
+f_progress_bar
+f_container_add_lock
+f_deletefile
+f_writefile
+f_allplayers_highest
+f_allplayers_lowest
+f_onlineplayers_highest
+f_onlineplayers_lowest
+f_noto_color
+f_noto_gumpcolor
+f_noto_htmlcolor
+f_nearest_town			//returns the name of the nearest town
+f_spell_get_strength		//gets the spell strength based on magery or other settings from a char or item
+f_trade_window			//NOT IN THIS FILE, MOV EIT
+f_format_comma			//will display a number in comma format, f_format_comma 100000 will display as 100,000
+f_spell_fizzle			//fizzles the current spell if your action is magery
+f_nearest_healer		//will find the closest healer npc within 100 ft
+f_combat_add			//f_combat_add <uid> ; will add a uid to your combat memories and attacker list
+f_combat_remove			//f_combat_remove <uid>	; will remove a uid from your combat memories and attacker list.
+f_clear_bad_memories			//removes all bad memories for the object such as fighting, sawcrime, etc, and removes from the attacker list	
+f_clear_all_bad_memories		//removes all bad memories for everyone and clears attacker list.
+f_player_protected_storage_add		//adds an item to a players protected storage
+f_player_protected_storage_retrieve	//gets an item from a players protected storage
+f_dialog_anim_expand			//f_dialog_anim_expand xorigin,yorigin,x,y,gump,width,heigth,dialog
+f_quest_arrow_target			//function that will point the arrow directly at a target, taking Z into consideration
+f_base_difficulty			//returns the base difficulty of the monster based on various stat/skill/attr values
+f_monster_poison_level			//returns the level of poison a monster can do 1-5
+f_bumpup				//nudges up by X
+f_bumpdown				//nudges down by X
+f_terrain_walkable			//will tell you if the terrain coords are walkable
+f_location_stack_height			//will tell you the height of all items stacked on a tile
+f_get_timestamp				//retrieves the timestamp from the current date and time
+f_sawcrime				//set the args as someone i saw commit a crime
+f_irritatedby				//set the args as someone who irritated me
+f_aggrievedby				//set the args as someone who aggrieved me
+f_harmedby				//set the args as someone who harmed me
+f_thievedby				//set the args as someone who stole from me
+f_set_region_banker			//sets the banker @create to a var for the region (extended distance banking commands
+f_potion_remove_cooldown		//removes the cooldown from a potion, timerf 0,f_potion_remove_cooldown
+f_addbuff				//runs some checks before using the internal addbuff
+f_removebuff				//runs some checks before using the internal removebuff
+f_lastnew				//returns the last 'new' item created on the server
+f_refresh_memory			//refreshes the memory item linked to the ARGS char
+f_addweight				//adds an invisible weight item to increase an objects overall weight
+
+
+[function f_moving]
+uid.<local.char>.trigger @Move
+
+[function f_tag_accounts]
+for 0 <eval <serv.accounts>-1>
+  local.a=<serv.account.<dlocal._for>.name>
+  //put code here to execute on accounts
+  if (<serv.account.<local.a>.totalconnecttime> > 230)
+    serv.account.<local.a>.tag0.beta_tester=<eval (<serv.account.<local.a>.totalconnecttime>/60)>
+  endif
+endfor
+
+[function f_huepicker]
+src.sendpacket 095 d<args> w0000 w0fab
+src.ctag0.huepicker=<args>
+
+[function f_huepicker_select]
+ref1=<local.char>
+if (<ref1.ctag0.huepicker>)
+ local.color=<hval <local.7>><strsub 1 3 <hval <local.8>>>	 //<local.7><strsub 1 0 <local.8>>
+ uid.<ref1.ctag0.huepicker>.color=<local.color>
+ ref1.ctag0.huepicker=
+endif
+
+[function f_health_regen_rate]
+//local.healthregen=<eval 8+((<maxfood>-<food>)/2)>
+local.healthregen=<eval 13+((<maxfood>-<food>)/2)>
+return <local.healthregen>
+
+[function f_shmush_args]
+local.string=<argv[0]>
+if (<argv> > 1)
+  for 1 <eval <argv>-1>
+    local.string=<local.string><argv[<dlocal._for>]>
+  endfor
+endif
+return <local.string>
+
+[function f_color_moongate]
+serv.newitem i_memory
+new.p=<morep>
+if (<new.region.flags>&region_flag_guarded) || (<new.region.flags>&region_flag_safe)
+  color=064
+else
+  color=026
+endif
+
+[function f_min]
+for n 0 <eval (<argv>-1)>
+  if (<argv[<dlocal.n>]> < <local.num>) || !(<local.num>)
+    local.num=<argv[<dlocal.n>]>
+  endif
+endfor
+return <local.num>
+
+[function f_max]
+for n 0 <eval (<argv>-1)>
+  if (<argv[<dlocal.n>]> > <local.num>) || !(<local.num>)
+    local.num=<argv[<dlocal.n>]>
+  endif
+endfor
+return <local.num>
+
+[function f_avgvalue]
+for 0 <eval (<argv>-1)>
+  local.n += <eval (<argv[<dlocal._for>]>/<argv>)>
+endfor
+return <dlocal.n>
+
+[function f_progress_bar]
+if (<src.npc>)
+  return 1
+endif
+if (<src.findid.i_progress_bar.isvalid>)
+  src.findid.i_progress_bar.remove
+endif
+if (<argn>==0)
+  src.dialogclose d_progress_bar_animated 
+  return 1
+endif
+serv.newitem i_progress_bar
+new.more1=<eval <argv[0]>*2>
+new.more2=<eval <argv[0]>*2>
+new.timerms=500
+src.equip <new>
+
+[itemdef i_progress_bar]
+id=i_memory
+name=Progress Bar Memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+ref1=<topobj>
+if (!<more1>0) || (!<ref1.isonline>)
+  trysrc <ref1> dialogclose d_progress_bar_animated
+  remove 
+  return 1
+endif
+trysrc <ref1> dialogclose d_progress_bar_animated
+trysrc <ref1> sdialog d_progress_bar_animated
+more1 -= 1
+timerms=500
+return 1
+
+[dialog d_progress_bar_animated]
+350,10
+nomove
+
+page 0
+
+ref1=<src.findid.i_progress_bar>
+gumppic 10 10 2061 964
+gumppictiled 10 12 <muldiv <ref1.more1>,110,<ref1.more2>> 13 2056
+
+[function f_container_add_lock]
+if (<argv[0]>==1)
+  serv.newitem i_key_gold
+  new.more1=<uid>
+  more1=<uid>
+  new.cont=<uid>
+endif
+type=t_container_locked
+more2=<argv[1]>
+
+
+//usage f_deletefile test.scp	//deletes test.scp in sphere root dir
+[FUNCTION f_deletefile]
+IF !(<FILE.INUSE>)
+  FILE.MODE.APPEND=1
+  FILE.f_deletefile <ARGS>
+  FILE.CLOSE
+ENDIF
+
+
+//useage f_writefile test.scp,test	//writes to sphere root dir test.scp with 1 line saying test
+[FUNCTION f_writefile]
+IF !(<FILE.INUSE>)
+  FILE.MODE.CREATE=1
+  FILE.MODE.APPEND=1
+  FILE.MODE.WRITEFLAG=1
+  IF (<FILE.OPEN <STRARG <ARGS>>>)
+    FILE.WRITELINE <STREAT <ARGS>>
+    FILE.CLOSE
+  ENDIF
+ENDIF
+
+[function f_allplayers_highest]
+for 0 <eval <serv.accounts>-1>
+  if <serv.account.<local._for>.chars>
+    local.account=<serv.account.<local._for>.name>
+    for 0 <eval <serv.account.<local._for>.chars>-1>
+    ref2=<serv.account.<local.account>.char.<local._for>>
+      if (<ref2.baseid> != c_new_character) && !(<ref2.isgm>)
+        if (<ref2.<args>> > <ref1.<args>>) || !(<ref1>)
+          ref1=<ref2>
+        endif
+      endif
+    endfor
+  endif
+endfor
+return <ref1>
+
+[function f_allplayers_lowest]
+for 0 <eval <serv.accounts>-1>
+  if <serv.account.<local._for>.chars>
+    local.account=<serv.account.<local._for>.name>
+    for 0 <eval <serv.account.<local._for>.chars>-1>
+    ref2=<serv.account.<local.account>.char.<local._for>>
+      if (<ref2.baseid> != c_new_character) && !(<ref2.isgm>)
+        if (<ref2.<args>> < <ref1.<args>>) || !(<ref1>)
+          ref1=<ref2>
+        endif
+      endif
+    endfor
+  endif
+endfor
+return <ref1>
+
+[function f_onlineplayers_highest]
+for 0 <eval <serv.clients>-1>
+  ref2=<serv.client.<local._for>.uid>
+  if !(<ref2.isgm>)
+    if (<ref2.isvalid>) && ((!<ref1.isvalid>) || (<ref2.<args>> > <ref1.<args>>))
+      ref1=<ref2>
+    endif
+  endif
+endfor
+return <ref1>
+
+[function f_onlineplayers_lowest]
+for 0 <eval <serv.clients>-1>
+  ref2=<serv.client.<local._for>.uid>
+  if !(<ref2.isgm>)
+    if (<ref2.<args>> < <ref1.<args>>) || !(<ref1>)
+      ref1=<ref2>
+    endif
+  endif
+endfor
+return <ref1>
+
+[function f_noto_color]		//for regular text in game
+ref1=<args>
+if (<isgm>)			//gm (purple)
+  return <serv.ColorNotoInvulGameMaster>
+elseif (<flags>&statf_invul)		//invul	(yellow)
+  return <serv.ColorNotoInvul>
+elseif (<notogetflag <ref1>>==6)		//red (murderer)
+  return <serv.ColorNotoEvil>
+elseif (<notogetflag <ref1>>==5)		//orange (enemy)
+  return <serv.ColorNotoGuildWar>
+elseif (<notogetflag <ref1>>==4)		//grey (criminal)
+  return <serv.ColorNotoCriminal>
+elseif (<notogetflag <ref1>>==3)		//grey (nuetral)
+  return <serv.ColorNotoNeutral>
+elseif (<notogetflag <ref1>>==2)		//green (ally)	//leave this to just guild chat??
+  return <serv.ColorNotoGuildSame>
+elseif (<notogetflag <ref1>>==1) && (<npc>)		//blue (NPC)
+  return <serv.ColorNotoGoodNPC>
+elseif (<notogetflag <ref1>>==1)		//blue (innocent)
+  return <serv.ColorNotoGood>
+else						//grey (default)
+  return <serv.ColorNotoDefault>			
+endif
+
+[function f_noto_gumpcolor] 	//for gump pic colors
+ref1=<args>
+if (<flags>&statf_invul) && (<isgm>) 
+  return 14
+elseif (<notogetflag <ref1>>==7)		
+  return 14
+elseif (<notogetflag <ref1>>==6)		
+  return 38
+elseif (<notogetflag <ref1>>==5)		
+  return 43
+elseif (<notogetflag <ref1>>==4)		
+  return 948
+elseif (<notogetflag <ref1>>==3)		
+  return 948
+elseif (<notogetflag <ref1>>==2)		
+  return 68
+elseif (<notogetflag <ref1>>==1)		
+  return 99
+else
+  return 948
+endif
+
+
+[function f_noto_htmlcolor] 	//for html text
+ref1=<args>
+if (<flags>&statf_invul) && (<isgm>)
+  return <def.bfont_gamemaster>
+elseif (<flags>&statf_invul)
+  return <def.bfont_invulnerable>
+elseif (<notogetflag <ref1>>==7)		
+  return <def.bfont_invulnerable>
+elseif (<notogetflag <ref1>>==6)		//red (murderer)
+  return <def.bfont_murderer>
+elseif (<notogetflag <ref1>>==5)		//orange (enemy)
+  return <def.bfont_guildenemy>
+elseif (<notogetflag <ref1>>==4)		//grey (criminal)
+  return <def.bfont_criminal>
+elseif (<notogetflag <ref1>>==3)		//grey (nuetral)
+  return <def.bfont_neutral>
+elseif (<notogetflag <ref1>>==2)		//green (ally)
+  return <def.bfont_guildally>
+elseif (<notogetflag <ref1>>==1)		//blue (innocent)
+  return <def.bfont_innocent>
+else				//grey (default)
+  return  <def.bfont_neutral>			
+endif
+
+[function f_nearest_town]
+ref1=<uid>
+local.distance=9999
+serv.newitem i_memory
+while (!<isempty <def.nearest_town<dlocal.t>>>)
+  new.p=<def0.nearest_town<dlocal.t>>
+  //serv.b <def0.nearest_town<dlocal.t>> <ref1.distance <new>> < <local.distance>>
+  if (<ref1.distance <new>> < <local.distance>)
+    local.distance=<ref1.distance <new>>
+    local.town=<def0.nearest_town<dlocal.t>>
+  endif
+  local.t += 1
+endwhile
+return <local.town>
+
+[defname nearest_town]
+nearest_town0	Britain
+nearest_town1	Serpent's Hold
+nearest_town2	Buccaneer's Den
+nearest_town3	Cove
+nearest_town4	Jhelom
+nearest_town5	Magincia
+nearest_town6	Minoc
+nearest_town7	Moonglow
+nearest_town8	Nujel'm
+nearest_town9	Ocllo
+nearest_town10	Skara Brae
+nearest_town11	Trinsic
+nearest_town12	Vesper
+nearest_town13	Yew
+
+
+[function f_spell_get_strength]		//gets the spell strength from an char/object
+if (<ischar>)
+  return <magery>
+elseif (<type>==t_potion)
+  return <more2>	//potion strength
+elseif (<type>==t_wand)
+  return <morey>	//wand strength
+elseif (strmatch(t_weapon*,<type>))
+  return <morey>
+elseif (<type>==t_clothing) || (<type>==t_enchanted_clothing)
+  return <morey>
+elseif (<type>==t_fish_special)
+  return <morey>
+endif
+return 500	//spell strength is just 500 if not defined anywhere
+
+[function f_format_comma]
+local.args=<argv[0]>
+local.number=<local.args>
+local.strlen=<eval (strlen <argv[0]>)>
+if ((<local.number> > 0) && (<local.strlen> > 3)) || ((<local.number> < 0) && (<local.strlen> > 4))
+  local.number=,<strsub <eval <local.strlen>-3> 3 <local.args>>
+  for n <eval <local.strlen>-4> 0
+    local.number="<strsub <local.n> 1 <local.args>><local.number>"
+    local.pos += 1
+    if (<local.pos> >= 3)
+      if ((<local.args> > 0) && (<local.n> != 0)) || ((<local.args> < 0) && (<local.n> >= 2))
+        local.number=,<local.number>
+        local.pos=
+      endif
+    endif
+  endfor
+endif
+say "<local.number>"
+return <local.number>
+
+
+[comment backup f_format_comma]	// "-" is counted as a character, this must be excluded so negative numbers show up correctly
+local.args=<argv[0]>
+local.number=<local.args>
+local.strlen=<eval (strlen <argv[0]>)>
+if ((<local.number> > 0) && (<local.strlen> > 3)) || ((<local.number> < 0) && (<local.strlen> > 4))
+  local.number=<strsub <eval <local.strlen>-1> 1 <local.args>>
+  local.pos=1
+  for n <eval <local.strlen>-2> 0
+    local.number="<strsub <local.n> 1 <local.args>><local.number>"
+    local.pos += 1
+    if (<local.pos> >= 3)
+      if ((<local.args> > 0) && (<local.n> != 0)) || ((<local.args> < 0) && (<local.n> >= 2))
+        local.number=,<local.number>
+        local.pos=
+      endif
+    endif
+  endfor
+endif
+say "<local.number>"
+return <local.number>
+
+[function f_spell_fizzle]	//spell fizzle doesnt seem work for 
+if (<action>==magery) 
+  action=-1
+  sound 05c
+  effect=3,i_fx_smoke_small,6,45,0
+  //message The spell fizzles.
+  //sysmessage Your concentration is disturbed, thus ruining thy spell.
+endif
+
+[function f_combat_add]
+ref1=<argv[0]>
+//serv.log <name>(<uid>) adding <ref1.name>(<ref1>) from its combat list
+attacker.<attacker.id <ref1>>.add
+if (<memoryfind.<ref1>>)		//must have a memory item for this target
+  serv.newitem i_memory
+  new.link=<ref2>
+  new.timer=1200
+  ref1.equip <new>
+endif
+memoryfind.<ref1>.color |= memory_fight
+memoryfind.<ref1>.color |= memory_war_targ
+memoryfind.<ref1>.color |= memory_irritatedby
+	
+[function f_combat_remove]
+ref1=<argv[0]>
+//serv.log <name>(<uid>) removing <ref1.name>(<ref1>) from its combat list
+attacker.<attacker.id <ref1>>.delete
+memoryfind.<ref1>.color &= ~ memory_fight
+memoryfind.<ref1>.color &= ~ memory_war_targ
+memoryfind.<ref1>.color &= ~ memory_irritatedby
+
+[function f_clear_bad_memories]		//like above but removes more bad memories
+ref1=<argv[0]>
+ref2=<memoryfind.<ref1>>
+//serv.log <name>(<uid>) clearing bad memories for <ref1.name>(<ref1>)
+attacker.<attacker.id <ref1>>.delete
+if (<ref2.isvalid>)
+  ref2.color &= ~ memory_sawcrime	  
+  ref2.color &= ~ memory_fight  
+  ref2.color &= ~ memory_iaggressor
+  ref2.color &= ~ memory_harmedby
+  ref2.color &= ~ memory_irritatedby
+  ref2.color &= ~ memory_aggrieved
+  ref2.color &= ~ memory_war_targ 
+endif
+
+[function f_clear_all_bad_memories]	//clears the attacker list and every bad memory for everyone 
+//serv.log <name>(<uid>) clearing ALL bad memories
+attacker.clear
+forcharmemorytype memory_sawcrime
+  color &= ~ memory_sawcrime
+endfor
+forcharmemorytype memory_fight 
+  color &= ~ memory_fight 
+endfor
+forcharmemorytype memory_iaggressor
+  color &= ~ memory_iaggressor
+endfor
+forcharmemorytype memory_harmedby
+  color &= ~ memory_harmedby
+endfor
+forcharmemorytype memory_irritatedby
+  color &= ~ memory_irritatedby
+endfor
+forcharmemorytype memory_aggrieved
+  color &= ~ memory_aggrieved
+endfor
+forcharmemorytype memory_war_targ 
+  color &= ~ memory_war_targ 
+endfor
+
+[function f_player_protected_storage_add]
+ref1=<args>
+if !(<findlayer.26.isvalid>)
+  serv.newitem i_player_protected_storage
+  new.equip
+endif
+ref1.cont=<findlayer.26>
+ref1.update
+
+[function f_player_protected_storage_retrieve]
+if !(<ref1.isvalid>)
+  serv.log <args> not a valid item in player <src.name>'s(<src>) protected storage.
+  return 1
+endif
+ref1.cont=<src.findlayer.21>
+ref1.update
+
+[itemdef i_player_protected_storage]
+defname=i_player_protected_storage
+id=i_chest_metal
+name=Protected Storage
+type=t_container
+layer=layer_vendor_stock	//for players this is okay to use since they dont sell items
+weight=0
+
+on=@DropOn_Self
+argo.weightreduction=100
+
+on=@PickUp_Self
+argo.weightreduction=-100
+
+
+[function f_dialog_anim_expand]
+consume i_dialog_anim_expand
+serv.newitem i_dialog_anim_expand
+new.more1l=<argv[0]>		//x origin
+new.more1h=<argv[1]>		//y origin
+new.more2l=<argv[2]>		//x start
+new.more2h=<argv[3]>		//y start
+new.tag.resizepic=<argv[4]>	//resizepic
+new.morex=<argv[5]>		//width
+new.morey=<argv[6]>		//height
+dialogclose <argv[7]>		//close the dial
+new.tag.dialog=<argv[7]>	//end dialog
+new.equip
+new.timer=0
+
+[dialog d_dialog_anim_expand]
+<more1l>,<more1h>
+nomove
+page 0
+//resizepic <more2l> <more2h> <tag0.resizepic> <eval (<morex>/(30-<morez>))> <eval (<morey>/(30-<morez>)>
+local.morex=<eval (<morez>*20)>
+local.morey=<eval (<morez>*20)>
+if (<local.morex> >= <morex>) && (<local.morey> >= <morey>)
+  trysrc <topobj> sdialog <tag0.dialog>
+  consume i_dialog_anim_expand
+  return 1
+endif
+resizepic <more2l> <more2h> <tag0.resizepic> <qval (<local.morex> < <morex>)?<local.morex>:<morex>> <qval (<local.morey> < <morey>)?<local.morey>:<morey>>
+
+//f_dialog_anim_expand 100,100,10,10,5054,425,300,d_moongates
+[itemdef i_dialog_anim_expand]
+defname=i_dialog_anim_expand
+name=Expanding Dialog Animation
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+trysrc <topobj> dialogclose d_dialog_anim_expand
+if !(<topobj.isvalid>) || !(<topobj.isonline>)
+  trysrc <topobj> sdialog <tag0.dialog>
+  remove
+  return 1
+endif
+morez += 1
+trysrc <topobj> dialog d_dialog_anim_expand
+timerms=50
+return 1
+
+on=@destroy
+trysrc <topobj> dialogclose d_dialog_anim_expand
+
+[function f_dialog_anim_slide_down]
+consume i_dialog_anim_slide_down
+serv.newitem i_dialog_anim_slide_down
+new.more1l=<argv[0]>		//x origin
+new.more1h=<argv[1]>		//y origin
+new.more2l=<argv[2]>		//x start
+new.more2h=<argv[3]>		//y start
+new.tag.resizepic=<argv[4]>	//resizepic
+new.morex=<argv[5]>		//width
+new.morey=<argv[6]>		//height
+new.link=<uid>			//keep default UID for the dialog
+dialogclose <argv[7]>
+new.tag.dialog=<argv[7]>	//end dialog
+new.equip
+new.timer=0
+
+[dialog d_dialog_anim_slide_down]
+<more1l>,<more1h>
+nomove
+page 0
+resizepic <more2l> <more2h> <tag0.resizepic> <morex> <eval (<morey>/(26-<morez>)>
+
+[itemdef i_dialog_anim_slide_down]
+defname=i_dialog_anim_slide_down
+name=Sliding Down Dialog Animation
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if !(<topobj.isvalid>) || !(<topobj.isonline>) || (<morez> >= 25)
+  trysrc <topobj> dialogclose d_dialog_anim_slide_down
+  trysrc <topobj> link.sdialog <tag0.dialog>
+  remove
+  return 1
+endif
+morez += 1
+trysrc <topobj> dialogclose d_dialog_anim_slide_down
+trysrc <topobj> dialog d_dialog_anim_slide_down
+timerms=25
+return 1
+
+on=@destroy
+trysrc <topobj> dialogclose d_dialog_anim_slide_down
+
+[function f_arrowquest_location]
+if !(<ref1.isvalid>)
+  arrowquest 0,0,<argv[3]>
+  return 1
+endif
+local.heightadjust=<eval (<argv[2]>/10)>
+arrowquest <eval (<argv[0]>-<local.heightadjust>)>,<eval (<argv[1]>-<local.heightadjust>)>,<argv[3]>
+
+[function f_arrowquest_object]
+ref1=<argv[0]>
+if !(<ref1.isvalid>)
+  arrowquest 0,0,<argv[1]>
+  return 1
+endif
+local.heightadjust=<eval (<ref1.z>/10)>
+arrowquest <eval (<ref1.p.x>-<local.heightadjust>)>,<eval (<ref1.p.y>-<local.heightadjust>)>,<argv[1]>
+
+[function f_base_difficulty]
+float.n=<floatval (<maxhits>*1.6)>
+float.n += <floatval (<maxstam>+<maxmana>)>
+float.n += <floatval (<skilltotal>/10)>
+if (<feval <float.n>> > 700)
+  float.n=<floatval 700.0+(((<float.n>-700.0)*2.75)/10.0)>
+endif
+if (<magery>)
+  float.n += 100.0
+endif
+if (<isevent.e_dragon_breathe>) || (<isevent.e_nightmare>)	//firebreath
+  float.n += 100.0
+endif
+if (<poisoning>)
+  float.n += <floatval (<f_monster_poison_level>*20.0)>
+endif
+float.n /= 10
+return <feval <float.n>>
+
+[function f_monster_poison_level]
+if (<poisoning >= 1251)
+  return 5
+elseif (<poisoning> >= 751)
+  return 4
+elseif (<poisoning >= 351)
+  return 3
+elseif (<poisoning> >= 151)
+  return 2
+else
+  return 1
+endif
+return 0
+
+[function f_bumpup]
+z += <argn>
+
+[function f_bumpdown]
+z -= <argn>
+
+[function f_terrain_walkable]
+serv.newnpc c_man_invisible
+args=<p>
+new.p=<args>
+if (<new.canmove>)
+  local.walkable=1
+endif
+new.remove
+if (<local.walkable>)
+  return 1
+endif
+return 0
+
+[function f_location_stack_height]
+serv.newitem i_memory
+new.p=<args>
+foritems 0
+  local.z += <eval (<height>+1)>
+endfor
+new.remove
+return <local.z>
+
+[function f_get_timestamp]
+local.date=<serv.rtime.format %Y>,<serv.rtime.format %m>,<serv.rtime.format %d>,<serv.rtime.format %H>,<serv.rtime.format %M>,<serv.rtime.format %S>
+return <serv.rticks.fromtime <local.date>>
+
+[function f_sawcrime]	//i've seen this person commit a crime
+ref1=<uid>		//witness
+ref2=<args>		//criminal
+if !(<ref1.memoryfind.<ref2>>)		//player 1 must have a memory item for player 2
+  serv.newitem i_memory
+  new.link=<ref2>
+  ref1.equip <new>
+endif
+ref1.memoryfind.<ref2>.color |= memory_sawcrime	
+ref1.memoryfind.<ref2>.timer=1200	
+ref2.notoupdate
+
+[function f_irritatedby]	//They have bothered me, potentially attacked me but not harmed yet
+ref1=<uid>		//victim
+ref2=<args>		//irritator
+if !(<ref1.memoryfind.<ref2>>)		//player 1 must have a memory item for player 2
+  serv.newitem i_memory
+  new.link=<ref2>
+  ref1.equip <new>
+endif
+ref1.memoryfind.<ref2>.color |= memory_irritatedby
+ref1.memoryfind.<ref2>.timer=1200
+ref2.notoupdate
+
+[function f_aggrievedby]	//This means they were the aggressor, and should appear grey if it's recent
+ref1=<uid>		//victim
+ref2=<args>		//aggriever
+if !(<ref1.memoryfind.<ref2>>)		//player 1 must have a memory item for player 2
+  serv.newitem i_memory
+  new.link=<ref2>
+  ref1.equip <new>
+endif
+ref1.memoryfind.<ref2>.color |= memory_aggrieved
+ref1.memoryfind.<ref2>.timer=1200
+ref2.notoupdate
+
+[function f_harmedby]	//this just means they damaged you
+ref1=<uid>		//victim
+ref2=<args>		//assailant
+if !(<ref1.memoryfind.<ref2>>)		//player 1 must have a memory item for player 2
+  serv.newitem i_memory
+  new.link=<ref2>
+  ref1.equip <new>
+endif
+ref1.memoryfind.<ref2>.color |= memory_harmedby	
+ref1.memoryfind.<ref2>.timer=1200
+ref2.notoupdate
+
+[function f_thievedby]	//this person has stolen from me, and should appear grey if it's recent
+ref1=<uid>		//victim
+ref2=<args>		//assailant
+if !(<ref1.memoryfind.<ref2>>)		//player 1 must have a memory item for player 2
+  serv.newitem i_memory
+  new.link=<ref2>
+  ref1.equip <new>
+endif
+ref1.memoryfind.<ref2>.color |= memory_thief
+ref1.memoryfind.<ref2>.timer=1200
+ref2.notoupdate
+
+[COMMENT function f_thievedby]	//OLD
+if (<args> == <uid>) 	//can't thieve yourself
+  return 1		
+endif
+//serv.log <name> thieved by <uid.<args>.name>
+serv.newitem i_stolen_from
+new.timer=120		//lasts about two minutes
+new.link=<args>
+equip <new>
+
+[function f_petfriend]	//this means they are a friend of the pet
+ref1=<uid>		//pet
+ref2=<args>		//friend
+if !(<ref1.memoryfind.<ref2>>)		//player 1 must have a memory item for player 2
+  serv.newitem i_memory
+  new.link=<ref2>
+  ref1.equip <new>
+endif
+ref1.memoryfind.<ref2>.color |= memory_friend
+ref1.memoryfind.<ref2>.timer=1200
+
+[function f_banker_list_add]		//used for extended distance banking commands
+if (<def0.bank_<region.defname>_p>)	//does this region have extended banking?
+  local.MaxDistance=<def0.bank_<region.defname>_dist>
+  local.Distance=<distance <def0.bank_<region.defname>_p>>
+  if (<local.Distance> < <local.MaxDistance>) && (<serv.list.bank_<region.defname>_banker.findelem <uid>> == -1)	//within distance and not already in the list
+    serv.list.bank_<region.defname>_bankers.add <uid>	//add them to a list
+  endif
+endif
+
+[function f_banker_list_remove]
+if (<serv.list.bank_<region.defname>_bankers.findelem <uid>> != -1)
+  serv.list.bank_<region.defname>_bankers.<serv.list.bank_<region.defname>_bankers.findelem <uid>>.remove
+endif
+
+[function f_potion_remove_cooldown]
+if (<src.findlayer.50.isvalid>)
+  src.findlayer.50.remove
+endif
+
+[function f_addbuff]
+if !(<npc>) && (<isonline>)
+  addbuff <args>	
+endif
+
+[function f_removebuff]
+if !(<npc>) && (<isonline>)
+  removebuff <args>
+endif
+
+[function f_lastnew]
+return <new>
+
+[function f_refresh_memory]
+if (<memoryfind.<args>>)
+  memoryfind.<args>.timer=1200
+endif
+
+[function f_addweight]
+if !(<ischar>) && (<type> != t_container)
+  return 1	//you cannot add weight to a non char/container item
+endif
+serv.newitem i_weight25,1,<uid>
+
+[itemdef i_weight25]
+defname=i_weight25
+name=weight
+id=i_memory
+type=t_script
+layer=layer_special
+weight=25
+
+on=@create
+attr |= attr_move_never|attr_newbie|attr_invis
+
+on=@timer
+remove
+
+on=@dropon_item
+remove
+
+
+[EOF]
+
+

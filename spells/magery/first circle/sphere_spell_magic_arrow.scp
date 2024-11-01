@@ -1,0 +1,40 @@
+[SPELL 5]
+DEFNAME=s_magic_arrow
+NAME=Magic Arrow
+SOUND=snd_spell_magic_arrow
+CAST_TIME=0.8
+RUNES=IPY
+RESOURCES=i_reag_sulfur_ash
+RUNE_ITEM=i_rune_magic_arrow
+SCROLL_ITEM=i_scroll_magic_arrow
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_damage|spellflag_fx_bolt|spellflag_resist
+EFFECT_ID=i_fx_fireball_small
+EFFECT=2,4
+DURATION=0.0
+MANAUSE=4
+SKILLREQ=MAGERY 0.0
+INTERRUPT=100.0,100.0
+
+//Magic Arrow is a small fireball kind of spell which is easily resisted. It's a good way to remove Magic Reflection from your target, however, it has a 1 second delay so it is often better to use Harm
+//Formula: 4d2 (4-8 Damage)
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<R2,4>		//<eval 2*{2 4}>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+//effect=0,<serv.spell.5.effect_id>,6,15,1,1
+
+on=@start
+if (<act.isitem>) && (<act.type> == t_potion) && (<act.more1> == s_explosion)
+  if (<act.topobj> != <src>)
+    src.sysmessage You cannot target that there.
+    return 1
+  endif
+  if (<act.region.flags>&region_flag_guarded)
+    src.sysmessage You think better of doing that in a guarded region.
+    return 1
+  endif
+endif
+
+[EOF]

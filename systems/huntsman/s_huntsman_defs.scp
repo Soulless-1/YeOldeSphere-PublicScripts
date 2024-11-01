@@ -1,0 +1,57 @@
+//Huntsman/Mondains Horde System by Soulless
+//v1.0
+//12:29 PM 1/16/2022
+
+//TODO
+//if you dont have the contract on you, you cannot hurt the creature
+//the creature will only attack the person holding the contract
+//need to be able to abbandon a contract on the contract view screen
+//only the linked player should be able to pick up the horde loot chest from the corpse
+//if the contract is removed the monster should be removed, and if the monster is removed the contract should be removed
+
+
+[comment notes]
+should only be able to buy one contract every 30 minutes (maybe 15 is best), contract cannot be picked up or given to another player. You may only purchase
+one contract and hold one contract at any given time. Using the contract in the same area as the target should give you an arrow pointing to them, once there
+only person who can attack the horde monster is the player. Horde monsters will ignore all other players except for the huntsman player.
+
+
+[defname huntsman_settings]
+mondains_horde_maxsize			75		//how many monsters can be in mondains horde
+mondains_horde_generate			25		//how many horde monsters to generate every 2 hours, 0 to disable
+mondains_horde_odds			50		//odds of an NPC spawning as a horde member
+mondains_horde_despawn			43200		//how long will a horde monster stay spawned after created
+huntsman_cache_max			8		//max amount of caches you can have opening at once
+huntsman_cache_opentime			3600		//how long it takes in seconds per cache level to open
+huntsman_cache_opentime_itemmod		20		//% that gets added onto cache open time per item inside
+huntsman_contract_buywait		900		//how long must you wait to buy another contract
+huntsman_contract_displaymax		12		//how many contracts will show max on the dialog
+huntsman_contract_expires		7200		//how long till a contract expires after being purchased
+huntsman_supply_buywait			300		//how long to wait between buying supplies	
+
+huntsman_supply0		i_reagent_bag,1,2400		//item,amount,price
+huntsman_supply1		i_reagent_bag_half,1,1200
+huntsman_supply2		i_bandage,100,300
+huntsman_supply3		i_potion_heal,25,600
+huntsman_supply4		i_potion_cure,25,700	
+huntsman_supply5		i_arrow,100,200
+huntsman_supply6		i_xbolt,100,200
+huntsman_supply7
+
+huntsman_hunter0		c_h_fighter,100		//char,price	//npcs that can be hired
+huntsman_hunter_level1		Squire,100			//rank,exp
+huntsman_hunter_level2		Aspirant,250
+huntsman_hunter_level3		Stalker,500
+huntsman_hunter_level4		Guardian,1000
+huntsman_hunter_level5		Purifier,2500
+
+mondains_horde_rank1		Grunt
+mondains_horde_rank2		Sergeant
+mondains_horde_rank3		Lieutenant
+mondains_horde_rank4		Captain
+mondains_horde_rank5		General
+
+
+       
+
+[EOF]

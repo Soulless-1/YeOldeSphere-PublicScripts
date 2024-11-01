@@ -1,0 +1,238 @@
+//House System by Soulless
+//v1.9
+//12:31 PM 1/31/2019
+
+[regiontype r_house_system]
+
+ON=@Enter
+ref1=<uid>
+ref1.region.flags=region_flag_nobuilding	//|region_flag_insta_logout	<--- this is ONLY for friends
+
+if (<src.npc>)
+  if (<src.npc>==brain_berserk) || (<ref1.GetBanPos <src.owner>> >= 0)
+    return 1
+  elseif (<ref1.housetype>==house_private) || (<ref1.housetype>==house_guild)
+    if (<src.owner.isvalid>)
+      if !(<ref1.isowner <src.owner>>) && !(<ref1.GetCoownerPos <src.owner>> >= 0) && !(<ref1.GetFriendPos <src.owner>> >= 0) && !(<ref1.GetAccessPos <src.owner>> >= 0) && !(<src.owner.isgm>) 
+        return 1
+      endif
+    endif
+  endif
+endif
+
+if (<src.isplayer>)
+
+  if (<ref1.GetBanPos <src>> >= 0)
+    //if (<src.p.y> >= <ref1.link.p.y>)
+      //src.sysmessage You are banned from this property. 
+      //return 1
+    //elseif (<src.p.z> > <ref1.p.z>)
+      //src.sysmessage You are banned from this property. 
+      //return 1
+    //endif
+    serv.newitem i_memory_houseban 	//this will remove them if they are actually standing on the property foundation
+    src.equip <new>
+    new.timerd=1
+  endif
+
+
+
+  src.events=+e_house_player_events
+  ref1.tag0.visitors += 1
+ 
+  //if (<def0.house_can_decay>) && !(<def0.house_property_tax>) && !(<src.isgm>)		// && !(<ref1.tag0.house_nodecay>) && !(<ref1.tag0.demolish>)	
+    //if (<eval ((((<def0.house_can_decay>*24)*60)*60)-<ref1.timer>)> >= 3600)		//atleast an hour since it has last been refreshed
+      //if (<ref1.f_house_isowner <src>>) || (<ref1.f_house_iscoowner <src>>) || (<ref1.f_house_isfriend <src>>) 
+        //ref1.timer=<eval (((<def0.house_can_decay>*24)*60)*60)>	//refresh the property if its a friend of the property
+        //ref1.tag0.last_refreshed=<serv.time>
+        //src.sysmessage This house and it's contents have been refreshed.
+      //endif
+    //endif
+  //endif
+
+  if !(<def0.house_private_public>)
+    ref1.housetype=house_public	//if there is no choices between house types, they are all public
+  else
+    if (<ref1.housetype>==house_private) && (<def0.house_private_noentry> >= 1)	//a private house
+      if !(<ref1.isowner <src>>) && !(<ref1.GetCoownerPos <src>> >= 0) && !(<ref1.GetFriendPos <src>> >= 0) && !(<ref1.GetAccessPos <src>> >= 0) && !(<src.isgm>) && !(<ref1.f_house_isowner <src>>)
+        src.sysmessage this is private proprety, you may not trespass.
+        return 1
+      endif
+    elseif (<ref1.housetype>==house_guild) && (<def0.house_guild_noentry> >= 1)			//its a guild house
+      if !(<ref1.isowner <src>>) && !(<ref1.GetCoownerPos <src>> >= 0) && !(<ref1.GetFriendPos <src>> >= 0) && !(<ref1.GetAccessPos <src>> >= 0) && (<src.guild> != <ref1.owner.guild>) &&!(<src.isgm>) 
+        src.sysmessage This is a guild house, you may not trespass.
+        return 1
+      endif
+    endif 
+  endif
+endif
+
+ON=@Exit	
+if (<src.isplayer>)
+  src.events=-e_house_player_events
+  src.events=-e_house_priv	
+  src.dialogclose d_house_menu
+endif
+src.consume i_memory_houseban
+
+
+[EVENTS e_house_player_events]	
+
+on=@ItemDclick
+if (<act.topobj> != <uid>)
+  if (<act.type>==t_figurine)
+    sysmessage You cannot use that where it is.
+    return 1
+  endif
+endif
+if (<act.isevent.t_house_corpse_decay>)
+  if (<src.distance <act>> < 3) && (<src.canseelos <act>>)
+    act.events=-t_house_corpse_decay
+    act.timer=<eval <serv.CorpsePlayerDecay>*60>
+  endif
+endif
+
+on=@deathcorpse
+if (<def0.house_corpse_decay> >= 0)
+  ref1=<region.uid>
+  if (<ref1.isvalid>) && (<ref1.f_house_isfriend <uid>>)
+    argo.timer=<eval (<def0.house_corpse_decay>*60)>
+    argo.events=+t_house_corpse_decay
+  endif
+endif
+
+on=@itemtargon_item
+ref1=<region.uid>
+if (<act.isaxe>) && (<argo.isevent.t_house_addon>)
+  if (<distance <src.targp>> >= 3)
+    src.sysmessage that is too far away
+    return 1
+  elseif !(<ref1.f_house_isowner <uid>>)	//only co-owner and up can remove addons
+    src.sysmessage You cannot remove that.
+    return 1
+  endif
+  argo.f_house_addon_redeed
+  //argo.remove
+  anim 12
+  sound 013e
+  return 1
+endif
+
+on=@ItemDropOn_Ground	//make sure items dont decay if they are not supposed to
+act.timerf 0,f_house_item_dropon_ground <uid>
+
+on=@ItemPickUp_Stack
+argo.timerf 0,f_house_item_dropon_ground <uid>
+
+
+//////////////////////////
+// House Customization
+
+[EVENTS e_house_customize]
+
+on=@SkillStart
+if (<housedesign>)
+  sysmessage You cannot do this whilst designing a house.
+  return 1
+endif
+
+
+on=@SkillUseQuick
+if (<housedesign>)
+  return 1
+endif
+
+on=@HouseDesignCommit
+//ARGN1			I	The total number of components in the current house design.
+//ARGN2			I	The total number of components in the house design being committed.
+//ARGN3			I	The revision number of the house design being committed.
+//LOCAL.FIXTURES.NEW	I	The total number of fixtures in the house design being committed.
+//LOCAL.FIXTURES.OLD	I	The total number of fixtures in the current house design.
+if (<isgm>)
+  sysmessage Your new house design has been committed.
+  return 2
+endif
+
+local.n=<eval (<argn2>-<argn1>)*500)>	//cost of the new items being commited
+
+if (<gold> < <local.n>)
+  sysmessage You cannot afford this house design.  
+  return 2
+endif
+
+if (<local.n> == 0)
+  sysmessage As the new design costs the same as the previous one, no gold has been taken out of your account.
+elseif (<local.n> < 0)
+  local.x = <eval 0-<local.n>>
+  gold += <local.x>
+  sysmessage As the new design is cheaper than the previous one, <dlocal.x> gold has been returned to you.
+else
+  gold -= <local.n>
+  sysmessage <dlocal.n> gold has been taken out of your account to pay for the construction.
+endif
+
+argo.tag0.construction_cost=<eval (<argn2>*500)-<argo.value>>		//cost of all custom construction - the house value
+sysmessage Your new house design has been committed.
+return 2
+
+on=@HouseDesignExit
+sysmessage You have left house design mode.
+events=-e_house_customize
+if (<argo.movingcrate>)
+  ref1=<argo.movingcrate>
+  ref1.attr |= attr_invis
+  ref1.p=<argo.p>
+  ref1.move 0,0,-20
+endif
+return 2
+
+
+[events e_house_trade]
+
+on=@TradeAccepted
+for 1 <argn1>
+  if (<argn1> > 0)
+    if (<ref<dlocal._for>.isvalid>)
+      //serv.b <ref<dlocal._for>.name> <argn1> <argn2> <src.name> <argo.name>
+      if (<ref<dlocal._for>.type>==t_house_trade_deed)
+        uid.<ref<dlocal._for>>.trigger @HouseTraded
+        uid.<ref<dlocal._for>>.remove
+      endif
+    endif
+  endif
+endfor
+
+dialogclose d_house_menu
+dialogclose d_house_clear_list_confirm
+dialogclose d_house_notice
+dialogclose d_house_demolish
+dialogclose d_house_demolish_confirm
+dialogclose d_house_buy_storage_confirm
+dialogclose d_house_secure_recode
+dialogclose d_house_entry_recode_confirm
+events=-e_house_trade
+
+on=@tradeclose
+ref1=<src.findtype.t_house_trade_deed>
+ref2=<uid.<argo.findlayer.0>.findtype.t_house_trade_deed>
+if (<ref1.isvalid>) 
+  ref1.remove
+endif
+if (<ref2.isvalid>)
+  ref2.remove
+endif
+src.events=-e_house_trade
+argo.events=-e_house_trade
+
+
+[events e_house_priv]	//Added 'e_house_priv' for chars who have any kind of priv on any house
+
+[events e_exiting_house]
+
+on=@gethit
+consume i_exiting_house
+sysmessage <src.name> prevented you from exiting the house
+
+
+
+[eof]

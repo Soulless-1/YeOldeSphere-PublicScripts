@@ -1,0 +1,140 @@
+//this fixes issues in the source, should be idealy resolved via github reports and removed 
+//4:28 PM 9/2/2020
+
+
+[events e_fixes_char]	
+
+on=@logout
+if (<argn1> <= 0)	//if there is no linger time
+  action=-1		//stop spell and/or skill
+endif
+
+on=@create
+height=12	
+
+on=@click
+if (<owner>)
+  owner.notoupdate
+endif
+notoupdate	//seems like notoriety doesnt always update very well
+
+on=@userexwalklimit
+//serv.log CHEATER! <src.name>(<src>) - <account.lastip> - has exceeded the walk limit!
+serv.f_writefile logs/speedhacking<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M> Account <src.account.name>(<account.lastip>) cheating(x<src.account.dtag0.speedhacking>), <src.name>(<src>)  has exceeded the walk limit!
+src.account.tag0.speedhacking += 1
+//nomove 3	//no moving for 3 seconds now
+//bark 3
+
+//on=@ItemDClick
+//if (<src.isplayer>) 
+  //serv.log <name>(<uid>) dclicked <act.name>(<act>)
+//endif
+
+on=@regionenter
+if (<argo.isvalid>) && (<src.isplayer>) 
+  local.areadef=<argo.defname>
+  if (<local.areadef>==a_green_acres_3) || (<local.areadef>==a_green_acres_2_1) || (<local.areadef>==a_green_acres_3_1)
+    if !(strmatch(simulated*,<src.account.name>))	//simulated accounts can go anywhere
+      if (<src.account.plevel> <= 1)
+        serv.log WARNING: Player character <src.name>(<src>) attempting to enter a restricted area : <argo.name> @<src.p>
+        return 1
+      elseif (<src.account.plevel> <= 4)
+        serv.log WARNING: Non-Developer GM <src.name>(<src>) attempting to enter a restricted area: <argo.name> @<src.p>
+        src.sysmessage This restricted area is for developers
+        src.timerf 0,src.p <src.p>
+        return 1
+      endif
+    endif
+  endif
+endif
+
+//on=@itemdropon_ground
+//return 0		//This seems to be fixed. remove this sometime?
+//if !(<src.isgm>)	//fix for being able to drop items on walls of houses
+  //local.p=<args>,<p.m>
+  //local.components=<serv.map(<local.p>).components>
+  //if (<local.components>)		//only check the below things if there is components on this tile
+    //for n 0 <eval (<local.components>-1)>
+      //local.id=<serv.map(<local.p>).components.<dlocal.n>.id>
+      //local.type=<qval (<local.id>)?<serv.itemdef.<local.id>.type>:0>
+      //local.z=<serv.map(<local.p>).components.<local.n>.z>
+      //local.height=<serv.itemdef.<local.id>.height>
+      //if (<local.type> == t_wall) 
+        //if (<streat <streat <args>>> >= <local.z>) && (<streat <streat <args>>> < <eval (<local.z>+<local.height>)>)
+          //src.bounce <act>
+          //return 1
+        //endif
+      //endif
+    //endfor
+  //endif
+//endif
+
+on=@itemequip
+if (<act.layer> >= 30)		//update the noto if any memory items are equipped
+  notoupdate
+endif
+
+on=@itemunequip
+if (<act.layer> >= 30)	
+  notoupdate			//update the noto if any memory items are unequipped
+  //if (<npc>)			//we're npcs make sure we're not stuck in warmode (this should be fixed in the source)
+    //if !(<attacker>)
+      //flags &= ~ statf_war		//remove them from warmode
+    //endif
+  //endif
+endif
+
+on=@spellfail
+if (<flags>&statf_war)	//doesn't go back into attacking with melee 
+  timerf 0,action <qval (<weapon.isvalid>)?<weapon.skill>:wrestling>
+endif
+
+on=@spellsuccess
+if (<flags>&statf_war)	//doesn't go back into attacking with melee 
+  timerf 0,action <qval (<weapon.isvalid>)?<weapon.skill>:wrestling>
+endif
+
+on=@spelleffect		
+if (<serv.spell.<argn1>.flags>&spellflag_harm) 
+  if (<notogetflag <src>> == 1)	&& (<src> != <uid>) 	//bug from latest build doesnt turn people crim
+    src.criminal			//we were innocent to them, make them criminal 
+  endif
+  if (<action>==magery) && !(<flags>&statf_reflection)  			//why do we need this? 
+    if !(<npc>) || ((<npc>) && (<serv.NPCCanFizzleOnHit> != 0)) 
+      timerf 0,action <qval (<weapon.isvalid>)?<weapon.skill>:wrestling>	//this fizzles them if they are casting spells
+    endif
+  endif
+endif
+
+on=@gethit
+if (<notogetflag <src>> == 1) && (<src> != <uid>) //bug from latest build doesnt turn people crim
+  src.criminal			//we were innocent to them, make them criminal
+endif
+
+
+on=@destroy
+ref1=<uid>
+if (<ref1.npc>)	
+  forcharlayer 30	//basically anyone the npc interacted with
+    if (<type>==t_eq_memory_obj) && (<link.isvalid>) && (<link.ischar>)
+      ref2=<link.memoryfind.<ref1>>
+      if (<ref2.isvalid>) 	//if they have a memory of the npc
+        //serv.log <ref1.name>(<ref1>) removing memory belonging to <link.name>(<link>). UID <ref2> flags <ref2.color> 
+        ref2.timer=1
+      endif
+    endif
+  endfor
+endif
+
+on=@stepstealth		
+if (<flags>&statf_fly)	//not revealed when you start running while stealthed
+  reveal
+endif
+
+[events ei_fixes_item]
+
+
+
+
+
+[EOF]

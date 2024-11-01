@@ -1,0 +1,725 @@
+//Supply Vendor Script by Soulless
+//v3.0
+//handles sub dialogs in menu, can markup prices by %
+
+
+[defname supply_vendor_settings]
+supply_vendor_buy_perhour		4	//how many times can you buy from this vender every hour
+
+///////////////////
+//Various Vendors
+
+[Chardef c_vendor_supplies]
+id=c_man
+name=Supply Vendor
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=supplies
+tag0.greeting=Welcome to my shop. I have many goods for sale.
+
+on=@npcrestock
+item=i_hat_straw
+color=colors_blue
+item=i_necklace_silver
+item=i_shirt_plain
+color=colors_neutral
+item=i_tunic
+color=colors_blue
+item=i_leather_gloves
+color=colors_neutral
+item=i_pants_long
+color=colors_neutral
+item=i_boots_calf
+color=colors_neutral
+
+[Chardef c_vendor_reagents]
+id=c_man
+name=Reagent Vendor
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=reagents
+tag0.greeting=Browse my reagents, see if you need anything.
+
+on=@npcrestock
+item=i_hat_wizards
+color=colors_green
+item=i_robe
+color=colors_green
+item=i_leather_gloves
+color=colors_neutral
+item=i_sandals
+color=colors_neutral
+
+[Chardef c_vendor_potions]
+id=c_man
+name=Potion Vendor
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=potions
+tag0.greeting=I've many potions for sale, have a look.
+
+on=@npcrestock
+item=i_hat_straw_tall
+color=colors_red
+item=i_robe
+color=colors_red
+item=i_leather_gloves
+color=colors_neutral
+item=i_sandals
+color=colors_neutral
+
+[Chardef c_vendor_dye_tickets_armor]
+id=c_man
+name=Armor Dye Vendor
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=dye_tickets_armor
+tag0.greeting=Hello, I have many armor dyes to sell.
+
+on=@npcrestock
+item=i_helm_norse
+item=i_platemail_gorget
+item=i_platemail_chest
+item=i_platemail_arms
+item=i_platemail_gloves
+item=i_platemail_leggings
+item=i_platemail_leggings
+item=i_doublet
+color=colors_all
+item=i_shield_kite_metal
+color=colors_all
+
+
+[Chardef c_vendor_dye_tickets_weapon]
+id=c_man
+name=Weapon Dye Vendor
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=dye_tickets_weapon
+tag0.greeting=Good day, take a look at my weapon dyes.
+
+on=@npcrestock
+item=i_chainmail_coif
+item=i_chainmail_tunic
+item=i_platemail_gloves
+item=i_chainmail_leggings
+item=i_boots_thigh
+item=i_cape
+color=colors_all
+item=i_bardiche
+
+
+[Chardef c_vendor_dye_tickets_animal]
+id=c_man
+name=Animal Dye Vendor
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=dye_tickets_animal
+tag0.greeting=Hail, I Have animal dyes available to buy.
+
+on=@npcrestock
+item=i_hat_floppy
+color=colors_all
+item=i_shirt_plain
+color=colors_all
+item=i_pants_long
+color=colors_neutral
+item=i_boots_calf
+color=colors_neutral
+item=i_shepherds_crook
+
+
+[Chardef c_vendor_drugs]
+id=c_man
+name=Drug Dealer
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=drugs
+tag0.greeting=Hey, psst, what do you need?
+
+on=@npcrestock
+item=i_hooded_shroud
+color=0455
+
+
+[Chardef c_vendor_sparring_weapons]
+id=c_man
+name=Sparring Weapon Vendor
+can=mt_nonmover|mt_equip|mt_usehands
+sound=0
+
+on=@create
+npc=brain_human
+color=colors_skin
+str=100
+dex=100
+int=100
+events=e_supply_vendor
+flags |= statf_invul 
+tag0.vendor=sparring_weapons
+tag0.greeting=Well met, Need a sparring weapon?
+
+on=@npcrestock
+item=i_chainmail_coif
+item=i_chainmail_tunic
+item=i_platemail_gloves
+item=i_chainmail_leggings
+item=i_boots_thigh
+item=i_cape
+color=colors_all
+item=random_weapon
+
+
+//////////////////
+// Vendor Event 
+
+[events e_supply_vendor]
+
+on=@dclick
+if (<src.flags>&statf_dead)
+ src.sysmessage You can not communicate with this vendor right now
+ return 1
+endif
+
+if (<distance> > 3) 
+  src.sysmessage You are too far away.
+  return 1
+endif
+
+message <tag0.greeting>
+dialog d_vendor_custom
+return 1
+
+
+//////////////////
+// Supply Items 
+
+[defname vendor_supply_items]
+vendor_supplies_markup	100	//% markup on prices'
+vendor_supplies0	i_supply_horse,1
+vendor_supplies1	i_bandage,100
+vendor_supplies2	i_arrow,100
+vendor_supplies3	i_xbolt,100
+vendor_supplies4	i_bottle_hair_dye,1	
+vendor_supplies5	i_scroll_recall,5
+vendor_supplies6	i_rune_marker,1
+vendor_supplies7	i_hammer_smith,1
+vendor_supplies8	i_pickaxe,1
+vendor_supplies9	i_mortar_pestle,1
+vendor_supplies10	i_pen_and_ink,1
+vendor_supplies11	i_sewing_kit,1	
+vendor_supplies12	i_scissors,1
+vendor_supplies13	i_tinker_tools,1
+vendor_supplies14	i_hammer,1
+vendor_supplies15	i_saw,1
+vendor_supplies16	i_fishing_pole,1
+vendor_supplies17	i_arrow_fletching,1
+vendor_supplies18	i_backpack,1
+vendor_supplies19	i_bag,1
+vendor_supplies20	i_bottle_empty,25
+vendor_supplies21	i_scroll_blank,25
+vendor_supplies22	i_map_bag,1
+vendor_supplies23	
+vendor_supplies24	
+
+//////////////
+// Reagents 
+
+[defname vendor_reagents]
+vendor_reagents_markup	100
+vendor_reagents0	i_reag_blood_moss,50
+vendor_reagents1	i_reag_black_pearl,50
+vendor_reagents2	i_reag_garlic,50
+vendor_reagents3	i_reag_mandrake_root,50
+vendor_reagents4	i_reag_ginseng,50
+vendor_reagents5	i_reag_sulfur_ash,50
+vendor_reagents6	i_reag_nightshade,50
+vendor_reagents7	i_reag_spider_silk,50
+vendor_reagents8	i_reag_batwing,50
+vendor_reagents9	i_reag_blackmoor,50
+vendor_reagents10	i_reag_blood_spawn,50 
+vendor_reagents11	i_reag_blood_vial,50
+vendor_reagents12	i_reag_bone,50
+vendor_reagents13	i_reag_brimstone,50
+vendor_reagents14	i_reag_daemon_bone,50
+vendor_reagents15	i_reag_fertile_dirt,50
+vendor_reagents16	i_reag_dragon_blood,50
+vendor_reagents17	i_reag_executioners_cap,50
+vendor_reagents18	i_reag_eye_of_newt,50
+vendor_reagents19	i_reag_obsidian,50
+vendor_reagents20	i_reag_pig_iron,50
+vendor_reagents21	i_reag_pumice,50
+vendor_reagents22	i_reag_nox_crystal,50
+vendor_reagents23	i_reag_grave_dust,50
+vendor_reagents24	i_reag_dead_wood,50
+vendor_reagents25	i_reag_wyrm_heart,50
+
+vendor_reagents26	i_reagent_pouch,1
+vendor_reagents27	i_reagent_bag,1
+vendor_reagents28	i_reagent_bag_pagan,1
+
+
+
+//////////////
+// Potions 
+
+[defname vendor_potions]
+vendor_potions_markup	100
+vendor_potions0		i_potion_agility,10
+vendor_potions1		i_potion_cure,10
+vendor_potions2		i_potion_explosion,10
+vendor_potions3		i_potion_heal,10
+vendor_potions4		i_potion_nightsight,10
+vendor_potions5		i_potion_poison,10
+vendor_potions6		i_potion_refresh,10
+vendor_potions7		i_potion_strength,10
+vendor_potions8		
+
+
+
+
+////////////////////////
+// armor Dye Tickets 
+
+[defname vendor_dye_tickets_armor]
+vendor_dye_tickets_armor_markup		0
+vendor_dye_tickets_armor0		i_dye_ticket_armor,1,Charcol Armor Dye Ticket,0b3f
+vendor_dye_tickets_armor1		i_dye_ticket_armor,1,Elven Green Armor Dye Ticket,0b40
+vendor_dye_tickets_armor2		i_dye_ticket_armor,1,Silver Armor Dye Ticket,0b41
+vendor_dye_tickets_armor3		i_dye_ticket_armor,1,Gold Armor Dye Ticket,0b42
+vendor_dye_tickets_armor4		i_dye_ticket_armor,1,Biohazard Armor Dye Ticket,0b43
+vendor_dye_tickets_armor5		i_dye_ticket_armor,1,Lava Armor Dye Ticket,0b44
+vendor_dye_tickets_armor6		i_dye_ticket_armor,1,Desert Armor Dye Ticket,0b45
+vendor_dye_tickets_armor7		i_dye_ticket_armor,1,Snow Armor Dye Ticket,0b46
+vendor_dye_tickets_armor8		i_dye_ticket_armor,1,Frost Armor Dye Ticket,0b47
+vendor_dye_tickets_armor9		i_dye_ticket_armor,1,Blood Red Armor Dye Ticket,0b48
+
+
+////////////////////////
+// weapon Dye Tickets 
+
+[defname vendor_dye_tickets_weapon]
+vendor_dye_tickets_weapon_markup		0
+vendor_dye_tickets_weapon0		i_dye_ticket_weapon,1,Charcol Weapon Dye Ticket,0b3f
+vendor_dye_tickets_weapon1		i_dye_ticket_weapon,1,Elven Green Weapon Dye Ticket,0b40
+vendor_dye_tickets_weapon2		i_dye_ticket_weapon,1,Silver Weapon Dye Ticket,0b41
+vendor_dye_tickets_weapon3		i_dye_ticket_weapon,1,Gold Weapon Dye Ticket,0b42
+vendor_dye_tickets_weapon4		i_dye_ticket_weapon,1,Biohazard Weapon Dye Ticket,0b43
+vendor_dye_tickets_weapon5		i_dye_ticket_weapon,1,Lava Weapon Dye Ticket,0b44
+vendor_dye_tickets_weapon6		i_dye_ticket_weapon,1,Desert Weapon Dye Ticket,0b45
+vendor_dye_tickets_weapon7		i_dye_ticket_weapon,1,Snow Weapon Dye Ticket,0b46
+vendor_dye_tickets_weapon8		i_dye_ticket_weapon,1,Frost Weapon Dye Ticket,0b47
+vendor_dye_tickets_weapon9		i_dye_ticket_weapon,1,Blood Red Weapon Dye Ticket,0b48
+
+
+////////////////////////
+// Animal Dye Tickets 
+
+[defname vendor_dye_tickets_animal]
+vendor_dye_tickets_animal_markup		0
+vendor_dye_tickets_animal0		i_dye_ticket_animal,1,Charcol Animal Dye Ticket,0b3f
+vendor_dye_tickets_animal1		i_dye_ticket_animal,1,Elven Green Animal Dye Ticket,0b40
+vendor_dye_tickets_animal2		i_dye_ticket_animal,1,Silver Animal Dye Ticket,0b41
+vendor_dye_tickets_animal3		i_dye_ticket_animal,1,Gold Animal Dye Ticket,0b42
+vendor_dye_tickets_animal4		i_dye_ticket_animal,1,Biohazard Animal Dye Ticket,0b43
+vendor_dye_tickets_animal5		i_dye_ticket_animal,1,Lava Animal Dye Ticket,0b44
+vendor_dye_tickets_animal6		i_dye_ticket_animal,1,Desert Animal Dye Ticket,0b45
+vendor_dye_tickets_animal7		i_dye_ticket_animal,1,Snow Animal Dye Ticket,0b46
+vendor_dye_tickets_animal8		i_dye_ticket_animal,1,Frost Animal Dye Ticket,0b47
+vendor_dye_tickets_animal9		i_dye_ticket_animal,1,Blood Red Animal Dye Ticket,0b48
+
+
+/////////////////
+// Drug Dealer 
+
+[defname vendor_drug_dealer]
+vendor_drugs_markup	0
+vendor_drugs0		i_beer_german,1
+vendor_drugs1		i_bowl,1
+vendor_drugs2		i_bong,1
+vendor_drugs3		i_weed,1
+vendor_drugs4		i_joint,1
+vendor_drugs5		i_rolling_papers,1
+vendor_drugs6		i_stoner_remedy,1
+vendor_drugs7		//cocaine
+vendor_drugs8		//heroin
+vendor_drugs9		//mushrooms
+vendor_drugs10		//marijuana seeds
+vendor_drugs11	
+
+
+//////////////////////////
+// Sparring Weapons
+
+[defname sparring_weapons]
+vendor_sparring_weapons_markup	0
+vendor_sparring_weapons0	i_pickaxe_sparring,1
+vendor_sparring_weapons1	i_pitchfork_sparring,1
+vendor_sparring_weapons2	i_cleaver_meat_sparring,1
+vendor_sparring_weapons3	i_knife_skinning_sparring,1
+vendor_sparring_weapons4	i_hatchet_sparring,1
+vendor_sparring_weapons5	i_axe_exec_sparring,1
+vendor_sparring_weapons6	i_axe_battle_sparring,1
+vendor_sparring_weapons7	i_axe_sparring,1
+vendor_sparring_weapons8	i_axe_double_sparring,1
+vendor_sparring_weapons9	i_bardiche_sparring,1
+vendor_sparring_weapons10	i_dagger_sparring,1
+vendor_sparring_weapons11	i_mace_sparring,1
+vendor_sparring_weapons12	i_sword_broad_sparring,1
+vendor_sparring_weapons13	i_sword_long_sparring,1
+vendor_sparring_weapons14	i_spear_sparring,1
+vendor_sparring_weapons15	i_axe_war_sparring,1
+vendor_sparring_weapons16	i_scimitar_sparring,1
+vendor_sparring_weapons17	i_sword_long_b_sparring,1
+vendor_sparring_weapons18	i_sword_viking_sparring,1
+vendor_sparring_weapons19	i_hammer_smith_sparring,1
+vendor_sparring_weapons20	i_knife_butcher_sparring,1
+vendor_sparring_weapons21	i_axe_battle_large_sparring,1
+vendor_sparring_weapons22	i_katana_sparring,1
+vendor_sparring_weapons23	i_kryss_sparring,1
+vendor_sparring_weapons24	i_spear_short_sparring,1
+vendor_sparring_weapons25	i_war_fork_sparring,1
+vendor_sparring_weapons26	i_mace_war_sparring,1
+vendor_sparring_weapons27	i_hammer_war_sparring,1
+vendor_sparring_weapons28	i_maul_sparring,1
+vendor_sparring_weapons29	i_hammer_pick_sparring,1
+vendor_sparring_weapons30	i_halberd_sparring,1
+vendor_sparring_weapons31	i_cutlass_sparring,1
+vendor_sparring_weapons32	i_axe_two_hand_sparring,1
+vendor_sparring_weapons33	i_bow_sparring,1
+vendor_sparring_weapons34	i_crossbow_sparring,1
+
+
+//////////////////////////
+// Custom Vendor Dialog
+
+[dialog d_vendor_custom]
+200,50
+
+gumppic 7 10 8000
+dtext 120 15 1263 Select Your Items
+//dtext 60 35 1263 Item
+//dtext 260 35 1263 Cost
+
+while !<isempty <def.vendor_<tag0.vendor><dlocal.n>>>
+  if (<local.x>==<eval (<local.n>/4)>)
+    gumppic 28 <eval 46+(70*<local.x>)> <R8001,8002>
+    local.x += 1
+  endif
+  args=<def0.vendor_<tag0.vendor><dlocal.n>>
+  button 40 <eval (50+(17*<local.n>))> 1209 1210 1 0 <eval <local.n>+1>
+  dcroppedtext 60 <eval (48+(17*<local.n>))> 190 20 1000 <dargv[1]> <qval <isempty <argv[2]>>?<serv.itemdef.<argv[0]>.name>:<argv[2]>>
+  local.price=<eval <f_avgvalue <serv.itemdef.<argv[0]>.value>>*<argv[1]>>	
+  local.price += <muldiv <local.price>,<def0.vendor_<tag0.vendor>_markup>,100>
+  dtext 260 <eval (48+(17*<local.n>))> 1000 <dlocal.price>g
+  local.n += 1
+endwhile
+gumppic 30 <eval 46+(70*<local.x>)> 8003
+dtext 60 <eval 51+(70*<local.x>)> 1263 Available Gold: <src.gold>
+if (<def0.vendor_<tag0.vendor>_markup>)
+  dtext 260 <eval 45+(70*<local.x>)> 026 Markup
+  dtext 260 <eval 60+(70*<local.x>)> 026 <ddef0.vendor_<tag0.vendor>_markup>%
+endif
+
+
+
+[dialog d_vendor_custom button]
+
+onbutton=1,1000
+if (<distance> > 3) 
+  src.message You are too far away!
+  return 1
+endif
+if (<src.findid.i_supply_vendor_cooldown>)
+  if (<src.findid.i_supply_vendor_cooldown.more1> >= <def0.supply_vendor_buy_perhour>)		//how many times total they bought from me
+    message You have reached your maximum hourly supply vendor limit.
+    return 1
+  endif
+endif
+if !(<src.findid.i_supply_vendor_cooldown>)		//make sure they have the cooldown equipped
+  serv.newitem i_supply_vendor_cooldown
+  new.timer=3600					//lasts 1 hour
+  src.equip <new>
+endif
+src.findid.i_supply_vendor_cooldown.more1 += 1
+
+
+argn -= 1
+args=<def0.vendor_<tag0.vendor><dargn>>
+
+local.item=<argv[0]>
+local.amount=<argv[1]>
+  
+local.price=<eval <f_avgvalue <serv.itemdef.<argv[0]>.value>>*<argv[1]>>	
+local.price += <muldiv <local.price>,<def0.vendor_<tag0.vendor>_markup>,100>
+
+if (<src.gold> < <local.price>)
+  message Alas, thou dost not possess sufficient gold for this purchase!
+  return 1
+endif
+
+src.gold -= <local.price>
+serv.newitem <local.item>,<local.amount>
+if (!<isempty <argv[3]>>)
+  new.color=<argv[3]>
+endif
+new.bounce <uid>
+message Here you are, <src.name> That is <dlocal.price> gold coins worth of goods. I thank thee for thy business
+sound 54
+
+[itemdef i_supply_vendor_cooldown]
+defname=i_supply_vendor_cooldown
+name=Supply Vendor Cooldown
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+///////////////////
+// Custom Items
+
+[itemdef i_reagent_pouch]
+id=i_pouch
+name=pouch of reagents
+value=1200
+
+on=@create
+color 0176
+newitem i_reag_blood_moss,50
+new.cont <uid>
+newitem i_reag_black_pearl,50
+new.cont <uid>
+newitem i_reag_garlic,50
+new.cont <uid>
+newitem i_reag_mandrake_root,50
+new.cont <uid>
+newitem i_reag_ginseng,50
+new.cont <uid>
+newitem i_reag_sulfur_ash,50
+new.cont <uid>
+newitem i_reag_nightshade,50
+new.cont <uid>
+newitem i_reag_spider_silk,50
+new.cont <uid>
+
+[itemdef i_reagent_bag]
+id=i_bag
+name=bag of reagents
+value=2400
+skillmake=tailoring 10.0, alchemy 100.0, magery 100.0, t_sewing_kit
+resources=4 i_hides_cut
+
+on=@create
+color 0176
+newitem i_reag_blood_moss,100
+new.cont <uid>
+newitem i_reag_black_pearl,100
+new.cont <uid>
+newitem i_reag_garlic,100
+new.cont <uid>
+newitem i_reag_mandrake_root,100
+new.cont <uid>
+newitem i_reag_ginseng,100
+new.cont <uid>
+newitem i_reag_sulfur_ash,100
+new.cont <uid>
+newitem i_reag_nightshade,100
+new.cont <uid>
+newitem i_reag_spider_silk,100
+new.cont <uid>
+
+[itemdef i_reagent_bag_half]
+id=i_bag
+name=half bag of reagents
+value=1200
+
+on=@create
+color 0176
+newitem i_reag_blood_moss,50
+new.cont <uid>
+newitem i_reag_black_pearl,50
+new.cont <uid>
+newitem i_reag_garlic,50
+new.cont <uid>
+newitem i_reag_mandrake_root,50
+new.cont <uid>
+newitem i_reag_ginseng,50
+new.cont <uid>
+newitem i_reag_sulfur_ash,50
+new.cont <uid>
+newitem i_reag_nightshade,50
+new.cont <uid>
+newitem i_reag_spider_silk,50
+new.cont <uid>
+
+
+[itemdef i_reagent_bag_pagan]
+id=i_bag
+name=bag of pagan reagents
+value=6000
+
+on=@create
+color 0455
+newitem i_reag_batwing,100
+new.cont <uid>
+newitem i_reag_blackmoor,100
+new.cont <uid>
+newitem i_reag_blood_spawn,100
+new.cont <uid>
+newitem i_reag_blood_vial,100
+new.cont <uid>
+newitem i_reag_bone,100
+new.cont <uid>
+newitem i_reag_brimstone,100
+new.cont <uid>
+newitem i_reag_daemon_bone,100
+new.cont <uid>
+newitem i_reag_fertile_dirt,100
+new.cont <uid>
+newitem i_reag_dragon_blood,100
+new.cont <uid>
+newitem i_reag_executioners_cap,100
+new.cont <uid>
+newitem i_reag_eye_of_newt,100
+new.cont <uid>
+newitem i_reag_obsidian,100
+new.cont <uid>
+newitem i_reag_pig_iron,100
+new.cont <uid>
+newitem i_reag_pumice,100
+new.cont <uid>
+newitem i_reag_nox_crystal,100
+new.cont <uid>
+newitem i_reag_serpent_scale,100
+new.cont <uid>
+newitem i_reag_grave_dust,100
+new.cont <uid>
+newitem i_reag_dead_wood,100
+new.cont <uid>
+newitem i_reag_wyrm_heart,100
+new.cont <uid>
+
+[itemdef i_potion_satchel]
+id=i_backpack
+name=Potion Satchel
+value=2820
+
+on=@create
+color 014
+newitem i_potion_agility,10
+new.cont <uid>
+newitem i_potion_cure,10
+new.cont <uid>
+newitem i_potion_explosion,10
+new.cont <uid>
+newitem i_potion_heal,10
+new.cont <uid>
+newitem i_potion_nightsight,10
+new.cont <uid>
+newitem i_potion_poison,10
+new.cont <uid>
+newitem i_potion_refresh,10
+new.cont <uid>
+newitem i_potion_strength,10
+new.cont <uid>
+
+[itemdef i_supply_horse]
+id=i_pet_horse
+name=Horse
+value=399
+
+on=@create
+dorand 10
+  name=Artax
+  name=Bill
+  name=Phantom
+  name=Pilgrim
+  name=Cisco
+  name=Gunpowder
+  name=Seabiscuit
+  name=Mr Ed
+  name=Llamrei
+  name=Shadowfax
+enddo
+
+[itemdef i_map_bag]
+id=i_bag
+name=Map Bag
+value=75
+
+on=@create
+for 25
+  serv.newitem i_map_blank,1,<uid>
+endfor
+
+
+
+
+[EOF]
+

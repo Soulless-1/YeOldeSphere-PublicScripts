@@ -1,0 +1,46 @@
+[SPELL 41]
+DEFNAME=s_dispel
+NAME=Dispel
+SOUND=snd_spell_dispel
+RUNES=AO
+CAST_TIME=2.0
+RESOURCES=i_reag_garlic,i_reag_mandrake_root,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_dispel
+SCROLL_ITEM=i_scroll_dispel
+FLAGS=spellflag_dir_anim|spellflag_targ_char
+EFFECT_ID=i_fx_smoke
+EFFECT=0
+DURATION=0.0
+MANAUSE=20
+SKILLREQ=MAGERY 50.0
+INTERRUPT=100.0,100.0
+
+on=@effect
+//Dispel can be cast on any summoned creature. Doing so will remove the creature from the game (unless it resists your Dispel)
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+if (<uid> == <src>) 	//if casting onself remove beneficial spell effects
+  consume i_rune_night_sight
+  consume i_rune_reactive_armor
+  //consume i_rune_reactive_armor2
+  consume i_rune_agility
+  consume i_rune_cunning
+  consume i_rune_protection
+  //consume i_rune_protection2
+  consume i_rune_strength
+  consume i_rune_bless
+  consume i_rune_archprotection
+  consume i_rune_incognito
+  //consume i_rune_incognito2
+  consume i_rune_magic_reflection
+  //consume i_rune_magic_reflection2
+  consume i_rune_invisibility
+  consume i_rune_polymorph
+  effect=3,<serv.spell.41.effect_id>,6,15,1
+  sound=<serv.spell.41.sound>
+  return 1
+elseif !(<flags>&statf_conjured)
+  return 1
+endif
+
+[EOF]

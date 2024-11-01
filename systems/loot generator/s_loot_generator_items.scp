@@ -1,0 +1,263 @@
+
+/////////////////////////////////
+// Magic Armor
+
+[itemdef i_magic_armor1]
+defname=i_magic_armor1
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 1,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 20
+
+[itemdef i_magic_armor2]
+defname=i_magic_armor2
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 40
+
+[itemdef i_magic_armor3]
+defname=i_magic_armor3
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 60
+
+[itemdef i_magic_armor4]
+defname=i_magic_armor4
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 80
+
+[itemdef i_magic_armor5]
+defname=i_magic_armor5
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 100
+
+[itemdef i_magic_armor6]	//these are probably not neccessary any more, unless we add different items to it. like rare uniques
+defname=i_magic_armor6
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 100
+
+[itemdef i_magic_armor7]
+defname=i_magic_armor7
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 100
+
+[itemdef i_magic_armor8]
+defname=i_magic_armor8
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 100
+
+[itemdef i_magic_armor9]
+defname=i_magic_armor9
+defname2=i_magic_armo9
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 100
+
+[itemdef i_magic_armor10]
+defname=i_magic_armor10
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_armor,1,<uid>
+new.f_make_magic_armor 100
+
+//////////////////////////////
+// Magic Weapons
+
+[itemdef i_magic_weapon1]
+defname=i_magic_weapon1
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 20
+
+[itemdef i_magic_weapon2]
+defname=i_magic_weapon2
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 40
+
+[itemdef i_magic_weapon3]
+defname=i_magic_weapon3
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 60
+
+[itemdef i_magic_weapon4]
+defname=i_magic_weapon4
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 80
+
+[itemdef i_magic_weapon5]
+defname=i_magic_weapon5
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 100
+
+[itemdef i_magic_weapon6]		//these and beyond are probably not needed either, maybe in the future
+defname=i_magic_weapon6
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 100
+
+[itemdef i_magic_weapon7]
+defname=i_magic_weapon7
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 100
+
+[itemdef i_magic_weapon8]
+defname=i_magic_weapon8
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 100
+
+[itemdef i_magic_weapon9]
+defname=i_magic_weapon9
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 100
+
+[itemdef i_magic_weapon10]
+defname=i_magic_weapon10
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_magic_weapon 100
+////////////////////////////////
+// Magic Wand
+
+[itemdef i_magic_wand]
+defname=i_magic_wand
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem i_wand_<R1,4>,1,<uid>
+new.f_make_magic_wand 100
+
+////////////////////////////////
+// Magic Jewelry
+
+[itemdef i_enchanted_jewelry]
+defname=i_enchanted_jewelry
+defname2=i_magic_jewelry
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_jewelry,1,<uid>
+new.f_make_enchanted_jewelry 100
+
+
+////////////////////////////////
+// Enchanted Weapon
+
+[itemdef i_enchanted_weapon]
+defname=i_enchanted_weapon
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_weapon,1,<uid>
+new.f_make_enchanted_weapon 100
+
+////////////////////////////////
+// Enchanted Clothing
+
+[itemdef i_enchanted_clothing]
+defname=i_enchanted_clothing
+resources=4 i_hides_cut
+id=i_bag
+
+on=@create
+timerf 0,id=i_bag
+serv.newitem random_clothing,1,<uid>
+new.f_make_enchanted_clothing 100
+
+
+[EOF]

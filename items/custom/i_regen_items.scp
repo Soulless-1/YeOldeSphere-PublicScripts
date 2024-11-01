@@ -1,0 +1,80 @@
+
+[itemdef i_mana_crystal]
+defname=i_mana_crystal
+id=i_crystal_purple
+name=mana crystal
+value=100
+skillmake=951 tinkering, 951 magery, 951 inscription
+resources=i_gem_sapphire 25, i_gem_emerald 25, i_scroll_mana_vampire 1
+type=t_mana_crystal
+
+on=@create
+color=053
+more2=10
+
+[itemdef i_mana_crystal_greater]
+defname=i_mana_crystal_greater
+defname2=i_mana_crystal_ultimate
+name=greater mana crystal
+id=i_crystal_purple
+value=250
+skillmake=1151 tinkering, 1151 magery, 1151 inscription
+resources=i_gem_ruby 50, i_gem_diamond 50, i_scroll_mana_vampire 5
+type=t_mana_crystal
+
+on=@create
+color=014
+more2=25
+
+[typedef t_mana_crystal]
+
+on=@click
+message [<eval <more2>> Charges]
+
+on=@dclick
+if (<src.mana>>=<src.int>)
+  src.sysmessage You are already super charged with mana.
+  return 1
+endif
+if (<src.findid.i_regain_mana>)
+  src.sysmessage You can't use this again so soon.
+  return 1
+endif
+sound 00f9
+more2 -= 1
+serv.newitem i_regain_mana
+new.equip <src.uid>
+
+if (<more2> <= 0)
+  remove
+  src.sysmessage That was the last chargen, The mana crystal shatters.
+  sound=00fd
+endif
+return 1
+
+[itemdef i_regain_mana]
+name=Mana Crystal
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+more1=<eval 1+(<src.meditation>/100)>		//meditation rate
+more2=<eval (<src.f_meditation_rate>*2)>	//meditation time
+morex=<eval (<src.maxmana>-<src.mana>)>		//how much mana to restore
+timer=0
+
+on=@timer
+topobj.effect=3,i_fx_sparkle_2,6,15,1,064
+topobj.mana += <more1>
+morey += <more1> 
+if (<morey> >= <morex>)	//we've reached out mana we needed
+  topobj.sysmessage You are at peace.
+  topobj.mana=<qval (<topobj.maxmana> < <topobj.mana>)?<topobj.maxmana>:<topobj.mana>>
+  remove
+  return 1
+endif
+timerms=<more2>
+return 1
+
+[EOF]

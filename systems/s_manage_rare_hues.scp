@@ -1,0 +1,91 @@
+//Rare Color Managmement by Soulless
+//v1.0
+//12:05 AM 10/20/2023
+
+//this system will bring up a dialog showing colors from 1150 to 2999 and you can add them to the approved list or restricted
+//a function f_rare_color_select will pull from the approved list.
+
+
+[function rarehues]
+if (<account.plevel> < 4)
+  sysmessage You lack the privs to use this management menu.
+  return 1
+endif
+sdialog d_hue_management 1
+
+[dialog d_hue_management]
+50,50
+
+page 0
+
+resizepic 10 10 2600 1300 770
+
+dtext 600 25 1000 Hue Management Dialog
+local.hue=<eval (1150+((<argn1>-1)*220))>
+local.itemid=i_robe
+for n 1 220
+  if (<local.hue> < 3000)
+    local.inlist=<serv.list.rare_hues_pool.findelem <local.hue>> 
+    tilepichue <eval (50+<local.x>)> <eval (70+<local.y>)> <eval id(<local.itemid>)> <dlocal.hue>
+    if (<account.plevel> >= 6)
+      checkbox <eval (58+<local.x>)> <eval (55+<local.y>)> 1896 1895 <qval (-1 < <local.inlist>)?1:0> <local.hue>
+    endif
+    dtext <eval (75+<local.x>)> <eval (55+<local.y>)> 1000 <dlocal.hue>
+    local.x += 55
+    if (<local.x> >= 1210)
+      local.y += 65
+      local.x=
+    endif
+    local.hue += 1
+  endif
+endfor
+dtext 625 740 1000 page <dargn1>
+
+dtext 750 740 044 (Rare Hues Pool: <serv.list.rare_hues_pool.count>)
+
+if (<argn1> > 1)
+  button 65 740 4014 4015 1 0 <eval (<argn1>-1)>
+endif
+if (<argn> < 9)
+  button 1200 740 4005 4006 1 0 <eval (<argn1>+1)>
+endif
+
+button 265 740 241 242 1 0 0				//cancel 
+if (<account.plevel> >= 6)
+  button 425 735 2472 2473 1 0 100			//clear all
+  dtext 455 740 026 Clear All
+endif
+
+button 1000 740 247 248 1 0 <eval (10+<argn1>)>		//okay 
+
+[dialog d_hue_management button]
+
+onbutton=0
+//sysmessage No changes made to the rare color pool
+
+onbutton=1,10		//back/forward
+sdialog d_hue_management <argn>
+
+onbutton=11,20		//apply changes
+argn1 -= 10
+local.hue=<eval (1150+((<argn1>-1)*220))>
+for n <local.hue> <eval (<local.hue>+220)>
+  if (<argchk[<local.n>]>==1)
+    if (<serv.list.rare_hues_pool.findelem <local.n>> == -1)
+      serv.list.rare_hues_pool.add <local.n>
+      local.added += 1
+    endif
+  elseif (<serv.list.rare_hues_pool.findelem <local.n>> != -1)
+    serv.list.rare_hues_pool.<serv.list.rare_hues_pool.findelem <local.n>>.remove
+    local.removed += 1
+  endif
+endfor
+sdialog d_hue_management <argn1>
+sysmessage Hues updated: <dlocal.added> added / <dlocal.removed> removed, <serv.list.rare_hues_pool.count> total in the pool.
+
+onbutton=100	//delete hue pool
+serv.list.rare_hues_pool.clear
+sdialog d_hue_management 1
+sysmessage Rare hues pool cleared
+
+

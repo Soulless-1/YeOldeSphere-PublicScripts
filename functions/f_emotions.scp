@@ -1,0 +1,198 @@
+//Emotions by Soulless
+//v2.0
+//1:56 PM 2/7/2019
+
+[defname emotion_settings]
+
+emotion_ah		0
+emotion_ahha 		1
+emotion_applaud 	2
+emotion_blownose	3
+emotion_burp 		4
+emotion_cheer 		5
+emotion_clearthroat 	6
+emotion_cough 		7
+emotion_coughbs 	8
+emotion_cry 		9
+emotion_fart 		10
+emotion_gasp 		11
+emotion_giggle		12
+emotion_groan 		13
+emotion_growl 		14
+emotion_hey 		15
+emotion_hiccup 		16
+emotion_huh 		17
+emotion_kiss 		18
+emotion_laugh 		19
+emotion_no 		20
+emotion_oh 		21
+emotion_oomph 		22
+emotion_oooh 		23
+emotion_oops 		24
+emotion_puke 		25
+emotion_scream 		26
+emotion_shush 		27
+emotion_sigh 		28
+emotion_sneeze 		29
+emotion_sniff 		30
+emotion_snore 		31
+emotion_spit 		32
+emotion_whistle 	33
+emotion_yawn 		34
+emotion_yea 		35
+emotion_yell 		36
+
+emotion_female_0 	ah,778
+emotion_female_1 	ahha,779
+emotion_female_2 	applaud,780
+emotion_female_3 	blow nose,781
+emotion_female_4 	burp,782
+emotion_female_5 	cheer,783
+emotion_female_6 	clear throat,784
+emotion_female_7	cough,785
+emotion_female_8	coughbs,786
+emotion_female_9	cry,787
+emotion_female_10	fart,792
+emotion_female_11 	gasp,793
+emotion_female_12 	giggle,794
+emotion_female_13 	groan,798
+emotion_female_14 	growl,796
+emotion_female_15 	hey,797
+emotion_female_16 	hic cup,798
+emotion_female_17 	huh,799
+emotion_female_18 	kiss,800
+emotion_female_19 	laugh,801
+emotion_female_20 	no,802
+emotion_female_21 	oh,803
+emotion_female_22 	oomph,{804 810}
+emotion_female_23 	oooh,811
+emotion_female_24 	oops,812
+emotion_female_25 	puke,813
+emotion_female_26 	scream,814
+emotion_female_27 	shush,815
+emotion_female_28 	sigh,816
+emotion_female_29 	sneeze,817
+emotion_female_30 	sniff,818
+emotion_female_31 	snore,819
+emotion_female_32 	spit,820
+emotion_female_33 	whistle,821
+emotion_female_34 	yawn,822
+emotion_female_35 	yea,823
+emotion_female_36 	yell,824
+
+emotion_male_0 		ah,1049
+emotion_male_1 		ahha,1050
+emotion_male_2 		applaud,1051
+emotion_male_3 		blow nose,1052
+emotion_male_4 		burp,1053
+emotion_male_5 		cheer,1054
+emotion_male_6 		clear throat,1055
+emotion_male_7 		cough,1056
+emotion_male_8 		coughbs,1057
+emotion_male_9 		cry,1058
+emotion_male_10 	fart,1064
+emotion_male_11 	gasp,1065
+emotion_male_12 	giggle,1066
+emotion_male_13 	groan,1067
+emotion_male_14 	growl,1068
+emotion_male_15 	hey,1069
+emotion_male_16 	hic cup,1070
+emotion_male_17 	huh,1071
+emotion_male_18 	kiss,1072
+emotion_male_19 	laugh,1073
+emotion_male_20 	no,1074
+emotion_male_21 	oh,1075
+emotion_male_22 	oomph,{1077 1084}
+emotion_male_23 	oooh,1085
+emotion_male_24 	oops,1086
+emotion_male_25 	puke,1087
+emotion_male_26 	scream,1088
+emotion_male_27 	shush,1089
+emotion_male_28 	sigh,1090
+emotion_male_29 	sneeze,1091
+emotion_male_30 	sniff,1092
+emotion_male_31 	snore,1093
+emotion_male_32 	spit,1094
+emotion_male_33 	whistle,1095
+emotion_male_34 	yawn,1096
+emotion_male_35 	yea,1097
+emotion_male_36 	yell,1098
+
+[plevel 1]
+emotions
+emo
+e
+
+[function e]
+emo <args>
+
+[function emo]
+if (<flags>&statf_dead) || (<flags>&statf_freeze) || (<flags>&statf_stone)
+  src.sysmessage You can't do much in your current state.
+  return 1
+endif
+if (<isempty <args>>)
+  emotions
+  return 1
+endif
+if !(<npc>)
+  if (<ctag0.emotion_flood>) && !(<isgm>) 
+    src.sysmessage You cannot use the emotion function so quickly
+    return 1
+  endif
+  ctag0.emotion_flood=1
+  timerf 3,ctag0.emotion_flood=
+endif
+local.sex=<qval (<body>==c_woman)?female:male>
+args=<def0.emotion_<local.sex>_<ddef0.emotion_<args>>>
+sound <argv[1]>
+say @<speechcolor>,3,0,0 *<argv[0]>*
+return 1
+
+[function emotions]
+sdialog d_emotions
+return 1
+
+[dialog d_emotions]
+403,53
+resizepic 7 7 9200 235 350
+local.sex=<qval (<obody>==c_woman)?female:male>
+
+dtext 80 20 1263 Emotion Menu
+
+for 0 36
+  args=<def0.emotion_<local.sex>_<dlocal._for>>
+  button <eval 40+<local.y>> <eval 45+<local.x>> 1209 1210 1 0 <eval <local._for>+1>
+  dtext <eval 60+<local.y>> <eval 41+<local.x>> 1000 <argv[0]>
+  local.x += 15
+  if (<local.x> >= 285)
+    local.x=
+    local.y=100
+  endif
+endfor
+
+dtext 130 320 1263 Keep Open
+checkbox 200 320 210 211 <qval <src.ctag0.keep_emotionbox_open>?1:0> 1
+
+
+[dialog d_emotions button]
+
+onbutton=0
+src.ctag0.keep_emotionbox_open=
+
+onbutton=1,37
+argn1 -= 1
+if (<argchk[1]>==1)
+  src.ctag0.keep_emotionbox_open=1
+  src.sdialog d_emotions
+else
+  src.ctag0.keep_emotionbox_open=
+endif
+local.sex=<qval (<src.obody>==c_woman)?female:male>
+args=<def0.emotion_<local.sex>_<dargn1>>
+src.e <f_shmush_args <explode " ",<argv[0]>>>
+
+
+
+
+[EOF]

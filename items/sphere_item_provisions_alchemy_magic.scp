@@ -1,0 +1,2638 @@
+//****************************************************************************
+// SPHERE by : Menasoft ©1997-2007
+// www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Sunday, November 23, 2003
+//
+VERSION=0.56b
+
+[ITEMDEF 0dda]
+//red moongate animated (full)
+DEFNAME=i_moongate_red
+RESOURCES=i_scroll_gate_travel
+TYPE=t_telepad
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Moongates
+DESCRIPTION=Red Moongate (Animated)
+DUPELIST=0ddb,0ddc,0ddd,0dde
+
+[ITEMDEF 0ddb]
+//red moongate frame of animation
+DUPEITEM=0dda
+
+[ITEMDEF 0ddc]
+//red moongate fast animated
+DUPEITEM=0dda
+
+[ITEMDEF 0ddd]
+//red moongate
+DUPEITEM=0dda
+
+[ITEMDEF 0dde]
+//red moongate
+DUPEITEM=0dda
+
+[ITEMDEF 0e34]
+DEFNAME=i_scroll_blank
+TYPE=T_SCROLL_BLANK
+VALUE=4
+RESOURCES=1 i_hide	//I_PARCHMENT
+SKILLMAKE=inscription 25.7	//, t_carpentry
+WEIGHT=01
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls
+DESCRIPTION=BLANK SCROLL
+DUPELIST=0ef3
+
+[ITEMDEF 0e35]
+//Don't use this item it's not "blank" has red ribbon around it
+// is set to be used as LIGHT spell - leave or change??
+DEFNAME=i_scroll_x_red
+TYPE=T_SCROLL
+RESOURCES=1 I_SCROLL_BLANK, 1 I_RIBBON
+WEIGHT=1
+DUPELIST=0ef4
+
+[ITEMDEF 0e36]
+//Don't use this item it's not "blank" has blue ribbon around it
+// is set to be used as FIRE BOLT spell - leave or change??
+DEFNAME=i_scroll_x_blue
+TYPE=T_SCROLL
+RESOURCES=1 I_SCROLL_BLANK, 1 I_RIBBON
+WEIGHT=1
+DUPELIST=0ef5
+
+[ITEMDEF 0e37]
+//Don't use this item it's not "blank" has green ribbon around it
+DEFNAME=i_scroll_x_green
+TYPE=T_SCROLL
+RESOURCES=1 I_SCROLL_BLANK, 1 I_RIBBON
+WEIGHT=1
+DUPELIST=0ef6
+
+[ITEMDEF 0e38]
+//Don't use this item it's not "blank" has teal ribbon around it
+DEFNAME=i_scroll_x_teal
+TYPE=T_SCROLL
+RESOURCES=1 I_SCROLL_BLANK, 1 I_RIBBON
+WEIGHT=1
+DUPELIST=0ef7
+
+[ITEMDEF 0e39]
+//Don't use this item it's not "blank" has brown ribbon around it
+DEFNAME=i_scroll_x_brown
+TYPE=T_SCROLL
+RESOURCES=1 I_SCROLL_BLANK, 1 I_RIBBON
+WEIGHT=1
+DUPELIST=0ef8
+
+[ITEMDEF 0e3a]
+//Don't use this item it's not "blank" has purple ribbon around it
+DEFNAME=i_scroll_x_purp
+TYPE=T_SCROLL
+RESOURCES=1 I_SCROLL_BLANK, 1 I_RIBBON
+WEIGHT=1
+DUPELIST=0ef9
+
+[ITEMDEF 0e3b]
+DEFNAME=i_spellbook_bad
+LAYER=1	// this is wrong in TILEDATA ?
+RESOURCES=80 I_PARCHMENT, 1 I_HIDE, 1 I_CLOTH
+//Spellbook, Empty
+//Client Anomaly requires this out of order dupeitem with 0e3b
+// DUPEITEM=0efa // don't use this at all !
+
+ON=@Create
+	ATTR=attr_magic|attr_newbie
+
+[ITEMDEF 0e9b]
+//Mortar & Pestle
+DEFNAME=i_mortar_pestle
+TYPE=T_MORTAR
+TEVENTS=t_tool_alchemy
+RESOURCES=3 i_ingot_iron
+WEIGHT=1
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Magical Items
+DESCRIPTION=Mortar and Pestle
+SKILLMAKE=TINKERING 23.3,t_tinker_tools
+
+ON=@Create
+	USESMAX={50 60}
+	
+[ITEMDEF 0ef3]
+//blank scroll
+DUPEITEM=0e34
+
+[ITEMDEF 0ef4]
+//scroll
+DUPEITEM=0e35
+
+[ITEMDEF 0ef5]
+//scroll
+DUPEITEM=0e36
+
+[ITEMDEF 0ef6]
+//scroll
+DUPEITEM=0e37
+
+[ITEMDEF 0ef7]
+//scroll
+DUPEITEM=0e38
+
+[ITEMDEF 0ef8]
+//scroll
+DUPEITEM=0e39
+
+[ITEMDEF 0ef9]
+//scroll
+DUPEITEM=0e3a
+
+[ITEMDEF 0efa]
+//Spellbook, Empty
+//Client Anomaly requires this out of order dupeitem with 0e3b
+DEFNAME=i_spellbook
+RESOURCES=10 i_scroll_blank	//80 I_PARCHMENT, 1 I_HIDE, 1 I_CLOTH
+SKILLMAKE=50.0 inscription
+TYPE=T_SPELLBOOK
+TDATA3=0
+TDATA4=64
+WEIGHT=1
+LAYER=1	// this is wrong in TILEDATA ?
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Magical Items
+DESCRIPTION=Spellbook
+
+ON=@Create
+	ATTR=attr_magic|attr_newbie
+   //MORE1=0ffffffff
+   //MORE2=0ffffffff
+   
+[itemdef i_spellbook_full]
+id=i_spellbook
+name=full spellbook
+type=t_spellbook
+value=1598
+resources=i_scroll_blank 64, i_reag_blood_moss 27, i_reag_mandrake_root 37, i_reag_spider_silk 25, i_reag_sulfur_ash 27, i_reag_garlic 21, i_reag_ginseng 13, i_reag_nightshade 14, i_reag_black_pearl 17
+skillmake=inscription 80.0, magery 70.0
+
+on=@create
+name=spellbook	//have to do this so it appears correctly in crafting menus
+attr=attr_magic|attr_newbie
+more1=0ffffffff
+more2=0ffffffff
+
+[itemdef i_spellbook_half]
+id=i_spellbook
+name=half spellbook
+type=t_spellbook
+value=799
+
+on=@create
+name=spellbook
+attr=attr_magic|attr_newbie
+more1=0ffffffff
+
+[itemdef i_spellbook_half2]	//only top half the spells for half spellbook
+id=i_spellbook
+name=half spellbook
+type=t_spellbook
+value=799
+
+on=@create
+name=spellbook
+attr=attr_magic|attr_newbie
+more1=0cccccccc
+
+[itemdef i_spellbook_quarter]
+id=i_spellbook
+name=quarter spellbook
+type=t_spellbook
+value=400
+
+on=@create
+name=spellbook
+attr=attr_magic|attr_newbie
+more1=00000ffff
+
+[itemdef i_spellbook_quarter2]	//only top half of the spells for quarter spellbook
+id=i_spellbook
+name=quarter spellbook
+type=t_spellbook
+value=400
+
+on=@create
+name=spellbook
+attr=attr_magic|attr_newbie
+more1=0cccccccc
+
+[ITEMDEF 0f06]
+//Potion (Black)
+DEFNAME=i_bottle_black
+TYPE=t_potion
+TDATA1=i_bottle_empty
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (Black)(Nightsite)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=S_Night_Sight
+	MORE2={ 30.0 90.0 }
+
+[ITEMDEF 0f07]
+//Potion (Orange)
+DEFNAME=i_bottle_orange
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (Orange)(Cure)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=s_cure
+	MORE2={ 300 900 }
+
+[ITEMDEF 0f08]
+//Potion (Blue)
+DEFNAME=i_bottle_blue
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (Blue)(Agility)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=s_agility
+	MORE2={ 300 900 }
+
+[ITEMDEF 0f09]
+//Potion (White)
+DEFNAME=i_bottle_white
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (White)(Strength)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=s_Strength
+	MORE2={ 300 900 }
+
+[ITEMDEF 0f0a]
+//Potion (Green)
+DEFNAME=i_bottle_green
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (Green)(Poison)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=s_Poison
+	MORE2={ 300 900 }
+
+[ITEMDEF 0f0b]
+//Potion (Red)
+DEFNAME=i_bottle_red
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (Red)(Refresh)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=s_refresh
+	MORE2={ 300 900 }
+
+[ITEMDEF 0f0c]
+//Potion (Yellow)
+DEFNAME=i_bottle_yellow
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (Yellow)(Heal)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=s_heal
+	MORE2={ 300 900 }
+
+[ITEMDEF 0f0d]
+//Potion (Purple)
+DEFNAME=i_bottle_purple
+TYPE=T_POTION
+TDATA1=0
+RESOURCES=i_bottle_empty
+WEIGHT=1
+DESCRIPTION=Potion (Purple)(Explosion)
+SUBSECTION=Potions
+CATEGORY=Provisions - Alchemy & Magic
+
+ON=@Create
+	MORE1=s_explosion
+	MORE2={ 30.0 80.0 }
+
+[ITEMDEF 0f0e]
+//Empty Potion Bottle
+DEFNAME=i_bottle_empty
+TYPE=T_POTION_EMPTY
+SKILLMAKE=TINKERING 21.3,t_tinker_tools
+RESOURCES=2 i_ingot_iron
+VALUE=4,8
+WEIGHT=1
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Magical Items
+DESCRIPTION=Empty Alchemist Bottle
+
+[ITEMDEF 0f6c]
+//blue moongate
+DEFNAME=i_moongate_blue
+TYPE=t_telepad
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Moongates
+DESCRIPTION=Blue Moongate
+DUPELIST=0f6d,0f6e,0f6f,0f70
+
+[ITEMDEF 0f6d]
+//blue moongate
+DUPEITEM=0f6c
+
+[ITEMDEF 0f6e]
+//blue moongate
+DUPEITEM=0f6c
+
+[ITEMDEF 0f6f]
+//blue moongate
+DUPEITEM=0f6c
+
+[ITEMDEF 0f70]
+//blue moongate
+DUPEITEM=0f6c
+
+[comment ITEMDEF 01f14]	//storing this in the runebook script 
+//recall rune
+//DEFNAME2=RUNE
+//DEFNAME2=MARKER_TALISMAN_1
+DEFNAME=i_rune_marker
+TYPE=T_RUNE
+VALUE={16 20}
+//RESOURCES=
+WEIGHT=1
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Magical Items
+DESCRIPTION=Recall Rune
+DUPELIST=01f15,01f16,01f17
+
+[ITEMDEF 01f15]
+//recall rune
+DUPEITEM=01f14
+
+[ITEMDEF 01f16]
+//recall rune
+DUPEITEM=01f14
+
+[ITEMDEF 01f17]
+//Recall Rune
+DUPEITEM=01f14
+
+[ITEMDEF 01f19]
+//blinking, glowing green magical crystal
+DEFNAME=i_crystal_green_big
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Magic Crystal
+DESCRIPTION=@
+DUPELIST=01f1a,01f1b
+
+[ITEMDEF 01f1a]
+//green magical crystal
+DUPEITEM=01f19
+
+[ITEMDEF 01f1b]
+//glowing green magical crystal
+DUPEITEM=01f19
+
+[ITEMDEF 01f1c]
+//blinking, glowing purple magical crystal
+DEFNAME=i_crystal_purple
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Magic Crystal
+DESCRIPTION=@
+DUPELIST=01f1d,01f1e
+
+[ITEMDEF 01f1d]
+//purple magical crystal
+DUPEITEM=01f1c
+
+[ITEMDEF 01f1e]
+//glowing purple magical crystal
+DUPEITEM=01f1c
+
+[ITEMDEF 01f2d]
+DEFNAME=i_scroll_reactive_armor
+NAME=Reactive Armor Scroll
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Reactive Armor
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_reactive_armor
+	morey=600 //{10 50}
+
+[ITEMDEF 01f2e]
+DEFNAME=i_scroll_clumsy
+NAME=Clumsy Scroll
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Clumsy Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_clumsy
+	morey=600 //{10 50}
+
+[ITEMDEF 01f2f]
+DEFNAME=i_scroll_create_food
+NAME=Create Food Scroll
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_ginseng, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Create Food Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_create_food
+	morey=600   //{10 50}
+
+[ITEMDEF 01f30]
+DEFNAME=i_scroll_feeblemind
+NAME=Feeblemind Scroll
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+RESOURCES=i_scroll_blank, i_reag_nightshade, i_reag_ginseng
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Feeblemind Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_feeblemind
+	morey=600   //{10 50}
+
+[ITEMDEF 01f31]
+DEFNAME=i_scroll_heal
+NAME=Heal Scroll
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_ginseng, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Heal Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_heal
+	morey=600   //{10 50}
+
+[ITEMDEF 01f32]
+DEFNAME=i_scroll_magic_arrow
+NAME=Magic Arrow Scroll
+RESOURCES=i_scroll_blank, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Magic Arrow Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_magic_arrow
+	morey=600   //{10 50}
+
+[ITEMDEF 01f33]
+DEFNAME=i_scroll_night_sight
+NAME=Night Sight Scroll
+RESOURCES=i_scroll_blank, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Night Sight Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_night_sight
+	morey=600   //{10 50}
+
+[ITEMDEF 01f34]
+DEFNAME=i_scroll_weaken
+NAME=Weaken Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_sulfur_ash, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 10.0, MAGERY 5.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=7
+//CIRCLE=1
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 1st Circle
+DESCRIPTION=Weaken Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_weaken
+	morey=600   //{10 50}
+
+[ITEMDEF 01f35]
+DEFNAME=i_scroll_agility
+NAME=Agility Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Agility Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_agility
+	morey=600   //{20 60}
+
+[ITEMDEF 01f36]
+DEFNAME=i_scroll_cunning
+NAME=Cunning Scroll
+RESOURCES=i_scroll_blank, i_reag_mandrake_root, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Cunning Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_cunning
+	morey=600   //{20 60}
+
+[ITEMDEF 01f37]
+DEFNAME=i_scroll_cure
+NAME=Cure Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_ginseng
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Cure Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_cure
+	morey=600   //{20 60}
+
+[ITEMDEF 01f38]
+DEFNAME=i_scroll_harm
+NAME=Harm Scroll
+RESOURCES=i_scroll_blank, i_reag_nightshade, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Harm Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_harm
+	morey=600   //{20 60}
+
+[ITEMDEF 01f39]
+DEFNAME=i_scroll_magic_trap
+NAME=Magic Trap Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Magic Trap Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_magic_trap
+	morey=600   //{20 60}
+
+[ITEMDEF 01f3a]
+DEFNAME=i_scroll_magic_untrap
+NAME=Magic Untrap Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Magic Remove Trap Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_magic_untrap
+	morey=600   //{20 60}
+
+[ITEMDEF 01f3b]
+DEFNAME=i_scroll_protection
+NAME=Protection Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_ginseng, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Protection Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_protection
+	morey=600   //{20 60}
+
+[ITEMDEF 01f3c]
+DEFNAME=i_scroll_strength
+NAME=Strength Scroll
+RESOURCES=i_scroll_blank, i_reag_mandrake_root, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 20.0, MAGERY 10.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=12
+//CIRCLE=2
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 2nd Circle
+DESCRIPTION=Strength Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_strength
+	morey=600   //{20 60}
+
+[ITEMDEF 01f3d]
+DEFNAME=i_scroll_bless
+NAME=Bless Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=Bless Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_bless
+	morey=600   //{30 70}
+
+[ITEMDEF 01f3e]
+DEFNAME=i_scroll_fireball
+NAME=Fireball Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=Fireball Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_fireball
+	morey=600   //{30 70}
+
+[ITEMDEF 01f3f]
+DEFNAME=i_scroll_magic_lock
+NAME=Magic Lock Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_garlic, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=Magic Lock Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_magic_lock
+	morey=600   //{30 70}
+
+[ITEMDEF 01f40]
+DEFNAME=i_scroll_poison
+NAME=Poison Scroll
+RESOURCES=i_scroll_blank, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=Poison Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_poison
+	morey=600   //{30 70}
+
+[ITEMDEF 01f41]
+DEFNAME=i_scroll_telekinesis
+NAME=Telekinesis Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=telekinesis Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_telekinesis
+	morey=600   //{30 70}
+
+[ITEMDEF 01f42]
+DEFNAME=i_scroll_teleport
+NAME=Teleport Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=Teleport Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_teleport
+	morey=600   //{30 70}
+
+[ITEMDEF 01f43]
+DEFNAME=i_scroll_unlock
+NAME=Unlock Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=Unlock Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_unlock
+	morey=600   //{30 70}
+
+[ITEMDEF 01f44]
+DEFNAME=i_scroll_wall_of_stone
+NAME=Wall of Stone Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_garlic
+SKILLMAKE=INSCRIPTION 30.0, MAGERY 20.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=17
+//CIRCLE=3
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 3rd Circle
+DESCRIPTION=Wall of Stone Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_wall_of_stone
+	morey=600   //{30 70}
+
+[ITEMDEF 01f45]
+DEFNAME=i_scroll_archcure
+NAME=Archcure Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_ginseng, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Archcure Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_archcure
+	morey=600   //{40 75}
+
+[ITEMDEF 01f46]
+DEFNAME=i_scroll_archprotection
+NAME=Archprotection Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_ginseng, i_reag_mandrake_root, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Arch Protection Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_archprotection
+	morey=600   //{40 75}
+
+[ITEMDEF 01f47]
+DEFNAME=i_scroll_curse
+NAME=Curse Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_nightshade, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Curse Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_curse
+	morey=600   //{40 75}
+
+[ITEMDEF 01f48]
+DEFNAME=i_scroll_fire_field
+NAME=Fire Field Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Fire Field Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_fire_field
+	morey=600   //{40 75}
+
+[ITEMDEF 01f49]
+DEFNAME=i_scroll_greater_heal
+NAME=Greater Heal Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_ginseng, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Greater Heal Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_greater_heal
+	morey=600   //{40 75}
+
+[ITEMDEF 01f4a]
+DEFNAME=i_scroll_lightning
+NAME=Lightning Scroll
+RESOURCES=i_scroll_blank, i_reag_mandrake_root, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Lightning Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_lightning
+	morey=600   //{40 75}
+
+[ITEMDEF 01f4b]
+DEFNAME=i_scroll_mana_drain
+NAME=Mana Drain Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Mana Drain Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_mana_drain
+	morey=600   //{40 75}
+
+[ITEMDEF 01f4c]
+DEFNAME=i_scroll_recall
+NAME=Recall Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_blood_moss, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 40.0, MAGERY 30.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=21
+//CIRCLE=4
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 4th Circle
+DESCRIPTION=Recall Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_recall
+	morey=600   //{40 75}
+
+[ITEMDEF 01f4d]
+DEFNAME=i_scroll_blade_spirits
+NAME=Blade Spirits Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_mandrake_root, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Blade Spirits Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_blade_spirits
+	morey=600   //{50 80}
+
+[ITEMDEF 01f4e]
+DEFNAME=i_scroll_dispel_field
+NAME=Dispel Field Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_garlic, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Dispel Field Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_dispel_field
+	morey=600   //{50 80}
+
+[ITEMDEF 01f4f]
+DEFNAME=i_scroll_incognito
+NAME=Incognito Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_garlic, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Incognito Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_incognito
+	morey=600   //{50 80}
+
+[ITEMDEF 01f50]
+DEFNAME=i_scroll_magic_reflection
+NAME=Magic Reflection Scroll
+NAME=Magic Reflection	
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Magic Reflection Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_magic_reflection
+	morey=600   //{50 80}
+
+[ITEMDEF 01f51]
+DEFNAME=i_scroll_mind_blast
+NAME=Mind Blast Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_mandrake_root, i_reag_nightshade, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Mind Blast Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_mind_blast
+	morey=600   //{50 80}
+
+[ITEMDEF 01f52]
+DEFNAME=i_scroll_paralyze
+NAME=Paralyze Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Paralyze Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_paralyze
+	morey=600   //{50 80}
+
+[ITEMDEF 01f53]
+DEFNAME=i_scroll_poison_field
+NAME=Poison Field Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_nightshade, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Poison Field Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_poison_field
+	morey=600   //{50 80}
+
+[ITEMDEF 01f54]
+DEFNAME=i_scroll_summon_creature
+NAME=Summon Creature Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 50.0, MAGERY 40.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=26
+//CIRCLE=5
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 5th Circle
+DESCRIPTION=Summon Creature Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_summon_creature
+	morey=600   //{50 80}
+
+[ITEMDEF 01f55]
+DEFNAME=i_scroll_dispel
+NAME=Dispel Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_mandrake_root, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Dispel Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_dispel
+	morey=600   //{60 85}
+
+[ITEMDEF 01f56]
+DEFNAME=i_scroll_energy_bolt
+NAME=Energy Bolt Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Energy Bolt Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_energy_bolt
+	morey=600   //{60 85}
+
+[ITEMDEF 01f57]
+DEFNAME=i_scroll_explosion
+NAME=Explosion Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+VALUE={60 64}
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Explosion Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_explosion
+	morey=600   //{60 85}
+
+[ITEMDEF 01f58]
+DEFNAME=i_scroll_invisibility
+NAME=Invisibility Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Invisibility Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_invisibility
+	morey=600   //{60 85}
+
+[ITEMDEF 01f59]
+DEFNAME=i_scroll_mark
+NAME=Mark Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_blood_moss, i_reag_mandrake_root
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Mark Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_mark
+	morey=600   //{60 85}
+
+[ITEMDEF 01f5a]
+DEFNAME=i_scroll_mass_curse
+NAME=Mass Curse Scroll
+RESOURCES=i_scroll_blank, i_reag_garlic, i_reag_mandrake_root, i_reag_nightshade, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Mass Curse Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_mass_curse
+	morey=600   //{60 85}
+
+[ITEMDEF 01f5b]
+DEFNAME=i_scroll_paralyze_field
+NAME=Paralyze Field Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_ginseng, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Paralyze Field Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_paralyzation_field
+	morey=600   //{60 85}
+
+[ITEMDEF 01f5c]
+DEFNAME=i_scroll_reveal
+NAME=Reveal Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 60.0, MAGERY 50.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=31
+//CIRCLE=6
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 6th Circle
+DESCRIPTION=Reveal Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_reveal
+	morey=600   //{60 85}
+
+[ITEMDEF 01f5d]
+DEFNAME=i_scroll_chain_lightning
+NAME=Chain Lightning Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_blood_moss, i_reag_mandrake_root, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Chain Lightning Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_chain_lightning
+	morey=600   //{70 90}
+
+[ITEMDEF 01f5e]
+DEFNAME=i_scroll_energy_field
+NAME=Energy Field Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_mandrake_root, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Energy Field Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_energy_field
+	morey=600   //{70 90}
+
+[ITEMDEF 01f5f]
+DEFNAME=i_scroll_flamestrike
+NAME=Flamestrike Scroll
+RESOURCES=i_scroll_blank, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Flame Strike Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_flamestrike
+	morey=600   //{70 90}
+
+[ITEMDEF 01f60]
+DEFNAME=i_scroll_gate_travel
+NAME=Gate Travel Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_mandrake_root, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Gate Travel Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_gate_travel
+	morey=600   //{70 90}
+
+[ITEMDEF 01f61]
+DEFNAME=i_scroll_mana_vampire
+NAME=Mana Vampire Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Mana Vampire Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_mana_vampire
+	morey=600   //{70 90}
+
+[ITEMDEF 01f62]
+DEFNAME=i_scroll_mass_dispel
+NAME=Mass Dispel Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_garlic, i_reag_mandrake_root, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Mass Dispel Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_mass_dispel
+	morey=600   //{70 90}
+
+[ITEMDEF 01f63]
+DEFNAME=i_scroll_meteor_swarm
+NAME=Meteor Swarm Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Meteor Storm Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_meteor_swarm
+	morey=600   //{70 90}
+
+[ITEMDEF 01f64]
+DEFNAME=i_scroll_polymorph
+NAME=Polymorph Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 70.0, MAGERY 60.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=35
+//CIRCLE=7
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 7th Circle
+DESCRIPTION=Polymorph Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_polymorph
+	morey=600   //{70 90}
+
+[ITEMDEF 01f65]
+DEFNAME=i_scroll_earthquake
+NAME=Earthquake Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_ginseng, i_reag_mandrake_root, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Earthquake Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_earthquake
+	morey=600   //{80 100}
+
+[ITEMDEF 01f66]
+DEFNAME=i_scroll_energy_vortex
+NAME=Energy Vortex Scroll
+RESOURCES=i_scroll_blank, i_reag_black_pearl, i_reag_blood_moss, i_reag_mandrake_root, i_reag_nightshade
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Energy Vortex Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_energy_vortex
+	morey=600   //{80 100}
+
+[ITEMDEF 01f67]
+DEFNAME=i_scroll_resurrection
+NAME=Resurrection Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_garlic, i_reag_ginseng
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Resurrection Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_resurrection
+	morey=600   //{80 100}
+
+[ITEMDEF 01f68]
+DEFNAME=i_scroll_summon_elem_air
+NAME=Summon Air Elemental Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Summon Elemental Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_summon_elem_air
+	morey=600   //{80 100}
+
+[ITEMDEF 01f69]
+DEFNAME=i_scroll_summon_daemon
+NAME=Summon Daemon Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Summon Deamon Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_summon_daemon
+	morey=600   //{80 100}
+
+[ITEMDEF 01f6a]
+DEFNAME=i_scroll_summon_elem_earth
+NAME=Summon Earth Elemental Scroll 
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Summon Earth Elemental Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_summon_elem_earth
+	morey=600   //{80 100}
+
+[ITEMDEF 01f6b]
+DEFNAME=i_scroll_summon_elem_fire
+NAME=Summon Fire Elemental Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk, i_reag_sulfur_ash
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Summon Fire Elemental Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_summon_elem_fire
+	morey=600   //{80 100}
+
+[ITEMDEF 01f6c]
+DEFNAME=i_scroll_summon_elem_water
+NAME=Summon Water Elemental Scroll
+RESOURCES=i_scroll_blank, i_reag_blood_moss, i_reag_mandrake_root, i_reag_spider_silk
+SKILLMAKE=INSCRIPTION 80.0, MAGERY 70.0
+TYPE=T_SCROLL
+WEIGHT=1
+VALUE=40
+//CIRCLE=8
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - 8th Circle
+DESCRIPTION=Summon Water Elemental Scroll
+
+ON=@Create
+	ATTR=ATTR_MAGIC
+	MOREX=s_summon_elem_water
+	morey=600   //{80 100}
+
+[ITEMDEF 01f6d]
+//unnamed scroll dark green border
+DEFNAME=i_scroll_x_green2
+TYPE=T_SCROLL
+//DEFNAME2=SCROLL_SUMMON_UNDEAD
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Scrolls - Unnamed
+DESCRIPTION=Unnamed scroll
+DUPELIST=01f6e
+
+[ITEMDEF 01f6e]
+//unnamed scroll dark green border
+DUPEITEM=01f6d
+
+[ITEMDEF 01f6f]
+//unnamed scroll teal border
+DEFNAME=i_scroll_x_teal2
+TYPE=T_SCROLL
+//DEFNAME2=SCROLL_ANIMATE_DEAD
+DUPELIST=01f70
+
+[ITEMDEF 01f70]
+//unnamed scroll teal border
+DUPEITEM=01f6f
+
+[ITEMDEF 01f71]
+//unnamed scroll brown border
+DEFNAME=i_scroll_x_brown2
+TYPE=T_SCROLL
+//DEFNAME2=SCROLL_BONE_ARMOR
+DUPELIST=01f72
+
+[ITEMDEF 01f72]
+//unnamed scroll brown border
+DUPEITEM=01f71
+
+[ITEMDEF 02080]
+//Clumsy
+DEFNAME=i_rune_clumsy
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Clumsy
+
+[ITEMDEF 02081]
+//Create Food
+DEFNAME=i_rune_create_food
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Create Food
+
+[ITEMDEF 02082]
+//Feeblemind
+DEFNAME=i_rune_feeblemind
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Feeblemind
+
+[ITEMDEF 02083]
+//Heal
+DEFNAME=i_rune_heal
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Heal
+
+[ITEMDEF 02084]
+//Magic Arrow
+DEFNAME=i_rune_magic_arrow
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Magic Arrow
+
+[ITEMDEF 02085]
+//Night Sight
+DEFNAME=i_rune_night_sight
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Night Sight
+
+[ITEMDEF 02086]
+//Reactive Armor
+DEFNAME=i_rune_reactive_armor
+TYPE=T_SPELLICON
+LAYER=layer_spell_reactive
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Reactive Armor
+
+[ITEMDEF i_rune_reactive_armor_custom]
+//Custom Reactive Armor
+DEFNAME=i_rune_reactive_armor_custom
+NAME=Reactive Armor
+ID=i_rune_reactive_armor
+TYPE=t_eq_script	//T_SPELLICON
+LAYER=layer_special 	//layer_spell_reactive
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Reactive Armor
+
+on=@equip
+src.events=+e_spell_reactive_armor
+src.flags |= statf_reactive
+src.f_addbuff 1028,1075812,1070722,0
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.events=-e_spell_reactive_armor
+src.flags &= ~ statf_reactive
+src.f_removebuff 1028
+//serv.newitem i_rune_beneficial_spell_cooldown		//<--- this is for the newer style with a buff cooldown
+//new.timer=60
+//src.equip <new>
+
+[events e_spell_reactive_armor]
+
+on=@gethit
+ref1=<findid.i_rune_reactive_armor_custom>
+ref2=<src>
+if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref2> != <uid>)		//valid char hitting us, not ourselves though
+  if (<argn2>&dam_physical)						//only physical damage
+    local.ReactiveArmorLeft=<eval (<ref1.more2>-<ref1.more1>)>		//how much reactive armor is left
+    local.NegatedDamage=<eval (<argn1>/2)>				//negate 50% of the damage
+    local.NegatedDamage=<qval (<local.NegatedDamage> < 0)?0:<local.NegatedDamage>>	//never less than 0% damage (can instakill the wearer)
+    local.ReflectedDamage=<eval ((<local.NegatedDamage>+2)/2)>				//reflect 50% of the damage negated
+    argn1 -= <local.NegatedDamage>
+    ref1.more1 += <local.NegatedDamage>
+    ref2.damage <local.ReflectedDamage> dam_god <uid> 	
+    ref2.effect=3,i_fx_curse,6,15,1
+    ref2.sound snd_spell_harm
+  endif
+  if !(<ref1.isvalid>) || (<ref1.more1> >= <ref1.more2>)		//runeitem isnt valid or we've reflected enough damage
+    consume i_rune_reactive_armor_custom
+    events=-e_spell_reactive_armor
+    sysmessage Your reactive armor spell has been nullified.
+  endif
+endif
+
+[ITEMDEF 02087]
+//Weaken
+DEFNAME=i_rune_weaken
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+NAME=Weaken
+
+[ITEMDEF 02088]
+//Agility
+DEFNAME=i_rune_agility
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Agility
+
+[ITEMDEF 02089]
+//Cunning
+DEFNAME=i_rune_cunning
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Cunning
+
+[ITEMDEF 0208a]
+//Cure
+DEFNAME=i_rune_cure
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Cure
+
+[ITEMDEF 0208b]
+//Harm
+DEFNAME=i_rune_harm
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Harm
+
+[ITEMDEF 0208c]
+//Magic Trap
+DEFNAME=i_rune_magic_trap
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Magic Trap
+
+[ITEMDEF 0208d]
+//Magic Untrap
+DEFNAME=i_rune_magic_untrap
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Magic Untrap
+
+[ITEMDEF 0208e]
+//Protection
+DEFNAME=i_rune_protection
+TYPE=T_SPELLICON
+LAYER=layer_spell_protection
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Protection
+
+
+[comment Not popular with sphere players]
+on=@unequip
+src.events=-e_spell_protection
+src.modar -= 25
+src.removebuff 1029
+serv.newitem i_rune_beneficial_spell_cooldown
+new.timer=60
+src.equip <new>
+
+[events e_spell_protection]
+//nothing really to put here
+
+[ITEMDEF 0208f]
+//Strength
+DEFNAME=i_rune_strength
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+NAME=Strength
+
+[ITEMDEF 02090]
+//Bless
+DEFNAME=i_rune_bless
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Bless
+
+[ITEMDEF 02091]
+//Fireball
+DEFNAME=i_rune_fireball
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Fireball
+
+[ITEMDEF 02092]
+//Magic Lock
+DEFNAME=i_rune_magic_lock
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Magic Lock
+
+[ITEMDEF 02093]
+//Poison
+DEFNAME=i_rune_poison
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Poison
+
+[ITEMDEF 02094]
+//Telekinesis
+DEFNAME=i_rune_telekinesis
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Telekinesis
+
+[ITEMDEF 02095]
+//Teleport
+DEFNAME=i_rune_teleport
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Teleport
+
+[ITEMDEF 02096]
+//Magic Unlock
+DEFNAME=i_rune_unlock
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Magic Unlock
+
+[ITEMDEF 02097]
+//Wall of Stone
+DEFNAME=i_rune_wall_of_stone
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+NAME=Wall of Stone
+
+[ITEMDEF 02098]
+//Archcure
+DEFNAME=i_rune_archcure
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Archcure
+
+[ITEMDEF 02099]
+//Archprotection
+DEFNAME=i_rune_archprotection
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Archprotection
+
+[ITEMDEF 0209a]
+//Curse
+DEFNAME=i_rune_curse
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Curse
+
+[ITEMDEF 0209b]
+//Fire Field
+DEFNAME=i_rune_fire_field
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Fire Field
+
+[ITEMDEF 0209c]
+//Greater Heal
+DEFNAME=i_rune_greater_heal
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Greater Heal
+
+[ITEMDEF 0209d]
+//Lightning
+DEFNAME=i_rune_lightning
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Lightning
+
+[ITEMDEF 0209e]
+//Mana Drain
+DEFNAME=i_rune_mana_drain
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Mana Drain
+
+[ITEMDEF 0209f]
+//Recall
+DEFNAME=i_rune_recall
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+NAME=Recall
+
+[ITEMDEF 020a0]
+//Blade Spirits
+DEFNAME=i_rune_blade_spirits
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Blade Spirits
+
+[ITEMDEF 020a1]
+//Dispel Field
+DEFNAME=i_rune_dispel_field
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Dispel Field
+
+[ITEMDEF 020a2]	
+//Incognito
+DEFNAME=i_rune_incognito
+TYPE=T_SPELLICON
+LAYER=layer_spell_incognito
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Incognito
+
+on=@equip
+link=<src>
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.name=<tag.name>
+src.tag.name.prefix=<qval (!<isempty <tag.name.prefix>>)?<tag.name.prefix>:>
+src.tag.name.suffix=<qval (!<isempty <tag.name.suffix>>)?<tag.name.suffix>:>
+if !(<src.findid.i_rune_polymorph>)
+  src.color=<src.oskin>
+endif
+src.flags &= ~ statf_incognito
+src.removebuff 1032
+
+[ITEMDEF 020a3]
+//Magic Reflection
+DEFNAME=i_rune_magic_reflection
+TYPE=T_SPELLICON
+LAYER=layer_spell_magic_reflect
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Magic Reflection
+
+[comment not needed anymore?]
+
+on=@unequip
+src.events=-e_spell_magic_reflection
+src.flags &=~ statf_reflection
+src.removebuff 1031
+
+[events e_spell_magic_reflection]
+
+on=@spelleffect
+ref1=<findid.i_rune_magic_reflection>
+if (<src> != <uid>) 
+  if (<serv.spell.<argn1>.flags>&spellflag_harm) && !(<serv.spell.<argn1>.flags>&spellflag_field)
+    events=-e_spell_magic_reflection
+    src.spelleffect <argn1> <argn2> <src>
+    effect=3,i_fx_glow,6,15,1
+    //src.effect=0,<serv.spell.<argn1>.effect_id>,6,15,1,1
+    src.f_magic_reflection_effect <uid>,<argn1>
+    ref1.remove
+    return 1
+  endif
+endif
+
+[function f_magic_reflection_effect]
+ref1=<argv[0]>
+if (<argv[1]>==5) || (<argv[1]>==18) || (<argv[1]>==42)
+  trysrc <ref1> effect=0,<serv.spell.<argv[1]>.effect_id>,6,15,1
+else
+  ref1.effect=3,<serv.spell.<argv[1]>.effect_id>,6,15,0
+endif
+
+// this version has mutliple reflects that are possible, up to a total amount based on the spell circle cast
+// not so popular with sphere players
+[comment goes under the rune item for magic reflection]
+on=@unequip
+src.events=-e_spell_magic_reflection
+src.flags &= ~ statf_reflection
+src.removebuff 1031
+serv.newitem i_rune_beneficial_spell_cooldown
+new.timer=180
+src.equip <new>
+
+// this version has mutliple reflects that are possible, up to a total amount based on the spell circle cast
+// not so popular with sphere players
+[comment events e_spell_magic_reflection]
+on=@spelleffect
+ref1=<findid.i_rune_magic_reflection>
+ref2=<src>
+local.spellcircle=<eval (<argn1>/8)+1>
+if !(<ref1>) || (<ref1.more1> >= <ref1.more2>) || (<eval <ref1.more1>+<local.spellcircle>> > <ref1.more2>)
+  events=-e_spell_magic_reflection
+  findid.i_rune_magic_reflection2.remove
+  return 1
+elseif (<serv.spell.<argn1>.flags>spellflag_bad) && (<src> != <uid>)
+  ref1.more1 += <local.spellcircle>
+  src.spelleffect <argn1> <argn2> <src>
+  effect=3,i_fx_glow,6,15,1
+  src.effect=0,<serv.spell.<argn1>.effect_id>,6,15,1,1
+  return 1
+endif
+
+[ITEMDEF 020a4]
+//Mind Blast
+DEFNAME=i_rune_mind_blast
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Mind Blast
+
+[ITEMDEF 020a5]
+//Paralyze
+DEFNAME=i_rune_paralyze
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Paralyze
+
+[ITEMDEF 020a6]
+//Poison Field
+DEFNAME=i_rune_poison_field
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Poison Field
+
+[ITEMDEF 020a7]
+//Summon Creature
+DEFNAME=i_rune_summon_creature
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+NAME=Summon Creature
+
+[ITEMDEF 020a8]
+//Dispel
+DEFNAME=i_rune_dispel
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Dispel
+
+[ITEMDEF 020a9]
+//Energy Bolt
+DEFNAME=i_rune_energy_bolt
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Energy Bolt
+
+[ITEMDEF 020aa]
+//Explosion
+DEFNAME=i_rune_explosion
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Explosion
+
+[ITEMDEF 020ab]
+//Invisibility
+DEFNAME=i_rune_invisibility
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Invisibility
+
+[ITEMDEF 020ac]
+//Mark
+DEFNAME=i_rune_mark
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Mark
+
+[ITEMDEF 020ad]
+//Mass Curse
+DEFNAME=i_rune_mass_curse
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Mass Curse
+
+[ITEMDEF 020ae]
+//Paralyze Field
+DEFNAME=i_rune_paralyze_field
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Paralyze Field
+
+[ITEMDEF 020af]
+//Reveal
+DEFNAME=i_rune_reveal
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+NAME=Reveal
+
+[ITEMDEF 020b0]
+//Chain Lightning
+DEFNAME=i_rune_chain_lightning
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Chain Lightning
+
+[ITEMDEF 020b1]
+//Energy Field
+DEFNAME=i_rune_energy_field
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Energy Field
+
+[ITEMDEF 020b2]
+//Flamestrike
+DEFNAME=i_rune_flamestrike
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Flamestrike
+
+[ITEMDEF 020b3]
+//Gate Travel
+DEFNAME=i_rune_gate_travel
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Gate Travel
+
+[ITEMDEF 020b4]
+//Mana Vampire
+DEFNAME=i_rune_mana_vampire
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Mana Vampire
+
+[ITEMDEF 020b5]
+//Mass Dispell
+DEFNAME=i_rune_mass_dispel
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Mass Dispell
+
+[ITEMDEF 020b6]
+//Meteor Swarm
+DEFNAME=i_rune_meteor_swarm
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Meteor Swarm
+
+[ITEMDEF 020b7]
+//Polymorph
+DEFNAME=i_rune_polymorph
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+NAME=Polymorph
+
+on=@unequip
+src.color=<src.oskin>
+
+[ITEMDEF 020b8]
+//Earthquake
+DEFNAME=i_rune_earthquake
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Earthquake
+
+[ITEMDEF 020b9]
+//Energy Vortex
+DEFNAME=i_rune_energy_vortex
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Energy Vortex
+
+[ITEMDEF 020ba]
+//Resurrection
+DEFNAME=i_rune_resurrection
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Resurrection
+
+[ITEMDEF 020bb]
+//Summon Air
+DEFNAME=i_rune_summon_elem_air
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Summon Air Elemental
+
+[ITEMDEF 020bc]
+//Summon Demon
+DEFNAME=i_rune_summon_daemon
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Summon Deamon
+
+[ITEMDEF 020bd]
+//Summon Earth
+DEFNAME=i_rune_summon_elem_earth
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Summon Earth Elemental
+
+[ITEMDEF 020be]
+//Summon Fire
+DEFNAME=i_rune_summon_elem_fire
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Summon Fire Elemental
+
+[ITEMDEF 020bf]
+//Summon Water
+DEFNAME=i_rune_summon_elem_water
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+NAME=Summon Water Elemental
+
+[ITEMDEF 020c0]
+//Circle 1
+DEFNAME=i_spell_circle_1
+NAME=First Circle
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=First Circle
+DESCRIPTION=@
+
+[ITEMDEF 020c1]
+//Circle 2
+DEFNAME=i_spell_circle_2
+NAME=Second Circle
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Second Circle
+DESCRIPTION=@
+
+[ITEMDEF 020c2]
+//Circle 3
+DEFNAME=i_spell_circle_3
+NAME=Third Circle
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Third Circle
+DESCRIPTION=@
+
+[ITEMDEF 020c3]
+//Circle 4
+DEFNAME=i_spell_circle_4
+NAME=Fourth Circle
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fourth Circle
+DESCRIPTION=@
+
+[ITEMDEF 020c4]
+//Circle 5
+DEFNAME=i_spell_circle_5
+NAME=Fifth Circle
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Fifth Circle
+DESCRIPTION=@
+
+[ITEMDEF 020c5]
+//Circle 6
+DEFNAME=i_spell_circle_6
+NAME=Sixth Circle
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Sixth Circle
+DESCRIPTION=@
+
+[ITEMDEF 020c6]
+//Circle 7
+DEFNAME=i_spell_circle_7
+NAME=Seventh Circle
+TYPE=T_SPELLICON
+CATEGORY=Spell Icons
+SUBSECTION=Seventh Circle
+DESCRIPTION=@
+
+[ITEMDEF 020c7]
+//Circle 8
+DEFNAME=i_spell_circle_8
+NAME=Eighth Circle
+TYPE=T_SPELLICON
+// Character Frames (used for spawns)
+CATEGORY=Spell Icons
+SUBSECTION=Eighth Circle
+DESCRIPTION=@
+
+[itemdef i_rune_chameleon]
+defname=i_rune_chameleon
+id=i_rune_cunning
+name=Chameleon
+type=t_eq_script
+layer=layer_special
+category=Spell Icons
+subsection=Extended Potions
+name=Chameleon
+
+on=@equip
+src.color=04555
+
+on=@timer
+if (<more1> <= 0) || (<topobj.flags>&statf_dead)
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.color=<src.oskin>
+
+
+[itemdef i_rune_beastform]
+defname=i_rune_beastform
+id=i_rune_polymorph
+name=Beastform
+type=t_eq_script
+layer=layer_special
+category=Spell Icons
+subsection=Extended Potions
+name=Beastform
+
+on=@equip
+local.beastform_level=<eval (<morey>/300)-1>
+local.beastform_level=<qval (<local.beastform_level> < 0)?0:<qval (3 < <local.beastform_level>)?3:<local.beastform_level>>>
+doswitch <local.beastform_level>
+  begin
+    //morex=5		//uncomment these for damage/armor bonuses
+    //morez=20
+    src.body=c_eagle
+    src.sound 092
+  end
+  begin
+    //morex=20
+    //morez=60
+    src.body=c_wolf
+    src.sound 0e8
+  end
+  begin
+    //morex=25
+    //morez=80
+    src.body=c_bear_grizzly
+    src.sound 0a5
+  end
+enddo
+args=<src.dam>
+src.dam=<eval <argv[0]>+<morex>>,<eval <argv[1]>+<morex>>
+src.modar += <morez>
+src.sound 01e1
+//src.sysmessage Your heart beat hastens and blood courses through your veins.
+src.emote violently mutate into a <serv.chardef.<src.body>.name>
+
+on=@timer
+if (<more1> <= 0) || (<topobj.flags>&statf_dead)
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+args=<src.dam>
+src.dam=<eval <argv[0]>-<morex>>,<eval <argv[1]>-<morex>>
+src.modar -= <morez>
+src.bark 4
+src.body=<src.obody>
+src.emote painfully transform back into a <serv.chardef.<src.body>.name>
+src.bark 4
+
+[itemdef i_rune_monster_form]
+defname=i_rune_monster_form
+id=i_rune_polymorph
+name=Monster Form
+type=t_eq_script
+layer=layer_special
+category=Spell Icons
+subsection=Extended Potions
+name=Monster Form
+
+on=@equip
+local.monster_form_level=<eval (<morey>/300)-1>
+local.monster_form_level=<qval (<local.monster_form_level> < 0)?0:<qval (3 < <local.monster_form_level>)?3:<local.monster_form_level>>>
+doswitch <local.monster_form_level>
+  begin
+    //morex=5			//uncomment these for damage/armor bonuses
+    //morez=20
+    src.body=c_spider_giant
+    src.sound 0185
+  end
+  begin
+    //morex=20
+    //morez=60
+    src.body=c_gargoyle
+    src.sound 0174
+  end
+  begin
+    //morex=25
+    //morez=80
+    src.body=c_elem_fire
+    src.sound 0113
+  end
+enddo
+args=<src.dam>
+src.dam=<eval <argv[0]>+<morex>>,<eval <argv[1]>+<morex>>
+src.modar += <morez>
+src.sound 01fb
+//src.sysmessage Your flesh away off and a monster reaveals itself.
+src.emote violently mutate into a <serv.chardef.<src.body>.name>
+
+on=@timer
+if (<more1> <= 0) || (<topobj.flags>&statf_dead)
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+args=<src.dam>
+src.dam=<eval <argv[0]>-<morex>>,<eval <argv[1]>-<morex>>
+src.modar -= <morez>
+src.bark 4
+src.body=<src.obody>
+src.emote painfully transform back into a <serv.chardef.<src.body>.name>
+src.bark 4
+
+[itemdef i_rune_gender_swap]
+defname=i_rune_gender_swap
+id=i_rune_polymorph
+name=Gender Swap
+type=t_eq_script
+layer=layer_special
+category=Spell Icons
+subsection=Extended Potions
+name=Gender Swap
+
+on=@equip
+src.body=<qval (<src.body>==c_man)?c_woman:c_man>
+
+on=@timer
+if (<more1> <= 0) || (<topobj.flags>&statf_dead)
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.body=<src.obody>
+
+[itemdef i_rune_trance]
+defname=i_rune_trance
+id=i_rune_cunning
+name=Trance
+type=t_eq_script
+layer=layer_special
+category=Spell Icons
+subsection=Extended Potions
+name=Trance
+
+on=@equip
+local.trance_level=<eval (<morey>/250)>
+local.trance_level=<qval (<local.trance_level> < 0)?0:<qval (3 < <local.trance_level>)?3:<local.trance_level>>>
+morex=<eval <local.trance_level>*50>
+src.meditation += <morex>
+
+on=@timer
+if (<more1> <= 0) || (<topobj.flags>&statf_dead)
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.meditation -= <morex>
+
+[itemdef i_rune_steelskin]
+defname=i_rune_steelskin
+id=i_rune_protection
+name=Steelskin
+type=t_eq_script
+layer=layer_special
+category=Spell Icons
+subsection=Extended Potions
+name=Steelskin
+
+on=@equip
+src.modar += 20
+
+on=@timer
+if (<more1> <= 0) || (<topobj.flags>&statf_dead)
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.modar -= 20
+
+[itemdef i_rune_stoneskin]
+defname=i_rune_stoneskin
+id=i_rune_protection
+name=Stoneskin
+type=t_eq_script
+layer=layer_special
+category=Spell Icons
+subsection=Extended Potions
+name=Stoneskin
+
+on=@equip
+local.stoneskin_level=<eval (<morey>/300)>
+local.stoneskin_level=<qval (<local.stoneskin_level> < 0)?0:<qval (3 < <local.stoneskin_level>)?3:<local.stoneskin_level>>>
+morex=<eval <local.stoneskin_level>*5>
+src.modar += <morex>
+
+on=@timer
+if (<more1> <= 0) || (<topobj.flags>&statf_dead)
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.modar -= <morex>
+
+[itemdef i_rune_beneficial_spell_cooldown]
+defname=i_rune_beneficial_spell_cooldown
+id=i_hourglass
+name=Beneficial Spell Cooldown
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.f_addbuff 1013,1151566,1070722,<timer>,"Beneficial Spell Cooldown"
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.f_removebuff 1013
+src.sysmessage Beneficial spell cooldown expired.
+
+
+
+
+
+
+[EOF]

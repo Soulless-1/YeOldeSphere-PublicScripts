@@ -1,0 +1,915 @@
+[function badseaspawns]
+ref1=<uid>
+forinstances i_worldgem_bit
+  if (<type>==t_spawn_char) && (<p.x> <= 5119) && (<p.y> < 4095) && (<isneartype t_water 1>)
+    if (<p.x> < 100) || (<p.x> > 5019)
+      serv.log <name>(<uid>) is too close to the sea boundaries @<p>
+    endif
+    if (<p.y> < 100) || (<p.y> > 3995)
+      serv.log <name>(<uid>) is too close to the sea boundaries @<p>
+    endif
+  endif
+endfor
+
+[function f_update_spawnednpc_homedist]
+forchars 9999
+  if (<spawnitem>) 
+    homedist=<spawnitem.morez>
+  endif
+endfor
+
+[function f_adjust_outdoorspawns]
+serv.newitem i_memory
+new.p=<argv[6]>,<argv[7]>,<argv[8]>,0
+new.f_adjust_outdoorspawns2
+new.remove
+
+[function f_adjust_outdoorspawns2]
+foritems 0
+  if (<type>==t_spawn_char)
+    if !(strmatch(c_h_heal*,<more1>))
+      //serv.log <name>(<uid>) (<type>) <more1> @<region.name> (<p>)
+      tag.oldmorez=
+      morez=130
+      //serv.log <more1> @<region.name> <p>
+     endif
+  endif
+endfor
+
+[function checkspawns_lostlands]
+//##############
+//## By Nerun ##
+//##############
+//overrideid 211
+//overridemap 1
+//overridemintime 5
+//overridemaxtime 10
+//##
+//## T2ADesertMain
+//##
+f_adjust_outdoorspawns,Imp,Scorpion,Desertostard,Orc,Orcishlord,harpy_stone,5457,2651,45,2,5,10,150,150,1,15,15,6,9,6,3
+f_adjust_outdoorspawns,Stonegargoyle,Wyvern,Mummy,Ettin,,,5457,2651,45,2,5,10,150,150,1,3,6,4,6,0,0
+f_adjust_outdoorspawns,Imp,Scorpion,Desertostard,Orc,Orcishlord,harpy_stone,5520,2890,33,2,5,10,100,100,1,10,10,4,6,4,3
+f_adjust_outdoorspawns,Stonegargoyle,Wyvern,Mummy,Ettin,,,5520,2890,33,2,5,10,100,100,1,3,4,2,4,0,0
+//##
+//## T2ADesCent
+//##
+f_adjust_outdoorspawns,Gazer,Reaper,Scorpion,Giantserpent,Troll,,5580,2885,6,2,5,10,15,15,1,3,2,3,2,2,0
+//##
+//## T2ADryCenter
+//##
+f_adjust_outdoorspawns,Corpser,Giantspider,Troll,Harpy,Ettin,Gazer,5557,2625,0,2,5,10,40,40,1,3,3,3,6,3,3
+//##
+//## T2ADesertFinal
+//##
+f_adjust_outdoorspawns,Imp,Scorpion,Desertostard,Orc,Orcishlord,Wyvern,5711,2494,46,2,5,10,80,80,1,3,3,1,3,2,1
+f_adjust_outdoorspawns,Ettin,,,,,,5711,2494,46,2,5,10,80,80,1,2,0,0,0,0,0
+//##
+//## T2AWyvern
+//##
+f_adjust_outdoorspawns,Wyvern,Drake,Imp,Mongbat,,,5697,2626,-2,2,5,10,30,25,1,2,4,1,2,0,0
+//##
+//## T2ASmallDesert
+//##
+f_adjust_outdoorspawns,Imp,Scorpion,Desertostard,Orc,Orcishlord,harpy_stone,5729,2767,-1,2,5,10,70,60,1,8,8,3,5,3,3
+f_adjust_outdoorspawns,Stonegargoyle,Wyvern,Mummy,Ettin,,,5729,2767,-1,2,5,10,70,60,1,3,3,3,5,0,0
+//##
+//## T2ALava
+//##
+f_adjust_outdoorspawns,Hellhound,Lavalizard,Fireelemental,Efreet,Hellcat,Lavaserpent,5724,2949,31,2,5,10,75,65,1,8,8,10,4,6,8
+f_adjust_outdoorspawns,Lavasnake,,,,,,5724,2949,31,2,5,10,75,65,1,15,0,0,0,0,0
+//##
+
+//##
+//## T2AFor3
+//##
+f_adjust_outdoorspawns,Gorilla,Panther,Giantserpent,Silverserpent,Mongbat,,5756,3453,-2,2,5,10,130,130,1,10,10,10,2,10,0
+//##
+//## T2ASwamp
+//##
+f_adjust_outdoorspawns,Gianttoad,Swampdragon,Giantrat,Alligator,Sewerrat,Plaguebeast,5983,3436,17,2,5,10,90,80,1,8,5,12,12,11,2
+f_adjust_outdoorspawns,Bullfrog,Swamptentacle,Bogling,Bogthing,,,5983,3436,17,2,5,10,90,80,1,15,5,13,3,0,0
+//##
+//## T2ADeer
+//##
+f_adjust_outdoorspawns,Horse,Orc,Orcishlord,Greathart,Hind,Ridablellama,5347,3449,17,2,5,10,50,50,1,4,8,4,4,16,4
+f_adjust_outdoorspawns,Horse,Orc,Orcishlord,Greathart,Hind,Ridablellama,5243,3548,14,2,5,10,50,50,1,4,8,4,4,16,4
+f_adjust_outdoorspawns,Horse,Orc,Orcishlord,Greathart,Hind,Ridablellama,5250,3449,16,2,5,10,50,50,1,4,8,4,4,16,4
+f_adjust_outdoorspawns,Horse,Orc,Orcishlord,Greathart,Hind,Ridablellama,5349,3547,-1,2,5,10,50,50,1,4,8,4,4,16,4
+//##
+//## T2AWild1
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5201,3162,53,2,5,10,50,50,1,6,4,4,2,2,2
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,,,,5201,3162,53,2,5,10,50,50,1,2,2,2,0,0,0
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5251,3301,-2,2,5,10,50,50,1,6,4,4,2,2,2
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,,,,5251,3301,-2,2,5,10,50,50,1,2,2,2,0,0,0
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5250,3401,1,2,5,10,50,50,1,6,4,4,2,2,2
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,,,,5250,3401,1,2,5,10,50,50,1,2,2,2,0,0,0
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5351,3401,30,2,5,10,50,50,1,6,4,4,2,2,2
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,,,,5351,3401,30,2,5,10,50,50,1,2,2,2,0,0,0
+//##
+//## T2AWild1&2 - 1
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,6018,3673,18,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,6018,3673,18,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,6018,3673,18,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,6018,3673,18,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 2
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,6022,3773,18,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,6022,3773,18,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,6022,3773,18,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,6022,3773,18,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 3
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,6022,2874,16,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,6022,2874,16,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,6022,2874,16,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,6022,2874,16,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 4
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,6022,3971,17,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,6022,3971,17,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,6022,3971,17,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,6022,3971,17,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 5
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5920,3675,12,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5920,3675,12,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5920,3675,12,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5920,3675,12,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 6
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5921,3777,28,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5921,3777,28,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5921,3777,28,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5921,3777,28,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 7
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5919,3875,16,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5919,3875,16,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5919,3875,16,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5919,3875,16,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 8
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5918,3975,1,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5918,3975,1,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5918,3975,1,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5918,3975,1,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 9
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5820,3675,0,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5820,3675,0,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5820,3675,0,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5820,3675,0,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 10
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5820,3775,48,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5820,3775,48,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5820,3775,48,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5820,3775,48,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 11
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5818,3876,18,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5818,3876,18,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5818,3876,18,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5818,3876,18,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 12
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5819,3974,16,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5819,3974,16,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5819,3974,16,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5819,3974,16,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 13
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5721,3675,22,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5721,3675,22,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5721,3675,22,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5721,3675,22,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 14
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5722,3776,32,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5722,3776,32,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5722,3776,32,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5722,3776,32,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 15
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5721,3876,-3,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5721,3876,-3,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5721,3876,-3,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5721,3876,-3,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 16
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5721,3975,21,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5721,3975,21,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5721,3975,21,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5721,3975,21,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 17
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5623,3676,-3,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5623,3676,-3,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5623,3676,-3,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5623,3676,-3,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 18
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5621,3775,2,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5621,3775,2,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5621,3775,2,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5621,3775,2,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 19
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5623,3875,15,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5623,3875,15,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5623,3875,15,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5623,3875,15,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 20
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5624,3975,-3,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5624,3975,-3,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5624,3975,-3,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5624,3975,-3,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 21
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5523,3676,45,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5523,3676,45,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5523,3676,45,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5523,3676,45,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 22
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5521,3775,8,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5521,3775,8,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5521,3775,8,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5521,3775,8,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 23
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5521,3875,-1,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5521,3875,-1,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5521,3875,-1,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5521,3875,-1,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild1&2 - 24
+//##
+f_adjust_outdoorspawns,Brownbear:Grizzlybear:Blackbear,Horse:Ridablellama,Rabbit:JackRabbit,Bird,Cougar,Greathart,5478,3587,3,2,5,10,50,50,1,3,2,2,1,1,1
+f_adjust_outdoorspawns,Hind,Llama,Timberwolf,Corpser,Ettin,Forestostard,5478,3587,3,2,5,10,50,50,1,1,1,1,1,1,2
+f_adjust_outdoorspawns,Gazer,Giantspider,Harpy,Headlessone,Lizardman,Mongbat,5478,3587,3,2,5,10,50,50,1,1,1,1,1,3,1
+f_adjust_outdoorspawns,Rat,Ratman,Reaper,Troll,,,5478,3587,3,2,5,10,50,50,1,1,1,1,2,0,0
+//##
+//## T2AWild3
+//##
+f_adjust_outdoorspawns,Forestostard,Ridablellama,,,,,5520,3939,42,2,5,10,25,25,1,3,3,0,0,0,0
+//##
+//## T2ASpawner1
+//##
+f_adjust_outdoorspawns,Imp,Mongbat,,,,,5764,2585,-4,2,5,10,75,2,1,2,5,0,0,0,0
+f_adjust_outdoorspawns,Imp,Harpy,Headlessone,Scorpion,harpy_stone,Wyvern,5838,2651,0,2,5,10,75,2,1,1,1,1,1,1,1
+//##
+//## T2ASpawner2
+//##
+f_adjust_outdoorspawns,Rabbit:JackRabbit,Bird,Rat,Hind,Llama,Horse,5218,3786,1,2,5,10,50,50,1,20,15,5,4,3,3
+f_adjust_outdoorspawns,Mongbat,Greathart,,,,,5218,3786,1,2,5,10,50,50,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,Rabbit:JackRabbit,Bird,Rat,Hind,Llama,Horse,5371,3820,-2,2,5,10,50,50,1,20,15,5,4,3,3
+f_adjust_outdoorspawns,Mongbat,Greathart,,,,,5371,3820,-2,2,5,10,50,50,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,Rabbit:JackRabbit,Bird,Rat,Hind,Llama,Horse,5368,3887,0,2,5,10,50,50,1,20,15,5,4,3,3
+f_adjust_outdoorspawns,Mongbat,Greathart,,,,,5368,3887,0,2,5,10,50,50,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,Rabbit:JackRabbit,Bird,Rat,Hind,Llama,Horse,5367,4003,19,2,5,10,50,50,1,20,15,5,4,3,3
+f_adjust_outdoorspawns,Mongbat,Greathart,,,,,5367,4003,19,2,5,10,50,50,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,Rabbit:JackRabbit,Bird,Rat,Hind,Llama,Horse,5466,4005,-1,2,5,10,50,50,1,20,15,5,4,3,3
+f_adjust_outdoorspawns,Mongbat,Greathart,,,,,5466,4005,-1,2,5,10,50,50,1,4,1,0,0,0,0
+//##
+//## T2ABull
+//##
+f_adjust_outdoorspawns,Bull,Greathart,Cow,,,,5194,3885,-1,2,5,10,45,32,1,10,6,6,0,0,0
+f_adjust_outdoorspawns,Bull,Greathart,Cow,,,,5200,3895,2,2,5,10,20,10,1,2,2,2,0,0,0
+//##
+//## T2ASheep
+//##
+f_adjust_outdoorspawns,Sheep,Goat,Bull,Chicken,,,5159,3913,1,2,2,5,10,15,10,7,1,1,1,1,0,0
+//##
+//## T2AFor1
+//##
+f_adjust_outdoorspawns,Gorilla,Panther,Giantserpent,Silverserpent,Mongbat,,5570,3153,14,2,5,10,80,60,1,6,6,6,1,6,0
+//##
+//## T2AFor2
+//##
+f_adjust_outdoorspawns,Gorilla,Panther,Giantserpent,Mongbat,Silverserpent,,5440,3292,-4,2,5,10,62,56,1,5,5,5,5,1,0
+f_adjust_outdoorspawns,Gorilla,Panther,Giantserpent,Mongbat,Silverserpent,,5566,3292,4,2,5,10,62,56,1,5,5,5,5,1,0
+
+
+
+[function checkspawns_felucca]
+//##############
+//## By Nerun ##
+//##############
+//overrideid 213
+//overridemap 1
+//overridemintime 60
+//overridemaxtime 60
+//##
+//## OSI Light
+//##
+f_adjust_outdoorspawns,hordeminion,,,,,,3619,2814,21,2,5,10,50,50,1,17,0,0,0,0,0
+f_adjust_outdoorspawns,mongbat,,,,,,3619,2814,21,2,5,10,50,50,1,17,0,0,0,0,0
+f_adjust_outdoorspawns,lizardman:ratman,,,,,,1147,3524,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider,wisp,mongbat:orc:troll,,,,1266,1982,0,2,60,80,30,30,1,2,1,6,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider,wisp,mongbat:orc:troll,,,,1249,2030,0,2,60,80,30,30,1,2,1,6,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider,wisp,mongbat:orc:troll,,,,1232,2093,0,2,60,80,30,30,1,2,1,6,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider,wisp,mongbat:orc:troll,,,,1140,2087,0,2,60,80,30,30,1,2,1,6,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider,wisp,mongbat:orc:troll,,,,1089,2033,0,2,60,80,30,30,1,2,1,6,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider,wisp,mongbat:orc:troll,,,,1067,2117,5,2,60,80,30,30,1,2,1,6,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:ogre:troll,,,,,,666,1825,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:ogre:troll,,,,,,741,1838,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:ogre:troll,,,,,,733,1937,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:ogre:troll,,,,,,798,1935,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:ogre:troll,,,,,,819,1841,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:ogre:troll,,,,,,893,1861,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:ogre:troll,,,,,,879,1956,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ogre,,,,,,809,1615,0,2,60,80,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,orcishmage,,,,,,4461,3106,0,2,60,80,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,orc,,,,,,4729,3485,0,2,60,80,30,30,1,10,0,0,0,0,0
+f_adjust_outdoorspawns,orc,,,,,,4519,3097,0,2,60,80,30,30,1,10,0,0,0,0,0
+f_adjust_outdoorspawns,orc,,,,,,4613,3272,0,2,60,80,30,30,1,10,0,0,0,0,0
+f_adjust_outdoorspawns,orc,,,,,,4576,3356,0,2,60,80,30,30,1,10,0,0,0,0,0
+f_adjust_outdoorspawns,orc,,,,,,4658,3376,0,2,60,80,30,30,1,10,0,0,0,0,0
+f_adjust_outdoorspawns,orc,,,,,,4607,3480,29,2,60,80,30,30,1,10,0,0,0,0,0
+f_adjust_outdoorspawns,brigand:harpy:lizardman:orcishmage:orc:ratman:spectre:troll,,,,,,3485,2595,12,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,brigand:harpy:lizardman:orcishmage:orc:ratman:spectre:troll,,,,,,3446,2741,49,2,60,80,50,50,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,brigand:harpy:lizardman:orcishmage:orc:ratman:spectre:troll,,,,,,3459,2655,9,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,brigand:harpy:lizardman:orcishmage:orc:ratman:spectre:troll,,,,,,3379,2693,35,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,brigand:harpy:lizardman:orcishmage:orc:ratman:spectre:troll,,,,,,3411,2592,44,2,60,80,40,40,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,brigand:harpy:lizardman:orcishmage:orc:ratman:spectre:troll,,,,,,3464,2503,49,2,60,80,50,50,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:ogre:waterelemental,orc:troll:lizardman,,,,,3168,629,8,2,60,80,30,30,1,5,5,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:ogre:waterelemental,orc:troll:lizardman,,,,,3172,700,8,2,60,80,30,30,1,5,5,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:ogre:waterelemental,orc:troll:lizardman,,,,,3173,771,0,2,60,80,30,30,1,5,5,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1473,229,22,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1337,293,22,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1184,217,27,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1284,433,6,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1203,502,30,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1300,607,15,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1200,633,6,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1162,704,6,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1130,830,9,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1013,980,0,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,848,917,0,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,840,1063,0,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,1038,1149,0,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,844,1235,0,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle:gazer,,,,,,617,1326,0,2,60,80,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1831,449,0,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1832,517,0,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1749,474,6,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1636,532,22,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1743,589,16,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1887,591,0,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1810,647,0,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1631,650,16,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,airelemental,ettin:harpy:orc,,,,,1723,683,6,2,60,80,60,60,1,1,8,0,0,0,0
+f_adjust_outdoorspawns,earthelemental:ratman,,,,,,1980,832,-1,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,earthelemental:ratman,,,,,,1905,883,-1,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,earthelemental:ratman,,,,,,1849,953,7,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,ghoul:lich:lichlord,skeleton:zombie,,,,,1001,787,0,2,60,80,30,30,1,3,5,0,0,0,0
+f_adjust_outdoorspawns,ghoul:lich:lichlord,skeleton:zombie,,,,,987,725,0,2,60,80,30,30,1,3,5,0,0,0,0
+f_adjust_outdoorspawns,gargoyle:gazer,,,,,,1912,1283,0,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,gargoyle:gazer,,,,,,1787,1280,0,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,gargoyle:gazer,,,,,,1799,1394,0,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,gargoyle:gazer,,,,,,1652,1400,0,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,gargoyle:gazer,,,,,,1755,1474,0,2,60,80,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,troll,,,,,,1325,1071,0,2,60,80,30,30,1,10,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:lizardman:silverserpent:snake,wisp,,,,,2369,3430,3,2,60,80,30,30,1,8,2,0,0,0,0
+f_adjust_outdoorspawns,alligator:lizardman:silverserpent:snake,wisp,,,,,2354,3503,0,2,60,80,30,30,1,8,2,0,0,0,0
+f_adjust_outdoorspawns,alligator:lizardman:silverserpent:snake,wisp,,,,,2503,3593,3,2,60,80,30,30,1,8,2,0,0,0,0
+f_adjust_outdoorspawns,alligator:lizardman:silverserpent:snake,wisp,,,,,2520,3983,3,2,60,80,30,30,1,8,2,0,0,0,0
+f_adjust_outdoorspawns,alligator:lizardman:silverserpent:snake,wisp,,,,,2438,3914,0,2,60,80,30,30,1,8,2,0,0,0,0
+f_adjust_outdoorspawns,alligator:lizardman:silverserpent:snake,wisp,,,,,2143,3953,3,2,60,80,30,30,1,8,2,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle,,,,,,868,488,0,2,60,80,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle,,,,,,805,483,0,2,60,80,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle,,,,,,839,406,0,2,60,80,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:gargoyle,,,,,,841,344,0,2,60,80,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,lizardman:ratman,,,,,,1131,3415,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,lizardman:ratman,,,,,,1158,3457,0,2,60,80,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,lizardman:ratman,,,,,,1094,3482,0,2,60,80,30,30,1,8,0,0,0,0,0
+//##############
+//## By Nerun ##
+//##############
+//overridemintime 20
+//overridemaxtime 20
+//##
+//## OSI Medium
+//##
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1312,613,10,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1214,617,13,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1361,522,19,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1226,449,1,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1276,431,16,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1231,192,6,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1143,180,14,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1191,288,11,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1295,328,22,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1361,275,16,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1491,238,22,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3440,405,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3382,375,4,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3327,344,4,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3434,316,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3382,280,9,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3322,271,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3360,218,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3390,259,4,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3446,213,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:lizardman:ogre:orc:troll,,,,,,3462,136,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2589,204,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2549,136,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2659,147,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2621,99,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2549,86,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2478,100,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2468,144,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2485,191,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2454,248,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:headlessone:lizardman:ogre:orc:troll:waterelemental,wisp,,,,,2533,240,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2077,434,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2080,400,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2080,400,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2107,358,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2138,323,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2189,298,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2137,271,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2113,221,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2146,178,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2093,147,3,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2109,109,3,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:orc,,,,,,2115,48,0,2,20,30,30,30,1,3,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gargoyle:gazer:orc:troll,,,,,,1996,73,8,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gargoyle:gazer:orc:troll,,,,,,1956,48,4,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gargoyle:gazer:orc:troll,,,,,,1944,102,4,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,2034,46,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,2033,74,1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,2058,87,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,2034,108,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,2000,141,1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,1965,160,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,1946,186,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,1922,173,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,1894,197,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,1908,214,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,1891,226,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:troll,,,,,,1869,265,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:skeleton:troll,,,,,1626,266,16,2,20,30,30,30,1,2,11,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:skeleton:troll,,,,,1682,252,6,2,20,30,30,30,1,2,11,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:skeleton:troll,,,,,1723,252,16,2,20,30,30,30,1,2,11,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:skeleton:troll,,,,,1759,259,21,2,20,30,30,30,1,2,11,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:skeleton:troll,,,,,1804,247,0,2,20,30,30,30,1,2,11,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1875,906,7,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1829,874,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1852,841,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1930,864,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1883,827,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1949,824,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1987,822,0,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,2013,839,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1979,885,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1947,912,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1915,928,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1866,938,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,giantspider:scorpion,,,,,,1838,957,-1,2,20,30,30,30,1,2,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1802,1506,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1692,1463,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1833,1245,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1726,1362,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1640,1431,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1912,1302,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1967,1296,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1898,1265,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1872,1347,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1812,1314,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1797,1393,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1862,1434,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:ogre:reaper:skeleton:zombie,,,,,,1877,1515,0,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1361,1392,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1445,1365,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1375,1330,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1474,1297,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1407,1281,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1225,1477,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1222,1418,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1244,1374,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1180,1354,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1240,1317,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1340,1268,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1305,1326,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1304,1413,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,harpy:lizardman:orc:ratman:troll,,,,,,1300,1481,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1541,1895,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1534,1941,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1475,1958,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1435,1917,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1383,1949,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1416,1992,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1504,2007,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1447,2038,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1479,2094,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:mongbat:orc:ratman:troll,,,,,,1525,2053,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,2095,2352,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,2077,2305,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,2021,2313,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1968,2346,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1947,2294,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1915,2385,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1891,2331,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1890,2270,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1873,2426,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1837,2334,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:ratman:slime:snake,,,,,,1826,2250,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,2109,2989,30,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,2089,3017,0,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,2074,3069,0,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,2033,3041,15,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1970,3052,15,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1915,3050,15,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1866,3040,15,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1812,3036,5,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1841,3000,10,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1803,2981,0,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1867,2962,7,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1849,2915,30,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1911,2934,10,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:ogre:orc,wisp,,,,,1954,2903,30,2,20,30,30,30,1,4,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:harpy:lizardman:orc:ratman:reaper,,,,,,851,495,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:harpy:lizardman:orc:ratman:reaper,,,,,,805,463,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:ettin:harpy:lizardman:orc:ratman:reaper,,,,,,837,361,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider:harpy:lizardman:ogre:orc:skeleton:spectre:troll,,,,,,1029,1969,0,2,20,30,30,30,1,9,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider:harpy:lizardman:ogre:orc:skeleton:spectre:troll,,,,,,1080,1963,0,2,20,30,30,30,1,9,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:giantspider:harpy:lizardman:ogre:orc:skeleton:spectre:troll,,,,,,1042,1920,0,2,20,30,30,30,1,9,0,0,0,0,0
+f_adjust_outdoorspawns,ghoul:giantspider:headlessone:lizardman:orc:ratman:zombie,wisp,,,,,821,1938,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ghoul:giantspider:headlessone:lizardman:orc:ratman:zombie,wisp,,,,,736,1938,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ghoul:giantspider:headlessone:lizardman:orc:ratman:zombie,wisp,,,,,899,1851,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ghoul:giantspider:headlessone:lizardman:orc:ratman:zombie,wisp,,,,,759,1828,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ghoul:giantspider:headlessone:lizardman:orc:ratman:zombie,wisp,,,,,672,1825,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,ghoul:giantspider:headlessone:lizardman:orc:ratman:zombie,wisp,,,,,892,1963,0,2,20,30,30,30,1,7,1,0,0,0,0
+f_adjust_outdoorspawns,giantspider:orc:ratman:spectre:zombie,,,,,,815,1603,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gazer:harpy:headlessone:ogre:troll,,,,,,1055,1442,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gazer:harpy:headlessone:ogre:troll,,,,,,1021,1415,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gazer:harpy:headlessone:ogre:troll,,,,,,1060,1375,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gazer:harpy:headlessone:ogre:troll,,,,,,1004,1369,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gazer:harpy:headlessone:ogre:troll,,,,,,1037,1325,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gazer:harpy:headlessone:ogre:troll,,,,,,971,1308,0,2,20,30,30,30,1,6,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:Direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:ratman:reaper,,,,,1000,330,0,2,20,30,30,30,1,2,10,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:Direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:ratman:reaper,,,,,964,365,0,2,20,30,30,30,1,2,10,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:Direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:ratman:reaper,,,,,947,418,0,2,20,30,30,30,1,2,10,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:Direwolf:ettin:gargoyle:gazer:harpy:lizardman:orc:ratman:reaper,,,,,956,452,0,2,20,30,30,30,1,2,10,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:harpy:reaper:skeleton,,,,,,423,1595,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:harpy:reaper:skeleton,,,,,,418,1665,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:harpy:reaper:skeleton,,,,,,480,1641,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:harpy:reaper:skeleton,,,,,,516,1585,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:direwolf:harpy:reaper:skeleton,,,,,,541,1645,0,2,20,30,30,30,1,5,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,141,1367,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,189,1344,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,232,1350,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,278,1355,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,229,1419,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,182,1428,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,157,1487,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,204,1483,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,240,1443,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,airelemental:waterelemental,corpser:direwolf:ettin:gargoyle:gazer:harpy:orc:reaper:troll,,,,,269,1474,0,2,20,30,30,30,1,2,9,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4057,300,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4057,300,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4013,239,1,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,3929,235,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,3920,287,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4090,325,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4162,395,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4206,471,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,3928,393,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,3963,508,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4066,569,0,2,20,30,80,80,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4153,601,0,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4214,655,1,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,polarbear:snowleopard:walrus:whitewolf,,,,,,4264,725,1,2,20,30,30,30,1,4,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:mongbat:ratman:silverserpent:snake,,,,,,2963,3617,3,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:mongbat:ratman:silverserpent:snake,,,,,,2966,3591,11,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:mongbat:ratman:silverserpent:snake,,,,,,3013,3591,15,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:mongbat:ratman:silverserpent:snake,,,,,,3024,3566,15,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,alligator:giantserpent:lizardman:mongbat:ratman:silverserpent:snake,,,,,,3042,3590,5,2,20,30,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2462,725,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2428,722,8,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2375,725,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2345,676,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2429,690,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2379,654,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2326,656,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ghoul:headlessone:ogre:orc:orcishmage:skeleton:troll,,,,,,2319,591,0,2,20,30,30,30,1,8,0,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,659,1318,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,579,1305,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,728,1242,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,793,1088,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,849,1262,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,909,1175,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,974,1186,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1059,1166,5,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,823,960,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,960,910,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1042,1024,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1147,1048,5,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1097,970,2,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1192,958,5,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1166,818,5,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1083,783,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1268,774,0,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1180,737,1,2,20,30,30,30,1,11,1,0,0,0,0
+f_adjust_outdoorspawns,corpser:ettin:ghoul:giantspider:lizardman:ogre:orc:reaper:skeleton:troll:zombie,wisp,,,,,1122,718,1,2,20,30,30,30,1,11,1,0,0,0,0
+//##############
+//## By Nerun ##
+//##############
+//overridemintime 5
+//overridemaxtime 10
+//##
+//## OSI Heavy + Miscellaneous
+//##
+f_adjust_outdoorspawns,airelemental:ettin:gargoyle:gazer:orc:troll:waterelemental,,,,,,423,1595,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:gargoyle:gazer:orc:troll:waterelemental,,,,,,418,1665,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:gargoyle:gazer:orc:troll:waterelemental,,,,,,480,1641,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:gargoyle:gazer:orc:troll:waterelemental,,,,,,516,1585,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,airelemental:ettin:gargoyle:gazer:orc:troll:waterelemental,,,,,,541,1645,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,timberwolf,,,,,,4504,1458,8,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,timberwolf,,,,,,4494,1426,8,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,timberwolf,,,,,,4455,1434,10,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,timberwolf,,,,,,4456,1405,8,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,timberwolf,,,,,,4455,1358,10,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,greathart,hind,,,,,4550,1409,8,2,5,10,30,30,1,2,5,0,0,0,0
+f_adjust_outdoorspawns,greathart,hind,,,,,4552,1447,10,2,5,10,30,30,1,2,5,0,0,0,0
+f_adjust_outdoorspawns,greathart,hind,,,,,4615,1469,0,2,5,10,30,30,1,2,5,0,0,0,0
+f_adjust_outdoorspawns,greathart,hind,,,,,4612,1418,0,2,5,10,30,30,1,2,5,0,0,0,0
+f_adjust_outdoorspawns,greathart,hind,,,,,4605,1365,0,2,5,10,30,30,1,2,5,0,0,0,0
+f_adjust_outdoorspawns,greathart,hind,,,,,4566,1359,8,2,5,10,30,30,1,2,5,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:headlessone:lizardman:ogre:orc:skeleton:troll:zombie,wisp,,,,,2372,210,0,2,5,10,30,30,1,9,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:headlessone:lizardman:ogre:orc:skeleton:troll:zombie,wisp,,,,,2355,179,0,2,5,10,30,30,1,9,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:headlessone:lizardman:ogre:orc:skeleton:troll:zombie,wisp,,,,,2351,148,0,2,5,10,30,30,1,9,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:headlessone:lizardman:ogre:orc:skeleton:troll:zombie,wisp,,,,,2345,112,0,2,5,10,30,30,1,9,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:harpy:headlessone:lizardman:ogre:orc:skeleton:troll:zombie,wisp,,,,,2328,67,0,2,5,10,30,30,1,9,1,0,0,0,0
+f_adjust_outdoorspawns,ettin:ogre:orc:ratman:skeleton:spectre:zombie,,,,,,2177,3034,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:ogre:orc:ratman:skeleton:spectre:zombie,,,,,,2143,3068,20,2,5,10,30,30,1,7,0,0,0,0,0
+//##
+//## Northeast Britain
+//##
+f_adjust_outdoorspawns,ettin:gargoyle:gazer:ogre:orc:troll:waterelemental,,,,,,1983,1517,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gargoyle:gazer:ogre:orc:troll:waterelemental,,,,,,1986,1463,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,ettin:gargoyle:gazer:ogre:orc:troll:waterelemental,,,,,,1969,1409,0,2,5,10,30,30,1,7,0,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1912,1302,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1967,1296,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1898,1265,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1872,1347,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1812,1314,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1797,1393,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1862,1434,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1877,1515,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1802,1506,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1692,1463,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1833,1245,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1726,1362,0,2,5,10,30,30,1,3,2,0,0,0,0
+f_adjust_outdoorspawns,mongbat,orc,,,,,1640,1431,0,2,5,10,30,30,1,3,2,0,0,0,0
+
+//##
+//## The Bog of Desolation (West Covetous)
+//##
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2038,1023,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2079,1018,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2067,989,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2028,987,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2033,936,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,1990,976,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,1993,1030,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2035,1018,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2023,1052,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2069,1028,0,2,5,10,30,30,1,3,1,3,0,0,0
+f_adjust_outdoorspawns,AcidElemental:alligator:bogthing:bogling:corpser:giantserpent:lizardman,wisp,strongmongbat:plaguebeast:plaguespawn:ratman:sewerrat:slime:snake,,,,2048,1066,0,2,5,10,30,30,1,3,1,3,0,0,0
+//##
+//## East Skara Brae
+//##
+f_adjust_outdoorspawns,orc,ettin,ratman,giantspider,reaper,,1435,2261,5,2,5,10,150,150,1,10,10,10,10,10,0
+f_adjust_outdoorspawns,orc,ettin,ratman,giantspider,reaper,,1651,2413,5,2,5,10,150,150,1,10,10,10,10,10,0
+f_adjust_outdoorspawns,orc,ettin,ratman,giantspider,reaper,,1619,2725,10,2,5,10,150,150,1,10,10,10,10,10,0
+f_adjust_outdoorspawns,orc,ettin,ratman,giantspider,reaper,,1427,2525,0,2,5,10,150,150,1,10,10,10,10,10,0
+f_adjust_outdoorspawns,orc,ettin,ratman,giantspider,reaper,,1059,2461,0,2,5,10,150,150,1,10,10,10,10,10,0
+f_adjust_outdoorspawns,orc,ettin,ratman,giantspider,reaper,,1243,2437,5,2,5,10,150,150,1,10,10,10,10,10,0
+//##
+//## South Destard / Trinsic
+//##
+f_adjust_outdoorspawns,orc,giantspider,giantserpent,gorilla,tropicalbird,whippingvine,1595,3045,0,2,5,10,100,60,1,5,5,5,5,5,5
+f_adjust_outdoorspawns,orc,giantspider,giantserpent,gorilla,tropicalbird,whippingvine,2091,3413,0,2,5,10,150,150,1,10,10,10,10,10,10
+f_adjust_outdoorspawns,orc,giantspider,giantserpent,gorilla,tropicalbird,whippingvine,1931,3205,0,2,5,10,150,150,1,10,10,10,10,10,10
+f_adjust_outdoorspawns,orc,giantspider,giantserpent,gorilla,tropicalbird,whippingvine,1827,3429,10,2,5,10,150,150,1,10,10,10,10,10,10
+f_adjust_outdoorspawns,orc,giantspider,giantserpent,gorilla,tropicalbird,whippingvine,1635,3253,0,2,5,10,150,150,1,10,10,10,10,10,10
+f_adjust_outdoorspawns,orc,giantspider,giantserpent,gorilla,tropicalbird,whippingvine,1387,3109,0,2,5,10,150,150,1,10,10,10,10,10,10
+//##
+//## Main Destard Orcs
+//##
+f_adjust_outdoorspawns,Headlessone,Orc,Orccaptain,Orcishlord,Orcishmage,,1110,2672,0,2,5,10,20,20,1,3,6,1,2,1,0
+
+
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3394,628,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3232,510,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4478,3218,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4446,3706,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4682,3662,77,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4692,3494,1,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4560,3504,2,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4612,3424,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3607,2417,45,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3555,2525,13,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3506,2477,28,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3452,2563,32,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3429,2650,43,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3449,2737,49,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3736,2512,35,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3718,2736,38,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3654,2866,61,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3662,2802,51,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3596,2804,51,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3546,2812,13,2,5,10,50,50,1,7,5,1,2,2,2
+//f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3650,2080,21,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3608,2140,79,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4384,1218,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4468,1006,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4326,1046,8,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4544,1128,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4510,1262,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4590,1326,8,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4526,986,10,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4336,1130,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4448,1334,3,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4540,1454,8,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4632,1164,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4470,1430,8,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,4592,1424,3,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2814,3500,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2998,3590,15,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2864,150,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3292,570,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3206,366,9,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3172,664,8,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3392,424,9,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3076,150,1,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,3092,542,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2512,1066,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2554,1142,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2416,1172,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2188,1986,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2654,2286,9,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2946,2168,44,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2744,2014,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2786,2282,13,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2074,1972,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2122,2108,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1932,3125,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1824,3027,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1894,2942,19,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1222,2499,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1005,2647,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,464,2059,8,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,559,2081,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,883,2129,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,968,2476,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,994,2361,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,964,2214,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1087,2401,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1222,2378,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1334,2311,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1315,2192,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1426,2615,10,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1527,2609,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1582,2722,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1650,2796,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1724,2781,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1727,2702,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1634,2645,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1505,2445,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1699,2560,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1612,2526,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1722,2435,10,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1715,2307,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1531,2351,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1602,2426,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1628,2334,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1563,2277,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1503,2207,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1709,1992,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1498,2040,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1439,2104,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1387,2023,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1377,1911,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1459,1963,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1268,2018,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1173,2103,2,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1070,2069,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,958,2074,1,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,999,1839,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1011,1945,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1229,1655,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1725,1447,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1798,1471,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1958,1305,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1867,1244,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1865,1379,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1769,1330,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1666,1290,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1486,1301,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1351,1359,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1231,1462,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1017,1726,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,398,1305,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,485,1398,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,210,1447,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,851,1770,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,977,1638,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,919,1718,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,876,1639,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,805,1570,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,725,1483,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,623,1328,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,727,1394,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1020,1360,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1024,1244,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,802,1280,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,855,934,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,771,1013,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,846,1071,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,940,1028,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1152,812,5,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1011,896,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1057,765,1,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,974,374,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1063,541,16,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1018,629,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,951,542,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,805,576,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,937,743,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,890,657,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,895,830,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,689,753,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,748,669,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,764,822,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,834,751,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,782,1156,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,887,1223,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,916,1159,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,993,1130,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1047,1071,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1092,1010,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1172,974,2,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1388,784,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1631,640,22,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1526,960,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1545,813,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1695,809,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1728,691,6,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1802,495,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1857,600,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1884,735,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,1973,751,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2085,658,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2367,748,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2289,917,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2338,989,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2418,999,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2495,978,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2583,993,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2513,782,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2748,660,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2765,754,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2668,1020,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2669,922,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2672,814,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2643,728,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2888,391,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2735,417,15,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2914,547,0,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2814,492,15,2,5,10,50,50,1,7,5,1,2,2,2
+f_adjust_outdoorspawns,Boar:Cougar:Goat:Horse:Panther:Pig:Sheep,BlackBear:GrizzlyBear:BrownBear:TimberWolf:GreyWolf,WanderingHealer,Bird:Eagle,GreatHart:Hind:Rabbit:JackRabbit,Bull:Cow,2688,524,11,2,5,10,50,50,1,7,5,1,2,2,2
+
+
+
+
+[eof]

@@ -1,0 +1,215 @@
+[SKILL 22]
+DEFNAME=SKILL_PROVOCATION
+KEY=Provocation
+TITLE=Bard
+FLAGS=skf_scripted
+PROMPT_MSG=	//Whom do you wish to incite?
+DELAY=6.0	//3.0
+STAT_STR=20
+STAT_INT=60
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=90
+BONUS_INT=10
+BONUS_STATS=5
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@select
+ref1=<src.findtype.t_musical>
+if !(<ref1.isvalid>)
+  src.sysmessage You do not have a musical instrument.
+  return 1
+endif
+actprv=<ref1>
+src.targetf f_provocation_incite
+src.sysmessage Whom do you wish to incite?
+return 1
+
+//nothing below here will be called because of return 1 above
+//players wanted it to automatically pick your musical instrument
+ref1=<actprv>
+if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_musical) || (<ref1.topobj> != <src>)
+  src.sysmessage What instrument shall you play?
+  src.targetf f_musical_instrument_select 22
+  return 1
+endif
+
+src.targetf f_provocation_incite
+src.sysmessage Whom do you wish to incite?
+return 1
+
+on=@start
+//act = target
+//actprv = instrument
+//actarg1 = second target
+ref1=<actprv>
+
+if !(<act.isvalid>) || !(<ref1.isvalid>) 
+  return 1
+elseif (<ref1.type> != t_musical) || (<ref1.topobj> != <src>)
+  src.sysmessage You do not have a musical instrument.
+  return 1 
+elseif !(<f_skillsucceed musicianship>)		//no need to continue
+  src.act=
+  actdiff=65535
+  //src.sound <ref1.tdata2>
+else
+  local.n=<eval (<ref1.tag0.base_difficulty>-<src.f_barding_modifers <act>>)>
+  local.n=<eval ((((<src.provocation>/10)-<local.n>)*2)+50)>
+  local.x=<eval (<ref1.tag0.base_difficulty>-<src.f_barding_modifers <act>>)>
+  local.x=<eval ((((<src.provocation>/10)-<local.x>)*2)+50)>
+  local.n=<eval ((<local.n>+<local.x>)/2)>
+  
+  //src.sound <ref1.tdata1>
+  //serv.log <src.name> provoking <ref1.baseid> onto <ref2.baseid> with <local.n> chance
+  if (<R1,100> > <local.n> )
+    src.actdiff=65535
+    //src.sound <ref1.tdata2>
+  else
+    src.actdiff=0
+    //src.sound <ref1.tdata1>
+  endif
+endif
+return 0
+
+ON=@Fail
+ref1=<actprv>
+timerf 0,src.sysmessage <qval (!<actarg1>)?You play poorly, and there is no effect:Your music fails to incite enough anger>.
+src.sound <ref1.tdata2>
+src.f_musical_instrument_damage
+
+ON=@Abort
+src.sysmessage You decide not to incite anything for now.
+
+on=@success
+ref1=<act>	//first target
+ref2=<actarg1>	//second target
+ref3=<actprv>	//instrument
+
+if !(<ref1>) || !(<ref2>)	//one of them has died, no fight can take place
+  return 1
+endif
+
+timerf 0,src.sysmessage Your music succeeds, as you start a fight.
+ref1.consume i_calmed
+ref1.say *looks furious*
+if (<ref1.findid.i_provoked.isvalid>)
+  ref1.findid.i_provoked.remove	//remove any previous provocation memory item they had
+endif
+serv.newitem i_provoked
+new.link=<uid>		//the person who provoked them
+new.more2=<ref2>	//the target they are attacking
+ref1.equip <new>
+ref1.attack <ref2>
+ref2.consume i_calmed
+ref2.attack <ref1>
+src.f_musical_instrument_damage
+src.sound <ref3.tdata1>
+
+on=@gain
+src.skillgain musicianship
+
+[function f_provocation_incite]
+ref1=<actprv>
+if !(<argo.isvalid>) || !(<argo.ischar>)  || (<argo.isplayer>) || (<argo.npc> == brain_guard) || (<argo.flags>&statf_invul) || (<argo.tag0.unbardable>) || (<argo.tag0.unprovokable>)
+  sysmessage You can't incite that!
+  return 1
+elseif !(<canseelos <argo>>)
+  sysmessage Target cannot be seen.
+  return 1
+elseif (<distance <argo>> > 10)
+  sysmessage That is too far away.
+  return 1
+elseif (<argo.owner.isvalid>) && (<argo.owner.isplayer>)
+  sysmessage They are too loyal to their master to be provoked.
+  return 1
+elseif (<argo.tag0.base_difficulty> >= 160)
+  sysmessage You have no chance of provoking those creatures.
+  return 1
+endif
+
+act=<argo>
+sysmessage You play your music and your target becomes angered. Whom do you wish them to attack?
+targetf f_provocation_start_fight
+sound <ref1.tdata1>
+return 1
+
+[function f_provocation_start_fight]		
+ref1=<src.act>
+if !(<argo.isvalid>) || !(<argo.ischar>)  || (<argo.isplayer>) || (<argo.npc> == brain_guard) || (<argo.flags>&statf_invul) || (<argo.tag0.unbardable>) || (<argo.tag0.unprovokable>)
+  sysmessage You can't incite that!
+  return 1
+elseif !(<argo.isvalid>) || !(<ref1.canseelos <argo>>)
+  sysmessage They cannot see the target.
+  return 1
+elseif (<ref1.distance <argo>> > 15)
+  sysmessage The creatures you are trying to provoke are too far away from each other for your music to have an effect.
+  return 1
+elseif (<ref1> == <argo>)
+  sysmessage You can't tell someone to attack themselves!
+  return 1
+endif
+
+if (<ref1.notogetflag <uid>,1> < 3)  || (<argo.notogetflag <ref1>,1> < 3)
+  criminal
+endif
+
+actarg1=<argo>
+action=provocation
+return 1
+
+[itemdef i_provoked]
+defname=i_provoked
+id=i_lute
+name=Provoked by Player
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer=1
+
+on=@equip
+morex=<src.fame>
+morey=<src.karma>
+
+
+on=@timer
+ref1=<more2>
+if (<topobj.distance <link>> > 15) || !(<topobj.canseelos <link>>) 	//lost line of sight
+  link.sysmessage You have broken line of site with <topobj.name>.	
+  remove
+  return 1
+elseif (<more1> >= 300) || !(<ref1>) || !(<topobj.isonline>)		//expired, target gone, or offline
+  remove 
+  return 1
+endif
+
+more1 += 1
+timer=1
+return 1
+
+on=@unequip
+ref1=<more2>	//target
+if (<ref1.isvalid>) 
+  src.f_provocation_end <ref1>
+  ref1.f_provocation_end <src>
+endif
+src.fame=<morex>	//restore original fame and karma
+src.karma=<morey>	
+if (<src.ischar>)
+  src.attack <link>
+endif
+
+[function f_provocation_end]
+ref1=<args>
+action=103
+attacker.<attacker.id <ref1>>.delete
+ref2=<memoryfind.<ref1>>
+if (<ref2.isvalid>)
+  ref2.color &= ~ memory_fight
+  ref2.color &= ~ memory_irritatedby
+  ref2.color &= ~ memory_aggrieved
+endif
+
+
+[EOF]

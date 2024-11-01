@@ -1,0 +1,241 @@
+
+
+[SKILLMENU sm_blacksmith]
+Blacksmithing
+
+ON=i_ANVIL Repair	// pretty much anyone can attempt to repair.
+TEST=BLACKSMITHING 1.0
+REPAIR
+
+ON=i_shield_round_bronze Shields
+SKILLMENU=sm_shields
+
+ON=i_platemail_chest Armor
+SKILLMENU=sm_armor
+
+ON=i_sword_viking Weapons
+SKILLMENU=sm_weapons
+
+ON=i_decorative_armor Colored Armor
+SKILLMENU=sm_colored_armor
+
+ON=0156a Colored Weapons
+SKILLMENU=sm_colored_weapons
+
+ON=i_decorative_armor Magic Armor
+SKILLMENU=sm_magic_armor
+
+[SKILLMENU sm_shields]
+Shields
+
+ON=i_shield_buckler <name> (<resmake>)
+MAKEITEM=i_shield_buckler
+
+ON=i_shield_round_bronze <name> (<resmake>)
+MAKEITEM=i_shield_round_bronze
+
+ON=i_shield_round_metal <name> (<resmake>)
+MAKEITEM=i_shield_round_metal
+
+ON=i_shield_kite_metal <name> (<resmake>)
+MAKEITEM=i_shield_kite_metal
+
+ON=i_shield_heater <name> (<resmake>)
+MAKEITEM=i_shield_heater
+
+[SKILLMENU sm_armor]
+Armor
+
+ON=i_platemail_chest Plate Mail
+SKILLMENU=sm_platemail_armor
+
+ON=i_chainmail_tunic Chain Mail
+SKILLMENU=sm_chainmail_armor
+
+ON=i_ringmail_tunic Ring Mail
+SKILLMENU=sm_ringmail_armor
+
+ON=i_bascinet Helmets
+SKILLMENU=sm_helmets
+
+[SKILLMENU sm_weapons]
+Weapons
+
+ON=i_sword_viking Swords & Blades
+SKILLMENU=sm_swords_blades
+
+ON=i_axe_battle Axes
+SKILLMENU=sm_axes
+
+ON=i_mace Maces & Hammers
+SKILLMENU=sm_maces_hammers
+
+ON=i_pitchfork Spears and Forks
+SKILLMENU=sm_spears_forks
+
+ON=i_halberd Pole Arms
+SKILLMENU=sm_pole_arms
+
+[SKILLMENU sm_platemail_armor]
+Plate Mail
+
+ON=i_platemail_chest <name> (<resmake>)
+MAKEITEM=i_platemail_chest
+
+ON=i_armor_female_plate <name> (<resmake>)
+MAKEITEM=i_armor_female_plate
+
+ON=i_armor_female_studded <name> (<resmake>)
+MAKEITEM=i_armor_female_studded
+
+ON=i_platemail_gorget <name> (<resmake>)
+MAKEITEM=i_platemail_gorget
+
+ON=i_platemail_gloves <name> (<resmake>)
+MAKEITEM=i_platemail_gloves
+
+ON=i_platemail_helm <name> (<resmake>)
+MAKEITEM=i_platemail_helm
+
+ON=i_platemail_leggings <name> (<resmake>)
+MAKEITEM=i_platemail_leggings
+
+ON=i_platemail_arms <name> (<resmake>)
+MAKEITEM=i_platemail_arms
+
+[SKILLMENU sm_chainmail_armor]
+Chain Mail
+
+ON=i_chainmail_tunic <name> (<resmake>)
+MAKEITEM=i_chainmail_tunic
+
+ON=i_chainmail_leggings <name> (<resmake>)
+MAKEITEM=i_chainmail_leggings
+
+ON=i_chainmail_coif <name> (<resmake>)
+MAKEITEM=i_chainmail_coif
+
+[SKILLMENU sm_ringmail_armor]
+Ring Mail
+
+ON=i_ringmail_tunic <name> (<resmake>)
+MAKEITEM=i_ringmail_tunic
+
+ON=i_ringmail_sleeves <name> (<resmake>)
+MAKEITEM=i_ringmail_sleeves
+
+ON=i_ringmail_leggings <name> (<resmake>)
+MAKEITEM=i_ringmail_leggings
+
+ON=i_ringmail_gloves <name> (<resmake>)
+MAKEITEM=i_ringmail_gloves
+
+[SKILLMENU sm_helmets]
+Helmets
+
+ON=i_helm_closed <name> (<resmake>)
+MAKEITEM=i_helm_closed
+
+ON=i_helm_open <name> (<resmake>)
+MAKEITEM=i_helm_open
+
+ON=i_bascinet <name> (<resmake>)
+MAKEITEM=i_bascinet
+
+ON=i_helm_norse <name> (<resmake>)
+MAKEITEM=i_helm_norse
+
+[SKILLMENU sm_swords_blades]
+Swords & Blades
+
+ON=i_sword_broad <name> (<resmake>)
+MAKEITEM=i_sword_broad
+
+ON=i_cutlass <name> (<resmake>)
+MAKEITEM=i_cutlass
+
+ON=i_dagger <name> (<resmake>)
+MAKEITEM=i_dagger
+
+ON=i_katana <name> (<resmake>)
+MAKEITEM=i_katana
+
+ON=i_kryss <name> (<resmake>)
+MAKEITEM=i_kryss
+
+ON=i_sword_long <name> (<resmake>)
+MAKEITEM=i_sword_long
+
+ON=i_scimitar <name> (<resmake>)
+MAKEITEM=i_scimitar
+
+ON=i_sword_viking <name> (<resmake>)
+MAKEITEM=i_sword_viking
+
+[SKILLMENU sm_axes]
+Axes
+
+ON=i_axe_exec <name> (<resmake>)
+MAKEITEM=i_axe_exec
+
+ON=i_axe <name> (<resmake>)
+MAKEITEM=i_axe
+
+ON=i_axe_double <name> (<resmake>)
+MAKEITEM=i_axe_double
+
+ON=i_axe_battle <name> (<resmake>)
+MAKEITEM=i_axe_battle
+
+ON=i_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_axe_battle_large
+
+ON=i_axe_war <name> (<resmake>)
+MAKEITEM=i_axe_war
+
+ON=i_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_axe_two_hand
+
+[SKILLMENU sm_maces_hammers]
+Maces & Hammers
+
+ON=i_hammer_pick <name> (<resmake>)
+MAKEITEM=i_hammer_pick
+
+ON=i_mace <name> (<resmake>)
+MAKEITEM=i_mace
+
+ON=i_maul <name> (<resmake>)
+MAKEITEM=i_maul
+
+ON=i_hammer_smith <name> (<resmake>)
+MAKEITEM=i_hammer_smith
+
+ON=i_hammer_war <name> (<resmake>)
+MAKEITEM=i_hammer_war
+
+ON=i_mace_war <name> (<resmake>)
+MAKEITEM=i_mace_war
+
+[SKILLMENU sm_spears_forks]
+Spears & Forks
+
+ON=i_spear_short <name> (<resmake>)
+MAKEITEM=i_spear_short
+
+ON=i_spear <name> (<resmake>)
+MAKEITEM=i_spear
+
+ON=i_war_fork <name> (<resmake>)
+MAKEITEM=i_war_fork
+
+[SKILLMENU sm_pole_arms]
+Pole Arms
+
+ON=i_bardiche <name> (<resmake>)
+MAKEITEM=i_bardiche
+
+ON=i_halberd <name> (<resmake>)
+MAKEITEM=i_halberd
+
+[EOF]

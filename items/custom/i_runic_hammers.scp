@@ -1,0 +1,197 @@
+//Runic Hammers by Soulless
+//v1.0
+//8:50 PM 1/28/2023
+
+//Dull Copper: Durable Accurate (+5 Tactics)
+[itemdef i_hammer_runic_dull_copper]
+defname=i_hammer_runic_dull_copper
+name=dull copper runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_dull_copper	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's dull copper runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_dull_copper
+
+//Shadow: Durable of Ruin (+1 damage)
+[itemdef i_hammer_runic_shadow]
+defname=i_hammer_runic_shadow
+name=shadow runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_shadow	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's shadow runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_shadow
+
+//Copper: Fortified Surpassingly Accurate of Ruin (+10 Tactics and +1 damage)
+[itemdef i_hammer_runic_copper]
+defname=i_hammer_runic_copper
+name=copper runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_copper	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's copper runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_copper
+
+//Bronze: Fortified Surpassingly Accurate of Might (+10 Tactics and +3 damage)
+[itemdef i_hammer_runic_bronze]
+defname=i_hammer_runic_bronze
+name=bronze runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_bronze	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's bronze runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_bronze
+
+//Gold: Indestructible Eminently Accurate of Force (+15 Tactics and +5 damage)
+[itemdef i_hammer_runic_gold]
+defname=i_hammer_runic_gold
+name=gold runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_gold	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's gold runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_gold
+
+//Agapite: Indestructible Eminently Accurate of Power (+15 Tactics and +7 damage)
+[itemdef i_hammer_runic_agapite]
+defname=i_hammer_runic_agapite
+name=agapite runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_agapite	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's agapite runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_agapite
+
+//Verite: Indestructible Exceedingly Accurate of Power (+20 Tactics and +7 damage)
+[itemdef i_hammer_runic_verite]
+defname=i_hammer_runic_verite
+name=verite runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_verite	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's verite runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_verite
+
+//Valorite: Indestructible Supremely Accurate of Vanquishing (+25 Tactics and +9 damage)
+[itemdef i_hammer_runic_valorite]
+defname=i_hammer_runic_valorite
+name=valorite runic hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+tevents=t_tool_blacksmithing
+resources=4 i_ingot_valorite	
+skillmake=tinkering 100.0
+dam=6,18
+speed=30
+skill=macefighting
+reqstr=30
+weaponsoundhit=0233
+
+category=provisions - weapons
+subsection=maces & hammers
+description=smith's valorite runic hammer
+
+on=@create
+	hitpoints={31 60}
+	usesmax={50 60}
+	color=color_o_valorite
+
+[EOF]

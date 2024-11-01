@@ -1,0 +1,97 @@
+[SPELL 20]
+DEFNAME=s_poison
+NAME=Poison
+SOUND=snd_spell_poison
+RUNES=IN
+CAST_TIME=1.3
+RESOURCES=i_reag_nightshade
+RUNE_ITEM=i_rune_poison
+SCROLL_ITEM=i_scroll_poison
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_resist|spellflag_tick
+EFFECT_ID=i_fx_curse
+EFFECT=100,750		//Only used without Magicf_OsiFormulas
+LAYER=layer_flag_poison
+DURATION=1.0,15.0
+MANAUSE=9
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+//Poison is a degen-style spell. Poison can be cured through the Cure spell, Arch Cure spell, Cure Potions, or Healing skill. Depending on your range from the target and your poisoning skill you can inflict greater levels of poison (To a maximum of deadly poison)
+//Formula: Magery + Poisoning - (If range is 3+ tiles, range to target * 10) At 200, 10% chance to deadly poison, otherwise greater. At 170-199.9 greater poison. At 130-169.9 lesser poison. All other situations normal poison.
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+ref2=<uid>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+local.chance=<eval ((<local.spell_strength>+<src.poisoning>)/10)-<qval (<src.distance <uid>> <= 3)?0:<src.distance <uid>> * 10>>
+if !(<src.poisoning>) 	//people with out poisoning default to lesser poison
+  local.effect=50
+elseif (<local.chance> >= 200)
+  if !(<R9>)		//10% chance to be deadly		// >= 1000 = lethally sick
+    local.effect=800	//deathly	>= 800 =deathly sick
+  else
+    local.effect=400	//greater	>= 400 = extremely sick	
+  endif
+elseif (<local.chance> >= 170)
+  local.effect=400	//greater	>= 400 = extremely sick
+elseif (<local.chance> >= 130)
+  local.effect=200	//normal	>= 200 = very ill
+else
+  local.effect=100	//lesser	>= 100 = sickly
+endif
+local.effect += 50	//poison should not decrease in strength.
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+ref3=<findid.i_rune_poison>
+if (<ref3.isvalid>) && (<ref3.morey> >= <local.effect>)	//already poisoned, just updated strength and ticks
+  ref3.more2=10
+  if (<local.effect> > <ref3.morey>)
+    ref3.morey=<local.effect>
+  endif
+  effect=3,<serv.spell.s_poison.effect_id>,6,15,1
+  damage 0
+  sound=<serv.spell.s_poison.sound>
+  return 1
+endif
+timerf 0,f_spell_adjust_poison_rune
+
+ON=@EffectTick
+ref1=<findid.i_rune_poison>
+if (<ref1.isvalid>) 
+  if (<local.charges> > 10)
+    local.charges=10
+  endif
+  ref1.morey += 50	//poison should not decrease in strength
+  if (<ref1.morey> >= 1251)		//lethal poison
+    local.effect=<muldiv 13,<src.hits>,100>
+    local.effect=<qval (<local.effect> < 9)?9:<qval (26 < <local.effect>)?26:<local.effect>>>
+    //src.message @025,3,0,0 *You are in extreme pain and require immediate aid!*		//<src.name> begins to spasm uncontrollably
+  elseif (<ref1.morey> >= 751)	//deadly poison
+    local.effect=<muldiv 13,<src.hits>,100>
+    local.effect=<qval (<local.effect> < 7)?7:<qval (23 < <local.effect>)?23:<local.effect>>>
+    //src.message @025,3,0,0 *You feel extremely weak and are in severe pain!*		//<src.name> is wracked with extreme pain.
+  elseif (<ref1.morey> >= 351)	//greater poison
+    local.effect=<muldiv 7,<src.hits>,100>
+    local.effect=<qval (<local.effect> < 6)?6:<qval (20 < <local.effect>)?20:<local.effect>>>
+    //src.message @025,3,0,0 *You begin to feel pain throughout your body!*		//<src.name> stumbles around in confusion and pain.
+  elseif (<ref1.morey> >= 151)	//normal poison
+    local.effect=<muldiv 4,<src.hits>,100>
+    local.effect=<qval (<local.effect> < 5)?5:<qval (17 < <local.effect>)?17:<local.effect>>>
+    //src.message @025,3,0,0 *You feel disorientated and nauseous!*		//<src.name> looks extremely ill.
+  else				//lesser poison
+    local.effect=<muldiv 3,<src.hits>,100>
+    local.effect=<qval (<local.effect> < 4)?4:<qval (14 < <local.effect>)?14:<local.effect>>>
+    //src.message @025,3,0,0 *You feel a bit nauseous*		//<src.name> Looks ill.
+  endif
+endif
+if (<src.action> == magery) 	//fizzle them if they are casting a spell now
+  src.action=wrestling
+endif
+local.delay={3 4} 	//{3 4}	= default
+
+[function f_spell_adjust_poison_rune]	//all poison should last for 10 ticks, and 3-4 seconds between each tick
+if (<findid.i_rune_poison.isvalid>)
+  findid.i_rune_poison.more2=10
+  findid.i_rune_poison.timer={3 4}	 // {3 4} = default
+endif
+
+[EOF]

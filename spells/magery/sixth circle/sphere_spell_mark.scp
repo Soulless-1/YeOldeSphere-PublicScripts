@@ -1,0 +1,37 @@
+
+[SPELL 45]
+DEFNAME=s_mark
+NAME=Mark
+SOUND=snd_spell_mark
+RUNES=KPY
+CAST_TIME=2.0
+RESOURCES=i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root
+RUNE_ITEM=i_rune_mark
+SCROLL_ITEM=i_scroll_mark
+FLAGS=spellflag_targ_item|spellflag_playeronly
+EFFECT_ID=i_fx_sparkle_2
+EFFECT=1,10
+DURATION=0.0
+MANAUSE=20
+SKILLREQ=MAGERY 50.0
+INTERRUPT=100.0,100.0
+
+on=@start
+ref1=<region.uid>
+if (<ref1.isvalid>) && (<ref1.type>==t_multi)	//we're marking in a house region.
+  if !(<def0.house_courtyard_recall>)
+    src.sysmessage An anti-magic field disturbs this spell.
+    return 1
+  elseif (<src.p.z> > <ref1.p.z>)
+    src.sysmessage An anti-magic field disturbs this spell.
+    return 1
+  endif
+endif
+
+//Cast Mark on recall runes to easily travel from place to place.
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+src.effect=2,<serv.spell.45.effect_id>,6,15,1
+
+[EOF]

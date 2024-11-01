@@ -1,0 +1,51 @@
+[SPELL 58]
+DEFNAME=s_energy_vortex
+NAME=Energy Vortex
+SOUND=snd_spell_energy_vortex
+RUNES=VCP
+CAST_TIME=6.0
+RESOURCES=i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root,i_reag_nightshade
+RUNE_ITEM=i_rune_energy_vortex
+SCROLL_ITEM=i_scroll_energy_vortex
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_summon
+EFFECT_ID=0
+EFFECT=0
+LAYER=layer_spell_summon
+DURATION=60.0,90.0
+MANAUSE=50
+SKILLREQ=MAGERY 70.0
+INTERRUPT=100.0,100.0
+
+//Creates an uncontrollable 'Vortex' of energy (a purple Air Elemental). These will attack any nearby creatures or players and have the ability to poison their targets. There is a small chance that when you cast this, an energy Llama will appear instead.
+on=@start
+ref1=<src.targp.region.uid>
+if (<src.targp.region.flags>&region_flag_guarded)
+  src.sysmessage The guards would surely slay you where you stand if you unleash this in town.
+  return 1
+elseif (<ref1.isvalid>) && (<ref1.owner>) && (<ref1.owner> != <src>) && !(<src.isgm>)		//cannot cast on someones property, unless it's yours
+  src.sysmessage You cannot cast this there
+  return 1
+elseif (<eval (<src.curfollower>+2)> > <src.maxfollower>) && !(<src.isgm>)
+  if !((<src.region.isevent.r_champion_spawn>) && (<src.region.tag0.champactive>==1))
+    src.sysmessage You have too many followers to summon that creature.
+    return 1
+  endif
+endif
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+
+on=@success
+timerf 0,f_energy_vortex_success	//ACT is not available until after the create is created and placed by the player it seems..
+
+[function f_energy_vortex_success]
+ref1=<uid>	//player that cast it
+ref2=<act>	//should be the npc we just summoned
+if (<ref2.isvalid>) && (<ref2.ischar>)
+  ref2.setowner=<ref1>
+endif
+
+
+
+[EOF]

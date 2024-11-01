@@ -1,0 +1,217 @@
+//Huntsman/Mondains Horde System by Soulless
+//v1.0
+//12:29 PM 1/16/2022
+
+
+[chardef c_h_huntsman]
+defname=c_h_huntsman
+name=#names_humanmale the Huntsman
+id=c_man
+can=mt_usehands|mt_equip|mt_nonmover
+dam=15,20
+armor=20
+desires=i_gold
+tspeech=spk_human_prime
+tspeech=spk_needs
+tspeech=spk_rehello
+tspeech=spk_human_default
+tspeech=spk_huntsman
+tevents=e_human_hearunk
+tevents=e_human_needs
+tevents=e_human_convinit
+tevents=e_human_greet
+tevents=e_human_space
+tevents=e_human_refuse
+tevents=e_human_environ
+tevents=e_huntsman_guildmaster
+
+category=Custom
+subsection=Hunstman
+description=Huntsman (Male)
+ 
+on=@create
+	npc=brain_vendor
+	events=+e_huntsman_guildmaster
+	color=colors_skin
+	str={151 165}
+	dex={151 165}
+	int={151 165}
+	detectinghidden={90.0 100.0}
+	forensics={90.0 100.0}
+	fencing={90.0 100.0}
+	parrying={90.0 100.0}
+	swordsmanship={90.0 100.0}
+	wrestling={90.0 100.0}
+	macefighting={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={90.0 100.0}
+	itemnewbie=i_lantern
+	itemnewbie=random_male_hair
+	color=colors_hair
+	itemnewbie=random_facial_hair
+	color=match_hair
+
+on=@npcrestock
+	item=i_shirt_plain
+	color=colors_all
+	item=random_pants
+	color=colors_all
+	item=i_helm_closed
+	color=color_o_shadow
+	item=i_platemail_chest
+	color=color_o_shadow
+	item=i_platemail_arms
+	color=color_o_shadow
+	item=i_platemail_gloves
+	color=color_o_shadow
+	item=i_platemail_leggings
+	color=color_o_shadow
+	item=i_cape
+	color=color_o_rusty
+	item=i_sash
+	color=color_o_rusty
+	item=i_spear
+	color=color_o_silver
+	item=random_coin_purse
+
+[chardef c_h_huntsman_f]
+defname=c_h_huntsman_f
+name=#names_humanfemale the Huntsman
+id=c_woman
+can=mt_usehands|mt_equip|mt_nonmover
+dam=15,20
+armor=20
+desires=i_gold
+tspeech=spk_human_prime
+tspeech=jobguard
+tspeech=spk_needs
+tspeech=spk_rehello
+tspeech=spk_human_default
+tspeech=spk_huntsman
+tevents=e_human_hearunk
+tevents=e_human_needs
+tevents=e_human_convinit
+tevents=e_human_greet
+tevents=e_human_space
+tevents=e_human_refuse
+tevents=e_human_environ
+tevents=e_huntsman_guildmaster
+category=Custom
+subsection=Hunstman
+description=Huntsman (Female)
+
+on=@create
+	npc=brain_vendor
+	events=+e_huntsman_guildmaster
+	color=colors_skin
+	str={151 165}
+	dex={151 165}
+	int={151 165}
+	detectinghidden={90.0 100.0}
+	forensics={90.0 100.0}
+	fencing={90.0 100.0}
+	parrying={90.0 100.0}
+	swordsmanship={90.0 100.0}
+	wrestling={90.0 100.0}
+	macefighting={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={90.0 100.0}
+	itemnewbie=i_lantern
+	itemnewbie=random_female_hair
+	color=colors_hair
+
+on=@npcrestock
+	item=random_pants
+	color=colors_all
+	item=i_helm_closed
+	color=color_o_shadow
+	item=i_armor_female_plate
+	color=color_o_shadow
+	item=i_platemail_arms
+	color=color_o_shadow
+	item=i_platemail_gloves
+	color=color_o_shadow
+	item=i_platemail_leggings
+	color=color_o_shadow
+	item=i_cape
+	color=color_o_rusty
+	item=i_sash
+	color=color_o_rusty
+	item=i_spear
+	color=color_o_silver
+	item=random_coin_purse
+
+
+//////////////////////////////////////
+// Huntsman Allies that can be hired
+
+[chardef c_h_huntsman_fighter]
+defname=c_h_huntsman_fighter
+name=#names_humanmale the Huntsman
+id=c_man
+can=mt_walk|mt_run|mt_usehands|mt_equip
+dam=15,20
+armor=20
+desires=i_gold
+tspeech=spk_human_prime
+tspeech=jobguard
+tspeech=spk_needs
+tspeech=spk_rehello
+tspeech=spk_human_default
+tspeech=spk_huntsman
+tevents=e_human_hearunk
+tevents=e_human_needs
+tevents=e_human_convinit
+tevents=e_human_greet
+tevents=e_human_space
+tevents=e_human_refuse
+tevents=e_human_environ
+category=Custom
+subsection=Hunstman
+description=Huntsman (Male)
+
+on=@create
+	npc=brain_human
+	events=+e_huntsman_ally
+	color=colors_skin
+	str={151 165}
+	dex={151 165}
+	int={151 165}
+	detectinghidden={90.0 100.0}
+	forensics={90.0 100.0}
+	fencing={90.0 100.0}
+	parrying={90.0 100.0}
+	swordsmanship={90.0 100.0}
+	wrestling={90.0 100.0}
+	macefighting={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={90.0 100.0}
+	itemnewbie=i_lantern
+	itemnewbie=random_female_hair
+	color=colors_hair
+
+on=@npcrestock
+	item=random_pants
+	color=colors_all
+	item=i_helm_closed
+	color=color_o_shadow
+	item=i_platemail_chest
+	color=color_o_shadow
+	item=i_platemail_arms
+	color=color_o_shadow
+	item=i_platemail_gloves
+	color=color_o_shadow
+	item=i_platemail_leggings
+	color=color_o_shadow
+	item=i_cape
+	color=color_o_rusty
+	item=i_sash
+	color=color_o_rusty
+	item=i_sword_long
+	color=color_o_silver
+	item=i_shield_kite_metal
+	color=color_o_silver
+
+
+
+[EOF]

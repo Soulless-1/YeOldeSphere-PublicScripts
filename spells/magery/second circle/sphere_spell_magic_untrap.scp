@@ -1,0 +1,27 @@
+[SPELL 14]
+DEFNAME=s_magic_untrap
+NAME=Magic Untrap
+SOUND=snd_spell_magic_untrap
+RUNES=AJ
+CAST_TIME=1.0
+RESOURCES=i_reag_blood_moss,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_magic_untrap
+SCROLL_ITEM=i_scroll_magic_untrap
+FLAGS=spellflag_dir_anim|spellflag_targ_item|spellflag_playeronly
+EFFECT_ID=0
+EFFECT=0
+DURATION=0.0
+MANAUSE=6
+SKILLREQ=MAGERY 10.0
+INTERRUPT=100.0,100.0
+
+//Magic Untrap can be used to remove any traps set by the Magic Trap spell. This may be considered unnecessary due to the low damage caused by opening a magic trapped container.
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+if !(<isevent.t_magic_trapped_container>)
+  events=-t_magic_trapped_container
+  color=<ocolor>
+endif
+
+[EOF]

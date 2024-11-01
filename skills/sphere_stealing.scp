@@ -1,0 +1,402 @@
+
+[SKILL 33]
+DEFNAME=Skill_Stealing
+KEY=Stealing
+TITLE=Thief
+PROMPT_MSG=Which item will you attempt to steal?
+FLAGS=skf_scripted
+DELAY=4.0	//2.0
+STAT_STR=40
+STAT_INT=50
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=100
+BONUS_INT=0
+BONUS_STATS=10
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+
+on=@start
+//act = target
+//actprv = none
+ref1=<act>
+
+local.targetingfactor=3	
+if !(<ref1.isvalid>) 
+  return 1
+elseif (<ref1.attr>&attr_move_never) || (<ref1.attr>&attr_static) 
+  src.sysmessage You could not hope to steal that
+  return 1
+elseif (<ref1.topobj.isitem>) && ((<ref1.topobj> == <ref1>) || (<ref1.topobj.type> == t_corpse))
+  src.sysmessage You do not need to steal that.
+  return 1
+elseif (<ref1.ischar>)	 	//targeting a player or a container
+  ref1=<f_stealing_pick_random_item <ref1.topobj.findlayer.21>>		//find a random item in the players bag
+  local.targetingfactor=1
+elseif (<ref1.topobj.ischar>) && (<ref1.topobj.findlayer.21> == <ref1>)  
+  ref1=<f_stealing_pick_random_item <ref1.topobj.findlayer.21>>
+  local.targetingfactor=1
+endif
+
+act=<ref1>		//set act to the item we randomly selected, or targeted.
+if !(<ref1.isvalid>) 	//cannot find a stealable item on them, should only happen when they target someone with an empty bag, or nothing stealable inside
+  sysmessage There is nothing to steal.
+  return 1
+endif
+
+local.itemweight=<ref1.f_stealing_item_weight>
+local.maxweight=<src.f_stealing_max_weight>
+//serv.log <name>(<uid>) stealing from <ref1.name>(<ref1>); item weight <local.itemweight> max stealable weight <local.maxweight>
+
+if (<src.distance <ref1.topobj>> > 1) 	//General checks
+  sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <ref1.topobj>>)
+  sysmessage Target cannot be seen.
+  return 1
+elseif (<ref1.topobj.tag0.nostealing>)
+  sysmessage You cannot steal from them.
+  return 1
+elseif (<ref1.topobj.ischar>) && ( ((<ref1.topobj.isplayer>) && (<ref1.topobj.account.plevel> > <account.plevel>)) || (<ref1.topobj.isgm>) )
+  sysmessage You cannot steal from them.
+  return 1
+elseif (<ref1.topobj> == <src>)
+  sysmessage You catch yourself red handed.
+  return 1
+elseif (<findlayer.1>) || (<findlayer.2>) 
+  sysmessage You must have both hands free to attempt stealing.
+  return 1
+
+elseif (<src.tag0.faction>) && (<ref1.baseid>==i_faction_town_sigil)	//faction member stealing a sigil that isn't being held by someone
+  if (<src.stealing> < 0)	//should be 800
+    sysmessage You do not have enough skill to steal the sigil.
+    return 1
+  elseif (<src.flags>&statf_polymorph)
+    sysmessage You cannot steal the sigil while polymorphed. 
+    return 1
+  elseif (<src.flags>&statf_incognito)
+    sysmessage you cannot steal the sigil while are incognito.
+    return 1
+  elseif (<src.findid.i_rune_beastform>)
+    sysmessage you cannot steal the sigil while are in beastform.
+    return 1
+  elseif (<src.findid.i_rune_monster_form>)
+    sysmessage you cannot steal the sigil while are in monster form.
+    return 1
+  elseif (<src.findid.i_rune_chameleon>)
+    sysmessage you cannot steal the sigil as a chameleon
+    return 1
+  elseif  (<src.findid.i_tribal_paint_applied>)
+    src.sysmessage you cannot steal the sigil while wearing body paint.
+    return 1
+  elseif  (<src.findid.i_disguise_kit_incognito>)
+    src.sysmessage you cannot steal the sigil while disguised.
+    return 1
+  elseif (<src.findid.i_faction_leaving>)
+    sysmessage You are currently quitting a faction and cannot steal the town sigil.
+    return 1
+  elseif (<ref1.link.more2>==<src.tag0.faction>) && (<ref1.more2l> != 2)	//can't steal unless it's corrupted
+    sysmessage You cannot steal your own sigil.
+    return 1
+  elseif (<ref1.more2l>==3)		//0=purified, 1=being corrupted, 2=corrupted, 3=being purified
+    sysmessage You cannot steal this sigil until it has been purified.
+    return 1
+  elseif (<src.findid.i_faction_town_sigil>)
+    sysmessage You cannot steal the sigil because you already have a sigil.
+    return 1
+  elseif (<ref1.cont>)	//can you steal a sigil out of an enemies bag??
+    sysmessage You cannot steal this sigil where it is.
+    return 1
+  endif
+
+elseif !(<ref1.f_isstealable>)	//more general checks
+  sysmessage You cannot steal that item. 
+  return 1
+elseif (<local.itemweight> > <local.maxweight>)
+  sysmessage That is too heavy for you to steal.
+  return 1
+elseif (<eval <src.weight>+<local.itemweight>> > <maxweight>)
+  sysmessage Your backpack can't hold anything else.
+  return 1
+
+elseif (<ref1.topobj.ischar>)		//stealing from a character
+  if (<ref1.topobj.findlayer.<ref1.layer>>==<ref1>) 
+    sysmessage You cannot steal something being worn.
+    return 1
+  elseif (<ref1.topobj.flags>&statf_invul) || (<ref1.region.flags>&region_flag_safe)
+    sysmessage You cannot steal from them.
+    return 1
+  elseif (<ref1.topobj.baseid>==c_player_vendor) || (<ref1.topobj.baseid>==c_player_vendor_f)
+    sysmessage You cannot steal from them.
+    return 1
+  elseif (<ref1.topobj.npc>==brain_vendor)
+    sysmessage You cannot steal from shopkeepers.
+    return 1
+  elseif (<ref1.topobj.flags>&statf_conjured)
+    sysmessage You can't steal from this.
+    return 1
+  elseif (<ref1.topobj.ismonster>) && (<ref1.topobj.tag0.stolenfrom>)
+    sysmessage That creature has already ben stolen from. There is nothing left to steal.
+    return 1
+  elseif (<ref1.topobj.isplayer>) || ((<ref1.topobj.owner>) && (<ref1.topobj.owner.isplayer>) && (<ref1.topobj.owner> ! = <uid>))
+    if (<stealing> < 600)
+      sysmessage You cannot steal from a player at your current skill.
+      return 1
+    elseif !(<findid.i_npc_guild_thieves>) 
+      sysmessage You must be in the thieves guild to steal from other players.
+      return 1
+    endif
+  endif
+
+elseif (<ref1.topobj.isitem>)	//item is inside a container
+  	//shopkeeper containers? 
+endif
+
+if (<src.flags>&statf_hidden) || (<src.flags>&statf_invisible)
+  src.reveal
+endif
+
+local.skillmodifier=<eval (100+<src.stealing>)>
+
+forchars 10 
+  if (<canseelos <src.p>>) && ( <ref1.topobj> != <uid>) && (<src> != <uid>) 
+    local.witnesses += 1		//calculation changes if there are witnesses, and depends on how many
+  endif
+endfor  
+
+
+if !(<local.witnesses>)
+  local.difficulty=<eval ((((<local.itemweight>/10)*<local.targetingfactor>)*2000)/<local.skillmodifier>)>
+else
+  local.difficulty=<eval ((((<local.itemweight>/10)*<local.targetingfactor>)*30)+100)>
+endif
+
+local.success=<eval ((500+2*(<src.stealing>-<local.difficulty>))/10)>
+
+//serv.log <name>(<uid>) trying to steal <ref1.name>(<ref1>) from <ref1.topobj.name>(<ref1.topobj>). 
+//serv.log Skill Modifier : <local.skillmodifier>
+//serv.log Targeting Factor : <local.targetingfactor>
+//serv.log Item Weight : <local.itemweight> / Max : <local.maxweight>
+//serv.log Witness : <qval (<local.witnesses>)?Y:N>
+//serv.log Difficulty : <local.difficulty>
+//serv.log Successs : <local.success>
+
+if (<R1,100> > <local.success>)
+  actdiff=65535
+else
+  actdiff=0
+endif
+return 0
+
+ON=@Fail
+ref1=<uid>
+src.sysmessage You fail to steal the item.
+if (<src.flags>&statf_hidden) || (<src.flags>&statf_invisible)
+  src.reveal
+endif
+if (<ref1.topobj.ischar>)
+  //ref1.topobj.f_aggrievedby <src>
+  if (<ref1.topobj.notogetflag <src>,1> < 2) && (<ref1.topobj> != <src>)
+    if (<f_stealing_caught <ref1.topobj>>)
+      //forchars 8
+        //if (<uid> != <src>)
+          //sysmessage  You notice <src.name> trying to steal from <qval (<ref1.topobj>==<uid>)?you:<ref1.topobj.name>>.
+        //endif
+      //endfor
+      src.say You notice <src.name> trying to steal from <qval (<ref1.topobj>==<uid>)?you:<ref1.topobj.name>>.
+      ref1.topobj.f_thievedby <src>
+	  serv.newitem i_stolen_from
+      new.link=<src>
+      ref1.topobj.equip <new>
+      new.timer=120 
+	  src.criminal	//src.setcriminal 10
+    endif
+  endif
+endif
+
+
+ON=@Abort
+src.sysmessage You give up trying to steal the item.
+
+
+on=@success
+ref1=<act>
+if !(<ref1.isvalid>) 
+  return 1	//no target? cancel the skill
+endif
+
+if (<src.distance <ref1>> > 2)
+  src.sysmessage You have wandered too far away from your mark
+  return 1
+elseif (<ref1.topobj.ismonster>)
+  if !(<ref1.topobj.tag0.stolenfrom>)
+    ref1.topobj.tag0.stolenfrom=1
+  else
+    src.sysmessage That creature has already been stolen from. There is nothing left to steal.
+    return 1
+  endif
+endif
+
+src.sysmessage You successfully steal the item.
+ref1.topobj.f_thievedby <src>	
+serv.newitem i_stolen_from
+new.link=<src>
+ref1.topobj.equip <new>
+new.timer=120
+if (<src.flags>&statf_hidden) || (<src.flags>&statf_invisible)
+  src.reveal
+endif
+
+if (<ref1.baseid>==i_faction_town_sigil)
+
+  if (<ref1.link.baseid>==i_faction_town_monolith) 		//taking it from town monolith
+    src.events=+e_factions_carrying_sigil
+    src.f_faction_sigil_highlight 1
+    ref1.timer=30*60	//30*60
+    ref1.canmask |= can_o_nosleep 	//this shouldn't sleep since it needs to go through corruption phases
+    src.sysmessage @11 YOU STOLE THE SIGIL!!!
+    src.f_faction_announcement The <def0.faction_<src.dtag0.faction>> have stolen the <ref1.name>!
+    if (<ref1.link.baseid>==i_faction_monolith)	//taking it from an enemy faction, save the timer for grace period
+      ref1.tag0.gracetimer=<ref1.timer>
+      ref1.timer=30*60	//30 minutes left for this sigil to get back and keep its timer
+    endif
+
+  elseif (<ref1.link.baseid>==i_faction_monolith) 	//taking it from faction monolith, own or enemies
+    src.events=+e_factions_carrying_sigil
+    src.f_faction_sigil_highlight 1
+    ref1.timer=60*60		//60 minutes to get it back to the town monolith
+    if (<ref1.link.more2> != <src.tag0.faction>) 	//stealing from enemy faction
+      src.sysmessage @11 YOU STOLE THE SIGIL!!!
+      src.f_faction_announcement The <def0.faction_<src.dtag0.faction>> have stolen the <ref1.name>!
+    endif
+  endif
+endif
+
+if (<ref1.topobj.ischar>)
+  //ref1.topobj.f_aggrievedby <src>
+  if (<ref1.topobj.notogetflag <src>,1> < 2) && (<ref1.topobj> != <src>)
+    if (<f_stealing_caught <ref1.topobj>>)
+      //forchars 8
+        //if (<uid> != <src>)
+          //sysmessage You notice <src.name> trying to steal from <qval (<ref1.topobj>==<uid>)?you:<ref1.topobj.name>>.
+        //endif
+      //endfor
+      src.say You notice <src.name> trying to steal from <qval (<ref1.topobj>==<uid>)?you:<ref1.topobj.name>>.
+      src.criminal 	//src.setcriminal 10
+    endif
+  endif
+endif
+
+if (<ref1.amount> <= 1)
+  ref1.cont <src.findlayer.21>	//moving single item to bag,
+  ref1.update
+else	 //if its a pile of items, only take what we're able to steal in weight.
+  local.steal_amount=<ref1.f_stealing_pile_amount>
+  local.steal_amount=<R<eval <local.steal_amount>/2>,<local.steal_amount>>
+  local.steal_amount=<qval (<ref1.amount> < <local.steal_amount>)?<ref1.amount>:<local.steal_amount>>
+  ref1.consume <local.steal_amount>
+  serv.newdupe <ref1>
+  new.amount=<local.steal_amount>
+  new.cont=<src.findlayer.21>
+  new.update
+endif
+
+[function f_stealing_pick_random_item]		//just select the first item from the pack
+ref1=<args>
+if (<ref1.isvalid>) && (<ref1.count>)
+  local.item=<R0,(<ref1.count>-1)>
+  //serv.log first item selection <local.item>
+  ref2=<ref1.findcont.<local.item>>
+  //serv.log item name <ref2.name>
+  if (<ref2.isvalid>) && (<ref2.type>==t_container) && (<ref2.count>) 
+    while (<ref2.type>==t_container)
+      local.item=<R0,(<ref2.count>-1)>
+      //serv.log next item selection <local.item>
+      ref2=<ref2.findcont.<local.item>>
+      //serv.log item name <ref2.name>
+    endwhile
+  endif
+  return <ref2>
+endif
+return 0
+
+[function f_stealing_pile_amount]	//checked on item
+if !(<isitem>)	//only items have weight
+  return 0
+endif
+local.itemweight=<serv.itemdef.<baseid>.weight>
+local.itemweight=<qval (0 <= <local.itemweight>)?1:<local.itemweight>>
+local.maxweight=<eval (<src.stealing>/10)>
+local.steal_amount=<eval <local.maxweight>/<local.itemweight>>
+return <local.steal_amount>
+
+[function f_stealing_max_weight]	//checked on char
+local.maxweight=<eval (<stealing>/10)>
+return <local.maxweight>
+
+[function f_stealing_item_weight]	//checked on item
+local.itemweight=<eval <weight>/<amount>>
+local.itemweight=<qval (<local.itemweight> <= 0)?1:<local.itemweight>>	//all items must have a weight for stealing
+return <local.itemweight>
+
+[function f_isstealable]
+if (<type>==t_container) || (<type>==t_deed)
+  return 0
+elseif (<attr>&attr_newbie) || (<attr>&attr_blessed) || (<attr>&attr_blessed2) ||  (<attr>&attr_static) || (<attr>&attr_move_never) 
+  return 0
+elseif (<isevent.t_player_vendor_selling>) || (<isevent.ei_house_lockdown>) || (<isevent.ei_house_secure>) || (<isevent.t_mondains_horde_cache>)
+  return 0
+elseif (<type>==t_figurine) && (<morem> >= 1)
+  return 0
+elseif (<isitem>)
+  if (<isequipped>)
+    return 0 
+  elseif (<baseid>==i_huntsman_contract)
+    return 0
+  endif
+elseif (<topobj.ischar>)
+  if (<topobj.isgm>) || (<topobj.account.plevel> > 1) || (<topobj.flags>&statf_invul) || (<topobj.flags>&statf_stone)
+    return 0
+  endif
+endif
+//serv.log Checking to see if <name> is stealable? yes.
+return 1
+
+[function inthievesguild]
+if (<findid.i_npc_guild_thieves>)
+  return 1
+endif
+return 0
+
+[function f_stealing_caught]
+if (<stealing> <= <R1500>)
+  return 1
+endif
+
+[function stolenfrom]
+ref1=<args>	//suspected thief
+forcharlayer 30
+  if (<baseid> == i_stolen_from) && (<link> == <ref1>)
+    return 1
+  endif
+endfor
+return 0
+
+[itemdef i_stolen_from]
+defname=i_stolen_from
+name=Stolen From
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+
+
+
+
+
+
+
+[EOF]

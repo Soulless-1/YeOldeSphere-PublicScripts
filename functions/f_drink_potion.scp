@@ -1,0 +1,69 @@
+//Drink Potion Command by Soulless
+//v1.0
+//8:03 PM 8/21/2017
+
+
+[defname potion_command_settings]
+potion_command_heal		i_potion_healgreat,i_potion_heal,i_potion_healless
+potion_command_cure		i_potion_curegreat,i_potion_cure,i_potion_cureless
+potion_command_mana		i_potion_manatotal,i_potion_managreat,i_potion_mana,i_potion_manaless
+potion_command_restore		i_potion_restoregreat,i_potion_restore,i_potion_restoreless
+potion_command_strength		i_potion_strengthgreat,i_potion_strength,i_potion_strengthless
+potion_command_agility		i_potion_agilitygreat,i_potion_agility,i_potion_agilityless
+potion_command_cunning		i_potion_cunninggreat,i_potion_cunning,i_potion_cunningless
+potion_command_refresh		i_potion_refresh,i_potion_refreshtotal
+potion_command_invis		i_potion_invisibility
+potion_command_nsight		i_potion_nightsight
+potion_command_explo		i_potion_explosion
+potion_command_shrink		i_potion_shrink
+potion_command_freedom		i_potion_freedom
+
+
+[plevel 1]
+drink
+
+[function drink]
+ref1=<uid>
+if (<isempty <args>>) || (<isempty <def.potion_command_<args>>>)
+  sysmessage options: heal, cure, mana, refresh, restore, invis, nsight, explo, shrink, freedom
+  return 1
+endif
+
+if (<ref1.isvalid>) && (<def0.potion_command_<args>>)
+  args=<def0.potion_command_<args>>
+  for n 0 <eval (<argv>-1)>
+    local.potion=<argv[<local.n>]>
+    if (<findid.<local.potion>>)
+      ref2=<ref1.findid.<local.potion>>
+      if (<ref2.isvalid>) && (<ref2.type>==t_potion)
+        if (<ref1.flags>&statf_dead) || ((<ref1.flags>&statf_freeze) && !(strcmpi("<args>",freedom))) || (<ref1.flags>&statf_stone)
+          src.sysmessage You cannot drink a potion in your current state.
+          return 1
+        endif
+        //serv.log <ref1.name>(<ref1>) using <ref2.name>(<ref2>)
+        ref1.useitem <ref2>
+        return 1
+      endif
+    endif
+  endfor
+endif
+sysmessage You don't have any of those potions to use
+
+[function f_candrink_potion]	//not using this? 
+ref1=<uid>
+if (<def0.potion_command_<args>>)
+  args=<def0.potion_command_<args>>
+  for 0 <eval (<argv>-1)>
+    local.p=<argv[<local._for>]>
+    if (<findid.<local.p>>)
+      local.potionfound=1
+    endif
+  endfor
+endif
+if (<local.potionfound>)
+  return 1
+endif
+return 0
+
+
+[EOF]

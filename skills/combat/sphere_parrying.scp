@@ -1,0 +1,21 @@
+//Parrying is handled in the combat script	
+//10:46 PM 3/26/2018
+
+[SKILL 5]
+DEFNAME=SKILL_Parrying
+KEY=Parrying
+TITLE=Shieldfighter
+FLAGS=skf_fight
+ADV_RATE=1.0,1.0,1.0    //800.0,800.0,800.0
+EFFECT=0.0,90.0
+DELAY=2.0	//2.0,0.1
+STAT_STR=125
+STAT_INT=15
+STAT_DEX=125	//25
+BONUS_STR=50
+BONUS_DEX=50
+BONUS_INT=0
+BONUS_STATS=10
+
+
+[EOF]

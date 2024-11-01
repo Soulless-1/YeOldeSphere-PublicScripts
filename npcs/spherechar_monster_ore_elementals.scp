@@ -1,0 +1,254 @@
+//ore elementals should all go in here
+
+
+
+[chardef 107]
+defname=c_elem_agapite
+name=Agapite Elemental
+sound=268
+dam=28
+armor=32
+can=mt_walk|mt_run
+
+on=@create
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={30, 40}
+	resfire={40, 50}
+	rescold={40, 50}
+	respoison={30, 40}
+	resenergy={10, 20}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 150}
+	item=i_ore_agapite
+	item=random_jewel,2
+	//item=i_treasure_map1,R99
+
+[chardef 108]
+defname=c_elem_bronze
+name=Bronze Elemental
+sound=268
+dam=9, 16
+armor=29
+can=mt_walk|mt_run
+
+on=@create
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={30, 40}
+	resfire={30, 40}
+	rescold={10, 20}
+	respoison={70, 80}
+	resenergy={20, 30}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=5000
+	karma=-5000
+
+on=@npcrestock
+	item=i_gold,{125 150}
+	item=i_ore_bronze,25
+	item=random_jewels,2
+	//item=i_treasure_map1,R99
+
+[chardef 109]
+defname=c_elem_copper
+name=copper elemental
+dam=9, 16
+armor=26
+sound=268
+can=mt_walk|mt_run
+
+on=@create
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={30, 40}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={20, 30}
+	resenergy={10, 20}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=4800
+	karma=-4800
+
+on=@npcrestock
+	item=i_gold,{125 150}
+	item=i_ore_copper,25
+
+
+
+[chardef 110]
+defname=c_elem_dull_copper
+name=Dull Copper Elemental
+sound=268
+can=mt_walk|mt_run
+dam=9, 16
+armor=20
+
+on=@create
+	npc=brain_monster
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={30, 40}
+	resfire={30, 40}
+	rescold={10, 20}
+	respoison={20, 30}
+	resenergy={20, 30}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	item=i_ore_dull_copper
+	item=random_jewel,2
+	//item=i_treasure_map1,R99
+	//item=i_crystalline_blackrock
+
+[chardef 111]
+defname=c_elem_shadow_iron
+name=Shadow Iron Elemental
+id=111
+sound=268
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=9, 16
+armor=23
+
+
+on=@create
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={30, 40}
+	resfire={30, 40}
+	rescold={20, 30}
+	respoison={10, 20}
+	resenergy={30, 40}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=4500
+	karma=-4500
+
+on=@npcrestock
+	item=i_gold,{125 150}
+	item=i_ore_shadow
+	item=random_jewels,{2 4}
+	//item=i_treasure_map1,R99
+
+
+[chardef 112]
+defname=c_elem_valorite
+name=Valorite Elemental
+sound=268
+can=mt_walk|mt_run
+dam=28
+armor=38
+
+
+on=@create
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={65, 75}
+	resfire={50, 60}
+	rescold={50, 60}
+	respoison={50, 60}
+	resenergy={40, 50}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{450 650}
+	item=i_ore_valorite,25
+	item=random_jewels,{2 4}
+	//item=i_treasure_map1,R99
+
+
+[chardef 113]
+defname=c_elem_verite
+name=Verite Elemental
+sound=268
+can=mt_walk|mt_run
+dam=9, 16
+armor=35
+
+on=@create
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={30, 40}
+	resfire={10, 20}
+	rescold={50, 60}
+	respoison={50, 60}
+	resenergy={50, 60}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 150}
+	item=i_ore_verite,25
+	item=random_jewels,{2 4}
+	//item=i_treasure_map1,R99
+
+[chardef 166]
+defname=c_elem_gold
+name=Golden Elemental
+sound=268
+can=mt_walk|mt_run
+dam=9, 16
+armor=60
+
+on=@create
+	str={226, 255}
+	dex={126, 145}
+	int={71, 92}
+	maxhits={136, 153}
+	//resphysical={60, 75}
+	resfire={10, 20}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 1250}
+	item=i_ore_gold,25
+	//item=i_treasure_map1,R99
+	//item=i_crystalline_blackrock
+
+
+
+[EOF]

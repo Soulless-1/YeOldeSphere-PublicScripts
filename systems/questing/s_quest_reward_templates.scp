@@ -1,0 +1,170 @@
+//Quest reward templates
+
+[TEMPLATE tm_questbagtrinketssmall]
+CONTAINER=i_bag
+NAME=A Small Bag of Trinkets
+COLOR=0283
+EVENTS=t_smallbagtrinkets
+ITEM=i_gold,{300 700}
+
+[TYPEDEF t_smallbagtrinkets]
+ON=@Clienttooltip
+RANDMAGICITEM
+EVENTS -t_smallbagtrinkets
+RESENDTOOLTIP
+
+[TEMPLATE tm_questbagtrinkets]
+CONTAINER=i_bag
+NAME=A Bag of Trinkets
+COLOR=01bb
+EVENTS=t_bagtrinkets
+ITEM=i_gold,{800 2500}
+
+[TYPEDEF t_bagtrinkets]
+ON=@Clienttooltip
+FOR <R1,3>
+RANDMAGICITEM
+ENDFOR
+EVENTS -t_bagtrinkets
+RESENDTOOLTIP
+
+[TEMPLATE tm_questbagtreasure]
+CONTAINER=i_bag
+NAME=A Bag of Treasure
+COLOR=55
+EVENTS=t_bagtreasure
+ITEM=i_gold,{3000 6800}
+//ITEM=i_mapa_tesouro,1,R4
+
+[TYPEDEF t_bagtreasure]
+ON=@Clienttooltip
+FOR <R2,5>
+RANDMAGICITEM
+ENDFOR
+EVENTS -t_bagtreasure
+RESENDTOOLTIP
+
+[TEMPLATE tm_questlargebagtreasure]
+CONTAINER=i_bag
+NAME=A Large Bag of Treasure
+COLOR=04ac
+EVENTS=t_largebagtreasure
+ITEM=i_gold,{5000 12000}
+//ITEM=i_mapa_tesouro,1,R2
+//ITEM=i_mapa_tesouro,1,R6
+
+[TYPEDEF t_largebagtreasure]
+ON=@Clienttooltip
+FOR <R4,8>
+RANDMAGICITEM
+ENDFOR
+EVENTS -t_largebagtreasure
+RESENDTOOLTIP
+
+[TEMPLATE tm_queststrongbox]
+CONTAINER=i_box_brass
+NAME=A Strong Box
+EVENTS=t_strongbox
+ITEM=i_gold,{8000 16000}
+//ITEM=i_mapa_tesouro,1,R2
+//ITEM=i_mapa_tesouro,1,R6
+
+[TYPEDEF t_strongbox]
+ON=@Clienttooltip
+FOR <R6,12>
+RANDMAGICITEM
+ENDFOR
+IF !(<R3>)
+LOCAL.PREVNEW=<NEW>
+SERV.NEWITEM={minorartis}
+NEW.CONT=<UID>
+NEW.UPDATE
+NEW=<LOCAL.PREVNEW>
+ENDIF
+EVENTS -t_strongbox
+RESENDTOOLTIP
+
+[TYPEDEF t_craftsatchel]
+ON=@Clienttooltip
+IF !(<R4>)
+RANDMAGICITEM
+ENDIF
+EVENTS -t_craftsatchel
+RESENDTOOLTIP
+
+[TEMPLATE tm_questtailorcraftsatchel]
+CONTAINER=i_backpack
+NAME=Craftman's Satchel - Tailoring.
+EVENTS=t_craftsatchel
+ITEM=i_gold,{1000 1500}
+ITEM=i_cloth_bolt
+ITEM=i_sewing_kit
+ATTR=ATTR_NEWBIE
+ITEM=random_scroll
+ATTR=ATTR_NEWBIE
+// ITEM=i_white_pearl,1,R4
+
+[TEMPLATE tm_questcarpentercraftsatchel]
+CONTAINER=i_backpack
+NAME=Craftman's Satchel - Carpentry.
+EVENTS=t_craftsatchel
+ITEM=i_gold,{1000 1500}
+ITEM=i_saw
+ATTR=ATTR_NEWBIE
+// ITEM=i_white_pearl,1,R4
+// ITEM={i_log_fire 1 i_log_cold 1 i_log_poison 1 i_log_thunder 1},{1 2}
+
+[TEMPLATE  tm_questblacksmithcraftsatchel]
+CONTAINER=i_backpack
+NAME=Craftman's Satchel - Blacksmithing.
+EVENTS=t_craftsatchel
+ITEM=i_gold,{1000 1500}
+ITEM=i_ingot_iron,{8 20}
+ITEM=i_hammer_smith
+ATTR=ATTR_NEWBIE
+// ITEM=i_white_pearl,1,R4
+ITEM={i_deed_anvil 1 i_deed_forge_small 1 0 1}
+ITEM={i_ingot_bronze 1 i_ingot_copper 1 i_ingot_agapite 1 i_ingot_gold 1 i_ingot_dull_copper 1},{1 2}
+
+[TEMPLATE  tm_questtinkercraftsatchel]
+CONTAINER=i_backpack
+NAME=Craftman's Satchel - Tinkering.
+EVENTS=t_craftsatchel
+ITEM=i_gold,{1000 1500}
+ITEM=i_ingot_iron,{8 30}
+ITEM=i_tinker_tools
+ATTR=ATTR_NEWBIE
+// ITEM=i_white_pearl,1,R5
+ITEM=random_jewel,{1 5}
+
+[TEMPLATE  tm_questbowcraftcraftsatchel]
+CONTAINER=i_backpack
+NAME=Craftman's Satchel - Bowcrafting.
+EVENTS=t_craftsatchel
+ITEM=i_gold,{1000 1500}
+ITEM=i_log,{10 20}
+ITEM=i_dagger
+ATTR=ATTR_NEWBIE
+// ITEM=i_white_pearl,1,R5
+// ITEM={i_log_fire 1 i_log_cold 1 i_log_poison 1 i_log_thunder 1},{1 2}
+
+[TEMPLATE  tm_questminingcraftsatchel]
+CONTAINER=i_backpack
+NAME=Craftman's Satchel - Mining.
+EVENTS=t_craftsatchel
+ITEM=i_gold,{1000 1500}
+ITEM=i_pickaxe
+ATTR=ATTR_NEWBIE
+ITEM={i_ore_bronze 1 i_ore_copper 1 i_ore_agapite 1 i_ore_gold 1 i_ore_silver 1 i_ore_dull_copper 1 i_ore_old_copper 1},{1 2}
+
+[TEMPLATE  tm_questalchemycraftsatchel]
+CONTAINER=i_backpack
+NAME=Craftman's Satchel - Alchemy.
+EVENTS=t_craftsatchel
+ITEM=i_gold,{1000 1500}
+ITEM=random_reagents,{10 30}
+ITEM=i_mortar_pestle
+ATTR=ATTR_NEWBIE
+ITEM=i_bottle_empty,{3 10}
+
+[EOF]

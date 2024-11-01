@@ -1,0 +1,805 @@
+//All elemental type creatures go here
+
+[CHARDEF 13]
+DEFNAME=c_elem_air
+NAME=Air Elemental
+SOUND=655
+ICON=i_pet_elem_air
+dam=8, 10
+armor=40
+CAN=MT_WALK|MT_FLY
+FOODTYPE=
+DESIRES=r_mountains
+BLOODCOLOR=colors_white
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Air Elemental
+
+ON=@Create
+	tag.controlslots=2
+	NPC=brain_monster
+	color=04001
+	str={126, 155}
+	dex={166, 185}
+	int={101, 125}
+	maxhits={76, 93}
+	resphysical={35, 45}
+	resfire={15, 25}
+	rescold={10, 20}
+	respoison={10, 20}
+	resenergy={25, 35}
+	evaluatingintel={60.1, 75.0}
+	magery={60.1, 75.0}
+	magicresistance={60.1, 75.0}
+	tactics={60.1, 80.0}
+	wrestling={60.1, 80.0}
+	fame=4500
+	karma=-4500
+	make_spellcaster 3,7
+
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	//item={random_second_circle 1 random_third_circle 1}
+	//item=i_treasure_map1,R99
+
+[CHARDEF 14]
+DEFNAME=c_elem_earth
+NAME=Earth Elemental
+SOUND=268
+ICON=i_pet_elem_earth
+dam=9, 16
+armor=34
+RESOURCES=8 tm_rocks
+CAN=MT_WALK
+FOODTYPE=15 t_arock,t_coin,t_ore,t_ingot
+DESIRES=r_caves
+BLOODCOLOR=colors_brown
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Earth Elemental
+
+ON=@Create
+	tag.controlslots=2
+	npc=brain_monster
+	str={126, 155}
+	dex={66, 85}
+	int={71, 92}
+	maxhits={76, 93}
+	resphysical={30, 35}
+	resfire={10, 20}
+	rescold={10, 20}
+	respoison={15, 25}
+	resenergy={15, 25}
+	magicresistance={50.1, 95.0}
+	tactics={60.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=3500
+	karma=-3500
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=random_jewel
+	item=i_ore_iron,5
+	item=i_reag_fertile_dirt,{1 4}
+	item=i_reag_mandrake_root
+
+[CHARDEF 15]
+DEFNAME=c_elem_fire
+NAME=Fire Elemental
+SOUND=838
+ICON=i_pet_elem_fire
+dam=7, 9
+armor=40
+RESOURCES=
+CAN=MT_WALK|MT_RUN|MT_USEHANDS	//|MT_FIRE_IMMUNE
+FOODTYPE=t_fire
+DESIRES=t_LAVA
+BLOODCOLOR=colors_red
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Fire Elemental
+
+ON=@Create
+	tag.controlslots=2
+	NPC=brain_monster
+	str={126, 155}
+	dex={166, 185}
+	int={101, 125}
+	maxhits={76, 93}
+	resphysical={35, 45}
+	resfire={60, 80}
+	rescold={5, 10}
+	respoison={30, 40}
+	resenergy={30, 40}
+	evaluatingintel={60.1, 75.0}
+	magery={60.1, 75.0}
+	magicresistance={75.2, 105.0}
+	tactics={80.1, 100.0}
+	wrestling={70.1, 100.0}
+	fame=4500
+	karma=-4500
+    make_spellcaster 3,5
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=random_jewel
+	item=i_reag_sulfur_ash
+
+ON=@NPCSpecialAction
+	serv.newitem i_fx_field_fire_ns
+        new.attr=013 
+	new.canmask |= can_o_nosleep
+        new.more2=<uid>
+        new.timer=<R20,30>
+	new.p=<p>
+ 	return 1
+
+ON=@Death
+	// Create death explosion to damage those nearby.
+	serv.newitem=i_fx_explode
+	new.type=t_explosion
+	new.attr=attr_move_never|attr_decay
+	new.link=<uid>
+	new.morex=10 // damage
+	new.morey=090 // wFlags DAMAGE_GENERAL
+	new.morez=2 // iDist
+	new.p=<p>
+	new.timer=1 // immediate decay
+
+
+
+[CHARDEF 16]
+DEFNAME=c_elem_water
+NAME=Water Elemental
+SOUND=278
+ICON=i_pet_elem_water
+dam=7, 9
+armor=40
+RESOURCES=8 t_MAGIC
+CAN=MT_WALK|MT_SWIM|MT_USEHANDS
+FOODTYPE=t_water_wash
+DESIRES=r_WATER
+BLOODCOLOR=colors_blue
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Water Elemental
+
+ON=@Create
+	tag.controlslots=2
+	NPC=brain_monster
+	str={126, 155}
+	dex={66, 85}
+	int={101, 125}
+	maxhits={76, 93}
+	resphysical={35, 45}
+	resfire={10, 25}
+	rescold={10, 25}
+	respoison={60, 70}
+	resenergy={5, 10}
+	evaluatingintel={60.1, 75.0}
+	magery={60.1, 75.0}
+	magicresistance={100.1, 115.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 70.0}
+	fame=4500
+	karma=-4500
+	make_spellcaster 3,7
+
+ON=@NPCRestock
+	item=i_gold,{17 225}
+	item=random_potion
+	item=i_reag_black_pearl,3
+	//item=i_treasure_map2,R99
+
+
+[CHARDEF 159]
+DEFNAME=c_elem_blood
+NAME=Blood Elemental
+ID=c_elem_water
+SOUND=278
+dam=17, 27
+armor=60
+RESOURCES=
+CAN=MT_WALK
+DESIRES=r_dungeon
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Blood Elemental
+
+ON=@Create
+	NPC=BRAIN_MONSTER
+	color=colors_blood
+	str={526, 615}
+	dex={66, 85}
+	int={226, 350}
+	maxhits={316, 369}
+	resphysical={55, 65}
+	resfire={20, 30}
+	rescold={40, 50}
+	respoison={50, 60}
+	resenergy={30, 40}
+	evaluatingintel={85.1, 100.0}
+	magery={85.1, 100.0}
+	meditation={10.4, 50.0}
+	magicresistance={80.1, 95.0}
+	tactics={80.1, 100.0}
+	wrestling={80.1, 100.0}
+	fame=12500
+	karma=-12500
+	make_spellcaster 6,7
+
+ON=@NPCRestock
+	item=i_gold,{700 900}
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+[CHARDEF c_elem_blood_tainted]
+DEFNAME=c_elem_blood_tainted
+NAME=Tainted Blood Elemental
+ID=c_elem_water
+SOUND=278
+dam=19, 29
+armor=80
+RESOURCES=
+CAN=MT_WALK
+DESIRES=r_dungeon
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Tainted Blood Elemental
+
+ON=@Create
+	NPC=BRAIN_MONSTER
+	color=0518
+	str={826, 915}
+	dex={166, 185}
+	int={426, 550}
+	maxhits={316, 369}
+	resphysical={55, 65}
+	resfire={20, 30}
+	rescold={40, 50}
+	respoison={50, 60}
+	resenergy={30, 40}
+	evaluatingintel={95.1, 110.0}
+	magery={95.1, 110.0}
+	meditation={20.4, 60.0}
+	magicresistance={90.1, 105.0}
+	tactics={90.1, 110.0}
+	wrestling={90.1, 110.0}
+	fame=12500
+	karma=-12500
+	make_spellcaster 6,7
+
+ON=@NPCRestock
+	item=i_gold,{700 900}
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+
+[CHARDEF 161]
+DEFNAME=c_elem_ice
+NAME=Ice Elemental
+SOUND=268
+ICON=i_pet_elem_earth
+dam=10, 21
+armor=40
+CAN=MT_WALK
+RESOURCES=8 t_magic
+DESIRES=r_caves
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Ice Elemental
+
+ON=@Create
+	COLOR=color_ice
+	str={156, 185}
+	dex={96, 115}
+	int={171, 192}
+	maxhits={94, 111}
+	resphysical={35, 45}
+	resfire={5, 10}
+	rescold={50, 60}
+	respoison={20, 30}
+	resenergy={20, 30}
+	evaluatingintel={10.5, 60.0}
+	magery={10.5, 60.0}
+	magicresistance={30.1, 80.0}
+	tactics={70.1, 100.0}
+	wrestling={60.1, 100.0}
+	fame=4000
+	karma=-4000
+
+on=@npcrestock
+	item=i_gold,{275 325}
+	item=random_jewel
+	item=random_jewel
+	item=i_reag_black_pearl
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+
+[CHARDEF 131]
+DEFNAME=c_efreet
+NAME=Efreet
+SOUND=768
+ICON=i_pet_elem_air
+dam=11, 13
+armor=56
+RESOURCES=8 t_magic
+CAN=MT_WALK
+FOODTYPE=
+DESIRES=r_mountains
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Efreet
+
+ON=@Create
+	npc=brain_monster
+	str={326, 355}
+	dex={266, 285}
+	int={171, 195}
+	maxhits={196, 213}
+	resphysical={50, 60}
+	resfire={60, 70}
+	respoison={30, 40}
+	resenergy={40, 50}
+	evaluatingintel={60.1, 75.0}
+	magery={60.1, 75.0}
+	magicresistance={60.1, 75.0}
+	tactics={60.1, 80.0}
+	wrestling={60.1, 80.0}
+	fame=10000
+	karma=-10000
+	make_spellcaster 2,5
+
+ON=@NPCRestock
+	item=i_gold,{400 500}
+	//item=daemon_bone_armor
+	//item=i_treasure_map4,R99
+
+
+[CHARDEF 162]
+DEFNAME=c_elem_poison
+NAME=Poison Elemental
+ID=c_elem_air
+SOUND=263
+ICON=i_pet_elem_air
+CAN=MT_WALK
+dam=12, 18
+armor=70
+RESOURCES=3 t_magic
+DESIRES=r_dungeon
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Poison Elemental
+
+ON=@Create
+	npc=brain_monster
+	color=046
+	str={426, 515}
+	dex={166, 185}
+	int={361, 435}
+	maxhits={256, 309}
+	resphysical={60, 70}
+	resfire={20, 30}
+	rescold={20, 30}
+	respoison={100}
+	resenergy={40, 50}
+	evaluatingintel={80.1, 95.0}
+	magery={80.1, 95.0}
+	meditation={80.2, 120.0}
+	poisoning={ 90.1, 100.0}
+	magicresistance={85.2, 115.0}
+	tactics={80.1, 100.0}
+	wrestling={70.1, 90.0}
+	fame=12500
+	karma=-12500
+    make_spellcaster 3,6
+	
+ON=@NPCRestock
+	item=i_gold,{750 950}
+	item=i_reag_nightshade,4
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	item=i_potion_poisonless
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+
+[CHARDEF 163]
+DEFNAME=c_elem_snow
+NAME=Snow Elemental
+SOUND=263
+ICON=i_pet_elem_earth
+can=mt_walk|mt_run
+dam=11, 17
+armor=50
+RESOURCES=8 t_magic
+DESIRES=r_mountains
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Snow Elemental
+
+ON=@Create
+	NPC=brain_monster
+	color=0481
+	str={326, 355}
+	dex={166, 185}
+	int={71, 95}
+	maxhits={196, 213}
+	resphysical={45, 55}
+	resfire={10, 15}
+	rescold={60, 70}
+	respoison={25, 35}
+	resenergy={25, 35}
+	magicresistance={50.1, 65.0}
+	tactics={80.1, 100.0}
+	wrestling={80.1, 100.0}
+	fame=5000
+	karma=-5000
+
+
+ON=@NPCRestock
+	item=i_gold,{250 350}
+	item=i_ore_iron,3
+	item=i_reag_black_pearl,3
+	//item=i_treasure_map2,R99
+
+
+[chardef 300]
+defname=c_elem_crystal
+defname2=c_crystal_elemental
+NAME=Crystal Elemental
+SOUND=278
+ICON=i_pet_crystalelemental
+dam=10, 15
+armor=54
+//RESDISPDNID=c_elem_air
+//RESLEVEL=3
+//RESDISPDNHUE=55
+ARMOR=20
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Crystal Elemental
+
+ON=@Create
+	npc=brain_monster
+	str={136, 160}
+	dex={51, 65}
+	int={86, 110}
+	maxhits={150}
+	resphysical={50, 60}
+	resfire={40, 50}
+	rescold={40, 50}
+	respoison={100}
+	resenergy={55, 70}
+	evaluatingintel={70.1, 75.0}
+	magery={70.1, 75.0}
+	meditation={65.1, 75.0}
+	magicresistance={80.1, 90.0}
+	tactics={75.1, 85.0}
+	wrestling={65.1, 75.0}
+	fame=6500
+	karma=-6500
+	make_spellcaster 1,8
+
+ON=@NpcRestock
+	item=i_gold,{400 500}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+
+[CHARDEF 09e]
+DEFNAME=c_elem_acid
+NAME=acid elemental
+ICON=i_pet_elem_water
+SOUND=snd_elementl_watrel1
+CAN=MT_WALK|MT_SWIM|MT_NONHUM
+dam=9, 15
+armor=70
+DESIRES=t_coin,t_gold,t_gem,t_wand,t_potion,t_scroll,t_reagent
+AVERSIONS=t_trap,r_civilization
+BLOODCOLOR=colors_green
+//tevents=+e_elemental_shards
+CATEGORY=Monsters
+SUBSECTION=Elementals
+DESCRIPTION=Elemental (acid)
+
+ON=@Create
+   	NPC=brain_monster
+	str={326, 355}
+	dex={66, 85}
+	int={271, 295}
+	maxhits={196, 213}
+	resphysical={60, 70}
+	resfire={20, 30}
+	rescold={20, 30}
+	respoison={100}
+	resenergy={40, 50}
+	anatomy={30.3, 60.0}
+	evaluatingintel={80.1, 95.0}
+	magery={70.1, 85.0}
+	meditation={0.0, 0.0}
+	magicresistance={60.1, 85.0}
+	tactics={80.1, 90.0}
+	wrestling={70.1, 90.0}
+	fame=10000
+	karma=-10000
+
+ON=@NPCRestock
+	item=i_gold,{400 500}
+	//item=tm_magic_items
+	//item=i_treasure_map2,R99
+
+[CHARDEF 199]
+Name=Rai-Ju
+DEFNAME=c_rai_ju
+ICON=i_pet_raiju
+SOUND=0346
+CAN=MT_WALK|MT_RUN
+dam=12, 15
+ARMOR=15
+//RESDISPDNID=c_elem_air
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Rai-Ju
+
+on=@create
+	NPC=BRAIN_MONSTER
+	str={151, 225}
+	dex={81, 135}
+	int={176, 180}
+	maxhits={201, 280}
+	resphysical={45, 65}
+	resfire={70, 85}
+	rescold={30, 60}
+	respoison={50, 70}
+	resenergy={60, 80}
+	wrestling={85.1, 95.0}
+	tactics={55.1, 65.0}
+	magicresistance={110.1, 125.0}
+	anatomy={25.1, 35.0}
+	fame=8000
+	karma=-8000
+
+on=@npcrestock
+	item=i_gold,{550 650}
+	//item=tm_magic_items
+	item=random_jewel,2
+
+[CHARDEF 196]
+Name=Kaze Kemono
+DEFNAME=c_kaze_kemono
+CAN=MT_WALK|MT_RUN
+ICON=i_pet_kazekemono
+sound=655
+dam=15, 20
+ARMOR=35
+//RESDISPDNID=c_elem_air
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Kaze Kemono
+
+on=@create
+	NPC=BRAIN_MONSTER
+	str={201, 275}
+	dex={101, 155}
+	int={101, 105}
+	maxhits={251, 330}
+	resphysical={50, 70}
+	resfire={30, 60}
+	rescold={30, 60}
+	respoison={50, 70}
+	resenergy={60, 80}
+	magicresistance={110.1, 125.0}
+	tactics={55.1, 65.0}
+	wrestling={85.1, 95.0}
+	anatomy={25.1, 35.0}
+	magery={95.1, 105.0}
+	fame=8000
+	karma=-8000
+
+on=@npcrestock
+	item=i_gold,{550 650}
+	//item=tm_magic_items
+	item=random_jewel,2
+
+
+[chardef 790]
+defname=c_Sand_Vortex
+name=Sand Vortex
+sound=263
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=3, 16
+armor=28
+
+on=@create
+	npc=brain_monster
+	str={96, 120}
+	dex={171, 195}
+	int={76, 100}
+	maxhits={51, 62}
+	resfire={60, 70}
+	rescold={60, 70}
+	respoison={60, 70}
+	resenergy={60, 70}
+	magicresistance={150.0}
+	tactics={70.0}
+	wrestling={80.0}
+	fame=4500
+	karma=-4500
+
+on=@npcrestock
+	item=i_gold,{100 150}
+	item=random_bones
+	//item=i_treasure_map4,R99
+
+
+[chardef c_elem_toxic]
+defname=c_elem_toxic
+id=c_elem_acid
+name="Toxic Elemental
+sound=278
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=9, 15
+armor=40
+
+on=@create
+	npc=brain_monster
+	str={326, 355}
+	dex={66, 85}
+	int={271, 295}
+	maxhits={196, 213}
+	resphysical={45, 55}
+	resfire={40, 50}
+	rescold={20, 30}
+	respoison={10, 20}
+	resenergy={30, 40}
+	anatomy={30.3, 60.0}
+	evaluatingintel={70.1, 85.0}
+	magery={70.1, 85.0}
+	magicresistance={60.1, 75.0}
+	tactics={80.1, 90.0}
+	wrestling={70.1, 90.0}
+	fame=10000
+	karma=-10000
+
+on=@npcrestock
+	item=i_gold,{400 500}
+	//item=tm_magic_items
+	//item=i_treasure_map2,R99
+
+
+[chardef c_Crystal_Vortex]
+defname=c_Crystal_Vortex
+name=crystal vortex
+id=c_elem_air
+sound=0107
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=15, 20
+
+on=@create
+	npc=brain_monster
+	color=02B2
+	str={800, 900}
+	dex={500, 600}
+	int={200}
+	maxhits={350, 400}
+	maxmana={0}
+	//resphysical={60, 80}
+	resfire={0, 10}
+	rescold={70, 80}
+	respoison={40, 50}
+	resenergy={60, 90}
+	magicresistance={120.0}
+	tactics={120.0}
+	wrestling={120.0}
+	fame=17000
+	karma=-17000
+
+[chardef c_elem_poison_greater]
+defname=c_elem_poison_greater
+id=c_elem_poison
+name=Greater Poison Elemental
+sound=263
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=12, 18
+armor=70
+
+on=@create
+	npc=brain_monster
+	color=667
+	str={700, 771}
+	dex={195, 203}
+	int={650, 691}
+	maxhits={650, 702}
+	maxstam={300, 322}
+	maxmana={500, 530}
+	resphysical={60, 70}
+	resfire={20, 30}
+	rescold={20, 30}
+	respoison={100}
+	resenergy={40, 50}
+	evaluatingintel={80.1, 110.0}
+	magery={80.1, 97.0}
+	meditation={80.2, 105.8}
+	poisoning={ 100.1, 114.9}
+	magicresistance={85.2, 93.2}
+	tactics={80.1, 100.0}
+	wrestling={75.0, 88.3}
+	detectinghidden={71.5}
+	fame=12500
+	karma=-12500
+	make_spellcaster 3,6
+
+on=@npcrestock
+	item=i_gold,{1175 1300}
+	item=i_reag_nightshade,4
+	item=i_potion_poisonless
+	//item={random_fourth_circle 1 random_fifth_circle 1 random_sixth_circle 1 random_seventh_circle 1}
+	//item=tm_magic_items,6
+	item=i_ancient_pottery_fragments
+	item=i_ancient_scroll_remnant
+	//item=i_treasure_map5,R99
+
+
+[chardef 720]
+defname=c_elem_lava
+name=lava elemental
+sound=060A
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=12, 18
+
+on=@create
+	npc=brain_monster
+	str={446, 510}
+	dex={160, 190}
+	int={360, 430}
+	maxhits={270, 290}
+	//resphysical={60, 70}
+	resfire={20, 30}
+	rescold={20, 30}
+	respoison={100}
+	resenergy={40, 50}
+	evaluatingintel={84.8, 92.6}
+	magery={80.0, 92.7}
+	meditation={97.8, 120.0}
+	magicresistance={101.9, 106.2}
+	tactics={80.3, 94.0}
+	wrestling={71.7, 85.4}
+	poisoning={ 90.0, 100.0}
+	detectinghidden={75.1}
+	fame=12250
+	karma=-12250
+
+on=@Npcrestock
+	item=i_gold,{800 1000}
+	item=i_potion_poisonless
+	item=random_reagent,9
+	item=random_jewel,2
+	//ITEM=random_scroll1
+	//item=tm_magic_items,{4 5}
+	item=i_lava_serpent_crust
+	item=i_tattered_scroll
+	item=i_pottery_fragments
+	//item=i_treasure_map5,R99
+
+
+
+
+[EOF]

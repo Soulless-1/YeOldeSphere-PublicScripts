@@ -1,0 +1,114 @@
+//Corpse Cutting By Soulless v1.0
+//v1.0
+//Replaces old corpse cutting with new animated version that drops player contents in a bone container
+//keeps notoriety color, only morphs the corpse ID and adds the body parts
+//tags the body parts with serv.time now to track how old they are
+
+[events e_corpse_cutting]
+
+on=@ItemTargon_Item
+if (<act.type>==t_weapon_sword) || (<act.type>==t_weapon_mace_sharp) || (<act.type>==t_weapon_fence) || (<act.type>==t_weapon_axe)
+  if (<src.targ.type> == t_corpse) && (<src.targ.iscorpsehuman>) 
+    if (<src.targ.distance> > 2)
+      src.sysmessage That is too far away.
+      return 1
+    elseif !(<src.canseelos <src.targ.p>>)
+      src.sysmessage You cannot see the target.
+      return 1
+    elseif (<src.targ.more1>==1) || (<src.region.safe>) || ((<src.targ.link> != 04fffffff) && (<src.targ.link.isgm>))
+      src.sysmessage This corpse is immune to your attempt at carving it.
+      return 1
+    endif
+    if (<src.targ.link> != <src.uid>)
+      if (<src.targ.link> != 04fffffff) && ((<src.tag0.newbie>) || (<src.targ.link.tag0.newbie>))
+        src.sysmessage You cannot carve this corpse 
+        return 1
+      endif
+      if (<src.targ.link> != 04fffffff)		//must be player, npcs have no links
+        if (<src.targ.link.notogetflag <src>> == 1)
+          src.criminal		//go criminal for cutitng an innocent corpse up
+        endif
+      endif
+    endif
+    src.anim 11
+    src.sound 319
+    src.timerf 1,anim 11
+    src.timerf 1,sound 319
+    src.targ.dispid={0eca 0ed2}
+    src.targ.color=0
+    src.targ.more1=1
+    //src.targ.name=remains of <src.targ.link.name>
+    src.targ.f_corpse_disturbed=<uid>	
+    src.targ.updatex
+    f_make_blood 5
+    f_corpse_cutting_make_body_part i_blood_pool_large
+    f_corpse_cutting_make_body_part i_flesh_head
+    f_corpse_cutting_make_body_part i_flesh_torso
+    f_corpse_cutting_make_body_part i_flesh_left_arm
+    f_corpse_cutting_make_body_part i_flesh_right_arm
+    f_corpse_cutting_make_body_part i_flesh_left_leg
+    f_corpse_cutting_make_body_part i_flesh_right_leg
+    return 1
+
+  elseif (<src.targ.baseid>==i_flesh_head)
+    src.targ.consume
+    serv.newitem i_human_meat_scraps_raw,1,<src.findlayer.21>
+    serv.newitem i_bone_skull,1,<src.findlayer.21>
+    serv.newitem i_flesh_brain,1,<src.findlayer.21>
+    src.anim 11
+    src.sound 319
+  elseif (<src.targ.baseid>==i_flesh_torso)
+    src.targ.consume
+    serv.newitem i_human_meat_ribs_raw,2,<src.findlayer.21>
+    serv.newitem i_human_meat_scraps_raw,4,<src.findlayer.21>
+    serv.newitem i_bone_ribcage,1,<src.findlayer.21>
+    serv.newitem i_flesh_heart,1,<src.findlayer.21>
+    serv.newitem i_flesh_liver,1,<src.findlayer.21>
+    serv.newitem i_flesh_entrails,1,<src.findlayer.21>
+    src.anim 11
+    src.sound 319
+  elseif (<src.targ.baseid>==i_flesh_left_arm) || (<src.targ.baseid>==i_flesh_right_arm) || (<src.targ.baseid>==i_flesh_left_leg) || (<src.targ.baseid>==i_flesh_right_leg)    
+    src.targ.consume
+    serv.newitem i_human_meat_scraps_raw,2,<src.findlayer.21>
+    serv.newitem i_bone,1,<src.findlayer.21>
+    src.anim 11
+    src.sound 319
+  endif
+
+endif
+
+[function f_corpse_cutting_make_body_part]
+serv.newitem <args>
+if (<src.targ.link> != 04fffffff)
+  new.link=<src.targ.link>
+  new.name=<new.name> of <new.link.name>
+  new.events=+t_player_body_part
+  new.timestamp=<serv.time>
+endif
+new.p=<src.targ.P>
+new.nudgeup 1
+new.attr |= attr_decay
+new.timer=<eval (<serv.DecayTimer>*60)>
+
+[typedef t_player_body_part]
+//link = player it was chopped from
+//timestamp = time it was created
+
+[itemdef i_human_meat_scraps_raw]
+defname=i_human_meat_scraps_raw
+id=0979
+name=human meat scraps
+type=t_meat_raw
+tevents=t_human_meat
+
+[itemdef i_human_meat_ribs_raw]
+defname=i_human_meat_ribs_raw
+id=09f1
+name=human ribs
+type=t_meat_raw
+tevents=t_human_meat
+
+[typedef t_human_meat]
+
+
+[EOF]

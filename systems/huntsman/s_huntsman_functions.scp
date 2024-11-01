@@ -1,0 +1,276 @@
+//Huntsman/Mondains Horde System by Soulless
+//v1.0
+//12:29 PM 1/16/2022
+
+
+
+[function f_generate_horde_monster]	//validate npc
+local.npc=<def0.random_monsters_veryeasy>
+local.amount=<eval <argv[0]>/5>
+for 0 <argv[0]>
+  serv.newnpc <local.npc>
+  ref1=<new>
+  ref1.f_mondains_horde_npc_join
+  ref1.f_horde_place_monster
+  if (<local.n> >= <local.amount>)
+    local.n=
+    local.x += 1  
+    doswitch <local.x>
+      local.npc=<def0.random_monsters_veryeasy>
+      local.npc=<def0.random_monsters_easy>
+      local.npc=<def0.random_monsters_medium>
+      local.npc=<def0.random_monsters_hard>
+      local.npc=<def0.random_monsters_veryhard>
+    enddo
+  endif
+  local.n += 1
+endfor
+
+[function f_remove_mondains_horde]
+forchars 9999
+  if (<isevent.e_mondains_horde>)  
+    remove
+  endif
+endfor
+
+[function f_mondains_horde_npc_join]	//use on npcs to join Mondain's Horde
+ref1=<uid>
+if !(<ref1.npc>)
+  serv.log Attempted to add player character <ref1.name>(<ref1>) to Mondain's Horde, preventing.
+  return 1
+endif
+local.modifier=<R1,5>
+ref1.make_stronger <eval (50*<local.modifier>)>
+ref1.events=+e_mondains_horde
+ref1.color=<eval 1752+(<ref1.tag0.mondains_horde_rank>*5)>
+ref1.name=#NAMES_Borg_Male	//#names_daemon
+ref1.taming=0		//shouldnt be able to tame any of these npcs
+for <local.modifier>		//chance to have special abilities
+  if !(<R5>)
+    dorand 5
+      begin
+        ref1.events=+e_enraged
+        ref1.color=066d
+      end
+      begin
+        ref1.events=+e_burning_aura
+        ref1.color=0489
+      end
+      begin
+        ref1.events=+e_frozen_aura
+        ref1.color=0480
+      end
+      begin
+        ref1.events=+e_spectral
+        ref1.color=05555
+      end
+      begin
+        ref1.events=+e_summoner
+        ref1.color=0482
+      end
+    enddo
+  endif
+endfor
+ref1.tag.mondains_horde_rank=<eval (<ref1.tag0.base_difficulty>/50)>
+ref1.tag.mondains_horde_rank=<qval (<ref1.tag0.mondains_horde_rank> <= 0)?1:<qval (5 < <ref1.tag0.mondains_horde_rank>)?5:<ref1.tag0.mondains_horde_rank>>>
+serv.list.mondains_horde<ref1.dtag0.mondains_horde_rank>.add <ref1>	//add to level specific horde list
+var0.mondains_horde_size += 1
+serv.newitem i_horde_monster_memory
+serv.new.timer=<def0.mondains_horde_despawn>
+ref1.equip <new>
+
+
+[function f_hunstman_generate_contract]	//this is the function used to make a contract for the player when they buy them
+ref1=<args>
+local.contract_level=<ref1.dtag0.mondains_horde_rank>
+serv.newitem i_huntsman_contract
+ref2=<new>
+ref2.color=<ref1.color>	
+ref2.more2=<ref1>	//store the monsters uid on the contract
+ref2.link=<src>		//link the contract to the player that owns it
+if (strcmpi(<ref1.job>,<ref1.name>))
+  local.hasname=1
+endif
+ref2.name=huntsman contract for a <ref1.job> <qval (<local.hasname>)?(<ref1.name>):>
+ref2.bounce <src>
+serv.list.mondains_horde<dlocal.contract_level>.<serv.list.mondains_horde<dlocal.contract_level>.findelem <ref1>>.remove
+ref1.findid.i_horde_monster_memory.more2=<ref2>	//store the UID of the contract on the horde memory item
+ref1.findid.i_horde_monster_memory.timer=<def0.huntsman_contract_expires>
+
+[function f_huntsman_contract_mark_distance]
+ref1=<argv[0]>
+local.distance=<distance <ref1>>
+if (<local.distance> < 15)
+  return <ref1.name> is near to the <f_huntsman_contract_mark_direction <ref1>>.
+elseif (<local.distance> < 50)
+  return <ref1.name> is to the <f_huntsman_contract_mark_direction <ref1>>.
+else
+  return <ref1.name> is far to the <f_huntsman_contract_mark_direction <ref1>>.
+endif
+
+[function f_huntsman_contract_mark_direction]
+ref1=<argv[0]>
+doswitch <dir <ref1>>
+  return north
+  return north east
+  return east
+  return south east
+  return south
+  return south west
+  return west
+  return north west
+enddo
+
+[function f_huntsman_dialog_add_cache]
+if (<argo.isevent.t_mondains_horde_cache>)
+  if (<argo.topobj> != <src>)
+    src.sysmessage You cannot use that where it is.
+    return 1
+  elseif !(<src.findid.i_npc_guild_huntsman>) || (<argo.more2> != <src>) && !(<src.isgm>)	//not in the guild or has a cache not linked to them.
+    argo.remove
+    src.sysmessage The Huntsman Guild thanks thee for thy generous contribution.
+    return 1
+  elseif (<serv.list.huntsman_<src>_caches.count> >= <def0.huntsman_cache_max>)
+    src.sysmessage Alas, the court mage cannot accept another cache from thee currently.
+    return 1
+  elseif (<serv.list.huntsman_<src>_caches.findelem <argo>> != -1)
+    serv.log <src.name>(<src>) attempting to give huntmaster <name>(<uid>) the same cache (<argo>) more than once
+    return 1
+  else
+    if !(<src.findlayer.26>)	//must have a container on player's layer 26 to hold the caches
+      serv.newitem i_player_protected_storage
+      new.equip
+    endif
+    serv.list.huntsman_<src>_caches.add <argo>
+    argo.link=<src>
+    argo.more2=<eval (<argo.morem>*<def0.huntsman_cache_opentime>)>	//total time it will take to open
+    argo.timer=<argo.more2>
+    argo.cont=<src.findlayer.26>	//store it in player's protected storage
+    src.sysmessage Well met <src.name>, the court mage will unseal this cache for thee.
+    return 1
+  endif
+endif
+
+[function f_horde_death_effect]
+serv.newitem i_memory
+ref1=<new>
+ref1.p=<p>
+ref1.z
+ref1.timerf 3,remove
+sound 020d
+for 0 5
+  ref1.timerfms <eval (<local._for>*100)>,circle_effect,i_fx_explode,2,1,{0455 1 0492 1},4
+  if (<local._for> >= 4)
+    ref1.timerfms <eval (<local._for>*100)>,circle_effect,i_fx_explode,<eval 2+<local.mushroom>>,1,{0455 1 0492 1},4
+    local.mushroom += 1
+  endif
+  ref1.timerfms <eval (<local._for>*100)>,f_horde_death_effect_nudgeup
+  sound 00fa
+  //sound 0115
+  sound 01d6
+  sound 0228
+endfor
+for 0 5
+  timerfms <eval (<local._for>*100)>,circle_effect,i_fx_explode,<dlocal._for>,0,{0455 1 0492 1},4
+endfor
+
+[function f_horde_death_effect_nudgeup]
+z += 3
+
+[function f_horde_cache_adjust_dispid]
+doswitch <eval <morem>-1>
+  dispid=0e80	//brass box
+  dispid=0e3c	//large crate
+  dispid=0e42	//wodden brass chest
+  dispid=0e7c	//metal chest
+  dispid=0e40 	//metal and brass chest	
+enddo
+update
+
+[function f_horde_place_monster]
+if (<tag0.mondains_horde_rank> >= 5)
+  dorand 6
+    f_horde_place_monster_area 5121,771,5366,1025,0	//destard level 1
+    f_horde_place_monster_area 5123,794,5186,885,0	//destard level 2
+    f_horde_place_monster_area 5125,954,5154,1020,0	//destard level 3
+    f_horde_place_monster_area 5153,982,5198,1020,0	//destard level 3
+    f_horde_place_monster_area 5124,1536,5372,1717,0	//under terathan keep
+    f_horde_place_monster_area 5276,1717,5371,1787,0	//under terathan keep
+  enddo
+
+elseif (<tag0.mondains_horde_rank> >= 4)
+  dorand 14
+    f_horde_place_monster_area 5663,130,5891,274,0	//ice dungeon level 1
+    f_horde_place_monster_area 5649,294,5713,350,0	//ice dungeon lair
+    f_horde_place_monster_area 5799,316,5870,381,0	//ice dungeon orc fort
+    f_horde_place_monster_area 5663,1402,5884,1488,0	//fire dungeon level 1
+    f_horde_place_monster_area 5727,1480,5884,1519,0	//fire dungeon level 1
+    f_horde_place_monster_area 5764,1284,5884,1408,0	//fire dungeon level 1
+    f_horde_place_monster_area 5627,1282,5887,1491,0	//fire dungoen level 1
+    f_horde_place_monster_area 5726,1489,5887,1521,0	//fire dungeon level 1
+    f_horde_place_monster_area 5630,1284,5763,1401,0	//fire dungeon level 2
+    f_horde_place_monster_area 5630,1397,5662,1456,0	//fire dungeon level 2
+    f_horde_place_monster_area 5902,15,6001,114,0	//hythloth level 1
+    f_horde_place_monster_area 5911,143,6002,243,0	//hythloth level 2
+    f_horde_place_monster_area 6021,141,6130,235,0	//hythloth level 3
+    f_horde_place_monster_area 6047,28,6122,107,0	//hythloth level 4
+  enddo
+
+elseif (<tag0.mondains_horde_rank> >= 3)
+  dorand 5
+    f_horde_place_monster_area 5131,1945,5162,2021,0	//orc dungeon level 1
+    f_horde_place_monster_area 5284,1284,5371,1388,0	//orc dungoen level 2
+    f_horde_place_monster_area 5265,1987,5363,2045,0	//orc dungeon level 3
+    f_horde_place_monster_area 5773,513,5884,636,0	//wrong level 1
+    f_horde_place_monster_area 5641,516,5742,586,0	//wrong level 2
+    //f_horde_place_monster_area 5685,623,5722,668,0	//wrong level 3		//cant really use these
+    //f_horde_place_monster_area 5665,785,5873,1017,0	//wrong level 4
+  enddo
+
+elseif (<tag0.mondains_horde_rank> >= 2)
+  dorand 8
+    f_horde_place_monster_area 5379,5,5498,131,0	//shame level 1
+    f_horde_place_monster_area 5507,3,5632,126,0	//shame level 2
+    f_horde_place_monster_area 5379,133,5626,261,0	//shame level 3
+    f_horde_place_monster_area 5638,2,5889,122,0	//shame level 4
+    f_horde_place_monster_area 5135,526,5235,642,0	//deceit level 1
+    f_horde_place_monster_area 5275,525,5355,634,0	//deceit level 2
+    f_horde_place_monster_area 5124,644,5234,769,0	//deceit level 3
+    f_horde_place_monster_area 5252,644,5339,765,0	//deceit level 4
+  enddo
+
+else	//if (<tag0.mondains_horde_rank> >= 1)
+  dorand 10
+    f_horde_place_monster_area 5380,1848,5421,1963,0	//covetous level 1
+    f_horde_place_monster_area 5421,1848,5510,1943,0	//covetous level 1
+    f_horde_place_monster_area 5425,1948,5624,2044,0	//covetous level 2
+    f_horde_place_monster_area 5384,1964,5425,2030,0	//covetous level 2
+    f_horde_place_monster_area 5532,1821,5630,1930,0	//covetous level 3
+    f_horde_place_monster_area 5498,1797,5565,1821,0	//covetous level 4
+    f_horde_place_monster_area 5400,1794,5489,1834,0	//covetous level 5
+    f_horde_place_monster_area 5378,517,5515,637,0	//despise level 1
+    f_horde_place_monster_area 5378,644,5530,767,0	//despise level 3
+    f_horde_place_monster_area 5381,774,5627,1020,0	//despise level 4
+  enddo
+endif
+
+[function f_horde_place_monster_area]
+if (<ischar>)
+  while !(<local.placed>)
+    go <R<argv[0]>,<argv[2]>>,<R<argv[1]>,<argv[3]>>
+    if (<canmove>)
+      local.placed=1
+    endif
+    local.n += 1
+  endwhile
+  //serv.log Horde monster placed: <name>(<uid>) in <region.name>(<p>)
+endif
+
+[function remove_mondains_horde]
+forchars 9999
+  if (<isevent.e_mondains_horde>)
+    remove
+  endif
+endif
+
+[EOF]

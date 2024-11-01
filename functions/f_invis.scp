@@ -1,0 +1,49 @@
+//New Invis Effect by Soulless
+//v1.0
+//2:03 PM 8/20/2017
+//Just does invis but with effect
+
+[function f_invis_effect]
+args=<streat <explode " ",<args>>>
+args=<qval (<isempty <args>>)?<eval (1-<qval (<isinvis>)?1:0>)>:<args>>
+consume i_invis_effect
+sound <qval (<args>==1)?snd_Spell_Cunning:snd_spell_lightning>
+sound <qval (<args>==1)?snd_Spell_Cunning:snd_Spell_explosion>
+serv.newitem i_invis_effect
+new.more1=<args>
+new.equip
+new.timerms=10
+
+[function f_invis_effect2]
+for 10
+  timerfms <eval <local._for>*250>,circle_effect,i_fire_column,<local._for>,0,0,0
+endfor
+
+[itemdef i_invis_effect]
+id=i_memory
+type=t_eq_script
+layer=layer_special
+name=Invis Effect
+
+on=@create
+more2l=0
+more2h=3
+
+on=@timer
+//more2 0=invis, 1=uninvis 
+//more2l=contracting, more2h=expanding
+ref1=<topobj>
+if (<more2l> >= 3) || (<more2l> < 0)
+  remove
+  return 1
+endif
+ref1.circle_effect,<qval (<more1> <= 0)?i_fx_explode:i_fx_smoke>,<qval (<more1> <= 0)?<more2l>:<more2h>>,0,0,0
+ref1.circle_effect,<qval (<more1> <= 0)?i_fx_bless_effect:i_fx_glow_spike>,<qval (<more1> <= 0)?<more2l>:<more2h>>,0,0,0
+more2l += 1
+more2h -= 1
+timerms=150
+return 1
+
+
+
+[EOF]

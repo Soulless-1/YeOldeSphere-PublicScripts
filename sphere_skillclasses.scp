@@ -1,0 +1,156 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2007
+//www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: 27-Jul-2006
+
+VERSION=0.56b
+
+// Generic advance rates for stats
+[ADVANCE]		//10000,4000,600 default?
+STR=-1,-1,-1		//this is handled below [skillclass 0] in a trigger
+INT=-1,-1,-1
+DEX=-1,-1,-1
+
+[COMMENT SKILL x]
+ADV_RATE=10.0,200.0,800.0	// 10.0 successes at 0% to gain .1, 800.0 successes at 100% to gain .1 skill, 200.0 successes at 50% to gain .1, 
+VALUES=0,100			// The amount of value an item created with the skill gets at skill levels.
+EFFECT=0,100			// Healing: Effect of bandages; Crafting Skills: Percentage of resources lost on failure.
+STAT_STR=80			// You will tend toward these stat vals if you use this skill a lot.
+BONUS_STATS=10			// What percent of the skill success is based on stat levels. = 10%
+BONUS_STR=80			// % of each stat toward success at skill
+
+[SKILLCLASS 0]
+// undeclared class.
+// max skills for players of this skill class. 
+// might want this to be all 50.0 to make people declare a class?
+DEFNAME=Class_undeclared
+NAME=undeclared
+// EVENTS=e_ClassUndeclared
+STATSUM=300
+SKILLSUM=10000		//default = 7000
+STR=100
+INT=100
+DEX=100
+Alchemy=100.0
+Anatomy=100.0
+AnimalLore=100.0
+ItemId=100.0
+ArmsLore=100.0
+Parrying=100.0
+Begging=100.0
+Blacksmithing=100.0
+Bowcraft=100.0
+Peacemaking=100.0
+Camping=100.0
+Carpentry=100.0
+Cartography=100.0
+Cooking=100.0
+DetectingHidden=100.0
+Discordance=100.0
+EvaluatingIntel=100.0
+Healing=100.0
+Fishing=100.0
+Forensics=100.0
+Herding=100.0
+Hiding=100.0
+Provocation=100.0
+Inscription=100.0
+LockPicking=100.0
+Magery=100.0
+MagicResistance=100.0
+Tactics=100.0
+Snooping=100.0
+Musicianship=100.0
+Poisoning=100.0
+Archery=100.0
+SpiritSpeak=100.0
+Stealing=100.0
+Tailoring=100.0
+Taming=100.0
+TasteId=100.0
+Tinkering=100.0
+Tracking=100.0
+Veterinary=100.0
+Swordsmanship=100.0
+Macefighting=100.0
+Fencing=100.0
+Wrestling=100.0
+Lumberjacking=100.0
+Mining=100.0
+Meditation=100.0
+Stealth=100.0
+RemoveTrap=100.0
+Necromancy=100.0
+
+on=@wait
+if !(<src.isgm>) 
+  if (<src.flags>&statf_freeze) || (<src.flags>&statf_stone) || (<src.flags>&statf_dead)
+    src.sysmessage You can't do much in your current state.
+    return 1
+  elseif (<src.action> != -1)
+    src.sysmessage You must wait a moment to perform another action.
+    return 1
+  endif
+endif
+return 0
+
+on=@skillfail
+skillgain <argn1>	// you should always be able to gain on fails as well, so you can progress and succeed
+trigger @skillfinish, <def.tat_as_argn>, <argn1>
+
+on=@skillsuccess
+trigger @skillfinish, <def.tat_as_argn>, <argn1>
+
+//on=@skillfinish
+
+on=@skillgain	//Tierd Exponential Subskill Gain
+local.skill=<serv.skill.<argn1>.key>
+local.skillcap=<qval (<src.tag0.override.skillcap_<dargn1>> <= <serv.skillclass.<skillclass>.<argn1>>)?<serv.skillclass.<skillclass>.<argn1>>:<src.tag0.override.skillcap_<dargn1>>)>
+local.skillsum=<qval (<src.tag0.override.skillsum>)?<src.tag0.override.skillsum>:<serv.skillclass.0.skillsum>>
+if (<src.<argn1>> >= <local.skillcap>)  || (<src.skilllock.<argn1>>) 	//at the individual skillcap or locked, no gain	//|| (<src.skilltotal> >= <local.skillsum>)
+  return 1	  
+endif
+local.chance=<eval (1300-<src.<local.skill>>)>			//get the base chance for gain ( 130.0 - current skill ) 
+local.modifier=<eval (<src.<local.skill>>/300)*30>		//gets harder every 30.0 skill you have
+local.chance -= <muldiv <local.modifier>,<local.chance>,100>	//apply the modifier
+local.chance=<qval (<local.chance> < 25)?25:<local.chance>>	//never less than 2.5% chance to gain	
+argn2=<qval (<local.chance> < <R1,1000>)?0:1000>
+if (<local.chance> < <R1,1000>)
+  argn2=0
+else
+  argn2=1000 
+endif
+src.f_statgain <argn1>	
+
+[function f_statgain]	//Exponential Substat Gain
+local.skill=<argn>
+for n 0 2
+  doswitch <local.n>
+    local.stat=str
+    local.stat=dex
+    local.stat=int
+  enddo
+  if (<o<local.stat>> < <serv.skill.<argn1>.stat_<local.stat>>) && !(<src.statlock.<local.stat>>) && !(<src.skilllock.<argn>>)  //the skill can provide this stat and it's not locked
+    local.statcap=<qval (<src.tag0.override.statcap_<dlocal.n>> <= <serv.skillclass.<skillclass>.<local.stat>>)?<serv.skillclass.<skillclass>.<local.stat>>:<src.tag0.override.statcap_<dlocal.n>>)>
+    local.statsum=<qval (<src.tag0.override.statsum>)?<src.tag0.override.statsum>:<serv.skillclass.<skillclass>.statsum>>
+    if (<src.o<local.stat>> < <local.statcap>) && (<src.statsum> < <local.statsum>) // under our statcap and statsum
+      local.chance=<eval (145-<src.o<local.stat>>)>
+      local.modifier=<eval (<src.o<local.stat>>/30)*30>
+      local.chance -= <muldiv <local.modifier>,<local.chance>,100>
+      local.chance=<qval (<local.chance> < 25)?25:<local.chance>>
+      if (<local.chance> > <R1,1000>)
+        src.o<local.stat> += 1	
+      endif
+    endif
+  endif
+endfor
+
+
+
+[EOF]

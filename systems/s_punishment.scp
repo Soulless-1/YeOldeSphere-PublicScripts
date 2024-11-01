@@ -1,0 +1,451 @@
+//client list with private chat by Soulless
+//v1.0
+//8:45 PM 8/8/2018
+//private messaging added
+//add so that you can ignore people (Spartacus)
+
+[defname punishment_system]
+flags_punishment_mutechat_char			0001		//a char cannot use the chat system
+flags_punishment_mutechat_account		0002		//an account cannot ues the chat system
+flags_punishment_mutespeech_char		0004		//a char cannot talk
+flags_punishment_mutespeech_account		0008		//all chars on on account cannot talk
+flags_punishment_banned_account			0010		//this account is banned (also kept in a list)
+flags_punishment_banned_ip			0020		//the the lastip on this account is banned (also kep in a list)
+flags_punishment_ipban_exclusion		0040		//this ip has a ban, but this account can connect
+
+punishment_jail_area		5300,1185,0,0		//location players will go when jailed
+
+punishment_view_account		5			//what plevel to view player account name
+punishment_view_ip		5			//what plevel to view player IP address
+punishment_manage_bans		5			//what plevel must you have to manage the ban lists
+
+[plevel 4]
+punish
+
+[function punish]
+sdialog d_punishment_system
+
+[dialog d_punishment_system]
+10,30
+
+page 0
+resizepic 10 10 5054 770 500
+gumppictiled 20 20 750 35 2624					
+checkertrans 20 20 750 35 
+
+gumppictiled 20 60 750 415 2624					
+checkertrans 20 60 750 415 
+
+
+button 70 25 4006 4007 1 0 65529	//target a player with reticle
+dtext 100 25 1000 Target Player
+
+gumppictiled 20 480 750 25 2624					
+checkertrans 20 480 750 25 
+
+dtext 280 20 1263 Punishment Menu
+dtext 300 35 1000 <dserv.clients> Clients
+
+button 430 25 4006 4007 1 0 65550	//manage players
+dtext 460 25 1000 Manage Players
+
+if (<account.plevel> >= <def0.punishment_manage_bans>)
+  button 580 25 4006 4007 1 0 65551	//manage bans
+  dtext 610 25 1000 Manage Bans
+endif
+
+button 740 20 4018 4019 1 0 0 //exit
+
+argn=<qval (<argn> <= 0)?1:<argn>>	//atleast must be page 1
+page <argn>
+
+if (<argn> < 2000)	// 1 - 1999 player selection pages
+  dtext 80 65 1263 ACCOUNT
+  dtext 180 65 1263 NAME
+  dtext 300 65 1263 IPADDRESS
+
+  local.c=<eval ((<argn>-1)*36)>
+  for <local.c> <eval (<local.c>+35)>
+    if (<local.c> < <serv.clients>)
+      if (<serv.client.<dlocal.c>> != 0)	//1 is in game, 0 is not logged in
+        ref1=<serv.client.<dlocal.c>.uid>
+        button <eval (40+<local.x>)> <eval (90+<local.y>)> 4006 4007 1 0 <eval (<local.c>+1)>    
+        dtext <eval (80+<local.x>)> <eval (90+<local.y>)> 1000 <qval (<src.account.plevel> < <def0.punishment_view_account>)?*****:<ref1.account.name>>
+    
+        dtext <eval (180+<local.x>)> <eval (90+<local.y>)> 1000 <ref1.name>
+        dtext <eval (300+<local.x>)> <eval (90+<local.y>)> 1000 <qval (<src.account.plevel> < <def0.punishment_view_ip>)?*****:<ref1.account.lastip>>
+  
+        local.y += 20
+        if (<local.y> > 340)
+          local.x += 365
+          local.y=
+        endif
+      endif
+      local.c += 1
+    endif  
+  endfor
+  dtext 300 480 1263 Page <argn>
+
+  if (<eval (<argn>*36)> < <serv.clients>)
+    button 580 480 4006 4007 1 0 <eval (2001+<argn>)>	//forward one page
+  endif
+
+elseif (<argn> < 4000)	// 2000 - 3999 ban management
+
+  dtext 125 65 025 Click the button remove a ban
+
+  dtext 50 85 1263 Account Bans
+  dtext 300 85 1263 Ip Address Bans
+  dtext 550 85 1263 IP Ban Account Exclusions
+
+  local.e=<eval ((<argn>-2000)*36)>	//set which sections of the lists we're going to look at
+  local.n=<local.e>
+  if (<serv.list.banned_accounts.count>)
+    for <local.e> <eval (<local.e>+35)>	//banned accounts
+      if (<local.e> < <serv.list.banned_accounts.count>) && (<local.e> < 2000)	//only 2000 max ban entries for all lists
+        button 50 <eval (112+<local.y>)> 1209 1210 1 0 <eval (6000+<local.e>)>       
+        dtext 70 <eval (110+<local.y>)> 1000 <serv.list.banned_accounts.<dlocal.e>>
+        local.y += 15
+      endif
+      local.e += 1
+    endfor
+  endif
+  if (<serv.list.banned_ipaddresses.count>)
+    local.e=<local.n>
+    local.y=
+    for <local.e> <eval (<local.e>+35)>	//banned ips
+      if (<local.e> < <serv.list.banned_ipaddresses.count>) && (<local.e> < 2000)	
+        button 300 <eval (112+<local.y>)> 1209 1210 1 0 <eval (8000+<local.e>)>      
+        dtext 320 <eval (110+<local.y>)> 1000 <serv.list.banned_ipaddresses.<dlocal.e>>
+        local.y += 15
+      endif
+      local.e += 1
+    endfor
+  endif
+  if (<serv.list.ipban_exclusions.count>)
+    local.e=<local.n>
+    local.y=
+    for <local.e> <eval (<local.e>+35)>	//ip ban exclusions
+      if (<local.e> < <serv.list.ipban_exclusions.count>) && (<local.e> < 2000)	//only 2000 max 
+        button 550 <eval (112+<local.y>)> 1209 1210 1 0 <eval (10000+<local.e>)>        
+        dtext 570 <eval (110+<local.y>)> 1000 <serv.list.ipban_exclusions.<dlocal.e>>
+        local.y += 15
+      endif
+      local.e += 1
+    endfor
+  endif
+  dtext 300 480 1263 Page <eval (<argn>-1999)>
+
+
+  dtext 40 440 1000 Ban Acct:
+  resizepic 100 440 9350 140 25
+  dtextentry 100 440 140 25 0 1
+  button 240 440 4006 4007 1 0 65552	//add account to ban list
+
+  dtext 350 440 1000 Ban IP:
+  resizepic 400 440 9350 140 25
+  dtextentry 400 440 140 25 0 2
+  button 540 440 4006 4007 1 0 65553	//add IP to ban list
+
+endif
+
+
+if ((<argn> > 1) && (<argn> < 2000)) || ((<argn> > 2000) && (<argn> < 4000))	//back button
+  button 40 480 4015 4016 1 0 <eval (1999+<argn>)>	
+elseif (<argn> == 2000) 
+  button 40 480 4012 4013 1 0 65550	//main menu
+  dtext 80 480 1000 Main Menu
+endif
+
+page 9999	//viewing specific character to punish
+
+ref2=<ctag0.punish_client>	//character we're punishing
+
+if !(<ref2.isvalid>) 
+  dtext 80 72 025 ERROR: NO CLIENT SELECTED
+else
+  dtext 80 72 025 <qval (<src.account.plevel> < <def0.punishment_view_account>)?*****:<ref2.account.lastip>>
+  dtext 200 72 025 <ref2.name> (<ref2>)
+  dtext 440 72 025 <qval (<src.account.plevel> < <def0.punishment_view_ip>)?*****:<ref2.account.lastip>>
+
+  button 80 100 4012 4013 1 0 65530
+  dtext 120 100 1000 <qval (<ref2.tag0.flags_punishment>&<def0.flags_punishment_mutechat_char>)?Unmute:Mute> Char Chat
+
+  button 80 130 4030 4031 1 0 65531
+  dtext 120 130 1000 <qval (<ref2.account.tag0.flags_punishment>&<def0.flags_punishment_mutechat_account>)?Unmute:Mute> Account Chat 
+
+  button 80 160 4021 4022 1 0 65532
+  dtext 120 160 1000 <qval (<ref2.tag0.flags_punishment>&<def0.flags_punishment_mutespeech_char>)?Unmute:Mute> Char Speech
+
+  button 80 190 4018 4019 1 0 65533
+  dtext 120 190 1000 <qval (<ref2.account.tag0.flags_punishment>&<def0.flags_punishment_mutespeech_account>)?Unmute:Mute> Account Speech
+
+  button 80 220 4006 4007 1 0 65534
+  dtext 120 220 1000 <qval (<ref2.isjailed>)?Unjail:Jail> Char
+
+  button 80 250 4015 4016 1 0 65535
+  dtext 120 250 1000 Kick Char
+
+  button 80 280 4003 4004 1 0 65536
+  dtext 120 280 1000 Ban Account
+
+  button 80 310 4009 4010 1 0 65537
+  dtext 120 310 1000 Ban IP Address
+
+  button 80 340 4027 4028 1 0 65538
+  dtext 120 340 1000 Exclude Account From IP Ban
+
+  dtext 320 100 1263 Character Punishment Note 1 :
+  resizepic 320 120 3000 375 100
+  dtextentrylimited 325 125 365 170 0 1 256 <ref2.account.tag.punishment_note1>
+  button 670 200 4024 4025 1 0 65540
+
+  dtext 320 220 1263 Account Punishment Note 2 :
+  resizepic 320 240 3000 375 100
+  dtextentrylimited 325 245 365 170 0 2 256 <ref2.account.tag.punishment_note2>
+  button 670 320 4024 4025 2 0 65541
+
+  dtext 320 340 1263 Account Punishment Note 3 :
+  resizepic 320 360 3000 375 100
+  dtextentrylimited 325 365 365 170 0 3 256 <ref2.account.tag.punishment_note3>
+  button 670 440 4024 4025 3 0 65542
+
+endif
+
+button 40 480 4012 4013 1 0 65550	//main menu
+dtext 80 480 1000 Main Menu
+
+[dialog d_punishment_system button]
+
+onbutton=0	//close menu
+
+onbutton=1,1999		//select player
+argn1 -= 1
+ref1=<serv.client.<dargn1>.uid>
+if (<ref1.account.plevel> >= <account.plevel>) && (<ref1> != <uid>)
+  sysmessage You are not privileged enough to do that.
+  return 1
+endif
+ctag0.punish_client=<ref1>
+sdialog d_punishment_system 9999
+
+onbutton=2000,5999	//page flip
+//1-1999 = player browsing, 2000-3999 = ban management
+argn1 -= 2000
+sdialog d_punishment_system <argn>
+
+
+onbutton=6000,11999	//ban management (removing bans from ists)
+if (<argn1> < 8000)
+  argn1 -= 6000
+  local.list=banned_accounts
+elseif (<argn1> < 10000)
+  argn1 -= 8000
+  local.list=banned_ipaddresses
+else
+  argn1 -= 10000
+  local.list=ipban_exclusions
+endif
+serv.log <name>(<uid>) removed entry <dargn1> from the <local.list> list : <serv.list.<local.list>.<dargn1>>
+serv.list.<local.list>.<dargn1>.remove
+sdialog d_punishment_system 2000
+
+onbutton=65520		//target player
+targetf f_punish_targ
+sysmessage Target a player to punish
+
+onbutton=65530		//mute Char Chat
+ref1=<ctag0.punish_client>
+if !(<ref1.tag0.flags_punishment>&<def0.flags_punishment_mutechat_char>)
+  ref1.tag0.flags_punishment |= <def0.flags_punishment_mutechat_char>
+  sysmessage <ref1.name> has been muted from the global chat.
+  serv.log <name>(<uid>) muted <ref1.name>(<ref1>) from the global chat.
+else
+  ref1.tag0.flags_punishment &= ~ <def0.flags_punishment_mutechat_char>
+  sysmessage <ref1.name> has been unmuted from the global chat.
+  serv.log <name>(<uid>) unmuted <ref1.name>(<ref1>) from the global chat.
+endif
+sdialog d_punishment_system 9999
+
+onbutton=65531		//mute Account Chat 
+ref1=<ctag0.punish_client>
+if !(<ref1.account.tag0.flags_punishment>&<def0.flags_punishment_mutechat_account>)
+  ref1.account.tag0.flags_punishment |= <def0.flags_punishment_mutechat_account>
+  sysmessage <ref1.name>'s account has been muted from the global chat.
+  serv.log <name>(<uid>) muted <ref1.name>(<ref1>)'s account from the global chat. (<ref1.account>)
+else
+  ref1.account.tag0.flags_punishment &= ~ <def0.flags_punishment_mutechat_account>
+  sysmessage <ref1.name>'s account has been muted from the global chat.
+  serv.log <name>(<uid>) unmuted <ref1.name>(<ref1>)'s account from the global chat. (<ref1.account>)
+endif
+sdialog d_punishment_system 9999
+
+onbutton=65532		//mute Char Talking
+ref1=<ctag0.punish_client>
+if !(<ref1.tag0.flags_punishment>&<def0.flags_punishment_mutespeech_char>)
+  ref1.tag0.flags_punishment |= <def0.flags_punishment_mutespeech_char>
+  sysmessage <ref1.name> has been muted from speaking.
+  serv.log <name>(<uid>) muted <ref1.name>(<ref1>) from speaking.
+else
+  ref1.tag0.flags_punishment &= ~ <def0.flags_punishment_mutespeech_char>
+  sysmessage <ref1.name> has been unmuted from speaking.
+  serv.log <name>(<uid>) unmuted <ref1.name>(<ref1>) from speaking.
+endif
+sdialog d_punishment_system 9999
+
+onbutton=65533		//mute Account Talking
+ref1=<ctag0.punish_client>
+if !(<ref1.account.tag0.flags_punishment>&<def0.flags_punishment_mutespeech_account>)
+  ref1.account.tag0.flags_punishment |= <def0.flags_punishment_mutespeech_account>
+  sysmessage <ref1.name>'s account has been muted from speaking
+  serv.log <name>(<uid>) muted <ref1.name>(<ref1>)'s account from speaking. (<ref1.account>)
+else
+  ref1.account.tag0.flags_punishment &= ~ <def0.flags_punishment_mutespeech_account>
+  sysmessage <ref1.name>'s account has been unmuted from speaking
+  serv.log <name>(<uid>) unmuted <ref1.name>(<ref1>)'s account from speaking. (<ref1.account>)
+endif
+sdialog d_punishment_system 9999
+
+onbutton=65534		//Jail Char	//unjail char if they are in jail
+ref1=<ctag0.punish_client>
+if !(<ref1.isjailed>)
+  ref1.f_punishment_jail_char
+else
+  ref1.f_punishment_unjail_char
+endif
+sdialog d_punishment_system 9999
+
+onbutton=65535		//Kick Char
+ref1=<ctag0.punish_client>
+ref1.disconnect
+sysmessage <ref1.name> has been kicked off the shard.
+serv.log <name>(<uid>) kicked <ref1.name>(<ref1>) off the shard.
+sdialog d_punishment_system 9999
+
+onbutton=65536		//Ban Account
+ref1=<ctag0.punish_client>
+if (<serv.list.banned_accounts.findelem "<ref1.account.name>"> != -1)
+  sysmessage That account is already present in the 'banned_accounts' list
+  sdialog d_punishment_system 9999
+  return 1
+endif
+serv.list.banned_accounts.add <ref1.account.name>
+ref1.disconnect
+sysmessage <ref1.name>'s account has been banned from the shard.
+serv.log <name>(<uid>) has banned the account associated with <ref1.name>(<ref1>) (<ref1.account.name>)
+
+onbutton=65537		//Ban IP Address
+ref1=<ctag0.punish_client>
+if (<serv.list.banned_ipaddresses.findelem "<ref1.account.lastip>"> != -1)
+  sysmessage That IP is already present in the 'banned_ipaddresses' list
+  sdialog d_punishment_system 9999
+  return 1
+endif
+serv.list.banned_ipaddresses.add <ref1.account.lastip>"
+ref1.disconnect
+sysmessage <ref1.name>'s IP address has been banned from the shard.
+serv.log <name>(<uid>) has banned the IP Address associate with <ref1.name>(<ref1>)'s account <ref1.account.name> (<ref1.account.lastip>)
+
+onbutton=65538		//Exclude From IP Bans
+ref1=<ctag0.punish_client>
+sdialog d_punishment_system 9999
+if (<serv.list.ipban_exclusions.findelem "<ref1.account.name>"> != -1)
+  sysmessage That account is already present in the 'ipban_exclisions' list
+  sdialog d_punishment_system 9999
+  return 1
+endif
+serv.list.ipban_exclusions.add <ref1.account.name>"
+sysmessage <ref1.name>'s account has been added to the IP ban exclusion list.
+serv.log <name>(<uid>) has added the account associated with <ref1.name>(<ref1>) to the IP ban exclusions list. (<ref1.account.name>)
+
+onbutton=65540	//commit character punishment note 1
+ref1=<ctag0.punish_client>
+ref1.account.tag.punishment_note1=<argtxt[1]>
+sdialog d_punishment_system 9999
+
+onbutton=65541	//commit account punishment note 2
+ref1=<ctag0.punish_client>
+ref1.account.tag.punishment_note2=<argtxt[2]>
+sdialog d_punishment_system 9999
+
+onbutton=65542	//commit account punishment note 3
+ref1=<ctag0.punish_client> 
+ref1.account.tag.punishment_note3=<argtxt[3]>
+sdialog d_punishment_system 9999
+
+onbutton=65550	//back to main menu
+sdialog d_punishment_system 1
+
+onbutton=65551	//enter ban management menu
+if (<account.plevel> < <def0.punishment_manage_bans>)
+  sysmessage You are not privileged enough to do that.
+  return 1
+endif
+sdialog d_punishment_system 2000
+
+onbutton=65552	//manually add account to ban list
+if (<serv.list.banned_accounts.findelem "<argtxt[1]>"> != -1)
+  sysmessage That account is already present in the 'banned_accounts' list
+  sdialog d_punishment_system 2000
+  return 1
+endif
+serv.list.banned_accounts.add <argtxt[1]>
+sysmessage The account '<argtxt[1]>' has been banned from the shard.
+serv.log <name>(<uid>) has banned an account manually : <argtxt[1]>
+sdialog d_punishment_system 2000
+
+onbutton=65553	//manually add ip to ban list
+if (<serv.list.banned_ipaddresses.findelem "<argtxt[2]>"> != -1)
+  sysmessage That account is already present in the 'banned_ipaddresses' list
+  sdialog d_punishment_system 2000
+  return 1
+endif
+serv.list.banned_ipaddresses.add <argtxt[2]>
+sysmessage The ipaddress '<argtxt[2]>' has been banned from the shard.
+serv.log <name>(<uid>) has banned an ipaddress manually : <argtxt[2]>
+sdialog d_punishment_system 2000
+
+[function f_punishment_jail_char]
+tag0.punishment_unjail_location=<p>
+events=+e_punishment_jailed
+go <def0.punishment_jail_area>
+
+[function f_punishment_unjail_char]
+events=-e_punishment_jailed
+go <tag0.punishment_unjail_location>
+tag0.punishment_unjail_location=
+
+[function isjailed]
+if (<isevent.e_punishment_jailed>) 
+  return 1
+endif
+return 0
+
+[events e_punishment_jailed]	//shouldnt be able to use functions, or click gumps, or do anything
+
+on=@itemclick
+return 1
+
+on=@itemdclick
+return 1
+
+on=@skillstart
+return 1
+
+on=@spellselect
+return 1
+
+[function f_punish_targ]
+if (<argo.account.plevel> >= <account.plevel>) && (<argo> != <uid>)
+  sysmessage You are not privileged enough to do that.
+  return 1
+endif
+ctag0.punish_client=<argo>
+sdialog d_punishment_system 9999
+
+
+
+
+[EOF]
+
+

@@ -1,0 +1,58 @@
+[SPELL 43]
+DEFNAME=s_explosion
+NAME=Explosion
+SOUND=	//snd_spell_explosion	//removed this from here incase we want a delay on the explosion spell
+RUNES=VOF
+CAST_TIME=2.0
+RESOURCES=i_reag_blood_moss,i_reag_mandrake_root
+RUNE_ITEM=i_rune_explosion
+SCROLL_ITEM=i_scroll_explosion
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_scripted		//|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_resist	
+EFFECT_ID=0		//i_fx_explode
+EFFECT=0		//15,35
+DURATION=0.0
+MANAUSE=20
+SKILLREQ=MAGERY 50.0
+INTERRUPT=100.0,100.0
+
+on=@effect		//call the delayed explosion spell
+ref1=<qval (!<argo>)?<src>:<argo>>
+ref2=<qval (<flags>&statf_reflection)?<src>:<uid>>	//since this is scripted we need to check for magic reflection
+local.spell_strength=<ref1.f_spell_get_strength>
+ref2.timerf <eval (<serv.spell.s_explosion.cast_time>/10)>,spelleffect s_explosion_delayed,<local.effect>,<ref1>
+ref2.effect=3,03459,6,50,1				//apply the delayed spell and effects to the proper target
+ref2.effect=3,0376a,6,50,1,0489
+ref2.sound 0225
+flags &= ~ statf_reflection				//original target always loses reflection
+return 1
+
+[SPELL 4300]
+DEFNAME=s_explosion_delayed
+NAME=Delayed Explosion
+SOUND=snd_spell_explosion	
+RUNES=VOF
+CAST_TIME=3.0
+RESOURCES=i_reag_blood_moss,i_reag_mandrake_root
+RUNE_ITEM=i_rune_explosion
+SCROLL_ITEM=i_scroll_explosion
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_resist
+EFFECT_ID=i_fx_explode
+EFFECT=15,35
+DURATION=0.0
+MANAUSE=20
+SKILLREQ=MAGERY 50.0
+INTERRUPT=100.0,100.0
+
+//Explosion has a delayed reaction (the offensive action & damage are delayed, making it a good combo spell).
+//Formula: 23 + 1d22 Base Damage
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.damagetype=(<def.dam_general>|<def.dam_magic>)
+local.effect=<R25,35>	//<eval 23+{1 22}>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+
+
+
+
+[EOF]

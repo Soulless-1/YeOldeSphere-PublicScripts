@@ -1,0 +1,27 @@
+[SPELL 30]
+DEFNAME=s_lightning
+NAME=Lightning
+SOUND=snd_spell_lightning
+RUNES=POG
+CAST_TIME=1.5
+RESOURCES=i_reag_mandrake_root,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_lightning
+SCROLL_ITEM=i_scroll_lightning
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_harm|spellflag_damage|spellflag_resist
+EFFECT_ID=0
+EFFECT=10,20
+DURATION=0.0
+MANAUSE=11
+SKILLREQ=MAGERY 30.0
+INTERRUPT=100.0,100.0
+
+//Strikes your target with a lightning bolt from the sky.
+//Formula: 12 + 1d9 Damage. 1 second delay on damage.
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_energy>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<R15,20>	//<eval 12 + {1 9}>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+
+[EOF]

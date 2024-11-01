@@ -1,0 +1,384 @@
+//Advanced effects
+//v1.0
+//11:27 PM 2/20/2019
+
+
+// very wide lightning bolt
+[function f_ultra_lightning]
+for n 10
+  timerfms <eval (<local.n>*10)>,effect 1,0,0
+endfor
+
+
+////////////////////////
+// From Nolok
+
+
+[function circle_effect]	//circle_effect,i_fx_explode,5,0,0,0
+serv.newitem i_memory
+ref1=<new>
+for dX -<argv[1]> <argv[1]>
+  for dY -<argv[1]> <argv[1]>
+    float.dist=<FLOATVAL SQRT(<EVAL (<LOCAL.dX>@2)+(<LOCAL.dY>@2)>)>
+    if (<float.dist> > <floatval <qval <argv[2]>?0:<argv[1]>-0.5>>) && (<float.dist> < <floatval <argv[1]>+0.5>)
+        local.absX=<EVAL <P.X>+<LOCAL.dX>>
+        local.absY=<EVAL <P.Y>+<LOCAL.dY>>
+        ref1.p=<dlocal.absX>,<dlocal.absY>,<p.z>
+        ref1.effect,2,<argv[0]>,6,15,1,<argv[3]>,<argv[4]>
+    endif
+  endfor
+endfor
+new.remove
+
+//usage circle_effect,baseid,diameter,fill,color,effect		
+[comment function circle_effect (NOSQRT)]	//circle_effect,i_fx_explode,5,0,0,0
+serv.newitem i_memory
+ref1=<new>
+for dX -<argv[1]> <argv[1]>
+  for dY -<argv[1]> <argv[1]>
+    float.dist=<FLOATVAL SQRT(<EVAL (<LOCAL.dX>*<local.dx>)+(<LOCAL.dY>*<local.dy>)>)>
+    if (<float.dist> > <floatval <qval <argv[2]>?0:<argv[1]>-0.5>>) && (<float.dist> < <floatval <argv[1]>+0.5>)
+        local.absX=<EVAL <P.X>+<LOCAL.dX>>
+        local.absY=<EVAL <P.Y>+<LOCAL.dY>>
+        ref1.p=<dlocal.absX>,<dlocal.absY>,<p.z>
+        ref1.effect,2,<argv[0]>,6,15,1,<argv[3]>,<argv[4]>
+    endif
+  endfor
+endfor
+new.remove
+
+
+
+////////////////////////////////////////////
+// Effects from Julian (ShiryuX)
+
+// TAG.AfterEffect = ID,Duration,DamLo,DamHi
+
+// Base timer for the special effects
+// This will be set on the char
+[ITEMDEF i_fxTimer]
+ID=0122a
+NAME=fxtimer
+TYPE=t_eq_script
+LAYER=layer_special
+WEIGHT=0
+
+ON=@Timer
+if (<more1> < <tag0.distance>)
+	local.effect = <tag0.effect>
+	local.dir = <cont.dir>
+		if <tag0.range>
+			local.range = <tag0.range>
+		endif
+		if !<isempty <tag.AfterEffect>>
+			local.AfterEffect = <tag0.AfterEffect>
+		endif
+	call cont.f_fx<tag0.EffectID> <more1>
+	more1 ++
+	timerms <eval <f_GetARGV 3 <tag0.Effect>> * 10>
+	return 1
+endif
+remove
+return 1
+
+[function f_getARGV]
+return <argv[<dargn>]>
+
+
+[function f_minARGV]
+for n 0 <eval <argv>-1>
+  if (<argv[<dlocal.n>]> < <local.arg>) || !(<local.arg>)
+    local.arg=<argv[<dlocal.n>]>
+  endif
+endfor
+return <local.arg>
+
+// CircleFX will create a circle effect around the char.
+// Distance limit is 16
+[FUNCTION f_FireCircle]
+local.AfterEffect = i_fire_column_dam,300
+call CircleFX 18,i_fx_explode,9,10,colors_red,4
+
+// Usage:
+// AfterEffect = ID,DamLo,DamHi
+// ARGS = distance,itemid,speed,loop,color,rendermode
+[FUNCTION CircleFX]
+newitem i_fxTimer
+equip <new.uid>
+new.tag.EffectID = Circle
+new.tag.distance = <f_minARGV 16,<argv[0]>>
+new.tag.effect = 2,<argv[1]>,<argv[2]>,<argv[3]>,0,<argv[4]>,<argv[5]>
+if <local.AfterEffect> != 0
+	new.tag.AfterEffect = <local.AfterEffect>
+endif
+new.timerms 1
+
+[FUNCTION f_fxCircle]
+newitem i_memory
+ref1=<new>
+for dx -<argn> <argn>
+	for dy -<argn> <argn>
+		float.dist=<floatval sqrt(<eval (<local.dx>*<local.dx>)+(<local.dy>*<local.dy>)>)>
+		if (<float.dist> > <floatval <argn>-0.6>) && (<float.dist> < <floatval <argn>+0.6>)
+			local.absx=<eval <p.x>+<local.dx>>
+			local.absy=<eval <p.y>+<local.dy>>
+			ref1.p=<dlocal.absx>,<dlocal.absy>
+			ref1.fix
+			ref1.effect <local.effect>	
+			if <local.AfterEffect> != 0
+				newitem <f_GetARGV 0 <local.AfterEffect>>
+				new.link = <uid>
+				new.more1 = <r<f_GetARGV 1 <local.AfterEffect>>,<f_GetARGV 2 <local.AfterEffect>>>
+				new.attr = attr_decay|attr_move_never|attr_invis
+				new.p = <ref1.p>
+				new.timerms 2
+				new.fix
+			endif
+		endif
+	endfor
+endfor
+ref1.remove
+
+
+[ITEMDEF i_fire_column_dam]
+ID=i_fire_column
+NAME=Fire COlumn Damage
+
+ON=@Timer
+ref1 = <link.uid>
+forchars 0
+	if <ref1.uid> != <uid>
+		damage <more1> dam_magic <ref1.uid>
+	endif
+endfor
+
+
+// Ex. (fire rain with fire field afterwards)
+// local.AfterEffect = 03996,{3500 4500},15000
+// call MeteorFX 14,i_fx_fireball,9,16,1,colors_red,4,60
+
+// Usage:
+// AfterEffect = ID,Duration
+// call MeteorFX range,itemid,speed,loop,explode,color,render,amount
+[FUNCTION f_FireRain]
+local.AfterEffect = 03996,15000
+call MeteorFx 14,i_fx_fireball,9,16,1,0488,4,60
+
+
+[FUNCTION MeteorFX]
+newitem i_fxTimer
+equip <new.uid>
+new.tag.EffectID = Meteor
+new.tag.Distance = <f_minARGV 100,<argv[7]>>
+new.tag.Range = <f_minARGV 12,<argv[0]>>
+new.tag.effect = 0,<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>,<argv[5]>,<argv[6]>
+if <local.AfterEffect> != 0
+	new.tag.AfterEffect = <local.AfterEffect>
+endif
+new.timerms 1
+
+[FUNCTION f_fxMeteor]
+serv.newitem i_memory_meteorfx
+new.tag0.AfterEffect = <local.AfterEffect>
+new.movenear <uid>,<local.range>
+new.timerms 650
+EffectXYZ <eval <new.p.x>-4>,<eval <new.p.y>-7>,<eval <new.p.z> + 50>,<new.p.x>,<new.p.y>,<new.p.z>,<local.effect>
+
+[FUNCTION EffectXYZ]
+if (<isonline>)
+  SendPacket 0c0 <argv[6]> d0 d0 w<argv[7]> w<argv[0]> w<argv[1]> <argv[2]> w<argv[3]> w<argv[4]> <argv[5]> <argv[8]> <argv[9]> w0 0 <argv[10]> d<argv[11]> d<argv[12]>
+endif
+
+[ITEMDEF i_memory_meteorfx]
+ID=i_memory
+NAME=meteorfx
+
+ON=@Timer
+if !<isempty <tag.AfterEffect>>
+	newitem <f_GetARGV 0 <tag0.AfterEffect>>,<f_GetARGV 1 <tag0.AfterEffect>>
+	new.p = <p>
+	new.attr = attr_decay|attr_move_never
+	new.timerms = <f_GetARGV 2 <tag0.AfterEffect>>
+	remove
+	return 1
+endif
+
+
+
+// TriangleFX will create a triangle effect.
+// Depending on the char's <dir> will be pointing differently.
+// ARGS = distance,itemid,speed,loop,color,rendermode
+// Distance limit is 16
+//TriangleFX 16,i_fx_explode,9,10,colors_red,4
+[FUNCTION TriangleFX]
+newitem i_fxTimer
+equip <new.uid>
+new.tag.EffectID = Triangle
+new.tag.distance = <f_minARGV 16,<argv[0]>>
+new.tag.effect = 2,<argv[1]>,<argv[2]>,<argv[3]>,0,<argv[4]>,<argv[5]>
+new.timerms 100
+
+[FUNCTION f_fxTriangle]
+serv.newitem i_memory
+ref1=<new>
+call f_fxTriangle_GetCoords <args>,<local.dir>
+for dX -<local.val1> <local.val2>
+	for dY -<local.val3> <local.val4>
+		float.dist=<FLOATVAL SQRT(<EVAL (<LOCAL.dX>*<local.dx>)+(<LOCAL.dY>*<local.dy>)>)>
+		if (<float.dist> > <floatval <argv[0]>-0.5>) && (<float.dist> < <floatval <argv[0]>+0.5>)
+			local.absX=<EVAL <P.X>+<LOCAL.dX>>
+			local.absY=<EVAL <P.Y>+<LOCAL.dY>>
+			REF1.P=<dlocal.absX>,<dlocal.absY>
+			REF1.FIX
+			REF1.effect <local.effect>
+		endif
+	endfor
+endfor
+ref1.remove
+
+[FUNCTION f_fxTriangle_GetCoords]
+doswitch <argv[1]>
+	begin 
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <argv[0]>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <argv[0]>
+		local.val3 = <argv[0]>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <argv[0]>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <argv[0]>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <argv[0]>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <argv[0]>
+	end
+	begin
+		local.val1 = <argv[0]>
+		local.val2 = <eval <argv[0]> / 4>
+		local.val3 = <eval <argv[0]> / 4>
+		local.val4 = <argv[0]>
+	end
+	begin	
+		local.val1 = <argv[0]>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <argv[0]>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <argv[0]>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+enddo
+
+/////////////////////////////////////
+// From Drk84 and Crusader
+
+[function f_effect_winds]
+effect 3,i_fx_sparkle,0,16,0,0480,5
+sector.allclients sendpacket 0c0 00 D0 D0 W0375a W<src.p.x> W<src.p.y> B<eval(<src.p.z>+2)> W<eval(<src.p.x>+4)> W<eval(<src.p.y>)> B<eval(<src.p.z>+10+{1 15})> B0 B16 00 00 00 B0 D0480 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W0375a W<src.p.x> W<src.p.y> B<eval(<src.p.z>+2)> W<eval(<src.p.x>)> W<eval(<src.p.y>+4)> B<eval(<src.p.z>+10+{1 15})> B0 B16 00 00 00 B0 D0480 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W0375a W<src.p.x> W<src.p.y> B<eval(<src.p.z>+2)> W<eval(<src.p.x>-2)> W<eval(<src.p.y>)> B<eval(<src.p.z>+10+{1 15})> B0 B16 00 00 00 B0 D0480 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W0375a W<src.p.x> W<src.p.y> B<eval(<src.p.z>+2)> W<eval(<src.p.x>)> W<eval(<src.p.y>-2)> B<eval(<src.p.z>+10+{1 15})> B0 B16 00 00 00 B0 D0480 D5
+
+[function f_effect_spirits]
+sector.allclients sendpacket 0c0 00 D0 D0 W036d4 W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<src.p.x>+4)> W<eval(<src.p.y>)> B<eval(<src.p.z>+10+{1 15})> B0 B13 00 00 00 B0 D1152 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W036d4 W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<src.p.x>)> W<eval(<src.p.y>+4)> B<eval(<src.p.z>+10+{1 15})> B0 B13 00 00 00 B0 D1152 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W036d4 W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<src.p.x>-2)> W<eval(<src.p.y>)> B<eval(<src.p.z>+10+{1 15})> B0 B13 00 00 00 B0 D1152 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W036d4 W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<src.p.x>)> W<eval(<src.p.y>-2)> B<eval(<src.p.z>+10+{1 15})> B0 B13 00 00 00 B0 D1152 D5
+
+[function f_effect_firewave]
+targetfg f_effect_firewave_targ	// need an item object, suggested: 03709 which is the flamestrike effect.
+
+[function f_effect_firewave_targ]
+if (<isempty <args>>)
+  args=03718
+endif
+sector.allclients sendpacket 0c0 00 D0 D0 W<args> W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<targp.x>+2)> W<eval(<targp.y>+6)> B<eval(<targp.z>+10+{1 15})> B0 B13 00 00 00 B0 D0488 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W<args>  W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<targp.x>-2)> W<eval(<targp.y>-6)> B<eval(<targp.z>+10+{1 15})> B0 B13 00 00 00 B0 D0488 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W<args>  W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<targp.x>+4)> W<eval(<targp.y>-3)> B<eval(<targp.z>+10+{1 15})> B0 B13 00 00 00 B0 D0488 D5
+sector.allclients sendpacket 0c0 00 D0 D0 W<args>  W<src.p.x> W<src.p.y> B<eval(<src.p.z>+9)> W<eval(<targp.x>-4)> W<eval(<targp.y>+3)> B<eval(<targp.z>+10+{1 15})> B0 B13 00 00 00 B0 D0488 D5
+
+[function e_bolt_bomb]
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+5)> W<eval(<p.y>)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+4)> W<eval(<p.y>+1)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+3)> W<eval(<p.y>+2)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+2)> W<eval(<p.y>+3)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+1)> W<eval(<p.y>+4)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>)> W<eval(<p.y>+5)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-5)> W<eval(<p.y>)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-4)> W<eval(<p.y>-1)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-3)> W<eval(<p.y>-2)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-2)> W<eval(<p.y>-3)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-1)> W<eval(<p.y>-4)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>)> W<eval(<p.y>-5)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-5)> W<eval(<p.y>)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-4)> W<eval(<p.y>+1)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-3)> W<eval(<p.y>+2)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-2)> W<eval(<p.y>+3)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>-1)> W<eval(<p.y>+4)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>)> W<eval(<p.y>+5)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+5)> W<eval(<p.y>)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+4)> W<eval(<p.y>-1)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+3)> W<eval(<p.y>-2)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+2)> W<eval(<p.y>-3)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>+1> W<eval(<p.y>-4)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_xbolt_x W<p.x> W<p.y> B<eval(<p.z>+5)> W<eval(<p.x>)> W<eval(<p.y>-5)> B<eval(<p.z>+5+{1 5})> B01 B16 00 00 00 B0 D0 D0
+
+
+[function f_nuclear_explosion]
+//for 20 0
+  //timerfms <eval 2000-(<local._for>*100)>,circle_effect,i_fx_explode,<dlocal._for>,0,{1355 1360},4
+//endfor
+serv.newitem i_memory
+ref1=<new>
+ref1.p=<p>
+ref1.z
+ref1.timerf 3,remove
+sound 020d
+for 0 20
+  ref1.timerfms <eval (<local._for>*100)>,circle_effect,i_fx_explode,2,1,{1355 1360},2
+  if (<local._for> >= 10)
+    ref1.timerfms <eval (<local._for>*100)>,circle_effect,i_fx_smoke,<eval 2+<local.mushroom>>,1,0386,6
+    local.mushroom += 1
+    if (<local._for> >= 15)
+      local.mushroom -= 2
+    endif
+  endif
+  ref1.timerfms <eval (<local._for>*100)>,f_nuclear_pillar_nudgeup
+  sound 02f3
+  sound 04ce
+  sound {04cf 1 02f3 1}
+  sound {0306 0309}
+endfor
+for 0 10
+  timerfms <eval (<local._for>*100)>,circle_effect,i_fx_explode,<dlocal._for>,0,{1355 1360},2
+endfor
+sector.allclients sysmessage @0489,3,0,0 ...in the senseless explosion of sound, you are reduced to a crawling thing on the margin of a disintegrating world...
+
+[function f_nuclear_pillar_nudgeup]
+z += 3
+
+
+
+[eof]

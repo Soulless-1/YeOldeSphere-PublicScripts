@@ -1,0 +1,23 @@
+    if (<ref1.region.flags>&region_flag_nobuilding) || (<ref1.region.flags>&region_flag_guarded)
+      src.sysmessage Housing cannot be created in this area.
+      local.invalid=1
+    elseif (<ref1.isneartype t_tree <local.AreaCheck>>)
+      src.sysmessage Location too close to a tree.
+      local.invalid=1
+    elseif (<ref1.isneartype t_rock <local.AreaCheck>>)
+      src.sysmessage Location too close to a rocks.
+      local.invalid=1
+    elseif (<ref1.isneartype t_water <local.AreaCheck>>)	
+      src.sysmessage Location too close to water.
+      local.invalid=1
+    elseif (<ref1.istoobumpy <local.AreaCheck>>)
+      src.sysmessage Terrain is too bumpy to place structure here.
+      local.invalid=1
+    elseif (<ref1.isnearroad <local.AreaCheck>>)
+      src.sysmessage Location too close to a road.
+      local.invalid=1
+    elseif (<ref1.isnearhouse <local.AreaCheck>>)
+      src.sysmessage Location too close to another house.
+      local.invalid=1
+    endif
+    ref1.remove		//remove the item we used to check the area with

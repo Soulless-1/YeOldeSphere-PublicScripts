@@ -1,0 +1,81 @@
+//General Skill functions
+//5:12 PM 3/31/2018
+
+[defname skill_settings]
+skill_instantuse	1	//this means the skill fires right away, and the delay is after
+
+[function f_skillwait]
+if !(<isempty <args>>)
+  findid.i_skillwait.remove
+  serv.newitem i_skillwait
+  equip <new>
+  new.timerms=<eval (<argv[0]>/10)*1000>
+endif
+if (<findid.i_skillwait>)
+  return <findid.i_skillwait.timerms>
+else
+  return 0
+endif
+
+[itemdef i_skillwait]
+id=i_memory
+name=f_skillwait
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[function f_skillcheck]		//f_skillcheck skillname, skillval
+//argv[0]=skill
+//argv[1]=val
+if (<<argv[0]>> >= <argv[1]>)
+  return 1
+else
+  return 0
+endif
+
+[function f_skill_successchance] 	//f_skillsucceed skill, minskill, maxskill, optionalobject
+if (<isempty <args>>)
+  return 0			//must have arguments to calculate
+endif
+local.skillvalue=<<argv[0]>>	//the value of our skill
+local.minskill=<argv[1]>	//min required skill
+local.maxskill=<argv[2]>	//maximum required skill
+ref1=<argv[3]>			//optional object
+local.chance=<eval (<local.skillvalue>-<local.minskill>)/(<local.maxskill>-<local.minskill>)>
+return <local.chance>
+
+[function f_skillsucceed]
+local.skill=<args>	//general skill succeed function based off 1-100%
+if (strlen(<args>)) && (<serv.skill.<args>>)
+  local.chance=<R1,1000>
+  //serv.log <<local.skill>> <local.chance> 
+  if (<<local.skill>> > <local.chance>) || (<isgm>)
+    return 1
+  else
+    return 0  
+  endif
+else 
+  return 0
+endif
+
+[function f_skillgain]		//general function to gain skill either based on the args or the skill level of the char
+if (<skilllock.<args>>) || (<skilltotal> >= <serv.skillclass.0.skillsum>)
+  return 1
+endif
+args=<explode " ",<args>>
+if (strlen(<args>))
+  if !(<serv.skill.<argv[0]>>)
+    return 1
+  endif
+  local.diff=<<argv[0]>>
+  local.diff=<qval (!<isempty <argv[1]>>)?<argv[1]>:<local.diff>>
+  local.diff=<qval (<local.diff> < 1000)?<local.diff>:970>
+  if (<R0,1000> > <local.diff>)
+    <argv[0]> += 1
+  endif
+endif
+
+[EOF]

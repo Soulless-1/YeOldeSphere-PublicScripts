@@ -1,0 +1,22 @@
+//Castspell function by Soulless
+//v1.0
+//8:52 AM 3/23/2022
+
+[plevel 1]
+castspell
+
+[function castspell]
+if (<isempty <args>>) || !(<isnum <args>>)
+  sysmessage You must specify a spell number with this command.
+  return 1
+elseif (<args> < 1) || (<args> > 64)
+  sysmessage That is not a valid spell number.
+  return 1
+endif
+//actarg1=<args>	//forcing the spell was a bad idea, caused invalid targets and issues
+//actprv=<uid>
+//action=25
+cast <args>
+
+
+[EOF]

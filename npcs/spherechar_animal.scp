@@ -1,0 +1,2277 @@
+//All animals should go in this file
+//1:01 AM 4/17/2018
+
+[chardef 05]
+defname=c_eagle
+name=Eagle
+sound=snd_ANIMALS_EAGLE1
+icon=i_pet_EAGLE
+can=mt_walk|mt_fly
+dam=5, 10
+armor=11
+resources=36 i_feather, 1 i_bird_raw
+foodtype=5 t_fruit,t_meat_raw
+desires=
+aversions=r_civilization,e_carnivores2
+description=Eagle
+subsection=Air (Wild)
+category=Animals
+
+on=@create
+	npc=brain_animal
+	str={31, 47}
+	dex={36, 60}
+	int={8, 20}
+	maxhits={20, 27}
+	maxmana={0}
+	//resphysical={20, 25}
+	//resfire={10, 15}
+	//rescold={20, 25}
+	//respoison={5, 10}
+	//resenergy={5, 10}
+	magicresistance={15.3, 30.0}
+	tactics={18.1, 37.0}
+	wrestling={20.1, 30.0}
+	taming=17.1
+	fame=300
+	karma=0
+
+on=@npcrestock
+	item=i_gold,{50,100}
+	item=i_reag_black_pearl,4
+
+[chardef 06]
+defname=c_bird
+name=#nameS_BIRDS
+sound=snd_ANIMALS_FRSTBRD1
+icon=i_pet_BIRD
+can=mt_walk|mt_fly
+dam=1
+armor=0
+resources=25 i_feather, 1 i_bird_raw
+foodtype=3 t_crops, 6 t_fruit, 3 t_grain
+desires=t_foliage,c_BIRD
+aversions=t_water,c_man,c_woman
+description=Bird
+subsection=Air (Wild)
+category=Animals
+
+on=@create
+	npc=brain_animal
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+[chardef 01d]
+defname=c_gorilla
+name=Gorilla
+sound=snd_ANIMALS_GORILLA1
+icon=i_pet_GORILLA
+dam=4, 10
+armor=20
+resources=6 i_hide,1 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=25 t_crops,25 t_fruit, 25 t_grain
+desires=r_jungle,c_gorilla
+aversions=r_civilization
+description=Gorilla
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={53, 95}
+	dex={36, 55}
+	int={36, 60}
+	maxhits={38, 51}
+	//resphysical={20, 25}
+	//resfire={5, 10}
+	//rescold={10, 15}
+	magicresistance={45.1, 60.0}
+	tactics={43.3, 58.0}
+	wrestling={43.3, 58.0}
+	taming=0
+	fame=450
+	karma=0
+
+[chardef 034]
+defname=c_snake
+name=Snake
+sound=snd_ANIMALS_SNAKE1
+icon=i_pet_SNAKE
+dam=1, 4
+armor=16
+resources=1 i_ribs_raw
+can=mt_walk
+foodtype=t_meat_raw
+desires=i_gold
+description=Snake
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	color=colors_snake
+	str={22, 34}
+	dex={16, 25}
+	int={6, 10}
+	maxhits={15, 19}
+	//resphysical={15, 20}
+	//respoison={20, 30}
+	poisoning={50.1, 70.0}
+	magicresistance={15.1, 20.0}
+	tactics={19.3, 34.0}
+	wrestling={19.3, 34.0}
+	taming=59.1
+	fame=300
+	karma=-300
+
+[chardef 03a]
+defname=c_wisp
+name=Wisp
+sound=snd_MONSTER_WISP1
+icon=i_pet_WISP
+dam=17, 18
+armor=40
+can=mt_walk|mt_fly|mt_usehands	//|MT_FIRE_IMMUNE
+foodtype=t_spell
+resources=t_magic
+aversions=r_civilization
+tevents=e_wisp_speech
+category=Miscellaneous
+subsection=Wisp
+description=Wisp
+
+ON=@Create
+    events=+e_faction_aligned
+    tag0.AlignedFaction=2
+	npc=brain_animal
+	str={196, 225}
+	dex={196, 225}
+	int={196, 225}
+	maxhits={118, 135}
+	//resphysical={35, 45}
+	//resfire={20, 40}
+	//rescold={10, 30}
+	//respoison={5, 10}
+	//resenergy={50, 70}
+	evaluatingintel={80.0}
+	magery={80.0}
+	magicresistance={80.0}
+	tactics={80.0}
+	wrestling={80.0}
+	fame=4000
+	karma=0
+	make_spellcaster 5,7
+	itemnewbie=i_light_source
+	attr=attr_magic|attr_newbie
+
+on=@npcrestock
+	item=i_gold,{400,500}
+//	item=i_fragrant_seed
+//	item=i_peculiar_seed
+
+[chardef 050]
+defname=c_toad_giant
+name=Giant Toad
+sound=snd_MONSTER_GIANTTOAD1
+icon=i_pet_toad_giant
+dam=5, 17
+armor=24
+resources=1 i_ribs_raw,12 i_hide_spined
+can=mt_walk
+foodtype=5 t_meat_raw
+aversions=r_civilization
+description=Giant Toad
+subsection=Giant Insects and Reptiles
+category=Monsters
+
+ON=@Create
+	npc=brain_monster
+	str={76, 100}
+	dex={6, 25}
+	int={11, 20}
+	maxhits={46, 60}
+	//resphysical={20, 25}
+	//resfire={5, 10}
+	//resenergy={5, 10}
+	magicresistance={25.1, 40.0}
+	tactics={40.1, 60.0}
+	wrestling={40.1, 60.0}
+	taming=23.1
+	fame=750
+	karma=-750
+
+on=@npcrestock
+	item=i_gold,{25,50}
+
+
+[chardef 051]
+defname=c_bullfrog
+name=Bull Frog
+sound=snd_MONSTER_BULLFROG1
+icon=i_pet_bullfrog
+can=mt_walk
+dam=1, 2
+armor=8
+resources=1 i_ribs_raw,4 i_hide
+foodtype=5 t_meat_raw
+aversions=r_civilization
+category=Animals
+subsection=Land (Wild)
+description=Bull Frog
+
+ON=@Create
+	npc=brain_animal
+	str={46, 70}
+	dex={6, 25}
+	int={11, 20}
+	maxhits={28, 42}
+	//resphysical={5, 10}
+	magicresistance={25.1, 40.0}
+	tactics={40.1, 60.0}
+	wrestling={40.1, 60.0}
+	taming=23.1
+	fame=350
+	karma=0
+
+ON=@NPCRestock
+	item=i_gold,{25,50}
+
+[chardef 097]
+defname=c_dolphin
+name=Dolphin
+sound=snd_ANIMALS_DOLPHIN1
+icon=i_pet_DOLPHIN
+dam=3, 6
+armor=16
+resources=1 i_fish_cut_raw
+can=mt_swim
+foodtype=5 t_FISH
+desires=t_SHIP,c_dolphin
+aversions=r_civilization
+description=Dolphin
+subsection=Sea (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={21, 49}
+	dex={66, 85}
+	int={96, 110}
+	maxhits={15, 27}
+	//resphysical={15, 20}
+	//resfire={70, 80}
+	//rescold={25, 30}
+	//respoison={10, 15}
+	//resenergy={10, 15}
+	magicresistance={15.1, 20.0}
+	tactics={19.2, 29.0}
+	wrestling={19.2, 29.0}
+	fame=500
+	karma=2000
+
+[chardef 0C8]
+defname=c_horse_tan
+name=Horse
+sound=snd_ANIMALS_HORSE1
+icon=i_pet_horse_tan
+can=mt_walk|mt_run
+resources=3 i_ribs_raw, 10 i_hide
+foodtype=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+dam=3, 4
+armor=9
+desires=e_horses,c_man,c_woman
+TEVENTS=e_horses
+aversions=e_carnivores3
+description=Horse (Beige)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={22, 98}
+	dex={56, 75}
+	int={6, 10}
+	maxhits={28, 45}
+	//resphysical={15, 20}
+	magicresistance={25.1, 30.0}
+	tactics={29.3, 44.0}
+	wrestling={29.3, 44.0}
+	taming=29.1
+	fame=300
+	karma=99  //300
+
+
+[chardef 0c9]
+defname=c_cat
+name=Cat
+sound=snd_ANIMALS_CAT1
+icon=i_pet_CAT
+dam=1
+armor=8
+resources=1 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=5 t_meat_raw, 5 t_FISH
+//SHELTER=r_HOUSE,e_Human_Greet
+desires=e_Human_Greet,t_WINDOW
+description=Cat
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={9}
+	dex={35}
+	int={5}
+	maxhits={6}
+	//resphysical={5, 10}
+	magicresistance={5.0}
+	tactics={4.0}
+	wrestling={5.0}
+	hiding={20.0}
+	taming=23.1
+	fame=0
+	karma=100
+
+[chardef 0CA]
+defname=c_alligator
+name=Alligator
+sound=661
+icon=i_pet_CROC
+dam=5, 15
+armor=30
+resources=6 i_ribs_raw,12 i_hide
+can=mt_walk|mt_run|mt_swim
+foodtype=5 t_meat_raw,t_fish
+desires=c_alligator
+aversions=r_civilization,c_man,c_woman,e_carnivores3
+description=Alligator
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={76, 100}
+	dex={6, 25}
+	int={11, 20}
+	maxhits={46, 60}
+	maxstam={46, 65}
+	//resphysical={25, 35}
+	//resfire={5, 10}
+	//respoison={5, 10}
+	magicresistance={25.1, 40.0}
+	tactics={40.1, 60.0}
+	wrestling={40.1, 60.0}
+	taming=47.1
+	fame=600
+	karma=-600
+
+[chardef 0CB]
+defname=c_pig
+name=Pig
+sound=0c4
+icon=i_pet_PIG
+can=mt_walk|mt_run
+dam=2, 4
+armor=12
+resources=1 i_ribs_raw
+foodtype=55 t_fruit, 55 t_crops, 55 t_grain, 55 t_garbage
+desires=c_pig,c_pig_big
+description=Pig
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	str={20}
+	dex={20}
+	int={5}
+	maxhits={12}
+	//resphysical={10, 15}
+	magicresistance={5.0}
+	tactics={5.0}
+	wrestling={5.0}
+	taming=11.1
+	fame=150
+	karma=0
+
+[chardef 0CC]
+defname=c_horse_brown_dk
+name=Horse
+sound=0a8
+icon=i_pet_horse_brown_dk
+can=mt_walk|mt_run
+resources=3 i_ribs_raw, 10 i_hide
+foodtype=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+dam=3, 4
+armor=9
+desires=e_horses,c_man,c_woman
+TEVENTS=e_horses
+aversions=e_carnivores3
+description=Horse (Beige)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={22, 98}
+	dex={56, 75}
+	int={6, 10}
+	maxhits={28, 45}
+	//resphysical={15, 20}
+	magicresistance={25.1, 30.0}
+	tactics={29.3, 44.0}
+	wrestling={29.3, 44.0}
+	taming=29.1
+	fame=300
+	karma=99  //300
+
+[chardef 0CD]
+defname=c_rabbit
+name=Rabbit
+sound=0c9
+icon=i_pet_RABBIT_2
+can=mt_walk|mt_run
+dam=1
+armor=6
+resources=1 i_ribs_raw,1 i_hide
+foodtype=55 t_crops,55 t_foliage, 64 t_grass
+desires=c_rabbit
+aversions=e_carnivores2
+description=Rabbit
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={6, 10}
+	dex={26, 38}
+	int={6, 14}
+	maxhits={4, 6}
+	//resphysical={5, 10}
+	magicresistance={5.0}
+	tactics={5.0}
+	wrestling={5.0}
+	taming=18.9
+	fame=150
+	karma=0
+
+[chardef 0CF]
+defname=c_sheep_woolly
+name=Sheep
+sound=0d6
+icon=i_pet_SHEEP_WOOLY
+dam=1, 2
+armor=6
+resources=3 I_WOOL, 3 i_lamb_leg_raw
+can=mt_walk|mt_run
+foodtype=5 t_crops, 5 t_grain, 64 t_grass
+desires=c_SHEEP_WOOLLY,c_SHEEP_SHORN,c_man,c_woman
+aversions=e_carnivores3
+description=Sheep
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={19}
+	dex={25}
+	int={5}
+	maxhits={12}
+	//resphysical={5, 10}
+	magicresistance={5.0}
+	tactics={6.0}
+	wrestling={5.0}
+	taming=11.1
+	fame=300
+	karma=0
+
+
+[chardef 0D0]
+defname=c_chicken
+name=Chicken
+sound=06e
+icon=i_pet_CHICKEN
+dam=1
+armor=2
+resources=25 i_feather,I_BIRD_RAW
+can=mt_walk|mt_run
+foodtype=5 t_grain
+desires=c_chicken
+aversions=e_carnivores2
+description=Chicken
+subsection=Air (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={5}
+	dex={15}
+	int={5}
+	maxhits={3}
+	//resphysical={1, 5}
+	magicresistance={4.0}
+	tactics={5.0}
+	wrestling={5.0}
+	taming=11.1
+	fame=150
+	karma=0
+
+[chardef 0d1]
+defname=c_goat
+name=Goat
+sound=099
+icon=i_pet_GOAT
+dam=3, 4
+armor=10
+resources=2 i_ribs_raw,8 i_hide
+can=mt_walk|mt_run
+foodtype=5 t_fruit, 5 t_leather, 64 t_grass, 5 t_garbage
+desires=c_man,c_woman,c_goat
+aversions=e_carnivores3
+description=Goat
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={19}
+	dex={15}
+	int={5}
+	maxhits={12}
+	//resphysical={5, 15}
+	magicresistance={5.0}
+	tactics={5.0}
+	wrestling={5.0}
+	taming=11.1
+	fame=150
+	karma=0
+
+[chardef 0d2]
+defname=c_ostard_desert
+defname2=c_ostard_ocklock
+name=Desert Ostard	//Oclock
+sound=0270
+icon=i_pet_OSTARD_Desert
+dam=5, 11
+armor=9
+resources=3 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=55 t_crops, 55 t_fruit, 64 t_grass
+desires=e_OSTARDS
+//RESLEVEL=1
+//RESDISPDNID=0d2 //c_horse_tan
+//RESDISPDNID=0 //0100
+description=Desert Ostard
+subsection=T2A Animals
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={94, 170}
+	dex={56, 75}
+	int={6, 10}
+	maxhits={71, 88}
+	//resphysical={15, 20}
+	//resfire={5, 15}
+	magicresistance={25.1, 30.0}
+	tactics={25.3, 40.0}
+	wrestling={29.3, 44.0}
+	taming=29.1
+	fame=450
+	karma=0
+
+[chardef 167]
+defname=c_bear_brown
+name=Brown Bear
+sound=0a3
+icon=i_pet_bear_black
+dam=6, 12
+armor=24
+resources=1 i_ribs_raw,12 i_hide
+can=mt_walk|mt_run
+foodtype=5 t_FISH, 5 t_fruit,15 t_meat_raw
+aversions=r_civilization
+description=Brown Bear
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={76, 100}
+	dex={26, 45}
+	int={23, 47}
+	maxhits={46, 60}
+	//resphysical={20, 30}
+	//rescold={15, 20}
+	//respoison={10, 15}
+	magicresistance={25.1, 35.0}
+	tactics={40.1, 60.0}
+	wrestling={40.1, 60.0}
+	taming=41.1
+	fame=450
+	karma=0
+
+[chardef 212]
+defname=c_bear_grizzly
+name=Grizzly Bear
+sound=0a3
+icon=i_pet_Grizzly
+dam=8, 13
+armor=24
+resources=10 i_ribs_raw,4 i_fur_light
+can=mt_walk|mt_run
+foodtype=6 t_FISH,5 t_fruit, 15 t_meat_raw
+aversions=r_civilization
+description=Grizzly Bear
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={126, 155}
+	dex={81, 105}
+	int={16, 40}
+	maxhits={76, 93}
+	//resphysical={25, 35}
+	//rescold={15, 25}
+	//respoison={5, 10}
+	//resenergy={5, 10}
+	magicresistance={25.1, 40.0}
+	tactics={70.1, 100.0}
+	wrestling={45.1, 70.0}
+	taming=59.1
+	fame=1000
+	karma=0
+
+
+[chardef 213]
+defname=c_bear_polar
+name=Polar Bear
+sound=0a3
+icon=i_pet_bear_polar
+dam=7, 12
+armor=18
+resources=16 i_hide, 3 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=6 t_FISH,5 t_fruit, 35 t_meat_raw
+desires=r_snow
+aversions=r_civilization
+description=Polar Bear
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={116, 140}
+	dex={81, 105}
+	int={26, 50}
+	maxhits={70, 84}
+	//resphysical={25, 35}
+	//rescold={60, 80}
+	//respoison={15, 25}
+	//resenergy={10, 15}
+	magicresistance={45.1, 60.0}
+	tactics={60.1, 90.0}
+	wrestling={45.1, 70.0}
+	taming=35.1
+	fame=1500
+	karma=0
+
+
+[chardef 0d6]
+defname=c_panther
+name=Panther
+sound=0462
+icon=i_pet_PANTHER
+dam=4, 12
+armor=16
+resources=10 i_hide, 1 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=15 t_meat_raw,t_fish
+desires=c_PANTHER
+tevents=e_carnivores2
+aversions=r_civilization,r_water
+description=Panther
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	color=0901
+	str={61, 85}
+	dex={86, 105}
+	int={26, 50}
+	maxhits={37, 51}
+	//resphysical={20, 25}
+	//resfire={5, 10}
+	//rescold={10, 15}
+	//respoison={5, 10}
+	magicresistance={15.1, 30.0}
+	tactics={50.1, 65.0}
+	wrestling={50.1, 65.0}
+	taming=53.1
+	fame=450
+	karma=0
+
+[chardef 0d8]
+defname=c_cow_bw
+name=Cow
+sound=078
+icon=i_pet_COW
+dam=1, 4
+armor=10
+resources=8 i_ribs_raw,12 i_hide
+can=mt_walk|mt_run|MT_FEMALE
+foodtype=64 t_grass,25 t_grain, 25 I_HAY
+desires=c_cow_bw,c_cow_brown,c_bull_brown_lt,c_bull_brown_dk
+aversions=e_carnivores3
+description=Cow (Black and White)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={30}
+	dex={15}
+	int={5}
+	maxhits={18}
+	//resphysical={5, 15}
+	magicresistance={5.5}
+	tactics={5.5}
+	wrestling={5.5}
+	taming=11.1
+	fame=300
+	karma=0
+        if !(<R1000000>)
+          color=078b
+          name=Mad Cow
+          events=+e_dragon_breathe
+	  npc=brain_monster 
+	  str={796, 825}
+	  dex={86, 105}
+	  int={436, 475}
+	  maxhits={478, 495}
+	  //resphysical={55, 65}
+	  //resfire={60, 70}
+	  //rescold={30, 40}
+	  //respoison={25, 35}
+	  //resenergy={35, 45}
+	  evaluatingintel={30.1, 40.0}
+	  magery={30.1, 40.0}
+	  magicresistance={99.1, 100.0}
+	  tactics={97.6, 100.0}
+	  wrestling={90.1, 92.5}
+	  taming=93.9
+	  fame=15000
+	  karma=-15000
+	  make_spellcaster 6
+        endif
+        
+
+[chardef 0D9]
+defname=c_dog
+name=Dog
+sound=085
+icon=i_pet_DOG
+can=mt_walk|mt_run
+dam=4, 7
+armor=12
+resources=3 i_ribs_raw
+foodtype=5 t_meat_raw
+desires=c_man,c_woman,c_DOG
+description=Dog
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={27, 37}
+	dex={28, 43}
+	int={29, 37}
+	maxhits={17, 22}
+	//resphysical={10, 15}
+	magicresistance={22.1, 47.0}
+	tactics={19.2, 31.0}
+	wrestling={19.2, 31.0}
+	taming=15.3
+	fame=0
+	karma=100
+
+[chardef 0da]
+defname=c_ostard_frenzied
+defname2=c_ostard_zostrich
+name=Frenzied Ostard	//Zostrich
+sound=0275
+icon=i_pet_OSTARD_ZOSTRICH
+can=mt_walk|mt_run
+dam=11, 17
+armor=15
+resources=3 i_ribs_raw
+foodtype=55 t_crops, 55 t_fruit, 64 t_grass
+desires=e_OSTARDS
+ANIM=01fff
+//RESLEVEL=1
+//RESDISPDNID=0da //c_horse_tan
+//RESDISPDNID=0 //0150
+description=Frenzied Ostard
+subsection=T2A Animals
+category=Animals
+
+ON=@Create
+	npc=brain_monster
+	color={044e, 047d}
+	str={94, 170}
+	dex={96, 115}
+	int={6, 10}
+	maxhits={71, 110}
+	//resphysical={25, 30}
+	//resfire={10, 15}
+	//respoison={20, 25}
+	//resenergy={20, 25}
+	magicresistance={75.1, 80.0}
+	tactics={79.3, 94.0}
+	wrestling={79.3, 94.0}
+	taming=77.1
+	fame=1500
+	karma=-1500
+
+
+[chardef 0db]
+defname=c_ostard_forest
+defname2=c_ostard_orn
+name=Forest Ostard
+sound=0270
+icon=i_pet_OSTARD_Forest
+can=mt_walk|mt_run
+DAM=4,12
+armor=9
+resources=3 i_ribs_raw
+foodtype=55 t_crops, 55 t_fruit, 64 t_grass
+desires=e_OSTARDS,c_man,c_woman
+aversions=e_carnivores3
+ANIM=01fff
+//RESLEVEL=1
+//RESDISPDNID=0db //c_horse_tan
+//RESDISPDNID=0 //0166lla
+description=Forest Ostard
+subsection=T2A Animals
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	color={0899,08b0} 
+	str={94, 170}
+	dex={56, 75}
+	int={6, 10}
+	maxhits={71, 88}
+	dam=8, 14
+	//resphysical={15, 20}
+	magicresistance={27.1, 32.0}
+	tactics={29.3, 44.0}
+	wrestling={29.3, 44.0}
+	taming=29.1
+	fame=450
+	karma=0
+
+[chardef 0dc]
+defname=c_llama
+name=Llama
+sound=03f3
+icon=i_pet_LLAMA
+can=mt_walk|mt_run
+dam=3, 5
+armor=16
+resources=1 i_ribs_raw,12 i_hide
+foodtype=5 t_crops, 5 t_fruit, 5 t_grain, 5 i_hay, 64 t_grass
+desires=c_llama,c_llama_pack,spk_human_prime
+description=Llama
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={21, 49}
+	dex={36, 55}
+	int={16, 30}
+	maxhits={15, 27}
+	//resphysical={15, 20}
+	magicresistance={15.1, 20.0}
+	tactics={19.2, 29.0}
+	wrestling={19.2, 29.0}
+	taming=35.1
+	fame=300
+	karma=0
+
+[chardef 0dd]
+defname=c_walrus
+name=Walrus
+sound=0e0
+icon=i_pet_walrus
+can=mt_walk|mt_run
+dam=4, 10
+armor=18
+resources=1 i_fish_cut_raw, 12 i_hide
+foodtype=5 t_FISH
+desires=r_snow,c_WALRUS
+aversions=r_civilization
+description=Walrus
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={21, 29}
+	dex={46, 55}
+	int={16, 20}
+	maxhits={14, 17}
+	//resphysical={20, 25}
+	//resfire={5, 10}
+	//rescold={20, 25}
+	//respoison={5, 10}
+	//resenergy={5, 10}
+	magicresistance={15.1, 20.0}
+	tactics={19.2, 29.0}
+	wrestling={19.2, 29.0}
+	taming=35.1
+	fame=150
+	karma=0
+
+[chardef 0df]
+defname=c_sheep_shorn
+name=Sheep
+sound=0d6
+icon=i_pet_SHEEP
+ANIM=01fff
+DAM=1, 2
+armor=6
+resources=3 i_lamb_leg_raw, 3 i_hide
+can=mt_walk|mt_run
+foodtype=5 t_crops, 5 t_grain, 64 t_grass
+desires=c_SHEEP_WOOLLY,c_SHEEP_SHORN,c_man,c_woman
+aversions=e_carnivores3
+description=Lamb
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={19}
+	dex={25}
+	int={5}
+	maxhits={12}
+	//resphysical={5, 10}
+	magicresistance={5.0}
+	tactics={6.0}
+	wrestling={5.0}
+	taming=11.1
+	fame=300
+	karma=0
+
+[chardef 225]
+defname=c_wolf
+name=Timber Wolf
+sound=0e5
+icon=i_pet_wolf
+dam=5, 9
+armor=16
+resources=3 i_ribs_raw,2 i_fur_dark
+can=mt_walk|mt_run
+foodtype=15 t_meat_raw
+desires=c_wolf
+aversions=r_civilization
+description=Timber Wolf
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={56, 80}
+	dex={56, 75}
+	int={11, 25}
+	maxhits={34, 48}
+	//resphysical={15, 20}
+	//resfire={5, 10}
+	//rescold={10, 15}
+	//respoison={5, 10}
+	//resenergy={5, 10}
+	magicresistance={27.6, 45.0}
+	tactics={30.1, 50.0}
+	wrestling={40.1, 60.0}
+	taming=23.1
+	fame=450
+	karma=0
+
+[chardef 0E2]
+defname=c_horse_gray
+name=Horse
+sound=0a8
+icon=i_pet_horse_gray
+can=mt_walk|mt_run
+resources=3 i_ribs_raw, 10 i_hide
+foodtype=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+dam=3, 4
+armor=9
+desires=e_horses,c_man,c_woman
+TEVENTS=e_horses
+aversions=e_carnivores3
+description=Horse (White)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={22, 98}
+	dex={56, 75}
+	int={6, 10}
+	maxhits={28, 45}
+	//resphysical={15, 20}
+	magicresistance={25.1, 30.0}
+	tactics={29.3, 44.0}
+	wrestling={29.3, 44.0}
+	taming=29.1
+	fame=300
+	karma=99  //300
+
+[chardef 0E4]
+defname=c_horse_brown_lt
+name=Horse
+sound=0a8
+icon=i_pet_horse_brown_lt
+can=mt_walk|mt_run
+resources=3 i_ribs_raw, 10 i_hide
+foodtype=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+dam=3, 4
+armor=9
+desires=e_horses,c_man,c_woman
+TEVENTS=e_horses
+aversions=e_carnivores3
+description=Horse (Tan)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={22, 98}
+	dex={56, 75}
+	int={6, 10}
+	maxhits={28, 45}
+	//resphysical={15, 20}
+	magicresistance={25.1, 30.0}
+	tactics={29.3, 44.0}
+	wrestling={29.3, 44.0}
+	taming=29.1
+	fame=300
+	karma=99  //300
+
+[chardef 0e7]
+defname=c_cow_brown
+name=Cow
+sound=078
+icon=i_pet_COW
+armor=10
+resources=8 i_ribs_raw,12 i_hide
+can=mt_walk|mt_run|MT_FEMALE
+foodtype=64 t_grass,25 t_grain, 25 I_HAY
+desires=c_cow_bw,c_cow_brown,c_bull_brown_lt,c_bull_brown_dk
+aversions=e_carnivores3
+description=Cow (Brown and White)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={30}
+	dex={15}
+	int={5}
+	maxhits={18}
+	//resphysical={5, 15}
+	magicresistance={5.5}
+	tactics={5.5}
+	wrestling={5.5}
+	taming=11.1
+	fame=300
+	karma=0
+
+[chardef 0e8]
+defname=c_bull_brown
+defname=c_bull_brown_dk
+name=Bull
+sound=064
+icon=i_pet_BULL
+dam=4, 9
+armor=28
+resources=10 i_ribs_raw,15 i_hide
+can=mt_walk|mt_run
+foodtype=25 t_grain, 25 I_HAY, 64 t_grass
+desires=c_cow_bw,c_cow_brown,c_bull_brown_lt,c_bull_brown_dk
+aversions=e_carnivores3
+
+description=Bull (Brown)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={77, 111}
+	dex={56, 75}
+	int={47, 75}
+	maxhits={50, 64}
+	//resphysical={25, 30}
+	//rescold={10, 15}
+	magicresistance={17.6, 25.0}
+	tactics={67.6, 85.0}
+	wrestling={40.1, 57.5}
+	taming=71.1
+	fame=600
+	karma=0
+
+[chardef 0e9]
+//Bull2 (Black and White)
+defname=c_bull_bw
+defname2=c_bull_brown_lt
+name=Bull
+sound=064
+icon=i_pet_BULL
+dam=4, 9
+armor=28
+resources=10 i_ribs_raw,15 i_hide
+can=mt_walk|mt_run
+foodtype=25 t_grain, 25 I_HAY, 64 t_grass
+desires=c_cow_bw,c_cow_brown,c_bull_brown_lt,c_bull_brown_dk
+aversions=e_carnivores3
+
+description=Bull (Black and White)
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={77, 111}
+	dex={56, 75}
+	int={47, 75}
+	maxhits={50, 64}
+	//resphysical={25, 30}
+	//rescold={10, 15}
+	magicresistance={17.6, 25.0}
+	tactics={67.6, 85.0}
+	wrestling={40.1, 57.5}
+	taming=71.1
+	fame=600
+	karma=0
+
+[chardef 0EA]
+defname=c_great_hart
+defname2=c_stag
+name=Great Hart
+sound=082
+icon=i_pet_DEER
+dam=5, 9
+armor=24
+resources=6 i_ribs_raw,15 i_hide
+can=mt_walk|mt_run
+foodtype=25 t_crops, 64 t_grass
+desires=c_stag,c_doe,r_foliage
+aversions=r_civilization,e_carnivores3
+description=Great Hart
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={41, 71}
+	dex={47, 77}
+	int={27, 57}
+	maxhits={27, 41}
+	//resphysical={20, 25}
+	//rescold={5, 10}
+	magicresistance={26.8, 44.5}
+	tactics={29.8, 47.5}
+	wrestling={29.8, 47.5}
+	taming=59.1
+	fame=300
+	karma=0
+
+[chardef 0ED]
+defname=c_hind
+defname2=c_doe
+name=Hind
+sound=082
+icon=i_pet_DEER
+dam=4
+armor=8
+resources=5 i_ribs_raw,8 i_hide
+can=mt_walk|mt_run
+foodtype=25 t_crops, 64 t_grass
+desires=c_stag,c_doe,r_foliage
+aversions=r_civilization,e_carnivores3
+description=Hind
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={21, 51}
+	dex={47, 77}
+	int={17, 47}
+	maxhits={15, 29}
+	//resphysical={5, 15}
+	//rescold={5}
+	magicresistance={15.0}
+	tactics={19.0}
+	wrestling={26.0}
+	taming=23.1
+	fame=300
+	karma=0
+
+[chardef 0ee]
+defname=c_rat
+name=Rat
+sound=0cc
+icon=i_pet_RAT
+dam=1, 2
+armor=6
+resources=1 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=5 t_food,t_garbage
+desires=c_rat,c_rat_sewer,c_RAT_GIANT,r_DARKNESS
+aversions=r_light,c_man,c_woman,e_carnivores
+description=Rat
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={9}
+	dex={35}
+	int={5}
+	maxhits={6}
+	//resphysical={5, 10}
+	//respoison={5, 10}
+	magicresistance={4.0}
+	tactics={4.0}
+	wrestling={4.0}
+	taming=0.9
+	fame=150
+	karma=-150
+
+on=@Npcrestock
+	item=i_gold,{25,50}
+
+[chardef 0122]
+defname=c_boar
+defname2=c_pig_big
+name=Boar
+sound=0c4
+icon=i_pet_PIG
+dam=3, 6
+armor=10
+resources=2 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=55 t_fruit, 55 t_crops, 55 t_grain, 55 t_garbage
+desires=c_pig,c_pig_big
+description=Boar
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={25}
+	dex={15}
+	int={5}
+	maxhits={15}
+	//resphysical={10, 15}
+	//resfire={5, 10}
+	//respoison={5, 10}
+	magicresistance={9.0}
+	tactics={9.0}
+	wrestling={9.0}
+	taming=29.1
+	fame=300
+	karma=0
+
+[chardef 291]
+defname=c_horse_pack
+name=Pack Horse
+sound=0a8
+icon=i_pet_horse_pack
+can=mt_walk|mt_run
+dam=5, 11
+armor=16
+resources=3 i_ribs_raw, 10 i_hide
+foodtype=55 t_crops, 55 t_fruit, 55 t_grain, 64 t_grass
+desires=e_horses,c_man,c_woman
+aversions=e_carnivores3
+TEVENTS=e_horses
+description=Pack Horse
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	modmaxweight 1400
+	npc=brain_animal
+	str={44, 120}
+	dex={36, 55}
+	int={6, 10}
+	maxhits={61, 80}
+	//resphysical={20, 25}
+	//resfire={10, 15}
+	//rescold={20, 25}
+	//respoison={10, 15}
+	//resenergy={10, 15}
+	magicresistance={25.1, 30.0}
+	tactics={29.3, 44.0}
+	wrestling={29.3, 44.0}
+	taming=29.1
+	fame=0
+	karma=200
+
+on=@click
+if (<owner>) && (<owner> == <src>)
+  message [Capacity: <muldiv <weight>,100,<maxweight>>%]
+endif
+
+[chardef 292]
+defname=c_llama_pack
+name=Pack Llama
+sound=03f3
+icon=i_pet_llama_pack
+dam=2, 6
+armor=16
+resources=1 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=5 t_crops, 5 t_fruit, 5 t_grain, 5 I_HAY, 64 t_grass
+desires=c_llama,c_llama_pack,spk_human_prime
+description=Pack Llama
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	modmaxweight 1400
+	npc=brain_animal
+	str={52, 80}
+	dex={36, 55}
+	int={16, 30}
+	maxhits={50}
+	//resphysical={25, 35}
+	//resfire={10, 15}
+	//rescold={10, 15}
+	//respoison={10, 15}
+	//resenergy={10, 15}
+	magicresistance={15.1, 20.0}
+	tactics={19.2, 29.0}
+	wrestling={19.2, 29.0}
+	taming=29.1
+	fame=0
+	karma=200
+
+on=@click
+if (<owner>) && (<owner> == <src>)
+  message [Capacity: <muldiv <weight>,100,<maxweight>>%]
+endif
+
+[chardef 01026]
+defname=C_BIRD_CROW
+name=Crow
+ID=c_BIRD
+sound=snd_ANIMALS_CROW1
+icon=i_pet_BIRD
+dam=1
+armor=0
+resources=2 i_ribs_raw, 25 i_feather
+can=mt_walk|mt_fly
+foodtype=25 t_crops, 25 t_grain
+desires=C_BIRD_CROW,t_crops
+aversions=e_carnivores,r_water,i_scarecrow
+description=Crow
+subsection=Air (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	color=colors_black
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+
+[chardef 01027]
+defname=C_BIRD_MAGPIE
+name=Magpie
+ID=c_BIRD
+sound=snd_ANIMALS_FRSTBRD1
+icon=i_pet_BIRD
+dam=1
+armor=0
+resources=2 i_ribs_raw,25 i_feather
+can=mt_walk|mt_fly
+foodtype=25 t_fruit,25 t_crops, 25 t_grain
+desires=c_BIRD,c_bird_magpie,T_GEM
+aversions=e_carnivores,r_water
+description=Magpie
+subsection=Air (Wild)
+category=Animals
+
+on=@create
+	npc=brain_animal
+	color=colors_bird
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+
+[chardef 01060]
+defname=C_BIRD_TROPICAL
+name=#nameS_TROPICAL_BIRDS
+ID=c_BIRD
+sound=snd_ANIMALS_PARROT1
+icon=i_pet_BIRD
+dam=1
+armor=0
+resources=2 i_ribs_raw, 25 i_feather
+can=mt_walk|mt_fly
+foodtype=3 t_crops, 6 t_fruit
+desires=C_BIRD_TROPICAL,c_BIRD,r_jungle
+aversions=r_civilization
+description=Tropical Bird
+subsection=Air (Wild)
+category=Animals
+
+on=@create
+	npc=brain_animal
+	color=colors_bird
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+
+[chardef 01061]
+defname=C_BIRD_RAVEN
+name=Raven
+ID=c_BIRD
+sound=snd_ANIMALS_RAVEN1
+icon=i_pet_RAVEN
+dam=1
+armor=0
+resources=2 i_ribs_raw, 25 i_feather
+can=mt_walk|mt_fly
+foodtype=15 t_crops, 15 t_grain
+desires=C_BIRD_RAVEN
+aversions=r_civilization,r_water
+description=Raven
+subsection=Air (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	color=colors_black
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+[chardef C_BIRD_JUNGLE]
+name=Jungle Bird
+ID=c_BIRD
+sound=snd_ANIMALS_JUNGBRD1
+icon=i_pet_BIRD
+dam=1
+armor=0
+resources=2 i_ribs_raw, 25 i_feather
+can=mt_walk|mt_fly
+foodtype=3 t_crops, 6 t_fruit
+desires=C_BIRD_JUNGLE,C_BIRD_TROPICAL, c_BIRD, C_BIRD_JUNGLE,r_jungle
+aversions=r_civilization
+description=Tropical Bird
+subsection=Air (Wild)
+category=Animals
+
+on=@create
+	npc=brain_animal
+	color=colors_bird
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+[chardef c_lion]
+defname=c_lion
+id=c_panther
+sound=03ef
+name=Mountain Lion
+icon=i_pet_PANTHER
+can=mt_walk|mt_run
+dam=16, 22
+armor=8
+resources=6 i_ribs_raw,2 i_fur_dark
+foodtype=15 t_meat_raw
+desires=c_Lion,r_foliage
+aversions=r_civilization,r_water
+description=Lion
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={710, 720}
+	dex={200, 220}
+	int={120, 140}
+	maxhits={350, 370}
+	//resphysical={40, 50}
+	//resfire={35, 45}
+	//rescold={30, 40}
+	//respoison={30, 40}
+	//resenergy={20, 40}
+parrying={90.0, 100.0}
+	tactics={100.0, 110.0}
+	wrestling={100.0, 110.0}
+detectinghidden={80.0}
+	fame=11000
+	karma=-11000
+
+
+[chardef 63]
+defname=c_cougar
+name=Cougar
+sound=073
+icon=i_pet_PANTHER
+can=mt_walk|mt_run
+dam=4, 10
+armor=16
+resources=1 i_ribs_raw,10 i_hide
+foodtype=15 t_meat_raw
+desires=c_COUGAR,r_foliage
+aversions=r_civilization,r_water
+description=Cougar
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={56, 80}
+	dex={66, 85}
+	int={26, 50}
+	maxhits={34, 48}
+	//resphysical={20, 25}
+	//resfire={5, 10}
+	//rescold={10, 15}
+	//respoison={5, 10}
+	magicresistance={15.1, 30.0}
+	tactics={45.1, 60.0}
+	wrestling={45.1, 60.0}
+	taming=41.1
+	fame=450
+	karma=0
+
+[chardef 88]
+defname=c_mountain_goat
+name=Mountain Goat
+sound=099
+icon=i_pet_GOAT
+can=mt_walk
+dam=3, 7
+armor=10
+resources=3 i_ribs_raw,12 i_hide
+foodtype=5 t_foliage, 5 t_fruit, 64 t_grass
+desires=c_goat, c_MOUNTAIN_GOAT
+aversions=r_civilization,e_carnivores3
+description=Mountain Goat
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={22, 64}
+	dex={56, 75}
+	int={16, 30}
+	maxhits={20, 33}
+	//resphysical={10, 20}
+	//resfire={5, 10}
+	//rescold={10, 20}
+	//respoison={10, 15}
+	//resenergy={10, 15}
+	magicresistance={25.1, 30.0}
+	tactics={29.3, 44.0}
+	wrestling={29.3, 44.0}
+	taming=0.9
+	fame=300
+	karma=0
+
+
+[chardef 01029]
+defname=c_jackrabbit
+name=Jackrabbit
+ID=c_RABBIT
+sound=snd_ANIMALS_RABBIT3
+icon=i_pet_RABBIT_2
+dam=1, 2
+armor=4
+resources=1 i_ribs_raw,1 i_hide
+can=mt_walk
+foodtype=55 t_crops, 55 t_foliage, 64 t_grass
+desires=t_crops,c_JACKRABBIT
+aversions=e_carnivores2
+description=Jackrabbit
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	color=01bb
+	str={15}
+	dex={25}
+	int={5}
+	maxhits={9}
+	//resphysical={2, 5}
+	magicresistance={5.0}
+	tactics={5.0}
+	wrestling={5.0}
+	fame=150
+	karma=0
+
+[chardef 01030]
+defname=c_rat_sewer
+name=Sewer Rat
+ID=c_rat
+sound=snd_ANIMALS_RAT1
+icon=i_pet_RAT
+dam=1, 2
+armor=6
+resources=1 i_ribs_raw
+can=mt_walk
+foodtype=5 t_food
+desires=c_rat,c_rat_giant,c_rat_sewer,r_darkness
+aversions=r_light,e_human_greet,e_carnivores
+description=Sewer Rat
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={9}
+	dex={25}
+	int={6, 10}
+	maxhits={6}
+	//resphysical={5, 10}
+	//respoison={15, 25}
+	//resenergy={5, 10}
+	magicresistance={5.0}
+	tactics={5.0}
+	wrestling={5.0}
+	taming=0.9
+	fame=300
+	karma=-300
+
+on=@npcrestock
+	item=i_gold.{25,50}
+
+[chardef 01031]
+defname=c_wolf_gray
+name=Gray Wolf
+ID=c_wolf
+sound=0e5
+icon=i_pet_wolf_gray
+dam=3, 7
+armor=16
+resources=1 i_ribs_raw, 6 i_hide
+can=mt_walk|mt_run
+foodtype=15 t_meat_raw
+desires=c_wolf
+aversions=r_civilization
+description=Gray Wolf
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={56, 80}
+	dex={56, 75}
+	int={31, 55}
+	maxhits={34, 48}
+	//resphysical={15, 20}
+	//resfire={10, 15}
+	//rescold={20, 25}
+	//respoison={10, 15}
+	//resenergy={10, 15}
+	magicresistance={20.1, 35.0}
+	tactics={45.1, 60.0}
+	wrestling={45.1, 60.0}
+	taming=53.1
+	fame=450
+	karma=0
+
+[chardef 01032]
+defname=c_wolf_white
+name=White Wolf
+ID=c_wolf
+sound=0e5
+dam=3, 7
+armor=16
+can=mt_walk|mt_run
+resources=1 i_ribs_raw, 6 i_hide
+foodtype=15 t_meat_raw
+desires=c_wolf_white,c_wolf,r_snow
+aversions=r_civilization
+description=White Wolf
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	color=0481
+	str={56, 80}
+	dex={56, 75}
+	int={31, 55}
+	maxhits={34, 48}
+	//resphysical={15, 20}
+	//resfire={10, 15}
+	//rescold={20, 25}
+	//respoison={10, 15}
+	//resenergy={10, 15}
+	magicresistance={20.1, 35.0}
+	tactics={45.1, 60.0}
+	wrestling={45.1, 60.0}
+	taming=53.1
+	fame=450
+	karma=0
+
+[chardef 211]
+defname=c_bear_black
+name=Black Bear
+sound=0a3
+icon=i_pet_bear_black
+dam=4, 10
+armor=24
+resources=9 i_ribs_raw
+foodtype=5 t_FISH, 5 t_fruit, 15 t_meat_raw
+can=mt_walk|mt_run
+aversions=r_civilization
+description=Black Bear
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={76, 100}
+	dex={56, 75}
+	int={11, 14}
+	maxhits={46, 60}
+	//resphysical={20, 25}
+	//rescold={10, 15}
+	//respoison={5, 10}
+	magicresistance={20.1, 40.0}
+	tactics={40.1, 60.0}
+	wrestling={40.1, 60.0}
+	taming=35.1
+	fame=450
+	karma=0
+
+[chardef 01059]
+defname=c_SNOW_LEOPARD
+name=Snow Leopard
+ID=c_PANTHER
+sound=073
+icon=i_pet_PANTHER
+dam=3, 9
+armor=24
+resources=1 i_ribs_raw, 8 i_hide
+can=mt_walk
+foodtype=15 t_meat_raw
+desires=r_snow,c_SNOW_LEOPARD
+aversions=r_civilization,r_water
+description=Snow Leopard
+subsection=Land (Wild)
+category=Animals
+
+ON=@Create
+	npc=brain_animal
+	str={56, 80}
+	dex={66, 85}
+	int={26, 50}
+	maxhits={34, 48}
+	//resphysical={20, 25}
+	//resfire={5, 10}
+	//rescold={30, 40}
+	//respoison={10, 20}
+	//resenergy={20, 30}
+	magicresistance={25.1, 35.0}
+	tactics={45.1, 60.0}
+	wrestling={40.1, 50.0}
+	taming=53.1
+	fame=450
+	karma=0
+
+
+[chardef 302]
+defname=c_skittering_hopper
+name=skittering hopper
+sound=959
+icon=i_pet_skithopper
+dam=3, 5
+armor=12
+//RESDISPDNID=0 //302		//c_headless
+//RESLEVEL=3
+//RESDISPDNID=0 //0		//55
+armor=15
+can=mt_walk|mt_run
+desires=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+category=New Monsters
+subsection=AOS
+description=skittering hopper
+
+ON=@Create
+	npc=brain_animal
+	str={41, 65}
+	dex={91, 115}
+	int={26, 50}
+	maxhits={31, 45}
+	//resphysical={5, 10}
+	//rescold={10, 20}
+	//resenergy={5, 10}
+	magicresistance={30.1, 45.0}
+	tactics={45.1, 70.0}
+	wrestling={40.1, 60.0}
+	taming=12.9
+	fame=300
+	karma=0
+
+ON=@NpcRestock
+	item=i_gold,{50,100}
+
+
+[chardef 277]
+name=Cu Sidhe
+sound=0576
+defname=c_cu_sidhe
+icon=i_pet_wolf
+dam=21, 28
+armor=20
+resources=3 i_ribs_raw,10 i_hide
+can=mt_walk|mt_run
+//RESDISPDNID=0 //c_horse_gray
+//RESLEVEL=5
+//RESDISPDNID=0 //083e7
+foodtype=55 i_ribs_raw
+desires=c_elf_male,c_elf_female
+aversions=e_carnivores3
+category=New Monsters
+subsection=ML
+description=Cu Sidhe
+
+ON=@Create
+	tag.controlslots=3
+	npc=brain_animal
+	str={1200, 1225}
+	dex={150, 170}
+	int={250, 285}
+	maxhits={1010, 1275}
+	//resphysical={50, 65}
+	//resfire={25, 45}
+	//rescold={70, 85}
+	//respoison={30, 50}
+	//resenergy={70, 85}
+	wrestling={90.1, 96.8}
+	tactics={90.3, 99.3}
+	magicresistance={75.3, 90.0}
+	anatomy={65.5, 69.4}
+	healing={72.2, 98.9}
+	taming=101.1
+	fame=5000  //Guessing here
+	karma=5000  //Guessing here
+
+on=@npcrestock
+	item=i_gold,{1500,1900}
+	item=random_weapon
+	item=random_armor
+	item=i_bandage,{1,5}
+//	item=level 5 treasure_map
+//	item=i_parrot?
+
+
+[chardef 0116]
+name=Squirrel
+defname=c_squirrel
+sound=0c9
+icon=i_pet_rabbit
+dam=1, 2
+armor=10
+resources=3 i_ribs_raw,2 i_hide
+can=mt_walk|mt_run
+//RESLEVEL=5
+//RESDISPDNID=0 //0	//33
+//RESDISPDNID=0 //c_rabbit
+foodtype=55 i_fruit_gourd1
+desires=c_man,c_woman
+aversions=e_carnivores3
+category=New Monsters
+subsection=ML
+description=Squirrel
+
+ON=@Create
+	npc=brain_animal
+	str={44, 50}
+	dex={35}
+	int={5}
+	maxhits={42, 50}
+	//resphysical={30, 34}
+	//resfire={10, 14}
+	//rescold={30, 35}
+	//respoison={20, 25}
+	//resenergy={20, 25}
+	magicresistance={4.0}
+	tactics={4.0}
+	wrestling={4.0}
+	taming=21.3
+
+
+[chardef 279]
+name=Ferret
+defname=c_ferret
+sound=0c9
+icon=i_pet_rabbit
+dam=7, 9
+armor=10
+resources=3 i_ribs_raw,3 i_hide
+can=mt_walk|mt_run
+//RESLEVEL=5
+//RESDISPDNID=0 //0		//33
+//RESDISPDNID=0 //c_rabbit
+foodtype=55 i_fruit_gourd1
+desires=c_man,c_woman
+aversions=e_carnivores3
+category=New Monsters
+subsection=ML
+description=Ferret
+
+ON=@Create
+	npc=brain_animal
+	str={41, 48}
+	dex={55}
+	int={75}
+	maxhits={45, 50}
+	//resphysical={45, 50}
+	//resfire={10, 14}
+	//rescold={30, 40}
+	//respoison={21, 25}
+	//resenergy={20, 25}
+	magicresistance={4.0}
+	tactics={4.0}
+	wrestling={4.0}
+	taming=21.3
+
+
+[chardef 282]
+name=Parrot
+defname=c_parrot
+sound=0bf
+icon=i_pet_bird
+DAM=2,8
+armor=10
+resources=1 i_bird_raw,5 i_feather
+can=mt_walk|mt_run|mt_fly
+//RESLEVEL=5
+//RESDISPDNID=0 //0	//33
+//RESDISPDNID=0 //c_bird
+foodtype=55 i_bread_loaf
+desires=c_man,c_woman
+aversions=e_carnivores3
+category=New Monsters
+subsection=ML
+description=Parrot
+
+ON=@Create
+	npc=brain_animal
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+[chardef 283]
+name=Crow
+defname=c_black_crow
+sound=snd_ANIMALS_CROW1
+icon=i_pet_bird
+DAM=5,9
+armor=10
+resources=1 i_bird_raw,5 i_feather
+can=mt_walk|mt_run|mt_fly
+//RESLEVEL=5
+//RESDISPDNID=0 //0455
+//RESDISPDNID=0 //c_bird
+foodtype=55 i_bread_loaf
+desires=c_man,c_woman
+aversions=e_carnivores3
+category=New Monsters
+subsection=ML
+description=Crow
+
+ON=@Create
+	npc=brain_animal
+	color=colors_black
+	str={10}
+	dex={25, 35}
+	int={10}
+	wrestling={4.2, 6.4}
+	tactics={4.0, 6.0}
+	magicresistance={4.0, 5.0}
+	taming=0
+	fame=150
+	karma=0
+
+[chardef 254]
+name=Crane
+defname=c_crane
+dam=1, 1
+armor=5
+sound=04d7
+resources=25 i_feather, 1 i_bird_raw
+can=mt_walk|mt_run
+icon=i_pet_crane
+category=New Monsters
+subsection=SE
+//RESDISPDNID=0 //c_bird
+//RESLEVEL=3
+//RESDISPDNID=0 //062	//33
+description=Crane
+
+on=@create
+	str={26, 35}
+	dex={16, 25}
+	int={11, 15}
+	maxhits={26, 35}
+	//resphysical={5, 5}
+	magicresistance={4.1, 5.0}
+	tactics={10.1, 11.0}
+	wrestling={10.1, 11.0}
+	fame=0
+	karma=200
+
+[chardef 248]
+name=Gaman
+defname=c_gaman
+armor=20
+icon=i_pet_gaman
+sound=04F8
+resources=15 i_hide, 10 i_ribs_raw
+can=mt_walk|mt_run
+dam=6, 11
+category=New Monsters
+//RESDISPDNID=0 //c_dog
+//RESLEVEL=3
+//RESDISPDNID=0 //0	//33
+subsection=SE
+description=Gaman
+
+on=@create
+	npc=brain_animal
+	str={146, 175}
+	dex={111, 150}
+	int={46, 60}
+	maxhits={131, 160}
+	//resphysical={50, 70}
+	//resfire={30, 50}
+	//rescold={30, 50}
+	//respoison={40, 60}
+	//resenergy={30, 50}
+	magicresistance={37.6, 42.5}
+	tactics={70.6, 83.0}
+	wrestling={50.1, 57.5}
+	taming=68.7
+	fame=2000
+	karma=-2000
+
+[chardef c_wisp_Shadow]
+defname=c_wisp_Shadow
+name=shadow wisp
+id=c_wisp
+sound=466
+can=mt_walk|mt_run|mt_usehands
+dam=5, 10
+armor=18
+tevents=e_wisp_speech
+
+on=@create
+	npc=brain_animal
+	color=0455
+	str={50, 50}
+	dex={60, 60}
+	int={100, 100}
+	maxhits={50, 50}
+	//resphysical={15, 20}
+	//resfire={5, 10}
+	//respoison={5, 10}
+	//resenergy={15, 20}
+	evaluatingintel={40.0}
+	magery={50.0}
+	meditation={40.0}
+	magicresistance={10.0}
+	tactics={0.1, 15.0}
+	wrestling={25.1, 40.0}
+	fame=500
+	make_spellcaster 5,7
+	itemnewbie=i_light_source
+	attr=attr_magic|attr_newbie
+
+on=@Npcrestock
+	item=i_gold,{30 75}
+	item=random_jewel
+	//item={random_body_parts_1 1 random_body_parts_2 1}
+	//item=random_bones
+
+[chardef 716]
+defname=c_Chicken_Lizard
+name=chicken lizard
+sound=1508
+resources=3 i_bird_raw, 4 i_reag_dragon_blood	//todo:1 i_chicken_lizard_egg
+can=mt_walk|mt_run
+dam=2, 5
+
+on=@create
+	npc=brain_animal
+	str={74, 95}
+	dex={78, 95}
+	int={6, 10}
+	maxhits={74, 95}
+	maxmana={6, 10}
+	maxstam={78, 95}
+	//resphysical={15, 20}
+	//resfire={5, 15}
+	magicresistance={25.1, 29.6}
+	tactics={30.1, 44.9}
+	wrestling={26.2, 38.2}
+	fame=300
+	karma=0
+
+[chardef 715]
+defname=c_boura_ruddy
+name=ruddy boura
+sound=1507
+resources=10 i_ribs_raw, 8 i_reag_dragon_blood, 22 i_hide_spined
+can=mt_walk|mt_run
+dam=16, 20
+armor=16
+
+on=@create
+	npc=brain_animal
+	str={396, 480}
+	dex={68, 82}
+	int={16, 20}
+	maxhits={435, 509}
+	maxstam={68, 82}
+	maxmana={16, 20}
+	//resphysical={50, 60}
+	//resfire={35, 40}
+	//rescold={10, 20}
+	//respoison={30, 40}
+	//resenergy={30, 40}
+	anatomy={86.6, 88.8}
+	magicresistance={69.7, 87.7}
+	tactics={83.3, 88.8}
+	wrestling={86.6, 87.9}
+	fame=2500
+	karma=-2500
+
+
+[chardef c_boura_high_plains]
+defname=c_boura_high_plains
+id=c_boura_ruddy
+name=high plains boura
+sound=1507
+resources=10 i_ribs_raw, 8 i_reag_dragon_blood,22 i_hide_spined
+can=mt_walk|mt_run
+dam=20, 25
+armor=16
+
+on=@create
+	npc=brain_animal
+	str={400, 435}
+	dex={90, 96}
+	int={25, 30}
+	maxhits={555, 618}
+	//resphysical={50, 60}
+	//resfire={35, 40}
+	//rescold={10, 20}
+	//respoison={30, 40}
+	//resenergy={30, 40}
+	anatomy={95.2, 105.4}
+	magicresistance={60.7, 70.0}
+	tactics={95.4, 105.7}
+	wrestling={105.1, 115.3}
+	fame=5000
+	karma=-5000
+
+
+[chardef c_boura_lowland]
+defnamec_boura_lowland
+name=lowland boura
+id=c_boura_ruddy
+sound=1507
+resources=10 i_ribs_raw, 8 i_reag_dragon_blood, 22 i_hide_spined
+can=mt_walk|mt_run
+dam=18, 23
+armor=16
+
+on=@create
+	npc=brain_animal
+	str={337, 411}
+	dex={82, 93}
+	int={23, 25}
+	maxhits={438, 553}
+	//resphysical={50, 60}
+	//resfire={35, 40}
+	//rescold={10, 20}
+	//respoison={30, 40}
+	//resenergy={30, 40}
+	anatomy={81.2, 84.4}
+	magicresistance={70.7, 75.0}
+	tactics={83.4, 86.7}
+	wrestling={95.1, 97.3}
+	fame=3500
+	karma=-3500
+
+[EOF]
+
+
+
+
+
+

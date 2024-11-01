@@ -1,0 +1,88 @@
+//Player Vendors by Soulless
+//v1.0
+//2:47 PM 5/21/2021
+
+
+[speech s_player_vendor]
+
+on=*buy
+on=*purchase
+if (<src.distance <uid>> <= <def0.player_vendor_maxdistance>) 	//&& (<src.canseelos <uid>>)
+  if (<owner> != <src>)
+    src.targetf f_player_vendor_buy <uid>
+    src.sysmessage select the item you wish to buy.
+  else
+    message You own this shop, just take what you want.
+  endif
+endif
+
+on=*browse
+on=*view
+on=*look
+if (<src.distance <uid>> <= <def0.player_vendor_maxdistance>)	//&& (<src.canseelos <uid>>) 
+  findlayer.21.open
+  message take a look at <qval (<owner>==<src>)? your:my> goods.
+endif
+
+on=*collect
+on=*gold
+on=*get
+if (<owner> != <src>) && !(<src.isgm>) 
+  return 1
+endif
+if !(<tag0.owners_gold>)
+  message I am holding no gold for you.
+  return 1
+else
+  message How much of the <dtag0.owners_gold> that i'm holding would you like?
+  src.sysmessage Enter the amount of gold you wish to withdraw (esc = cancel):
+  src.ctag.player_vendor=<uid>
+  src.promptconsole f_player_vendor_collect_gold
+endif
+
+on=dismiss
+on=release
+if (<owner> == <src>) || (<src.isgm>) 	//this is taken care of in the general pet speech it seems
+  if (<findlayer.21.count>)
+    message You cannot dismiss me while I am holding your goods.
+    return 1
+  endif
+  dialog d_player_vendor_dismiss
+endif
+//A contract of employment has been returned to you
+//Will command the vendor to crease operations and return you his contact of work.
+//This command only works if the vendor is empty and all his gold is collected.
+//The vendors name and payments remaining will be indicated on the contract.
+
+
+on=*status
+on=*info
+//give info about vendor
+
+
+on=*news
+//give news if bartender
+
+
+ON=TRANSFER
+ON=COME
+ON=FOLLOW
+ON=FOLLOW ME
+ON=ATTACK
+ON=DEFEND ME
+ON=DROP	// "GIVE" ?
+ON=DROP ALL
+ON=FETCH
+ON=FRIEND
+ON=GO
+ON=GUARD
+ON=GUARD ME
+ON=KILL
+ON=SPEAK
+ON=STAY
+ON=STAY HERE
+ON=STOP
+return 1
+
+
+[EOF]

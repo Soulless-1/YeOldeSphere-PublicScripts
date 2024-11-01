@@ -1,0 +1,64 @@
+//Bowcrafting is handled in scripts/custom/systems/crafting/
+//2:32 AM 3/27/2018
+
+[SKILL 8]
+DEFNAME=Skill_Bowcraft
+KEY=Bowcraft
+TITLE=Bowyer
+FLAGS=skf_craft
+PROMPT_MSG=
+DELAY=1.0	//6.0	
+STAT_STR=40
+STAT_INT=45
+STAT_DEX=125
+BONUS_STR=15
+BONUS_DEX=70
+BONUS_INT=15
+BONUS_STATS=20
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+VALUES=1,30,200
+
+ON=@Start
+local.CraftStrokeCnt=5		//how many strokes alchemy takes to complete
+actioneffect=50			//how much resources are lost if we fail 
+local.successchance=<f_crafting_success_chance <actarg2.baseid>>
+if (<R0,1000> > <local.successchance> ) && !(<isgm>)	//failed to craft the item
+  actdiff=65535
+else
+  actdiff=0
+endif
+
+ON=@Stroke		
+ref1=<actprv>		//tool
+local.anim=33
+if !(<ref1.isvalid>) || (<ref1.topobj> != <src>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=The tool must be on your person to use.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu <src.ctag0.crafting_lastpage>	
+  return 1
+endif
+
+ON=@Abort
+src.ctag0.<src.ctag0.crafting_skill>_notice=You fail to complete the item.
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+src.sdialog d_crafting_menu
+
+ON=@Fail
+src.ctag0.<src.ctag0.crafting_skill>_notice=You fail to create the item.
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+if !(<isempty <def.crafting_alchemy_bowcraft_fail>>)
+  src.emote <def0.crafting_alchemy_bowcraft_fail>
+endfor
+src.sdialog d_crafting_menu
+
+ON=@Success		//if you succeed @makeitem was called, we're going to use that instead for more control
+//src.ctag0.<src.ctag0.crafting_skill>_notice=You successfully craft the item.
+//src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+if !(<isempty <def.crafting_bowcraft_emote_success>>)
+  src.emote <def0.crafting_bowcraft_emote_success>
+endfor
+//src.sdialog d_crafting_menu
+
+
+
+[EOF]

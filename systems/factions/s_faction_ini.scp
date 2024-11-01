@@ -1,0 +1,124 @@
+//Faction system by Soulless 
+//v1.0
+//9:53 AM 1/12/2020
+
+//Using information gathered from here http://www.uoguide.com/Publish_8 
+//Need to confirm dialog 
+
+//to add?
+
+//vendors
+// You are not in my faction, I cannot sell you a horse!
+// You cannot mount a faction war horse!
+// You cannot ride an opposing faction's war horse!
+// You must achieve a faction rank of at least two before riding a war horse!
+
+
+//parties
+//You cannot have players from opposing factions in the same party!
+//The party cannot have members from opposing factions.
+
+
+//guilds
+// You have been kicked out of your guild!  Young players may not remain in a guild which is allied with a faction.
+// You have been kicked out of your guild due to factional overlap
+// You are currently banned from the faction system
+// You cannot join a faction because your guild is an Order or Chaos type.
+// That player cannot join a non-faction guild.
+// That player must be in a faction before joining this guild.
+// That person has a different faction affiliation.
+// "That person is quitting their faction and so you may not recruit them."
+// You cannot declare war while you are in a faction
+// You cannot invite a young player to your faction-aligned guild.
+// That player must be in a faction before joining this guild.
+// That person has a different faction affiliation.
+// "That person is quitting their faction and so you may not recruit them."
+// You cannot propose an alliance to a guild with a different faction allegiance.
+
+[defname faction_system_settings]
+factions_leave_time	1*24*60*60		//how long in minutes must you wait before you finally are removed after quitting (default 7*24*60*60)
+
+faction_1 		True Britannians
+faction_1_base		1330,1620,50,0
+faction_1_joinstone	1419,1623,20,0
+faction_1_colors	1254,2125
+faction_1_desc		True Britannians are loyal to the throne of Lord British. They refuse to give up their homelands to the vile Minax, and detest the Shadow Lords for their evil ways.  In addition, the Council of Mages threatens the existance of their ruler, and as such they have armed themselves, and prepare for war with all.
+faction_1_titles	Defender, Defender, Defender, Sentinel, Sentinel, Sentinel, Crusader, Crusader, Knight of Virtue, Knight of the Codex
+faction_1_warhorse	076,03eb2
+faction_1_monoliths	1328,1627,50,0,S,6,6		//starting p, dir, space between monoliths (x and y)
+
+faction_2		Council of Mages
+faction_2_base		3795,2259,20,0
+faction_2_joinstone	3746,2231,20,0
+faction_2_colors	1310,1325
+faction_2_desc		The council of Mages have their roots in the city of Moonglow, where they once convened. They began as a small movement, dedicated to calling forth the Stranger, who saved the lands once before.  But a series of murders and misbegotten trials by those loyal to Lord British has caused the group to take up the banner of war.
+faction_2_titles	Mystic, Mystic, Mystic, Diviner, Diviner, Diviner, Luminary, Luminary, Archon of Principle, Inquisitor of the Council
+faction_2_warhorse	077,0e3b1
+faction_2_monoliths	3793,2255,20,0,e,4,3		//x,y,z,m,dir,x dist,y dist
+
+faction_3		Minax
+faction_3_base		1121,2591,23,0
+faction_3_joinstone	1208,2569,0,0
+faction_3_colors	1645,0453
+faction_3_desc		The followers of Minax has taken control in the old lands, and intend to hold it for as long as they can.  Allying themselves with orcs, headless, gazers, trolls, and other beasts, they seek revenge against Lord British, for slights both real and imagined, though some of the followers wish only to wreak havok on the unsuspecting populace.
+faction_3_titles	Defiler, Defiler, Defiler, Executioner, Excecutioner, Excecutioner, Warlord, Warlord, Dread Knight, Avenger of Mondain
+faction_3_warhorse	078,02eaf
+faction_3_monoliths	1112,2599,18,0,e,3,3
+
+faction_4		Shadowlords
+faction_4_base		947,712,0,0
+faction_4_joinstone	959,771,0,0
+faction_4_colors	1109,0590
+faction_4_desc		The Shadow Lords are a faction that has sprung up within the ranks of Minax. Comprised mostly of undead and those who would seek to be necromancers, they pose a threat to both the sides of good and evil. Their plans have disrupted the hold Minax has over Felucca, and their ultimate goal is to destroy all life.
+faction_4_titles	Servant, Servant, Servant, Keeper of Lies, Keeper of Lies, Keeper of Lies, Bringer of Sorrow, Bringer of Sorrow, Agent of Evil, Purveyor of Darkness
+faction_4_warhorse	079,03eb0
+faction_4_monoliths	953,713,20,0,e,4,4
+
+faction_controlled_town_0		a_townbritain,Britain	//defname,menu name
+faction_controlled_town_0_sigil		1592,1680,10,0		//town sigil location		//blue
+faction_controlled_town_0_sigil_id				//correct id of virtustone
+faction_controlled_town_0_stone		1588,1676,10,0		//townstone location
+
+faction_controlled_town_1		a_townskarabrae,Skara Brae
+faction_controlled_town_1_sigil		576,2200,0,0		
+faction_controlled_town_1_stone		572,2196,0,0
+
+faction_controlled_town_2		a_townmagincia,Magincia
+faction_controlled_town_2_sigil		3714,2235,20,0		//red/orange
+faction_controlled_town_2_stone		3712,2230,20,0
+
+faction_controlled_town_3		a_towntrinisc,Trinsic
+faction_controlled_town_3_sigil		1914,2717,20,0	//red/white
+faction_controlled_town_3_stone		1909,2720,20,0
+
+faction_controlled_town_4		a_townminoc,Minoc
+faction_controlled_town_4_sigil		2471,439,15,0		//red/green
+faction_controlled_town_4_stone		2469,445,15,0
+
+faction_controlled_town_5		a_townvesper,Vesper
+faction_controlled_town_5_sigil		2981,818,0,0
+faction_controlled_town_5_stone		2985,822,0,0
+
+faction_controlled_town_6		a_townmoonglow,Moonglow
+faction_controlled_town_6_sigil		4436,1084,0,0	//red/orange
+faction_controlled_town_6_stone		4432,1086,0,0
+
+faction_controlled_town_7		a_townyew,Yew
+faction_controlled_town_7_sigil		548,979,0,0	//red/orange
+faction_controlled_town_7_stone		542,980,0,0
+
+faction_1_attack	Followers of Lord British will now be attacked on sight.
+faction_1_warn		Followers of Lord British will now be warned of their impending doom.
+faction_1_ignore	Followers of Lord British will now be ignored.
+faction_2_attack	Members of the Council of Mages will now be beaten with a stick.
+faction_2_warn		Members of the Council of Mages will now be warned to leave.
+faction_2_ignore	Members of the Council of Mages will now be ignored.
+faction_3_attack	Followers of Minax will now be hanged by their toes.
+faction_3_warn		Followers of Minax will now be told to go away.
+faction_3_ignore	Followers of Minax will now be ignored.
+faction_4_attack	Minions of the Shadowlords will now be attacked at will.
+faction_4_warn		Minions of the Shadowlords will now be warned of their impending deaths.
+faction_4_ignore	Minions of the Shadowlords will now be ignored.
+
+
+[eof]

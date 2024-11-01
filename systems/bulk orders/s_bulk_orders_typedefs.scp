@@ -1,0 +1,91 @@
+//Bulk Order Deed System by Soulless
+//v0.5
+//1:28 AM 8/21/2022
+
+[typedef t_bulk_order_deed]
+//more1 = itemid
+//more2 = amount needed
+//morex = crafting skill number
+//morey = special requirements; 01=exceptional, 02=special material
+//morez = amount filled
+
+on=@dclick
+if (<topobj> != <src>) && !(<src.isgm>)
+  src.sysmessage You must have the deed in your backpack to use it.
+  return 1
+endif
+if (<baseid> == i_bulk_order_deed_large)
+  dialog d_bulk_order_deed_large
+else
+  dialog d_bulk_order_deed
+endif
+return 1
+
+on=@targon_item
+if (<topobj> != <src>) && !(<src.isgm>)
+  src.sysmessage You must have the deed in your backpack to use it.
+  return 1
+elseif (<src.targ.topcont> != <src.findlayer.21>)
+  src.sysmessage You must have the item in your backpack to target it.
+  return 1
+elseif (<src.targ.type>==t_container_locked)
+  src.sysmessage You cannot target a locked container.
+  return 1
+elseif (<src.targ.baseid> != <more1>)
+  src.sysmessage That item is not in the request.
+  return 1
+elseif (<morez> >= <more2>)
+  src.sysmessage The maximum amount of requested items have already been combined to this deed.
+  return 1
+elseif (<morey>&01) && !(<src.targ.isevent.t_exceptional_item>)
+  src.sysmessage The item must be exceptional.
+  return 1
+endif
+
+if (<morex> == 7)	//blacksmithing
+  if (!(<morey>&02) && (<src.targ.tag0.matoverride_i_ingot_iron>)) || (<src.targ.tag0.matoverride_i_ingot_iron> != <tag0.matoverride>)	//must be made from a specific material
+    src.sysmessage The item is not made from the requested resource.
+    return 1
+  endif
+elseif (<morex> == 34)	//tailoring
+  if (!(<morey>&02) && (<src.targ.tag0.matoverride_i_hides_cut>)) || (<src.targ.tag0.matoverride_i_hides_cut> != <tag0.matoverride>)
+    src.sysmessage The item is not made from the requested resource.
+    return 1
+  endif
+endif
+
+//serv.log <src.name>(<src>) adding <src.targ.name>(<src.targ>) to a bulk order deed (<uid>)
+src.targ.consume
+morez += 1
+if (<morez> < <more2>)	//bring the reticle back up
+  target
+endif
+dialogclose d_bulk_order_deed
+dialog d_bulk_order_deed
+src.sysmessage The item has been combined with the deed.
+return 1
+
+on=@dropon_char
+if (<argo.npc>)
+  local.craftskill=<argo.f_bulk_order_craftskill>
+  local.craftname=<serv.skill.<argo.f_bulk_order_craftskill>.name>
+  if (<def0.bulk_orders_<local.craftname>>) 
+    if (strcmpi(<serv.skill.<morex>.name>,<local.craftname>))  
+       argo.say This order is for some other shopkeeper.
+       return 1
+    elseif (<morez> < <more2>)
+      argo.say You have not completed the order yet.
+    else
+      local.reward=<f_bulk_order_select_reward <local.craftname>,<uid>>
+      src.account.tag0.bulk_order_<local.craftname>_last=
+      serv.newitem <local.reward>
+      src.bounce <new>
+      consume
+      argo.say Thank you so much! Here is a reward for your effort.
+    endif
+  endif
+  return 1
+endif
+
+
+[EOF]

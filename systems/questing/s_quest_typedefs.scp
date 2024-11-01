@@ -1,0 +1,32 @@
+[typedef t_peerless_key]
+
+[typedef t_quest_deliverable]
+
+on=@dclick
+src.sysmessage You cannot use this.
+return 1
+
+on=@equiptest
+src.sysmessage The item must stay in your main pack.
+return 1
+
+on=@dropon_ground
+src.sysmessage The item must stay in your main pack.
+bounce <src.findlayer.21>
+return 1
+
+on=@dropon_item
+if (<argo> != <src.findlayer.21>)
+  src.sysmessage The item must stay in your main pack.
+  return 1
+endif
+
+on=@dropon_char
+if (<argo> != <src>)
+  src.sysmessage The item must stay in your main pack.
+  return 1
+endif
+
+
+[EOF]
+

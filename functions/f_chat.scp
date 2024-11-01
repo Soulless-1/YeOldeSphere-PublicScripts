@@ -1,0 +1,123 @@
+//Chat System by Soulless
+//v1.0
+//11:39 PM 8/14/2017
+//displays chat in a dialog that you can scroll through, has different channels to use
+//make private chat work, include invite button
+//add minimize, close button top right
+//do better update method
+
+
+[defname chat_settings]	//do not change these settings
+chat_notoriety	1	//display a players notoriety in chat (blue, red, crim, etc)
+chat_max_msgs	10	//how many messages will be displayed in the dialog max?
+
+//types of chat 0=normal,1=guild,2=faction
+
+[plevel 1]
+chat
+chaton
+chatoff
+c
+g
+f
+
+[function disablechat]
+var0.chatdisabled=1
+sysmessage Global chat disabled...
+
+[function enablechat]
+var0.chatdisabled=
+sysmessage Global chat enabled...
+
+[function chaton]
+tag0.flags_player |= <def0.flags_player_chaton>
+sysmessage Chat toggled on
+
+[function chatoff]
+tag0.flags_player &= ~ <def0.flags_player_chaton>
+sysmessage Chat toggled off
+
+[function c]
+f_chat <uid>,0,<args>
+
+[function chat]
+f_chat <uid>,0,<args>
+
+[function g]
+f_chat <uid>,1,<args>
+
+[function f]
+f_chat <uid>,2,<args>
+
+[function f_chat]
+if !(<isgm>) 
+  if (<var0.chatdisabled>)
+    sysmessage Global chat has been temporarily disabled for all players.
+    return 1
+  elseif !(<tag0.flags_player>&<def0.flags_player_chaton>)
+    sysmessage Use .chaton to turn on chat.
+    return 1
+  elseif (<tag0.flags_punishment>&<def0.flags_punishment_mutechat_char>) || (<account.tag0.flags_punishment>&<def0.flags_punishment_mutechat_account>)
+    sysmessage You have been squelched from using the chat system.
+    return 1
+  elseif (<eval (<serv.time>-<ctag0.lastchat>)> < 5) 
+    ctag0.lastchat=<serv.time>
+    sysmessage You cannot send messages so fast in the global chat.
+    return 1
+  elseif (<isprofane <args>>)
+    sysmessage Obscene language prohibitted in global chat.
+    return 1
+  endif
+endif
+ctag0.lastchat=<serv.time>
+if !(<isempty <argv[2]>>)
+  serv.allclients sysmessage_chat <args>
+  doswitch <argv[1]>
+    local.type=Chat
+    local.type=Guild
+    local.type=Faction
+  enddo
+  f_writefile logs/player_speech<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M>[<local.type>] <name>(<uid>): <streat <streat <args>>>
+endif
+
+[function sysmessage_chat]
+ref1=<argv[0]>
+local.chat=<streat <streat <args>>>
+if (<argv[1]>==0) && (<tag0.flags_player>&<def0.flags_player_chaton>)
+  sysmessage @<qval (<def0.chat_notoriety>)?<ref1.f_noto_color <uid>>:0481>,,1 <ref1.name>[chat]: <local.chat>
+endif
+
+if (<guild>)
+  if (<argv[1]>==1) && (<guild>==<ref1.guild>)
+    sysmessage @044,,1 <ref1.name>[guild]: <streat <streat <args>>>
+  endif
+endif
+
+if (<tag0.faction>)
+  if (<argv[1]>==2) && (<tag0.faction>==<ref1.tag0.faction>)
+    sysmessage @0100,,1 <ref1.name>[faction]: <streat <streat <args>>>
+ endif
+endif
+
+
+
+[dialog d_chat]
+150,300
+
+page 0
+resizepic 10 10 <def0.background_default0> 500 210
+dtext 75 20 1000 <serv.servname> Chat System
+
+button 440 15 2443 2444 1 0 99
+dtext 450 15 100 Options
+
+[dialog d_chat button]
+
+
+
+[EOF]
+
+
+
+
+

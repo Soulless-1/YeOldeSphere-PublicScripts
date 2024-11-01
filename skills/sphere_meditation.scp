@@ -1,0 +1,116 @@
+//http://www.uoguide.com/Meditation
+//1:38 PM 3/31/2018
+
+//todo make different armors affect meditation 
+
+[SKILL 46]
+DEFNAME=SKILL_MEDITATION
+KEY=Meditation
+TITLE=Stoic
+FLAGs=skf_scripted
+DELAY=4.0,2.0	//DELAY=2.0,1.0
+STAT_STR=10
+STAT_INT=125
+STAT_DEX=10
+BONUS_STR=5
+BONUS_DEX=90
+BONUS_INT=5
+BONUS_STATS=20
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+
+on=@start
+//act = none
+//actprv = non
+
+if (<src.mana> >= <src.maxmana>)
+  src.sysmessage You are at peace.
+  return 1
+elseif ((<src.findlayer.1>) && !(<src.findlayer.1.ismedable>)) || ((<src.findlayer.2>) && !(<src.findlayer.2.ismedable>))
+  src.sysmessage Your hands must be free to cast spells or meditate.
+  return 1
+//elseif (<src.tag0.heavy_armor> > 0) && !((<src.findlayer.6.isvalid>) && (<src.findlayer.6.isevent.t_gazers_eyeplate>))
+  //src.sysmessage Regenerative forces cannot penetrate your armor!
+  //return 1
+endif
+if !(<src.f_skillsucceed meditation>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You lose your concentration.
+
+ON=@Abort
+src.sysmessage You stop concentrating.
+
+on=@success
+//src.message *Monnn-guhhh-baaaat*	//this is the chant from old Ultimas
+src.consume i_meditation
+serv.newitem i_meditation
+new.morep=<src.p>
+new.tag.flags=<src.flags>
+src.equip <new>
+new.more1=<src.f_meditation_rate>	//ms timer
+new.timerms=<new.more1>
+src.sysmessage You enter a meditative trance.
+src.sound 00f9
+src.regenmana=<src.f_mana_regen_rate>
+
+[itemdef i_meditation]
+id=i_memory
+name=Meditating
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<topobj.mana> >= <topobj.maxmana>)
+  topobj.sysmessage You are at peace.
+  remove
+  return 1
+elseif (<topobj.action> != -1) 		//|| (<topobj.flags> != <tag0.flags>) || (<topobj.distance <morep>> > 0)
+  topobj.sysmessage You break your concentration
+  remove
+  return 1
+elseif ((<topobj.findlayer.1>) && !(<topobj.findlayer.1.ismedable>)) || ((<topobj.findlayer.2>) && !(<topobj.findlayer.2.ismedable>))
+  topobj.sysmessage Your hands must be free to cast spells or meditate.
+  return 1
+//elseif (<topobj.tag0.heavy_armor> > 0) && !((<topobj.findlayer.6.isvalid>) && (<topobj.findlayer.6.isevent.t_gazers_eyeplate>))
+  //topobj.sysmessage Regenerative forces cannot penetrate your armor!
+  //return 1
+endif
+topobj.mana += 1
+timerms=<more1>
+return 1
+
+[function f_meditation_rate]
+local.meditationrate= <eval ((<meditation>/10)*3)+<int>>
+if (<meditation> >= 1000)
+  local.meditationrate += <muldiv <local.meditationrate>,10,100>
+endif
+local.meditationrate=<eval 2+<local.meditationrate>/40>
+if (<findid.i_meditation>)
+  local.meditationrate *= 2
+endif
+if (<tag0.heavy_armor> >= 1) && !((<topobj.findlayer.6.isvalid>) && (<topobj.findlayer.6.isevent.t_gazers_eyeplate>))
+  local.meditationrate /= <tag0.heavy_armor>
+endif
+return <eval (10000/<local.meditationrate>)/2>
+
+[comment function f_mana_regen_rate]
+float.n=0.2
+float.n += <fval ((0.0075*(<meditation>/10))+0.0025)*<int>>
+if (<meditation> >= 1000)
+  float.n *= 1.1
+endif
+
+[function f_mana_regen_rate]
+local.regenmana=<feval <floatval (<qval (<meditation> >= 1000)?1.1:1>*((<meditation>*3)+<int>))/40)>>
+//local.regenmana=<eval 20 - <local.regenmana>>
+local.regenmana=<eval 22 - <local.regenmana>>
+local.regenmana /= 4	// /= 2
+return <qval (<local.regenmana> <= 0)?1:<local.regenmana>>
+
+
+[EOF]

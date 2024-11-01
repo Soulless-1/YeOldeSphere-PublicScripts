@@ -1,0 +1,45 @@
+//Veteran award system
+
+[function f_veteran_points_possible]
+args=<explode " "/\,<account.firstconnectdate>>,<explode "/\,<serv.rtime>>
+args=<eval (((<argv[4]>-2021)*12)-<argv[1]>)+<argv[5]>>		//2021 = <argv[0]> prior to this
+args -= <account.tag0.veteran_points_spent>
+return <args>
+
+[function f_veteran_get_title]
+args=<eval (<tag0.onlinetime>/60)/24>
+//serv.log Setting veteran title for <name>(<uid>) who's been connected a total of <args> days.
+if (<args> >= 365)
+  return Highlord
+elseif (<args> >= 273)
+  return Champion
+elseif (<args> >= 182) 
+  return Renowned
+elseif (<args> >= 91) 
+  return Prestigious
+elseif (<args> >= 60)
+  return Esteemed
+elseif (<args> >= 30)
+  return Proven
+elseif (<args> >= 15)
+  return Explorer
+else
+  return ""
+  //return Newcomer	// no need to display this over new players heads, lack of title will show they are new.
+endif
+
+
+[itemdef i_veteran_coin]
+defname=i_veteran_coin
+id=i_gold
+name=veteran coin
+type=t_normal
+dropsound=032
+
+on=@create
+attr |= attr_newbie
+color=0481
+
+
+
+[EOF]

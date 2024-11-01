@@ -1,0 +1,363 @@
+//Generic player events by Soulless
+//v1.0
+//
+//these should be general things that are not too specific for any one system
+
+[events e_generic_player_event]
+
+on=@login
+hearall=0
+detail=0
+maxfollower=5
+account.resdisp=<serv.AutoResDisp>
+f_login_house_check
+if (<def0.negotiate_features_enabled>==1)
+  f_negotiate_razor_features			//disable certain razor/uosteam features
+endif	
+f_orion_features				//disable certain orion features
+if !(<tag0.flags_player>&<def0.flags_player_nochangelog>)
+  changelog
+endif
+if (<isempty <account.tag.email>>)
+  dialog d_email_registration
+endif
+if !(<tag0.flags_player>&<def0.flags_player_acceptedterms>)
+  welcome
+endif
+
+if (<tag0.mustrename> >= 1)	//for whatever reason this char was flagged for rename
+  sdialog d_rename_char
+  stone=1
+endif
+
+//serv.list.connected_ipaddresses.add "<serv.account.<account.name>.lastip>"
+//serv.log Added "<serv.account.<account.name>.lastip>" to connected ipaddress list (position <serv.list.connected_ipaddresses.findelem "<serv.account.<account.name>.lastip>">)
+
+on=@logout
+//if !(<isgm>)
+  //serv.allclients sysmessage @02b <name> has left the realm.
+//endif
+if (<flags>&statf_dead) && (<flags>&statf_freeze)	//incase they had resurrection menu up
+  flags &= ~ statf_freeze
+endif
+consume i_travel_stone_memory
+
+ref1=<region.uid>
+if (<ref1.isvalid>) && (<ref1.f_house_isfriend <uid>>)	//is a friend of the house
+  timerf 0,disconnect	//this will instalog them
+//elseif (<region.flags>&region_flag_insta_logout) || (<room.flags>&region_flag_insta_logout)
+  //timerf 0,disconnect
+endif
+
+//serv.log Removing "<serv.account.<account.name>.lastip>" from connected ipaddress list (position <serv.list.connected_ipaddresses.findelem "<serv.account.<account.name>.lastip>">)
+//if (<serv.list.connected_ipaddresses.findelem "<serv.account.<account.name>.lastip>"> != -1)
+  //serv.log <serv.account.<account.name>.lastip> found
+  //serv.list.connected_ipaddresses.<serv.list.connected_ipaddresses.findelem "<serv.account.<account.name>.lastip>">.remove
+//endif
+
+on=@environchange
+if (<region.isvalid>) 
+  if (<region.flags>&region_flag_underground) && !(<src.flags>&statf_underground)
+    src.flags |= statf_underground
+    src.update
+    //src.sound { 0102 1 0104 1}
+    //src.sysmessage The light fades from behind as you travel deeper underground.
+  elseif !(<region.flags>&region_flag_underground) && (<src.flags>&statf_underground)
+    src.flags &=~ statf_underground
+    src.update
+    //src.sound { 01 05 }
+    //src.sysmessage You emerge from underground to a gust of fresh air.
+  endif
+endif
+
+on=@regionenter
+if (<argo.isvalid>) && (<argo.flags>&region_flag_guarded) && !((<region.isvalid>) && (<region.flags>&region_flag_guarded))
+  if (<flags>&statf_criminal) || (<kills> > <serv.murdermincount>)
+    src.sysmessage Guards can now be called on you!
+  endif
+endif
+
+on=@click
+if (!<isempty <tag.veteran_title>>)
+  tag.veteran_title=
+  //message <tag.veteran_title>
+endif
+
+//on=@move	//careful with this trigger, might be expensive		//use i.lasteventwalk
+//tag.lastmovedtime=<serv.time>	//these tags are needed for the 'standingstill' function
+//tag.lastmovedpos=<p.x><p.y>
+
+on=@mount	
+//if (<argo.incombat>)
+  //src.sysmessage You cannot ride a mount that's fighting.
+  //return 1
+//endif
+if (<src.isgm>) 	//gms can mount any animal and it will become theirs
+  if !(<argo.owner>) || ((<argo.owner>) && (<argo.owner> != <src>)) 
+    ref1=<argo.owner>
+    if (<ref1.isvalid>)   
+      //ref1.sysmessage Your mount <argo.name> has been commandeered by <src.name>!
+      //src.sysmessage You have commandeered <argo.name> from <ref1.name>!
+      src.sysmessage @026,0,1 Prevented from mounting player's pet.
+      return 1
+    endif
+    argo.setowner <src>			//set the GM as the owner
+  endif
+endif
+argo.consume i_discorded		//remove memories for bard affects on the mount
+argo.consume i_calmed
+argo.consume i_provoked
+argo.f_clear_all_bad_memories		//clear any and all bad memories on the mount
+src.f_clear_bad_memories <argo>		//clear riders bad memories for the mount
+
+//on=@dismount
+//argo.act=<src>		//target owner
+//argo.action=101		//set to idling
+
+on=@skillmenu
+if (<args>)
+  if (<args>==sm_summon)		//use custom summon menu
+    sdialog d_summon_menu
+    return 1
+  elseif (<args>==sm_polymorph)	//use custom polymorph menu
+    sdialog d_polymorph_menu
+    return 1
+  endif
+endif
+
+on=@profile
+dialog d_player_profile
+return 1
+
+on=@UserVirtue
+sdialog d_virtue_system
+return 1
+
+on=@ItemDclick
+if (<src.isgm>) && (<act.cont.isvalid>)  && (<act.cont.isplayer>) && (<act.cont> != <src>) && (<act.layer> < 24) && (<act.layer> != 21)
+  src.sysmessage @026,0,1 Prevented from equiping player's paperdoll item.
+  return 1
+endif
+
+on=@ItemPickUp_Ground
+if !(<isgm>)
+  local.lastlooted=<eval (<serv.time>-<ctag0.lastlooted>)>
+  if (<local.lastlooted> < 2)	
+    sysmessage You are attempting to loot too quickly.
+    return 1
+  endif
+  ctag.lastlooted=<serv.time> 
+endif
+
+on=@ItemPickUp_Pack
+if (<act.cont.type>==t_corpse) && !(<isgm>)
+  if (<act.cont.link> != <uid>)
+    local.lastlooted=<eval (<serv.time>-<ctag0.lastlooted>)>
+    if (<local.lastlooted> < 2)	
+      sysmessage You are attempting to loot too quickly.
+      return 1
+    endif
+    ctag.lastlooted=<serv.time> 
+  endif
+  act.cont.f_corpse_disturbed=<uid>	//needed for forensics
+endif
+
+on=@itemdropon_self		//dropping an intem inside a container
+ref1=<act.topobj>	 	//the person wearing the pack
+if (<ref1.isvalid>) && (<ref1.ischar>) && !(<src.isgm>)
+  if (<act.inbackpack>)		//ignore bank box layer
+    local.maxweight=<qval (<ref1.npc>)?<ref1.maxweight>:<eval (<ref1.maxweight>+400)>>
+    if (<ref1.weight> > <local.maxweight>) 
+      src.sysmessage That container cannot hold more weight. 
+      return 1
+    endif
+    if (<ref1.weight> > <ref1.maxweight>)
+      src.sysmessage You are overloaded. Carrying stones / Max stones : <eval (<src.weight>/10)> / <eval (<src.maxweight>/10)> 
+    endif
+  endif
+endif
+
+on=@itemtargon_cancel
+if (<account.plevel> >= 2)
+  serv.f_writefile logs/gmcommands<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M> '<account.name>' target canceled from <act.name>(<act>)
+endif
+
+on=@itemtargon_char
+if (<account.plevel> >= 2)
+  serv.f_writefile logs/gmcommands<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M> '<account.name>' targeted <argo.name>(<argo>) with <act.name>(<act>)
+endif
+
+on=@itemtargon_ground
+if (<account.plevel> >= 2)
+  serv.f_writefile logs/gmcommands<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M> '<account.name>' targeted <targp> with <act.name>(<act>)
+endif
+
+on=@itemtargon_item
+if (<account.plevel> >= 2)
+  serv.f_writefile logs/gmcommands<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M> '<account.name>' targeted <argo.name>(<argo>) with <act.name>(<act>)
+endif
+
+//on=@itemequip
+//if (<act.isweapon>) 
+  //if (strcmpi("<act.dam>","<serv.itemdef.<act.baseid>.dam>"))
+    //serv.log <name>(<uid>) equiping <act.name>(<act>) with mismatching damage <act.dam> != <serv.itemdef.<act.baseid>.dam>
+    //act.dam = <serv.itemdef.<act.baseid>.dam>
+  //endif
+//endif
+
+on=@itembuy	//when a player buys from a vendor
+if (<act.type>==t_figurine)	//when players buy a pet they should get it added to their followers
+  if (<eval (<curfollower>+<argn1>)> > <maxfollower>) 	//don't let players buy over the max allowed pets.
+    argo.say Your order cannot be fulfilled, please try again.
+    return 1
+  endif
+  timerf 0,f_animal_trainer_sold
+endif
+
+on=@itemsell	//when a player sells an item to a vendor
+local.already_bought=<argo.findlayer.27.rescount <act.baseid>>
+if (<local.already_bought>)	//This item has been sold to them by players recently
+  //serv.log <argo.name> already has <local.already_bought> <act.name> from player bought stock
+  local.amount_sellable=<eval (55-<local.already_bought>)>
+  local.amount_sellable=<qval (<local.amount_sellable> <= 0)?0:<local.amount_sellable>>
+  //serv.log <name> can only sell <local.amount_sellable> <act.name> to <argo.name> 
+  if (<argn1> > <local.amount_sellable>)		//exceeded how many thye can sell
+    if !(<local.amount_sellable>)
+      argo.say I don't need any more of those in stock at the moment.
+    else
+      argo.say I only need <local.amount_sellable> for my stock.
+    endif
+    return 1
+  endif
+endif
+
+if (<argn1> > 55)		//They can only sell a maximum of 55 items at once.
+  local.individual_price=<eval (<argn2>/<argn1>)>
+  //argn1=55
+  //argn2=<eval (<argn1>*<local.individual_price>)>
+  argo.say You can only sell 55 items at a time.
+  return 1
+endif
+
+if (<argn2> > <argo.vendgold>)	//Vendor cannot afford this expense.
+  argo.say I cannot afford any more at the moment.
+  return 1
+endif
+
+if (<argn1> >= 1)	//At least sold one thing, so put it in the vendor's layer 27 box.
+  newdupe <act>
+  new.amount=<argn1>
+  new.cont=<argo.findlayer.27>
+endif
+
+//serv.log <name>(<uid>) just sold <argn1>x <act.name>(<act>) to <argo.name>(<argo>) for <argn2>g.
+ctag0.total_sell_value += <argn2>
+timerf 1,f_console_show_total_sell_value
+local.filename=vendorsell_report_<serv.rtime.format %Y-%m>
+f_writefile reports/npcvendors/<local.filename>.csv,<name>,<uid>,<serv.rtime.format %Y-%m-%d-%H%M>,<argo.name>(<argo.job>),<argo.baseid>,<argo.uid>,<act.name>,<act.baseid>,<act.uid>,<argn1>x,<argn2>g
+
+on=@eat
+regenhits=<f_health_regen_rate>
+return 1
+
+on=@attack
+action=-1
+return 0
+//if (<src.npc>) && !(<src.owner>) && !(<src.incombat>) && (<src.canseelos <uid>>)	//an unowned npc not in combat who can see me
+  //if (<src.npc> == 1) || (<src.npc> >= 8)						//its either an animal or some kind of monster
+    //src.attack <uid>									//attack our attacker back
+  //endif
+//endif
+
+on=@spellselect		
+if (<argo.isitem>) && (<argo.type>==t_scroll)	//make sure we have the proper skill and mana
+  local.spell=<argn1>
+  if (<src.magery> < <strarg <serv.spell.<local.spell>.skillreq>>)
+    src.sysmessage This is beyond your ability.
+    return 1
+  elseif (<src.mana> < <eval (<serv.spell.<local.spell>.manause>/2)>)
+    src.sysmessage You lack sufficient mana for this spell.
+    return 1
+  endif
+endif
+
+on=@spellcast
+if (<src.notogetflag <act>> == 5) 	//cannot cast beneficial spells on an enemy
+  if (<serv.spell.<argn1>.flags>&spellflag_good) || (<serv.spell.<argn1>.flags>&spellflag_bless) || (<serv.spell.<argn1>.flags>&spellflag_heal)
+    src.sysmessage You cannot perform beneficial acts on your target.
+    return 1
+  endif
+endif
+local.scroll=<serv.spell.<argn1>.scroll_item>
+ref1=<src.findid.<local.scroll>>
+if !(<argo.isvalid>) || (<argo.ischar>) 
+  if (<ref1.isvalid>) && (<ref1.type> == t_scroll) && (<ref1.morex> == <argn1>)
+    argo=<ref1>
+    actprv=<ref1>
+    src.sysmessage Found <ref1.name> to use.
+  endif
+endif
+
+on=@death
+ref1=<uid>
+ref2=<mount>
+if (<ref2.isvalid>) 
+  ref2.act=
+  ref2.timerf 0,action=101	//108 guarding
+endif
+timerf 2,findhealer
+timerf 2,message You have Died! Follow the arrow to a healer.
+
+ref1=<attacker.last>	//Send pvp activity to the discord #pvp channel
+if (<ref1.isvalid>) && (<ref1.isplayer>) && !(<ref1.isgm>) && !(<isgm>)
+  dorand 20
+    local.message=<name> falls before <ref1.name>'s might! They stand triumphant.
+    local.message=<name> is cut down to size by <ref1.name>! Their defeat is swift and final.
+    local.message=With a final gasp, <name> breathes their last. Victory is <ref1.name>'s.
+    local.message=<name> meets their end at the point of <ref1.name>'s weapon. They reign supreme.
+    local.message=The life fades from <name>'s eyes. <ref1.name> claims victory in the struggle.
+    local.message=<name> is no more! <ref1.name> has bested their foe in glorious combat.
+    local.message=<name> has been bested! <ref1.name> stands victorious over their fallen form.
+    local.message=The once vibrant <name> now lies lifeless. <ref1.name> has emerged victorious.
+    local.message=<name> is sent packing to the afterlife! <ref1.name> claims the spoils of war.
+    local.message=<name>'s journey through the mortal realm has ended by <ref1.name>'s hand.
+    local.message=<name> is shown no mercy! <ref1.name> claims victory with ruthless efficiency.
+    local.message=<ref1.name> dominated the battlefield as <name> falls before them.
+    local.message=<name> is but a memory now, thanks to <ref1.name>'s valiant efforts.
+    local.message=May <name> find solace in the next world, for <ref1.name> is done with them.
+    local.message=<name> is cut down in their prime. <ref1.name> stands as the sole victor.
+    local.message=The legend of <name> ends here. <ref1.name> has written their final chapter.
+    local.message=<name>'s name will be sung no more, for <ref1.name> has silenced their song.
+    local.message=<name> falls like a shooting star, their light extinguished by <ref1.name>'s might.
+    local.message=<name>'s defeat is a testament to <ref1.name>'s unwavering skill.
+    local.message=<ref1.name> stands victorious as the lifeless form of <name> lays at their feet.
+  enddo
+  f_writefile c:/yeoldesphere/scripts/discord/f_pvp_recent.cmd,curl -H "Content-Type: application/json" -d "{\"username\": \"PvP\", \"content\":\"<local.message>\"}" %WEBHOOK_URL%
+  f_writefile c:/yeoldesphere/scripts/discord/f_pvp_recent.cmd,start /b "" cmd /c del "%~f0"&exit /b
+  f_update_discord_pvp		
+endif
+
+on=@deathcorpse
+argo.canmask |= can_o_nosleep
+
+[function f_update_discord_pvp]
+serv.log Sending recent pvp activity to discord channel
+local.spawn = <sysspawn c:/yeoldesphere/scripts/discord/f_pvp_to_discord.cmd>
+
+[function f_console_show_total_sell_value]
+if (<ctag0.total_sell_value>)
+  //serv.log <name> Total Sale Value : <ctag0.total_sell_value>g
+  ctag.total_sell_value=
+endif
+
+[function f_login_house_check]
+ref1=<region.uid>
+if (<ref1.isvalid>) && (<ref1.type>==t_multi) 
+  if (<ref1.link.isvalid>) && !(<ref1.f_house_isfriend <uid>>) && !(<src.isgm>) 
+    go <ref1.link.p>
+  endif
+endif
+
+
+
+[EOF]

@@ -1,0 +1,184 @@
+//Automated Event System by Soulless
+//v0.1
+//10:35 AM 7/7/2022
+
+[dialog d_automated_event_controller]
+200,100
+
+page 0
+
+resizepic 10 10 9200 260 390
+
+page 1
+resizepic 35 20 9200 205 20
+dtext 90 20 1263 Event Controller
+
+resizepic 25 60 9350 230 22
+dtext 40 60 1000 Select an event below to begin
+
+resizepic 50 95 9350 200 220	//white event selection
+while !(<isempty <def.automated_event_<dlocal.n>_name>>)
+  button 25 <eval 95+(<local.n>*20)> 4006 4007 1 0 <eval (<local.n>+1)>
+  dtext 60 <eval 95+(<local.n>*20)> <eval 026+(<local.n>*20)> <def.automated_event_<dlocal.n>_name>
+  local.n += 1
+endwhile
+
+resizepic 40 350 9350 150 22
+button 25 350 4006 4007 1 0 20
+dtext 60 350 1000 Cancel active event
+
+[dialog d_automated_event_controller button]
+
+onbutton=1,10
+argn -= 1
+local.event=<dvar0.automated_event_active>
+if (<local.event> != -1)
+  src.sysmessage There is currently a <def0.automated_event_<dlocal.event>_name> event already happening.
+  return 1
+endif
+f_automated_event_open <argn>
+
+onbutton=20
+local.event=<dvar0.automated_event_active>
+if (<local.event>==-1)
+  src.sysmessage No event is currently active.
+  return 1
+endif
+f_automated_event_end
+src.sysmessage The <def0.automated_event_<dlocal.event>_name> has been canceled.
+
+
+[dialog d_automated_event_signup_board]
+
+100,50
+
+local.event=<var0.automated_event_active>
+local.eventname=<def0.automated_event_<dlocal.event>_name>
+local.participants=<serv.list.automated_event_<dlocal.event>_participants.count>
+local.participants=<qval (<local.participants> < 0)?0:<local.participants>>
+local.participantsneeded=<eval (<def0.automated_event_<dlocal.event>_minplayers>-<local.participants>)>
+
+page 0
+gumppictiled 10 10 570 400 100
+resizepic 20 20 9200 550 382
+dtext 212 30 1263 Event Signup Board
+
+page 1
+
+dtext 65 75 1263 Event Name : 
+dtext 165 75 1000 <qval (<var0.automated_event_active> != -1)?<local.eventname>:No Event Currently>
+
+dtext 65 95 1263 Participants :  
+dtext 165 95 1000 <qval (0 < <local.participants>)?<dlocal.participants>:N/A>
+dtext 235 95 <qval (0 < <local.participantsneeded>)?026:044> <qval (0 < <local.participantsneeded>)?<local.participantsneeded> Player(s) Needed:>
+
+dtext 65 115 1263 Status : 
+if (<local.event> == -1)
+  dtext 165 115 1000 N/A
+elseif (<timer> > 0) 
+  dtext 165 115 1000 <local.eventname> Signup Period (<qval (60 < <timer>)?<eval (<timer>/60)> minutes:<timer> seconds>)
+elseif (<timer> == -1) && (<local.event> != -1)
+  dtext 165 115 1000 <local.eventname> Event In Progress 
+endif
+
+button 70 170 4006 4007 1 0 1
+dtext 110 170 1000 <qval (<serv.list.automated_event_<dlocal.event>_participants.findelem <src>> == -1)?Signup for Event:Resign from Event> 
+
+button 70 205 4006 4007 0 2
+dtext 110 205 1000 View Participants
+
+button 70 240 4006 4007 1 0 2
+dtext 110 240 1000 Spectate Event
+
+button 70 275 4006 4007 1 0 3
+dtext 110 275 1000 Scoreboard
+
+button 485 360 247 248 1 0 0	//okay button
+
+page 2
+
+if (<local.event> == -1 )
+  dtext 74 55 1000 There is no event currently happening.
+elseif (<serv.list.automated_event_<dlocal.event>_participants.count> <= 0)
+  dtext 74 55 1000 No one has signed up for the event yet.
+else
+  dtext 74 55 1263 Participants
+  for n 0 <eval (<serv.list.automated_event_<dlocal.event>_participants.count>-1)>
+    ref1=<serv.list.automated_event_<dlocal.event>_participants.<dlocal.n>>
+    dtext <eval (50+<local.x>)> <eval (75+<local.y>)> 1000 <eval (<local.n>+1)>.  <ref1.name>
+    local.y += 15
+  endfor
+endif
+
+button 40 370 4015 4016 0 1
+dtext 80 370 1263 Back
+
+[dialog d_automated_event_signup_board button]
+
+onbutton=1	//signup / cancel signup
+local.event=<var0.automated_event_active>
+local.eventname=<def0.automated_event_<dvar0.automated_event_active>_name>
+if (<local.event> == -1)
+  src.sysmessage There is no event currently to join.
+  return 1
+elseif (<timer> == -1)		//no timer means the signup period is finished
+  src.sysmessage You cannot join the event right now.
+  return 1
+endif
+
+if (<serv.list.automated_event_<dlocal.event>_participants.findelem <src>> == -1)
+  src.f_automated_event_join <dlocal.event>	
+else
+  src.f_automated_event_resign <dlocal.event>	
+endif
+
+onbutton=2
+//spectate event if possible
+local.event=<var0.automated_event_active>
+if (<local.event> == -1)
+  src.sysmessage There is no event currently to spectate.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_spectators>)
+  src.sysmessage You cannot spectate on this event.
+  return 1
+endif
+f_automated_event_spectate
+
+onbutton=3
+src.eventscore
+
+
+[dialog d_automated_event_scoreboard]
+150,25
+page 0
+resizepic 0 0 9200 410 560
+resizepic 10 10 3000 390 540
+local.event=<dvar0.automated_event_active>
+dtext 120 30 026 <def0.automated_event_<dlocal.event>_name> Scoreboard
+dtext 104 70 1000 <def0.automated_event_<dlocal.event>_victorypoints> Kills to win the match
+
+dtext 75 90 026 Players
+dtext 250 90 026 Score
+
+for n 0 <eval (<serv.list.automated_event_<dlocal.event>_participants.count>-1)>	
+  ref1=<serv.list.automated_event_<dlocal.event>_participants.<dlocal.n>>
+  if (<ref1.isvalid>) 
+    if !(<ref2.isvalid>) || (<ref1.tag0.automated_event_points> > <ref2.tag0.automated_event_points>) 
+      ref2=<ref1>	//replace old winner
+    endif
+    dtext 75 <eval (105+(<local.n>*15))> 026 <eval (<local.n>+1)>. 
+    dtext 90 <eval (105+(<local.n>*15))> 1000 <ref1.name>  
+    dtext 250 <eval (105+(<local.n>*15))> 1000 <ref1.tag0.automated_event_points> kills
+  endif
+endfor
+
+if !(<ref2.isvalid>) || !(<ref2.tag0.automated_event_points>)
+  dtext 120 50 1000 Currently no winner...
+else
+  dtext 100 50 044 <ref2.name> is winning with <ref2.tag0.automated_event_points> kills //needs to be here so the local winner is selected
+endif
+
+
+
+
+[EOF]

@@ -1,0 +1,27 @@
+[SPELL 6]
+DEFNAME=s_night_sight
+NAME=Night Sight
+SOUND=snd_spell_night_sight
+RUNES=IL
+CAST_TIME=0.8
+RESOURCES=i_reag_spider_silk,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_night_sight
+SCROLL_ITEM=i_scroll_night_sight
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+EFFECT_ID=i_fx_heal_effect
+EFFECT=0
+LAYER=layer_spell_night_sight
+DURATION=3*60.0,10*60.0
+MANAUSE=4
+SKILLREQ=MAGERY 0.0
+INTERRUPT=100.0,100.0
+
+//Nightsight is used in dungeons to allow the target to see in the dark. There is a Potion with the same effect
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+
+[EOF]

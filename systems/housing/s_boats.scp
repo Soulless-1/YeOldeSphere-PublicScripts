@@ -1,0 +1,393 @@
+//Ship System by Soulless
+//v1.0
+//8:04 AM 3/16/2022
+
+
+[plevel 1]
+shiplist
+boatlist
+
+[function boatlist]
+if (<flags>&statf_dead) || (<flags>&statf_freeze)
+  sysmessage You cannot use this function in your current state.
+  return 1
+endif
+shiplist
+
+[function shiplist]
+sdialog d_ship_list
+
+////////////////////////
+// Ship Speech
+
+
+[speech spk_ship_cmds]
+on=set name *
+	// changes ship name, where *=name.
+	// name=<strmid(<args>,8,64)>
+
+on=furl sail	// stop
+on=stop			// stops current ship movement.
+	shipstop
+
+on=turn left
+on=port			// turn left
+        serv.log <name>(<uid>) issued 'turn left' boat command in <region.name>(<p>)
+	shipturnleft
+
+on=turn right
+on=starboard	// turn right
+        serv.log <name>(<uid>) issued 'turn right' boat command in <region.name>(<p>)
+	shipturnright
+
+on=left			// move ship in desired direction.
+on=drift left
+	shipdriftleft
+
+on=right		// move ship in desired direction.
+on=drift right
+	shipdriftright
+
+on=back			// move ship backwards
+on=backward		// move ship backwards
+on=backwards	// move ship backwards
+	shipback
+
+on=forward
+on=foreward		// moves ship forward.
+on=unfurl sail	// moves ship forward.
+	shipfore
+
+on=forward left
+	shipforeleft
+
+on=forward right
+	shipforeright
+
+on=backward left
+on=back left
+	shipbackleft
+
+on=backward right
+on=back right
+	shipbackright
+
+on=raise anchor
+	shipanchorraise
+
+on=drop anchor
+	shipanchordrop
+
+on=turn around	// turns ship around and proceeds.
+on=come about	// turns ship around and proceeds.
+	shipturn
+
+on=up
+	shipup
+
+on=down
+	shipdown
+
+on=land
+	shipland
+
+
+[typedef t_ship]
+
+on=@PickUP_Ground
+update
+return 1
+
+[typedef t_ship_hold]
+
+[typedef t_ship_hold_lock]
+
+on=@dclick
+ref1=<uid>
+if !(<src.f_ship_findkey <uid>>)
+  src.sysmessage That appears to be locked.
+else
+  open
+endif
+return 1
+
+[typedef t_ship_tiller]
+
+on=@click
+ref1=<region.uid>
+if (<ref1.isvalid>) 
+  message The tiller man of <ref1.name>
+  message This structure is like new.
+  return 1
+endif
+
+on=@dclick
+ref1=<region.uid>
+if (<ref1.isvalid>) 
+  if (<ref1> == <src.region.uid>) 
+    if (<link.owner>==<src>)
+      message What dost thou wish to name they ship?
+      src.ctag0.tillerman=<uid>
+      promptconsole f_ship_rename
+      return 1
+    endif
+    dorand 4
+      say Arr, don't do that!
+      say Arr, leave me alone!
+      say Arr, watch what thour'rt doing, matey!
+      say Arr! Do that again and I'll throw ye overboard!
+    enddo
+  else
+    if !(<ref1.owner>==<src>) && !(<src.f_ship_findkey <uid>>) && !(<src.isgm>) 
+      src.sysmessage You must either own the boat or have a key to dock the boat.
+      return 1
+    elseif (<link.anchor> != 1) && !(<src.isgm>) 
+      src.sysmessage you must lower the anchor to dock the boat
+      return 1
+    endif
+    sdialog d_ship_drydock
+  endif
+endif
+return 1
+
+
+
+
+[typedef t_ship_side_locked]
+
+
+////////////////////////////////
+// Ship Functions
+
+[function f_ship_findkey]
+ref1=<args>
+forconttype t_key,2
+  if (<more1>==<ref1.more1>)
+    return <uid>
+  endif
+endfor
+
+[function f_ship_rename]
+ref1=<src.ctag0.tillerman>	
+src.ctag.tillerman=
+if (<ref1.isvalid>)
+  ref1.link.name=<args>
+  ref1.message This ship is now called the <args>
+endif
+
+[events e_ship_priv]	//Added 'e_ship_priv' for chars who have any kind of priv on any ship
+
+on=@ItemDropOn_Ground		//this doesnt fire on classicuo clients when they drop things!
+if (<act.region.isvalid>)
+ref1=<act.region.uid>
+  if (<ref1> == <src.region.uid>)
+    //this is dropped in the boat with me
+  endif
+endif
+
+
+[dialog d_ship_drydock]
+150,50
+page 0
+resizepic 10 10 9200 200 150
+resizepic 20 20 3000 180 130
+dhtmlgump 30 30 160 65 1 0  <def.bfont_black>Do you wish to dry dock this boat?
+button 30 95 4005 4006 1 0 1
+dtext 65 95 0 CONTINUE
+button 30 120 4005 4006 1 0 0
+dtext 65 120 0 CANCEL
+
+
+[dialog d_ship_drydock button]
+
+onbutton=0
+//do nothing
+
+onbutton=1
+if !(<src.isgm>) 
+  if (<link> == <src.region.uid>) 
+    src.sysmessage You cannot dock the boat from that location
+    return 1
+  elseif !(<link.owner>==<src>) && !(<src.f_ship_findkey <uid>>) 
+    src.sysmessage You must either own the boat or have a key to dock the boat.
+    return 1
+  elseif (<link.anchor> != 1)
+    src.sysmessage you must lower the anchor to dock the boat
+    return 1
+  endif
+endif
+
+serv.newitem i_model_ship
+new.type t_deed
+new.name=<link.name>
+new.more=<link.id>
+new.more2=<link.more>
+new.bounce <src>
+link.f_ship_clean_deck
+src.f_boat_remove_keys <link>
+src.delship <link>
+link.remove
+
+[function f_ship_clean_deck]
+local.x=<strarg <streat <streat <multiregion>>>>
+local.y=<strarg <streat <streat <streat <multiregion>>>>>
+local.r=<qval (<local.x> < <local.y>)?<local.y>:<local.x>>
+ref1=<uid>	//boat
+ref2=<more1>	//owner
+serv.newitem i_crate_md
+ref3=<new>	//crate 
+ref3.p=<ref2.p>	//put at feet of owner
+ref3.z -= 10
+foritems <local.r>
+  if (<region.uid>==<ref1>)
+    if (strmatch(t_ship_hold*,<type>)) && (<link>==<ref1>) && (<count>)
+      ref4=<uid>
+      forcont <ref4> 99
+        cont=<ref3>
+	update
+      endfor
+    //elseif !(<attr>&attr_move_never) && !(<attr>&attr_static) && (<uid> != <ref3>)	//no need to save items on the deck, not safely stowed away
+      //cont=<ref3>
+      //update
+    endif
+  endif
+endfor
+if (<ref3.isvalid>)
+  if (<ref3.count> <= 0)	//remove the box if nothing is in it
+    ref3.remove
+  else
+    ref3.cont=<ref2.findlayer.29>	//throw it in the owners bankbox
+    ref3.update
+  endif
+endif
+
+forchars <local.r>	//also send chars to players position on land
+  if (<region.uid>==<ref1>) || (<isplayer>)
+    go <ref2.p>
+  endif
+endfor
+
+[function f_boat_remove_keys]
+forcont <findlayer.21> 1
+  if (<type>==t_key) && (<more1> == <args>)
+    remove
+  endif
+endfor
+forcont <findlayer.29> 1
+  if (<type>==t_key) && (<more1> == <args>)
+    remove
+  endif
+endfor
+
+[dialog d_ship_list]
+
+250,200
+resizepic 0 0 9200 540 300
+dtext 180 15 1263 Your Current Ships
+
+dtext 60 40 1263 Name
+dtext 265 40 1263 Coordinates
+dtext 420 40 1263 Owner
+
+ref1=<src>
+ref1.ctag0.ship_list=
+for c 0 <eval (<ref1.account.chars>-1)>
+  ref2=<serv.account.<ref1.account>.char.<dlocal.c>>
+  if (<ref2.ships> >= 1)
+    for n <eval (<ref2.ships>-1)> 0
+      ref3=<ref2.ship.<dlocal.n>>
+      ref1.ctag0.ship_list .= <ref3>,
+      if !(<ref3.isvalid>) || !(<ref3.isitem>) || ((<ref3.owner> != <ref2>) && (strcmpi("<ref2.account>","<ref1.account>)))
+        serv.log <ref2.name>(<ref2>) viewing ship (ship.<dlocal.n> <ref3>) in their ship list, removing it from their ship list.
+        ref2.delship <ref3>
+      else
+        local.b += 1
+        radio 40 <eval (60+(<local.y>))> 210 211 0 <local.b>
+        dcroppedtext 65 <eval (60+(<local.y>))> 200 25 1000 <ref3.name>
+        dtext 270 <eval (60+(<local.y>))> 1000 <ref3.p>
+        dtext 420 <eval (60+(<local.y>))> <qval (<ref1>==<ref2>)?044:1000> <qval (<ref1>==<ref2>)?You:<ref3.owner.name>>
+        local.y += 17
+      endif
+    endfor
+  endif
+endif
+
+button 20 270 4006 4007 1 0 1
+dtext 50 270 1000 Recall (250gp)
+
+button 170 270 4006 4007 1 0 2
+dtext 200 270 1000 Gate (500gp)
+
+button 340 270 4018 4019 1 0 0
+
+[dialog d_ship_list button]
+
+onbutton=0
+src.ctag0.house_list=
+
+onbutton=1		//RECALL
+args=<src.ctag0.ship_list>
+src.ctag0.ship_list=
+ref1=<argv[<eval (<argchkid>-1)>]>
+if (<argchkid> == -1)
+  src.sysmessage You must select a ship for this service.
+  return 1
+elseif (<src.gold> < 250)
+  src.sysmessage You cannot afford that service.
+  return 1
+elseif (<flags>&statf_stone) || (<isjailed>)
+  sysmessage You cannot use this service in your current state
+  return 1
+endif
+ref1.shipstop
+src.gold -= 250
+src.sound {036 037}
+events=+e_spell_nocost
+serv.newitem i_rune_marker 
+new.morep=<eval (<ref1.p.x>+1)>,<eval (<ref1.p.y>+1)>,<eval (<ref1.p.z>+1)>
+new.type=t_eq_script
+new.layer=layer_special
+new.equip
+new.type=t_rune
+new.events=+t_remove_ontimer
+new.timer=<eval (<serv.spell.52.cast_time>+10)/10>
+src.actarg1=32	//recall spell
+src.act=<new>	//set act to newly created rune marker
+src.actprv=<src>
+src.action=25		//set action to magery
+
+onbutton=2		//GATE
+args=<src.ctag0.ship_list>
+src.ctag0.ship_list=
+ref1=<argv[<eval (<argchkid>-1)>]>
+if (<argchkid> == -1)
+  src.sysmessage You must select a ship for this service.
+  return 1
+elseif (<src.gold> < 500) && !(<src.sigm>)
+  src.sysmessage You cannot afford that service.
+  return 1
+elseif (<flags>&statf_stone) || (<isjailed>)
+  sysmessage You cannot use this service in your current state
+  return 1
+endif
+ref1.shipstop
+src.gold -= 500
+src.sound {036 037}
+events=+e_spell_nocost
+serv.newitem i_rune_marker 
+new.morep=<eval (<ref1.p.x>+1)>,<eval (<ref1.p.y>+1)>,<eval (<ref1.p.z>+1)>
+new.type=t_eq_script
+new.layer=layer_special
+new.equip
+new.type=t_rune
+new.events=+t_remove_ontimer
+new.timer=<eval (<serv.spell.52.cast_time>+10)/10>
+src.actarg1=52	
+src.act=<new>	//set act to newly created rune marker
+src.actprv=<src>
+src.action=25		//set action to magery
+
+
+
+[EOF]
+

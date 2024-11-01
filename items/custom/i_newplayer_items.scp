@@ -1,0 +1,404 @@
+//New Player Pack by Soulless
+//v1.0
+//10:52 AM 8/9/2018
+//contains all the starting items a player will need (stat potion, skill tomes, starting gear, some gold, etc)
+
+
+////////////////
+//////////////// - NEWPLAYER WELCOME MESSAGE
+////////////////
+
+[dialog d_newplayer_msg]
+150, 150
+resizepic 
+resizepic 20 20 5150 300 340
+//resizepic 30 30 3000 280 260
+dtext 65 23 1263 Welcome <src.name>,
+dhtmlgump 55 50 235 210 0 1 <def0.bfont_black>In your backpack you will find some armor, weapons, bandages, potions, reagents, and a quarter full spellbook<def.br>You will also find a crate of common crafting tools and some gold coins have been placed in your bank. <def.br>These items will help you on your journey. We hope you enjoy your time here on our shard and please don't hesitate to ask for help from your fellow players.
+
+dtext 55 270 044 Ocllo is the new player starting area
+button 100 292 1209 1210 1 0 1
+dtext 120 290 1000 Go there now!
+
+dtext 135 335 1263 Good luck have fun!
+button 270 333 4024 4025 1 0 0
+
+[dialog d_newplayer_msg button]
+
+onbutton=1
+go ocllo
+
+////////////////
+//////////////// - NEWPLAYER PACK
+////////////////
+
+[itemdef i_newplayer_pack]
+id=i_backpack
+name=New Player Pack
+type=t_normal
+
+on=@create
+attr=attr_newbie
+color=0480
+
+on=@dclick
+if (<link.uid> != <src.uid>) && !(<src.isgm>)
+  src.sysmessage This is not your new player pack, you can not use it.
+  return 1
+endif
+
+src.sdialog d_newplayer_msg
+
+serv.newitem tm_newplayer_tools	//crate of crafting tools
+new.cont=<src.findlayer.29>
+new.update
+serv.newitem i_bandage,25
+new.cont=<src.findlayer.21>
+new.update
+serv.newitem i_potion_heal,5
+new.cont=<src.findlayer.21>
+new.update
+serv.newitem i_potion_cure,5
+new.cont=<src.findlayer.21>
+new.update
+serv.newitem i_pet_horse 
+new.cont=<src.findlayer.21>
+new.update
+serv.newitem i_spellbook
+new.more1=0ffffffff		//half spellbook
+new.cont=<src.findlayer.21>
+new.update
+serv.newitem tm_newplayer_reags	//bag of reagents
+new.cont=<src.findlayer.21>
+new.update
+//serv.newitem tm_newplayer_gear	//backpack of armor & weapons
+//new.cont=<src.findlayer.21>
+//new.update
+//serv.newitem i_stat_ball	//there's no need for this 
+//new.link=<src>
+//new.cont=<src.findlayer.21>
+//serv.newitem i_skill_tome	//there's no need for this 
+//new.link=<src>
+//new.cont=<src.findlayer.21>
+
+
+serv.newitem i_gold
+new.amount 1000
+new.cont=<src.findlayer.29>
+
+sound 72
+consume
+return 1
+
+[template tm_newplayer_reags]
+container=i_bag
+color=0238
+item=i_reag_black_pearl,45
+item=i_reag_blood_moss,45
+item=i_reag_garlic,45
+item=i_reag_ginseng,45
+item=i_reag_mandrake_root,45
+item=i_reag_nightshade,45
+item=i_reag_sulfur_ash,45
+item=i_reag_spider_silk,45
+
+[template tm_newplayer_tools]
+container=i_crate_small
+color=021e
+item=i_mortar_pestle
+item=i_hammer_smith
+item=i_tongs
+item=i_arrow_fletching
+item=i_saw
+item=i_saw_dovetail
+item=i_hammer
+item=i_pen_mapmakers
+item=i_rolling_pin
+item=i_skillet
+item=i_flour_sifter
+item=i_pen_scribes
+item=i_sewing_kit
+item=i_tinker_tools
+item=i_pickaxe
+item=i_hatchet
+item=i_fishing_pole
+item=i_scissors
+
+[template tm_newplayer_gear]
+container=i_backpack
+color=0c8
+item=i_platemail_helm_young
+item=i_platemail_gorget_young
+item=i_platemail_chest_young
+item=i_platemail_arms_young
+item=i_platemail_gloves_young
+item=i_platemail_leggings_young
+item=i_shield_kite_metal_young
+item=i_sword_long_young
+item=i_hatchet_young
+item=i_mace_young
+item=i_spear_young
+item=i_bow_young
+item=i_arrow,40
+
+
+
+///////////////////////
+// Youngplayer Equipment
+
+[itemdef i_platemail_arms_young]
+defname=i_platemail_arms_young
+defname2=i_platemail_arms_noob
+id=i_platemail_arms
+type=t_armor
+BONUSDEX=-2
+armor=40
+value=0
+weight=0
+ReqStr=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Platemail Arms (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_platemail_leggings_young]
+defname=i_platemail_leggings_young
+defname2=i_platemail_leggings_noob
+id=i_platemail_leggings
+type=t_armor
+BONUSDEX=-5
+armor=40
+value=0
+weight=0
+ReqStr=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Platemail Legs (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_platemail_helm_young]
+defname=i_platemail_helm_young
+defname2=i_platemail_helm_noob
+id=i_platemail_helm
+type=t_armor
+BONUSDEX=-1
+armor=40
+value=0
+weight=0
+ReqStr=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Plate Helm (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_platemail_gorget_young]
+defname=i_platemail_gorget_young
+defname2=i_platemail_gorget_noob
+id=i_platemail_gorget
+type=t_armor
+BONUSDEX=-1
+armor=40
+value=0
+weight=0
+ReqStr=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Platemail Gorget (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_platemail_gloves_young]
+defname=i_platemail_gloves_young
+defname2=i_platemail_gloves_noob
+id=i_platemail_gloves
+type=t_armor
+BONUSDEX=-3
+armor=40
+value=0
+weight=0
+ReqStr=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Platemail Gloves (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_platemail_chest_young]
+defname=i_platemail_chest_young
+defname2=i_platemail_chest_noob
+id=i_platemail_chest
+type=t_armor
+BONUSDEX=-5
+armor=40
+value=0
+weight=0
+ReqStr=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Platemail Tunic (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_shield_kite_metal_young]
+defname=i_shield_kite_metal_young
+defname2=i_shield_kite_metal_noob
+id=i_shield_kite_metal
+reqstr=0
+value=0
+weight=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Kite Shield (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_sword_long_young]
+defname=i_sword_long_young
+defname2=i_sword_long_noob
+id=i_sword_long
+ReqStr=0
+value=0
+weight=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Sword Long (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_hatchet_young]
+defname=i_hatchet_young
+defname2=i_hatchet_noob
+id=i_hatchet
+ReqStr=0
+value=0
+weight=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Hatchet (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_mace_young]
+defname=i_mace_young
+defname2=i_mace_noob
+id=i_mace
+reqstr=0
+value=0
+weight=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Mace (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_spear_young]
+defname=i_spear_young
+defname2=i_spear_noob
+id=i_spear
+reqstr=0
+value=0
+weight=0
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Spear (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[itemdef i_bow_young]
+defname=i_bow_young
+defname2=i_bow_noob
+id=i_bow
+reqstr=0
+value=0
+weight=0
+range=2,10
+tevents=+t_youngplayer_item
+category=Custom
+subsection=Newplayer Pack
+description=Bow (youngplayer)
+
+on=@create
+HITPOINTS={50 60}
+attr=attr_newbie
+color=058b
+
+[typedef t_youngplayer_item]
+
+on=@click
+message Young player's <name>
+return 1
+
+on=@dclick
+if !(<src.tag0.young>)
+  src.sysmessage This item is for young players only
+  return 1
+endif
+
+on=@equiptest
+if !(<src.tag0.young>)
+  src.sysmessage This item is for young players only
+  return 1
+endif
+
+on=@equip
+if !(<src.tag0.young>)
+  src.sysmessage This item is for young players only
+  return 1
+endif
+
+
+
+
+[EOF]
+
+
+
+ 
+

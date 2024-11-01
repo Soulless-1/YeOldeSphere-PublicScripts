@@ -1,0 +1,176 @@
+// mapuo protocol support
+// author: diego@runuo.com
+// last update: 11/04/2013
+// last update: 10/09/2013 - extreme
+//
+// instructions:
+//
+// open sphere.ini and insert the following line:
+// packet240=f_handler_extendedprotocol
+//
+// restart or resync the server if necessary.
+// you can adjust the following defs as you wish
+
+[plevel 7]
+getargvx
+
+[function getargvx]
+if <argv[0]> == -1
+  return <eval <argv>-1>
+else
+  return <argv[<argv[0]>]>
+endif
+
+[defname mapuo_settings]
+mapuo_party_enabled            1
+mapuo_guild_enabled            1
+mapuo_guild_hitpoints          1
+mapuo_guild_disabletag         mapuo_invisible
+negotiate_features_enabled     0
+
+[defname razor_features]   	 // 1 = block | 0 = allow
+feature.1         1,filterweather       //= 1 << 0,     // weather filter
+feature.2         1,filterlight        	//= 1 << 1,     // light filter
+feature.3         1,smarttarget        	//= 1 << 2,     // smart targeting option
+feature.4         1,rangedtarget        //= 1 << 3,     // range check for targeting option
+feature.5         0,autoopendoors       //= 1 << 4,     // automatically open doors
+feature.6         0,dequiponcast        //= 1 << 5,     // clear hands before casting
+feature.7         0,autopotionequip   	//= 1 << 6,     // dequip and equip hands for potions
+feature.8         0,poisonedchecks  	//= 1 << 7,     // poisoned checks for macros and block heal if poisoned option
+feature.9         0,loopedmacros        //= 1 << 8,     // looped macros
+feature.10        0,useonceagent        //= 1 << 9,     // use once agent and command
+feature.11        0,restockagent        //= 1 << 10,    // restock agent
+feature.12        0,sellagent           //= 1 << 11,    // vendor sell agent
+feature.13        0,buyagent            //= 1 << 12,    // vendor buy agent
+feature.14        0,potionhotkeys       //= 1 << 13,    // potions hotkeys
+feature.15        0,randomtargets       //= 1 << 14,    // random targeting hotkeys and commands
+feature.16        0,closesttargets      //= 1 << 15,    // closest targeting hotkeys and commands
+feature.17        0,overheadhealth      //= 1 << 16,    // display health percentage over head
+feature.18        1,autolootagent       //= 1 << 17,    // autoloot agent
+feature.19        1,bonecutteragent     //= 1 << 18,    // bone cutter agent
+feature.20        1,advancedmacros      //= 1 << 19,    // advanced macros engine
+feature.21        0,autoremount         //= 1 << 20,    // automatically remound after dismount
+feature.22        1,autobandage         //= 1 << 21,    // automatically apply bandages
+feature.23        1,buffchecks          //= 1 << 22,    // buff bar checks for macros
+feature.24        1,filterseason        //= 1 << 23,    // season filter
+
+[dialog d_negotiate_features]
+0,0
+nomove
+noclose
+gumppictiled 0 0 806 606 2624
+checkertrans 0 0 806 606
+
+[function f_serv_negotiate_razor_features]
+local.features=0
+serv.log setting the features to negotiate
+for i 1 24
+  if (<getargvx 1,<def.feature.<dlocal.i>>> == 1)
+    local.features |= <hval 2@(<dlocal.i>-1)>
+    serv.log - <getargvx 2,<def.feature.<dlocal.i>>>
+  endif
+endfor
+serv.log negotiate features set <strtoupper <local.features>>
+var.features=<local.features>
+return 1
+
+[function f_negotiate_razor_features]
+if (<isonline>) 
+  //sdialog d_negotiate_features
+  tag.negotiatefeatures=1
+  //flags |= statf_freeze
+  sendpacket 0f0 00 0c 0fe d00 d<var.features>
+  //sysmessage @063,,1 to play here, you must use uosteam or razor and have 'negotiate features with server' enabled. if it's disabled, you have 8 seconds to enable it or will be disconnected in 10 seconds.
+  sendpacket 0f0 00 0c 0fe d00 d<var.features>
+  serv.log test
+  timerf 2,f_negotiate_razor_features_2
+endif
+
+[function f_negotiate_razor_features_2]
+if (<dtag.negotiatefeatures>)
+  flags &= ~statf_freeze
+  //sysmessage @026,,1 you must activate 'negotiate features with server' in your assistant to play.
+  if (<isonline>)
+    //sendpacket 082 04
+    trysrc <uid> dialogclose d_negotiate_features
+  endif
+endif
+return 1
+
+[function f_negotiate_razor_features_3]
+tag.negotiatefeatures=
+flags &= ~statf_freeze
+trysrc <uid> dialogclose d_negotiate_features
+//sysmessage @044,,1 you negotiated the features with server and you're ready to play.
+updatex
+return 1
+
+[function f_handler_extendedprotocol]
+if (<dlocal.num> <= 8)
+  ref1=<local.char>
+  if (<dargn1> != 240)
+    return 1
+  elseif (<dlocal.3> == 255) && (<ref1.dtag.negotiatefeatures>)
+    ref1.f_negotiate_razor_features_3
+  elseif (<dlocal.3> == 0) && (<ddef.mapuo_party_enabled> == 1)
+    ref1.f_mapuo_handle_party
+  elseif (<dlocal.3> == 1) && (<ddef.mapuo_guild_enabled> == 1)
+    ref1.f_mapuo_handle_guild <dlocal.4>
+  endif
+  return 1
+endif
+
+[function f_mapuo_handle_party]
+if !(<isinparty>)
+  return
+endif
+local.data = <hval 01>
+local.count = 0
+for x 0 <eval <party.members> - 1>
+  ref1 = <party.member.<dlocal.x>>
+  if (<ref1>) && (<ref1> != <uid>) && (<distance <ref1>> >= 18)
+    local.count ++
+    local.data = <local.data> d<hval <ref1.uid>> w<hval <ref1.p.x>> w<hval <ref1.p.y>> <hval <ref1.map>>
+  endif
+endfor
+if (<dlocal.count> > 0)
+  local.data = <local.data> d<hval 00>
+  local.length = <eval 4 + (<local.count> * 9) + 4>
+  sendpacket 0f0 w<hval <local.length>> <local.data>
+endif
+
+[function f_mapuo_handle_guild]
+if !<guild>
+  sendpacket 0f0 w<hval 9> <hval 2> <hval 0> d<hval 00>
+  return
+endif
+local.data = <hval 02> <hval <argn1>>
+local.count = 0
+for x 0 <eval <guild.member.count> - 1>
+  ref1 = <guild.member.<dlocal.x>.uid>
+  if (<ref1>) && (<ref1> != <uid>) && (<ref1.isonline>) && (<dref1.tag0.<def.mapuo_guild_disabletag>> == 0)
+    if (<dargn1> == 0) || ((<dargn1> == 1) && (<distance <ref1>> >= 18))
+      local.count ++
+      local.data = <local.data> d<hval <ref1.uid>> 
+      if (<dargn1> == 1)
+        local.data = <local.data> w<hval <ref1.p.x>> w<hval <ref1.p.y>> <hval <ref1.map>> <hval <ref1.f_mapuo_hitspercent>>
+      endif
+    endif
+  endif
+endfor
+local.data = <local.data> d<hval 00>
+if (<dargn1> == 0)
+  local.length = <eval 5 + (<local.count> * 4) + 4>
+else
+  local.length = <eval 5 + (<local.count> * 10) + 4>
+endif
+sendpacket 0f0 w<hval <local.length>> <local.data>
+
+[function f_mapuo_hitspercent]
+if (<ddef.mapuo_guild_hitpoints>) && (<maxhits> > 0)
+  return <feval <floatval (<hits> / <maxhits>) * 100>>
+else
+  return 0
+endif
+
+[eof] 

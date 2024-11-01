@@ -1,0 +1,1250 @@
+[itemdef 0ffdb]
+defname=i_broodwich_sandwich
+name=the broodwitch
+type=t_normal
+
+on=@create
+more1=10
+
+on=@dclick
+if !(<more1>)
+  consume
+  return 1  
+endif
+sound {03a 03c}
+more1 -= 1
+src.sysmessage You feel you've lost a little bit of your soul
+return 1
+
+[itemdef i_pardon_forged]
+defname=i_pardon_forged
+name=Forged Pardon
+id=10289
+type=t_script
+
+on=@create
+color=1177
+
+on=@dclick
+if (<topobj> != <src>) 
+  src.sysmessage That must be in your pack for you to use it.
+  return 1
+elseif (<src.kills> <= 0) && !(<src.findid.i_murder_short_term>) && !(<src.findid.i_murder_long_term>)
+  src.sysmessage You have no use for this item.
+  return 1
+elseif (<src.findid.i_forged_pardon_cooldown>)
+  src.sysmessage You must wait 24 hours before using another forged pardon.
+  return 1
+elseif (<src.incombat>)
+  src.sysmessage You cannot use a forged pardon while in combat.
+  return 1
+endif
+if (<src.findid.i_murder_short_term.more1> >= 1)
+  src.findid.i_murder_short_term.more1 -= 1
+endif
+if (<src.findid.i_murder_long_term.more1> >= 1)
+  src.findid.i_murder_long_term.more1 -= 1
+endif
+src.kills=<src.findid.i_murder_long_term.more1>
+src.sysmessage Your murder count has been successfully updated.
+consume
+serv.newitem i_forged_pardon_cooldown
+new.timer=24*60*60
+src.equip <new>
+return 1
+
+[itemdef i_pardon_forged_royal]
+defname=i_pardon_forged_royal
+name=Royal Forged Pardon
+id=10289
+type=t_script
+
+on=@create
+color=1177
+
+on=@dclick
+if (<topobj> != <src>) 
+  src.sysmessage That must be in your pack for you to use it.
+  return 1
+elseif (<src.kills> <= 0) && !(<src.findid.i_murder_short_term>) && !(<src.findid.i_murder_long_term>)
+  src.sysmessage You have no use for this item.
+  return 1
+elseif (<src.findid.i_forged_pardon_cooldown>)
+  src.sysmessage You must wait 24 hours before using another forged pardon.
+  return 1
+elseif (<src.incombat>)
+  src.sysmessage You cannot use a forged pardon while in combat.
+  return 1
+endif
+src.consume i_murder_short_term
+src.consume i_murder_long_term
+src.kills=0
+src.sysmessage Your murder count has been successfully updated.
+consume
+serv.newitem i_forged_pardon_cooldown
+new.timer=24*60*60
+src.equip <new>
+return 1
+
+[itemdef i_forged_pardon_cooldown]
+defname=i_forged_pardon_cooldown
+name=Forged pardon Cooldown
+id=i_memory
+type=t_script
+
+on=@timer
+remove
+return 1
+
+[itemdef i_house_stables]
+defname=i_house_stables
+name=House Stables
+id=0f38
+type=t_house_stables
+
+[typedef t_house_stables]
+
+on=@dclick
+ref1=<region.uid>
+if !(<ref1.isvalid>) || !(<ref1.f_house_isfriend <src>>)
+  src.sysmessage You cannot use these house stables.
+  return 1
+endif
+target Select a pet to put in the stables.
+return 1
+
+on=@targon_item
+return 1
+
+on=@targon_char
+ref1=<src.targ>
+if !(<ref1.owner>) || (<ref1.owner> != <src>)
+  src.sysmessage You cannot stable a pet that you do not own.
+  return 1
+elseif (<src.targ.distance <uid>> > 12)
+  src.sysmessage That is too far away.
+  return 1
+endif
+src.targ.shrink 1
+return 1
+
+[itemdef i_deed_pet_bonding]
+defname=i_deed_pet_bonding
+name=Pet Bonding Deed
+id=i_deed
+type=t_script
+
+on=@create
+color=0490
+
+on=@dclick
+if (<topobj> != <src>) 
+  src.sysmessage You cannot use that where it is.
+  return 1
+endif
+target Select a pet to bond with.
+return 1
+
+on=@targon_char
+ref1=<src.targ>
+if (<topobj> != <src>) 
+  src.sysmessage You cannot use that where it is.
+  return 1
+elseif (<src.targ> == <src>)
+  src.sysmessage You know yourself quite well enough already.
+  return 1
+elseif !(<src.targ.npc>) || (<src.targ.ishuman>)
+  src.sysmessage Perhaps you should just talk to them?
+  return 1
+elseif !(<ref1.owner>) || (<ref1.owner> != <src>)
+  src.sysmessage You cannot bond with a pet that you do not own.
+  return 1
+endif
+consume
+src.targ.bonded=1
+src.sysmessage You are now bonded with that pet
+src.targ.effect=3,i_fx_heal_effect,6,15,1
+src.targ.bark
+return 1
+
+
+[itemdef i_beed_bless_clothing]
+defname=i_deed_bless_clothing
+name=Clothing Bless Deed
+id=i_deed
+type=t_script
+category=Misc Items
+subsection=Deeds
+description=Clothing Bless Deed
+
+on=@create
+color=0ba
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+endif
+target Select a clothing item to bless.
+return 1
+
+on=@targon_item
+if (<topobj> != <src>) || (<src.targ.topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+elseif (<src.targ.attr>&attr_newbie)
+  src.sysmessage That clothing is already blessed.
+  return 1
+elseif (<src.targ.type> != t_clothing) || (<src.targ.isevent.t_unique_magic_item>) || (<src.targ.isevent.t_enchanted_clothing>) 
+  src.sysmessage You cannot bless that with this deed.
+  return 1
+endif
+src.targ.attr |= attr_newbie
+src.sysmessage Target clothing object has been blessed.
+src.sound 501
+consume
+return 1
+
+
+[itemdef i_mystery_bag]
+defname=i_mystery_bag
+name=Mystery Bag
+id=i_bag
+type=t_script
+
+on=@create
+color=04fe
+
+[itemdef i_potion_cooldown_explosion]
+defname=i_potion_cooldown_explosion
+name=Explosion Potion Cooldown
+id=i_potion_explosion
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[itemdef i_wool_regrowing]
+defname=i_wool_regrowing
+name=Wool Regrowing
+id=i_wool
+type=t_eq_script
+layer=46
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.body=c_sheep_woolly
+
+[itemdef i_fishing_net_special]
+defname=i_fishing_net_special
+id=i_fishing_net_3
+name=Special Fishing Net
+type=t_fishing_net_special
+
+on=@create
+dorand 14
+  color=0
+  color=009B
+  color=00CD
+  color=00D3
+  color=014D
+  color=01DD
+  color=01E9
+  color=01F4
+  color=0373
+  color=0451
+  color=047F
+  color=0489
+  color=0492
+  color=04B5
+  color=08AA
+enddo
+
+[itemdef i_fishermans_poncho]
+defname=i_fishermans_poncho
+id=02683	//hooded shroud
+name=Fisherman's Poncho
+weight=1
+type=t_clothing
+layer=layer_robe
+category=Misc Items
+subsection=Shrouds
+description=Fisherman's Poncho
+
+on=@create
+color=0aff
+
+//shipwreck stuff 
+
+[itemdef i_shipwreck_chair]
+defname=i_shipwreck_chair
+id=0c1b
+name=Chair Recovered From a Shipwreck
+type=40
+value=5
+
+on=@create
+attr=04008
+
+category=Other 
+subsection=Shipwreck Stuff
+description=Chair Recovered From a Shipwreck 
+
+[itemdef i_shipwreck_clock]
+defname=i_shipwreck_clock
+id=0c1f
+name=Clock Recovered From a Shipwreck
+type=24
+value=5
+
+on=@create
+attr=04008
+
+category=Other 
+subsection=Shipwreck Stuff
+description=Clock Recovered From a Shipwreck
+
+[itemdef i_shipwreck_painting]
+defname=i_shipwreck_painting
+id=0c2c
+name=Painting Recovered From a Shipwreck
+type=64
+value=5
+
+on=@create
+attr=04008
+
+category=Other 
+subsection=Shipwreck Stuff
+description=Painting Recovered From a Shipwreck
+
+[itemdef i_shipwreck_dresser]
+defname=i_shipwreck_dresser
+id=0c24
+name=Dresser Recovered From a Shipwreck
+type=t_container
+value=5
+
+on=@create
+attr=04008
+
+category=Other 
+subsection=Shipwreck Stuff
+description=Dresser Recovered From a Shipwreck
+
+[itemdef i_shipwreck_books]
+defname=i_shipwreck_books
+id=0c16
+name=Books Recovered From a Shipwreck
+type=19
+value=5
+
+on=@create
+attr=04008
+
+category=Other 
+subsection=Shipwreck Stuff
+description=Books Recovered From a Shipwreck
+
+[itemdef i_shipwreck_bookcase]
+defname=i_shipwreck_bookcase
+id=0c14
+name=Bookcase Recovered From a Shipwreck
+type=t_container
+value=5
+
+on=@create
+attr=04008
+
+category=Other 
+subsection=Shipwreck Stuff
+description=Bookcase Recovered From a Shipwreck
+
+//This is just a place for items that don't have a specific place anywhere else
+
+[itemdef i_clockwork_assembly]
+defname=i_clockwork_assembly
+id=i_winch
+name=clockwork assembly
+type=t_normal
+weight=50
+
+on=@create
+color=0770
+
+[itemdef i_wind_teleporter]
+defname=i_wind_teleporter
+id=i_shield_chaos
+name=Wind Telepoter
+type=t_script
+
+on=@create
+attr=090
+
+on=@step
+if (<src.magery> >= 720) || (<src.isgm>) 
+  if (<morep>) && (<argn1> != 1) 
+    src.p=<morep>
+    src.update    
+   endif
+endif
+return 0
+
+[itemdef i_tree_variety]
+defname=i_tree_variety
+id=0d98
+name=Variety Tree
+type=t_normal
+
+on=@create
+attr=010
+timer=1
+
+on=@timer
+if (<link>==04fffffff)
+  serv.newitem <eval <id>+1>
+  new.attr=010
+  link=<new>
+  new.link=<uid>
+  new.p=<p>
+endif
+dispid={0d98 1 0d9c 1 0da0 1 0da4 1 0da8 1 0ccd 1 0cd0 1 0cd3 1 0cd6 1 0cda 1 0cdd 1 0ce0 1 0ce3 1 0ce6 1}
+update
+link.dispid=<eval <dispid>+1>
+link.attr=010
+link.p=<p>
+link.update
+timer={10800 21600}
+return 1
+
+[itemdef i_flower_variety]
+id=i_plant_blade
+name=Variety Flower
+type=t_normal
+
+on=@create
+attr=010
+timer=1
+
+on=@timer
+dispid={{0c83 0c8e} 4 {0cbe  0cc1} 1}
+update
+timer={10800 21600}
+return 1
+
+[itemdef i_crystal_ball_reputation]
+defname=i_crystal_ball_reputation
+id=i_crystal_ball
+name=Crystal Ball of Reputation
+value={1500 2000}
+type=t_normal
+
+on=@dclick
+src.sysmessage Your current Fame: <src.fame>
+src.sysmessage Your current Karma: <src.karma>
+return 1
+
+[itemdef i_reagent_bag_small]
+name=Small Reagent Bag
+id=i_bag
+
+on=@create
+color=0176
+for 8
+  serv.newitem random_reagent,<R2,6>,<uid>
+endfor  
+
+[itemdef i_reagent_bag_large]
+name=Large Reagent Bag
+id=i_bag
+
+on=@create
+color=0176
+for 8
+  serv.newitem random_reagent,<R20,50>,<uid>
+endfor  
+
+[itemdef i_reagent_bag_huge]
+name=Huge Reagent Bag
+id=i_bag
+
+on=@create
+color=0176
+for 8
+  serv.newitem random_reagent,100,<uid>
+endfor  
+
+[itemdef i_bag_of_scrolls]
+id=i_bag
+name=Bag of Scrolls
+
+on=@create
+for 6
+  serv.newitem random_scroll,1,<uid>
+endfor
+
+[itemdef i_yoohoo]
+name=bottle of yoohoo
+id=i_bottle_ale
+type=t_normal
+
+on=@create
+color=021f
+
+on=@dclick
+if (<more1> >= 3)
+  src.emote finish the yoohoo in one huge chug.
+  src.sound 0031
+  remove
+  return 1
+endif
+src.emote shake the yoohoo.
+more1 += 1
+return 1
+
+////////////////////////////
+// These are just here because they dont have a specific place anywhere else.
+
+[itemdef i_terrain_restrictor]
+defname=i_terrain_restrictor
+name=Terrain Restrictor
+id=i_paver_stone	//01776	//medium boulder
+type=t_normal
+
+on=@create
+attr=090
+color=026
+
+
+on=@step
+//serv.log <src.name>(<src>) stepped on <name>(<uid>) @<p>	//dont need this anymore, just spams the console
+if (<src.spawnitem.isvalid>)  
+  if (<src.incombat>)
+    return 1
+  else
+    src.movenear <src.spawnitem> 5
+  endif
+elseif (<src.findid.i_memory_champion_spawn>)
+  src.go <src.findid.i_memory_champion_spawn.link.p>
+elseif (!(<src.npc>) && !(<src.isgm>)) || ((<src.npc>) && !(<src.spawnitem>))
+  return 1
+endif
+
+[itemdef i_prismatic_energy_beam]	//used in Prism of Light 
+id=03818
+name=Electric Wind
+type=t_script
+
+on=@create
+attr=010
+
+on=@step
+if (!<argn1>==1) 
+  src.ctag0.prismatic_energy_beam += 1
+  p=<R6506,6513>,<R83,90>,-4,0
+  update
+  if (<src.ctag0.prismatic_energy_beam> >= 3) 
+    src.go 6523,71,-10
+    src.ctag0.prismatic_energy_beam=
+  endif
+endif
+
+[itemdef i_solen_hive_teleporter]	//used for traversing the solen hives 
+id=01772
+name=Solen Hive Hole
+type=t_sign_gump
+
+on=@create
+attr=010
+color=01
+
+on=@dclick
+src.go <morep>
+return 1
+
+[itemdef 02256]
+defname=i_rugby_ball
+name=Rugby Ball
+type=t_normal
+
+on=@create
+attr=attr_move_never
+
+[itemdef 029fd]
+defname=i_fire_pit2
+name=fire pit
+type=t_normal
+
+[itemdef i_box_of_bees]
+id=i_crate_lg
+name=Crate
+type=t_container
+
+on=@create
+serv.newitem i_beehive,1,<uid>
+new.type=t_normal
+new.attr=010
+
+on=@click
+message <name>
+if (<src.distance <p>> < 3)
+  src.sysmessage Looking closely, you see someone has carved "not bees" onto this.
+endif
+return 1
+
+on=@dclick
+src.effect=3,091b,5,60,30
+src.e scream
+src.emote get stung by an angry swarm of bees
+//src.damage 5 dam_physical	//people can use this to train things like bandaging afk
+src.sysmessage WHAT! There's a bunch of bees inside this box.
+
+[itemdef i_flaming_boots]
+id=i_boots_calf
+name=Flaming Boots
+type=t_clothing
+
+on=@create
+maxhits=65535
+hits=<maxhits>
+color=0b65
+
+on=@equip
+timerd=1
+
+on=@timer
+if (<cont.p.x><cont.p.y> != <tag0.posyx>)
+  tag0.posyx=<cont.p.x><cont.p.y>
+  cont.effect=2,019ab,5,60
+endif
+timerd=1
+return 1
+
+[itemdef i_bloody_boots]
+defname=i_bloody_boots
+id=i_boots_calf
+name=Bloody Boots
+type=t_clothing
+
+on=@create
+maxhits=65535
+hits=65535
+color=0ba0
+
+on=@equip
+timerd=1
+
+on=@timer
+if (<topobj.mount>) || (<topobj.p.x><topobj.p.y> == <morex><morey>)
+  timer=5
+else
+  morex=<topobj.p.x>
+  morey=<topobj.p.y>
+  if (<topobj.dir> == 2) || (<topobj.dir> ==6)
+    topobj.effect=2,01e03,5,60,0,0ba0
+  elseif (<topobj.dir> == 0) || (<topobj.dir> ==4)
+    topobj.effect=2,01e04,5,60,0,0ba0
+  else
+    topobj.effect=2,{01e03 01e04},5,60,0,0ba0
+  endif
+  timerms=250
+endif
+return 1
+
+[itemdef i_trash_barrel] 
+name=trash barrel
+id=i_barrel_open 
+type=t_container 
+tevents=+t_trash_barrel
+
+on=@Create
+color=946
+attr=010
+
+[typedef t_trash_barrel]
+
+ON=@DropOn_Self
+if (<rescount> >= 50)
+  message The trash is full!  Emptying!
+  empty
+  sound 011e
+else
+  message The item will be deleted in three minutes.
+  timer=180
+endif
+
+ON=@Timer
+if !(<attr> & attr_decay)
+  if (<count>)
+    message Emptying the trashcan!
+    empty
+    sound 011e
+    endif
+  return 1
+endif
+
+////////////////////////////////
+// These were items I had to add after making the NPC look accurate to uoguide.com
+
+[itemdef i_hydra_scale]
+id=i_dragon_scale
+name=Hydra Scale
+type=t_normal
+
+on=@create
+color=064
+
+[itemdef i_healthy_gland]
+id=i_flesh_entrails
+name=Healthy Gland
+type=t_normal
+
+on=@create
+color=064
+
+[itemdef i_seed_peculiar]
+id=i_fishing_weight
+name=Peculiar Seed
+type=t_normal
+
+[itemdef i_seed_fragrant]
+id=i_fishing_weight
+name=Fragrant Seed
+type=t_normal
+
+[itemdef i_helm_orc_evil]
+DEFNAME=i_helm_orc_evil
+ID=i_helm_orc
+NAME=evil orc helm
+ARMOR=20
+//BONUSSTR=10
+CATEGORY=Provisions - Armor
+SUBSECTION=Helmets
+DESCRIPTION=Evil Orc Helm
+
+on=@create
+HITPOINTS={31 70}
+color=096E
+
+on=@equip
+src.modstr += 10
+
+on=@unequip
+src.modstr -= 10
+
+[itemdef i_bow_orcish]
+defname=i_bow_orcish
+name=Orcish Bow
+id=i_bow
+type=t_weapon_bow
+range=12
+category=Provisions - Weapons
+subsection=Bows
+description=Orcish Bow
+
+on=@create
+color=0453
+hitpoints=70
+
+[itemdef i_mask_orcish_kin]
+DEFNAME=i_mask_orcish_kin
+ID=i_mask_orc
+NAME=Mask of Orcish Kin
+ARMOR=0
+CATEGORY=Provisions - Armor
+SUBSECTION=Masks
+DESCRIPTION=Msk of Orcish Kin
+
+on=@create
+color=0590
+
+on=@equip
+src.events=+e_mask_of_orcish_kin
+
+on=@unequip
+src.events=-e_mask_of_orcish_kin
+
+[events e_mask_of_orcish_kin]
+
+on=@combatadd
+//serv.log <name> adding <src.name> to attacker list
+if (<findlayer.6.isvalid>) && (<findlayer.6.baseid>==i_mask_orcish_kin)	//while wearing an orcish kin mask
+  if (<src.istevent.e_orcs>)	//attacked an orc
+    damage 50 dam_fire <uid>
+    effect=3,i_fx_explode,6,15,1
+    sound=snd_spell_explosion
+    findlayer.6.remove
+  endif
+endif
+
+on=@hittry
+if (<findlayer.6.isvalid>) && (<findlayer.6.baseid>==i_mask_orcish_kin)
+ if (<src.istevent.e_orcs>)	//attacked an orc
+    damage 50 dam_fire <uid>
+    effect=3,i_fx_explode,6,15,1
+    sound=snd_spell_explosion
+    findlayer.6.remove
+  endif
+endif
+
+on=@spellcast
+if (<serv.spell.<argn1>.flags>&spellflag_harm)
+  if (<findlayer.6.isvalid>) && (<findlayer.6.baseid>==i_mask_orcish_kin)
+    if (<act.isvalid>) && (<act.istevent.e_orcs>)	//attacked an orc
+      damage 50 dam_fire <uid>
+      effect=3,i_fx_explode,6,15,1
+      sound=snd_spell_explosion
+      findlayer.6.remove
+    endif
+  endif
+endif
+
+[itemdef i_tribal_berry]
+defname=i_tribal_berry
+id=i_fruit_apple
+name=tribal berry
+type=t_normal
+
+on=@create
+color=1107
+hipoints=70
+color=6
+
+[itemdef i_tribal_paint]
+defname=i_tribal_paint
+id=i_jar_honey
+name=tribal paint
+type=t_normal
+skillmake=80.0 cooking
+resources=i_flour_sack,i_tribal_berry
+
+on=@create
+color=2101
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage That must be in your pack for you to use it.
+  return 1
+elseif (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot wear body paint while icognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot wear body paint while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot wear body paint while in beastform.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot wear body paint while in monster form.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot wear body paint while gender swapped.
+  return 1
+elseif (<findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot wear body paint while your disguised.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You are already wearing body paint.
+  return 1
+endif
+serv.newitem i_tribal_paint_applied
+new.equip
+new.timer=60*60*24*7
+return 1
+
+[itemdef i_tribal_paint_applied]
+defname=i_tribal_paint_applied
+id=i_dyes
+name=tribal paint applied
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.events=+e_tribal_paint_applied
+dorand 2
+  src.body=c_man
+  src.body=c_woman
+enddo
+src.color=0
+src.sysmessage You now bear the markings of the savage tribe.  Your body paint will last about a week or you can remove it with an oil cloth.
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.events=-e_tribal_paint_applied
+src.body=<src.obody>
+src.color=<src.oskin>
+
+[events e_tribal_paint_applied]
+
+on=@combatadd
+//serv.log <name> adding <src.name> to attacker list
+if (<src.istevent.e_savages>)		//attacked a savage
+  if (<findid.i_tribal_paint_applied>)		//while disgused with savage paint
+    damage 50 dam_fire <uid>
+    effect=3,i_fx_explode,6,15,1
+    sound=snd_spell_explosion
+    findlayer.6.remove
+  endif
+endif
+
+on=@hittry
+if (<src.istevent.e_savages>)		//attacked a savage
+  if (<findid.i_tribal_paint_applied>)	//while disgused with savage paint
+    damage 50 dam_fire <uid>
+    effect=3,i_fx_explode,6,15,1
+    sound=snd_spell_explosion
+    findlayer.6.remove
+  endif
+endif
+
+on=@spellcast
+if (<serv.spell.<argn1>.flags>&spellflag_harm)		//and it was harmful	
+  if (<findid.i_tribal_paint_applied>)			//while disgused with savage paint
+    if (<act.isvalid>) && (<act.istevent.e_savages>)	//casted on a savage
+      damage 50 dam_fire <uid>
+      effect=3,i_fx_explode,6,15,1
+      sound=snd_spell_explosion
+      findlayer.6.remove
+    endif
+  endif
+endif
+
+[itemdef i_tribal_spear]
+defname=i_tribal_spear
+id=i_spear
+name=tribal spear
+type=t_weapon_fence
+weight=7.0
+reqstr=50
+dam=13,15
+speed=46
+
+on=@create
+color=837
+
+[itemdef i_beer_german]
+name=German Weizen Beer
+id=i_bottle_ale
+type=t_eq_script
+value=1000
+
+on=@create
+color=07ad
+more1=10
+
+on=@click
+message <muldiv <more1>,100,10>% full
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You must have it in your backpack!
+  return 1
+endif
+
+more1 -= 1
+src.mana=<src.maxmana>
+src.sysmessage You feel yourself refreshed
+src.sound <R030,031>
+if !(<more1>)
+  src.sysmessage You smash the empty bottle on the ground
+  consume
+endif
+return 1
+
+[itemdef i_bowl]
+defname=i_bowl
+id=i_bottle_3
+name=Bowl
+type=t_bowl
+value=50000
+
+on=@create
+color=0480
+
+[itemdef i_bong]
+defname=i_bong
+id=i_flask1_empty
+name=Bong
+type=t_bowl
+value=100000
+
+on=@create
+color=0480
+
+[typedef t_bowl]
+
+on=@click
+message <name> [<qval <more1>?<dmore1> hits left:empty>]
+return 1
+
+on=@dclick
+if !(<more1>)
+  target What would you like to pack in the <name>
+  return 1
+endif
+
+more1 -= 1
+if (<src.findid.i_memory_stoned>)
+  src.findid.i_memory_stoned.more1 += <eval (60/10)> 
+  src.findid.i_memory_stoned.timer=10
+else
+  serv.newitem i_memory_stoned
+  new.more1=<eval (60/10)>
+  src.equip <new.uid>
+  new.timer=10
+endif
+src.emote light the bowl
+src.message Ahhhh. That's some good bud.
+dorand 5
+  src.sysmessage You notice you know the meaning of life, but have no way to express it in words. 
+  src.sysmessage You see the top of the mountain, and its below the clouds.
+  src.sysmessage You feel lighter.
+  src.sysmessage You are very thirsty.
+  src.sysmessage You see the world in a completely different light.
+enddo
+src.make_smoke
+src.anim 34
+if (<baseid>==i_bong)
+  src.sound 33
+endif
+src.sound 0230
+return 1
+
+on=@targon_item
+if (<src.targ.baseid> != i_weed) && (<src.targ.baseid> != i_roach)
+  src.sysmessage You can't figure how to pack that in the bowl piece.
+  return 1
+endif
+
+src.targ.consume
+src.sysmessage You pack the <src.targ.name> into your <name>
+if (<src.targ.baseid>==i_weed)
+  more1=5
+  elseif (<src.targ.baseid>==i_roach)
+  more1=2
+endif
+src.sound 0247
+return 1
+
+on=@targon_char
+src.sysmessage Perhaps you don't need to smoke anymore?
+return 1
+
+[itemdef i_joint]
+id=i_arrow_shaft
+name=Joint
+type=t_joint
+value=10000
+
+on=@create
+color=0481
+more1=5	
+
+on=@click
+message <name> [<eval <more1>> hits left]
+return 1
+
+[typedef t_joint]
+
+on=@dclick
+if !(<more>)
+  consume
+  serv.newitem i_roach
+  new.bounce <src>
+  src.sysmessage You burn your fingers trying to light the joint.
+  return 1
+endif
+
+more1 -= 1
+if (<src.findid.i_memory_stoned>)
+  src.findid.i_memory_stoned.more1 += <eval (60/10)>
+  src.findid.i_memory_stoned.timer=10
+else
+  serv.newitem i_memory_stoned
+  new.more1=<eval (60/10)>
+  src.equip <new>
+  new.timer=10
+endif
+for 4
+  src.make_smoke
+endfor
+src.emote light a joint up
+src.sound 0230
+src.anim 34
+return 1
+
+[itemdef i_roach]
+id=i_hinge
+name=Roach
+type=t_normal
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You burn your fingers trying to light the roach.
+return 1
+
+[itemdef i_weed]
+defname=i_weed
+id=i_reag_nightshade
+name=Weed
+type=t_weed
+value=25000
+
+on=@create
+color=03d
+more1=1
+
+[typedef t_weed]
+
+[itemdef i_rolling_papers]
+defname=i_rolling_papers
+id=i_book_sm_open
+name=Rolling Papers
+type=t_rolling_papers
+value=5000
+
+on=@create
+color=02c
+more1=25
+
+[typedef t_rolling_papers]
+
+on=@click
+message <name> [<eval <more1>> papers]
+return 1
+
+on=@dclick
+if !(<more1>)
+  src.sysmessage There are no more papers left.
+  return 1
+endif
+
+target What would you like to roll?
+return 1
+
+on=@targon_item
+if (<src.targ.type> != t_weed)
+  src.sysmessage You can't figure out how to roll a joint out of that.
+  return 1
+endif
+
+if (<src.targ.baseid>==i_weed)
+  more1 -= 1
+  serv.newitem i_joint
+  new.bounce <src>
+  src.targ.consume
+  src.sound 0249
+  return 1
+endif
+
+[itemdef i_memory_stoned]
+defname=i_memory_stoned
+Name=Stoned
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.hits=<eval (<src.maxhits>*2)>
+
+on=@unequip
+src.hits=<eval (<src.maxhits>/2)>
+
+on=@timer
+if !(<more1>)
+  topobj.sysmessage You've sobered up from the weed now.
+  emote sober up
+  remove
+  return 1
+endif
+more1 -= 1
+topobj.f_stoned_speech
+timer <R10,15>
+return 1
+
+[function f_stoned_speech]
+if (<isgm>) && ((<flags>&statf_invisible) || (<flags>&statf_insubstantial) || (<flags>&statf_hidden))
+  return 1
+elseif (<R4> == 1)
+  say *WOW*
+else
+  dorand 37
+    say I'll lick that hamster!
+    say Did you see that?
+    say Man this is weird...
+    say I don't feel so good...
+    say Did you see the size of that chicken?
+    say Man, I'm hungry!
+    say What was that?
+    say Who said that?
+    say Look Out!
+    say Oh, man...
+    say Jersey?  I can't get there from here!
+    say Your father smells of elderberries!
+    say Let's make a wooden rabbit.
+    say I blow my nose in your general direction!
+    say What did she mean 'get out of the cab'?
+    say Where are the badgers?
+    say We don't need no stinking badgers!
+    say Your internal IPX is conflicting with your segment IPX!
+    say Saw that other leg off and make em even, paw...
+    say The turkey is in the henhouse!
+    say Thats twice I've had to message that, for the third time.
+    say I see you looking at me looking at you looking at me!
+    say What do you do with a drunken sailor so early in the morning?
+    say I think Twisted smells like stewed cabbage!
+    say Where's my turnip?
+    say Quit calling me Surely!
+    say Lets be frank.  Cause Frank is a cool dude.
+    say He who stands on toilet is high on pot.
+    say Beam me up scotty, and hurry up about it!
+    say I love you truly, truly I do.
+    say Where's my pencil?
+    say Oh all the pretty colors!
+    say I am getting a bad case of the munchies.
+    say Puff Puff Pass!
+    say Very well then, my lovely.
+    say Boogers!  Boogers!
+    say The rocks are lovely this time of year.
+  enddo
+endif
+
+[itemdef i_stoner_remedy]
+defname=i_stoner_remedy
+id=i_bottle_blue
+name=Stoner Remedy
+type=t_normal
+value=2500
+
+on=@create
+color=03a
+
+on=@dclick
+if (<src.findid.i_memory_stoned>)
+  src.findid.i_memory_stoned.remove
+  src.sysmessage You instantly sober up
+endif
+src.sfx 0030
+src.anim 34
+consume
+return 1
+
+
+
+
+
+
+[EOF]
+
+
+

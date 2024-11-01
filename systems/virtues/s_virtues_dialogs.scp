@@ -1,0 +1,152 @@
+//Virtue System by Soulless
+//v1.0
+//11:52 AM 3/28/2022
+
+
+[dialog d_virtue_system]
+300,100
+
+page 0
+gumppic 20 20 104
+
+button 114 25 112 112 1 0 1	//Valor: A Sword (Kill champion spawn monsters / ability to activate and advance champion spawns)
+tooltip 1051004 //valor
+gumppic 114 25 112 <f_virtue_get_symbol_color 0>
+
+button 177 50 107 107 1 0 2	//Honor: A Chalice (Honoring then killing monsters / walk amidst monsters without being attacked)
+tooltip 1051005 //honor
+gumppic 177 50 107 <f_virtue_get_symbol_color 1>
+
+button 201 113 105 105 1 0 3	//Compassion: A Heart (NPC escort quests / resurrect others with up to 80% full health)
+tooltip 1051002 //compassion
+gumppic 201 113 105 <f_virtue_get_symbol_color 2>
+
+button 175 177 109 109 1 0 4	//Justice: A Set of Scales (Killing reds / increased power scrolls amounts)
+tooltip 1051006 //justice
+gumppic 175 177 109 <f_virtue_get_symbol_color 3>
+
+button 111 202 106 106 1 0 5	//Honesty: An Open-Palmed Hand ("Lost" items / NPC merchant discount)
+tooltip 1051007 //honesty
+gumppic 111 202 106 <f_virtue_get_symbol_color 4>
+
+button 51 175 111 111 1 0 6	//Spirituality: An Ankh (Use targeted heals and resurrections on other players)
+tooltip 1051003 //spirituality
+gumppic 51 175 111 <f_virtue_get_symbol_color 6>
+
+button 25 114 110 110 1 0 7	//Sacrifice: A Teardrop (Sacrificing fame / self resurrection)
+tooltip 1051001 //sacrifice
+gumppic 25 114 110 <f_virtue_get_symbol_color 6>
+
+button 51 50 108 108 1 0 8	//Humility: A Shepherd’s Crook (Kill evil-aligned monsters during Humility Hunt)
+tooltip 1051000 //humility  
+gumppic 51 50 108 <f_virtue_get_symbol_color 7>
+
+button 45 250 2027 2028 1 0 9	//status
+button 175 250 2071 2072 1 0 0	//cancel
+
+[dialog d_virtue_system button]
+
+onbutton=9
+sdialog d_virtue_list
+
+onbutton=1,10
+argn1 -= 1
+f_virtue_<def0.virtue<dargn1>_name>_power
+
+
+//Virtue List
+
+[dialog d_virtue_list]
+300,100
+
+page 0
+resizepic 20 20 9380 290 265
+
+button 260 20 4016 4017 1 0 1	//back button
+
+dtext 125 50 0 The Virtues
+
+button 55 75 1209 1210 1 0 9
+dtext 75 73 0 Humility
+
+button 55 105 1209 1210 1 0 8
+dtext 75 103 0 Sacrifice
+
+button 55 135 1209 1210 1 0 4
+dtext 75 133 0 Compassion
+
+button 55 165 1209 1210 1 0 7
+dtext 75 163 0 Spirituality
+
+button 180 75 1209 1210 1 0 2
+dtext 200 73 0 Valor
+
+button 180 105 1209 1210 1 0 3
+dtext 200 103 0 Honor
+
+button 180 135 1209 1210 1 0 5
+dtext 200 133 0 Justice
+
+button 180 165 1209 1210 1 0 6
+dtext 200 163 0 Honesty
+
+gumppictiled 65 195 199 10 50
+dtext 55 206 0 Click on a blue gem to view your
+dtext 55 225 0 status in that virtue.
+
+
+[dialog d_virtue_list button]
+
+onbutton=1	//back to main menu
+sdialog d_virtue_system
+
+onbutton=2,9	//view individual virtue
+argn1 -= 2
+sdialog d_virtue_definition <argn1>
+
+// Virtue Definition
+
+[dialog d_virtue_definition]
+300,100
+
+page <argn1>>
+
+local.virtue=<def0.virtue<dargn1>_name>
+local.value=<tag0.virtue_<local.virtue>>
+local.dots=<f_virtue_get_progress_dots <argn1>>
+
+resizepic 20 20 9380 290 290
+
+button 260 20 4016 4017 1 0 1	//back button
+
+for n 1 10
+  gumppic <eval (65+<local.x>)> 30 2360
+  if (<local.n> <= <local.dots>)
+    gumppic <eval (65+<local.x>)> 30 2362
+  endif
+  local.x += 18
+
+endfor
+
+dtext 125 50 0 <local.virtue>
+
+dhtmlgump 55 75 225 400 0 0 <def0.virtue<dargn1>_definition>
+
+gumppictiled 65 195 199 10 50
+dhtmlgump 55 205 225 40 0 0 <f_virtue_get_progress_text <argn1>>
+
+dtext 55 240 0 <local.virtue> : <dtag0.virtue_<local.virtue>>
+dtext 55 258 0 Title : <f_virtue_get_title <argn1>>
+
+button 45 288 1209 1210 1 0 10
+dtext 65 285 0 This virtue is not yet defined.
+//or if its on the codex have "-click to learn more (opens webpage)"
+
+[dialog d_virtue_definition button]
+
+onbutton=1 
+sdialog d_virtue_list
+
+
+
+[EOF]

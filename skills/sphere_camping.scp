@@ -1,0 +1,76 @@
+//https://uo2.stratics.com/skill-guides/skills-and-professions/camping/
+//http://www.uoguide.com/Camping
+//5:21 PM 3/27/2018
+
+//todo add special effect that players get for standing around a camp fire for n legnth of time
+
+
+[SKILL 10]
+DEFNAME=Skill_Camping
+KEY=Camping
+TITLE=Explorer
+FLAGS=skf_scripted
+PROMPT_MSG=
+DELAY=6.0
+STAT_STR=125
+STAT_INT=30
+STAT_DEX=30
+BONUS_STR=33
+BONUS_DEX=33
+BONUS_INT=34
+BONUS_STATS=50
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start
+//act = none
+//actprv = kindling
+
+if !(<uid.<actprv>.isvalid>) || !(<uid.<actprv>.isitem>) || (<uid.<actprv>.type> != t_kindling)
+  return 1
+elseif !(<src.findtype.t_kindling>)
+  src.sysmessage You do not have any kindling.
+  return 1 
+elseif !(<src.f_skillsucceed camping>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+uid.<actprv>.consume 1
+src.sound 03e3
+src.timerfms 3300,sound 03e3
+return 0
+
+ON=@Fail
+src.sysmessage You fail to ignite the campfire.
+
+ON=@Abort
+src.sysmessage You give up trying to light the campfire.
+
+on=@success
+local.q=<eval (<src.camping>/200)>		//quality of the camp fire
+serv.newitem i_fire_pit
+new.type=t_normal
+new.events=+t_campsite_item
+new.attr=012
+new.timer=<eval (<serv.DecayTimer>*60)>
+new.link=<src>
+new.p=<src.p>
+new.move s 1
+new.fix
+ref1=<new>
+serv.newitem i_fire
+new.type=t_normal
+new.events=+t_campsite_item
+new.events=+t_camp_fire
+new.attr=012
+new.more1=<eval (<serv.DecayTimer>*60)>
+new.timer=1
+new.p=<ref1.p>
+new.z += 3
+ref1.sound <R0225,0226>
+src.sysmessage You feel it would take a few moments to secure your camp.
+//could use random_campsite_items to make it a bigger camp
+
+
+
+[EOF]

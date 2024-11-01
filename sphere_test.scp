@@ -1,0 +1,608 @@
+
+[function testtest]
+if (<uid.<src.findtype.t_eq_horse>.tag0.tagname> >= 1)
+  src.say okey
+else
+  src.say no
+  return 1
+endif
+
+[function derp]		//derp i_fx_explode,5,0,0,0
+for dX -<argv[1]> <argv[1]>
+  for dY -<argv[1]> <argv[1]>
+    local.ms += 5
+    float.dist=<floatval sqrt(<eval (<local.dX>@2)+(<local.dY>@2)>)>
+    if (<float.dist> > <floatval <qval <argv[2]>?0:<argv[1]>-0.5>>) && (<float.dist> < <floatval <argv[1]>+0.5>)
+      local.absX=<eval <p.x>+<local.dX>>
+      local.absY=<eval <p.y>+<local.dY>>
+      timerfms <local.ms>,effectlocation <local.absX>,<local.absy>,<p.z>,2,<argv[0]>,6,15,1
+    endif
+  endfor
+endfor
+
+[function fxcircle]	//fxcircle i_fx_explode,5,0,0,0
+for dX -<argv[1]> <argv[1]>
+  for dY -<argv[1]> <argv[1]>
+    local.ms += 1
+    float.dist=<floatval sqrt(<eval (<local.dX>@2)+(<local.dY>@2)>)>
+    if (<float.dist> > <floatval <qval <argv[2]>?0:<argv[1]>-0.5>>) && (<float.dist> < <floatval <argv[1]>+0.5>)
+      local.absX=<eval <p.x>+<local.dX>>
+      local.absY=<eval <p.y>+<local.dY>>
+      timerfms <local.ms>,effectlocation <local.absX>,<local.absy>,<p.z>,2,<argv[0]>,6,15,1
+    endif
+  endfor
+endfor
+
+[function fix_reserved_names]
+serv.log Fixing unique names and altering chars using reserved names
+for n 0 <eval (<serv.accounts>-1)>
+  if (<serv.account.<dlocal.n>.chars> != 0)
+    for x 0 <eval (<serv.account.<dlocal.n>.chars>-1)>
+      ref1=<serv.account.<dlocal.n>.char.<dlocal.x>>
+      ref1.change_common_names <ref1>
+    endfor
+  endif
+endfor
+
+[function change_common_names]
+ref1=<uid>		//the char we are working with
+serv.log checking <ref1.name>(<ref1>) with create value <ref1.create>
+for n 0 <eval (<serv.accounts>-1)>
+  if (<serv.account.<dlocal.n>.chars> != 0)
+    for x 0 <eval (<serv.account.<dlocal.n>.chars>-1)>
+      ref2=<serv.account.<dlocal.n>.char.<dlocal.x>>
+      if (<ref1> != <ref2>) && !(strcmpi(<ref1.name>,<ref2.name>))
+        if (<ref2.account.plevel> <= 1) && (<ref1.create> > <ref2.create>) 
+          serv.log <ref2.name> reserved by <ref1>. <ref2> with create:<ref2.create>(-<eval (<ref1.create>-<ref2.create>)>) renamed to <strsub 0,4 <ref2.strtrim <ref2.name>>><strsub 0,4 <dref2>>
+          ref2.tag.oldname=<ref2.name>
+          ref2.name=<strsub 0,4 <ref2.strtrim <ref2.name>>><strsub 0,4 <dref2>>
+          ref2.tag0.mustrename=1        
+        endif
+      endif
+    endfor
+  endif
+endfor
+
+[function crashdie]
+for 10000
+  if (<isonline>) 
+    weblink www.google.com
+  endif
+endfor
+
+[function delevilhealers]
+forinstances i_worldgem_bit
+  if (<type>==t_spawn_char) 
+    if (<more1>==c_h_healer_evil) || (<more1>==c_h_healer_evil_f)
+      remove
+    endif
+  endif
+endfor
+
+[function blipple]
+serv.newitem i_memory 
+ref1=<new>
+ref1.p=10,10,1,0
+serv.log running 1,000 simulated deaths to find healers 
+//while (<local.x> < 6144) && (<local.y> < 4096)
+for 1000
+  ref2=<region.uid>
+  if !(<ref1.indungeon>)
+    if !(<ref2.isvalid>) || (<ref2.type> != t_multi) || (<ref2.type> != t_ship)
+      //local.x += 10
+      //if (<local.x> >= 6144)
+        //local.x=10
+        //local.y += 10
+      //endif
+      //ref1.p=<local.x>,<local.y>
+      ref1.p=<R5,6140>,<R5,4090>
+      ref1.f_nearest_healer_find
+      //serv.list.spawns_healer_<region.defname>.clear
+    endif
+  endif
+endfor
+//endwhile
+ref1.remove
+serv.log completed 1,000 simulated deaths finding healers
+
+[function blipblop]
+local.items=i_dragon_scale_helm,i_dragon_scale_tunic,i_dragon_scale_sleeves,i_dragon_scale_gloves,i_dragon_scale_leggings
+args=<local.items>
+for n 0 <eval (<argv>-1)>
+  args=<local.items>
+  forinstances <argv[<dlocal.n>]>
+    name=<serv.itemdef.<baseid>.name>
+    modar=0
+    f_blacksmithing_apply_<tag0.matoverride_i_dragon_scale>
+    f_blacksmithing_apply_<tag0.matoverride_i_ingot_iron>
+  endfor
+endif
+
+[function organizecontainer]
+ref1=<uid>
+forcont <uid> 125
+  if (!<local.<type>_bag>) && (<type>!=t_container)	//place similar items into same bag
+    serv.newitem i_backpack
+    new.tag0.item_type=<type>
+    new.cont=<ref1>
+    local.<type>_bag=<new>
+  endif
+  if (<local.<type>_bag>)
+    cont=<local.<type>_bag>
+  endif
+endfor
+serv.newitem i_bag	//bag for empty containers
+ref2=<new>
+ref2.cont=<ref1>
+forcont <ref1> 0
+  if (<type>==t_container>) && (<count> <= 0)
+    cont=<ref2>
+  endif
+endfor
+
+[function nipple]
+return 1
+
+[function glip]
+return 1
+foritems 9999
+  if (<type> == t_container) && (<baseid> != i_item_overload_container)
+    if (<fcount> > 125)
+      f_glipglop
+      serv.log <name>(<uid>) has <fcount> items in it
+    endif
+  endif 
+endfor
+
+[function f_glipglop]
+return 1
+ref1=<uid>
+serv.newitem i_item_overload_container
+ref2=<new>
+ref2.p=<ref1.p.x>,<ref1.p.y>,<eval (<ref1.p.z>+4)>
+forcont <ref1.uid> 9999
+  if (<ref1.fcount> > 125)
+    cont=<ref2>
+  endif
+endfor
+
+
+[itemdef i_item_overload_container]
+defname=i_item_overload_container
+name=Overload Crate
+id=i_crate_md
+type=t_container
+
+on=@create
+attr=010
+color=026
+
+on=@click
+message This chest will remove in 30 days
+message <name> (<fcount> items)
+return 1
+
+on=@dclick
+src.sysmessage This chest will delete in 30 days from now, please take out anything you want to keep
+
+on=@destroy
+if !(<tag0.deleteme>)
+  return 1
+endif
+
+
+
+  
+
+
+[function disty]
+forinstances i_nutcracker_south_4
+  id=i_nutcracker_small_south
+endfor
+forinstances i_nutcracker_east_4
+  id=i_nutcracker_small_east
+endfor
+
+
+                                                                            
+                                      
+[function output_difficulties]
+local.filename=base_difficulties
+f_deletefile <local.filename>.txt
+f_writefile <local.filename>.txt,{| class="wikitable sortable" 
+f_writefile <local.filename>.txt,! Name  !! Hostile !! 
+f_writefile <local.filename>.txt,|-
+forchars 9999
+  if (<npc>) && !(<local.baseid_<baseid>>)
+    local.name=<qval (!<isempty <serv.chardef.<baseid>.description>>)?<serv.chardef.<baseid>.description>:<name>>
+    f_writefile <local.filename>.txt,| <local.name> || <qval (<isevil>)?Yes:No> || <tag0.base_difficulty>
+    f_writefile <local.filename>.txt,|-
+    local.baseid_<baseid>=1
+  endif
+endfor
+f_writefile <local.filename>.txt,|}
+
+
+[function output_tamables]
+local.filename=tamables
+f_deletefile <local.filename>.txt
+f_writefile <local.filename>.txt,{| class="wikitable sortable" 
+f_writefile <local.filename>.txt,! Name !! Control Stots  !! Hostile !! Taming Required 
+f_writefile <local.filename>.txt,|-
+forchars 9999
+  if (<npc>) && (<taming>) && !(<ishuman>) && !(<local.baseid_<baseid>>)
+    local.name=<qval (!<isempty <serv.chardef.<baseid>.description>>)?<serv.chardef.<baseid>.description>:<name>>
+    f_writefile <local.filename>.txt,| <local.name> || <controlslots> || <qval (<isevil>)?Yes:No> || <fval <taming>>
+    f_writefile <local.filename>.txt,|-
+    local.baseid_<baseid>=1
+  endif
+endfor
+f_writefile <local.filename>.txt,|}
+
+[function output_crafting_table]
+if (<isempty <args>>) || (<isempty <def.crafting_<args>_0_name>>)
+  serv.log Error: "<args>" is not a valid crafting skill.
+  return 1
+endif
+local.filename=crafting_table_<args>
+f_deletefile <local.filename>.txt
+f_writefile <local.filename>.txt,{| class="wikitable" 
+while !(<isempty <def.crafting_<args>_<dlocal.n>_name>>)
+  f_writefile <local.filename>.txt,! <def0.crafting_<args>_<dlocal.n>_name>
+  f_writefile <local.filename>.txt,|-
+  f_writefile <local.filename>.txt,! Item Name !! Resources Needed !! Minimum Skill Required !! 100% Success Skill Required
+  f_writefile <local.filename>.txt,|-
+  while !(<isempty <def.crafting_<args>_<dlocal.n>_<dlocal.x>>>)
+    f_writefile <local.filename>.txt,| <serv.itemdef.<def0.crafting_<args>_<dlocal.n>_<dlocal.x>>.name> || <f_output_crafting_table_get_resources <def0.crafting_<args>_<dlocal.n>_<dlocal.x>>> || <f_output_crafting_table_get_skills <def0.crafting_<args>_<dlocal.n>_<dlocal.x>>> || <f_output_crafting_table_get_skills_100 <def0.crafting_<args>_<dlocal.n>_<dlocal.x>>> 
+    f_writefile <local.filename>.txt,|-
+    serv.log Adding <def0.crafting_<args>_<dlocal.n>_<dlocal.x>> to the <args> bulk order craftable def list.
+    local.x += 1  
+    local.y += 1
+  endwhile
+  local.n += 1
+  local.x=
+endwhile
+f_writefile <local.filename>.txt,|}
+
+[function f_output_crafting_table_get_resources]
+local.item=<args>
+for r 1 <serv.itemdef.<local.item>.resources.count>
+  local.resource=<serv.itemdef.<serv.itemdef.<local.item>.resources.<dlocal.r>.key>.name>	//just the regular resource we're working with
+  local.amount=<serv.itemdef.<local.item>.resources.<dlocal.r>.val>
+  local.string .=, <local.amount> <local.resource> 
+endfor
+return <streat <local.string>>
+
+[function f_output_crafting_table_get_skills]
+local.item=<args>
+while (!<isempty <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>>)
+  local.s += 1
+  if (<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key.isvalid>)
+    if (<resourcetype <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>> != <def.res_itemdef>)	//no items in the skill list
+      if !(strmatch(t_*,<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>))
+        local.string .=, <fval <serv.itemdef.<local.item>.skillmake.<dlocal.s>.val>> <serv.skill.<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>.name> 
+      endif
+    endif
+  endif  
+endwhile
+return <streat <local.string>>
+
+[function f_output_crafting_table_get_skills_100]
+local.item=<args>
+while (!<isempty <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>>)
+  local.s += 1
+  if (<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key.isvalid>)
+    if (<resourcetype <serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>> != <def.res_itemdef>)	//no items in the skill list
+      if !(strmatch(t_*,<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>))
+        local.string .=, <fval ((<serv.itemdef.<local.item>.skillmake.<dlocal.s>.val>)+400)> <serv.skill.<serv.itemdef.<local.item>.skillmake.<dlocal.s>.key>.name> 
+      endif
+    endif
+  endif  
+endwhile
+return <streat <local.string>>
+
+[function mass_modify_item]	//find all items and check them
+foritems 9999
+  f_mass_modify_item
+  if (<type>==t_container)
+    ref1=<uid>
+    forcont <ref1> 100
+      f_mass_modify_item
+    endfor
+  endif
+endfor  
+for 0 <eval (<serv.accounts>-1)>		//look at every char, not just online ones
+  if (<serv.account.<local._for>.chars>)
+    local.account=<serv.account.<local._for>.name>
+    for 0 <eval <serv.account.<local._for>.chars>-1>
+      ref1=<serv.account.<local.account>.char.<local._for>>
+      for l 1 29
+        if (<ref1.can>&mt_equip)
+          ref2=<ref1.findlayer.<dlocal.l>>
+          if (<ref2.isvalid>) 
+            ref2.f_mass_modify_item
+          endif
+        endif
+      endfor
+      ref1=<ref1.findlayer.21>
+      if (<ref1.isvalid>)
+        forcont <ref1> 100
+          f_mass_modify_item
+        endif
+      endfor
+    endfor
+  endif
+endfor
+serv.log <var0.modifycount> items modified.
+var0.modifycount=
+
+[function f_mass_modify_item]	//check the item here, then change it
+if (<isevent.t_obsolete_item>)
+  events=+t_legacy_item
+  events=-t_obsolete_item
+  var0.modifycount += 1
+endif
+
+
+[FUNCTION f_Poison_Boss_Throw]
+for 300
+// dorand 4
+sector.allclients EffectXYZ <p.x>,<p.y>,<p.z> + 10,<eval <p.x> + <r1,5>>,<eval <p.y> + <r1,5>>,<p.z> + <r10,20>,0,{4410 4414},<r1,10>,<r16,36>,0,0,3
+sector.allclients EffectXYZ <p.x>,<p.y>,<p.z> + 10,<eval <p.x> - <r1,5>>,<eval <p.y> + <r1,5>>,<p.z> + <r10,20>,0,{4410 4414},<r1,10>,<r16,36>,0,0,3
+sector.allclients EffectXYZ <p.x>,<p.y>,<p.z> + 10,<eval <p.x> - <r1,5>>,<eval <p.y> - <r1,5>>,<p.z> + <r10,20>,0,{4410 4414},<r1,10>,<r16,36>,0,0,3
+sector.allclients EffectXYZ <p.x>,<p.y>,<p.z> + 10,<eval <p.x> + <r1,5>>,<eval <p.y> - <r1,5>>,<p.z> + <r10,20>,0,{4410 4414},<r1,10>,<r16,36>,0,0,3
+// enddo
+endfor
+
+[FUNCTION EffectXYZ]
+if (<isonline>)
+    SendPacket 0c0 <argv[6]> d0 d0 w<argv[7]> w<argv[0]> w<argv[1]> <argv[2]> w<argv[3]> w<argv[4]> <argv[5]> <argv[8]> <argv[9]> w0 0 <argv[10]> d<argv[11]> d<argv[12]>
+endif
+
+
+[function bipbip]
+for 1000
+  skillgain alchemy
+endfor
+
+[function f_import_item_04002ac3c_targ]
+name=runebook
+tag.default_location=1425,1701,2,
+tag.rune1=Britain,1425,1701,2
+tag.rune10=Vesper,2905,680
+tag.rune11=Ocllo,3709,2506
+tag.rune12=Jhelom,1432,3810
+tag.rune13=Delucia,5233,4030,36
+tag.rune14=Skara Brae,611,2201
+tag.rune15=FinneysHouse,3045,673
+tag.rune16=GuildHouse(RAG),2644,313,15
+tag.rune2=Brit Mage ,1487,1550,30
+tag.rune3=Cove,2273,1210
+tag.rune4=Yew,544,982
+tag.rune5=Nujel'm,3780,1280
+tag.rune6=Minoc,2513,555
+tag.rune7=Moonglow,4458,1167
+tag.rune8=Home,2082,2673,10
+tag.rune9=Serpent's Hold,2993,3404,15
+tag.runes=16
+events=+t_crafted_item
+
+
+[function cleave]
+sound 0146
+ref1=<uid>
+local.d=<ref1.dir>
+forchars 2
+  local.d2=<ref1.facing <uid>>
+  if (<local.d>=<local.d2>) || (<local.d>=<eval <local.d2>-1>) || (<local.d>=<eval <local.d2>+1>)
+    damage <R10> dam_god <ref1>
+  endif
+endfor
+
+[function f_clientpathfind]
+for 19
+  sendpacket 038 w<eval (<p.x>-15)> w<eval (<p.y>-15)> w<p.z>
+endfor
+message  
+message  
+message  
+
+
+[function f_create_rock_fragments]
+effect=3,{14214 14216},1,64,0,<color>,0
+serv.newitem i_memory
+new.movenear <uid> {1 2}
+new.link=<uid>
+new.effect=0,{14214 14216},1,16,0,<color>,0
+effectLocation <new.p.x>,<new.p.y>,<new.p.z>,2,{14214 14216},1,45,0,<color>,0
+
+[function clb]
+targetf f_clb_targ
+src.sysmessage Who to hit with chain ligtning
+
+[function f_clb_targ]
+serv.newitem i_chain_lightning
+new.timerd={3 5}
+argo.equip <new>
+argo.sound { 01dc 1 102f5 1}
+
+[itemdef i_chain_lightning]
+defname=i_chain_lightning
+name=Chain Lightening
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<more1>)
+  remove
+endif
+topobj.f_chain_lightning_transfer
+timer=<serv.spell.s_chain_lightning.cast_time>
+more1=1	
+return 1
+
+[function f_chain_lightning_transfer]
+return 1
+ref1=<uid>
+forchars 3
+  if !(<findid.i_chain_lightning>)
+     serv.newitem i_chain_lightning
+     new.timerd={3 5}
+     trysrc <ref1> effect=0,14360,15
+     timerf 0,trysrc <ref1> effect=0,14360,15
+     sound {028 1 029 1 0206 1 }
+     bark 3
+     equip <new>
+     return 1	//just go to one guy
+  endif
+endfor
+
+[function makestormdebris]
+ref1=<uid>
+Local.dir=sw
+for 25
+  serv.newitem i_fx_smoke	//<R01b1f 01b22>
+  new.movenear <ref1> 15
+  new.z += <R20,25>
+  new.type=t_cloudtest
+  new.more1=<R20,25>
+  new.tag.dir=<local.dir>
+  new.timerd=1
+endfor
+
+[typedef t_cloudtest]
+
+on=@timer
+if (<more1>==0)
+  remove
+endif
+move <tag0.dir> 1
+timerd=1
+more1 -= 1
+return 1
+
+
+[function harpeffect]
+effect=3,i_fx_sparkle,1,64,0,040,3
+serv.newitem i_harpeffect
+new.link=<uid>
+new.p=<p>
+
+[itemdef i_harpeffect]
+name=Harpeffect
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@create
+more1=20
+timerms=10
+
+on=@timer
+p=<link.p>
+z += <R60,90>
+dorand 5
+  move n <R1,2>
+  move ne <R1,2>
+  move e <R1,2>
+  move w <R1,2>
+  move nw <R1,2>
+enddo
+trysrc <link> effect=0,i_lute,1,16,0,040,3
+more1 -= 1
+if !(<more1>)
+  remove
+endif
+timerms=150
+return 1
+
+
+[function bloodsplash]
+effect=3,i_fx_sparkle_2,1,64,0,026,0
+serv.newitem i_bloodsplash
+new.link=<uid>
+new.more1=20
+new.timerms=10
+new.p=<p>
+
+[itemdef i_bloodsplash]
+name=Bloodsplash
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+p=<link.p>
+dorand 5
+  move sw <R1,2>
+  move s <R1,2>
+  move se <R1,2>
+  move e <R1,2>
+  move ne <R1,2>
+enddo
+trysrc <link> effect=0,<R0122b,0122e>,1,16,0,0
+effectLocation <p.x>,<p.y>,<p.z>,2,<R0122b,0122e>,1,45,0,0,0
+more1 -= 1
+if !(<more1>)
+  remove
+endif
+timerms=10
+return 1
+
+[function blorpeffect]
+ref1=<uid>
+serv.newitem i_memory
+ref2=<new>
+ref2.link=<ref1>
+for 0 7
+  local.offset=<qval <local.offset>==1?0:1>
+  ref2.p=<ref1.p>
+  ref2.move <truedir <dlocal._for>> <eval <argv[0]>+(<local.offset>*(<argv[0]>/2))>
+  ref2.blorp2
+endfor
+
+[function blorp2]
+trysrc <link> effect=0,i_fire_column,1,16,0,064,2
+
+
+
+
+[function f_risingsmoke]
+effect=3,0376a,0,200,0,0455,0
+serv.newitem i_risingsmoke
+new.link=<uid>
+new.more1=20
+new.timerms=10
+new.p=<p>
+
+[itemdef i_risingsmoke]
+name=Rising Smoke
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+p=<link.p>
+z += 20
+dorand 3
+  move w <R1,2>
+  move nw <R1,2>
+  move n <R1,2>
+enddo
+for 3
+  trysrc <link> effect=0,01153,0,16,0,0455,0
+  trysrc <link> effect=0,03779,0,16,0,0455,0
+  effectLocation <p.x>,<p.y>,<p.z>,2,03779,1,45,0,0455,0
+endfor
+more1 -= 1
+if !(<more1>)
+  remove
+endif
+timerms=300
+return 1
+
+
+
+[EOF]
+

@@ -1,0 +1,25 @@
+[SPELL 21]
+DEFNAME=s_telekinesis
+NAME=Telekinesis
+SOUND=snd_spell_telekinesis
+RUNES=OPY
+CAST_TIME=1.3
+RESOURCES=i_reag_blood_moss,i_reag_mandrake_root
+RUNE_ITEM=i_rune_telekinesis
+SCROLL_ITEM=i_scroll_telekinesis
+FLAGS=spellflag_dir_anim|spellflag_targ_obj|spellflag_fx_targ|spellflag_playeronly
+EFFECT_ID=i_fx_heal_effect
+EFFECT=0
+DURATION=0.0
+MANAUSE=9
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+//Manipulate objects from tiles away. (Good for opening doors or activating Traps while out of the blast radius)
+//10 Tile Range
+on=@effect	//fixme this seems broken for telekinesis
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+effect=2,<serv.spell.<21>.effect_id>,6,15,1
+
+[EOF]

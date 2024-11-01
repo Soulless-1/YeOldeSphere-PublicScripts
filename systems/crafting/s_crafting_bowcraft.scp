@@ -1,0 +1,212 @@
+
+[defname crafting_bowcraft]
+crafting_bowcraft_flags 	02|04|08		//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool
+crafting_bowcraft_anim 		33
+crafting_bowcraft_sound		055,0
+crafting_bowcraft_tool		t_tool_bowcraft
+
+crafting_bowcraft_resource0	i_log	
+crafting_bowcraft_resource0_0	i_log
+crafting_bowcraft_resource0_1	i_log_hickory
+crafting_bowcraft_resource0_2	i_log_ash
+crafting_bowcraft_resource0_3	i_log_cedar
+crafting_bowcraft_resource0_4	i_log_walnut
+crafting_bowcraft_resource0_5	i_log_cypress
+crafting_bowcraft_resource0_6	i_log_rosewood
+crafting_bowcraft_resource0_7	i_log_oak
+crafting_bowcraft_resource0_8	i_log_maple
+crafting_bowcraft_resource0_9	i_log_yew
+crafting_bowcraft_resource0_10	i_log_blackwood
+crafting_bowcraft_resource0_11	i_log_hawthorn
+crafting_bowcraft_resource0_12	i_log_ironwood
+crafting_bowcraft_resource0_13
+
+crafting_bowcraft_0_name LAST TEN		//this will be generated as people craft
+
+crafting_bowcraft_1_name BOWS
+crafting_bowcraft_1_resource_replace	1
+crafting_bowcraft_1_0 i_bow
+
+crafting_bowcraft_2_name CROSSBOWS
+crafting_bowcraft_2_resource_replace	1
+crafting_bowcraft_2_0 i_crossbow
+crafting_bowcraft_2_1 i_crossbow_heavy
+
+crafting_bowcraft_3_name AMMUNITION
+crafting_bowcraft_3_0 i_arrow_shaft
+crafting_bowcraft_3_1 i_arrow
+crafting_bowcraft_3_2 i_xbolt
+
+crafting_bowcraft_4_name //OTHER
+crafting_bowcraft_4_0
+
+
+[function f_bowcraft_apply_i_log]
+
+[function f_bowcraft_apply_i_board]
+f_bowcraft_apply_i_log
+
+[function f_bowcraft_apply_i_log_hickory]		
+ref1=<args>
+name=hickory <name>
+color=color_l_hickory
+modar += <qval (<isarmor>)?5:1>
+maxhits += 5
+hits=<maxhits>
+tag.matoverride_i_log=i_log_hickory
+
+[function f_bowcraft_apply_i_board_hickory]
+f_bowcraft_apply_i_log_hickory
+
+[function f_bowcraft_apply_i_log_ash]		
+ref1=<args>
+name=ash <name>
+color=color_l_ash
+modar += <qval (<isarmor>)?5:1>
+maxhits += 5
+hits=<maxhits>
+tag.matoverride_i_log=i_log_ash
+
+[function f_bowcraft_apply_i_board_ash]
+f_bowcraft_apply_i_log_ash
+
+[function f_bowcraft_apply_i_log_cedar]		
+ref1=<args>
+name=cedar <name>
+color=color_l_cedar
+modar += <qval (<isarmor>)?8:2>
+maxhits += 8
+hits=<maxhits>
+tag.matoverride_i_log=i_log_cedar
+
+[function f_bowcraft_apply_i_board_cedar]
+f_bowcraft_apply_i_log_cedar
+
+[function f_bowcraft_apply_i_log_walnut]		
+ref1=<args>
+name=walnut <name>
+color=color_l_walnut
+modar += <qval (<isarmor>)?10:3>
+maxhits += 10
+hits=<maxhits>
+tag.matoverride_i_log=i_log_walnut
+
+[function f_bowcraft_apply_i_board_walnut]
+f_bowcraft_apply_i_log_walnut
+
+[function f_bowcraft_apply_i_log_cypress]		
+ref1=<args>
+name=cypress <name>
+color=color_l_cypress
+modar += <qval (<isarmor>)?13:4>
+maxhits += 13
+hits=<maxhits>
+tag.matoverride_i_log=i_log_cypress
+
+[function f_bowcraft_apply_i_board_cypress]
+f_bowcraft_apply_i_log_cypress
+
+[function f_bowcraft_apply_i_log_rosewood]		
+ref1=<args>
+name=rosewood <name>
+color=color_l_rosewood
+modar += <qval (<isarmor>)?15:5>
+maxhits += 15
+hits=<maxhits>
+tag.matoverride_i_log=i_log_rosewood
+
+[function f_bowcraft_apply_i_board_rosewood]
+f_bowcraft_apply_i_log_rosewood
+
+[function f_bowcraft_apply_i_log_oak]		
+ref1=<args>
+name=oak <name>
+color=color_l_oak
+modar += <qval (<isarmor>)?18:6>
+maxhits += 18
+hits=<maxhits>
+tag.matoverride_i_log=i_log_oak
+
+[function f_bowcraft_apply_i_board_oak]
+f_bowcraft_apply_i_log_oak
+
+[function f_bowcraft_apply_i_log_maple]		
+ref1=<args>
+name=maple <name>
+color=color_l_maple
+modar += <qval (<isarmor>)?20:7>
+maxhits += 20
+hits=<maxhits>
+tag.matoverride_i_log=i_log_maple
+
+[function f_bowcraft_apply_i_board_maple]
+f_bowcraft_apply_i_log_maple
+
+[function f_bowcraft_apply_i_log_yew]		
+ref1=<args>
+name=yew <name>
+color=color_l_yew
+modar += <qval (<isarmor>)?23:8>
+maxhits +=  23
+hits=<maxhits>
+tag.matoverride_i_log=i_log_yew
+
+[function f_bowcraft_apply_i_board_yew]
+f_bowcraft_apply_i_log_yew
+
+[function f_bowcraft_apply_i_log_blackwood]		
+ref1=<args>
+name=blackwood <name>
+color=color_l_blackwood
+modar += <qval (<isarmor>)?25:9>
+maxhits += 25
+hits=<maxhits>
+tag.matoverride_i_log=i_log_blackwood
+
+[function f_bowcraft_apply_i_board_blackwood]
+f_bowcraft_apply_i_log_blackwood
+
+[function f_bowcraft_apply_i_log_hawthorn]		
+ref1=<args>
+name=hawthorn <name>
+color=color_l_hawthorn
+modar += <qval (<isarmor>)?30:10>
+maxhits += 30
+hits=<maxhits>
+tag.matoverride_i_log=i_log_hawthorn
+
+[function f_bowcraft_apply_i_board_hawthorn]
+f_bowcraft_apply_i_log_hawthorn
+
+[function f_bowcraft_apply_i_log_ironwood]		
+ref1=<args>
+name=ironwood <name>
+color=color_l_ironwood
+modar += <qval (<isarmor>)?35:11>
+maxhits += 35
+hits=<maxhits>
+tag.matoverride_i_log=i_log_ironwood
+
+[function f_bowcraft_apply_i_board_ironwood]
+f_bowcraft_apply_i_log_ironwood
+
+[typedef t_bowcrafted]
+
+///////////////////////////////
+// Bowcraft Post Craft
+
+[function f_bowcraft_prerequisite]
+return 1	//always able to bowcraft
+
+[function f_bowcraft_pre_craft]
+
+[function f_bowcraft_post_craft]
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+
+
+[EOF]

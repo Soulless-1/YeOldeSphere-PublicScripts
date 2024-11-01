@@ -1,0 +1,60 @@
+//Ambient vendor noises to NPCs by Soulless
+//v1.0
+//2:46 PM 3/8/2019
+
+[defname ambient_vendor_sounds]
+
+ambient_vendor_blacksmith	42,02b
+ambient_vendor_carpenter	573
+ambient_vendor_architect	573
+ambient_vendor_tailor		584,574
+ambient_vendor_weaver		584,574
+ambient_vendor_mage		249,585
+ambient_vendor_script		249,585
+ambient_vendor_alchemist	578,576
+ambient_vendor_herbalist	578,576
+ambient_vendor_bard		045,052,038,04c
+ambient_vendor_banker		50,54,55
+ambient_vendor_tavernkeeper	576,726,031,03c,03e
+ambient_vendor_waiter		576,726,031,03c,03e
+ambient_vendor_waitress		576,726,031,03c,03e
+ambient_vendor_healer		586
+ambient_vendor_jeweler		52,53
+ambient_vendor_butcher		0138,013e,013f
+ambient_vendor_butcher2		072,07c,09d,0c8,0da
+
+
+[function f_initialize_ambient_vendor_sounds]
+consume 100 i_ambient_vendor_sounds
+if (<def0.ambient_vendor_<job>>) && !(<findid.i_ambient_vendor_sounds>)
+  serv.newitem i_ambient_vendor_sounds
+  equip <new>
+endif
+
+[itemdef i_ambient_vendor_sounds]
+id=i_memory
+name=Ambient Vendor Sounds
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer={10 20}
+
+on=@timer
+topobj.f_make_ambient_vendor_sound
+timer={10 20}
+return 1
+
+[function f_make_ambient_vendor_sound]
+if (<def0.ambient_vendor_<job>>)
+  args=<def0.ambient_vendor_<job>>
+  local.n=<R0,<eval <argv>-1>>
+  sound <argv[<local.n>]>
+endif
+if (<def0.ambient_vendor_<job>2>)
+  args=<def0.ambient_vendor_<job>2>
+  local.n=<R0,<eval <argv>-1>>
+  sound <argv[<local.n>]>
+endif
+
+[EOF]

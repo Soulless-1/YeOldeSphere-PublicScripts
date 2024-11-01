@@ -1,0 +1,41 @@
+[SPELL 63]
+DEFNAME=s_summon_elem_fire
+NAME=Fire Elemental
+SOUND=snd_spell_summon_elem_fire
+RUNES=KVXF
+CAST_TIME=2.5
+RESOURCES=i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_summon_elem_fire
+SCROLL_ITEM=i_scroll_summon_elem_fire
+FLAGS=spellflag_dir_anim|spellflag_summon
+EFFECT_ID=0
+EFFECT=0
+LAYER=layer_spell_summon
+DURATION=2*60.0,3*60.0
+MANAUSE=50
+SKILLREQ=MAGERY 70.0
+INTERRUPT=100.0,100.0
+
+on=@start
+if (<eval (<src.curfollower>+2)> > <src.maxfollower>) && !(<src.isgm>)
+  src.sysmessage You have too many followers to summon that creature.
+  return 1
+endif
+
+//Summon a controllable Fire Elemental
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+
+on=@success
+timerf 0,f_summon_elem_fire_success	//ACT is not available until after the create is created and placed by the player it seems..
+
+[function f_summon_elem_fire_success]
+ref1=<uid>	//player that cast it
+ref2=<act>	//should be the npc we just summoned
+if (<ref2.isvalid>) && (<ref2.ischar>)
+  ref2.setowner=<ref1>
+endif
+
+
+[EOF]

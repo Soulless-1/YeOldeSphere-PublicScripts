@@ -1,0 +1,24 @@
+//Evolving Pet System by Soulless
+//v1.0
+//8:40 PM 7/13/2024
+
+[itemdef i_monster_egg]
+defname=i_monster_egg]
+name=peculiar egg
+id=010d9		//caccoon egg
+type=t_monster_egg
+
+on=@create
+color=2046
+
+[typedef t_monster_egg]
+
+on=@dclick
+dorand 3
+  message Something moves around inside the egg...
+  message You feel the egg shift...
+  message The egg pulses as you touch it...
+enddo
+return 1
+
+[EOF]

@@ -1,0 +1,317 @@
+//Player Vendors by Soulless
+//v1.0
+//2:47 PM 5/21/2021
+
+
+[function f_player_vendor_setup]
+ref1=<uid>
+events=+e_player_vendor
+modmaxweight=<qval (<def0.player_vendor_maxweight>==0)?65535:<def0.player_vendor_maxweight>>
+//findlayer.21.modmaxweight=<def0.player_vendor_maxweight>
+speechcoloroverride=
+tag0.player_vendor_shopname=Shop Not Yet Named
+gold=1000
+say Ah! It feels good to be working again!
+equiphalo
+serv.newitem i_memory
+new.color=<def0.memory_ipet>
+new.link=<src>
+new.attr=04
+ref1.equip <new>
+ref1.act=<src>
+ref1.action=101   //Guarding
+serv.newitem i_player_vendor_payroll
+new.timer=8*60*60	//<def0.player_vendor_gameday>
+equip <new>
+for 1 24
+  if (<ref1.findlayer.<dlocal._for>.isvalid>) 
+    ref1.findlayer.<dlocal._for>.attr |= attr_move_never
+  endif
+endfor
+
+[function f_player_vendor_gameday_charge]
+return <eval <def0.player_vendor_salary>+<f_player_vendor_goods_value>/<def0.player_vendor_salary_plus>)>
+
+[function f_player_vendor_earthday_charge]
+return <eval <f_player_vendor_gameday_charge>*((24*60*60)/<def0.player_vendor_gameday>)>
+
+[function f_player_vendor_goods_value]
+forcont <findlayer.21> 9999
+  if (<tag0.player_vendor_price>)
+    local.goods_value += <tag0.player_vendor_price>
+  endif
+endfor
+return <local.goods_value>
+
+[function f_player_vendor_gamedays_paid]
+if !(<def0.player_vendor_salary> <= 0)
+  return <eval <findlayer.29.rescount i_gold>/<f_player_vendor_gameday_charge>>
+endif
+return 0
+
+[function f_player_vendor_earthdays_paid]
+if !(<def0.player_vendor_salary> <= 0)
+  return <eval <findlayer.29.rescount i_gold>/<f_player_vendor_earthday_charge>>
+endif
+return 0
+
+[function f_player_vendor_advertising_contract_daysleft]
+return N/A
+
+[function f_player_vendor_receive_item]
+ref1=<qval <ischar>?<uid>:<topobj>>	//get vendor UID
+ref2=<args>
+if (<ref1.owner> != <src>) && !(<src.isgm>)
+  ref1.message I can only accept items from the shop owner
+  return 1
+//elseif (<eval <ref1.weight>+<ref2.weight>> >= <qval (<ref1.tag0.override.maxweight>)?<ref1.tag0.override.maxweight>:<ref1.maxweight>>)
+  //ref1.say I can't carry anymore. derp
+  //return 1
+//elseif (<ref2.type> == t_gold)
+  //ref1.message I'll take that to fund my services.
+  //ref2.remove
+  //return 1
+elseif (<ref2.isevent.t_player_vendor_selling>)
+  ref2.cont=<ref1.findlayer.21>
+  ref2.update
+  return 1
+else
+  ref2.cont=<ref1.findlayer.21>
+  ref2.update
+  ref2.events=+t_player_vendor_selling
+  ref2.tag0.player_vendor_price=999
+  //ref2.tag0.player_vendor_oldattr=<ref2.attr>
+  ref2.tag0.player_vendor_timestamp=<serv.time>
+  src.sysmessage type in a price and description for <ref2.name> (esc = not-for-sale)
+  src.ctag0.item=<ref2>
+  src.ctag0.vendor=<ref1>
+  promptconsole f_player_vendor_set_price
+  ref1.findlayer.21.update
+  ref2.update
+  return 1
+endif
+
+//for a container to be not for sale, must be empty or all items inside not for sale
+//droppingitem inside container; if container is for sale, do not price item OR if container is not for sale, price item
+//only letters means item is not for sale
+
+[function f_player_vendor_set_price]
+ref1=<ctag0.item>
+ref2=<ctag0.vendor>
+ctag0.item=
+ctag0.vendor=
+local.price=<strarg <args>>
+local.description=<streat <args>>
+
+if !(<ref1.topobj.isevent.e_player_vendor>)	//just incase it was moved off the vendor before price is set
+  ref1.tag0.player_vendor_price=
+  ref1.tag0.player_vendor_description=
+  return 1
+endif
+if ((<isempty <args>>) || !(<isnum <local.price>>) || (<local.price> <= 0))
+  local.emptyprice=1
+endif
+
+//if (<local.emptyprice>) && (<ref1.type> != t_book) && (<ref1.type> != t_container) && (<ref1.type> != t_keyring)
+  //ref1.tag0.player_vendor_description=<args>
+  //ref2.message only the following may be made not-for-sale: books, containers, keyrings, and items in for-sale containers.
+  //return 1
+//endif
+
+if (<ref1.type>==t_container) 
+  ref1.f_player_vendor_format_nested_container	
+  ref1.events=+t_player_vendor_container
+  if (<local.emptyprice>)
+    forcont <ref1> 9999
+      if !(<tag0.player_vendor_price>)
+        ref1.f_player_vendor_format_nested_container
+        ref2.message To be not for sale, all contents of a container must be for sale.
+        return 1
+      endif
+    endfor
+  endif
+endif
+
+if !(<isnum <local.price>>)
+  ref1.tag0.player_vendor_price=
+  ref1.tag0.player_vendor_description=<args>
+  return 1
+endif
+
+if (<local.price> > <def0.player_vendor_maxprice>)
+  sysmessage You cannot price items above 100,000,000 gold. The price has been adjusted.
+  local.price=<def0.player_vendor_maxprice>
+endif
+
+ref1.tag0.player_vendor_price=<local.price>
+ref1.topobj.tag0.player_vendor_goods_value += <local.price>
+ref1.tag0.player_vendor_description=<local.description>
+
+
+
+
+[function f_player_vendor_remove_props]
+serv.log Removing vendor properties on <name>(<uid>) at <topobj.p>.
+tag0.player_vendor_price=
+tag0.player_vendor_description=
+tag0.player_vendor_timestamp=
+events=-t_player_vendor_selling 
+events=-t_player_vendor_container
+if (<type>==t_container)
+  forcont <uid> 9999
+    tag0.player_vendor_price=
+    tag0.player_vendor_description=
+    tag0.player_vendor_timestamp=
+    events=-t_player_vendor_selling 
+    events=-t_player_vendor_container
+  endfor
+endif
+
+[function f_player_vendor_format_nested_container]
+forcont <uid> 9999
+  tag0.player_vendor_price=
+  tag0.player_vendor_description=
+  events=-t_player_vendor_selling 
+  events=-t_player_vendor_container
+  if (<type>==t_container)
+    events=+t_player_vendor_container
+    f_player_vendor_format_nested_container
+  endif
+endfor
+
+
+
+[function f_player_vendor_buy]
+ref1=<args>	//player vendor
+ctag0.player_vendor_buying=<argo>
+argo.sdialog d_player_vendor_purchase_confirm
+return 1
+
+
+[function f_player_vendor_purchase_confirmed]
+//uid = item
+//src = player buying
+ref1=<topobj.uid>	//vendor holding the item
+local.gold_available=<qval (<def0.player_vendor_payfrombank> <= 0)?<src.rescount i_gold>:<src.gold>>
+if (<tag0.player_vendor_price> <= 0)
+  ref1.message This item is not for sale.
+  return 1
+elseif (<local.gold_available> < <tag0.player_vendor_price>)
+  ref1.message You cannot afford this item.
+  return 1
+elseif (<eval <serv.time>-<tag0.player_vendor_timestamp>> < 600)
+  src.sysmessage You cannot buy this item right now. Please wait one minute and try again.
+  return 1
+endif
+serv.log <src.name>(<src>) buying <name>(<uid>) on <topobj.name>(<topobj>) at <topobj.p>
+if (<def0.player_vendor_payfrombank> <= 0)
+  src.consume i_gold <tag0.player_vendor_price>
+else
+  src.gold -= <tag0.player_vendor_price>
+endif
+ref1.tag0.owners_gold += <tag0.player_vendor_price>
+f_player_vendor_remove_props
+cont=<src.findlayer.21>
+update
+src.sysmessage You take the item.
+return 1
+
+[function f_player_vendor_withdraw]
+ref1=<ctag0.player_vendor>
+ctag0.player_vendor=
+
+[function f_player_vendor_farewell]
+dorand 12
+  say I live only to serve thee.
+  say You'll not catch me skimming from the top. You can trust me!
+  say One day, I would like to ride a horse, until then I will wait here and sell goods for you.
+  say I do only thy bidding.
+  say The market will surely be good for such fine wars.
+  say Oh goody! I get to stand here and sell things. My life is complete.
+  say Together we shall make a fortune.
+  say It shall be as ye say.
+  say Mother told me to become a mage, but no, I wanted a "people' position.
+  say Safe travels to you.
+  say Farewell to thee. Come back with exotic wares, and I will sell them.
+  say Good journeys to you.
+enddo
+
+[function f_player_vendor_rename_shop]
+ref1=<ctag0.rename_vendor>
+ctag0.rename_vendor=
+if (<isempty <args>>)
+  args=Shop not yet named
+endif
+ref1.tag0.player_vendor_shopname=<args>
+sysmessage Shop name updated
+ref1.sdialog d_player_vendor_shop_details
+
+[function f_player_vendor_dismiss]
+ref1=<findlayer.21>
+ref1.f_player_vendor_remove_props
+ref1.cont=<owner.findlayer.29>
+ref1.attr=attr_identified
+ref1.update
+owner.gold += <tag0.owners_gold>
+remove
+
+[function f_player_vendor_collect_gold]
+ref1=<ctag.player_vendor>
+ctag0.player_vendor=
+if (<isempty <args>>) ||  !(<isnum <args>>) || (<args> <= 0) 
+  ref1.say Very well. I will hold onto the money for now then.
+  return 1
+elseif (<args> > <ref1.tag0.owners_gold>)
+  src.sysmessage I'm sorry, but I'm only holding <ref1.tag0.owners_gold> gold for you.
+  return 1
+endif
+gold += <args>
+ref1.tag0.owners_gold -= <args>
+sysmessage <args> gold has been deposited into your bank account.
+serv.log <name>(<uid>) has collected <args> gold from his vendor <ref1.name>(<ref1>) at <ref1.p>
+if (<ref1.tag0.owners_gold>)
+  ref1.say Your gold has been transferred.
+else
+  ref1.say All the gold that I have been carrying has been deposited into your bank box.
+endif
+return 1
+
+[function f_player_vendor_payroll_setup]
+consume i_player_vendor_payroll
+serv.newitem i_player_vendor_payroll
+new.equip
+new.timer=1
+serv.log Player vendor payroll setup on <name>(<uid>) owner by <owner.name>(<owner>)
+
+[function f_player_vendor_payroll_global_reset]
+forchars 9999
+  if (<baseid>==c_player_vendor)
+    trysrc <uid> f_player_vendor_payroll_setup
+  endif
+endfor
+
+[comment function f_player_vendor_restore_oldattr] 	//not needed with ini flag 'AllowNewbTransfer=1'
+if (<tag0.player_vendor_oldattr>)
+  attr=<tag0.player_vendor_oldattr>
+  tag0.player_vendor_oldattr=
+endif
+if (<type>==t_container)
+  forcont <uid> 9999
+    if (<tag0.player_vendor_oldattr>)
+      attr=<tag0.player_vendor_oldattr>
+      tag0.player_vendor_oldattr=
+    endif
+  endfor
+endif
+
+[function f_player_vendor_update_maxweight]
+forinstances c_player_vendor
+  modmaxweight=65535
+endfor
+forinstances c_player_vendor_f
+  modmaxweight=65535
+endfor
+
+
+
+[EOF]

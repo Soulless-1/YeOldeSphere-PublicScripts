@@ -1,0 +1,147 @@
+[defname advancedai_combat_settings]
+
+advancedai_combat_interrupt_circle1	1,3,5,8
+advancedai_combat_interrupt_circle2	12
+advancedai_combat_interrupt_circle3	18,20
+advancedai_combat_interrupt_circle4	27,30,31
+advancedai_combat_interrupt_circle5	37,38
+advancedai_combat_interrupt_circle6	42,43
+advancedai_combat_interrupt_circle7	51
+advancedai_combat_interrupt_circle8	//there isnt
+
+
+[events e_advancedai_combat]
+
+on=@spellcast
+if (<act.isvalid>) && (<act.ischar>)
+  act.trigger @targetedby_spell, <def.tat_as_args>,<uid>,<argn1>,<argn2>,<argn3>	
+endif
+if (<findlayer.1.isvalid>)
+  ref1=<findlayer.1>
+  timerfms <eval (<serv.spell.<argn1>.cast_time>*200)+100>,equip <uid.<findlayer.1>>
+endif
+if (<findlayer.2.isvalid>)
+  ref1=<findlayer.2>
+  timerfms <eval (<serv.spell.<argn1>.cast_time>*200)+100>,equip <uid.<findlayer.2>>
+endif
+
+
+on=@gethit
+if (<argn2>&dam_poison)	//cure yourself
+  if (<f_candrink_potion cure>)
+    drink cure
+  elseif (<cancast s_cure>)
+    if (<findlayer.1.isvalid>)
+      ref1=<findlayer.1>
+      timerfms <eval (<serv.spell.s_cure.cast_time>*200)+1000>,equip <uid.<findlayer.1>>
+    endif
+    if (<findlayer.2.isvalid>)
+      ref1=<findlayer.2>
+      timerfms <eval (<serv.spell.s_cure.cast_time>*200)+1000>,equip <uid.<findlayer.2>>
+    endif
+    actarg1=11	//cure spell
+    act=<uid>
+    actprv=<uid>
+    timerfms 100,action=25
+  elseif (<findid.i_applying_bandage>) && !(<findid.i_applying_bandaging>) && (<healing> >= <def0.healing_cure>)
+    bandageself
+  endif
+endif
+
+if (<muldiv <hits>,<maxhits>,100> <= 60) && (<action> != <magery>)
+  if (<cancast s_heal>)
+    actarg1=4		//heal spell
+    act=<uid>
+    actprv=<uid>
+    timerfms 100,action=25
+  endif
+endif
+
+if (<muldiv <hits>,<maxhits>,100> <= 75)
+  if (<findid.i_bandage>)
+    bandageself
+  endif
+endif
+
+on=@targetedby_spell
+ref1=<argv[0]>
+if (<tag0.advancedai_magery> ) && (<action> != 25)
+  if (<ref1.isvalid>) && (<ref1.ischar>) && (<ref1> != <uid>)	//fizzle them
+    local.spell=<argv[1]>
+    local.spellcircle=<eval (<local.spell>/8)+1>
+    local.strength=<argv[2]>
+    local.casttime=<argv[3]>
+    act=<ref1>
+    actprv=<uid>
+    args=<def0.advancedai_combat_interrupt_circle<eval (<local.spellcircle>-1)>>
+    actarg1=<argv[<R0,<argv>>]>
+    timerfms 100,action=25
+  endif
+endif
+
+[CHARDEF c_advancedai_testchar]
+DEFNAME=c_advancedai_testchar
+ID=C_MAN
+NAME=#NAMES_DREAD_LORD the Dread Lord
+SOUND=0
+DAM=10,20
+ARMOR=30
+//DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+//ALIGNMENT=EVIL
+TSPEECH=spk_human_prime
+TSPEECH=jobMageEvil
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+
+ON=@Create
+	COLOR=colors_skin
+	tag0.advancedai_magery=1
+	STR={200 250}
+	DEX={100 150}
+	INT={71 85}
+	PARRYING={75.0 98.0}
+	SWORDSMANSHIP={80.0 95.0}
+	WRESTLING={67.0 90.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={80.0 98.0}
+	POISONING={90.0 100.0}
+	DETECTINGHIDDEN={90.0 100.0}
+	MAGERY={90.0 100.0}
+	npc=brain_human  //brain_monster
+	FAME=9999
+	KARMA=-9999
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=i_platemail_gloves
+	ITEM=i_platemail_helm
+	ITEM=i_platemail_arms
+	ITEM=i_platemail_gorget
+	ITEM=i_platemail_chest
+	ITEM=i_platemail_leggings
+	ITEM=i_sword_viking
+	ITEM=i_CAPE
+	COLOR=020
+	ITEM=i_SASH
+	COLOR=020
+	ITEM=i_apron_half
+	COLOR=020
+	ITEM={ random_jewel 1 0 1 }
+	ITEM={ random_jewel 1 0 1 }
+	ITEM={ random_jewel 1 0 1 }
+	ITEM={ random_jewel 1 0 1 }
+	ITEM=i_gold,{250 450}
+
+
+[EOF]
+
+
+
+
+
+

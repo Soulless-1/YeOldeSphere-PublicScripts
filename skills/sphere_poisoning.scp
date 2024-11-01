@@ -1,0 +1,152 @@
+
+//Lesser Poison: (1 Nightshade)
+//Target loses approximately %3 health every 15 seconds, when successfully applied
+
+//Poison: (2 Nightshade)
+//Target loses approximately %4 health every 10 seconds, when successfully applied
+
+//Greater Poison: (4 Nightshade)
+//Target loses approximately %7 health every 10 seconds, when successfully applied
+
+//Deadly Poison: (8 Nightshade)
+//Target loses approximately %13 health every 10 seconds, when successfully applied
+
+[SKILL 30]
+DEFNAME=SKILL_POISONING
+KEY=Poisoning
+TITLE=Assassin
+FLAGS=skf_scripted
+PROMPT_MSG=	//Select the poison you wish to use.
+DELAY=2.0
+STAT_STR=15
+STAT_INT=40
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=20
+BONUS_INT=80
+BONUS_STATS=20
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+VALUES=1,30,200
+
+on=@select
+src.targetf f_poisoning_select_potion
+src.sysmessage Select the poison you wish to use.
+return 1
+
+on=@start
+//act = target
+//actprv = poison
+ref1=<actprv>
+
+if !(<act.isvalid>) || !(<ref1.isvalid>) 	//|| (<ref1.type> != t_potion) || (<ref1.more1> != 014)
+  return 1
+elseif !(<src.f_skillsucceed poisoning>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+ref1=<act>	//weapon
+ref2=<actprv>	//poison
+if !(<R2>) && (<ref2.isvalid>) 
+  ref2.consume 1
+  serv.newitem i_bottle_empty,1,<src>
+endif
+src.sysmessage You fail to apply a sufficient dose of poison to it.
+
+ON=@Abort
+src.sysmessage You decide not to poison anything for now.
+
+on=@success
+//serv.log <name>
+ref1=<act>	//weapon
+ref2=<actprv>	//poison
+
+if !(<ref1.isvalid>) || !(<ref2.isvalid>)
+  return 1
+endif
+
+if (<ref1.type> == t_weapon_arrow) || (<ref1.type> == t_weapon_bolt)	//we need to separate arrows/bolts
+  local.amount=<eval ({10 20}*3)>
+  local.amount=<qval (<ref1.amount> < <local.amount>)?<ref1.amount>:<local.amount>>
+  serv.newitem <ref1.baseid>,<local.amount>
+  ref1.consume <local.amount>
+  ref1=<new>	//we're dealing with the new arrows now
+  ref1.color=03f
+  ref1.tag0.poisonstrength=<ref2.more2>		//strength
+  new.bounce
+else					//all other items get charges
+  ref1.tag0.poisoncharges=<R10,20>		
+  ref1.tag0.poisonstrength=<ref2.more2>	
+endif
+
+ref1.resendtooltip
+ref2.consume 1
+serv.newitem i_bottle_empty,1,<src>
+src.sysmessage You apply the poison
+src.sound 04f
+
+if (<ref1.type>==t_food) || (<ref1.type>==t_drink)
+  ref1.events=+t_poisoned_food  
+else
+  ref1.events=+t_poisoned_weapon
+endif
+
+[function f_poisoning_select_potion]
+if (<src.distance <argo>> > 3)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<canpackaccess <argo>>) && !(<canbankaccess <argo>>)
+  src.sysmessage You cannot use that where it is!
+  return 1
+elseif !(<argo.isitem>)
+  sysmessage That is not a poison potion.
+  return 1
+elseif !(strmatch(i_potion_poison*,<argo.baseid>))
+  src.sysmessage That is not a poison potion.
+  return 1
+endif
+
+src.actprv=<argo>
+src.targetf f_poisoning_apply
+src.sysmessage To what do you wish to apply the poison?
+
+[function f_poisoning_apply]
+if !(<argo.isvalid>) || !(<argo.isitem>)
+  src.sysmessage You can not poison that! 
+  return 1
+elseif !(<canpackaccess <argo>>) && !(<canbankaccess <argo>>)
+  src.sysmessage You can't poison that where it is.
+  return 1
+elseif !(<argo.f_poison_can_apply>)
+  src.sysmessage You can not poison that! You can only poison one handed bladed or piercing weapons, food or drink.
+  return 1
+endif
+src.act=<argo>
+src.action=poisoning
+
+
+[typedef t_poisoned_weapon]
+
+[typedef t_poisoned_food]
+
+on=@dclick
+src.poison <tag0.poisonstrength>
+src.sysmessage It was poisoned!
+
+[function f_poison_can_apply]
+if (<layer> == 1) && ((<type> == t_weapon_sword) || (<type> == t_weapon_fence))
+  return 1
+elseif (<type> == t_weapon_arrow) || (<type> == t_weapon_bolt)
+  return 1
+elseif (<type> == t_food) || (<type> == t_drink)
+  return 1
+endif
+return 0
+
+
+
+
+[EOF]

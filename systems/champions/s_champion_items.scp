@@ -1,0 +1,189 @@
+//Champion Spawn System by Soulless
+//v1.0
+//1:35 PM 1/8/2022
+
+
+//more1=active, more2=level, morex=spawned, morey=killed, morem=champ type
+[itemdef i_champion_idol]
+defname=i_champion_idol
+id=01f18	//skull bust
+name=Champion Idol
+type=t_champion_idol
+can=can_o_nosleep|can_i_forcedc|can_i_dcignoredist
+
+on=@create
+attr=010
+more1=0
+timer=-1
+
+[ITEMDEF i_champion_altar]
+NAME=Champion Spawn
+ID=i_stairs_stone_5
+ID=i_champion_idol
+TYPE=t_multi
+REGIONFLAGS=region_flag_nobuilding
+CATEGORY=Custom
+SUBSECTION=Champion Spawns
+DESCRIPTION=Champion Altar
+MULTIREGION=-45,-45,45,45
+//MULTIREGION=-42,-42,42,42
+//component=i_champion_idol 0 0 5 0
+component=i_stairs_stone 1 0 0 0
+component=i_stairs_stone -1 0 0 0
+component=i_stairs_stone 0 1 0 0
+component=i_stairs_stone 1 1 0 0
+component=i_stairs_stone -1 1 0 0
+component=i_stairs_stone 0 -1 0 0
+component=i_stairs_stone 1 -1 0 0
+component=i_stairs_stone -1 -1 0 0
+component=03f7 -2 -2 0 0  //nw corner
+component=03f1 -1 -2 0 0  //n side
+component=03f1 0 -2 0 0
+component=03f1 1 -2 0 0
+component=03fa 2 -2 0 0	//ne corner
+component=03f0 2 -1 0 0	//e side
+component=03f0 2 0 0 0
+component=03f0 2 1 0 0
+component=03f8 2 2 0 0	//se corner
+component=03ef 0 2 0 0	//s side
+component=03ef -1 2 0 0
+component=03ef 1 2 0 0
+component=03f9 -2 2 0 0	//sw corner
+component=03f2 -2 1 0 0 //w side
+component=03f2 -2 0 0 0
+component=03f2 -2 -1 0 0
+component=i_pentagram -1 0 5 0	//pentagram
+component=0fea 0 0 5 0
+component=0fee 1 0 5 0
+component=0fec 0 1 5 0
+component=0fed 1 1 5 0
+component=0fe9 -1 1 5 0
+component=0fe8 0 -1 5 0
+component=0feb 1 -1 5 0
+component=0fe7 -1 -1 5 0
+
+on=@create
+timerf 1,f_champion_setup_altar
+
+[itemdef i_memory_champion_spawn]	//used to keep track of the monsters spawned/killed
+id=i_memory
+name=Champion Spawn Memory
+type=t_eq_script
+layer=layer_special
+
+on=@unequip
+if (<topobj.region.isevent.r_champion_spawn>)			//must be in a champion spawn area
+  if (<link.isvalid>) && (<link.more1>) && (<link.more2> <= 16)	//only if its active and below level 16
+    link.morex -= 1	//removed spawned
+    link.morey += 1	//add killed
+  endif
+endif
+
+[itemdef i_champion_skull]	//base item that will be generated with info when it's created
+defname=i_champion_skull
+id=01ae0
+name=Champion Skull
+type=t_champion_skull
+
+[ITEMDEF i_star_chamber_altar]
+NAME=Harrower Altar
+ID=i_stairs_marble
+TYPE=t_multi
+REGIONFLAGS=region_flag_nobuilding
+CATEGORY=Custom
+SUBSECTION=Champion Spawns
+DESCRIPTION=Harrower Altar
+MULTIREGION=-2,-2,2,2
+component=i_harrower_tenticle 0 0 6 0
+component=i_stairs_marble 0 0 0 0
+component=071a -1 -1 0 0
+component=i_stairs_marble 0 -1 0 0
+component=i_floor_marble_3 0 -1 5 0
+//component=i_champion_skull_pedestal 0 -1 6 0
+component=i_stairs_marble 1 -1 0 0
+component=i_floor_marble_3 1 -1 5 0
+//component=i_champion_skull_pedestal 1 -1 6 0
+component=i_stairs_marble 1 0 0 0
+component=i_floor_marble_3 1 0 5 0
+//component=i_champion_skull_pedestal 1 0 6 0
+component=i_star_chamber_altar_sign_s 0 2 -6 0
+component=071b 1 1 0 0
+component=i_stairs_marble 0 1 0 0 
+component=i_floor_marble_3 0 1 5 0
+//component=i_champion_skull_pedestal 0 1 6 0
+component=i_star_chamber_altar_sign_e 2 0 -6 0
+component=i_stairs_marble -1 0 0 0
+component=i_floor_marble_3 -1 0 5 0
+//component=i_champion_skull_pedestal -1 0 6 0
+component=i_stairs_marble -1 1 0 0
+component=i_floor_marble_3 -1 1 5 0
+//component=i_champion_skull_pedestal -1 1 6 0
+
+[itemdef i_harrower_tenticle]
+defname=i_harrower_tenticle
+id=i_pet_corpser
+name=Harrower Tenticle
+type=t_normal
+
+on=@create
+color=0518
+
+[itemdef i_star_chamber_altar_sign_s]
+defname=i_star_chamber_altar_sign_s
+id=0bcf
+name=Harrower Sign
+type=t_sign_gump
+
+on=@create
+color=0482
+
+on=@click
+name=Champions must be sacrificed to summon enlightment...
+
+[itemdef i_star_chamber_altar_sign_e]
+defname=i_star_chamber_altar_sign_e
+id=0bd0
+name=Harrower Sign
+type=t_sign_gump
+
+on=@create
+color=0482
+
+on=@click
+name=The altars must be used to fulfill the prophecy...
+
+[itemdef i_champion_skull_pedestal]
+defname=i_champion_skull_pedestal
+id=019bb	//brazier
+name=Champion Skull Pedestal
+type=t_champion_skull_pedestal
+can=can_i_dcignorelos|can_i_dcignoredist
+
+on=@create
+color=0455
+attr=010
+
+[itemdef i_pendant_ankh]
+defname=i_pendant_ankh
+name=ankh pendant
+id=03bb5
+type=t_jewelry
+tevents=t_virtue_jewelry
+
+[itemdef i_harrower_gate]
+defname=i_harrower_gate
+name=dark moongate
+id=i_moongate_black
+type=t_script
+can=can_i_dcignoredist|can_i_dcignorelos
+
+on=@dclick
+if (<src.distance> > 4)
+  src.sysmessage You can't reach that.
+  return 1
+endif
+src.go <morep>
+return 1
+
+[EOF]
+

@@ -1,0 +1,122 @@
+//Bulk Order Deed System by Soulless
+//v0.5
+//1:28 AM 8/21/2022
+
+////////////////////
+// Offer From NPC
+
+[dialog d_bulk_order_offer]
+
+150,50
+
+page 0
+resizepic 20 20 9200 460 290
+gumppictiled 30 30 440 270 2624
+checkertrans 30 30 440 270
+gumppic 15 15 10460
+gumppic 455 15 10460
+gumppic 15 285 10460
+gumppic 455 286 10460
+
+dtext 195 35 1000 A bulk order
+dtext 45 65 1000 Ah!  Thanks for the goods!  Would you help me out?
+dtext 45 90 1000 Amount to make:
+dtext 245 90 1000 <dmore2>
+dtext 45 115 1000 Item requested:
+dtext 45 140 1000 <serv.itemdef.<more1>.name>
+tilepic 385 100 <eval id(<serv.itemdef.<more1>.dispid>)>
+
+dtext 45 165 1000 Special requirements to meet:
+if (<morey>&01)
+  dtext 45 190 1000 All items must be exceptional.
+endif
+if (<morey>&02)
+  dtext 45 215 1000 All items must be made with <serv.itemdef.<tag0.matoverride>.name>
+endif
+
+dtext 45 240 1000 Do you want to accept this order? 
+button 105 275 4005 4006 1 0 1
+dtext 140 275 1000 OK
+button 295 275 4005 4006 1 0 2
+dtext 330 275 1000 CANCEL
+
+[dialog d_bulk_order_offer button]
+
+onbutton=1 //accept
+serv.newitem i_bulk_order_deed
+new.more1=<more1>	//itemdef
+new.more2=<more2>	//amount needed
+new.morex=<morex>	//craft skill
+new.morey=<morey>	//requirements (flags)
+new.tag0.matoverride=<tag0.matoverride>	//material to be used
+new.tag0.bodvalue=<tag0.bodvalue>
+new.tag0.matlevel=<tag0.matlevel>
+new.color=<color>
+new.cont=<src.findlayer.21>
+remove
+src.sysmessage The bulk orer deed has been placed in your backpack.
+
+onbutton=2 	//decline
+remove
+
+
+
+
+
+
+
+//////////////////////
+// The Bulk Order Deed
+
+[dialog d_bulk_order_deed]
+
+150,50
+
+page 0
+resizepic 20 20 9200 460 290
+gumppictiled 30 30 440 270 2624
+checkertrans 30 30 440 270
+gumppic 15 15 10460
+gumppic 455 15 10460
+gumppic 15 285 10460
+gumppic 455 286 10460
+
+dtext 195 35 1000 A bulk order
+dtext 45 65 1000 Amount to make:
+dtext 245 65 1000 <dmore2>
+dtext 45 90 1000 Item requested:
+dtext 45 115 1000 <serv.itemdef.<more1>.name>
+tilepic 385 100 <eval id(<serv.itemdef.<more1>.dispid>)>
+dtext 245 95 1000 Amount finished:
+dtext 245 115 1000 <dmorez>
+
+dtext 45 140 1000 Special requirements to meet:
+if (<morey>&01)
+  dtext 45 165 1000 All items must be exceptional.
+endif
+if (<morey>&02)
+  dtext 45 190 1000 All items must be made with <serv.itemdef.<tag0.matoverride>.name>.
+endif
+
+button 90 225 4005 4006 1 0 1
+dtext 125 225 1000 Combine this deed with the item requested.
+
+button 90 250 4005 4006 1 0 0
+dtext 125 250 1000 CANCEL
+
+[dialog d_bulk_order_deed button]
+
+onbutton=1 //add item to deed
+dialog d_bulk_order_deed
+if (<morez> >= <more2>)
+  src.sysmessage The maximum amount of requested items have already been combined to this deed.
+  return 1
+endif
+target
+
+
+
+
+
+
+[EOF]

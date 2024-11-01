@@ -1,0 +1,718 @@
+//Custom NPC events by Soulless
+//v1.0
+//2:00 PM 2/18/2019
+
+//make dragons breathe do actual damage
+//make charge push away, not move back, incase the char is facing the wrong way
+
+/////////////////////////////
+// Healers
+// Will heal young players that are damaged
+
+[events e_healer]
+
+on=@create
+serv.list.npc_healers.add <uid>	//this is used for the healer arrow system
+if (<spawnitem>)
+  spawnitem.tag.spawned_healer_last=<uid>	//tag the last known healer from spawns that create them
+endif
+
+on=@destroy
+if (<serv.list.npc_healers.findelem <uid>> != -1)
+  serv.list.npc_healers.<serv.list.npc_healers.findelem <uid>>.remove
+endif
+
+on=@npclookatchar
+if (<src.flags>&statf_dead)
+  if (<src.isinnocent>) && !(<src.isdialogopen.d_resurrect_confirm>)
+    dorand 5
+      say Thou art dead, but 'tis within my power to resurrect thee. Live!
+      say Allow me to resurrect thee ghost. Thy time of true death has not yet come.
+      say Perhaps thou shouldst be more careful. Here, I shall resurrect thee.
+      say Live again, ghost! Thy time in this world is not yet done.
+      say I shall attempt to resurrect thee.
+    enddo
+    src.dialogclose d_resurrect_confirm
+    src.resurrect
+  endif
+  return 0
+endif
+
+on=@npcseenewchar
+if (<src.tag0.young>) && (<src.hits> < <muldiv 40,<src.maxhits>,100>) && !(<src.iscriminal>) && !(<src.ismurderer>)
+  say You look like you need some healing my child.
+  src.spelleffect s_greater_heal,1000,0,0
+  src.sound <serv.spell.s_greater_heal.sound>
+  src.effect 3,<serv.spell.s_greater_heal.effect_id>,6,15,1
+endif
+
+/////////////////////////////
+// Dragon
+// Will breathe flames at you
+
+
+[events e_dragon_breathe]
+
+on=@npcactfight	//should breathe fire every 15 seconds
+if (<distance <src.p>> < 20) && (<canseelos <src>>) && (<cansee <src>>)
+  local.lastbreathe=<eval (<serv.time>-<tag0.lastbreathedfire>)>
+  if (<local.lastbreathe> >= 150)	//every 15.0 seconds
+    tag0.lastbreathedfire=<serv.time>
+    act=<src>
+    actprv=<uid>
+    actarg1=200
+    action=25
+    return 1
+  endif
+endif
+
+
+////////////////////////////////
+// Dragon Scales
+// Absorb 50%
+
+[events e_dragon_scales]	
+
+on=@gethit
+return 0
+if !(<R9>) && (<argn2> != dam_god)
+  argn1 /= 2
+  message @0482,3,0 *dragon scales absorb some damage*
+endif
+
+
+/////////////////////////////
+// Nightmare
+// Will breathe flames at you like a dragon
+
+
+[events e_nightmare]
+
+on=@npcactfight	//should breathe fire every 15 seconds
+if (<distance <src.p>> < 20) && (<canseelos <src>>) && (<cansee <src>>)
+  local.lastbreathe=<eval (<serv.time>-<tag0.lastbreathedfire>)>
+  if (<local.lastbreathe> >= 150)	//every 15.0 seconds
+    tag0.lastbreathedfire=<serv.time>
+    act=<src>
+    actprv=<uid>
+    actarg1=200
+    action=25
+    return 1
+  endif
+endif
+
+
+//////////////////////////////
+// Poison Resistance
+// Becomes resistant to poison for 30 minutes after being damaged so much
+
+[events e_poison_resistance]
+
+on=@gethit
+if (<argn2>&dam_poison) && (<findid.i_rune_poison.isvalid>) 
+  if !(<findid.i_poison_resistance>)
+    serv.newitem i_poison_resistance
+    equip <new>
+  endif
+  local.p=<findid.i_rune_poison.more2>
+  local.r=<findid.i_poison_resistance.more2>
+  local.r=<qval (<local.r> < 75)?<local.r>:75>	//don't exceed 75% immunity
+  findid.i_poison_resistance.more2 += <local.p>		
+  argn1 -= <muldiv <local.r>,<argn1>,100>	//decrease by the % resistant
+  //if (<local.r> >= 100)
+    //message @0482,3,0,0 *The poison seems to have no effect*
+    //findid.i_rune_poison.remove
+    //return 1
+  //endif
+endif
+
+[itemdef i_poison_resistance]
+id=i_memory
+name=Poison resistance
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer=1800 	//30 minutes of resistance
+
+on=@timer
+remove
+return 1
+
+
+////////////////////////////////
+// Poison Immunity
+// Completely immune to poison damage
+
+[events e_poison_immunity]
+
+
+
+on=@spelleffect
+if (<argn1>==20) || (<argn1>==39)
+  message @03b2,3,0,0 *The poison seems to have no effect*
+  return 1
+endif
+
+on=@gethit
+if (<argn2>&dam_poison)
+  message @03b2,3,0,0 *The poison seems to have no effect*
+  return 1
+endif
+
+
+
+////////////////////////////////
+// split / Multiply Self
+//
+
+[events e_multiply]		//this npc will split into 2 weaker versions on death
+
+on=@death
+if !(<tag0.multiplied>)
+  tag0.multiplied=1
+  hits=<eval <maxhits>/2>
+  serv.newnpc <baseid>
+  new.hits=<hits>
+  new.color=<color>
+  new.tag0.multiplied=1
+  new.p=<p>
+  new.update
+  new.attack <attacker.max>
+  emote multiply into a duplicate copy
+  return 1
+endif
+
+
+//////////////////////////////
+// Pack Instinct
+// Call for help from same npcs
+
+[events e_pack_instinct]	//will call for help from other npcs of his type
+
+on=@gethit
+if (<hits> <= <eval <maxhits>/3>) && !(<findid.i_pack_instinct>)	//below33% life
+  ref1=<uid>
+  serv.newitem i_pack_instinct
+  new.timer=600		//five minute cooldown
+  ref1.equip <new>
+  ref1.emote call for help
+  ref1.bark 4
+  forchars 15
+    if (<baseid>==<ref1.baseid>) 
+      ref2=<uid>
+      serv.newitem i_pack_instinct
+      new.timer=600
+      ref2.equip <new>
+      ref2.attack <ref1.attacker.target>
+    endif
+  endfor
+endif
+
+[itemdef i_pack_instinct]
+id=i_memory
+name=Pack Instinct
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+
+/////////////////////////////
+// Charging Attack
+// Will charge towards a person/direction
+// f_npc_charge <uid>,<dir>,<dist> (specifying a target will ignore the dir and follow the target)
+
+[events e_charging_attack]
+
+on=@hit
+ref1=<uid>
+if !(<ref1.findid.i_charging_attack>)
+  serv.newitem i_charging_attack
+  new.timer={20 30}
+  ref1.equip <new>
+  ref1.timerf 4,f_npc_charge <ref1.attacker.max>,0,<eval <ref1.distance <ref1.attacker.max>>+3>
+  ref1.emote begin to charge at <uid.<ref1.attacker.target>.name>
+endif
+  
+[itemdef i_charging_attack]
+id=i_memory
+name=Charging Attack
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+
+//////////////////////////
+// Vicious Bite
+// Causes bleeding that must be healed by an expert healer with a bandage or it will keep bleeding for 60 seconds
+
+[events e_vicious_bite]		//a bleeding wound that leaves a bloody trail and does damage
+
+on=@hit
+ref1=<uid>
+if !(<ref1.findid.i_vicious_bite>) && !(<src.findid.i_viciously_bitten>)
+  if (<ref2.isvalid>) 
+    ref2=<attacker.target>
+    serv.newitem i_vicious_bite
+    new.timer={20 30}
+    ref1.equip <new>
+    ref1.emote viciously bite <ref2.name>
+    serv.newitem i_viciously_bitten
+    new.more1=60		//will bleed for 60 seconds unless it's bandaged
+    new.more2=<eval <ref1.dam.lo>/3>	//determines how bad the bite is
+    new.link=<ref1>	
+    new.timer=1
+    ref2.equip <new>
+    ref2.emote bleed profusely from a vicious bite
+  endif
+endif
+  
+[itemdef i_vicious_bite]
+id=i_memory
+name=Vicious Bite
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[itemdef i_viciously_bitten]
+id=i_memory
+name=Viciously Bitten
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+topobj.damage <more2> dam_god <link>
+more1 -= 5
+//topobj.emote bleed heavily from a vicious bite
+topobj.f_make_blood 5
+if !(<more1>)
+  topobj.sysmessage You finally recover from the vicious bite
+  remove
+endif
+timer=5
+return 1
+
+
+/////////////////////////////////
+// Poisonious wound that damages the target
+// Only bandages with antiseptic can cure it, it reduces your maxhits till cured
+
+[events e_festering_wound]	
+
+on=@hit
+ref1=<uid>
+if !(<ref1.findid.i_festering_wound>) && !(<src.findid.i_festered_wound>)
+  serv.newitem i_festering_wound
+  new.timer={20 30}
+  ref1.equip <new>
+  ref2=<attacker.target>
+  ref1.emote secrete pus and rot
+  serv.newitem i_festered_wound
+  new.timer=180		//will fester for 180 seconds unless its cured
+  new.more2=<eval <ref1.dam.lo>/2>	//determines how bad the wound is
+  new.link=<ref1>
+  ref2.maxhits -= <new.more2>	
+  ref2.equip <new>
+endif
+  
+[itemdef i_festering_wound]
+id=i_memory
+name=Festering Wound
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[itemdef i_festered_wound]
+id=i_memory
+name=Festered Wound
+type=t_eq_script
+layer=layer_special
+
+on=@unequip
+src.maxhits += <more2>
+src.sysmessage Your festering wound has cleared up
+
+on=@timer
+remove
+return 1
+
+
+////////////////////////////////////////
+// Profusive Bleeding
+// Target will bleed until bandaged, or death
+
+[itemdef i_profusive_bleeding]
+
+
+////////////////////////////////////////
+// Explosive
+// Will explode and do area damage when it dies 
+
+[events e_explosive]		
+
+on=@death
+ref1=<uid>
+forchars 4
+  if (<uid> != <ref1>)
+    damage <ref1.dam.hi> dam_god <ref1>
+    sound {032 037}
+  endif
+endfor
+call circlefx 4,i_fx_explode,1,16,0,0
+sound {032 037}
+
+
+/////////////////////////////////////////
+// Townsfolk
+// Basically just for the npc garbage collection system to ignore them
+
+[events e_townsfolk]
+
+
+/////////////////////////////////////
+// Acid Blood
+// Causes acid blood on the ground to appear which damages anyone who stands in it
+
+[events e_acid_blood]	
+
+on=@gethit
+if (<src.weapon.isvalid>) && !(<R5>)		//stratics says 50% chance? let's do 20%
+  src.weapon.damage 1
+  src.message @0482,3,0,0 *Acid blood scars your weapon!*
+endif
+	
+
+
+
+
+
+[events e_disarm]		//will disarm the target occasionally
+[events e_incorporeal]		//strikes will often pass through this npc
+[events e_magic_resistant]	//somewhat resistant to magic damage
+[events e_magic_shell]		//immune to all magical damages
+[events e_magic_reflect]	//reflects all magic spells
+[events e_charging]		//will charge targets or general directions
+[events e_ground_stop]		//will stomp the ground to stun people around
+[events e_egg_laying]		//will lay eggs in corpses it finds to birth more, or targets it kills
+[events e_shape_shift]		//can shapeshift into certain forms
+[events e_knockback]		//knocks its target back sometimes
+[events e_firebreath]		//breathes fire in a triangle
+[events e_racial_hate]		//another faction type they are enemies with
+[events e_racial_ally]		//another faction type they are friends with
+[events e_frostbreath]		//casts frost breath which will slow and hurt enemies
+[events e_paralyzer]		//paralyzes its enemies on attacks sometimes
+[events e_mindwhip]		//will do damage and take mana from its enemies
+[events e_antimage]		//specifically a monster thats good against casters
+[events e_antimelee]		//specifically a monster good against melee enemies
+
+
+
+///////////////////////////////
+// Mirror Image
+// Will surround the target with fake 
+
+
+[events e_mirror_image]		//splits npc into several targets, fake ones do no damage and dissapear in 20 seconds	
+
+
+
+///////////////////////////////
+// Savages and Orcs wont attack disguised players
+
+[events e_savages]
+
+on=@combatadd
+if (<src.findid.i_tribal_paint_applied>)
+  return 1
+endif
+
+on=@hit
+if (<src.findid.i_tribal_paint_applied>)
+  action=103
+  attacker.<attacker.id <src>>.delete
+  if (<memoryfind.<src>.isvalid>)
+    memoryfind.<src>.remove
+  endif
+  return 1
+endif
+if (<src.owner>)
+  argn1 *= 2
+endif
+
+on=@spellcast
+if (<src.findid.i_tribal_paint_applied>)
+  if (<serv.spell.<argn1>.flags>&spellflag_harm)
+    action=103
+    attacker.<attacker.id <src>>.delete
+    if (<memoryfind.<src>.isvalid>)
+      memoryfind.<src>.remove
+    endif
+    return 1
+  endif
+endif
+
+[events e_orcs]
+
+on=@combatadd
+if (<src.findlayer.6.isvalid>) && (<src.findlayer.6.baseid>==i_mask_orcish_kin)
+  return 1
+endif
+
+on=@hit
+if (<src.findlayer.6.isvalid>) && (<src.findlayer.6.baseid>==i_mask_orcish_kin)
+  action=103
+  attacker.<attacker.id <src>>.delete
+  if (<memoryfind.<src>.isvalid>)
+    memoryfind.<src>.remove
+  endif
+  return 1
+endif
+
+on=@spellcast
+if (<act.findlayer.6.isvalid>) && (<act.findlayer.6.baseid>==i_mask_orcish_kin)
+  if (<serv.spell.<argn1>.flags>&spellflag_harm)
+    action=103
+    attacker.<attacker.id <src>>.delete
+    if (<memoryfind.<src>.isvalid>)
+      memoryfind.<src>.remove
+    endif
+    return 1
+  endif
+endif
+
+
+//////////////////////////////
+// Enraged
+// Moves faster and does extra damage
+
+[events e_enraged]
+
+on=@hit
+if !(<R5>)
+  src.damage {15 30} dam_physical <uid>
+  sound 029a
+endif
+
+
+//////////////////////////////
+// Burning Aura
+// Will do small area of effect fire attacks
+
+[events e_burning_aura]
+
+on=@gethit
+ref1=<uid>
+if !(<R5>)
+  forclients 2
+    ref2=<uid>
+    ref2.damage {10 15} dam_fire <ref1>
+    ref2.consume i_burning_aura_ignited
+    serv.newitem i_burning_aura_ignited
+    new.more1=10
+    new.timer=1
+    ref2.equip <new>
+  endfor
+  for 0 2
+    timerfms <eval (<local._for>*100)>,circle_effect,i_fx_explode,<dlocal._for>,0,{1355 1360},2
+  endfor
+  ref1.sound 015e
+endif
+
+[itemdef i_burning_aura_ignited]
+defname=i_burning_aura_ignited
+name=Burning Aura Ignited
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<more1> <= 0)
+  remove
+endif
+topobj.effect=3,i_fx_heal_effect,6,30,0,0489
+topobj.damage {3 5} dam_fire <link>
+more1 -= 1
+timer=1
+return 1
+
+
+//////////////////////////////
+// Frozen Aura
+// Will do small area of effect cold attacks and slow the attakers movement speed
+
+[events e_frozen_aura]
+
+on=@gethit
+ref1=<uid>
+if !(<R5>)
+  forclients 2
+    ref2=<uid>
+    ref2.damage {10 15} dam_cold <ref1>
+    ref2.consume i_frozen_aura_slowed
+    serv.newitem i_frozen_aura_slowed
+    new.more1=10
+    new.timer=1
+    ref2.equip <new>
+  endfor  
+  for 0 2
+    timerfms <eval (<local._for>*100)>,circle_effect,i_fx_smoke,<dlocal._for>,0,{0480},2
+  endfor
+  ref1.sound 0228
+endif
+
+[itemdef i_frozen_aura_slowed]
+defname=i_frozen_aura_slowed
+name=Frozen Aura Slowed Movement
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.speedmode=2
+
+on=@timer
+if (<more1> <= 0)
+  remove
+endif
+topobj.effect=3,i_fx_heal_effect,6,30,0,0480
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.speedmode=0
+
+
+//////////////////////////////
+// Spectral
+// Harder to hit with physical attacks because it exists partially in the spectral plane
+
+[events e_spectral]
+
+on=@gethit
+if (<argn1>&dam_physical)
+  if !(<R5>)
+    src.sysmessage You're <qval (<src.weapon>)?<src.weapon.name>:fists> passes through <name>
+    src.sound {0238 023a}
+    return 1
+  endif
+endif
+
+
+//////////////////////////////
+// Summoner
+// Summons weaker versions of its own monster type
+
+[events e_summoner]
+
+on=@hit
+ref1=<uid>
+if !(<R5>)
+  if (<ref1.tag0.summoned_minions> < 3)
+    serv.newnpc <ref1.baseid>
+    new.events=+e_summoner_minion
+    new.tag0.summoner_master=<ref1>
+    new.maxhits /= 2
+    new.hits=<new.maxhits>
+    new.movenear <ref1> 3
+    new.attack <src>
+    ref1.tag0.summoned_minions += 1
+    ref1.sound 0215
+  endif
+endif
+
+[events e_summoner_minion]
+
+on=@destroy
+ref1=<tag0.summoner_master>
+if (<ref1.isvalid>)
+  if (<ref1.tag0.summoned_minions> >= 1)
+    ref1.tag0.summoned_minions -= 1   
+  endif
+endif
+
+
+/////////////////////////////////////
+// Life Drain
+// Does 10-40 damage in 2 foot radius and gives half to the NPC
+
+[events e_life_drain]
+
+on=@hit
+ref1=<uid>
+forchars 2
+  if (<src.ismale>) && (<src> != <uid>)
+    if !(<src.npc>) || ((<src.npc>) && (<src.owner>) && (<src.owner.isplayer>))
+      local.damage=<R10,40>
+      damage <local.damage> dam_magic <ref1>
+      ref1.hits += <eval (<local.damage>/2)>
+      ref1.hits=<qval (<ref1.maxhits> < <ref1.hits>)?<ref1.maxhits>:<ref1.hits>>
+      sysmessage You feel the life drain out of you!
+      sound 0231
+      effect=3,0374a,10,15,0
+    endif
+  endif
+endfor
+
+
+
+
+//////////////////////////////////
+// Auto Dispel
+// Will dispell any conjured attacker that attacks them
+
+[events e_auto_dispel]
+
+on=@combatadd
+if (<src.flags>&statf_conjured)
+  actarg1=41
+  act=<src>	
+  actprv=<src>
+  action=25		
+endif
+
+on=@gethit
+if (<src.flags>&statf_conjured) && !(<R5>)
+  actarg1=41
+  act=<src>	
+  actprv=<src>
+  action=25		
+endif
+
+//////////////////////////////////
+// Auto Cure
+// Will Automatically cure any poison on their char
+
+[events e_auto_cure]
+
+on=@spelleffect
+if (<argn1> == 20) 	//poison
+  //timerf 0,f_auto_cure_cast	
+endif
+
+on=@gethit
+if (<argn2>&dam_poison) && !(<R5>)
+  //timerf 0,f_auto_cure_cast	
+endif
+
+[function f_auto_cure_cast]
+actarg1=11
+act=<uid>	
+actprv=<uid>
+action=25	
+
+
+
+[EOF]

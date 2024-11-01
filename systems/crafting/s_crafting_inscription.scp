@@ -1,0 +1,122 @@
+
+
+[defname crafting_Inscription]
+crafting_Inscription_flags 	0		//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool
+crafting_Inscription_anim 	33
+crafting_Inscription_sound	0249,0	
+crafting_isncription_tool	t_tool_inscription
+
+crafting_inscription_0_name LAST TEN		//this will be generated as people craft
+
+crafting_Inscription_1_name 1ST CIRCLE
+crafting_Inscription_1_0 i_scroll_reactive_armor
+crafting_Inscription_1_1 i_scroll_clumsy
+crafting_Inscription_1_2 i_scroll_create_food
+crafting_Inscription_1_3 i_scroll_feeblemind
+crafting_Inscription_1_4 i_scroll_heal
+crafting_Inscription_1_5 i_scroll_magic_arrow
+crafting_Inscription_1_6 i_scroll_night_sight
+crafting_Inscription_1_7 i_scroll_weaken
+
+crafting_Inscription_2_name 2ND CIRCLE
+crafting_Inscription_2_0 i_scroll_agility
+crafting_Inscription_2_1 i_scroll_cunning
+crafting_Inscription_2_2 i_scroll_cure
+crafting_Inscription_2_3 i_scroll_harm
+crafting_Inscription_2_4 i_scroll_magic_trap
+crafting_Inscription_2_5 i_scroll_magic_untrap
+crafting_Inscription_2_6 i_scroll_protection
+crafting_Inscription_2_7 i_scroll_strength
+
+crafting_Inscription_3_name 3ND CIRCLE
+crafting_Inscription_3_0 i_scroll_bless
+crafting_Inscription_3_1 i_scroll_fireball
+crafting_Inscription_3_2 i_scroll_magic_lock
+crafting_Inscription_3_3 i_scroll_poison
+crafting_Inscription_3_4 i_scroll_telekinesis
+crafting_Inscription_3_5 i_scroll_teleport
+crafting_Inscription_3_6 i_scroll_unlock
+crafting_Inscription_3_7 i_scroll_wall_of_stone
+
+crafting_Inscription_4_name 4TH CIRCLE
+crafting_Inscription_4_0 i_scroll_archcure
+crafting_Inscription_4_1 i_scroll_archprotection
+crafting_Inscription_4_2 i_scroll_curse
+crafting_Inscription_4_3 i_scroll_fire_field
+crafting_Inscription_4_4 i_scroll_greater_heal
+crafting_Inscription_4_5 i_scroll_lightning
+crafting_Inscription_4_6 i_scroll_mana_drain
+crafting_Inscription_4_7 i_scroll_recall
+
+crafting_Inscription_5_name 5TH CIRCLE
+crafting_Inscription_5_0 i_scroll_blade_spirits
+crafting_Inscription_5_1 i_scroll_dispel_field
+crafting_Inscription_5_2 i_scroll_incognito
+crafting_Inscription_5_3 i_scroll_magic_reflection
+crafting_Inscription_5_4 i_scroll_mind_blast
+crafting_Inscription_5_5 i_scroll_paralyze
+crafting_Inscription_5_6 i_scroll_poison_field
+crafting_Inscription_5_7 i_scroll_summon_creature
+
+crafting_Inscription_6_name 6TH CIRCLE
+crafting_Inscription_6_0 i_scroll_dispel
+crafting_Inscription_6_1 i_scroll_energy_bolt
+crafting_Inscription_6_2 i_scroll_explosion
+crafting_Inscription_6_3 i_scroll_invisibility
+crafting_Inscription_6_4 i_scroll_mark
+crafting_Inscription_6_5 i_scroll_mass_curse
+crafting_Inscription_6_6 i_scroll_paralyze_field
+crafting_Inscription_6_7 i_scroll_reveal
+
+crafting_Inscription_7_name 7TH CIRCLE
+crafting_Inscription_7_0 i_scroll_chain_lightning
+crafting_Inscription_7_1 i_scroll_energy_field
+crafting_Inscription_7_2 i_scroll_flamestrike
+crafting_Inscription_7_3 i_scroll_gate_travel
+crafting_Inscription_7_4 i_scroll_mana_vampire
+crafting_Inscription_7_5 i_scroll_mass_dispel
+crafting_Inscription_7_6 i_scroll_meteor_swarm
+crafting_Inscription_7_7 i_scroll_polymorph
+
+crafting_Inscription_8_name 8TH CIRCLE
+crafting_Inscription_8_0 i_scroll_earthquake
+crafting_Inscription_8_1 i_scroll_energy_vortex
+crafting_Inscription_8_2 i_scroll_resurrection
+crafting_Inscription_8_3 i_scroll_summon_elem_air
+crafting_Inscription_8_4 i_scroll_summon_daemon
+crafting_Inscription_8_5 i_scroll_summon_elem_earth
+crafting_Inscription_8_6 i_scroll_summon_elem_fire
+crafting_Inscription_8_7 i_scroll_summon_elem_water
+
+crafting_Inscription_9_name OTHER
+crafting_Inscription_9_0 i_scroll_blank
+crafting_Inscription_9_1 i_map_blank
+crafting_Inscription_9_2 i_book_sm
+crafting_Inscription_9_3 i_book_lg
+crafting_Inscription_9_4 i_runebook
+crafting_Inscription_9_5 i_spellbook
+crafting_Inscription_9_6 i_spellbook_full
+crafting_Inscription_9_7
+
+///////////////////////////////
+// Inscription Post Craft
+
+[function f_inscription_prerequisite]
+return 1	//always able to use inscription
+
+[function f_inscription_pre_craft]
+
+[function f_inscription_post_craft]
+ref1=<args>
+if (<ref1.type> == t_scroll)
+  ref1.morey=600				//all scrolls are 60.0% for the skill/potency
+endif
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+
+
+[EOF]

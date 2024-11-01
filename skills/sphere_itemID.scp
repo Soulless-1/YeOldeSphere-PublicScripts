@@ -1,0 +1,81 @@
+//http://www.uoguide.com/Item_Identification
+//6:08 PM 3/30/2018
+
+//fixme : todo make this useful for iding things
+
+[SKILL 3]
+DEFNAME=SKILL_APPRAISE
+KEY=ItemID
+TITLE=Merchant
+FLAGS=skf_scripted
+PROMPT_MSG=What do you wish to appraise and identify?
+DELAY=1.0
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+STAT_STR=0
+STAT_INT=125
+STAT_DEX=0
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=25
+
+on=@start
+//act = target
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> >= 8)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.cansee <act>>) // && (<act.topobj> != <src>) 	//should be able to ID anything you can see
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(<act.isitem>)
+  src.sysmessage That is not an item.
+  return 1
+endif
+if !(<src.f_skillsucceed itemid>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You are not certain...
+
+ON=@Abort
+src.sysmessage You stop trying to appraise the item.
+
+on=@success
+if (<act.type>==t_container) && (<src.itemid> >= 1000)
+  forcont <act> 1
+    f_identify_item <uid>
+  endfor
+else
+  src.f_identify_item <act>
+endif
+//src.sysmessage You guess the value of that item at: <f_avgvalue <qval (<act.tag0.override.value>)?<act.tag0.override.value>:<act.value>>> gold	//dont think it told you value back in the day
+
+[function f_identify_item]
+ref1=<args>	//item being identified
+if (<ref1.isvalid>)
+  if !(<ref1.attr>&attr_identified)
+    ref1.attr |= attr_identified
+    if !(<isempty <ref1.tag.itemid_name>>)	//fixme: eventually can get rid of this
+      ref1.name=<ref1.tag0.itemid_name>
+      ref1.tag0.itemid_name=
+    elseif !(<isempty <ref1.oname>>)
+      ref1.name=<ref1.oname>
+    endif
+    if (!<isempty <ref1.ocolor>>)
+      ref1.color=<ref1.ocolor>
+      ref1.ocolor=
+    endif
+  endif  
+  ref1.message <ref1.name>
+endif
+
+
+[EOF]

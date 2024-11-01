@@ -1,0 +1,60 @@
+
+[chardef c_mimic]
+id=c_doppleganger
+name=Mimic
+can=mt_walk|mt_run|mt_usehands|mt_equip
+dam=75,100
+armor=75,100
+sound=0179
+
+on=@Create
+npc=brain_monster
+fame=8000
+karma=-9999
+str=100
+dex=100
+int=100
+
+on=@npcseenewplayer
+//if (<src.avgstats> > <avgstats>)
+on=@attack
+  mimic_player <src>
+  emote mimic <src.name>
+//endif
+
+[function mimic_player]
+if !(<tag0.mimicking>)
+  ref1=<uid> 
+  ref2=<argn>
+  name=<ref2.name>
+  body=<ref2.body>
+  for 0 48
+    ref1.<dlocal._for>=<ref2.<dlocal._for>>
+  endfor
+  ref1.stealth=
+  ref1.str=<ref2.str>
+  ref1.maxhits=<ref2.maxhits>
+  ref1.hits=<ref1.maxhits>
+
+  ref1.dex=<ref2.dex>
+  ref1.maxstam=<ref2.maxstam>
+  ref1.stam=<ref1.maxstam>
+
+  ref1.int=<ref2.int>
+  ref1.maxmana=<ref2.maxmana>
+  ref1.mana=<ref1.maxmana>
+  
+  ref1.modar=<ref2.armor>
+
+  forcont <ref2> 0
+    if (<layer> < 25) && (<type> != t_container)
+      serv.newitem <baseid>
+      new.name=<name>
+      new.color=<color>
+      new.attr=attr_newbie
+      ref1.equip <new>
+    endif
+  endfor
+endif
+
+[EOF]

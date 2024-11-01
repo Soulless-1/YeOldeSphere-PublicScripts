@@ -1,0 +1,58 @@
+[SKILL 32]
+DEFNAME=SKILL_SPIRITSPEAK
+KEY=SpiritSpeak
+TITLE=Medium
+PROMPT_MSG=
+FLAGS=skf_scripted
+DELAY=2.0
+STAT_STR=20
+STAT_INT=125
+STAT_DEX=30
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=50
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start
+//act = non
+//actprv = none
+
+if !(<src.f_skillsucceed spiritspeak>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You fail your attempt at contacting the netherworld.
+
+ON=@Abort
+src.sysmessage You stop trying to commune with the netherworld.
+
+on=@success
+src.sysmessage You establish contact with the netherworld.
+src.findid.i_spiritspeaking.remove	//remove any prior spirit speak they had
+src.flags |= statf_spiritspeak
+serv.newitem i_spiritspeaking
+new.more2=1
+new.attr=06
+src.equip <new>
+new.timer=2400
+src.anim 17
+src.sound 024a
+
+
+[itemdef i_spiritspeaking]
+id=i_handr_1
+name=Spirit Speaking
+type=t_spell
+
+on=@timer
+topobj.flags &=~ statf_spiritspeak
+remove
+return 1
+
+
+[EOF]

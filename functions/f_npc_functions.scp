@@ -1,0 +1,126 @@
+//these are general functions that NPCs can use
+
+
+/////////////////////
+// Charging attack
+
+[function f_npc_charge]		//f_npc_charge <uid>,<dir>,<dist> (specifying a target will ignore the dir and follow the target)
+ref1=<uid>
+serv.newitem i_memory_charging
+new.link=<argv[0]>		//target
+new.color=<argv[1]>		//direction
+new.more1=<argv[2]>		//distance
+new.more2=<argv[2]>		//for getting the proper statue_frame
+new.tag0.name=<ref1.name>
+ref1.name=" "
+ref1.canmask |= mt_statue
+ref1.tag0.statue_anim=5		//this should be an attack anim for all monsters
+ref1.equip <new>
+ref1.bark 2
+effect 2,i_fx_smoke,1,16,0,03e9,0
+
+[itemdef i_memory_charging]
+id=i_memory
+name=Charging
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timerms=10
+
+on=@timer
+if (<link>) && (<link> != 04fffffff) 	//something was passed in the arguments
+  topobj.face <link>
+  else
+  topobj.dir=<color>
+endif
+if (<topobj.canmove <topobj.dir>>)
+  topobj.move <truedir <topobj.dir>> 1 
+  topobj.effect 2,i_fx_sparkle_2,1,8,0,03e9,0
+endif
+topobj.f_npc_knockback 1
+topobj.f_npc_areadamage 1,<topobj.dam>	//based on npcs damage
+topobj.tag0.statue_frame=<eval 6 - <muldiv 4,<muldiv <more1>,100,<more2>>,100> >
+if !(<more1>) 
+  topobj.canmask &= ~mt_statue
+  topobj.tag0.statue_anim=
+  topobj.tag0.statue_frame=
+  topobj.updatex
+  local.name=<tag0.name>
+  topobj.timerf 1,name=<local.name>
+  link.fix
+  remove
+endif
+more1 -= 1
+timerms=50
+return 1
+
+[function f_npc_knockback]	//this should move the play back from the target, not just move "backwards"
+ref1=<uid>
+forchars 1
+  if (<uid> != <ref1>) && (<uid> != <ref1.owner>)
+    face <ref1>
+    moveback <argv[0]>
+  endif
+endfor
+
+[function f_npc_areadamage]
+ref1=<uid>
+forchars <argv[0]>
+  if (<uid> != <ref1>) && (<uid> != <ref1.owner>)
+    damage <argv[1]> dam_god <ref1>
+  endif
+endfor
+
+/////////////////////////////////////
+// Dragons Fire Breathe
+
+[function f_breathe_fire]
+newitem i_fxTimer
+equip <new.uid>
+new.tag.EffectID = Triangle
+new.tag.distance = <f_minARGV 16,<argv[0]>>
+new.tag.effect = 2,i_fx_explode,9,10,0,0489,4
+new.timerms 100
+
+[function f_dragons_breathe]
+serv.newitem i_dragons_fire
+ref1=<new>
+call f_fxTriangle_GetCoords <args>,<local.dir>
+for dX -<local.val1> <local.val2>
+	for dY -<local.val3> <local.val4>
+		float.dist=<FLOATVAL SQRT(<EVAL (<LOCAL.dX>*<local.dx>)+(<LOCAL.dY>*<local.dy>)>)>
+		if (<float.dist> > <floatval <argv[0]>-0.5>) && (<float.dist> < <floatval <argv[0]>+0.5>)
+			local.absX=<EVAL <P.X>+<LOCAL.dX>>
+			local.absY=<EVAL <P.Y>+<LOCAL.dY>>
+			REF1.P=<dlocal.absX>,<dlocal.absY>
+			REF1.FIX
+			REF1.effect <local.effect>
+		endif
+	endfor
+endfor
+ref1.remove
+ 
+
+[itemdef i_dragons_fire]
+defname=i_dragons_fire
+id=i_fx_explode
+name=Dragon's Fire
+type=t_eq_script
+
+on=@create
+timer={1 4}
+
+on=@timer
+remove
+return 1
+
+on=@step
+src.damage {10 15}
+
+
+
+[EOF]
+
+
+

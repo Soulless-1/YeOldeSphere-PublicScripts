@@ -1,0 +1,201 @@
+//http://www.therodentstones.com/Patrick/BardingDifficultyList.html
+//http://uodemiseguide.spokland.com/character/skill/discordance
+//http://www.uoguide.com/Discordance
+//10:36 PM 3/27/2018
+//previously known as enticement
+
+[SKILL 15]
+DEFNAME=Skill_Discordance
+KEY=Discordance
+TITLE=Demoralizer
+FLAGS=skf_scripted
+PROMPT_MSG=Choose the target for your song of discordance.
+DELAY=6.0
+STAT_STR=15
+STAT_INT=125
+STAT_DEX=50
+BONUS_STR=0
+BONUS_DEX=50
+BONUS_INT=50
+BONUS_STATS=5
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@select
+ref1=<src.findtype.t_musical>
+if !(<ref1.isvalid>)
+  src.sysmessage You do not have a musical instrument.
+  return 1
+endif
+actprv=<ref1>
+return 0
+
+//nothing below here will be called because of return 1 above
+//players wanted it to automatically pick your musical instrument
+ref1=<actprv>
+if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_musical) || (<ref1.topobj> != <src>)
+  src.sysmessage What instrument shall you play?
+  src.targetf f_musical_instrument_select 15
+  return 1
+endif
+return 0
+
+on=@start
+//act = target
+//actprv = instrument 
+ref1=<actprv>
+
+if !(<act.isvalid>) || !(<ref1.isvalid>) 
+  return 1
+elseif (<ref1.type> != t_musical) || (<ref1.topobj> != <src>)
+  src.sysmessage You do not have a musical instrument.
+  return 1 
+elseif (<src.distance <act>> > 10)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <act>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(<act.ischar>) || (<act.isplayer>) || (<act.tag0.unbardable>) || (<act.tag0.undiscordable>)	//fixme: should music just play? 
+  src.sysmessage A song of discord would have no effect on that.
+  return 1
+elseif (<act.findid.i_discorded>)
+  src.sysmessage that creature is already discorded.
+  return 1
+elseif (<act.isplayer>)
+  src.sound <ref1.tdata1>
+  return 1
+endif
+
+src.sound <ref1.tdata1>
+local.n=<eval (<act.tag0.base_difficulty>-<src.f_barding_modifers <act>>)>
+local.n=<eval ((((<src.Discordance>/10)-<local.n>)*2)+50)>
+if (<R1,100> > <local.n>)	//this should be difficulty based, figure the formula out
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+//serv.b <act>
+
+return 0
+
+
+ON=@Fail
+ref1=<actprv>
+timerf 0,src.sysmessage You play poorly, and there is no effect
+src.sound <ref1.tdata2>
+src.f_musical_instrument_damage
+
+ON=@Abort
+src.sysmessage You fail to complete the song.
+
+on=@success
+//serv.b <act>
+ref1=<actprv>
+src.f_discord_creature <act>
+src.sound <ref1.tdata1>
+src.sysmessage you play jarring music, suppressing your target's strength.
+src.f_musical_instrument_damage
+
+on=@gain
+src.skillgain musicianship
+
+[function f_discord_creature]
+ref1=<args>
+//serv.log <ref1.name>(<ref1>) discorded by <name>(<uid>)
+ref1.consume i_discorded
+serv.newitem i_discorded
+new.link=<uid>
+ref1.equip <new>
+new.more1=60*3
+
+[itemdef i_discorded]
+id=i_memory
+name=Discorded
+layer=layer_special
+type=t_eq_script
+
+on=@create
+timer=1
+
+on=@equip
+src.events=+e_discorded
+tag0.str=<src.str>
+tag0.maxhits=<src.maxhits>
+tag0.dex=<src.dex>
+tag0.maxstam=<src.maxstam>
+tag0.int=<src.int>
+tag0.maxmana=<src.maxmana>
+tag0.wrestling=<src.wrestling>
+tag0.tactics=<src.tactics>
+tag0.magicresistance=<src.magicresistance>
+tag0.anatomy=<src.anatomy>
+tag0.poisoning=<src.poisoning>
+tag0.healing=<src.healing>
+tag0.magery=<src.magery>
+tag0.evaluatingintel=<src.evaluatingintel>
+tag0.meditation=<src.meditation>
+tag0.taming=<src.taming>
+tag0.val=<eval (<link.Discordance>/10)/5>	//drop their stats/skills
+src.str -= <muldiv <tag0.val>,<src.str>,100>
+src.hits -= <muldiv <tag0.val>,<src.maxhits>,100>
+src.maxhits -= <muldiv <tag0.val>,<src.maxhits>,100>
+src.dex -= <muldiv <tag0.val>,<src.dex>,100>
+src.stam -= <muldiv <tag0.val>,<src.maxstam>,100>
+src.maxstam -= <muldiv <tag0.val>,<src.maxstam>,100>
+src.int -= <muldiv <tag0.val>,<src.int>,100>
+src.mana -= <muldiv <tag0.val>,<src.maxmana>,100>
+src.maxmana -= <muldiv <tag0.val>,<src.maxmana>,100>
+src.wrestling -= <muldiv <tag0.val>,<src.wrestling>,100>
+src.tactics -= <muldiv <tag0.val>,<src.tactics>,100>
+src.magicresistance -= <muldiv <tag0.val>,<src.magicresistance>,100>
+src.anatomy -= <muldiv <tag0.val>,<src.anatomy>,100>
+src.poisoning -= <muldiv <tag0.val>,<src.poisoning>,100>
+src.healing -= <muldiv <tag0.val>,<src.healing>,100>
+src.magery -= <muldiv <tag0.val>,<src.magery>,100>
+src.evaluatingintel <muldiv <tag0.val>,<src.evaluatingintel>,100>
+src.meditation -= <muldiv <tag0.val>,<src.meditation>,100>
+src.taming -= <muldiv <tag0.val>,<src.taming>,100>
+
+on=@timer
+if (<topobj.distance <link>> > 15) || !(<topobj.canseelos <link>>)	//lost line of sight
+  link.sysmessage You have broken line of sight with your target.
+  remove
+  return 1
+elseif  (<more1> <= 0) || !(<topobj.isonline>)		//expired, target gone, or offline
+  remove
+  return 1
+endif
+
+topobj.effect=3,0376a,6,25,0
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.events=-e_discorded
+src.str += <muldiv <tag0.val>,<tag0.str>,100>
+src.hits += <muldiv <tag0.val>,<tag0.maxhits>,100>
+src.maxhits += <muldiv <tag0.val>,<tag0.maxhits>,100>
+src.dex += <muldiv <tag0.val>,<tag0.dex>,100>
+src.stam += <muldiv <tag0.val>,<tag0.maxstam>,100>
+src.maxstam += <muldiv <tag0.val>,<tag0.maxstam>,100>
+src.int += <muldiv <tag0.val>,<tag0.int>,100>
+src.mana += <muldiv <tag0.val>,<tag0.maxmana>,100>
+src.maxmana += <muldiv <tag0.val>,<tag0.maxmana>,100>
+src.wrestling += <muldiv <tag0.val>,<tag0.wrestling>,100>
+src.tactics += <muldiv <tag0.val>,<tag0.tactics>,100>
+src.magicresistance += <muldiv <tag0.val>,<tag0.magicresistance>,100>
+src.anatomy += <muldiv <tag0.val>,<tag0.anatomy>,100>
+src.poisoning += <muldiv <tag0.val>,<tag0.poisoning>,100>
+src.healing += <muldiv <tag0.val>,<tag0.healing>,100>
+src.magery += <muldiv <tag0.val>,<tag0.magery>,100>
+src.evaluatingintel <muldiv <tag0.val>,<tag0.evaluatingintel>,100>
+src.meditation += <muldiv <tag0.val>,<tag0.meditation>,100>
+src.taming += <muldiv <tag0.val>,<tag0.taming>,100>
+if (<src.ischar>)
+  src.attack <link>
+endif
+
+[events e_discorded]
+
+[EOF]

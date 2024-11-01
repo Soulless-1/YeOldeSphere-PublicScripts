@@ -1,0 +1,184 @@
+//Automated Event System by Soulless
+//v0.1
+//10:35 AM 7/7/2022
+
+//INSTALLATION
+//you need to add this event to all players
+//make sure you place the aredef below this at the bottom of your sphere_map3.scp
+//[areadef a_event_arena]
+//name=event arena
+//p=2347,1127,-69,3
+//group=automated events
+//flags=region_flag_nobuilding|region_antimagic_recall_in|region_antimagic_gate|region_antimagic_recall_out
+//rect=2339,1157,2394,1098,3
+
+[defname automated_event_system]
+automated_event_message_color		044			//what color will messages be in
+automated_event_staging_area		6623,295,0,0		//where players will go to signup/join the event before it starts
+automated_event_sound_begin		523			//sound everyone will hear when an event starts
+automated_event_sound_progress		250			//sound everyone will hear when they make progress during an event
+automated_event_sound_suspense		251			//sound everyone will hear when a suspensful moment happens during the event
+automated_event_sound_fail		245			//sound everyone will hear when they fail the event
+automated_event_sound_finish		247			//sound everyone will hear when they finish the event
+automated_event_exit_location		6623,295,0,0		//location where people will go after the event is complete
+automated_event_exit_location_evil	6623,295,0,0		//location where evil people will go after the event is complete
+automated_event_signup_period		900			//how long in seconds is the signup period window
+
+automated_event_staging_gate_location0		1416,1700	//britain bank
+automated_event_staging_gate_location1		2881,3469,15	//serpents hold bank
+automated_event_staging_gate_location2		2718,2168	//buccaneers den bank
+automated_event_staging_gate_location3		2268,1235	//cove bank
+automated_event_staging_gate_location4		1395,3789	//jhelom bank
+automated_event_staging_gate_location5		3723,2158,20	//magincia bank
+automated_event_staging_gate_location6		2515,568	//minoc bank
+automated_event_staging_gate_location7		4482,1175	//moonglow bank
+automated_event_staging_gate_location8		3779,1308	//nujelm bank
+automated_event_staging_gate_location9		3678,2512	//ocllo bank
+automated_event_staging_gate_location10		609,2140	//skarabrae bank
+automated_event_staging_gate_location11		1911,2678	//trinsic bank
+automated_event_staging_gate_location12		2894,690	//vesper bank
+automated_event_staging_gate_location13		652,836		//yew bank
+automated_event_staging_gate_location14		5256,3986,37	//deluca bank
+automated_event_staging_gate_location15 	5684,3140,-5	//papua bank
+automated_event_staging_gate_location16		1378,1499,10	//britain graveyard
+automated_event_staging_gate_location17		1295,3714	//jhelom graveyard
+automated_event_staging_gate_location18		3533,1156,20	//nujelm graveyard
+automated_event_staging_gate_location19		2786,863	//vesper graveyard
+automated_event_staging_gate_location20		722,1142	//yew graveyard
+automated_event_staging_gate_location21		2446,1124,5	//cove graveyard
+automated_event_staging_gate_location22		4551,1338,8	//moonglow graveyard
+
+//These are individual automated events and their settings
+automated_event_0_name			Deathmatch
+automated_event_0_teams			0		//how many teams?
+automated_event_0_type			1		//1=DM, 2=TDM, 3=CTF, 4=KOTH, 5=OTHER
+automated_event_0_location		6616,475,0,0	//start location 
+automated_event_0_respawn		6616,475,0,0	//respawn location, 0=no respawns
+automated_event_0_minplayers		2		//minimum amount players to start
+automated_event_0_scorepoints		1		//points per kill/capture
+automated_event_0_victorypoints		20		//points for player/team to win
+automated_event_0_captureitem		0		//item that needs to be taken back to the base
+automated_event_0_expires		60		//how many minutes till the event expires
+automated_event_0_supplies		0		//supplies players are given at the start and when respawning
+automated_event_0_equipment		0		//equipment players are given at the start of the event	
+automated_event_0_bankallitems		0		//bank everything the player has at the begining of the event?
+automated_event_0_mounts		0		//allow players to mount pets?
+automated_event_0_potions		1		//allow potions?
+automated_event_0_bandages		1		//allow bandages?
+automated_event_0_hiding		0		//allow hiding, stealth, and invisibility?
+automated_event_0_spells		1		//allow spells?
+automated_event_0_polymorph		1		//allow polymorph?
+automated_event_0_summons		0		//allow summons?
+automated_event_0_aoespells		1		//allow area of effect spells?
+automated_event_0_fieldspells		1		//allow field spells?
+automated_event_0_teleport		0		//allow teleport?
+
+automated_event_1_name	
+
+[comment]
+automated_event_1_name			Team Deathmatch
+automated_event_2_name			Capture the Flag
+automated_event_3_name			King of the Hill
+automated_event_4_name			Juggernaut
+automated_event_5_name			Last Man Standing
+automated_event_6_name			1v1 Tournament
+automated_event_7_name			2v2 Tournament
+
+
+[regiontype r_event_arena]		//this adds the event to players who enter, and removes it from those who leave
+
+ON=@Enter
+ref1=<uid>
+if (<var0.automated_event_active> != -1)		//deathmatch event is active
+  src.events=+e_automated_events
+endif
+
+on=@exit	
+src.events=-e_automated_evented_deathmatch
+
+[events e_automated_events]	
+
+on=@itemdclick
+local.event=<dvar0.automated_event_active>
+if !(<def0.automated_event_<dlocal.event>_potions>) && (<act.type>==t_potion)
+  src.sysmessage @<def0.automated_event_message_color> Potions are not allowed during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_bandages>) && (<act.type>==t_bandage)
+  src.sysmessage @<def0.automated_event_message_color> Bandages are not allowed during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_mounts>) && ((<act.type>==t_ethereal_statuette) || (<act.type>==t_figurine))
+  src.sysmessage @<def0.automated_event_message_color> Mounts are not allowed during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_hiding>) && (<act.type>==t_potion) && !(strcmpi(<act.more1>,s_invisibility))
+  src.sysmessage @<def0.automated_event_message_color> invisibility potions are not permitted during this event.
+  return 1
+endif
+
+on=@mount
+local.event=<dvar0.automated_event_active>
+serv.b <local.event> <dvar0.automated_event_active> <def0.automated_event_<dlocal.event>_mounts>
+if !(<def0.automated_event_<dlocal.event>_mounts>)
+  src.sysmessage @<def0.automated_event_message_color> Mounts are not allowed during this event.
+  return 1
+endif
+
+on=@skillstart
+local.event=<dvar0.automated_event_active>
+if !(<def0.automated_event_<dlocal.event>_hiding>) && ((<argn>==21) || (<argn>==47))		//hiding & stealth
+  src.sysmessage @<def0.automated_event_message_color> Hiding is not permitted during this event.
+  return 1
+endif
+
+on=@spellselect
+local.event=<dvar0.automated_event_active>
+if !(<def0.automated_event_<dlocal.event>_spells>)
+  src.sysmessage @<def0.automated_event_message_color> Spells are not allowed during this event.
+  return 1
+elseif (<argn1>==32) || (<argn1>==45) || (<argn1>==52) 	// recall, mark, and gate travel 
+  src.sysmessage @<def0.automated_event_message_color> <serv.spell.<argn1>.name> is forbidden during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_hiding>) && (<argn1>==44)
+  src.sysmessage @<def0.automated_event_message_color> Hiding is not permitted during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_polymorph>) && (<argn1>==56)
+  src.sysmessage @<def0.automated_event_message_color> Polymorph is not allowed during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_summons>) && ((<argn1>==33) || (<argn1>==40) || (<argn1>==58) || (<argn1>==60) || (<argn1>==61) || (<argn1>==62) || (<argn1>==63) || (<argn1>==64))
+  src.sysmessage @<def0.automated_event_message_color> Summoning is not allowed during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_aoespells>) && ((<argn1>==46) || (<argn1>==54))
+  src.sysmessage @<def0.automated_event_message_color> Mass spells are not allowed during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_fieldspells>) && ((<argn1>==24) || (<argn1>==28) || (<argn1>==34) || (<argn1>==39) || (<argn1>==47) || (<argn1>==50))
+  src.sysmessage @<def0.automated_event_message_color> Field spells are not allowed during this event.
+  return 1
+elseif !(<def0.automated_event_<dlocal.event>_teleport>) && (<argn1>==22) 
+  src.sysmessage @<def0.automated_event_message_color> Teleport is not allowed during this event.
+  return 1
+endif
+
+on=@death
+local.event=<dvar0.automated_event_active>
+local.eventname=<def0.automatd_event_<dvar0.automated_event_active>_name>
+ref1=<attacker.max>
+if (<ref1.isvalid>)
+  f_automated_event_notify <ref1.name> killed <name>! <ref1.dtag0.automated_event_points>/<ddef0.automated_event_<dlocal.event>_victorypoints>
+  ref1.f_automated_event_point_gain <def0.automated_event_<dlocal.event>_scorepoints>
+endif
+f_automated_event_refresh_player			//refresh all stats/debuffs/buffs/supplies(where permitted)/equipment durability
+sound <def0.automated_event_sound_suspense>		//silly noise
+attacker.clear						//clear all attackers for next respawn
+go <def0.automated_event_<dlocal.event>_location>	//this should be handled in an array of positions, or spawnpoint items "forinstances'
+  dorand 8
+    move nw 7
+    move n 10
+    move ne 7
+    move e 10
+    move se 7
+    move s 10
+    move sw 7
+    move w 10
+  enddo
+return 1
+
+[EOF]

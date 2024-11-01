@@ -1,0 +1,94 @@
+//Quest type = more1
+//if more1=n progress tracking = this way
+//
+
+////////////////////////////////
+// general event for quest npcs
+
+
+
+[events e_quest_npc]
+
+on=@click
+message @030 [Quest Giver]
+
+on=@dclick
+if (<distance <src>> > 10)
+  src.sysmessage You should get closer to speak with them.
+  return 1
+endif
+
+if (<findid.i_quest_escort_following>) && (<findid.i_quest_escort_following.link> != <src>)
+  src.sysmessage They are currently busy with someone else.
+  return 1
+endif
+
+//check for deliverables, skip the main dialog if one is found
+ref1=<src.f_quest_delivery_check <baseid>>		//look for things addressed to the NPC
+if (<ref1>)		//we found something to receive and set ref1 to quest memory
+  for 1 <ref1.tag0.quest<ref1.dcolor>_objectiveamount>
+    args=<ref1.tag0.quest<ref1.dcolor>_objective<dlocal._for>>	//type,itemdef,amount
+    //if (<argv[0]>==3)	//i dont think thi sis needed
+      src.ctag0.quest=<ref1.dcolor>
+      sdialog d_quest_offer
+      return 1
+    //endif
+  endfor
+endif
+
+src.ctag0.quest=	//always make them select a quest after talking to an NPC
+sdialog d_quest_offer
+return 0	
+
+on=@npcseenewplayer
+if (<findid.i_quest_escort_following>)
+  return 0
+endif
+dorand 13
+  message Hey, could you help me out with something? 
+  message You there! Yes you. Stop looking about like a toadie and come here.
+  message Hey tough guy! I have a job, but I doubt you are up too it.  It requires someone far braver then you.
+  message You there, in the stupid hat! Come here.
+  message Excuse me! I’m sorry to interrupt but I urgently need some assistance. 
+  message Pardon me, but if you could spare some time I’d greatly appreciate it.
+  message Might you lend a troubled soul some assistance?
+  message Help! I need somebody! Won’t you please, please help me!
+  message Greetings seeker. I have an urgent matter for you, if you are willing. 
+  message Oh great adventurer, would you please assist a weak soul in need of aid?
+  message Excuse me please traveler, might I have a little of your time?
+  message Hey, could you help me out with something? 
+  message You busy?
+enddo
+
+on=@death
+args=<def0.quest<dtag0.quest>_objective>	
+if !(strcmpi(<argv[0]>,escort))
+  ref1=<tag0.escort>
+  ref1.f_quest_escort_end <uid>
+  ref1.sysmessage The person you were escorting has been slain!
+endif
+
+[events e_quest_player]		//we only need this for kills honestly
+
+on=@kill		//we have to track kills somehow for quests	//we could use this style for delivery types also
+ref1=<uid>
+ref2=<argo>
+forcharlayer 30		
+  if (<baseid>==i_quest_tracker)	//check all quest memories
+    ref3=<uid>
+    local.q=<color> 
+    for n 1 <ref3.tag0.quest<dlocal.q>_objectiveamount> 	//check the objectives
+      args=<ref3.tag0.quest<dlocal.q>_objective<dlocal.n>>
+      if (<argv[0]> == 2) && (<ref3.tag0.quest<dlocal.q>_objective<dlocal.n>_count>)	//slay type objective? kills left on it? 	
+        if !(strcmpi(<ref2.baseid>,<argv[1]>)) 					//matches my kill?
+          ref3.tag0.quest<dlocal.q>_objective<dlocal.n>_count -= 1
+          //serv.log <ref3.name> <ref3.tag0.quest<dlocal.q>_objective<dlocal.n>_count> left to kill
+        endif
+      endif
+    endfor
+  endif
+endfor
+
+[EOF]
+
+

@@ -1,0 +1,88 @@
+
+[events e_generic_char]
+
+on=@click		//guild, faction, and other overhead tags for chars
+if (<tag0.faction>) && !(<flags>&statf_incognito) && !(<findid.i_disguise_kit_incognito>)
+  if (<f_faction_isleader>)
+    message @<qval <f_faction_isally <src>>?05d:027>,0,1 (Commanding Lord of the <def0.faction_<dtag0.faction>> Faction)
+  elseif (!<isempty <tag.faction_officer>>)
+    args=<tag0.faction_officer>
+    message @<qval <f_faction_isally <src>>?05d:027>,0,1 (The <argv[2]> of <uid.<argv[0]>.region.name>, <def0.faction_<dtag0.faction>>)
+  else
+    local.title=<qval (<npc>)?Guard:<tag0.faction_title>>
+    message @<qval <f_faction_isally <src>>?05d:027> (<local.title>, <def0.faction_<dtag0.faction>>)
+  endif
+endif
+
+on=@regenstat
+if (<local.statid>==0)
+  if (<tag0.healthregen>) 
+    local.value += <tag0.healthregen>
+  endif
+endif
+if (<local.statid>==1)
+  if (<mana> < <maxmana>) && !(<R5>)
+    skillgain meditation		//passive meditation gain
+  endif
+endif
+if (<local.statid>==3)
+  regenhits=<f_health_regen_rate>
+  if (<food> <= 0)
+    sysmessage You are starving.
+  endif
+endif
+
+on=@personalspace
+ref1=<uid>
+if (<ref1.owner>) && !(<ref1.owner.npc>)
+  ref1=<ref1.owner>
+endif
+if (<owner>==<src>) || ((<ref1.tag0.young>) && !(<src.tag0.young>)) || (!(<ref1.tag0.young>) && (<src.tag0.young>)) 	//owner can always pass through pets
+  argn1=0	//0 stamina required
+  argn2=1	//allow char to push through
+endif
+
+on=@stepstealth
+if (<mount>)		//cannot ride a mount while stealthed
+  reveal
+elseif (<tag0.heavy_armor> >= 3)	//you cannot have too much heavy armor while stealthed
+  reveal
+endif
+
+//on=@spellcast
+//local.castdelay=25		//increase the cast time by this value
+//argn3 += <muldiv <local.castdelay>,<argn3>,100>
+
+on=@SpellInterrupt
+//ARGN1 = Spell being casted.
+//ARGN2 = The disturb chance calculated: 0-1000. (Internally, this number is compared against a random of 1000)
+//RETURN 1 cancels the interruption and allows the target (SRC) to cast.
+ref1=<uid>
+if (<ref1.isvalid>) && (<ref1.ischar>) && (<ref1.action> != magery)	//magery always disrupts a spell
+  if (<src.wrestling> > 0) || (<src.tactics> > 0)
+    float.chance=<floatval ((<src.wrestling>/(<src.wrestling>+<ref1.tactics>))*100)>
+    local.chance=<feval <float.chance>>
+    local.chance=<qval ((<src.npc>) && (<local.chance> < 50))?50:<local.chance>>)
+    //serv.b <local.chance>
+    if (<R1,100> < <local.chance>)
+      return 1
+    endif
+  endif
+  src.say @0482,3,0,0 *spell fizzles*
+endif
+
+on=@deathcorpse
+ref1=<uid>
+ref2=<argo>
+for n <eval (<ref1.attacker>-1)> 0
+  ref3=<ref1.attacker.<dlocal.n>>
+  if (<ref1.attacker.<dlocal.n>.dam> >= 1)
+    if (<ref3.npc>) & (<ref1.owner>) 		//an NPC with an owner, so tag the owner instead
+      ref3=<ref3.owner>
+    endif 
+    ref2.tag0.killers .= ,<ref3>
+    //serv.log <ref3.name>(<ref3>) being added to <ref2.name>(<ref2>) as a looter. : <ref2.tag0.killers>
+  endif
+endfor
+
+[EOF]

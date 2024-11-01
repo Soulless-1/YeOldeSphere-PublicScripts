@@ -1,0 +1,552 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2007
+//www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions 
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// NOTE: This is loaded 2nd after SPHERE.INI watch out for order of dependancies ! (keyword DEFNAME)
+VERSION=0.56
+
+[RESOURCES]
+// sphere.ini and spheretable.scp are automatic.
+// All the other scripts we want to load.
+scripts/sphere_defs.scp
+scripts/types/
+scripts/sphere_book.scp
+scripts/sphere_backward_compatibility.scp
+scripts/sphere_events_human.scp
+scripts/sphere_events_npcs.scp
+scripts/npcs/
+scripts/sphere_admin.scp
+//scripts/dialogs/   //<---- this should be loaded later incase we override things
+scripts/items/sphere_item_resources.scp
+scripts/items/
+scripts/items/colored armaments/
+//scripts/items/new expac items/		//don't load this unless you need new era items
+scripts/systems/factions/s_faction_events.scp	
+// -----------------------------------
+scripts/sphere_region.scp
+// -----------------------------------
+//          	Maps
+// -----------------------------------
+scripts/maps/felucca/
+scripts/maps/trammel/
+//scripts/maps/ilshenar/
+//scripts/maps/malas/
+//scripts/maps/tokuno/
+//scripts/maps/termur/
+// -----------------------------------
+scripts/sphere_menu.scp
+scripts/sphere_name.scp
+scripts/skillmenus/
+scripts/sphere_spawns.scp
+scripts/sphere_speech.scp
+scripts/skills/
+scripts/skills/combat/
+scripts/skills/crafting/
+scripts/skills/gathering/
+scripts/skills/magic/
+scripts/sphere_skillclasses.scp
+//scripts/sphere_spells.scp
+scripts/spells/custom/
+scripts/spells/magery/
+scripts/spells/magery/first circle/
+scripts/spells/magery/second circle/
+scripts/spells/magery/third circle/
+scripts/spells/magery/fourth circle/
+scripts/spells/magery/fifth circle/
+scripts/spells/magery/sixth circle/
+scripts/spells/magery/seventh circle/
+scripts/spells/magery/eighth circle/
+//scripts/spells/necromancy/		//dont load this unless we have AOS era items
+scripts/sphere_newb.scp
+scripts/sphere_template.scp
+scripts/sphere_template_loot.scp
+scripts/sphere_template_vend.scp
+scripts/sphere_triggers.scp
+scripts/sphere_serv_triggers.scp
+scripts/speech/
+// -----------------------------------
+//          Stone systems
+// -----------------------------------
+scripts/stones/
+scripts/stones/guilds/
+scripts/stones/towns/
+// -----------------------------------
+// -----------------------------------
+//		Custom	
+// -----------------------------------
+
+scripts/dialogs/ 
+
+scripts/items/custom/
+scripts/npcs/custom/
+
+scripts/events/
+
+scripts/functions/
+scripts/functions/function package/
+
+scripts/systems/
+scripts/systems/automated events/
+scripts/systems/bulk orders/
+scripts/systems/champions/
+scripts/systems/crafting/
+scripts/systems/donations/
+scripts/systems/factions/
+scripts/systems/huntsman/
+scripts/systems/housing/
+scripts/systems/loot generator/
+scripts/systems/npc guilds/
+scripts/systems/npc variants/
+scripts/systems/npcai/
+scripts/systems/player vendors/
+scripts/systems/questing/
+scripts/systems/sos fishing/
+scripts/systems/treasure maps/
+scripts/systems/virtues/
+scripts/systems/worldgen/
+scripts/systems/worldgen/spawns/
+scripts/systems/worldgen/spawns/felucca/
+scripts/systems/worldgen/spawns/trammel/
+scripts/systems/worldgen/spawns/ilshenar/
+scripts/systems/worldgen/spawns/malas/
+scripts/systems/worldgen/spawns/tokuno/
+scripts/systems/worldgen/spawns/termur/
+scripts/systems/worldgen/decoration/
+scripts/systems/worldgen/decoration/felucca/
+scripts/systems/worldgen/decoration/ilshenar/
+scripts/systems/worldgen/decoration/malas/
+scripts/systems/worldgen/decoration/misc/
+scripts/systems/worldgen/decoration/termur/
+scripts/systems/worldgen/decoration/tokuno/
+scripts/systems/worldgen/decoration/trammel/
+
+scripts/other/
+
+
+[OBSCENE]
+wolfpussy
+
+
+
+[comment CHECK THIS LIST, IT CAN DELETE ACCOUNTS!!!]
+fuck		//canonical form
+cunt
+chink
+motherfucker
+coon
+shit
+retard
+faggot
+fudge packer
+nigger
+jiggaboo
+kike
+diddle
+niggers
+penis
+porch monkey
+queer
+raghead
+monkey
+slant eye
+spic
+spook
+ass
+towelhead
+wetback
+bum
+camel jockey
+china virus
+chingchong
+cock
+cotton picker
+cum
+darky
+dick
+dyke
+flamer
+gay
+gook
+homosexual
+jap
+jew
+jizz
+negro
+muff
+niggger
+pussy
+retarded
+shemale
+snatch
+tranny
+beaner
+butt
+carpet muncher
+coot
+dothead
+bitch
+knob
+ku kluxer
+ladyboy
+mongrel
+paki
+sausage jockey
+tar-baby
+animal fucker	//variations?
+assfvck3r
+butt fucker
+buttfucker
+buttfuckers
+c*nt
+c*ntface
+ch1nk
+chink
+chinky
+cocksucking mothafuckers
+coon
+coon1es
+coonies
+cunt lick
+cunt licker
+cuntbag
+cuntlick
+cuntness
+darkshit
+darktard
+dog fucker
+dune coon
+f@gg0t
+f@ggot
+f@gs
+fag0t
+faget
+fagg0t
+fagging
+faggot mofoes
+faggot mothafuckers
+faggot nob jokeys
+faggot nobjockies
+faggot son-of-a-bitch
+faggoting
+faggots
+faggs
+faggy
+fags
+fagshit
+fucking retard
+fudgefucker
+fudgepackershitter
+fudgepacking fucker
+higgers
+jiggaboo
+jiggaboos
+jiggabu
+jigger
+jiggerboos
+jiggyboo
+k!ke
+k..!ke
+k1k3
+kid diddler
+kike
+kikes
+kyke
+m@derfuck
+m0thafucked
+m0thafucker
+m0therfucking
+m0therfvcker
+mecha fag
+mfukk
+motha fuckers
+mothafuccer
+mothafuccing
+mothafuckasses
+mothafuckazzes
+mothafucker
+mothafucking
+mother fucker
+mother fuckers
+mother fucking
+motherfckin
+motherfcking
+motherfuccas
+motherfuccers
+motherfucked
+motherfuckeds
+motherfucker
+motherfuckka
+motherfuckkas
+motherfuckkers
+motherfucks
+motherfukka
+motherfukker
+motherfvcker
+mothter fuck
+mtherfuker
+muddafukkas
+muthafeckers
+muthafuckers
+muthafuckings
+muthafuckker
+muthafukka
+n1g3r
+n1g3rz
+n1gg@
+n1gg3r
+n1gg3rs
+n1ggahs
+n1ggas
+n1ggazes
+n1gger
+n1ggers
+nicker
+nickk3r
+nickker
+nig
+nigasses
+nigers
+nigg3r
+nigg3rs
+nigg4h
+nigga lover
+niggahz
+nigger
+nigger lover
+niggers
+niggerz
+niggir
+niggress
+nigguhs
+nigguhz
+niglet
+nignigs
+nigre
+nikk3r
+nikkas
+p3nisfcker
+penisfcker
+penisfucker
+penisfuckers
+penisfvcker
+phaggots
+phagot
+phags
+pigfuckers
+piggyfuck
+piss off fuckhead
+porch monkey
+queerasses
+raghead
+ragtard
+rice monkey
+sand nigger
+sl@nteye
+slanteye
+slanteyes
+slanteyeshit
+spic
+spicfuck
+spicshit
+spik
+spix
+spook
+tard asses
+timber nigger
+towelhead
+towelheads
+wetback
+
+[FAME]
+0,2000,6000
+Anonymous
+Known
+Famous
+
+[KARMA]
+-10000,-6000,-2000,2001,6001
+Wicked
+Belligerent
+Neutral
+Kindly
+Goodhearted
+
+[NOTOTITLES] // NotoTitles
+10000,5000,1250,625,-624,-625,-1250,-2500,-5000,-10000    // karma levels
+1250,2500,5000,10000                                    // fame levels
+
+// highest karma
+Trustworthy
+Estimable
+Great
+Glorious
+Glorious
+
+Honest
+Commendable
+Famed
+Illustrious
+Illustrious
+
+Good
+Honorable
+Admirable
+Noble
+Noble
+
+Kind
+Respectable
+Proper
+Eminent
+Eminent
+
+Fair
+Upstanding
+Reputable
+Distinguished
+Distinguished
+
+<none>
+Notable
+Prominent
+Renowned
+Renowned
+
+Rude
+Disreputable
+Notorious
+Imfamous
+Dishonored
+
+Unsavory
+Dishonorable
+Ignoble
+Sinister
+Sinister
+
+Scoundrel
+Malicious
+Vile
+Villainous
+Dark
+
+Despicable
+Dastardly
+Wicked
+Evil
+Evil
+
+Outcast
+Wretched
+Nefarious
+Dread
+Dread
+
+
+[RUNES]
+An
+Bet
+Corp
+Des
+Ex
+Flam
+Grav
+Hur
+In
+Jux
+Kal
+Lor
+Mani
+Nox
+Ort
+Por
+Quas
+Rel
+Sanct
+Tym
+Uus
+Vas
+Wis
+Xen
+Ylem
+Zan
+
+[PLEVEL 1]	// extra player commands.
+AFK
+WHERE
+HUNGRY
+SUICIDE
+SELF
+LAST
+HELP
+PASSWORD
+EMAIL
+HELPPAGE
+
+[PLEVEL 2]	// extra counselor commands.
+TELE
+CAST
+ANIM
+DETAIL
+SLEEP
+UNDERWEAR
+BARK
+FIX
+RESEND
+INFO
+PAGE
+GO
+XGO
+JAIL
+FORGIVE
+
+[PLEVEL 3]
+CHARLIST
+
+[PLEVEL 4]
+ACTION
+BADSPAWN
+SAVE
+LINK
+TILE
+NUKE
+GOTYPE
+
+[PLEVEL 6]
+ACCOUNT
+SETPRIV
+DIALOG
+BLOCKIP
+TOME
+EXTRACT
+UNEXTRACT
+EXPORT
+IMPORT
+SERV.CLEARVARS
+ADMIN	//plevel 1
+GONAME	//plevel 2
+GOUID	//plevel 3
+GOCHAR	//plevel 3
+GOSOCK	//plevel 3
+GOCLI	//plevel 3
+
+[PLEVEL 7]
+SRC
+OBJ
+NEW
+DB
+FILE
+TRY
+TRYP
+TRYSRC
+TRYSRV
+PLEVEL
+SERV.MYSQLPASSWORD
+
+[EOF]
+

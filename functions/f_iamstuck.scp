@@ -1,0 +1,112 @@
+//Iamstuck by Soulless
+//v1.0
+//8:43 PM 8/8/2018
+
+[defname iamstuck_settings]
+iamstuck_location_0	Britain,1390,1721,10,0
+iamstuck_location_1	Ocllo,3655,2496,0,0
+iamstuck_location_2	Trinsic,1892,2747,21,0
+iamstuck_location_3	Vesper,2858,752,1,0
+iamstuck_location_4	Minoc,2501,581,0,0
+iamstuck_location_5	Yew,632,902,0,0
+iamstuck_location_6	Cove,2222,1133,0,0
+iamstuck_location_7	Buccaneer's Den,2751,2167,-2,0
+
+[plevel 1]
+iamstuck
+
+[function iamstuck]
+ref1=<findid.i_stuck_player>
+if (<findid.i_faction_town_sigil>)
+  sysmessage That command is restricted while carrying a sigil.
+  return 1
+elseif (<flags>&statf_stone) || (<isjailed>) || (<isevent.e_automated_events>)
+  sysmessage You cannot use that command right now.
+  return 1
+elseif (<ref1.isvalid>) && !(<src.isgm>)
+  if (<ref1.more1>)
+    sysmessage You are already awaiting teleportation via the .iamstuck command.
+  else
+    sysmessage You cannot use the .iamstuck command so soon again
+  endif
+  return 1
+endif
+sdialog d_iamstuck
+
+[dialog d_iamstuck]
+
+250,200
+
+page 0
+
+resizepic 0 0 9200 240 240
+resizepic 10 10 9350 220 220
+
+dtext 70 15 1263 Stuck Player Menu
+
+while !(<isempty <def.iamstuck_location_<dlocal.n>>>)
+  args=<def0.iamstuck_location_<dlocal.n>>
+  radio 40 <eval 40+(17*<local.n>)> 210 211 0 <eval <local.n>+1>
+  dtext 65 <eval 40+(17*<local.n>)> 1000 <argv[0]>
+  local.n += 1
+endwhile
+
+button 85 200 247 248 1 0 1
+
+[dialog d_iamstuck button]
+
+onbutton=1
+ref1=<findid.i_stuck_player>
+if (<findid.i_faction_town_sigil>)
+  sysmessage That command is restricted while carrying a sigil.
+  return 1
+elseif (<flags>&statf_stone) || (<isjailed>)
+  sysmessage You cannot use this command in your current state.
+  return 1
+elseif (<argchkid> == -1)
+  sysmessage You must select a location.
+  return 1
+elseif (<ref1.isvalid>) && !(<src.isgm>)
+  if (<ref1.more1>)
+    sysmessage You are already awaiting teleportation via the .iamstuck command.
+  else
+    sysmessage You cannot use the .iamstuck command so soon again
+  endif
+  return 1
+endif
+args=<def0.iamstuck_location_<eval (<argchkid>-1)>>
+consume i_stuck_player
+serv.newitem i_stuck_player
+new.morep=<argv[<eval (<argv>-4)>]>,<argv[<eval (<argv>-3)>]>,<argv[<eval (<argv>-2)>]>,<argv[<argv>]>
+new.more1=<R150,300>
+new.timer=1
+equip <new>
+//flags |= statf_freeze
+nomove <new.more1>
+message You will be teleported to <argv[0]> with the next 5 minutes.
+
+[itemdef i_stuck_player]
+defname=i_stuck_player
+name=Stuck Player
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if !(<more>)
+  remove
+else
+  topobj.message <dmore1>
+  more1 -= 1
+  timer=1
+  if (<more1> == 0)
+    //topobj.flags &= ~ statf_freeze
+    topobj.nomove 0
+    topobj.go <morep>
+    timer=30*60		//30 min cooldown
+    name=Iamstuck Cooldown
+  endif
+endif
+return 1  
+
+[EOF]

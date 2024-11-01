@@ -1,0 +1,52 @@
+//All function overrides should be placed in here
+
+[function f_oncommand]
+
+//if (<account.plevel> <= <serv.CommandLog>)
+  //if (<f_loggable_command <args>>)	//custom logging to exclude certain commands that are often spammed	
+    //serv.log '<account.name>' commands '<args>'
+  //endif
+//endif
+
+if (<account.plevel> >= 2)	//log all GM commands
+  serv.f_writefile logs/gmcommands<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M> '<account.name>' commands '<args>'
+endif
+
+if (<isjailed>) && (<account.plevel> <= 1)
+  sysmessage Jailed players cannot use functions.
+  return 1  	//no functions at all for jailed players
+endif
+
+if (<account.plevel> >= 4)		//THESE ARE GM FUNCTIONS AND SHOULD ONLY BY USED BY GMS
+
+  if (strmatch("page*","<args>"))	//new page system
+    page2
+    return 1
+
+  elseif (strmatch("invis*","<args>"))
+    f_invis_effect <args>
+
+  elseif (strmatch("xshow account*","<args>"))
+    if (<src.account.plevel> < 6)	//only admins should be able to see account info
+      src.sysmessage You are not priviledged to do that.
+      return 1
+    endif
+
+  elseif !(strcmpi("info","<args>"))	//new information menu
+    infor
+    return 1
+
+  endif
+
+endif
+
+[function f_loggable_command]
+if !(strcmpi("bandageself","<args>")) || !(strcmpi("sac","<args>")) || !(strcmpi("sacall","<args>")) || !(strcmpi("usedoor","<args>")) || !(strcmpi("opendoor","<args>")) || !(strcmpi("closedoor","<args>")) || !(strcmpi("undress","<args>")) || !(strcmpi("dress","<args>")) 
+  return 0
+elseif (strmatch("chat*","<args>")) || (strmatch("emo*","<args>")) || (strmatch("castspell*","<args>")) || (strmatch("drink*","<args>"))
+  return 0
+endif
+return 1
+
+
+[EOF]

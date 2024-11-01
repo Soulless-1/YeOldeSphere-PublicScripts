@@ -1,0 +1,2318 @@
+//Pet Statues by Soulless
+//v1.0
+//3:43 PM 10/14/2023
+
+//simple writfile output all the current NPCs spawned in my world
+//template created in the same way
+
+
+[defname random_pet_statue]
+random_pet_statue={ random_pet_statuea 1 random_pet_statueb 1 random_pet_statuec 1 random_pet_statued 1 random_pet_statuee 1 random_pet_statuef 1 random_pet_statueg 1 random_pet_statueh 1 random_pet_statuei 1 random_pet_statuej 1 random_pet_statuek 1 random_pet_statuel 1 }
+random_pet_statuea={ i_statue_zombie 1 i_statue_skeleton 1 i_statue_bone_knight 1 i_statue_spectre 1 i_statue_horse_tan 1 i_statue_bear_polar 1 i_statue_ostard_forest 1 i_statue_ostard_frenzied 1 i_statue_llama 1 i_statue_swamp_dragon 1 i_statue_troll_w_axe 1 i_statue_orc 1 i_statue_troll_w_mace 1 i_statue_gazer 1  i_statue_troll 1 i_statue_ettin 1 i_statue_elem_air 1 }
+random_pet_statueb={ i_statue_kraken 1 i_statue_sea_serpent_deep 1 i_statue_daemon 1 i_statue_skeletal_mage 1 i_statue_lich 1 i_statue_gazer_elder 1 i_statue_dragon_green 1 i_statue_wraith 1 i_statue_Rotting_Corpse 1 i_statue_lich_lord 1 i_statue_drake_red 1 i_statue_mummy 1 i_statue_elem_water 1 i_statue_scorpion_giant 1 i_statue_elem_earth 1 i_statue_elem_dull_copper 1 }
+random_pet_statuec={ i_statue_elem_fire 1 i_statue_elem_blood 1 i_statue_sea_serpent 1 i_statue_imp 1 i_statue_hellhound 1 i_statue_fire_gargoyle 1 i_statue_gargoyle_stone 1 i_statue_balron 1 i_statue_gargoyle 1 i_statue_mongbat 1 i_statue_headless 1 i_statue_ratman_w_sword 1 i_statue_dolphin 1 i_statue_harpy 1 i_statue_lizardman 1 i_statue_ogre 1 i_statue_wisp 1 }
+random_pet_statued={ i_statue_skeleton_w_axe 1 i_statue_lizardman_spear 1 i_statue_pig 1 i_statue_sheep_woolly 1 i_statue_bear_brown 1 i_statue_boar 1 i_statue_jackrabbit 1 i_statue_bear_grizzly 1 i_statue_panther 1 i_statue_lich_ancient 1 i_statue_dragon_red 1 i_statue_elem_acid 1 i_statue_ratman 1 i_statue_reaper 1 i_statue_skeletonarcher 1 i_statue_lizardman_mace 1 }
+random_pet_statuee={ i_statue_cow_bw 1 i_statue_great_hart 1 i_statue_wolf_gray 1 i_statue_BIRD_JUNGLE 1 i_statue_bull_brown 1 i_statue_bear_black 1 i_statue_goat 1 i_statue_bird 1 i_statue_cougar 1 i_statue_elem_poison 1 i_statue_elem_snow 1 i_statue_icesteed 1 i_statue_elem_ice 1 i_statue_frost_troll 1 i_statue_ice_serpent 1 i_statue_frost_spider 1 i_statue_frostooze 1 }
+random_pet_statuef={ i_statue_ice_snake 1 i_statue_wyrm_white 1 i_statue_gazer_larva 1 i_statue_spider_giant 1 i_statue_corpser 1 i_statue_direwolf 1 i_statue_wolf 1 i_statue_BIRD_MAGPIE 1 i_statue_walrus 1 i_statue_SNOW_LEOPARD 1 i_statue_drake_gray 1 i_statue_ogre_lord_arctic 1 i_statue_Ratman_Mage 1 i_statue_orc_w_club 1 i_statue_ghoul 1 i_statue_horse_gray 1 }
+random_pet_statueg={ i_statue_wolf_white 1 i_statue_icefiend 1 i_statue_eagle 1 i_statue_BIRD_CROW 1 i_statue_rabbit 1 i_statue_bull_bw 1 i_statue_slime 1 i_statue_rat_giant 1 i_statue_Ratman_Archer 1 i_statue_rat 1 i_statue_cat 1 i_statue_dog 1 i_statue_hind 1 i_statue_hellcat 1 i_statue_horse_brown_dk 1 i_statue_BIRD_RAVEN 1 i_statue_BIRD_TROPICAL 1 }
+random_pet_statueh={ i_statue_Solen_Infiltrator_Warrior_red 1 i_statue_Solen_Infiltrator_Queen_Red 1 i_statue_orc_mage 1 i_statue_Shade 1 i_statue_juka_warrior 1 i_statue_juka_lord 1 i_statue_juka_mage 1 i_statue_iron_golem 1 i_statue_bone_magi 1 i_statue_skeleton_knight 1 i_statue_silver_serpent 1 i_statue_wyvern 1 i_statue_snake 1 i_statue_ogre_lord 1 i_statue_ostard_desert 1 }
+random_pet_statuei={ i_statue_serpent_giant 1 i_statue_bogling 1 i_statue_wyrm_shadow 1 i_statue_alligator 1 i_statue_rat_sewer 1 i_statue_chicken 1 i_statue_plague_beast 1 i_statue_bog_thing 1 i_statue_mongbat_arboreal 1 i_statue_wyrm_ancient 1 i_statue_cyclops 1 i_statue_orc_lord 1 i_statue_orc_scout 1 i_statue_orc_bomber 1 i_statue_orc_captain 1 }
+random_pet_statuej={ i_statue_Shadow_Fiend 1 i_statue_phoenix 1 i_statue_daemon_knight 1 i_statue_lava_lizard 1 i_statue_efreet 1 i_statue_firesteed 1 i_statue_lava_serpent 1 i_statue_lava_snake 1 i_statue_dread_spider 1 i_statue_bullfrog 1 i_statue_gorilla 1 i_statue_toad_giant 1 i_statue_ophidian_warrior 1 i_statue_swamp_tentacles 1 i_statue_plaguesteed 1 }
+random_pet_statuek={ i_statue_terathan_matriarch 1 i_statue_ophidian_matriarch 1 i_statue_terathan_avenger 1 i_statue_ophidian_archmage 1 i_statue_terathan_warrior 1 i_statue_ophidian_mage 1 i_statue_terathan_drone 1 i_statue_ophidian_knight 1 i_statue_gypsy_llama 1 i_statue_horse_brown_lt 1 i_statue_solen_worker_black 1 i_statue_harpy_stone 1 }
+random_pet_statuel={ i_statue_ant_lion 1 i_statue_solen_warrior_black 1 i_statue_orc_brute 1 i_statue_titan 1 i_statue_nightmare 1 i_statue_Whipping_Vine 1 i_statue_llama_supreme_evilness 1 i_statue_pixie 1 i_statue_wisp_Shadow 1 i_statue_ettin_lord 1 i_statue_arch_daemon 1 i_statue_red_death 1 i_statue_minotaur_tormented 1 i_statue_dread_horn 1}
+
+
+[itemdef i_statue_zombie]
+defname=i_statue_zombie
+name=Zombie Statue
+id=020ec
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Zombie Statue
+
+on=@create
+more2=c_zombie
+
+[itemdef i_statue_harpy]
+defname=i_statue_harpy
+name=Harpy Statue
+id=020dc
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Harpy Statue
+
+on=@create
+more2=c_harpy
+
+[itemdef i_statue_skeleton]
+defname=i_statue_skeleton
+name=Skeleton Statue
+id=020e7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Skeleton Statue
+
+on=@create
+more2=c_skeleton
+
+[itemdef i_statue_bone_knight]
+defname=i_statue_bone_knight
+name=Bone Knight Statue
+id=020e7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Bone Knight Statue
+
+on=@create
+more2=c_bone_knight
+
+[itemdef i_statue_horse_tan]
+defname=i_statue_horse_tan
+name=Horse Statue
+id=02124
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Horse Statue
+
+on=@create
+more2=c_horse_tan
+
+[itemdef i_statue_bear_polar]
+defname=i_statue_bear_polar
+name=Polar Bear Statue
+id=020e1
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Polar Bear Statue
+
+on=@create
+more2=c_bear_polar
+
+[itemdef i_statue_ostard_forest]
+defname=i_statue_ostard_forest
+name=Forest Ostard Statue
+id=02137
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Forest Ostard Statue
+
+on=@create
+more2=c_ostard_forest
+
+[itemdef i_statue_ostard_frenzied]
+defname=i_statue_ostard_frenzied
+name=Frenzied Ostard Statue
+id=02136
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Frenzied Ostard Statue
+
+on=@create
+more2=c_ostard_frenzied
+
+[itemdef i_statue_llama]
+defname=i_statue_llama
+name=Llama Statue
+id=020f6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Llama Statue
+
+on=@create
+more2=c_llama
+
+[itemdef i_statue_swamp_dragon]
+defname=i_statue_swamp_dragon
+name=Swamp Dragon Statue
+id=02619
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Swamp Dragon Statue
+
+on=@create
+more2=c_swamp_dragon
+
+[itemdef i_statue_troll_w_axe]
+defname=i_statue_troll_w_axe
+name=Troll Statue
+id=020e9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Troll Statue
+
+on=@create
+more2=c_troll_w_axe
+
+[itemdef i_statue_orc]
+defname=i_statue_orc
+name=Orc Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Orc Statue
+
+on=@create
+more2=c_orc
+
+[itemdef i_statue_troll_w_mace]
+defname=i_statue_troll_w_mace
+name=Troll Statue
+id=020e9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Troll Statue
+
+on=@create
+more2=c_troll_w_mace
+
+[itemdef i_statue_gazer]
+defname=i_statue_gazer
+name=Gazer Statue
+id=020f4
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Gazer Statue
+
+on=@create
+more2=c_gazer
+
+[itemdef i_statue_troll]
+defname=i_statue_troll
+name=Troll Statue
+id=020e9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Troll Statue
+
+on=@create
+more2=c_troll
+
+[itemdef i_statue_ettin]
+defname=i_statue_ettin
+name=Ettin Statue
+id=020d8
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ettin Statue
+
+on=@create
+more2=c_ettin
+
+[itemdef i_statue_elem_air]
+defname=i_statue_elem_air
+name=Air Elemental Statue
+id=020ed
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Air Elemental Statue
+
+on=@create
+more2=c_elem_air
+
+[itemdef i_statue_kraken]
+defname=i_statue_kraken
+name=Kraken Statue
+id=025a2
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Kraken Statue
+
+on=@create
+more2=c_kraken
+
+[itemdef i_statue_sea_serpent_deep]
+defname=i_statue_sea_serpent_deep
+name=deep sea serpent Statue
+id=020fb
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=deep sea serpent Statue
+
+on=@create
+more2=c_sea_serpent_deep
+color=08A0
+
+[itemdef i_statue_daemon]
+defname=i_statue_daemon
+name=Daemon Statue
+id=020d3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Daemon Statue
+
+on=@create
+more2=c_daemon
+
+[itemdef i_statue_skeletal_mage]
+defname=i_statue_skeletal_mage
+name=Skeletal Mage Statue
+id=020e7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Skeletal Mage Statue
+
+on=@create
+more2=c_skeletal_mage
+color=colors_red
+
+[itemdef i_statue_lich]
+defname=i_statue_lich
+name=Lich Statue
+id=020f8
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lich Statue
+
+on=@create
+more2=c_lich
+
+[itemdef i_statue_gazer_elder]
+defname=i_statue_gazer_elder
+name=Elder Gazer Statue
+id=020f4
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Elder Gazer Statue
+
+on=@create
+more2=c_gazer_elder
+
+[itemdef i_statue_dragon_green]
+defname=i_statue_dragon_green
+name=Dragon Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Dragon Statue
+
+on=@create
+more2=c_dragon_green
+
+[itemdef i_statue_wraith]
+defname=i_statue_wraith
+name=Wraith Statue
+id=02109
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Wraith Statue
+
+on=@create
+more2=c_wraith
+color=0455
+
+[itemdef i_statue_spectre]
+defname=i_statue_spectre
+name=Spectre Statue
+id=02109
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Spectre Statue
+
+on=@create
+more2=c_spectre
+
+[itemdef i_statue_Rotting_Corpse]
+defname=i_statue_Rotting_Corpse
+name=Rotting Corpse Statue
+id=020ec
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Rotting Corpse Statue
+
+on=@create
+more2=c_Rotting_Corpse
+
+[itemdef i_statue_lich_lord]
+defname=i_statue_lich_lord
+name=Lich Lord Statue
+id=020f8
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lich Lord Statue
+
+on=@create
+more2=c_lich_lord
+
+[itemdef i_statue_drake_red]
+defname=i_statue_drake_red
+name=Drake Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Drake Statue
+
+on=@create
+more2=c_drake_red
+
+[itemdef i_statue_mummy]
+defname=i_statue_mummy
+name=Mummy Statue
+id=025d5
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Mummy Statue
+
+on=@create
+more2=c_mummy
+
+[itemdef i_statue_elem_water]
+defname=i_statue_elem_water
+name=Water Elemental Statue
+id=0210b
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Water Elemental Statue
+
+on=@create
+more2=c_elem_water
+
+[itemdef i_statue_scorpion_giant]
+defname=i_statue_scorpion_giant
+name=Giant Scorpion Statue
+id=020e4
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Giant Scorpion Statue
+
+on=@create
+more2=c_scorpion_giant
+
+[itemdef i_statue_elem_earth]
+defname=i_statue_elem_earth
+name=Earth Elemental Statue
+id=020d7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Earth Elemental Statue
+
+on=@create
+more2=c_elem_earth
+
+[itemdef i_statue_elem_dull_copper]
+defname=i_statue_elem_dull_copper
+name=Dull Copper Elemental Statue
+id=020d7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Dull Copper Elemental Statue
+
+on=@create
+more2=c_elem_dull_copper
+color=color_o_dullcopper
+
+[itemdef i_statue_elem_fire]
+defname=i_statue_elem_fire
+name=Fire Elemental Statue
+id=020f3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Fire Elemental Statue
+
+on=@create
+more2=c_elem_fire
+
+[itemdef i_statue_elem_blood]
+defname=i_statue_elem_blood
+name=Blood Elemental Statue
+id=0210b
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Blood Elemental Statue
+
+on=@create
+more2=c_elem_blood
+color=021
+
+[itemdef i_statue_sea_serpent]
+defname=i_statue_sea_serpent
+name=Sea Serpent Statue
+id=020fb
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Sea Serpent Statue
+
+on=@create
+more2=c_sea_serpent
+
+[itemdef i_statue_imp]
+defname=i_statue_imp
+name=Imp Statue
+id=020f9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Imp Statue
+
+on=@create
+more2=c_imp
+
+[itemdef i_statue_hellhound]
+defname=i_statue_hellhound
+name=Hell Hound Statue
+id=020ea
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Hell Hound Statue
+
+on=@create
+more2=c_hellhound
+color=066d
+
+[itemdef i_statue_fire_gargoyle]
+defname=i_statue_fire_gargoyle
+name=Fire Gargoyle Statue
+id=020d9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Fire Gargoyle Statue
+
+on=@create
+more2=c_fire_gargoyle
+color=0489
+
+[itemdef i_statue_gargoyle_stone]
+defname=i_statue_gargoyle_stone
+name=Stone Gargoyle Statue
+id=020d9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Stone Gargoyle Statue
+
+on=@create
+more2=c_gargoyle_stone
+color=0482
+
+[itemdef i_statue_balron]
+defname=i_statue_balron
+name=Balron Statue
+id=020d3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Balron Statue
+
+on=@create
+more2=c_balron
+color=0454
+
+[itemdef i_statue_gargoyle]
+defname=i_statue_gargoyle
+name=Gargoyle Statue
+id=020d9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Gargoyle Statue
+
+on=@create
+more2=c_gargoyle
+
+[itemdef i_statue_mongbat]
+defname=i_statue_mongbat
+name=Subterranean Mongbat Statue
+id=020f9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Subterranean Mongbat Statue
+
+on=@create
+more2=c_mongbat
+
+[itemdef i_statue_headless]
+defname=i_statue_headless
+name=Headless One Statue
+id=0210a
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Headless One Statue
+
+on=@create
+more2=c_headless
+
+[itemdef i_statue_ratman_w_sword]
+defname=i_statue_ratman_w_sword
+name=Rat Man Statue
+id=020e3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Rat Man Statue
+
+on=@create
+more2=c_ratman_w_sword
+
+[itemdef i_statue_dolphin]
+defname=i_statue_dolphin
+name=Dolphin Statue
+id=020f1
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Dolphin Statue
+
+on=@create
+more2=c_dolphin
+
+[itemdef i_statue_lizardman]
+defname=i_statue_lizardman
+name=Lizard Man Statue
+id=020de
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lizard Man Statue
+
+on=@create
+more2=c_lizardman
+
+[itemdef i_statue_ogre]
+defname=i_statue_ogre
+name=Ogre Statue
+id=020df
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ogre Statue
+
+on=@create
+more2=c_ogre
+
+[itemdef i_statue_wisp]
+defname=i_statue_wisp
+name=Wisp Statue
+id=02100
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Wisp Statue
+
+on=@create
+more2=c_wisp
+
+[itemdef i_statue_skeleton_w_axe]
+defname=i_statue_skeleton_w_axe
+name=Skeleton Statue
+id=020e7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Skeleton Statue
+
+on=@create
+more2=c_skeleton_w_axe
+
+[itemdef i_statue_lizardman_spear]
+defname=i_statue_lizardman_spear
+name=Lizard Man Statue
+id=020de
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lizard Man Statue
+
+on=@create
+more2=c_lizardman_spear
+
+[itemdef i_statue_pig]
+defname=i_statue_pig
+name=Pig Statue
+id=02101
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Pig Statue
+
+on=@create
+more2=c_pig
+
+[itemdef i_statue_sheep_woolly]
+defname=i_statue_sheep_woolly
+name=Sheep Statue
+id=020eb
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Sheep Statue
+
+on=@create
+more2=c_sheep_woolly
+
+[itemdef i_statue_bear_brown]
+defname=i_statue_bear_brown
+name=Brown Bear Statue
+id=02118
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Brown Bear Statue
+
+on=@create
+more2=c_bear_brown
+
+[itemdef i_statue_boar]
+defname=i_statue_boar
+name=Boar Statue
+id=02101
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Boar Statue
+
+on=@create
+more2=c_boar
+
+[itemdef i_statue_jackrabbit]
+defname=i_statue_jackrabbit
+name=Jackrabbit Statue
+id=020e2
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Jackrabbit Statue
+
+on=@create
+more2=c_jackrabbit
+
+[itemdef i_statue_bear_grizzly]
+defname=i_statue_bear_grizzly
+name=Grizzly Bear Statue
+id=0211e
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Grizzly Bear Statue
+
+on=@create
+more2=c_bear_grizzly
+
+[itemdef i_statue_panther]
+defname=i_statue_panther
+name=Panther Statue
+id=02119
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Panther Statue
+
+on=@create
+more2=c_panther
+
+[itemdef i_statue_lich_ancient]
+defname=i_statue_lich_ancient
+name=Ancient Lich Statue
+id=020f8
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ancient Lich Statue
+
+on=@create
+more2=c_lich_ancient
+color=0482
+
+[itemdef i_statue_dragon_red]
+defname=i_statue_dragon_red
+name=Dragon Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Dragon Statue
+
+on=@create
+more2=c_dragon_red
+
+[itemdef i_statue_elem_acid]
+defname=i_statue_elem_acid
+name=acid elemental Statue
+id=0210b
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=acid elemental Statue
+
+on=@create
+more2=c_elem_acid
+color=03d
+
+[itemdef i_statue_ratman]
+defname=i_statue_ratman
+name=Rat Man Statue
+id=020e3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Rat Man Statue
+
+on=@create
+more2=c_ratman
+
+[itemdef i_statue_reaper]
+defname=i_statue_reaper
+name=Reaper Statue
+id=020fa
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Reaper Statue
+
+on=@create
+more2=c_reaper
+
+[itemdef i_statue_skeletonarcher]
+defname=i_statue_skeletonarcher
+name=Skeleton Archer Statue
+id=020e7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Skeleton Archer Statue
+
+on=@create
+more2=c_skeletonarcher
+
+[itemdef i_statue_lizardman_mace]
+defname=i_statue_lizardman_mace
+name=Lizard Man Statue
+id=020de
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lizard Man Statue
+
+on=@create
+more2=c_lizardman_mace
+
+[itemdef i_statue_cow_bw]
+defname=i_statue_cow_bw
+name=Cow Statue
+id=02103
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Cow Statue
+
+on=@create
+more2=c_cow_bw
+
+[itemdef i_statue_great_hart]
+defname=i_statue_great_hart
+name=Great Hart Statue
+id=020d4
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Great Hart Statue
+
+on=@create
+more2=c_great_hart
+
+[itemdef i_statue_wolf_gray]
+defname=i_statue_wolf_gray
+name=Gray Wolf Statue
+id=02122
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Gray Wolf Statue
+
+on=@create
+more2=c_wolf_gray
+
+[itemdef i_statue_BIRD_JUNGLE]
+defname=i_statue_BIRD_JUNGLE
+name=Jungle Bird Statue
+id=020ee
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Jungle Bird Statue
+
+on=@create
+more2=C_BIRD_JUNGLE
+
+[itemdef i_statue_bull_brown]
+defname=i_statue_bull_brown
+name=Bull Statue
+id=020ef
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Bull Statue
+
+on=@create
+more2=c_bull_brown
+
+[itemdef i_statue_bear_black]
+defname=i_statue_bear_black
+name=Black Bear Statue
+id=02118
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Black Bear Statue
+
+on=@create
+more2=c_bear_black
+
+[itemdef i_statue_goat]
+defname=i_statue_goat
+name=Goat Statue
+id=02108
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Goat Statue
+
+on=@create
+more2=c_goat
+
+[itemdef i_statue_bird]
+defname=i_statue_bird
+name=#nameS_BIRDS Statue
+id=020ee
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=#nameS_BIRDS Statue
+
+on=@create
+more2=c_bird
+
+[itemdef i_statue_cougar]
+defname=i_statue_cougar
+name=Cougar Statue
+id=02119
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Cougar Statue
+
+on=@create
+more2=c_cougar
+
+[itemdef i_statue_elem_poison]
+defname=i_statue_elem_poison
+name=Poison Elemental Statue
+id=020ed
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Poison Elemental Statue
+
+on=@create
+more2=c_elem_poison
+color=044
+
+[itemdef i_statue_elem_snow]
+defname=i_statue_elem_snow
+name=Snow Elemental Statue
+id=020d7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Snow Elemental Statue
+
+on=@create
+more2=c_elem_snow
+color=0481
+
+[itemdef i_statue_icesteed]
+defname=i_statue_icesteed
+name=Ice Steed Statue
+id=02121
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ice Steed Statue
+
+on=@create
+more2=c_icesteed
+color=08d3
+
+[itemdef i_statue_elem_ice]
+defname=i_statue_elem_ice
+name=Ice Elemental Statue
+id=020d7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ice Elemental Statue
+
+on=@create
+more2=c_elem_ice
+color=0480
+
+[itemdef i_statue_frost_troll]
+defname=i_statue_frost_troll
+name=Frost Troll Statue
+id=020e9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Frost Troll Statue
+
+on=@create
+more2=c_frost_troll
+color=0482
+
+[itemdef i_statue_ice_serpent]
+defname=i_statue_ice_serpent
+name=Ice Serpent Statue
+id=020fe
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ice Serpent Statue
+
+on=@create
+more2=c_ice_serpent
+color=0480
+
+[itemdef i_statue_frost_spider]
+defname=i_statue_frost_spider
+name=Frost Spider Statue
+id=020fd
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Frost Spider Statue
+
+on=@create
+more2=c_frost_spider
+color=0480
+
+[itemdef i_statue_frostooze]
+defname=i_statue_frostooze
+name=Frost Ooze Statue
+id=020e8
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Frost Ooze Statue
+
+on=@create
+more2=c_frostooze
+color=0480
+
+[itemdef i_statue_ice_snake]
+defname=i_statue_ice_snake
+name=Ice Snake Statue
+id=020fc
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ice Snake Statue
+
+on=@create
+more2=c_ice_snake
+color=0480
+
+[itemdef i_statue_wyrm_white]
+defname=i_statue_wyrm_white
+name=a white wyrm Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=a white wyrm Statue
+
+on=@create
+more2=c_wyrm_white
+color=0481
+
+[itemdef i_statue_gazer_larva]
+defname=i_statue_gazer_larva
+name=Gazer Larva Statue
+id=0261a
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Gazer Larva Statue
+
+on=@create
+more2=c_gazer_larva
+color=066d
+
+[itemdef i_statue_spider_giant]
+defname=i_statue_spider_giant
+name=Giant Spider Statue
+id=020fd
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Giant Spider Statue
+
+on=@create
+more2=c_spider_giant
+
+[itemdef i_statue_corpser]
+defname=i_statue_corpser
+name=Corpser Statue
+id=020d2
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Corpser Statue
+
+on=@create
+more2=c_corpser
+
+[itemdef i_statue_direwolf]
+defname=i_statue_direwolf
+name=Dire Wolf Statue
+id=020ea
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Dire Wolf Statue
+
+on=@create
+more2=c_direwolf
+color=0455
+
+[itemdef i_statue_wolf]
+defname=i_statue_wolf
+name=Timber Wolf Statue
+id=020ea
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Timber Wolf Statue
+
+on=@create
+more2=c_wolf
+
+[itemdef i_statue_BIRD_MAGPIE]
+defname=i_statue_BIRD_MAGPIE
+name=Magpie Statue
+id=020ee
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Magpie Statue
+
+on=@create
+more2=C_BIRD_MAGPIE
+
+[itemdef i_statue_walrus]
+defname=i_statue_walrus
+name=Walrus Statue
+id=020ff
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Walrus Statue
+
+on=@create
+more2=c_walrus
+
+[itemdef i_statue_SNOW_LEOPARD]
+defname=i_statue_SNOW_LEOPARD
+name=Snow Leopard Statue
+id=02119
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Snow Leopard Statue
+
+on=@create
+more2=c_SNOW_LEOPARD
+
+[itemdef i_statue_drake_gray]
+defname=i_statue_drake_gray
+name=Drake Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Drake Statue
+
+on=@create
+more2=c_drake_gray
+
+[itemdef i_statue_ogre_lord_arctic]
+defname=i_statue_ogre_lord_arctic
+name=Arctic Ogre Lord Statue
+id=020df
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Arctic Ogre Lord Statue
+
+on=@create
+more2=c_ogre_lord_arctic
+color=0482
+
+[itemdef i_statue_Ratman_Mage]
+defname=i_statue_Ratman_Mage
+name=ratman mage Statue
+id=020e3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=ratman mage Statue
+
+on=@create
+more2=c_Ratman_Mage
+
+[itemdef i_statue_orc_w_club]
+defname=i_statue_orc_w_club
+name=Orc Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Orc Statue
+
+on=@create
+more2=c_orc_w_club
+
+[itemdef i_statue_ghoul]
+defname=i_statue_ghoul
+name=Ghoul Statue
+id=020ec
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ghoul Statue
+
+on=@create
+more2=c_ghoul
+
+[itemdef i_statue_horse_gray]
+defname=i_statue_horse_gray
+name=Horse Statue
+id=0211f
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Horse Statue
+
+on=@create
+more2=c_horse_gray
+
+[itemdef i_statue_wolf_white]
+defname=i_statue_wolf_white
+name=White Wolf Statue
+id=020ea
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=White Wolf Statue
+
+on=@create
+more2=c_wolf_white
+color=0481
+
+[itemdef i_statue_icefiend]
+defname=i_statue_icefiend
+name=Ice Fiend Statue
+id=020d3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ice Fiend Statue
+
+on=@create
+more2=c_icefiend
+color=0480
+
+[itemdef i_statue_eagle]
+defname=i_statue_eagle
+name=Eagle Statue
+id=0211d
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Eagle Statue
+
+on=@create
+more2=c_eagle
+
+[itemdef i_statue_BIRD_CROW]
+defname=i_statue_BIRD_CROW
+name=Crow Statue
+id=020ee
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Crow Statue
+
+on=@create
+more2=C_BIRD_CROW
+
+[itemdef i_statue_rabbit]
+defname=i_statue_rabbit
+name=Rabbit Statue
+id=020e2
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Rabbit Statue
+
+on=@create
+more2=c_rabbit
+
+[itemdef i_statue_bull_bw]
+defname=i_statue_bull_bw
+name=Bull Statue
+id=020ef
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Bull Statue
+
+on=@create
+more2=c_bull_bw
+
+[itemdef i_statue_slime]
+defname=i_statue_slime
+name=Slime Statue
+id=020e8
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Slime Statue
+
+on=@create
+more2=c_slime
+
+[itemdef i_statue_rat_giant]
+defname=i_statue_rat_giant
+name=Giant Rat Statue
+id=020d0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Giant Rat Statue
+
+on=@create
+more2=c_rat_giant
+
+[itemdef i_statue_Ratman_Archer]
+defname=i_statue_Ratman_Archer
+name=ratman archer Statue
+id=020e3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=ratman archer Statue
+
+on=@create
+more2=c_Ratman_Archer
+
+[itemdef i_statue_rat]
+defname=i_statue_rat
+name=Rat Statue
+id=02123
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Rat Statue
+
+on=@create
+more2=c_rat
+
+[itemdef i_statue_cat]
+defname=i_statue_cat
+name=Cat Statue
+id=0211b
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Cat Statue
+
+on=@create
+more2=c_cat
+
+[itemdef i_statue_dog]
+defname=i_statue_dog
+name=Dog Statue
+id=0211c
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Dog Statue
+
+on=@create
+more2=c_dog
+
+[itemdef i_statue_hind]
+defname=i_statue_hind
+name=Hind Statue
+id=020d4
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Hind Statue
+
+on=@create
+more2=c_hind
+
+[itemdef i_statue_hellcat]
+defname=i_statue_hellcat
+name=Hellcat Statue
+id=02102
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Hellcat Statue
+
+on=@create
+more2=c_hellcat
+color=0659
+
+[itemdef i_statue_horse_brown_dk]
+defname=i_statue_horse_brown_dk
+name=Horse Statue
+id=02121
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Horse Statue
+
+on=@create
+more2=c_horse_brown_dk
+
+[itemdef i_statue_BIRD_RAVEN]
+defname=i_statue_BIRD_RAVEN
+name=Raven Statue
+id=0211a
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Raven Statue
+
+on=@create
+more2=C_BIRD_RAVEN
+
+[itemdef i_statue_BIRD_TROPICAL]
+defname=i_statue_BIRD_TROPICAL
+name=#nameS_TROPICAL_BIRDS Statue
+id=020ee
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=#nameS_TROPICAL_BIRDS Statue
+
+on=@create
+more2=C_BIRD_TROPICAL
+
+[itemdef i_statue_Solen_Infiltrator_Warrior_red]
+defname=i_statue_Solen_Infiltrator_Warrior_red
+name=red solen infiltrator Statue
+id=02604
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=red solen infiltrator Statue
+
+on=@create
+more2=c_Solen_Infiltrator_Warrior_red
+
+[itemdef i_statue_Solen_Infiltrator_Queen_Red]
+defname=i_statue_Solen_Infiltrator_Queen_Red
+name=red solen infiltrator Statue
+id=02602
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=red solen infiltrator Statue
+
+on=@create
+more2=c_Solen_Infiltrator_Queen_Red
+
+[itemdef i_statue_orc_mage]
+defname=i_statue_orc_mage
+name=Orc Mage Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Orc Mage Statue
+
+on=@create
+more2=c_orc_mage
+
+[itemdef i_statue_Shade]
+defname=i_statue_Shade
+name=Shade Statue
+id=02109
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Shade Statue
+
+on=@create
+more2=c_Shade
+color=0455
+
+[itemdef i_statue_juka_warrior]
+defname=i_statue_juka_warrior
+name=juka warrior Statue
+id=0261f
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=juka warrior Statue
+
+on=@create
+more2=c_juka_warrior
+
+[itemdef i_statue_juka_lord]
+defname=i_statue_juka_lord
+name=Juka Lord Statue
+id=0261f
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Juka Lord Statue
+
+on=@create
+more2=c_juka_lord
+
+[itemdef i_statue_juka_mage]
+defname=i_statue_juka_mage
+name=juka mage Statue
+id=0261e
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=juka mage Statue
+
+on=@create
+more2=c_juka_mage
+
+[itemdef i_statue_iron_golem]
+defname=i_statue_iron_golem
+name=Iron Golem Statue
+id=02610
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Iron Golem Statue
+
+on=@create
+more2=c_iron_golem
+
+[itemdef i_statue_bone_magi]
+defname=i_statue_bone_magi
+name=Bone Magi Statue
+id=020e7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Bone Magi Statue
+
+on=@create
+more2=c_bone_magi
+
+[itemdef i_statue_skeleton_knight]
+defname=i_statue_skeleton_knight
+name=Skeletal Knight Statue
+id=020e7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Skeletal Knight Statue
+
+on=@create
+more2=c_skeleton_knight
+
+[itemdef i_statue_silver_serpent]
+defname=i_statue_silver_serpent
+name=Silver Serpent Statue
+id=020fc
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Silver Serpent Statue
+
+on=@create
+more2=c_silver_serpent
+
+[itemdef i_statue_wyvern]
+defname=i_statue_wyvern
+name=Wyvern Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Wyvern Statue
+
+on=@create
+more2=c_wyvern
+
+[itemdef i_statue_snake]
+defname=i_statue_snake
+name=Snake Statue
+id=020fc
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Snake Statue
+
+on=@create
+more2=c_snake
+
+[itemdef i_statue_ogre_lord]
+defname=i_statue_ogre_lord
+name=Ogre Lord Statue
+id=020df
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ogre Lord Statue
+
+on=@create
+more2=c_ogre_lord
+
+[itemdef i_statue_ostard_desert]
+defname=i_statue_ostard_desert
+name=Desert Ostard Statue
+id=02135
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Desert Ostard Statue
+
+on=@create
+more2=c_ostard_desert
+
+[itemdef i_statue_serpent_giant]
+defname=i_statue_serpent_giant
+name=Giant Serpent Statue
+id=020fe
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Giant Serpent Statue
+
+on=@create
+more2=c_serpent_giant
+
+[itemdef i_statue_bogling]
+defname=i_statue_bogling
+name=Bogling Statue
+id=02607
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Bogling Statue
+
+on=@create
+more2=c_bogling
+
+[itemdef i_statue_wyrm_shadow]
+defname=i_statue_wyrm_shadow
+name=a shadow wyrm Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=a shadow wyrm Statue
+
+on=@create
+more2=c_wyrm_shadow
+color=0455
+
+[itemdef i_statue_alligator]
+defname=i_statue_alligator
+name=Alligator Statue
+id=02131
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Alligator Statue
+
+on=@create
+more2=c_alligator
+
+[itemdef i_statue_rat_sewer]
+defname=i_statue_rat_sewer
+name=Sewer Rat Statue
+id=02123
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Sewer Rat Statue
+
+on=@create
+more2=c_rat_sewer
+
+[itemdef i_statue_chicken]
+defname=i_statue_chicken
+name=Chicken Statue
+id=020d1
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Chicken Statue
+
+on=@create
+more2=c_chicken
+
+[itemdef i_statue_plague_beast]
+defname=i_statue_plague_beast
+name=Plague Beast Statue
+id=02613
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Plague Beast Statue
+
+on=@create
+more2=c_plague_beast
+
+[itemdef i_statue_bog_thing]
+defname=i_statue_bog_thing
+name=Bog Thing Statue
+id=02608
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Bog Thing Statue
+
+on=@create
+more2=c_bog_thing
+
+[itemdef i_statue_mongbat_arboreal]
+defname=i_statue_mongbat_arboreal
+name=Arboreal Mongbat Statue
+id=020f9
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Arboreal Mongbat Statue
+
+on=@create
+more2=c_mongbat_arboreal
+
+[itemdef i_statue_wyrm_ancient]
+defname=i_statue_wyrm_ancient
+name=Ancient Wyrm Statue
+id=020d6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ancient Wyrm Statue
+
+on=@create
+more2=c_wyrm_ancient
+color=0455
+
+[itemdef i_statue_cyclops]
+defname=i_statue_cyclops
+name=Cyclopean Warrior Statue
+id=0212e
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Cyclopean Warrior Statue
+
+on=@create
+more2=c_cyclops
+
+[itemdef i_statue_orc_lord]
+defname=i_statue_orc_lord
+name=Orc Lord Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Orc Lord Statue
+
+on=@create
+more2=c_orc_lord
+
+[itemdef i_statue_orc_scout]
+defname=i_statue_orc_scout
+name=orc scout Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=orc scout Statue
+
+on=@create
+more2=c_orc_scout
+
+[itemdef i_statue_orc_bomber]
+defname=i_statue_orc_bomber
+name=orc bomber Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=orc bomber Statue
+
+on=@create
+more2=c_orc_bomber
+
+[itemdef i_statue_orc_captain]
+defname=i_statue_orc_captain
+name=Orc Captain Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Orc Captain Statue
+
+on=@create
+more2=c_orc_captain
+
+[itemdef i_statue_Shadow_Fiend]
+defname=i_statue_Shadow_Fiend
+name=shadow fiend Statue
+id=0210b
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=shadow fiend Statue
+
+on=@create
+more2=c_Shadow_Fiend
+color=0455
+
+[itemdef i_statue_phoenix]
+defname=i_statue_phoenix
+name=Phoenix Statue
+id=0211d
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Phoenix Statue
+
+on=@create
+more2=c_phoenix
+color=0674
+
+[itemdef i_statue_daemon_knight]
+defname=i_statue_daemon_knight
+name=Daemon Knight Statue
+id=020d3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Daemon Knight Statue
+
+on=@create
+more2=c_daemon_knight
+
+[itemdef i_statue_lava_lizard]
+defname=i_statue_lava_lizard
+name=Lava Lizard Statue
+id=02131
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lava Lizard Statue
+
+on=@create
+more2=c_lava_lizard
+
+[itemdef i_statue_efreet]
+defname=i_statue_efreet
+name=Efreet Statue
+id=020ed
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Efreet Statue
+
+on=@create
+more2=c_efreet
+color=066d
+
+[itemdef i_statue_firesteed]
+defname=i_statue_firesteed
+name=Fire Steed Statue
+id=02121
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Fire Steed Statue
+
+on=@create
+more2=c_firesteed
+color=0873
+
+[itemdef i_statue_lava_serpent]
+defname=i_statue_lava_serpent
+name=Lava Serpent Statue
+id=020fe
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lava Serpent Statue
+
+on=@create
+more2=c_lava_serpent
+color=065a
+
+[itemdef i_statue_lava_snake]
+defname=i_statue_lava_snake
+name=Lava Snake Statue
+id=020fc
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Lava Snake Statue
+
+on=@create
+more2=c_lava_snake
+color=065a
+
+[itemdef i_statue_dread_spider]
+defname=i_statue_dread_spider
+name=Dread Spider Statue
+id=025c4
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Dread Spider Statue
+
+on=@create
+more2=c_dread_spider
+color=0455
+
+[itemdef i_statue_bullfrog]
+defname=i_statue_bullfrog
+name=Bull Frog Statue
+id=02130
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Bull Frog Statue
+
+on=@create
+more2=c_bullfrog
+
+[itemdef i_statue_gorilla]
+defname=i_statue_gorilla
+name=Gorilla Statue
+id=020f5
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Gorilla Statue
+
+on=@create
+more2=c_gorilla
+
+[itemdef i_statue_toad_giant]
+defname=i_statue_toad_giant
+name=Giant Toad Statue
+id=0212f
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Giant Toad Statue
+
+on=@create
+more2=c_toad_giant
+
+[itemdef i_statue_ophidian_warrior]
+defname=i_statue_ophidian_warrior
+name=Ophidian Warrior Statue
+id=02133
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ophidian Warrior Statue
+
+on=@create
+more2=c_ophidian_warrior
+
+[itemdef i_statue_swamp_tentacles]
+defname=i_statue_swamp_tentacles
+name=Swamp Tentacles Statue
+id=020d2
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Swamp Tentacles Statue
+
+on=@create
+more2=c_swamp_tentacles
+
+[itemdef i_statue_plaguesteed]
+defname=i_statue_plaguesteed
+name=Plague Steed Statue
+id=02121
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Plague Steed Statue
+
+on=@create
+more2=c_plaguesteed
+color=055a
+
+[itemdef i_statue_terathan_matriarch]
+defname=i_statue_terathan_matriarch
+name=Terathan Matriarch Statue
+id=0212c
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Terathan Matriarch Statue
+
+on=@create
+more2=c_terathan_matriarch
+
+[itemdef i_statue_ophidian_matriarch]
+defname=i_statue_ophidian_matriarch
+name=Ophidian Matriarch Statue
+id=02134
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ophidian Matriarch Statue
+
+on=@create
+more2=c_ophidian_matriarch
+
+[itemdef i_statue_terathan_avenger]
+defname=i_statue_terathan_avenger
+name=Terathan Avenger Statue
+id=0212a
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Terathan Avenger Statue
+
+on=@create
+more2=c_terathan_avenger
+
+[itemdef i_statue_ophidian_archmage]
+defname=i_statue_ophidian_archmage
+name=Ophidian Archmage Statue
+id=02132
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ophidian Archmage Statue
+
+on=@create
+more2=c_ophidian_archmage
+
+[itemdef i_statue_terathan_warrior]
+defname=i_statue_terathan_warrior
+name=Terathan Warrior Statue
+id=0212a
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Terathan Warrior Statue
+
+on=@create
+more2=c_terathan_warrior
+
+[itemdef i_statue_ophidian_mage]
+defname=i_statue_ophidian_mage
+name=Ophidian Mage Statue
+id=02132
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ophidian Mage Statue
+
+on=@create
+more2=c_ophidian_mage
+
+[itemdef i_statue_terathan_drone]
+defname=i_statue_terathan_drone
+name=Terathan Drone Statue
+id=0212b
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Terathan Drone Statue
+
+on=@create
+more2=c_terathan_drone
+
+[itemdef i_statue_ophidian_knight]
+defname=i_statue_ophidian_knight
+name=Ophidian Knight Statue
+id=02133
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ophidian Knight Statue
+
+on=@create
+more2=c_ophidian_knight
+
+[itemdef i_statue_gypsy_llama]
+defname=i_statue_gypsy_llama
+name=Pack Llama Statue
+id=02127
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Pack Llama Statue
+
+on=@create
+more2=c_gypsy_llama
+
+[itemdef i_statue_horse_brown_lt]
+defname=i_statue_horse_brown_lt
+name=Horse Statue
+id=02120
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Horse Statue
+
+on=@create
+more2=c_horse_brown_lt
+
+[itemdef i_statue_solen_worker_black]
+defname=i_statue_solen_worker_black
+name=black solen worker Statue
+id=02604
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=black solen worker Statue
+
+on=@create
+more2=c_solen_worker_black
+color=0455
+
+[itemdef i_statue_harpy_stone]
+defname=i_statue_harpy_stone
+name=Stone Harpy Statue
+id=020dc
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Stone Harpy Statue
+
+on=@create
+more2=c_harpy_stone
+color=0482
+
+[itemdef i_statue_ant_lion]
+defname=i_statue_ant_lion
+name=Ant Lion Statue
+id=01ea7
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Ant Lion Statue
+
+on=@create
+more2=c_ant_lion
+
+[itemdef i_statue_solen_warrior_black]
+defname=i_statue_solen_warrior_black
+name=black solen warrior Statue
+id=02603
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=black solen warrior Statue
+
+on=@create
+more2=c_solen_warrior_black
+color=0455
+
+[itemdef i_statue_orc_brute]
+defname=i_statue_orc_brute
+name=Orc Brute Statue
+id=020e0
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Orc Brute Statue
+
+on=@create
+more2=c_orc_brute
+color=066d
+
+[itemdef i_statue_titan]
+defname=i_statue_titan
+name=Titan Statue
+id=0212d
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Titan Statue
+
+on=@create
+more2=c_titan
+
+[itemdef i_statue_nightmare]
+defname=i_statue_nightmare
+name=Nightmare Statue
+id=02121
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Nightmare Statue
+
+on=@create
+more2=c_nightmare
+color=0455
+
+[itemdef i_statue_Whipping_Vine]
+defname=i_statue_Whipping_Vine
+name=whipping vine Statue
+id=020d2
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=whipping vine Statue
+
+on=@create
+more2=c_Whipping_Vine
+color=0851 
+
+[itemdef i_statue_llama_supreme_evilness]
+defname=i_statue_llama_supreme_evilness
+name=Llama of Supreme Evilness Statue
+id=020f6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Llama of Supreme Evilness Statue
+
+on=@create
+more2=c_llama_supreme_evilness
+color=055e
+
+[itemdef i_statue_pixie]
+defname=i_statue_pixie
+name=Pixie Statue
+id=025b6
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Pixie Statue
+
+on=@create
+more2=c_pixie
+color=066d
+
+[itemdef i_statue_wisp_Shadow]
+defname=i_statue_wisp_Shadow
+name=shadow wisp Statue
+id=02100
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=shadow wisp Statue
+
+on=@create
+more2=c_wisp_Shadow
+color=0455
+
+[itemdef i_statue_ettin_lord]
+defname=i_statue_ettin_lord
+name=an Ettin Lord Statue
+id=020d8
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=an Ettin Lord Statue
+
+on=@create
+more2=c_ettin_lord
+
+[itemdef i_statue_arch_daemon]
+defname=i_statue_arch_daemon
+name=Arch Daemon Statue
+id=020d3
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Arch Daemon Statue
+
+on=@create
+more2=c_daemon
+color=0455
+
+[itemdef i_statue_red_death]
+defname=i_statue_red_death
+name=Red Death Statue
+id=02124
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Red Death Statue
+
+on=@create
+more2=c_horse_tan
+color=036
+
+[itemdef i_statue_harrower]
+defname=i_statue_harrower
+name=Harrower Statue
+id=i_pet_corpser
+type=t_pet_statue
+category=Miscellaneous
+subsection=Pet Statues
+description=Harrower statue
+
+on=@create
+more2=c_harrower
+color=0455
+
+[typedef t_pet_statue]
+
+on=@dclick
+sound {<serv.chardef.<more2>.sound> <eval (<serv.chardef.<more2>.sound>+3)>}
+return 1
+
+on=@step
+sound {<serv.chardef.<more2>.sound> <eval (<serv.chardef.<more2>.sound>+3)>}
+return 0
+
+
+[EOF]

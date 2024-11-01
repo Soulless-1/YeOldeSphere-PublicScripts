@@ -1,0 +1,151 @@
+//Dungeon Chests by Soulless
+//v1.0
+//9:25 AM 8/9/2018
+//Contains rare armor/weapons/gems, gold, and consumable supplies
+//Must be unlocked with the lockpicking skill
+
+
+////////////////////////////
+// Dungeon Chest Itemdefs
+
+[itemdef i_dungeon_chest1]
+id=i_chest_wooden_brass
+type=t_container
+tevents=+t_dungeon_chest
+
+on=@create
+dispid={i_crate_small 1 i_crate_md 1 i_crate_lg 1  }
+attr=attr_move_never|attr_decay
+type=t_container_locked
+more2=<R50,60>
+timer=60*60*2
+f_trap_container <R1,3>,<R1,20>,04fffffff
+f_dungeon_chest_additem i_gold,{30 100},0,1
+f_dungeon_chest_additem i_xbolt,10,0,1
+f_dungeon_chest_additem random_jewel,{1 3},3,5
+f_dungeon_chest_additem random_jewelry,1,3,3
+f_dungeon_chest_additem random_weapons,1,3,3
+f_dungeon_chest_additem random_armor,1,3,3
+f_dungeon_chest_additem random_clothing,1,3,3
+
+[itemdef i_dungeon_chest2]
+id=i_chest_wooden_brass
+type=t_container
+tevents=t_dungeon_chest
+
+on=@create
+dispid={i_crate_small 1 i_crate_md 1 i_crate_lg 1 i_chest_wooden_brass 1 i_chest_metal 1 i_barrel 1 01940 1}
+attr=attr_move_never|attr_decay
+type=t_container_locked
+more2=<R70,80>
+timer=60*60*2
+f_trap_container <R1,3>,<R20,40>,04fffffff
+f_dungeon_chest_additem i_gold,{70 100},0,1
+f_dungeon_chest_additem i_arrow,10,0,1
+f_dungeon_chest_additem random_reagents,{1 3},0,5
+f_dungeon_chest_additem {random_lower_scroll 8 random_middle_scroll 8 random_sixth_circle 1},1,3,3
+f_dungeon_chest_additem random_potion,1,3,1
+f_dungeon_chest_additem random_jewel,1,3,1
+
+[itemdef i_dungeon_chest3]
+id=i_chest_wooden_brass
+type=t_container
+tevents=t_dungeon_chest
+
+on=@create
+dispid={i_chest_wooden_brass 1 i_chest_metal 1 }
+attr=attr_move_never|attr_decay
+type=t_container_locked
+more2=<R40,60>
+timer=60*60*2
+f_trap_container <R1,3>,<R40,60>,04fffffff
+f_dungeon_chest_additem i_gold,{180 240},0,1
+f_dungeon_chest_additem i_arrow,10,0,1
+f_dungeon_chest_additem random_reagents,{1 3},0,5
+f_dungeon_chest_additem {random_lower_scroll 8 random_middle_scroll 8 random_sixth_circle 1 random_seventh_circle 1},1,3,3
+f_dungeon_chest_additem random_potion,1,3,3
+f_dungeon_chest_additem random_jewel,1,3,3
+f_dungeon_chest_additem random_jewelry,1,3,3
+f_dungeon_chest_additem i_wand_<R1,4>,1,3,1,f_make_magic_wand <R40 60>
+f_dungeon_chest_additem random_armor,1,3,1,f_make_magic_armor <R40 60>
+f_dungeon_chest_additem random_weapons,1,3,1,f_make_magic_weapon <R40 60>
+
+[itemdef i_dungeon_chest4]
+id=i_chest_wooden_brass
+type=t_container
+tevents=t_dungeon_chest
+
+on=@create
+dispid={i_chest_wooden_brass 1 i_chest_metal 1 }
+attr=attr_move_never|attr_decay
+type=t_container_locked
+more2=<R60,80>
+timer=60*60*2
+f_trap_container <R1,3>,<R60,80>,04fffffff
+f_dungeon_chest_additem i_gold,{200 400},0,1
+f_dungeon_chest_additem random_reagents,{1 3},0,5
+f_dungeon_chest_additem {random_lower_scroll 8 random_middle_scroll 8 random_sixth_circle 1 random_seventh_circle 1},1,3,3
+f_dungeon_chest_additem i_scroll_blank,1,3,3
+f_dungeon_chest_additem random_jewel,1,3,3
+f_dungeon_chest_additem random_jewelry,1,3,1
+f_dungeon_chest_additem i_wand_<R1,4>,1,1,1,f_make_magic_wand <R40 60>
+f_dungeon_chest_additem random_armor,1,3,1,f_make_magic_armor <R40 60>
+f_dungeon_chest_additem random_weapons,1,3,1,f_make_magic_weapon <R40 60>
+f_dungeon_chest_additem i_crystal_ball,1,3,1
+
+[itemdef i_dungeon_chest5]
+id=i_chest_wooden_brass
+type=t_container
+tevents=t_dungeon_chest
+
+on=@create
+dispid={i_chest_wooden_brass 1 i_chest_metal 1 }
+attr=attr_move_never|attr_decay
+type=t_container_locked
+more2=<R80,100>
+timer=60*60*2
+f_dungeon_chest_additem i_gold,{200 400},0,1
+f_dungeon_chest_additem random_reagents,{1 3},0,5
+f_dungeon_chest_additem {random_lower_scroll 8 random_middle_scroll 8 random_sixth_circle 1 random_seventh_circle 1},1,3,3
+f_dungeon_chest_additem i_scroll_blank,1,3,3
+f_dungeon_chest_additem random_jewel,1,3,3
+f_dungeon_chest_additem random_jewelry,1,3,1
+f_dungeon_chest_additem i_wand_<R1,4>,1,1,1,f_make_magic_wand <R40 60>
+f_dungeon_chest_additem random_armor,1,3,1,f_make_magic_armor <R40 60>
+f_dungeon_chest_additem random_weapons,1,3,1,f_make_magic_weapon <R40 60>
+f_dungeon_chest_additem i_crystal_ball,1,3,1
+
+
+//////////////////////////
+// Dungeon Chest Typedefs
+
+[typedef t_dungeon_chest]
+
+on=@click
+message <serv.itemdef.<dispid>.name>
+return 1
+
+on=@spelleffect
+if (<argn1>==23) && ((<type>==t_container_locked) || (<isevent.t_container_locked>))
+  src.sysmessage You can not unlock this with that spell.
+  return 1
+endif
+
+[function f_dungeon_chest_additem]	//command usage : itemid,amount,odds,rolls,function	
+for <argv[3]>
+  if (<argv[2]> <= 0) || !(<R<argv[2]>>) 
+    serv.newitem <argv[0]>,<argv[1]>,<uid>
+    if !(<isempty <argv[4]>>)	//function
+      new.<argv[4]>
+    endif
+  endif
+endfor
+
+[function remove_dungeon_chests]
+for n 5 
+  forinstances i_dungeon_chest<dlocal.n>
+    remove
+  endfor
+endfor
+
+[EOF]

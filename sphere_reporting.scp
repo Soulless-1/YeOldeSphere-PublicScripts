@@ -1,0 +1,514 @@
+//Reporting Functions by Soulless
+//v1.0
+//5:42 AM 9/2/2021
+
+//These reports are meant to give the administration better inside into players, npcs, items, accounts, and other such information.
+
+
+[function f_report_accounts]
+local.filename=account_report_<serv.rtime.format %Y-%m-%d-%H%M>
+f_deletefile reports/accounts/<local.filename>.csv
+f_writefile reports/accounts/<local.filename>.csv,ACCOUNT,FIRSTIP,LASTIP,FIRSTSEEN,LASTSEEN,CONECTTIME,BLOCKED,LANG,EMAIL
+for 0 <eval <serv.accounts>-1>
+  local.account=<serv.account.<local._for>.name>
+  if !(strmatch(*simulated*,<local.account>))
+    ref1=<serv.account.<local.account>.char.<local._for>>
+    f_writefile reports/accounts/<local.filename>.csv,<local.account>,<serv.account.<local.account>.firstip>,<serv.account.<local.account>.lastip>,<serv.account.<local.account>.firstconnectdate>,<serv.account.<local.account>.lastconnectdate>,<serv.account.<local.account>.totalconnecttime>,<serv.account.<local.account>.block>,<serv.account.<local.account>.lang>,<serv.account.<local.account>.tag0.email>
+  endif
+endfor
+
+[function f_report_containers]
+local.filename=container_report_<serv.rtime.format %Y-%m-%d-%H%M>
+f_writefile reports/containers/<local.filename>.csv,CONT_TYPE,CONT_UID,CONT_TOPOBJ_NAME,CONT_TOPOBJ_UID,CONT_COUNT,CONT_GOLD
+foritems 9999
+  if (<type>==t_container)
+    f_writefile reports/containers/<local.filename>.csv,<baseid>,<uid>,<f_shmush_args <explode " ",<topobj.name>>>,<topobj>,<count>,<rescount i_gold>
+  endif
+endfor
+
+[function f_report_npcs]
+local.filename=npcs_report_<serv.rtime.format %Y-%m-%d-%H%M>
+f_deletefile reports/npcs/<local.filename>.csv
+f_writefile reports/npcs/<local.filename>.csv,NAME,BASEID,UID,BRAIN,OWNER,HITS/MAXHITS,REGION,COORDS,DIFFICULTY,GOLD,NEARBYNPCS,STUCK,SLEEPING,ORPHANED
+forchars 9999
+  if (<npc>)
+    ref1=<uid>
+    forchars 2
+      if (<npc>)
+        local.nearbynpcs += 1
+      endif
+    endfor
+    f_writefile reports/npcs/<local.filename>.csv,<f_shmush_args <explode " ",<ref1.name>>>,<ref1.baseid>,<ref1.uid>,<ref1.brain>,<qval (<ref1.owner.isvalid>)?<ref1.owner.name>(<ref1.owner>):N/A>,<ref1.hits>/<ref1.maxhits>,<ref1.region.name>,<ref1.p.x> <ref1.p.y> <ref1.p.z> <ref1.p.m>,<ref1.tag0.base_difficulty>,<ref1.gold>,<local.nearbynpcs>,<qval <ref1.canmove>?N:Y>,<qval <ref1.issleeping>?Y:N>,<qval <ref1.isorphanednpc>?Y:N>
+    local.nearbynpcs=
+  endif
+endfor
+
+[function f_report_player_houses]
+local.filename=playerhouse_report_<serv.rtime.format %Y-%m-%d-%H%M>
+f_deletefile reports/playerhouses/<local.filename>.csv
+f_writefile reports/playerhouses/<local.filename>.csv,BASEID,UID,NAME,OWNER,OWNERNAME,VALUE,COORDS,LOCKDOWNS,SERCURES,TIMER
+foritems 9999
+  if (<type>==t_multi) && (<owner>) && (<owner.isplayer>) 
+    f_writefile reports/playerhouses/<local.filename>.csv,<baseid>,<uid>,<name>,<owner>,<f_shmush_args <explode " ",<owner.name>>>,<f_house_value>,<p.x> <p.y> <p.z> <p.m>,<serv.list.house_<uid>_lockdowns>,<serv.list.house_<uid>_secures>,<timer>
+  endif
+endfor
+
+[function f_report_players]
+local.filename=player_report_<serv.rtime.format %Y-%m-%d-%H%M>
+f_deletefile reports/players/<local.filename>.csv
+f_writefile reports/players/<local.filename>.csv,ACCOUNT,NAME,UID,STATSUM,SKILLTOTAL,GOLD
+for 0 <eval <serv.accounts>-1>
+  if (<serv.account.<local._for>.chars>)
+    local.account=<serv.account.<local._for>.name>
+    for 0 <eval <serv.account.<local._for>.chars>-1>
+      ref1=<serv.account.<local.account>.char.<local._for>>
+      f_writefile reports/players/<local.filename>.csv,<ref1.account>,<f_shmush_args <explode " ",<ref1.name>>>,<ref1.uid>,<ref1.statsum>,<ref1.skilltotal>,<ref1.gold>
+    endfor
+  endif
+endfor
+
+[function f_report_player_vendors]
+local.filename=player_vendor_report_<serv.rtime.format %Y-%m-%d-%H%M>
+f_deletefile reports/playervendors/<local.filename>.csv
+f_writefile reports/playervendors/<local.filename>.csv,NAME,UID,OWNERNAME,OWNERUID,REGION,COORDS,OPERATINGGOLD,OWNERSGOLD
+forchars 9999
+  if (<npc>) && (<isevent.e_player_vendor>)
+    f_writefile reports/playervendors/<local.filename>.csv,<f_shmush_args <explode " ",<name>>>,<uid>,<f_shmush_args <explode " ",<owner.name>>>,<owner>,<region.name>,<p.x> <p.y> <p.z> <p.m>,<gold>,<tag0.owners_gold>
+  endif
+endfor
+
+
+[function f_report_treasuremaps]
+local.filename=treasuremap_report_<serv.rtime.format %Y-%m-%d-%H%M>
+f_deletefile reports/treasuremaps/<local.filename>.csv
+f_writefile reports/treasuremaps/<local.filename>.csv,TOPOBJ,TOPOBJUID,BASEID,UID,LEVEL
+for m 1 5
+  forinstances i_treasure_map<dlocal.m>
+    f_writefile reports/treasuremaps/<local.filename>.csv,<f_shmush_args <explode " ",<topobj.name>>>,<topobj>,<baseid>,<uid>,<more1>
+  endfor
+endfor
+
+//This needs to be smaller, just loop through the crafting defs
+
+[function f_get_crafting_report]
+f_writefile reports/crafting/crafting_report_all_craftable_items.csv,CRAFTNAME,ITEMNAME,ITEMBASEID,RESOURCESCOST,ITEMVALUE,PROFIT,PROFITPERCENTAGE
+f_crafting_report_iteminfo	i_apron_full
+f_crafting_report_iteminfo	i_apron_half
+f_crafting_report_iteminfo	i_armoir_dk
+f_crafting_report_iteminfo	i_armoir_lt
+f_crafting_report_iteminfo	i_armor_female_bustier
+f_crafting_report_iteminfo	i_armor_female_bustier_studded
+f_crafting_report_iteminfo	i_armor_female_leather
+f_crafting_report_iteminfo	i_armor_female_plate
+f_crafting_report_iteminfo	i_armor_female_shorts
+f_crafting_report_iteminfo	i_armor_female_skirt
+f_crafting_report_iteminfo	i_armor_female_studded
+f_crafting_report_iteminfo	i_arrow
+f_crafting_report_iteminfo	i_arrow_fletching
+f_crafting_report_iteminfo	i_arrow_shaft
+f_crafting_report_iteminfo	i_axe
+f_crafting_report_iteminfo	i_axe_battle
+f_crafting_report_iteminfo	i_axe_battle_large
+f_crafting_report_iteminfo	i_axe_double
+f_crafting_report_iteminfo	i_axe_exec
+f_crafting_report_iteminfo	i_axe_two_hand
+f_crafting_report_iteminfo	i_axe_war
+f_crafting_report_iteminfo	i_axel
+f_crafting_report_iteminfo	i_axel_and_gears
+f_crafting_report_iteminfo	i_backgammon_game
+f_crafting_report_iteminfo	i_backpack
+f_crafting_report_iteminfo	i_bag
+f_crafting_report_iteminfo	i_bandana
+f_crafting_report_iteminfo	i_bardiche
+f_crafting_report_iteminfo	i_barrel
+f_crafting_report_iteminfo	i_barrel_hoops
+f_crafting_report_iteminfo	i_barrel_lid
+f_crafting_report_iteminfo	i_barrel_open
+f_crafting_report_iteminfo	i_barrel_staves
+f_crafting_report_iteminfo	i_barrel_tap
+f_crafting_report_iteminfo	i_bascinet
+f_crafting_report_iteminfo	i_basket
+f_crafting_report_iteminfo	i_basket_2
+f_crafting_report_iteminfo	i_basket_bushel
+f_crafting_report_iteminfo	i_basket_square
+f_crafting_report_iteminfo	i_beads
+f_crafting_report_iteminfo	i_bench_wood_dark
+f_crafting_report_iteminfo	i_bird_cooked
+f_crafting_report_iteminfo	i_bone_arms
+f_crafting_report_iteminfo	i_bone_chest
+f_crafting_report_iteminfo	i_bone_gloves
+f_crafting_report_iteminfo	i_bone_helmet
+f_crafting_report_iteminfo	i_bone_leggings
+f_crafting_report_iteminfo	i_bonnet
+f_crafting_report_iteminfo	i_book_lg
+f_crafting_report_iteminfo	i_book_sm
+f_crafting_report_iteminfo	i_bookcase
+f_crafting_report_iteminfo	i_bookcase_full
+f_crafting_report_iteminfo	i_boots_calf
+f_crafting_report_iteminfo	i_boots_thigh
+f_crafting_report_iteminfo	i_bottle_empty
+f_crafting_report_iteminfo	i_bow
+f_crafting_report_iteminfo	i_bowl_pewter
+f_crafting_report_iteminfo	i_bowl_stew_lg
+f_crafting_report_iteminfo	i_bowl_wood
+f_crafting_report_iteminfo	i_bowl_wood_lg
+f_crafting_report_iteminfo	i_box_wood
+f_crafting_report_iteminfo	i_bracelet_silver
+f_crafting_report_iteminfo	i_bread_french
+f_crafting_report_iteminfo	i_bread_loaf
+f_crafting_report_iteminfo	i_bureau
+f_crafting_report_iteminfo	i_bureau_2
+f_crafting_report_iteminfo	i_cake
+f_crafting_report_iteminfo	i_candle
+f_crafting_report_iteminfo	i_cape
+f_crafting_report_iteminfo	i_chainmail_coif
+f_crafting_report_iteminfo	i_chainmail_leggings
+f_crafting_report_iteminfo	i_chainmail_tunic
+f_crafting_report_iteminfo	i_chair_stool
+f_crafting_report_iteminfo	i_chair_stool_bamboo
+f_crafting_report_iteminfo	i_chair_stool_bar
+f_crafting_report_iteminfo	i_chair_throne
+f_crafting_report_iteminfo	i_chair_wood
+f_crafting_report_iteminfo	i_chair_wood_bamboo
+f_crafting_report_iteminfo	i_chair_wood_cushion
+f_crafting_report_iteminfo	i_chair_wood_fancy_cushion
+f_crafting_report_iteminfo	i_chair_wood_rough_dark
+f_crafting_report_iteminfo	i_chest_wooden_brass
+f_crafting_report_iteminfo	i_chicken_leg
+f_crafting_report_iteminfo	i_cleaver_meat
+f_crafting_report_iteminfo	i_clock
+f_crafting_report_iteminfo	i_clock_frame
+f_crafting_report_iteminfo	i_CLOCK_PARTS
+f_crafting_report_iteminfo	i_cloth_oil
+f_crafting_report_iteminfo	i_club
+f_crafting_report_iteminfo	i_crate_lg
+f_crafting_report_iteminfo	i_crate_md
+f_crafting_report_iteminfo	i_crate_small
+f_crafting_report_iteminfo	i_crossbow
+f_crafting_report_iteminfo	i_crossbow_heavy
+f_crafting_report_iteminfo	i_cutlass
+f_crafting_report_iteminfo	i_dagger
+f_crafting_report_iteminfo	i_deed_house_addon_anvil
+f_crafting_report_iteminfo	i_deed_house_addon_bed_large_white_east
+f_crafting_report_iteminfo	i_deed_house_addon_bed_large_white_south
+f_crafting_report_iteminfo	i_deed_house_addon_bed_small_white_east
+f_crafting_report_iteminfo	i_deed_house_addon_bed_small_white_south
+f_crafting_report_iteminfo	i_deed_house_addon_flour_mill_east
+f_crafting_report_iteminfo	i_deed_house_addon_flour_mill_south
+f_crafting_report_iteminfo	i_deed_house_addon_forge
+f_crafting_report_iteminfo	i_deed_house_addon_forge_large_east
+f_crafting_report_iteminfo	i_deed_house_addon_forge_large_south
+f_crafting_report_iteminfo	i_deed_house_addon_loom_east
+f_crafting_report_iteminfo	i_deed_house_addon_loom_south
+f_crafting_report_iteminfo	i_deed_house_addon_oven_stone_east
+f_crafting_report_iteminfo	i_deed_house_addon_oven_stone_south
+f_crafting_report_iteminfo	i_deed_house_addon_spinning_wheel_south
+f_crafting_report_iteminfo	i_deed_house_addon_spinning_wheel_west
+f_crafting_report_iteminfo	i_deed_house_addon_water_trough_east
+f_crafting_report_iteminfo	i_deed_house_addon_water_trough_south
+f_crafting_report_iteminfo	i_dice_cup
+f_crafting_report_iteminfo	i_doublet
+f_crafting_report_iteminfo	i_drawer
+f_crafting_report_iteminfo	i_drawer_2
+f_crafting_report_iteminfo	i_dress_full
+f_crafting_report_iteminfo	i_dress_plain
+f_crafting_report_iteminfo	i_dresser
+f_crafting_report_iteminfo	i_drum
+f_crafting_report_iteminfo	i_earrings_gold
+f_crafting_report_iteminfo	i_earrings_silver
+f_crafting_report_iteminfo	i_eggs_fried
+f_crafting_report_iteminfo	i_fish_cut_cooked
+f_crafting_report_iteminfo	i_FISHING_POLE
+f_crafting_report_iteminfo	i_flour_sack
+f_crafting_report_iteminfo	i_flour_sifter
+f_crafting_report_iteminfo	i_fork
+f_crafting_report_iteminfo	i_froe
+f_crafting_report_iteminfo	i_frypan
+f_crafting_report_iteminfo	i_game_board
+f_crafting_report_iteminfo	i_gears
+f_crafting_report_iteminfo	i_goblet
+f_crafting_report_iteminfo	i_goblet_2
+f_crafting_report_iteminfo	i_halberd
+f_crafting_report_iteminfo	i_hammer
+f_crafting_report_iteminfo	i_hammer_pick
+f_crafting_report_iteminfo	i_hammer_sledge
+f_crafting_report_iteminfo	i_hammer_smith
+f_crafting_report_iteminfo	i_hammer_smith
+f_crafting_report_iteminfo	i_hammer_war
+f_crafting_report_iteminfo	i_HARP_LARGE
+f_crafting_report_iteminfo	i_hat_feather
+f_crafting_report_iteminfo	i_hat_floppy
+f_crafting_report_iteminfo	i_hat_jester
+f_crafting_report_iteminfo	i_hat_straw
+f_crafting_report_iteminfo	i_hat_straw_tall
+f_crafting_report_iteminfo	i_hat_tricorne
+f_crafting_report_iteminfo	i_hat_wide_brim
+f_crafting_report_iteminfo	i_hat_wizards
+f_crafting_report_iteminfo	i_helm_closed
+f_crafting_report_iteminfo	i_helm_norse
+f_crafting_report_iteminfo	i_helm_open
+f_crafting_report_iteminfo	i_hinge
+f_crafting_report_iteminfo	i_hooded_shroud
+f_crafting_report_iteminfo	i_inshave
+f_crafting_report_iteminfo	i_jar_honey
+f_crafting_report_iteminfo	i_jester_suit
+f_crafting_report_iteminfo	i_katana
+f_crafting_report_iteminfo	i_keg_potion
+f_crafting_report_iteminfo	i_keg_potion_huge
+f_crafting_report_iteminfo	i_keg_potion_mega
+f_crafting_report_iteminfo	i_keg_small
+f_crafting_report_iteminfo	i_kettle
+f_crafting_report_iteminfo	i_kilt
+f_crafting_report_iteminfo	i_knife
+f_crafting_report_iteminfo	i_knife_butcher
+f_crafting_report_iteminfo	i_knife_draw
+f_crafting_report_iteminfo	i_kryss
+f_crafting_report_iteminfo	i_lamb_leg
+f_crafting_report_iteminfo	i_lantern
+f_crafting_report_iteminfo	i_leather_cap
+f_crafting_report_iteminfo	i_leather_gloves
+f_crafting_report_iteminfo	i_leather_gorget
+f_crafting_report_iteminfo	i_leather_leggings
+f_crafting_report_iteminfo	i_leather_sleeves
+f_crafting_report_iteminfo	i_leather_tunic
+f_crafting_report_iteminfo	i_lockpick
+f_crafting_report_iteminfo	i_lockpick_set
+f_crafting_report_iteminfo	i_lute
+f_crafting_report_iteminfo	i_lyre
+f_crafting_report_iteminfo	i_mace
+f_crafting_report_iteminfo	i_mace_war
+f_crafting_report_iteminfo	i_mask_blue
+f_crafting_report_iteminfo	i_mask_tribal_red
+f_crafting_report_iteminfo	i_maul
+f_crafting_report_iteminfo	i_mortar_pestle
+f_crafting_report_iteminfo	i_muffin
+f_crafting_report_iteminfo	i_mug_ceramic
+f_crafting_report_iteminfo	i_mug_pewter
+f_crafting_report_iteminfo	i_nails
+f_crafting_report_iteminfo	i_necklace_gold
+f_crafting_report_iteminfo	i_necklace_gold_beads
+f_crafting_report_iteminfo	i_necklace_metal_beads
+f_crafting_report_iteminfo	i_necklace_silver
+f_crafting_report_iteminfo	i_necklace_silver_beads
+f_crafting_report_iteminfo	i_pan_cookies
+f_crafting_report_iteminfo	i_pants_long
+f_crafting_report_iteminfo	i_pants_short
+f_crafting_report_iteminfo	i_pen_and_ink
+f_crafting_report_iteminfo	i_pen_mapmakers
+f_crafting_report_iteminfo	i_pen_scribes
+f_crafting_report_iteminfo	i_pickaxe
+f_crafting_report_iteminfo	i_pie_baked
+f_crafting_report_iteminfo	i_pie_unbaked
+f_crafting_report_iteminfo	i_pitchfork
+f_crafting_report_iteminfo	i_pizza
+f_crafting_report_iteminfo	i_plane_jointing
+f_crafting_report_iteminfo	i_plane_moulding
+f_crafting_report_iteminfo	i_plane_smoothing
+f_crafting_report_iteminfo	i_plate
+f_crafting_report_iteminfo	i_plate_cookies
+f_crafting_report_iteminfo	i_platemail_arms
+f_crafting_report_iteminfo	i_platemail_chest
+f_crafting_report_iteminfo	i_platemail_gloves
+f_crafting_report_iteminfo	i_platemail_gorget
+f_crafting_report_iteminfo	i_platemail_helm
+f_crafting_report_iteminfo	i_platemail_helm
+f_crafting_report_iteminfo	i_platemail_leggings
+f_crafting_report_iteminfo	i_pot
+f_crafting_report_iteminfo	i_potion_Agility
+f_crafting_report_iteminfo	i_potion_AgilityGreat
+f_crafting_report_iteminfo	i_potion_Clever
+f_crafting_report_iteminfo	i_potion_CleverGreat
+f_crafting_report_iteminfo	i_potion_Cure
+f_crafting_report_iteminfo	i_potion_CureGreat
+f_crafting_report_iteminfo	i_potion_CureLess
+f_crafting_report_iteminfo	i_potion_Explosion
+f_crafting_report_iteminfo	i_potion_ExplosionGreat
+f_crafting_report_iteminfo	i_potion_ExplosionLess
+f_crafting_report_iteminfo	i_potion_Heal
+f_crafting_report_iteminfo	i_potion_HealGreat
+f_crafting_report_iteminfo	i_potion_HealLess
+f_crafting_report_iteminfo	i_potion_Incognito
+f_crafting_report_iteminfo	i_potion_Invisibility
+f_crafting_report_iteminfo	i_potion_Mana
+f_crafting_report_iteminfo	i_potion_ManaTotal
+f_crafting_report_iteminfo	i_potion_Nightsight
+f_crafting_report_iteminfo	i_potion_Poison
+f_crafting_report_iteminfo	i_potion_PoisonDeadly
+f_crafting_report_iteminfo	i_potion_PoisonGreat
+f_crafting_report_iteminfo	i_potion_PoisonLess
+f_crafting_report_iteminfo	i_potion_Refresh
+f_crafting_report_iteminfo	i_potion_RefreshTotal
+f_crafting_report_iteminfo	i_potion_Restore
+f_crafting_report_iteminfo	i_potion_RestoreGreat
+f_crafting_report_iteminfo	i_potion_Shrink
+f_crafting_report_iteminfo	i_potion_Stoneskin
+f_crafting_report_iteminfo	i_potion_StoneskinGreat
+f_crafting_report_iteminfo	i_potion_StoneskinLess
+f_crafting_report_iteminfo	i_potion_Strength
+f_crafting_report_iteminfo	i_potion_StrengthGreat
+f_crafting_report_iteminfo	i_pouch
+f_crafting_report_iteminfo	i_ribs_cooked
+f_crafting_report_iteminfo	i_ring_gold
+f_crafting_report_iteminfo	i_ring_silver
+f_crafting_report_iteminfo	i_ringmail_gloves
+f_crafting_report_iteminfo	i_ringmail_leggings
+f_crafting_report_iteminfo	i_ringmail_sleeves
+f_crafting_report_iteminfo	i_ringmail_tunic
+f_crafting_report_iteminfo	i_robe
+f_crafting_report_iteminfo	i_rope
+f_crafting_report_iteminfo	i_runebook
+f_crafting_report_iteminfo	i_sandals
+f_crafting_report_iteminfo	i_sash
+f_crafting_report_iteminfo	i_saw
+f_crafting_report_iteminfo	i_saw_dovetail
+f_crafting_report_iteminfo	i_scimitar
+f_crafting_report_iteminfo	i_scissors
+f_crafting_report_iteminfo	i_scorp
+f_crafting_report_iteminfo	i_scroll_agility
+f_crafting_report_iteminfo	i_scroll_archcure
+f_crafting_report_iteminfo	i_scroll_archprotection
+f_crafting_report_iteminfo	i_scroll_blade_spirits
+f_crafting_report_iteminfo	i_scroll_blank
+f_crafting_report_iteminfo	i_scroll_bless
+f_crafting_report_iteminfo	i_scroll_chain_lightning
+f_crafting_report_iteminfo	i_scroll_clumsy
+f_crafting_report_iteminfo	i_scroll_create_food
+f_crafting_report_iteminfo	i_scroll_cunning
+f_crafting_report_iteminfo	i_scroll_cure
+f_crafting_report_iteminfo	i_scroll_curse
+f_crafting_report_iteminfo	i_scroll_dispel
+f_crafting_report_iteminfo	i_scroll_dispel_field
+f_crafting_report_iteminfo	i_scroll_earthquake
+f_crafting_report_iteminfo	i_scroll_energy_bolt
+f_crafting_report_iteminfo	i_scroll_energy_field
+f_crafting_report_iteminfo	i_scroll_energy_vortex
+f_crafting_report_iteminfo	i_scroll_explosion
+f_crafting_report_iteminfo	i_scroll_feeblemind
+f_crafting_report_iteminfo	i_scroll_fire_field
+f_crafting_report_iteminfo	i_scroll_fireball
+f_crafting_report_iteminfo	i_scroll_flamestrike
+f_crafting_report_iteminfo	i_scroll_gate_travel
+f_crafting_report_iteminfo	i_scroll_greater_heal
+f_crafting_report_iteminfo	i_scroll_harm
+f_crafting_report_iteminfo	i_scroll_heal
+f_crafting_report_iteminfo	i_scroll_incognito
+f_crafting_report_iteminfo	i_scroll_invisibility
+f_crafting_report_iteminfo	i_scroll_lightning
+f_crafting_report_iteminfo	i_scroll_magic_arrow
+f_crafting_report_iteminfo	i_scroll_magic_lock
+f_crafting_report_iteminfo	i_scroll_magic_reflection
+f_crafting_report_iteminfo	i_scroll_magic_trap
+f_crafting_report_iteminfo	i_scroll_magic_untrap
+f_crafting_report_iteminfo	i_scroll_mana_drain
+f_crafting_report_iteminfo	i_scroll_mana_vampire
+f_crafting_report_iteminfo	i_scroll_mark
+f_crafting_report_iteminfo	i_scroll_mass_curse
+f_crafting_report_iteminfo	i_scroll_mass_dispel
+f_crafting_report_iteminfo	i_scroll_meteor_swarm
+f_crafting_report_iteminfo	i_scroll_mind_blast
+f_crafting_report_iteminfo	i_scroll_night_sight
+f_crafting_report_iteminfo	i_scroll_paralyze
+f_crafting_report_iteminfo	i_scroll_paralyze_field
+f_crafting_report_iteminfo	i_scroll_poison
+f_crafting_report_iteminfo	i_scroll_poison_field
+f_crafting_report_iteminfo	i_scroll_polymorph
+f_crafting_report_iteminfo	i_scroll_protection
+f_crafting_report_iteminfo	i_scroll_reactive_armor
+f_crafting_report_iteminfo	i_scroll_recall
+f_crafting_report_iteminfo	i_scroll_resurrection
+f_crafting_report_iteminfo	i_scroll_reveal
+f_crafting_report_iteminfo	i_scroll_strength
+f_crafting_report_iteminfo	i_scroll_summon_creature
+f_crafting_report_iteminfo	i_scroll_summon_daemon
+f_crafting_report_iteminfo	i_scroll_summon_elem_air
+f_crafting_report_iteminfo	i_scroll_summon_elem_earth
+f_crafting_report_iteminfo	i_scroll_summon_elem_fire
+f_crafting_report_iteminfo	i_scroll_summon_elem_water
+f_crafting_report_iteminfo	i_scroll_telekinesis
+f_crafting_report_iteminfo	i_scroll_teleport
+f_crafting_report_iteminfo	i_scroll_unlock
+f_crafting_report_iteminfo	i_scroll_wall_of_stone
+f_crafting_report_iteminfo	i_scroll_weaken
+f_crafting_report_iteminfo	i_sewing_kit
+f_crafting_report_iteminfo	i_sextant
+f_crafting_report_iteminfo	i_SEXTANT_PARTS
+f_crafting_report_iteminfo	i_shepherds_crook
+f_crafting_report_iteminfo	i_shield_buckler
+f_crafting_report_iteminfo	i_shield_heater
+f_crafting_report_iteminfo	i_shield_kite_metal
+f_crafting_report_iteminfo	i_shield_kite_wood
+f_crafting_report_iteminfo	i_shield_kite_wood
+f_crafting_report_iteminfo	i_shield_round_bronze
+f_crafting_report_iteminfo	i_shield_round_metal
+f_crafting_report_iteminfo	i_shield_wood
+f_crafting_report_iteminfo	i_shirt_fancy
+f_crafting_report_iteminfo	i_shirt_plain
+f_crafting_report_iteminfo	i_shoes_plain
+f_crafting_report_iteminfo	i_shovel
+f_crafting_report_iteminfo	i_skirt_long
+f_crafting_report_iteminfo	i_SKULL_CAP
+f_crafting_report_iteminfo	i_skull_mug
+f_crafting_report_iteminfo	i_spear
+f_crafting_report_iteminfo	i_spear_short
+f_crafting_report_iteminfo	i_spellbook
+f_crafting_report_iteminfo	i_spellbook_full
+f_crafting_report_iteminfo	i_spittoon
+f_crafting_report_iteminfo	i_spoon
+f_crafting_report_iteminfo	i_springs
+f_crafting_report_iteminfo	i_spyglass
+f_crafting_report_iteminfo	i_staff_gnarled
+f_crafting_report_iteminfo	i_staff_quarter
+f_crafting_report_iteminfo	i_studded_gloves
+f_crafting_report_iteminfo	i_studded_gorget
+f_crafting_report_iteminfo	i_studded_leggings
+f_crafting_report_iteminfo	i_studded_sleeves
+f_crafting_report_iteminfo	i_studded_tunic
+f_crafting_report_iteminfo	i_surcoat
+f_crafting_report_iteminfo	i_sword_broad
+f_crafting_report_iteminfo	i_sword_long
+f_crafting_report_iteminfo	i_sword_long
+f_crafting_report_iteminfo	i_sword_viking
+f_crafting_report_iteminfo	i_table_nightstand
+f_crafting_report_iteminfo	i_table_runner_plaid_blue
+f_crafting_report_iteminfo	i_table_runner_purple
+f_crafting_report_iteminfo	i_table_runner_red
+f_crafting_report_iteminfo	i_table_runner_snowflake
+f_crafting_report_iteminfo	i_table_wood_rough_board
+f_crafting_report_iteminfo	i_table_wood_rough_small
+f_crafting_report_iteminfo	i_table_writing
+f_crafting_report_iteminfo	i_tambourine
+f_crafting_report_iteminfo	i_tinker_tools
+f_crafting_report_iteminfo	i_tongs
+f_crafting_report_iteminfo	i_toolcase_empty
+f_crafting_report_iteminfo	i_toolkit_empty
+f_crafting_report_iteminfo	i_trap_kit_dart
+f_crafting_report_iteminfo	i_trap_kit_explosion
+f_crafting_report_iteminfo	i_trap_kit_poison
+f_crafting_report_iteminfo	i_tray
+f_crafting_report_iteminfo	i_tub_empty
+f_crafting_report_iteminfo	i_tunic
+f_crafting_report_iteminfo	i_war_fork
+f_crafting_report_iteminfo	i_wire_copper
+f_crafting_report_iteminfo	i_wire_gold
+f_crafting_report_iteminfo	i_wire_iron
+f_crafting_report_iteminfo	i_wire_silver
+f_crafting_report_iteminfo	i_wood_pulp
+f_crafting_report_iteminfo	i_xbolt
+f_crafting_report_iteminfo	i_map_local
+f_crafting_report_iteminfo	i_map_city
+f_crafting_report_iteminfo	i_map_seachart
+f_crafting_report_iteminfo	i_map_world
+
+[function f_crafting_report_iteminfo]
+serv.newitem <args>
+serv.log Reporting crafting information for <new.baseid>
+local.resourcecost=<f_avgvalue <new.f_crafting_item_resource_cost>>
+local.sellvalue=<f_avgvalue <new.value>>
+local.profit=<eval <local.sellvalue>-<local.resourcecost>>
+local.profitpercentage=<qval (<local.resourcecost>)?<muldiv <local.profit>,100,<local.resourcecost>>:100>
+//serv.log <name> <local.resourcecost>g --> <local.sellvalue>g = <local.profit>g profit
+f_writefile reports/crafting/crafting_report_all_craftable_items.csv,<new.skillmake.1.key>,<new.name>,<new.baseid>,<local.resourcecost>g,<local.sellvalue>g,<local.profit>g,<local.profitpercentage>%
+new.remove
+
+[EOF]
+

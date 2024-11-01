@@ -1,0 +1,103 @@
+
+[defname crafted_armor_adjustment]
+modar_armor_i_ingot_old_copper 		5
+modar_weapon_i_ingot_old_copper		1
+modar_armor_i_ingot_dull_copper		8
+modar_weapon_i_ingot_dull_copper	2
+modar_armor_i_ingot_shadow		10
+modar_weapon_i_ingot_shadow		3
+modar_armor_i_ingot_copper		13
+modar_weapon_i_ingot_copper		4
+modar_armor_i_ingot_bronze		15
+modar_weapon_i_ingot_bronze		5
+modar_armor_i_ingot_silver		15
+modar_weapon_i_ingot_silver		5
+modar_armor_i_ingot_gold		18	
+modar_weapon_i_ingot_gold		6
+modar_armor_i_ingot_rose		20
+modar_weapon_i_ingot_rose		7
+modar_armor_i_ingot_agapite		20	
+modar_weapon_i_ingot_agapite		7
+modar_armor_i_ingot_bloodrock		23
+modar_weapon_i_ingot_bloodrock		8
+modar_armor_i_ingot_verite		23
+modar_weapon_i_ingot_verite		8
+modar_armor_i_ingot_valorite		25
+modar_weapon_i_ingot_valorite		9
+modar_armor_i_ingot_mytheril		30
+modar_weapon_i_ingot_mytheril		10
+modar_armor_i_ingot_blackrock		35
+modar_weapon_i_ingot_blackrock		11
+
+[function respec_crafted_armements]
+for 0 <eval (<serv.accounts>-1)>		//take care of people wearing items
+  if (<serv.account.<local._for>.chars>)
+    local.account=<serv.account.<local._for>.name>
+    for 0 <eval (<serv.account.<local._for>.chars>-1)>
+      ref1=<serv.account.<local.account>.char.<local._for>>
+      ref1.respec_crafted_armaments2
+    endfor
+  endif
+endfor
+foritems 9999999				//look at all itmes in the world, and all items in containers
+  ref1=<uid>	//item we're looping through
+  if (<ref1.type>==t_container)
+    forcont <ref1> 9999999
+      ref2=<uid>	//item in container
+      if !(<isempty <ref2.tag.matoverride_i_ingot_iron>>)
+        ref2.f_respec_crafted_armament
+      endif
+    endfor
+  else
+    ref2=<uid>	//item in open world (locked down maybe?)
+    if !(<isempty <ref2.tag.matoverride_i_ingot_iron>>)
+      ref2.f_respec_crafted_armament
+    endif
+  endif
+endfor
+
+[function respec_crafted_armaments2]
+ref1=<uid>	//player
+for l 0 24			//check all layers
+  ref2=<ref1.findlayer.<dlocal.l>>	//item they are wearing
+  if (<ref2.isvalid>)	
+    if !(<isempty <ref2.tag.matoverride_i_ingot_iron>>)
+      ref2.f_respec_crafted_armament
+    endif
+  endif
+endfor
+if (<ref1.findlayer.21.isvalid>)
+  forcont <ref1.findlayer.21> 999999	//check pack
+    ref2=<uid>	//item in player's pack
+    if !(<isempty <ref2.tag.matoverride_i_ingot_iron>>)
+      ref2.f_respec_crafted_armament
+    endif
+  endfor
+endif
+if (<ref1.findlayer.29.isvalid>)
+  forcont <ref1.findlayer.29> 999999	//check bank
+    ref2=<uid>	//item in player's bank
+    if !(<isempty <ref2.tag.matoverride_i_ingot_iron>>)
+      ref2.f_respec_crafted_armament
+    endif
+  endfor
+endfor
+
+[function f_respec_crafted_armament]
+if (<isweapon>) || (<isarmor>) 
+  local.type=<qval (<isarmor>)?armor:weapon>
+  local.ingot=<tag0.matoverride_i_ingot_iron>
+  if (<isarmor>)
+    armor=<serv.itemdef.<baseid>.armor>
+  elseif (<isweapon>)
+    damage=<serv.itemdef.<baseid>.dam>
+  endif  
+  modar=<def0.modar_<local.type>_<local.ingot>>
+  if (strmatch("exceptional*","<name>"))		//some were missing this event
+    events=+t_exceptional_item
+  endif
+  if (<isevent.t_exceptional_item>)
+    modar += 4
+  endif
+  serv.log <name> now has <modar> modar
+endif

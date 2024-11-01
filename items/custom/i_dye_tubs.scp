@@ -1,0 +1,541 @@
+//Dyetubs by Soulless
+//v1.0
+//12:52 AM 5/2/2018
+
+//dyetubs now have charges
+//you cannot dye an item dyetub more than once
+//small dye buckets added for loot
+//added hair and skin dyes 
+
+
+/////////////////////////////////////
+// Dye Bucket (smaller than a dye tub, limited uses)
+
+[itemdef 0f94]				//this is a tiny version of the dyetub
+defname=i_dye_tub_small
+name=small dyeing tub
+type=t_dye_vat
+
+
+[itemdef i_dye_bucket]				//this is a tiny version of the dyetub
+defname=i_dye_bucket
+defname2=i_dye_bucket_rare
+name=Rare Dyeing Bucket
+id=i_dye_tub_small
+type=t_dye_bucket_rare
+
+on=@create
+color=<f_rare_hue_select>
+more1={1,6}
+
+
+/////////////////////
+// Larger Rare Dyetubs
+
+[itemdef i_dye_tub_rare]		//these are some new rare colors, nice but not so bright
+defname=i_dye_tub_rare
+name=rare dye tub
+id=i_dye_tub
+type=t_dye_vat_rare
+
+on=@create
+color=<f_rare_hue_select>
+more1={20 30}
+
+[itemdef i_dye_tub_rare2]
+defname=i_dye_tub_rare2
+defname2=i_dye_tub_rare_neon		//remove this at some point after next restart
+name=rare dye tub
+id=i_dye_tub
+type=t_dye_vat_rare
+
+on=@create
+color=<f_rare_hue_select>
+more1={20 30}
+
+[itemdef i_dye_tub_rare_original]	//these are the original rare colors in UO
+defname=i_dye_tub_rare_original
+name=rare dye tub
+id=i_dye_tub
+type=t_dye_vat_rare
+
+on=@create
+color={047e 049a}	
+more1={20 30}
+
+//////////////////////////////////
+// Item Dye Tubs
+
+[itemdef i_dye_tub_armor]
+defname=i_dye_tub_armor
+name=armor dye tub
+id=i_dye_tub
+type=t_dye_vat_item
+
+on=@create
+more1={10 20}
+color=<f_rare_hue_select>
+
+on=@dclick
+//target Select the armor to dye.
+src.sysmessage You cannot use this at the moment.
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You can not dye that where it is
+  return 1
+elseif !(strmatch(t_armor*,<src.targ.type>)) && !(<src.targ.type>==t_shield)
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+on=@targon_char
+return 1
+
+[itemdef i_dye_tub_weapon]
+defname=i_dye_tub_weapon
+name=weapon dye tub
+id=i_dye_tub
+type=t_dye_vat_item
+
+on=@create
+more1={10 20}
+color=<f_rare_hue_select>
+
+on=@dclick
+//target Select the weapon to dye
+src.sysmessage You cannot use this at the moment.
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You can not dye that where it is
+  return 1
+elseif !(strmatch(t_weapon*,<src.targ.type>))
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+on=@targon_char
+return 1
+
+[itemdef i_dye_tub_animal]
+defname=i_dye_tub_animal
+name=animal dye tub
+id=i_dye_tub
+type=t_dye_vat_item
+
+on=@create
+more1={10 20}
+color=<f_rare_hue_select>
+
+on=@dclick
+//target Select the Animal to dye.
+src.sysmessage You cannot use this at the moment.
+return 1
+
+on=@targon_char
+if (<src.targ.owner> != <src>) || (<src.targ.uid> == <src.uid>)
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+//src.targ.oskin=<color>	//this must be set or it will revert upon resurrect
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You can not dye that where it is
+  return 1
+elseif (<src.targ.type> != t_ethereal_statuette) && (<src.targ.type> != t_figurine)
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+[itemdef i_dye_tub_book]
+defname=i_dye_tub_book
+name=book dye tub
+id=i_dye_tub
+type=t_dye_vat_item
+
+on=@create
+more1={10 20}
+color=<f_rare_hue_select>
+
+on=@dclick
+//target Select the book to dye.
+src.sysmessage You cannot use this at the moment.
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You can not dye that where it is
+  return 1
+elseif (<src.targ.type> != t_book) && !(<src.targ.baseid>==i_spellbook_full) && !(<src.targ.baseid>==i_runebook) && !(<src.targ.baseid>==i_spellbook) 
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+on=@targon_char
+return 1
+
+[itemdef i_dye_tub_furniture]
+defname=i_dye_tub_furniture
+name=furniture dye tub
+id=i_dye_tub
+type=t_dye_vat_item
+
+on=@create
+more1={10 20}
+color=<f_rare_hue_select>
+
+on=@dclick
+//target Select the peice of furniture to dye.
+src.sysmessage You cannot use this at the moment.
+return 1
+
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You can not dye that where it is
+  return 1
+elseif  !(<src.targ.isfurniture>)
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+on=@targon_char
+return 1
+
+[itemdef i_dye_tub_jewelry]
+defname=i_dye_tub_jewelry
+name=jewelry dye tub
+id=i_dye_tub
+type=t_dye_vat_item
+
+on=@create
+more1={10 20}
+color=<f_rare_hue_select>
+
+on=@dclick
+//target Select the jewelry to dye.
+src.sysmessage You cannot use this at the moment.
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You can not dye that where it is
+  return 1
+elseif (<src.targ.type> != t_jewelry)
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+on=@targon_char
+return 1
+
+////////////////////////////////////////////////////////////////////////////////////////
+//This seems like we should get rid of it, makes the others pointless, it does too much
+
+[itemdef i_dye_tub_ultimate]
+defname=i_dye_tub_ultimate
+name=ultimate dye tub
+id=i_dye_tub
+type=t_dye_vat_item
+
+on=@create
+more1={10 20}
+color=<f_rare_hue_select>
+
+on=@dclick
+//target Select the item to dye
+src.sysmessage You cannot use this at the moment.
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You can not dye that where it is
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+on=@targon_char
+if (<src.targ.owner> != <src>) || (<src.targ> == <src>)
+  src.sysmessage You can't dye that with this tub.
+  return 1
+endif
+src.targ.color=<color>
+src.sfx 023e
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+return 1
+
+
+///////////////////////
+// Typedefs
+
+[typedef t_dye_vat_rare]
+
+on=@click
+if (<more1>) 	// more1 = charges 		//(<israredyetub>) || (<isitemdyetub>)) 
+  message charges: <dmore1>
+endif
+message (<strtolower color: <qval (<isempty <def.hue<eval (<color>-1)>_name>>)?<color>: <def.hue<eval (<color>-1)>_name> <color>>>)
+
+on=@dclick
+target Select the object to use this on.
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You cannot dye that where it is.
+  return 1
+elseif (<src.targ.israredyetub>) && (<src.targ> != <uid>)  // you can combine two special colors together to make a new one
+  if (<more1> <= 6) || (<src.targ.more1> <= 6)
+    src.sysmessage There is not enough to mix into a new color.
+    return 1
+  endif
+  src.ctag0.mixxing_rare_tub=<src.targ>
+  dialog d_confirm_mix_rare_tubs			//prevent players from accidentally losing a dye tub
+  return 1
+elseif (<src.targ.isitemdyetub>) && (<more1> >= 1)	//you can color item dyetubs with this (not dyebuckets though)
+  more1 -= 1						//remove a charge
+  src.targ.color=<color>				
+  src.sysmessage You see the dye tub swirl and take on the color.
+  src.sfx 023e
+  return 1
+elseif !(<src.targ.isdyeable>)
+  src.sysmessage The dye just drips off that.
+  return 1
+elseif (<src.targ.color> == <color>)
+  src.sysmessage This object is already dyed that color.	
+  return 1
+endif
+
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+
+src.targ.color=<color>
+src.sfx 023e
+return 1
+
+on=@targon_char
+src.sysmessage You cannot dye that with this.
+return 1
+
+[typedef t_dye_vat_item]
+//this is basically just a place holder cause each item dye vat has its own specific rules
+
+on=@click
+if (<more1>) 	// more1 = charges 		//(<israredyetub>) || (<isitemdyetub>)) 
+  message charges: <dmore1>
+endif
+message (<strtolower color: <qval (<isempty <def.hue<eval (<color>-1)>_name>>)?<color>: <def.hue<eval (<color>-1)>_name> <color>>>)
+
+//on=@dclick
+//if (<color> == 0)
+  //src.sysmessage You should apply a color to this tub first.	//why should you prevent this? 
+  //return 1
+//endif
+
+[typedef t_dye_bucket_rare]
+
+on=@click
+if (<more1>) 	// more1 = charges 		//(<israredyetub>) || (<isitemdyetub>)) 
+  message charges: <dmore1>
+endif
+message (<strtolower color: <qval (<isempty <def.hue<eval (<color>-1)>_name>>)?<color>: <def.hue<eval (<color>-1)>_name> <color>>>)
+
+on=@dclick
+target Select the object to use this on.
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>)
+  src.sysmessage You cannot dye that where it is.
+  return 1
+elseif !(<src.targ.isdyeable>) || (<src.targ.type>==t_dye_vat_item)
+  src.sysmessage The dye just drips off that.
+  return 1
+endif
+
+more1 -= 1
+if (<more1> <= 0)
+  consume
+  src.sysmessage The dye tub has run out of charges.
+endif
+
+src.targ.color=<color>
+src.sfx 023e
+return 1
+
+////////////////////////////////////
+// Ticket barrel dye tub (color selectable)
+
+[dialog d_dye_bucket]
+
+150,50
+
+page 0 
+resizepic 10 10 2600 400 400
+
+page 1
+for n 0 11
+  dtext 40 <eval (80+<local.y>)> <eval (09c4+(<local.n>*1))> DERP DERP
+  local.y += 20
+endfor
+
+[function f_rare_hue_select]
+local.huecount=<eval (<serv.list.rare_hues_pool.count>-1)>
+return <serv.list.rare_hues_pool.<R<local.huecount>>>
+
+[dialog d_confirm_mix_rare_tubs]
+250,250
+page 0
+
+resizepic 10 10 9200 325 100
+dtext 120 20 026 **Warning**
+dtext 20 35 1000 Confirm you wish to mix these two tubs together
+dtext 50 50 026 One will be destroyed in the process
+
+button 40 75 241 242 1 0 0	//cancel
+
+button 225 75 247 278 1 0 1	//okay
+
+[dialog d_confirm_mix_rare_tubs button]
+
+onbutton=0
+src.ctag0.mixxing_rare_tub=
+
+onbutton=1
+ref1=<uid>				//tub we're mixing into the other
+ref2=<src.ctag.mixxing_rare_tub>	//tub being poured into
+src.ctag0.mixxing_rare_tub=
+if !(<ref1.isvalid>) || !(<ref2.isvalid>) 
+  return 1
+elseif (<ref1.topobj> != <src>) || (<ref2.topobj> != <src>)
+  src.sysmessage You must have both dye tubs on your person.
+  return 1
+elseif (<ref1.more1> <= 6) || (<ref2.more1> <= 6)
+  src.sysmessage There is not enough to mix into a new color.
+  return 1
+endif
+ref2.color=<f_rare_hue_select>
+ref2.more1 += <eval ((<ref1.more1>+1)/2)>	//lose half the charges of the tub you poured in
+ref2.more1=<qval (30 < <ref2.more1>)?30:<ref2.more1>>
+ref1.consume
+src.sysmessage You mix the tubs together and they swirl into a new color.
+src.sound 023e
+
+[itemdef i_hair_dye_rare]
+defname=i_hair_dye_rare
+name=rare hair dyes
+id=i_bottle_hair_dye
+type=t_script
+
+on=@create
+color=<f_rare_hue_select>
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+src.findlayer.11.color=<color>
+src.findlayer.16.color=<color>
+src.sysmessage You apply the dye to your hair.
+src.sound 025		//small splash
+consume
+return 1
+
+[itemdef i_body_paint_rare]
+defname=i_body_paint_rare
+name=rare body paint
+id=i_testtube_rack_full
+type=t_script
+
+on=@create
+color=<f_rare_hue_select>
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+src.color=<color>
+src.sysmessage You apply the paint to your body.
+src.sound 026		//large splash
+consume
+return 1
+
+
+
+[EOF]

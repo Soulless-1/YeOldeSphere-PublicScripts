@@ -1,0 +1,604 @@
+F//this is for Soulless' custom NPC Pack
+//You SHOULD be using either the 56b or 56d defs!!! 
+//v2.0
+
+//add healer camps
+//add banker camps
+
+
+//should we add renowned monsters?
+//should we add quest monsters?
+
+[DEFNAME world_spawner_humans]	
+actor				{c_h_actor 1 c_h_actor_f 1}
+alchemistgm			{c_h_alchem_gm 1 c_h_alchem_gm_f 1}
+alchemist			{c_h_alchemist 1 c_h_alchemist_f 1}
+gypsyanimaltrainer		{c_h_animaltrainer 1 c_h_animaltrainer_f 1}
+animaltrainer			{c_h_animaltrainer 1 c_h_animaltrainer_f 1}
+realestatebroker		{c_h_architect 1 c_h_architect_f 1}
+architect			{c_h_architect 1 c_h_architect_f 1}
+armorer				{c_h_armorer 1 c_h_armorer_f 1}
+artist				{c_h_ARTIST 1 c_h_ARTIST_F 1}
+baker				{c_h_baker 1 c_h_baker_f 1}
+ninja				{c_h_bandit_m 1 c_h_bandit_f 1}
+eliteninja			{c_h_bandit_m 1 c_h_bandit_f 1}
+eliteninjawarrior		{c_h_bandit_m 1 c_h_bandit_f 1}
+ronin				{c_h_bandit_m}
+samurai				{c_h_bandit_m}
+banker				{c_h_banker 1 c_h_banker_f 1}
+gypsybanker			{c_h_banker 1 c_h_banker_f 1}	//no gypsy banker, using regular banker
+Savagerider			{c_h_barbarian_chieftan}
+Savageshaman			{c_h_barbarian_shaman}
+Savage				{c_h_barbarian_warrior 1 c_h_barbarian_warrioress 1}
+customhairstylist		{c_h_barber 1 c_h_barber_f 1}
+bodysculptor			{c_h_barber 1 c_h_barber_f 1}
+hairstylist			{c_h_barber 1 c_h_barber_f 1}
+bard				{c_h_BARD 1 c_h_BARD_F 1}
+HireBardArcher			{c_h_bard 1 c_h_bard_f 1}	// no hire npcs using base ones.
+beekeeper			{c_h_beekeeper 1 c_h_beekeeper_f 1}
+beggar				{c_h_begger 1 c_h_begger_f 1}
+HireBeggar			{c_h_begger 1 c_h_begger_f 1}	// no hire npcs using base ones.
+blacksmith			{c_h_blacksmith 1 c_h_blacksmith_f 1}
+bowyer				{c_h_bowyer 1 c_h_bowyer_f 1}
+dragonsflamemage		{c_h_brigand 1 c_h_brigand_f 1}	//no dragonsflamemage
+serpentsfanghighexecutioner	{c_h_executioner 1 c_h_executioner_f 1}
+Brigand				{c_h_brigand 1 c_h_brigand_f 1}
+magedragonsflamemage		{c_h_brigand 1 c_h_brigand_f 1}	//no mage dragons flame mage
+tigersclawthief			{c_h_brigand 1 c_h_brigand_f 1}	//no tigers claw thief
+Executioner			{c_h_executioner 1 c_h_executioner_f 1}
+serpentsfangassassin		{c_h_brigand 1 c_h_brigand_f 1}	//no serpents fang assassin using brigand
+vagabond			{c_h_brigand 1 c_h_brigand_f 1}	//no vagabond
+butcher				{c_h_butcher 1 c_h_butcher_f 1}
+carpenter			{c_h_carpenter 1 c_h_carpenter_f 1}
+cobbler				{c_h_cobbler 1 c_h_cobbler_f 1}
+cook				{c_h_cook 1 c_h_cook_f 1}
+Evilmagelord			{c_h_evilmage}
+Golemcontroller			{c_h_evilmage}
+Evilmage			{c_h_evilmage}
+farmer				{c_h_farmer 1 c_h_farmer_f 1}
+warriorguard			{c_h_fighter 1 c_h_fighter_f 1}	//no warrior guard using fighter
+warrior				{c_h_fighter 1 c_h_fighter_f 1}	//no warrior using fighter
+fisherman			{c_h_fisher 1 c_h_fisher_f 1}
+furtrader			{c_h_furtrader 1 c_h_furtrader_f 1}
+genericguard			{c_h_guard 1 c_h_guard_f 1}
+Chaosguard			c_h_guard_chaos	//{c_h_GUARD_chaos 1 c_h_GUARD_chaos_F 1}	
+orderguard			c_h_guard_order //{c_h_GUARD_order 1 c_h_GUARD_order_F 1}
+mageguildmaster			{c_h_GUILD_ARCANE 1 c_h_GUILD_ARCANE_F 1}
+bardguildmaster			{c_h_guild_BARD 1 c_h_guild_BARD_F 1}
+blacksmithguildmaster		{c_h_guild_blacksmith 1 c_h_guild_blacksmith_f 1}
+tailorguildmaster		{c_h_GUILD_CLOTHIER 1 c_h_GUILD_CLOTHIER_F 1}
+tinkerguildmaster		{c_h_GUILD_ENGINEER 1 c_h_GUILD_ENGINEER_F 1}
+healerguildmaster		{c_h_GUILD_HEALER 1 c_h_GUILD_HEALER_F 1}
+fisherguildmaster		{c_h_guild_maritime 1 c_h_guild_maritime_f 1}
+merchantguildmaster		{c_h_GUILD_MERCHANT 1 c_h_GUILD_MERCHANT_F 1}
+minerguildmaster		{c_h_GUILD_MINER 1 c_h_GUILD_MINER_F 1}
+rangerguildmaster		{c_h_GUILD_RANGER 1 c_h_GUILD_RANGER_F 1}
+thiefguildmaster		{c_h_GUILD_THIEF 1 c_h_GUILD_THIEF_F 1}
+warriorguildmaster		{c_h_GUILD_WARRIOR 1 c_h_GUILD_WARRIOR_F 1}
+gypsy				{c_h_gypsy 1 c_h_gypsy_f 1}
+fortuneteller			{c_h_gypsy 1 c_h_gypsy_f 1}	//no fortune teller using gypsy
+gypsymaiden			{c_h_gypsy_f}
+evilwanderinghealer		{c_h_healer_evil 1 c_h_healer_evil_f 1}
+wanderinghealer			{c_h_HEAL_WANDER 1 c_h_HEAL_WANDER_F 1}
+healer				{c_h_healer 1 c_h_healer_f 1}
+evilhealer			{c_h_heal_evil 1 c_h_heal_evil_f 1} //no evil healer, using healer
+Herbalist			{c_h_herbalist 1 c_h_herbalist_f 1}
+innkeeper			{c_h_innkeeper 1 c_h_innkeeper_f 1}
+jeweler				{c_h_jeweler 1 c_h_jeweler_f 1}
+stonecrafter			{c_h_jeweler 1 c_h_jeweler_f 1}
+spellbinder			{c_h_mage 1 c_h_mage_f 1}
+HireMage			{c_h_mage 1 c_h_mage_f 1}	// no hire npcs using base ones.
+holymage			{c_h_mage 1 c_h_mage_f 1}	//no holy mage using mage
+Mage				{c_h_mageshop 1 c_h_mageshop_f 1}
+mapmaker			{c_h_mapmaker 1 c_h_mapmaker_f 1}
+miner				{c_h_miner 1 c_h_miner_f 1}
+ironworker			{c_h_miner 1 c_h_miner_f 1}
+minter				{c_h_minter 1 c_h_minter_f 1}
+Noble				{c_h_noble 1 c_h_noble_f 1}
+Seekerofadventure		{c_h_noble 1 c_h_noble_f 1}	// no hire npcs using base ones.
+bridegroom			{c_h_noble 1 c_h_noble_f 1}	//no bridegroom using noble
+HirePaladin			{c_h_paladin 1 c_h_paladin_f 1}// no hire npcs using base ones.
+keeperofchivalry		{c_h_paladin 1 c_h_paladin_f 1}//no keeper of chivalry using paladin
+peasant				{c_h_peasant 1 c_h_peasant_f 1}
+hirebard			{c_h_peasant 1 c_h_peasant_f 1}
+hirefighter			{c_h_peasant 1 c_h_peasant_f 1}
+hirepeasant			{c_h_peasant 1 c_h_peasant_f 1}
+hiresailor			{c_h_peasant 1 c_h_peasant_f 1}
+monk				{c_h_priest 1}//no monk using priest
+merchant			{c_h_provis 1 c_h_provis_f 1}
+provisioner			{c_h_provis 1 c_h_provis_f 1}
+rancher				{c_h_rancher 1 c_h_rancher_f 1}
+ranger				{c_h_ranger 1 c_h_ranger_f 1}
+HireRangerArcher		{c_h_ranger 1 c_h_ranger_f 1}// no hire npcs using base ones.
+HireRanger			{c_h_ranger 1 c_h_ranger_f 1}// no hire npcs using base ones.
+sailor				{c_h_sailor 1 c_h_sailor_f 1}
+harbormaster			{c_h_sailor 1 c_h_sailor_f 1}//no harbormaster using sailor
+pirate				{c_h_sailor 1 c_h_sailor_f 1}//no pirate using sailor
+scribe				{c_h_scribe 1 c_h_scribe_f 1}
+boatpainter			{c_h_SHIPWRIGHT 1 c_h_SHIPWRIGHT_F 1}
+dockmaster			{c_h_shipwright 1 c_h_shipwright_f 1}
+shipwright			{c_h_shipwright 1 c_h_shipwright_f 1}
+tailor				{c_h_tailor 1 c_h_tailor_f 1}
+tanner				{c_h_tanner 1 c_h_tanner_f 1}
+leatherworker			{c_h_tanner 1 c_h_tanner_f}
+barkeeper			{c_h_tavernkeeper 1 c_h_tavernkeeper_f 1}
+tavernkeeper			{c_h_tavernkeeper 1 c_h_tavernkeeper_f 1}
+thief				{c_h_thief 1 c_h_thief_f 1}
+HireThief			{c_h_thief 1 c_h_thief_f 1}// no hire npcs using base ones.
+tinker				{c_h_tinker 1 c_h_tinker_f 1}
+glassblower			{c_h_tinker 1 c_h_tinker_f 1}//no glassblower using tinker
+towncrier			{c_h_towncrier 1 c_h_towncrier_f 1}
+messenger			{c_h_towncrier 1 c_h_towncrier_f 1}//no messenger using towncrier
+veterinarian			{c_h_vet 1 c_h_vet_f}
+waiter				{c_h_waiter 1 c_h_waitress 1}
+waitress			{c_h_waitress}
+weaponsmith			{c_h_WEAPONSMITH_BLADE 1 c_h_WEAPONSMITH_BLADE_F 1 c_h_WEAPONSMITH_BLUNT 1 c_h_WEAPONSMITH_BLUNT_F 1}
+weaver				{c_h_weaver 1 c_h_weaver_f 1}
+weaverguildmaster		{c_h_weaver_guildmaster 1 c_h_weaver_guildmaster_f 1}
+
+
+[defname world_spawner_camps-escorts]		//there are no escortable npcs or camps yet
+Bankercamp			{c_h_banker 1 c_h_banker_f 1}
+brigandcamp			{m_monster_camp_brigand}
+Healercamp			{c_h_healer 1 c_h_healer_f 1}
+magecamp			{c_h_mage 1 c_h_mage_f 1}
+Orccamp				{m_monster_camp_orc}	
+Ratcamp				{m_monster_camp_ratman}	
+escortablewanderinghealer	{c_h_healer 1 c_h_healer_f 1}
+Escortablemage			{c_h_mage 1 c_h_mage_f 1}	
+baseescortable			{c_h_noble 1 c_h_noble_f 1}
+
+
+[defname sworld_spawner_animals]
+alligator			{c_alligator}
+grobu				{c_bear_black}
+BlackBear			{c_bear_black}
+BrownBear			{c_bear_brown}
+GrizzlyBear			{c_bear_grizzly}
+Polarbear			{c_bear_polar}
+abbein				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+alelle				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+aluniol				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+aneen				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+bird				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+daelas				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+jothan				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+mallew				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+olaeni				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+rebinil				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+taellia				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+tyeelor				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+vicaie				{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+alethanian			{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+athialon			{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+bolaevin			{c_bird 1 c_bird_crow 1 C_BIRD_MAGPIE 1 C_BIRD_TROPICAL 1 C_BIRD_JUNGLE 1 c_bird_raven 1}
+crow				{c_bird_crow}
+Magpie				{c_bird_magpie}
+Raven				{c_bird_raven}
+tropicalbird			{c_bird_tropical}
+Bull				{c_bull_brown_lt 1 c_bull_brown_dk 1}
+Bullfrog			{c_bullfrog}
+Cat				{c_cat}
+Chicken				{c_chicken}
+Cougar				{c_cougar}
+Cow				{c_cow_bw}
+crane				{c_crane}
+Hind				{c_doe}
+Dog				{c_dog}
+Dolphin				{c_dolphin}
+Eagle				{c_eagle}
+Ferret				{c_ferret}
+Goat				{c_goat}
+Gorilla				{c_gorilla}
+Horse				{c_horse_tan 1 c_horse_gray 1 c_horse_brown_dk 1}
+JackRabbit			{c_jackrabbit}
+Llama				{c_llama}
+Ridablellama			{c_llama} 		//All llamas in sphere are ridable
+mountaingoat			{c_mountain_goat}
+Desertostard			{c_ostard_desert}
+Forestostard			{c_ostard_forest}
+Frenziedostard			{c_ostard_forest}	//no frenzied ostard using forest ostard
+Panther				{c_panther}
+Boar				{c_pig_big}
+Pig				{c_pig}
+Rabbit				{c_rabbit}
+Sheep				{c_sheep_woolly}
+snake				{c_snake}
+squirrel			{c_squirrel}
+GreatHart			{c_stag}
+gianttoad			{c_toad_giant}
+Walrus				{c_walrus}
+GreyWolf			{c_wolf_gray}
+Whitewolf			{c_wolf_white}
+TimberWolf			{c_wolf}
+
+
+[defname world_spawner_monsters]
+
+abscess				{c_hydra}	//no abscess	//named hydra
+AcidSlug			{c_acid_slug}
+Antlion				{c_ant_lion}
+ArcaneDaemon			{c_arcane_daemon}
+bakekitsune			{c_bake_kitsune}
+Balron				{c_balron}
+putrefier			{c_balron} 	//no Putrefier	//named balron
+Betrayer			{c_betrayer}
+Juggernaut			{c_Blackthorn_Juggernaught}
+tangle				{c_bog_thing}	//no tangle	//named bog thing
+bogthing			{c_bog_thing}
+bogling				{c_bogling}
+bonedemon			{c_bone_daemon}
+Bonemagi			{c_bone_magi}
+guile				{c_changeling}	//no guile	//named changeling
+Irk				{c_changeling}	//no irk	//named changeling
+spite				{c_changeling}	//no spie	//named changeling
+changeling			{c_changeling}
+Corpser				{c_corpser}
+HarrowerTentacles		{c_harrower_tentacles}
+swamptentacle			{c_swamp_tentacles}
+thrasher			{c_corpser}	//no thrasher	//named corpser
+Crystalelemental		{c_crystal_elemental}
+CrystalLatticeSeeker		{c_crystal_lattice_seeker}
+CuSidhe				{c_cu_sidhe}
+Cyclops				{c_cyclops}
+daemon				{c_daemon 1 c_balron 1 }
+CrystalDaemon			{c_crystal_daemon}
+chaosdaemon			{c_chaos_daemon}
+deathwatchbeetle		{c_deathwatch_beetle}
+deathwatchbeetlehatchling	{c_deathwatch_beetle_hatchling}
+devourer			{c_devourer}
+Gnaw				{c_direwolf}	//no gnaw	//named direwolf
+Direwolf			{c_direwolf}
+szavetra			{c_doppleganger}	//no szavetra	//named doppleganger
+doppleganger			{c_doppleganger}
+dragon				{c_dragon_red 1 c_dragon_green 1}
+drake				{c_dragon_small_red 1 c_dragon_small_black 1}
+grim				{c_dragon_small_red 1 c_dragon_small_black 1}	//no grim	//named dragon
+Shadowwyrm			{c_dragon_wyrm_shadow}
+Whitewyrm			{c_dragon_wyrm_white}
+Dreadspider			{c_dread_spider}
+giantblackwidow			{c_giant_black_widow}
+insanedryad			{c_dryad_insane}	
+Dryad				{c_dryad}
+DryadA				{c_dryad}		//what is DryadA?
+Efreet				{c_efreet}
+AcidElementalRenowned		{c_elem_acid}	//renowned creature
+AcidElemental			{c_elem_acid}
+flurry				{c_elem_air}	//no flurry	//named air elemental
+mistral				{c_elem_air}	//no mistral	//named air elemental
+tempest				{c_elem_air}	//no tempest	//named air elemental
+Sandvortex			{c_sand_vortex}
+Airelemental			{c_elem_air}
+Bloodelemental			{c_elem_blood}
+Dullcopperelemental		{c_elem_dull_copper}
+Earthelemental			{c_elem_earth}
+Fireelemental			{c_elem_fire}
+Iceelemental			{c_elem_ice}
+Toxicelemental			{c_elem_toxic}
+Poisonelemental			{c_elem_poison}
+Snowelemental			{c_elem_snow}
+Waterelemental			{c_elem_water}
+EtherealWarrior			{c_ethereal_warrior}
+Ettin				{c_ettin 1 c_ettin_w_axe 1}
+mougguur			{c_ettin} 	//no moug-guur	//named ettin
+ExodusMinion			{c_exodus_minion}
+ExodusOverseer			{c_exodus_overseer}
+fandancer			{c_fan_dancer}
+Firegargoyle			{c_fire_gargoyle}
+fleshgolem			{c_flesh_golem}
+Frosttroll			{c_frost_troll}
+Frostooze			{c_frostooze}
+Frostspider			{c_frostspider}
+gaman				{c_gaman}
+Stonegargoyle			{c_gargoyle_stone}
+EnslavedGargoyle		{c_gargoyle_enslaved}
+gargoyledestroyer		{c_gargoyle_destroyer}
+gargoyleenforcer		{c_gargoyle_enforcer}
+Gargoyle			{c_gargoyle}
+Eldergazer			{c_gazer_elder}
+Gazer				{c_gazer}
+Ghost				{c_ghost}
+Ghoul				{C_ghoul}
+restlesssoul			{c_restless_soul}
+Beetle				{c_giant_beetle}
+FireBeetle			{c_giant_beetle_fire}
+gibberling			{c_gibberling}
+Barreraak			{c_goblin}	// no barreraak 	//named goblin
+gorefiend			{c_gore_fiend}
+Harpy				{c_harpy}
+Headlessone			{c_headless}
+Hellcat				{c_hellcat}
+Hellhound			{c_hellhound}
+hiryu				{c_hiryu}
+lesserhiryu			{c_hiryu_lesser}	
+hordeminion			{c_horde_minion_small 1 c_horde_minion_large 1}
+hydra				{c_hydra}
+CrystalHydra			{c_hydra_crystal}
+Iceserpent			{c_ice_serpent}
+Icesnake			{c_ice_snake}
+Icefiend			{c_icefiend}
+Imp				{c_imp}
+Golem				{c_iron_golem}
+Jukalord			{c_juka_lord}
+Jukamage			{c_juka_mage}
+Jukawarrior			{c_juka_warrior}
+kappa				{c_kappa}
+kazekemono			{c_kaze_kemono}
+Kirin				{c_kirin}
+Kraken				{c_kraken}
+ladyofthesnow			{C_lady_of_snow}
+Lavalizard			{c_lava_lizard}
+Lavaserpent			{c_lava_serpent}
+Lavasnake			{c_lava_snake}
+AncientLichRenowned		{c_liche_ancient}	//renowned creature
+Ancientlich			{c_liche_ancient}
+lichlord			{c_liche_lord}
+Lich				{c_liche}
+Lizardman			{c_lizardman 1 c_lizardman_spear 1 c_lizardman_mace 1}
+MeerCaptain			{c_meer_captain}
+MeerEternal			{c_meer_eternal}
+MeerMage			{c_meer_mage}
+MeerWarrior			{c_meer_warrior}
+minotaurcaptain			{c_minotaur_captain}
+minotaurscout			{c_minotaur_scout}
+minotaur			{c_minotaur}
+moloch				{c_moloch}
+Mongbat				{c_mongbat}
+Strongmongbat			{c_mongbat_arboreal}	
+InterredGrizzle			{c_interred_grizzle}
+Mummy				{c_mummy}
+rottingcorpse			{c_rotting_corpse}
+UnfrozenMummy			{c_mummy_unfrozen}
+Nightmare			{c_nightmare}
+Arcticogrelord			{c_ogre_lord_arctic}
+ogrelord			{c_ogre_lord}
+Ogre				{c_ogre}
+oni				{c_oni}
+Ophidianarchmage		{c_ophidian_archmage}
+Ophidianknight			{c_ophidian_knight}
+Ophidianmage			{c_ophidian_mage}
+Ophidianmatriarch		{c_ophidian_queen}
+Ophidianwarrior			{c_ophidian_warrior}
+orcishspirit			{c_orc_mage}		//what is an orcish spirit?
+orcbrute			{c_orc_brute}
+orccaptain			{c_orc_captain}
+orcbomber			{c_orc_bomber}
+orcishlord			{c_orc_lord}
+orcishmage			{c_orc_mage}
+orc				{c_orc}
+orcscout			{c_orc_scout}
+patchworkskeleton		{c_patchwork_skeleton}
+Phoenix				{c_phoenix}
+Swoop				{c_phoenix}	//no swoop	//named eagle
+pyre				{c_phoenix}	//no pyre	//named phoenix
+Pixie				{c_pixie}
+plaguebeastlord			{c_plague_beast_lord}
+plaguespawn			{c_plague_spawn}
+plaguebeast			{c_plague_beast}
+quagmire			{c_quagmire}
+raiju				{c_rai_ju}
+Giantrat			{c_rat_giant}
+sewerrat			{c_rat_sewer}
+FireAnt				{c_fire_ant}
+Garamon				{c_skeleton}	// no garamon	//quest giver
+gremlin				{c_gremlin}
+Jaacar				{c_goblin_gray}	//no jaacar 	//named gray goblin
+Kepetch				{c_kepetch}
+Medusa				{c_skeleton}	//no medusa	//peerless
+Raptor				{c_raptor}
+rat				{c_rat}
+rotworm				{c_rotworm}
+Skree				{c_skree}
+Slith				{c_slith}
+Vernix				{c_goblin_green}	//no vernix	//king of green goblins
+Xenrr				{c_goblin_green}		//no xenrr	//named green goblin
+DevourerRenowned		{c_devourer}	//renowned creature
+EnslavedGreenGoblinAlchemist	{c_goblin_green}	//lazy
+FireDaemonRenowned		{c_daemon_fire}		//renowned monster
+FireElementalRenowned		{c_elem_fire}		//renowned monster
+ForgottenServant		{c_forgotten_servant}
+GrayGoblinKeeper		{c_goblin_gray_keeper}
+GrayGoblinMageRenowned		{c_goblin_gray_mage}	//renowned creature
+GreaterPoisonElemental		{c_elem_poison_greater}
+
+
+
+GreenGoblinAlchemistRenowned	{c_goblin_green_alchemist}	//renowned creature
+NevilleBrightwhistle		{c_h_mage}	//no neville brightwhistle	//quest giver
+putridundeadguardian		{c_undead_guardian_putrid}
+QuartermasterFlint		{c_h_warrior}	//no quarter master flint	//quest giver
+RakktaviRenowned		{c_skeleton}
+SkeletalDragonRenowned		{c_skeletal_dragon}	//renowned creature
+TikitaviRenowned		{c_ratman}	//no tikitavi	//peerless
+bloodworm			{c_bloodworm}
+ChickenLizard			{c_chicken_lizard}
+ClanChitterAssistant		{c_ratman}	//fixme: don't be lazy - make these
+ClanChitterTinkerer		{c_ratman}
+ClanRibbonCourtier		{c_ratman}
+ClanRibbonPlagueRat		{c_ratman}
+ClanRibbonSupplicant		{c_ratman}
+ClanScratchHenchrat		{c_ratman}
+ClanScratchSavageWolf		{c_ratman}
+ClanScratchScrounger		{c_ratman}
+
+
+ClockworkScorpion		{c_clockwork_scorpion}
+CoralSnake			{c_snake_coral}
+ElderDugan			{c_h_miner}	//no elder dugan	//quest giver
+EnslavedGoblinKeeper		{c_goblin_keeper_enslaved}
+EnslavedGoblinMage		{c_goblin_mage_enslaved}
+EnslavedGoblinScout		{c_goblin_scout_enslaved}
+EnslavedGrayGoblin		{c_goblin_gray_enslaved}
+EnslavedGreenGoblin		{c_goblin_green_enslaved}
+FairyDragon			{c_fairy_dragon}
+FeralTreefellow			{c_treefellow_feral}
+FiddlingTobin			{c_h_tinker}	//no fiddling tobin	//quest giver
+FireDaemon			{c_daemon_fire}
+gargoyleshade			{c_gargoyle_shade}
+GrayGoblin			{c_goblin_gray}
+GrayGoblinMage			{c_goblin_gray_mage}
+GreaterMongbat			{c_mongbat}
+GreenGoblin			{c_goblin_green}
+GreenGoblinAlchemist		{c_goblin_green_alchemist}
+GreenGoblinScout		{c_goblin_green_scout}
+Gretchen			{c_h_alchemist}	//no gretchen	//quest giver
+HighPlainsBoura			{c_boura_high_Plains}
+IronBeetle			{c_beetle_iron}
+KepetchAmbusher			{c_kepetch_ambusher}
+LavaElemental			{c_elem_lava}
+LowlandBoura			{c_boura_lowland}
+MaddeningHorror			{c_maddening_horror}
+NavreyNightEyes			{c_dread_spider}	//no Navrey Night eyes	//mini boss
+Niporailem			{c_Niporailem}
+PitFiend			{c_pit_fiend}
+PixieRenowned			{c_pixie}	//renowned creature
+RuddyBoura			{c_boura_ruddy}
+SentinelSpider			{c_sentinel_spider}
+SkeletalLich			{c_skeletal_lich}
+SlasherOfVeils			{c_balron}	//no slasher of veils	//peerless
+StoneSlith			{c_slith_stone}
+StygianDragon			{c_dragon_wyrm}	//no stygian dragon	//boss of abyss
+tanglingroots			{c_tangling_roots}
+ToxicSlith			{c_slith_toxic}
+TrapdoorSpider			{c_trapdoor_spider}
+undeadguardian			{c_undead_guardian}
+VitaviRenowned			{c_ratman}	//no vitavi	//renowned creature
+WailingBanshee			{c_wailing_banshee}
+WolfSpider			{c_wolf_spider}
+WyvernRenowned			{c_wyvern}	//renowned creature
+
+
+
+ratman				{c_ratman}
+chiikkaha			{c_ratman}	//no chiikkaha the toothed	//named ratman
+ratmanarcher			{c_ratman_archer}
+ratmanmage			{c_ratman_mage}
+reaper				{c_reaper}
+reptalon			{c_reptalon}
+rend				{c_reptalon}	//no rend 	//named reptalon
+revenantlion			{c_revenant_lion}
+ridgeback			{c_ridgeback}
+runebeetle			{c_rune_beetle}
+Satyr				{c_satyr}
+savageridgeback			{c_savage_ridgeback}
+Scorpion			{c_scorpion_giant}
+miasma				{c_scorpion_giant}	//no miasma 	//named scorpion
+Seaserpent			{c_sea_serpent}
+CrystalSeaSerpent		{c_sea_serpent_crystal} 
+DeepSeaSerpent			{c_sea_serpent_deep}	
+SeaHorse			{c_sea_horse}		//this npc needs to be checked
+Serpentinedragon		{c_serpentine_dragon}
+Silverserpent			{c_silver_serpent}
+Skeletaldragon			{c_skeletal_dragon}
+reddeath			{c_skeletal_steed}	//no reddeath 	//named skeletal steed
+Skeleton			{c_skeleton 1 c_skeleton_w_axe 1 c_skeleton_w_sword 1 c_skeleton_mage 1 c_skeletonarcher 1}
+Boneknight			{c_bone_knight}
+Skeletalknight			{c_skeleton_knight}
+Skeletalmage			{c_skeleton_mage}
+Spectralarmour			{c_skeleton}
+skitteringhopper		{c_skittering_hopper}
+saliva				{c_harpy}	//no saliva	//named harpy
+Slime				{c_slime}
+corrosiveslime			{c_slime_corrosive}
+Jwilson				{c_slime} 	//no Jwilson 	//named slime
+coil				{c_silver_serpent}	//no coil	//named silver serpent
+Giantserpent			{c_snake_giant}
+blacksoleninfiltratorqueen	{c_solen_infiltrator_queen_black}
+blacksoleninfiltratorwarrior	{c_solen_infiltrator_warrior_black}
+blacksoleninfiltratorworler	{c_solen_infiltrator_warrior_black}
+Blacksolenqueen			{c_solen_queen_black}
+Redsolenqueen			{c_solen_queen_red}
+redsoleninfiltratorqueen	{c_solen_infiltrator_queen_red}
+Blacksolenwarrior		{c_solen_warrior_black}
+redsoleninfiltratorwarrior	{c_solen_infiltrator_warrior_red}
+Redsolenwarrior			{c_solen_warrior_red}
+Blacksolenworker		{c_solen_worker_black}
+Redsolenworker			{c_solen_worker_red}
+Cursed				{c_cursed}
+Spectre				{c_spectre}
+GrimmochDrummel			{c_cursed}	//no grimmoch drummel	//named cursed
+Khaldunsummoner			{c_khaldun_summoner}
+TavaraSewel			{c_spectre}	//no tavar sewel 	//named cursed
+Shadowfiend			{c_shadow_fiend}
+Khaldunzealot			{c_khaldun_zealot}	
+LysanderGathenwale		{c_cursed}	//no Lysander Gathenwale 	//named cursed
+MorgBergen			{c_cursed}	//no Morg Bergen 	//named cursed
+sphynx				{c_sphynx}
+Malefic				{c_dread_spider}	//no malefic	//named dread spider
+LadyLissith			{c_giant_black_widow}	//no lady lissith	//named giant black widow
+LadySabrix			{c_giant_black_widow}	//no lady sabrix	//named giant black widow
+Virulent			{c_dread_spider}	//no virulent	//named dread spider
+Giantspider			{c_spider_giant}
+harpy_stone			{c_harpy_stone}
+succubus			{c_succubus}
+Swampdragon			{c_swamp_dragon}
+Gazerlarva			{c_gazer_larva}
+Terathanavenger			{c_terathan_avenger}
+Terathandrone			{c_terathan_drone}
+Terathanmatriarch		{c_terathan_matriarch}
+Terathanwarrior			{c_terathan_warrior}
+titan				{c_titan}
+whippingvine			{c_whipping_vine}
+meraktus			{c_tormented_minotaur}	//no meraktus 	//named tormented minotaur
+treefellow			{c_treefellow}
+lurg				{c_troglodyte}	//no lurg	//named troglodyte
+troglodyte			{c_troglodyte}
+Troll				{c_troll_w_axe 1 c_troll 1 c_troll_w_mace 1}
+tsukiwolf			{c_tsuki_wolf}
+Unicorn				{c_unicorn}
+vampirebat			{c_vampire_bat}
+Crystalvortex			{c_crystal_vortex}
+wisp				{c_wisp}
+CrystalWisp			{c_wisp_crystal}
+DarkWisp			{c_wisp_dark}
+protector			{c_protector}
+ShadowWisp			{c_wisp_shadow}
+Shade				{c_shade}
+Wraith				{c_wraith}
+Ancientwyrm			{c_wyrm_ancient}
+Wyvern				{c_wyvern}
+yamandon			{c_yamandon}
+yomotsupriest			{c_yomotsu_priest}
+yomotsuwarrior			{c_yomotsu_warrior}
+Zombie				{c_zombie}
+SEAMISC				{DeepSeaSerpent 1 SeaSerpent 1 WaterElemental 1 Kraken 1}
+
+
+[defname world_spawner_items]
+REAGENTS			{BlackPearl 1 Bloodmoss 1 SpidersSilk 1 SulfurousAsh 1 Garlic 1 Ginseng 1 Nightshade 1 MandrakeRoot 1}
+closedbarrel			{i_barrel}
+fruitbasket			{i_basket_fruit}
+basket				{i_basket}
+candlelarge			{i_candle_lg}
+TreasureChestLevel1		{i_dungeon_chest1}
+treasurelevel1h			{i_dungeon_chest1}
+TreasureLevel1			{i_dungeon_chest1}
+TreasureChestLevel2		{i_dungeon_chest2}
+TreasureLevel2			{i_dungeon_chest2}
+TreasureChestLevel3		{i_dungeon_chest3}
+TreasureLevel3			{i_dungeon_chest3}
+TreasureChestLevel4		{i_dungeon_chest4}
+TreasureLevel4			{i_dungeon_chest4}
+TreasureChestLevel5		{i_dungeon_chest5}
+TreasureLevel5			{i_dungeon_chest5}
+pumpkin				{i_fruit_pumpkin}
+ham				{i_ham}
+fulljars			{i_jar_full}
+MiniatureMushroom		{i_mushroom}
+mushroomtrap			{i_mushroom}	//no mushroom trap
+BlackPearl			{i_reag_black_pearl}
+Bloodmoss			{i_reag_blood_moss}
+Garlic				{i_reag_garlic}
+Ginseng				{i_reag_ginseng}
+MandrakeRoot			{i_reag_mandrake_root}
+Nightshade			{i_reag_nightshade}
+silk				{i_reag_spider_silk}
+SpidersSilk			{i_reag_spider_silk}
+SulfurousAsh			{i_reag_sulfur_ash}
+robe				{i_robe}
+rarerocks			{i_rock}
+candleskull			{i_skull_candle}
+Snowleopard			{c_snow_leopard}
+
+		
+[EOF]		

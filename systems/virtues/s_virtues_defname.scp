@@ -1,0 +1,42 @@
+//Virtue System by Soulless
+//v1.0
+//11:52 AM 3/28/2022
+
+
+[defname d_virtue_system]
+
+virtue0_name		Valor
+virtue0_definition	Valor is the courage to take actions in support of one's convictions. Valor is gained by slaying creatures in areas controlled by Champions of Evil.
+virtue0_symbol_hues	123,46,112
+
+virtue1_name		Honor
+virtue1_definition	Honor is the courage to stand for truth, against any odds. Honor is gained by entering Honorable combat with thy foes.
+virtue1_symbol_hues	187,70,107
+
+virtue2_name		Compassion
+virtue2_definition	Compassion is the nonjudgmental empathy for one's fellow creatures. You gain in Compassion by escorting NPCs and prinsoners safely to their destinations.
+virtue2_symbol_hues	211,133,105
+
+virtue3_name		Justice
+virtue3_definition	Justice is the devotion to truth, tempered by love. Justice is gained by making those who would murder innocents pay for their crimes.
+virtue3_symbol_hues	186,195,109
+	
+virtue4_name		Honesty
+virtue4_definition	Honesty is the scrupulous respect for truth, the willingness to never deceive oneself or another. Honesty is gained when returning 'lost items' to their owners or to lost-and-found boxes.
+virtue4_symbol_hues	121,221,106
+	
+virtue5_name		Spirituality
+virtue5_definition	Spirituality is the concern with one's inner being and how one deals with truth, love, and courage. One gains Spirituality by healing others.
+virtue5_symbol_hues	61,195,111
+
+virtue6_name		Sacrifice
+virtue6_definition	Sacrifice is the courage to give of oneself in the name of love. One gains in Sacrifice by giving away their fame to certai nmonsters to save them from their eternal torment.
+virtue6_symbol_hues	35,135,110
+
+virtue7_name		Humility
+virtue7_definition	Humility is perceiving one's place in the world, not according to one's own accomplishments, but according ot the intrinsic value of all individuals. One gains Humility through Humility hunts.
+virtue7_symbol_hues	61,71,108
+
+
+[EOF]
+

@@ -1,0 +1,173 @@
+//Huntsman/Mondains Horde System by Soulless
+//v1.0
+//12:29 PM 1/16/2022
+
+[events e_huntsman_guildmaster]
+
+on=@dclick
+message " "
+message " "
+message Mondain's horde has withdrawn for now, but we must remain vigilant to the threat...
+return 1
+if (<src.findid.i_npc_guild_huntsman>) && (<src.distance <uid>> < 3)
+  sdialog d_huntsman_guild_menu
+  face <src>
+  timerf 0,salute
+  return 1
+endif
+
+on=@ReceiveItem
+if (<argo.type>==t_gold)
+  if (<src.skilltotal> < 3000)
+    say You are not ready to join our huntsman ranks, come back later.
+  elseif (<src.findid.i_npc_guild_huntsman>)
+    say You are already a member of our guild.
+  elseif (<argo.type>==t_gold) && (<argo.amount> == 1000)
+    src.f_npc_guild_join huntsman
+    say All hail <src.name>! Death to Mondain's horde!
+    argo.consume 1000
+    //sound {036 037}
+  endif
+elseif (<argo.isevent.t_mondains_horde_cache>)
+  if !(<src.findid.i_npc_guild_huntsman>)	// || (<more2> != <src>)
+    say The Huntsman Guild thanks thee for thy generous contribution.
+    argo.remove
+    return 1
+  elseif (<serv.list.huntsman_<src>_caches.count> >= <def0.huntsman_cache_max>)
+    say Alas, the court mage cannot accept another cache from thee currently.
+    return 1
+  elseif (<serv.list.huntsman_<src>_caches.findelem <argo>> != -1)
+    serv.log <src.name>(<src>) attempting to give huntmaster <name>(<uid>) the same cache (<argo>) more than once
+    return 1
+  else
+    if !(<src.findlayer.26>)	//must have a container on player's layer 27 to hold the caches
+      serv.newitem i_player_protected_storage
+      new.equip
+    endif
+    serv.list.huntsman_<src>_caches.add <argo>
+    argo.link=<src>
+    argo.more2=<eval (<argo.morey>*<def0.huntsman_cache_opentime>)>	//total time it will take to open (level * def.opentime)
+    local.modifier=<eval ((<argo.morem>-1)*<def0.huntsman_cache_opentime_itemmod>)>
+    //serv.log <argo.dmore2> + <dlocal.modifier>%
+    argo.more2 += <muldiv <local.modifier>,<argo.more2>,100>
+    //serv.log result <argo.dmore2>
+    argo.timer=<argo.more2>
+    argo.cont=<src.findlayer.26>	//store it in player's protected storage
+    salute
+    say Well met <src.name>, the court mage will unseal this cache for thee.
+    face <src>
+    return 1
+  endif
+endif
+
+on=@death
+hits=<maxhits>
+effect=3,i_fx_heal_effect,6,15,1
+sound snd_spell_resurrection
+anim 17
+say No, I mustn't yet take my last breath, I will not fail Lord British!
+return 1
+
+[events e_mondains_horde]
+
+on=@click	//moved this to generic @click for npcs
+//ref1=<src.findid.i_huntsman_contract>
+//if (<ref1.isvalid>) && (<ref1.more2> == <uid>)
+  //message @030 (Mondain's Horde)
+  //message @030 <def0.mondains_horde_rank<dtag0.mondains_horde_rank>> <name>
+//else
+  //message @027 (Mondain's Horde)
+  //message @027 <def0.mondains_horde_rank<dtag0.mondains_horde_rank>> <name>
+//endif
+//return 1  
+
+on=@combatadd
+ref1=<memoryfind.<src>>
+if (<ref1.isvalid>)
+  if !(<src.findid.i_npc_guild_huntsman>) || !((<src.findid.i_huntsman_contract>) && (<src.findid.i_huntsman_contract.link>==<uid>))
+    if !(<ref1.color>&memory_harmedby) && !(<ref1.color>&memory_irritatedby) 
+      return 1
+    endif
+  endif
+endif
+
+on=@gethit
+if !(<src.npc>) && (<src.findid.i_npc_guild_huntsman>) 
+  if (<eval <serv.time>-<src.findid.i_npc_guild_huntsman.tag.last_contract_buytime>> > <eval (<def0.huntsman_contract_buywait>*10)>) || (<src.isgm>)
+    if (<serv.list.mondains_horde<dtag0.mondains_horde_rank>.findelem <uid>> != -1) 
+      if !(<src.isdialogopen.d_huntsman_spot_offer>) && !(<src.isdialogopen.d_dialog_anim_slide_down>)  
+        sdialog d_huntsman_spot_offer_notif
+      endif
+    endif
+  endif
+endif
+
+on=@deathcorpse
+for n 0 <eval <attacker>-1>
+  ref1=<attacker.<dlocal.n>>			//attacker in the list
+  if (<ref1.isvalid>) && (<ref1.isplayer>)	//we need to close all the offers on this monster
+    trysrc <ref1> dialogclose d_huntsman_spot_offer_notif
+    ref2=<ref1.findid.i_dialog_anim_slide_down>
+    if (<ref2.isvalid>) && !(strcmpi("d_huntsman_spot_offer","<ref2.tag0.dialog>"))
+      ref2.remove
+    endif
+    trysrc <ref1> dialogclose d_huntsman_spot_offer
+  endif
+endfor
+
+ref1=<findid.i_horde_monster_memory.more2>	//contract for the monster
+if (<ref1.isvalid>) 
+  ref2=<ref1.topobj>				//player holding the contract
+  if (<ref2.isvalid>)
+    if (<attacker.id <ref2>> == -1) || !(<ref2.findid.i_npc_guild_huntsman>)	//contract holder wasn't one of the killers, or not in the guild
+      ref2.sysmessage Your huntsman contract for the <job>, <name> has been nullified.
+    else
+      local.cache_level=<tag0.mondains_horde_rank>
+      serv.newitem i_mondains_horde_cache
+      new.morex=<tag0.base_difficulty>
+      new.morey=<local.cache_level>
+      new.morem={1 5}
+      new.more2=<ref2>
+      new.f_horde_cache_adjust_dispid
+      new.name=Horde Cache (Level <dlocal.cache_level>)
+      new.color=<eval 1752+(<tag0.mondains_horde_rank>*5)>
+      new.cont=<argo>
+      argo.f_horde_death_effect
+      ref2.sysmessage Dark energy erupts from <name> as their body collapses to the ground.
+    endif
+  trysrc <ref2> dialogclose d_huntsman_contract
+  endif
+ref1.remove		//remove the contract
+endif
+
+on=@destroy
+local.horde_rank=<dtag0.mondains_horde_rank>
+if (<var0.mondains_horde_size> >= 1)
+  var.mondains_horde_size -= 1
+endif
+if (<serv.list.mondains_horde<dlocal.horde_rank>.count> >= 1) && (<serv.list.mondains_horde<dlocal.horde_rank>.findelem <uid>> != -1)
+  serv.list.mondains_horde<dlocal.horde_rank>.<serv.list.mondains_horde<dlocal.horde_rank>.findelem <uid>>.remove
+endif
+
+[typedef t_mondains_horde_cache]
+
+on=@click
+message Horde Cache (Level <dmorey>)
+return 1
+
+on=@dclick
+src.sysmessage This cache emenates dark magic, bring it to the Huntsman Guildmaster.
+return 1
+
+on=@dropon_self
+src.sysmessage You are unable to place this inside that.
+return 1
+
+
+[events e_huntsman_ally]
+
+
+
+
+
+[EOF]

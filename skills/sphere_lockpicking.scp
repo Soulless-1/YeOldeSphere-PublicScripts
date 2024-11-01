@@ -1,0 +1,82 @@
+//http://www.uoguide.com/Lockpicking
+//9:02 AM 8/9/2018
+//check fail/succeed messages and sfx
+
+//more1 = uid of the key
+//more2 = complexity of lock
+//morex = trap type
+//link = secondary key?
+
+[SKILL 24]
+DEFNAME=Skill_LockPick
+KEY=LockPicking
+TITLE=Infiltrator
+FLAGS=skf_scripted
+PROMPT_MSG=What do you want to pick?
+DELAY=3.0
+STAT_STR=20
+STAT_INT=60
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=80
+BONUS_INT=20
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start	//doors? what kind of chests can't be unlocked, so much more we can do!!!
+//act = target
+//actprv = lockpick
+ref1=<actprv>
+
+if !(<act.isvalid>) || !(<ref1.isvalid>) || (<ref1.type> != t_lockpick)
+  return 1
+elseif !(<src.findtype.t_lockpick>)
+  src.sysmessage You do not have a lockpicking tool.
+  return 1 
+elseif (<src.distance <act>> > 2) 	//General checks
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <act>>) && (<act.topobj> != <src>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(<act.isitem>) || ((<act.type> != t_container_locked) && !(<act.isevent.t_container_locked>))
+  src.sysmessage You can't unlock that!
+  return 1
+endif
+
+src.sound 0241	//check
+if !(<act.cont>) && !(<act.isevent.t_treasure_chest>)
+  act.timer=<eval (<serv.decaytimer>*60)>
+endif
+if !(<src.f_skillsucceed lockpicking>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You are unable to pick the lock.
+if (25 <= <R1,100>)
+  src.consume 1 i_lockpick
+  src.sysmessage you broke the lockpick.
+  src.sound 03a4
+endif
+
+ON=@Abort
+src.sysmessage You stop trying to pick the lock.
+
+on=@success
+if (<src.distance <act>> > 2) 	//General checks
+  src.sysmessage That is too far away.
+  return 1
+endif
+src.sysmessage You successfully pick the lock
+act.type=t_container
+act.sound 04a
+//act.more1=		//uid of the key
+//act.more2=		//complexity of lock
+//act.morex=		//trap type
+//act.link=		//secondary key?
+
+[EOF]

@@ -1,0 +1,280 @@
+//Guard System by Soulless
+//v1.0
+//4:01 PM 10/8/2018
+
+//guards are gray to the criminal, they should be blue, add the proper memories
+
+[defname guard_system]
+guards_npc			{c_h_guard 1 c_h_guard_f 1}	//default npc to be used for guards
+guards_instakill		1				//instant death from being hit by guard?
+guards_runonly			0				//guards run instead of teleport to their target?
+guards_linger			180				//how many seconds a guard will linger in an area after being summoned?
+guards_allow_murderers		0				//allow murderers in town like in pre-t2a? 
+guards_jail_players		0				//Jail Players instead of kill them?
+guards_jail_onlycriminal	1				//Guards will still kill murderers but only jail criminals
+guards_Jail_time		60				//how long should the player be in jail (in seconds)?
+guards_jail_stoned		1				//should the player be stoned for the duration of their stay?
+guards_jail_location		5295,1182,0,0			//Where is their jail cell? 
+guards_jail_returnto		1365,1777,15,0			//where do they get released? 0 = the place the crime happened
+guards_call_cooldown		5				//how many seconds must a player wait to call guards again		
+guards_criminal_calltime	120				//how many seconds are criminals at risk of guards being called?
+
+[events e_guard_system]
+
+on=@spellcast
+if (<region.flags>&region_flag_guarded) && !(<isgm>) 
+  if (<serv.spell.<argn1>.flags>&spellflag_field) && (<argn1> !=  52) 	//casting a field on a town (not gate travel though)
+    sysmessage You cannot cast this in town!		//do not allow it
+    return 1
+  elseif (<argn1> == 49) || (<argn1> == 55) || (<argn1> == 57)	//other area of effect spells
+    sysmessage The town guards will not permit you to cast that in town.
+    return 1
+  endif
+endif
+
+on=@criminal
+ref1=<uid>
+if (<ref1.isplayer>) && !(<ref1.iscriminal>) 
+  serv.log <ref1.name>(<ref1.uid>) becoming criminal in <ref1.region.name>(<ref1.p>) action: <ref1.action>(<ref1.actionname>) <qval (<act> != -1)?act: <ref1.act.name>(<ref1.act>):>
+endif
+if (<region.flags>&region_flag_guarded)
+  if !(<ref1.flags>&statf_dead) && !(<ref1.flags>&statf_invul) && !(<ref1.flags>&statf_stone)
+    ref2=<f_npc_witnessed_crime <uid>>	//only need 1 NPC witness
+    if (<ref2.isvalid>)	
+      ref2.f_callguards <ref1>      	
+    endif
+  endif
+endif
+
+on=@callguards
+serv.log <name>(<uid>) calling <qval (<argo.isvalid>)?<argo.name>(<argo>):guards(N/A)> on <src.name>(<src>) in <region.name>(<p>)
+
+[comment]
+
+on=@seecrime
+if (<src.isplayer>) 
+  serv.log <src.name> commited a crime against <argo.name> and I, <name>, witnessed it.
+endif  
+if (<region.isvalid>)
+  if (<region.flags>&region_flag_guarded) && (<src.region.flags>&region_flag_guarded)
+    if (<npc>) && (<ishuman>) && !(<iscriminal>) && !(<ismurderer>) && !(<ismonster>) 
+      f_callguards <src>
+    endif
+  endif
+endif
+
+on=@callguards
+ref1=<uid>
+if !(<ref1.findid.i_guards_call_cooldown>)		//can't call guards if it's on cooldown	
+  if !(<ref1.iscriminal>) && !(<ref1.isevil>) 		//criminals and evil characters can't call guards
+    forchars 15						//only check characters on the screen
+      ref2=<uid>
+      if (<ref2.region.isvalid>) && (<ref2.region.flags>&region_flag_guarded)
+        if (<ref2.iscriminal> >= <eval ((<serv.CriminalTimer>*60) - <def0.guards_criminal_calltime>)>) || (<ref2.isevil>)	//if they are criminal and guards can be called, or evil 
+          ref1.f_callguards <ref2>		//call guards
+        endif
+      endif
+    endfor
+  endif
+endif
+serv.newitem i_guards_call_cooldown		//cooldown to prevent over usage
+new.timer=<def0.guards_call_cooldown>
+ref1.equip <new>
+return 1					//we handle our guards on our own here
+
+[itemdef i_guards_call_cooldown]
+defname=i_guards_call_cooldown
+name=Calling Guards Cooldown
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[events e_guards]
+
+on=@notosend
+argn=1		//These agents of the law are always blue
+return 1
+
+on=@npclookatchar
+if (<src.f_guards_canprosecute>)
+  dorand 3
+    say Thou shalt regret thine actions, swine!
+    say Take this swine!
+    say <name>, thou art a cowardly swine.
+  enddo
+  go <src.p>	//teleport to them
+  attack <src>	//attack them
+endif
+
+on=@hittry
+if (<src.region.flags>&region_flag_guarded)	//only in guarded zones
+  src.damage 10000 dam_god <uid>		//dealt 10,000 damage from the guard      
+  src.effect=1,i_memory,6,45
+  src.sound 0237
+endif
+
+[function f_callguards]		//crashing when called from @criminal in this script  <--DOES THIS STILL HAPPEN?
+ref1=<argv[0]>			//char we're calling guards on
+if (<iscriminal>) || (<ismurderer>) || (<ismonster>) || (<isevil>) || (<npc> == brain_guard)
+  return 1			//evildoers cannot call for guards, and guards will just attack criminals/evil chars
+endif
+
+serv.log <name>(<uid>) called guards on <ref1.name>(<ref1>) in <ref1.region.name>(<ref1.p>)
+
+if (<ref1.isvalid>)
+  ref2=<var0.nearby_guard_<ref1.region.defname>>
+  if !(<ref2>) || !(<ref2.ischar>) || (<ref2.npc> != brain_guard)	//is there a guard in this region already? 
+    newsummon {c_h_guard 1 c_h_guard_f 1}
+    ref2=<new>					//made a new guard for this incident
+    var0.nearby_guard_<ref1.region.defname>=<ref2>
+  endif
+  ref2.go <ref1.p>
+  ref2.home=<ref2.p>
+  ref2.homedist=10
+  //ref2.tag0.override.movedelay=750
+  //ref2.tag0.override.moverate=250
+
+  if (<def0.guards_jail_players>) && !((<def0.guards_jail_onlycriminal>) && (<ref1.kills> >= <serv.MurderMinCount>))	//if jail is active, and if murderers aren't killed immediatly
+    ref1.sound 01f0
+    ref1.serv.newitem i_jail_timer				//jail the player
+    ref1.equip <new>
+  else							//attack the criminal			
+    ref2.f_sawcrime <ref1>
+    ref2.f_irritatedby <ref1>
+    ref2.f_aggrievedby <ref1>
+    ref2.attack <ref1>
+    if (<def0.guards_instakill>)
+      ref1.damage 10000 dam_god		//dealt 10,000 damage   
+      ref1.effect=1,i_memory,6,45
+      ref1.sound 0237
+      serv.log <name>(<uid>) called guards on <ref1.name>(<ref1.uid>) in <ref1.region.name>(<ref1.p>), guard=<ref2.name>(<ref2.uid>)!
+      serv.log brain=<ref1.npc> criminal=<ref1.iscriminal> murders=<ref1.kills> attackers=<ref1.attacker> target=<ref1.attacker.target>
+    endif
+  endif
+endif
+
+//////////////////////////////
+// Jail memory item
+
+[itemdef i_jail_timer]
+id=i_memory
+layer=layer_special
+type=t_eq_script
+name=Jail Timer
+
+on=@create
+more1=<def0.guards_jail_time>
+timer=1
+
+on=@equip
+tag0.crime_scene=<src.p>
+src.go <def0.guards_jail_cell>
+src.stone=<qval <def0.guards_jail_stoned>?1:0>
+src.message You've been jailed for <dmore1> seconds.
+
+on=@unequip
+src.criminal=0	//if you're released from jail you're no longer a criminal, or you'd be staying in jail
+src.notoupdate
+src.go <def0.guards_jail_returnto>	//<qval (<def0.guards_jail_returnto>==0)?<tag0.crime_scene>:<def0.guards_jail_returnto>>
+src.stone=0
+
+on=@timer
+cont.sysmessage <dmore1>
+more1 -= 1
+if (<cont.distance <def0.guards_jail_cell>> > 15)
+  cont.go <def0.guards_jail_cell>
+  cont.sysmessage You may not leave jail yet.
+elseif (<more1> <= 0)
+  remove
+endif
+timer=1
+return 1
+
+////////////////////////////////
+// Various Functions
+
+[function f_clear_criminal_memories]
+forcharmemorytype memory_sawcrime
+  color &=~ memory_sawcrime
+  //color &=~ memory_irritatedby
+endfor
+
+[function f_criminal]
+consume i_memory_criminal
+flags |= statf_criminal
+notoupdate
+serv.newitem i_memory_criminal
+new.timer=<eval (<serv.CriminalTimer>*60)>
+if (<argn>) && (<isnum <argn>>)
+  new.timer=<argn>
+endif
+equip <new>
+sysmessage Criminal!!!
+
+if (<src.region.flags>&region_flag_guarded>)
+  sysmessage The guards can now be called on you.
+endif
+ref1=<uid>
+forchars 15
+  if (<uid> != <ref1>)
+    if (<src.canseelos>) || (<isplayer>) 
+      f_sawcrime <src>
+    endif
+  endif
+endfor
+
+[itemdef i_memory_criminal]
+defname=i_memory_criminal
+name=criminal memory
+id=i_handr_1
+type=t_eq_script
+layer=43
+
+on=@unequip
+src.flags &= ~ statf_criminal 
+src.notoupdate
+
+on=@timer
+remove
+return 1
+
+[function f_guards_canprosecute]
+if (<region.flags>&region_flag_guarded) && !(<flags>&statf_dead) && !(<flags>&statf_invul) && !(<flags>&statf_stone) 
+  if (<iscriminal>) || (<ismurderer>) || ((<ismonster>) && !(<owner>)) || (<isevil>) || (<npc> == brain_berserk)
+    return 1
+  elseif (<npc>) && (<flags>&statf_conjured) && ((<ismonster>) || (<isevil>))
+    return 1
+  endif
+endif
+return 0
+
+[function f_npc_witnessed_crime]
+ref1=<uid>
+forchars 15
+  if (<npc>) && (<ishuman>) && !(<iscriminal>) && !(<isevil>) 
+    if (<ref1.cansee <uid>>)		//canseelos for actual sight
+      return <uid> 			//only 1 witness needed, return the UID
+    endif
+  endif
+endfor  
+return 0
+
+[function f_can_callguards]	
+ref1=<args>	
+if (<region.isvalid>)									//must be in some kind of region
+  if (<region.flags>&region_flag_guarded) && (<src.region.flags>&region_flag_guarded)	//that region must be guarded
+    if !(<iscriminal>) && !(<ismurderer>) && !(<ismonster>) 				//you cannot be criminal or evil
+      if (<ref1.iscriminal> >= <eval ((<serv.CriminalTimer>*60) - <def0.guards_criminal_calltime>)>) || (<ref1.isevil>)		//must be within the guards call time
+        return 1
+      endif
+    endif
+  endif
+endif
+return 0
+
+
+[EOF]

@@ -1,0 +1,28 @@
+[SPELL 24]
+DEFNAME=s_wall_of_stone
+NAME=Wall of Stone
+SOUND=snd_spell_wall_of_stone
+RUNES=ISY
+CAST_TIME=1.3
+RESOURCES=i_reag_blood_moss,i_reag_garlic
+RUNE_ITEM=i_rune_wall_of_stone
+SCROLL_ITEM=i_scroll_wall_of_stone
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly
+EFFECT_ID=i_fx_heal_effect
+EFFECT=0
+DURATION=1*30.0,2*30.0
+MANAUSE=9
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+//Creates a temporary wall of stone ranging 1 tile deep, and 3 tiles wide. This wall blocks line of sign and is impassable. Dispel Field can be cast on it to remove 1 column of the wall.
+//10 Tile Range
+ON=@Success
+LOCAL.FieldWidth=5
+
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_physical>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+
+[EOF]

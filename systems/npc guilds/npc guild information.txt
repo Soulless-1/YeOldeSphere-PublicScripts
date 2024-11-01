@@ -1,0 +1,10 @@
+Some of the non player characters in the world are in guilds of their own. For instance, NPC mages have a mages guild, and offer better prices to those in their guild.
+ Find a "guildmaster" of a certain profession, and tell them <their-name> join, and they will offer to admit you for some gold. The thieves guild works a little different, 
+members of the thieves guild can steal from other players that are not criminals/murderers. Anyone can steal from a criminal/murderer. The thief guildmaster also offers to 
+sell you a disguise kit. You tell them <their-name> disguise, and for 700gp they will sell you an item that changes your general appearance and name, but always makes your 
+hair white, so use of a hair-dye afterwards is important. This effect is temporary. You can only be in 1 NPC guild at a time, to quit one you simply find a guildmaster for 
+that profession and say <their-name> quit. There are some stipulations to quitting, you may have to wait a few days. There is also certain criteria you must meet to join 
+certain guilds, such as the thieves guild, however you can be a member of an npc and a player guild at the same time.
+
+There is a thief-gm in the tavern by the water immediately south of the west brittan bank. Look for the guy/girl with a kryss in hand.
+

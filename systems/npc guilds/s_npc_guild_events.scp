@@ -1,0 +1,13 @@
+//NPC Guilds by Soulless
+//v1.0
+//6:22 PM 1/4/2022
+
+
+[events e_npc_guild_member_thieves]
+
+[events e_thieves_disguise]
+
+[events e_npc_guild_member_huntsman]
+
+
+[EOF]

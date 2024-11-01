@@ -1,0 +1,2847 @@
+// Skill advancement items by Soulless
+// v1.0 
+// 1:46 PM 3/5/2022
+
+[itemdef i_scroll_power_hour]
+defname=i_scroll_power_hour
+name=Power Hour Scroll
+id=i_scroll_x_blue
+type=t_script
+
+on=@create
+color=05d
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+consume 1
+if !(<src.findid.i_memory_power_hour>)
+  serv.newitem i_memory_power_hour
+  src.equip <new>
+endif
+if (<src.findid.i_memory_power_hour.more1> < 5)
+  src.findid.i_memory_power_hour.more1 += 1
+endif
+src.findid.i_memory_power_hour.timer += 60*60
+src.sysmessage You now have <eval (((<src.findid.i_memory_power_hour.timer>/60)/60)+1)> power hour(s) of 2x skillgain chance.
+src.effect=3,i_fx_heal_effect,6,15,1
+src.sound=snd_spell_bless
+return 1
+
+[itemdef i_memory_power_hour]
+defname=i_memory_power_hour
+name=Power Hour Memory
+id=i_memory
+type=t_eq_script
+
+on=@equip
+src.events=+e_power_hour
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.events=-e_power_hour
+src.sysmessage Your power hour boost has expired.
+
+[events e_power_hour]
+
+on=@skillgain
+argn2 *= 2
+
+[itemdef i_scroll_bonus_loot_roll]
+defname=i_scroll_bonus_loot_roll
+name=Bonus Loot Roll Scroll
+id=i_scroll_x_red
+type=t_script
+
+on=@create
+color=021
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+consume 1
+if !(<src.findid.i_memory_bonus_loot_roll>)
+  serv.newitem i_memory_bonus_loot_roll
+  src.equip <new>
+endif
+src.findid.i_memory_bonus_loot_roll.more1 += 30
+src.findid.i_memory_bonus_loot_roll.timer += 60*60
+src.sysmessage You now have <src.findid.i_memory_bonus_loot_roll.dmore1> bonus loot rolls. Expiring in <eval (((<src.findid.i_memory_bonus_loot_roll.timer>/60)/60)+1)> hour(s).
+src.effect=3,i_fx_heal_effect,6,15,1
+src.sound=snd_spell_bless
+return 1
+
+[itemdef i_memory_bonus_loot_roll]
+defname=i_memory_bonus_loot_roll
+name=Bonus Loot Roll Memory
+id=i_memory
+type=t_eq_script
+
+on=@timer
+remove
+return 1
+
+on=@unequip 
+src.sysmessage Your bonus loot rolls have expired.
+
+
+
+///////////////////////////////////
+// Power Scrolls
+
+[itemdef i_power_scroll_wondrous]
+defname=i_power_scroll_wondrous
+id=i_deed
+name=Wondrous Power Scroll
+type=t_power_scroll
+
+on=@create
+color=0481
+more1=1050
+//more2={1 48}
+//name=<name> of <serv.skill.<more2>.name> (<eval (<more1>/10)> skill)
+
+[itemdef i_power_scroll_exalted]
+defname=i_power_scroll_exalted
+id=i_deed
+name=Exalted Power Scroll
+type=t_power_scroll
+
+on=@create
+color=0481
+more1=1100
+//more2={1 48}		//this is done by the various systems that generate them.
+//name=<name> of <serv.skill.<more2>.name> (<eval (<more1>/10)> skill)
+
+[itemdef i_power_scroll_mythical]
+defname=i_power_scroll_mythical
+id=i_deed
+name=Mythical Power Scroll
+type=t_power_scroll
+
+on=@create
+color=0481
+more1=1150
+//more2={1 48}		//this is done by the various systems that generate them.
+//name=<name> of <serv.skill.<more2>.name> (<eval (<more1>/10)> skill)
+
+[itemdef i_power_scroll_legendary]
+defname=i_power_scroll_legendary
+id=i_deed
+name=Legendary Power Scroll
+type=t_power_scroll
+
+on=@create
+color=0481
+more1=1200
+//more2={1 48}		//this is done by the various systems that generate them.
+//name=<name> of <serv.skill.<more2>.name> (<eval (<more1>/10)> skill)
+
+////////////////////
+// These are skill specific scrolls
+
+[itemdef i_power_scroll_alchemy_wondrous]
+defname=i_power_scroll_alchemy_wondrous
+id=i_deed
+name=wondrous power scroll of alchemy (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=0
+ 
+[itemdef i_power_scroll_alchemy_exalted]
+defname=i_power_scroll_alchemy_exalted
+id=i_deed
+name=exalted power scroll of alchemy (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=0
+ 
+[itemdef i_power_scroll_alchemy_mythical]
+defname=i_power_scroll_alchemy_mythical
+id=i_deed
+name=mythical power scroll of alchemy (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=0
+ 
+[itemdef i_power_scroll_alchemy_legendary]
+defname=i_power_scroll_alchemy_legendary
+id=i_deed
+name=legendary power scroll of alchemy (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=0
+ 
+[itemdef i_power_scroll_anatomy_wondrous]
+defname=i_power_scroll_anatomy_wondrous
+id=i_deed
+name=wondrous power scroll of anatomy (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=1
+ 
+[itemdef i_power_scroll_anatomy_exalted]
+defname=i_power_scroll_anatomy_exalted
+id=i_deed
+name=exalted power scroll of anatomy (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=1
+ 
+[itemdef i_power_scroll_anatomy_mythical]
+defname=i_power_scroll_anatomy_mythical
+id=i_deed
+name=mythical power scroll of anatomy (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=1
+ 
+[itemdef i_power_scroll_anatomy_legendary]
+defname=i_power_scroll_anatomy_legendary
+id=i_deed
+name=legendary power scroll of anatomy (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=1
+ 
+[itemdef i_power_scroll_animallore_wondrous]
+defname=i_power_scroll_animallore_wondrous
+id=i_deed
+name=wondrous power scroll of animallore (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=2
+ 
+[itemdef i_power_scroll_animallore_exalted]
+defname=i_power_scroll_animallore_exalted
+id=i_deed
+name=exalted power scroll of animallore (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=2
+ 
+[itemdef i_power_scroll_animallore_mythical]
+defname=i_power_scroll_animallore_mythical
+id=i_deed
+name=mythical power scroll of animallore (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=2
+ 
+[itemdef i_power_scroll_animallore_legendary]
+defname=i_power_scroll_animallore_legendary
+id=i_deed
+name=legendary power scroll of animallore (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=2
+ 
+[itemdef i_power_scroll_itemid_wondrous]
+defname=i_power_scroll_itemid_wondrous
+id=i_deed
+name=wondrous power scroll of itemid (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=3
+ 
+[itemdef i_power_scroll_itemid_exalted]
+defname=i_power_scroll_itemid_exalted
+id=i_deed
+name=exalted power scroll of itemid (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=3
+ 
+[itemdef i_power_scroll_itemid_mythical]
+defname=i_power_scroll_itemid_mythical
+id=i_deed
+name=mythical power scroll of itemid (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=3
+ 
+[itemdef i_power_scroll_itemid_legendary]
+defname=i_power_scroll_itemid_legendary
+id=i_deed
+name=legendary power scroll of itemid (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=3
+ 
+[itemdef i_power_scroll_armslore_wondrous]
+defname=i_power_scroll_armslore_wondrous
+id=i_deed
+name=wondrous power scroll of armslore (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=4
+ 
+[itemdef i_power_scroll_armslore_exalted]
+defname=i_power_scroll_armslore_exalted
+id=i_deed
+name=exalted power scroll of armslore (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=4
+ 
+[itemdef i_power_scroll_armslore_mythical]
+defname=i_power_scroll_armslore_mythical
+id=i_deed
+name=mythical power scroll of armslore (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=4
+ 
+[itemdef i_power_scroll_armslore_legendary]
+defname=i_power_scroll_armslore_legendary
+id=i_deed
+name=legendary power scroll of armslore (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=4
+ 
+[itemdef i_power_scroll_parrying_wondrous]
+defname=i_power_scroll_parrying_wondrous
+id=i_deed
+name=wondrous power scroll of parrying (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=5
+ 
+[itemdef i_power_scroll_parrying_exalted]
+defname=i_power_scroll_parrying_exalted
+id=i_deed
+name=exalted power scroll of parrying (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=5
+ 
+[itemdef i_power_scroll_parrying_mythical]
+defname=i_power_scroll_parrying_mythical
+id=i_deed
+name=mythical power scroll of parrying (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=5
+ 
+[itemdef i_power_scroll_parrying_legendary]
+defname=i_power_scroll_parrying_legendary
+id=i_deed
+name=legendary power scroll of parrying (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=5
+ 
+[itemdef i_power_scroll_begging_wondrous]
+defname=i_power_scroll_begging_wondrous
+id=i_deed
+name=wondrous power scroll of begging (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=6
+ 
+[itemdef i_power_scroll_begging_exalted]
+defname=i_power_scroll_begging_exalted
+id=i_deed
+name=exalted power scroll of begging (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=6
+ 
+[itemdef i_power_scroll_begging_mythical]
+defname=i_power_scroll_begging_mythical
+id=i_deed
+name=mythical power scroll of begging (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=6
+ 
+[itemdef i_power_scroll_begging_legendary]
+defname=i_power_scroll_begging_legendary
+id=i_deed
+name=legendary power scroll of begging (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=6
+ 
+[itemdef i_power_scroll_blacksmithing_wondrous]
+defname=i_power_scroll_blacksmithing_wondrous
+id=i_deed
+name=wondrous power scroll of blacksmithing (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=7
+ 
+[itemdef i_power_scroll_blacksmithing_exalted]
+defname=i_power_scroll_blacksmithing_exalted
+id=i_deed
+name=exalted power scroll of blacksmithing (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=7
+ 
+[itemdef i_power_scroll_blacksmithing_mythical]
+defname=i_power_scroll_blacksmithing_mythical
+id=i_deed
+name=mythical power scroll of blacksmithing (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=7
+ 
+[itemdef i_power_scroll_blacksmithing_legendary]
+defname=i_power_scroll_blacksmithing_legendary
+id=i_deed
+name=legendary power scroll of blacksmithing (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=7
+ 
+[itemdef i_power_scroll_bowcraft_wondrous]
+defname=i_power_scroll_bowcraft_wondrous
+id=i_deed
+name=wondrous power scroll of bowcraft (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=8
+ 
+[itemdef i_power_scroll_bowcraft_exalted]
+defname=i_power_scroll_bowcraft_exalted
+id=i_deed
+name=exalted power scroll of bowcraft (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=8
+ 
+[itemdef i_power_scroll_bowcraft_mythical]
+defname=i_power_scroll_bowcraft_mythical
+id=i_deed
+name=mythical power scroll of bowcraft (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=8
+ 
+[itemdef i_power_scroll_bowcraft_legendary]
+defname=i_power_scroll_bowcraft_legendary
+id=i_deed
+name=legendary power scroll of bowcraft (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=8
+ 
+[itemdef i_power_scroll_peacemaking_wondrous]
+defname=i_power_scroll_peacemaking_wondrous
+id=i_deed
+name=wondrous power scroll of peacemaking (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=9
+ 
+[itemdef i_power_scroll_peacemaking_exalted]
+defname=i_power_scroll_peacemaking_exalted
+id=i_deed
+name=exalted power scroll of peacemaking (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=9
+ 
+[itemdef i_power_scroll_peacemaking_mythical]
+defname=i_power_scroll_peacemaking_mythical
+id=i_deed
+name=mythical power scroll of peacemaking (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=9
+ 
+[itemdef i_power_scroll_peacemaking_legendary]
+defname=i_power_scroll_peacemaking_legendary
+id=i_deed
+name=legendary power scroll of peacemaking (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=9
+ 
+[itemdef i_power_scroll_camping_wondrous]
+defname=i_power_scroll_camping_wondrous
+id=i_deed
+name=wondrous power scroll of camping (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=10
+ 
+[itemdef i_power_scroll_camping_exalted]
+defname=i_power_scroll_camping_exalted
+id=i_deed
+name=exalted power scroll of camping (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=10
+ 
+[itemdef i_power_scroll_camping_mythical]
+defname=i_power_scroll_camping_mythical
+id=i_deed
+name=mythical power scroll of camping (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=10
+ 
+[itemdef i_power_scroll_camping_legendary]
+defname=i_power_scroll_camping_legendary
+id=i_deed
+name=legendary power scroll of camping (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=10
+ 
+[itemdef i_power_scroll_carpentry_wondrous]
+defname=i_power_scroll_carpentry_wondrous
+id=i_deed
+name=wondrous power scroll of carpentry (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=11
+ 
+[itemdef i_power_scroll_carpentry_exalted]
+defname=i_power_scroll_carpentry_exalted
+id=i_deed
+name=exalted power scroll of carpentry (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=11
+ 
+[itemdef i_power_scroll_carpentry_mythical]
+defname=i_power_scroll_carpentry_mythical
+id=i_deed
+name=mythical power scroll of carpentry (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=11
+ 
+[itemdef i_power_scroll_carpentry_legendary]
+defname=i_power_scroll_carpentry_legendary
+id=i_deed
+name=legendary power scroll of carpentry (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=11
+ 
+[itemdef i_power_scroll_cartography_wondrous]
+defname=i_power_scroll_cartography_wondrous
+id=i_deed
+name=wondrous power scroll of cartography (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=12
+ 
+[itemdef i_power_scroll_cartography_exalted]
+defname=i_power_scroll_cartography_exalted
+id=i_deed
+name=exalted power scroll of cartography (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=12
+ 
+[itemdef i_power_scroll_cartography_mythical]
+defname=i_power_scroll_cartography_mythical
+id=i_deed
+name=mythical power scroll of cartography (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=12
+ 
+[itemdef i_power_scroll_cartography_legendary]
+defname=i_power_scroll_cartography_legendary
+id=i_deed
+name=legendary power scroll of cartography (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=12
+ 
+[itemdef i_power_scroll_cooking_wondrous]
+defname=i_power_scroll_cooking_wondrous
+id=i_deed
+name=wondrous power scroll of cooking (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=13
+ 
+[itemdef i_power_scroll_cooking_exalted]
+defname=i_power_scroll_cooking_exalted
+id=i_deed
+name=exalted power scroll of cooking (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=13
+ 
+[itemdef i_power_scroll_cooking_mythical]
+defname=i_power_scroll_cooking_mythical
+id=i_deed
+name=mythical power scroll of cooking (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=13
+ 
+[itemdef i_power_scroll_cooking_legendary]
+defname=i_power_scroll_cooking_legendary
+id=i_deed
+name=legendary power scroll of cooking (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=13
+ 
+[itemdef i_power_scroll_detectinghidden_wondrous]
+defname=i_power_scroll_detectinghidden_wondrous
+id=i_deed
+name=wondrous power scroll of detectinghidden (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=14
+ 
+[itemdef i_power_scroll_detectinghidden_exalted]
+defname=i_power_scroll_detectinghidden_exalted
+id=i_deed
+name=exalted power scroll of detectinghidden (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=14
+ 
+[itemdef i_power_scroll_detectinghidden_mythical]
+defname=i_power_scroll_detectinghidden_mythical
+id=i_deed
+name=mythical power scroll of detectinghidden (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=14
+ 
+[itemdef i_power_scroll_detectinghidden_legendary]
+defname=i_power_scroll_detectinghidden_legendary
+id=i_deed
+name=legendary power scroll of detectinghidden (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=14
+ 
+[itemdef i_power_scroll_discordance_wondrous]
+defname=i_power_scroll_discordance_wondrous
+id=i_deed
+name=wondrous power scroll of discordance (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=15
+ 
+[itemdef i_power_scroll_discordance_exalted]
+defname=i_power_scroll_discordance_exalted
+id=i_deed
+name=exalted power scroll of discordance (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=15
+ 
+[itemdef i_power_scroll_discordance_mythical]
+defname=i_power_scroll_discordance_mythical
+id=i_deed
+name=mythical power scroll of discordance (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=15
+ 
+[itemdef i_power_scroll_discordance_legendary]
+defname=i_power_scroll_discordance_legendary
+id=i_deed
+name=legendary power scroll of discordance (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=15
+ 
+[itemdef i_power_scroll_evaluatingintel_wondrous]
+defname=i_power_scroll_evaluatingintel_wondrous
+id=i_deed
+name=wondrous power scroll of evaluatingintel (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=16
+ 
+[itemdef i_power_scroll_evaluatingintel_exalted]
+defname=i_power_scroll_evaluatingintel_exalted
+id=i_deed
+name=exalted power scroll of evaluatingintel (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=16
+ 
+[itemdef i_power_scroll_evaluatingintel_mythical]
+defname=i_power_scroll_evaluatingintel_mythical
+id=i_deed
+name=mythical power scroll of evaluatingintel (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=16
+ 
+[itemdef i_power_scroll_evaluatingintel_legendary]
+defname=i_power_scroll_evaluatingintel_legendary
+id=i_deed
+name=legendary power scroll of evaluatingintel (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=16
+ 
+[itemdef i_power_scroll_healing_wondrous]
+defname=i_power_scroll_healing_wondrous
+id=i_deed
+name=wondrous power scroll of healing (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=17
+ 
+[itemdef i_power_scroll_healing_exalted]
+defname=i_power_scroll_healing_exalted
+id=i_deed
+name=exalted power scroll of healing (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=17
+ 
+[itemdef i_power_scroll_healing_mythical]
+defname=i_power_scroll_healing_mythical
+id=i_deed
+name=mythical power scroll of healing (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=17
+ 
+[itemdef i_power_scroll_healing_legendary]
+defname=i_power_scroll_healing_legendary
+id=i_deed
+name=legendary power scroll of healing (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=17
+ 
+[itemdef i_power_scroll_fishing_wondrous]
+defname=i_power_scroll_fishing_wondrous
+id=i_deed
+name=wondrous power scroll of fishing (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=18
+ 
+[itemdef i_power_scroll_fishing_exalted]
+defname=i_power_scroll_fishing_exalted
+id=i_deed
+name=exalted power scroll of fishing (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=18
+ 
+[itemdef i_power_scroll_fishing_mythical]
+defname=i_power_scroll_fishing_mythical
+id=i_deed
+name=mythical power scroll of fishing (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=18
+ 
+[itemdef i_power_scroll_fishing_legendary]
+defname=i_power_scroll_fishing_legendary
+id=i_deed
+name=legendary power scroll of fishing (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=18
+ 
+[itemdef i_power_scroll_forensics_wondrous]
+defname=i_power_scroll_forensics_wondrous
+id=i_deed
+name=wondrous power scroll of forensics (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=19
+ 
+[itemdef i_power_scroll_forensics_exalted]
+defname=i_power_scroll_forensics_exalted
+id=i_deed
+name=exalted power scroll of forensics (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=19
+ 
+[itemdef i_power_scroll_forensics_mythical]
+defname=i_power_scroll_forensics_mythical
+id=i_deed
+name=mythical power scroll of forensics (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=19
+ 
+[itemdef i_power_scroll_forensics_legendary]
+defname=i_power_scroll_forensics_legendary
+id=i_deed
+name=legendary power scroll of forensics (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=19
+ 
+[itemdef i_power_scroll_herding_wondrous]
+defname=i_power_scroll_herding_wondrous
+id=i_deed
+name=wondrous power scroll of herding (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=20
+ 
+[itemdef i_power_scroll_herding_exalted]
+defname=i_power_scroll_herding_exalted
+id=i_deed
+name=exalted power scroll of herding (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=20
+ 
+[itemdef i_power_scroll_herding_mythical]
+defname=i_power_scroll_herding_mythical
+id=i_deed
+name=mythical power scroll of herding (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=20
+ 
+[itemdef i_power_scroll_herding_legendary]
+defname=i_power_scroll_herding_legendary
+id=i_deed
+name=legendary power scroll of herding (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=20
+ 
+[itemdef i_power_scroll_hiding_wondrous]
+defname=i_power_scroll_hiding_wondrous
+id=i_deed
+name=wondrous power scroll of hiding (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=21
+ 
+[itemdef i_power_scroll_hiding_exalted]
+defname=i_power_scroll_hiding_exalted
+id=i_deed
+name=exalted power scroll of hiding (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=21
+ 
+[itemdef i_power_scroll_hiding_mythical]
+defname=i_power_scroll_hiding_mythical
+id=i_deed
+name=mythical power scroll of hiding (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=21
+ 
+[itemdef i_power_scroll_hiding_legendary]
+defname=i_power_scroll_hiding_legendary
+id=i_deed
+name=legendary power scroll of hiding (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=21
+ 
+[itemdef i_power_scroll_provocation_wondrous]
+defname=i_power_scroll_provocation_wondrous
+id=i_deed
+name=wondrous power scroll of provocation (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=22
+ 
+[itemdef i_power_scroll_provocation_exalted]
+defname=i_power_scroll_provocation_exalted
+id=i_deed
+name=exalted power scroll of provocation (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=22
+ 
+[itemdef i_power_scroll_provocation_mythical]
+defname=i_power_scroll_provocation_mythical
+id=i_deed
+name=mythical power scroll of provocation (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=22
+ 
+[itemdef i_power_scroll_provocation_legendary]
+defname=i_power_scroll_provocation_legendary
+id=i_deed
+name=legendary power scroll of provocation (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=22
+ 
+[itemdef i_power_scroll_inscription_wondrous]
+defname=i_power_scroll_inscription_wondrous
+id=i_deed
+name=wondrous power scroll of inscription (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=23
+ 
+[itemdef i_power_scroll_inscription_exalted]
+defname=i_power_scroll_inscription_exalted
+id=i_deed
+name=exalted power scroll of inscription (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=23
+ 
+[itemdef i_power_scroll_inscription_mythical]
+defname=i_power_scroll_inscription_mythical
+id=i_deed
+name=mythical power scroll of inscription (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=23
+ 
+[itemdef i_power_scroll_inscription_legendary]
+defname=i_power_scroll_inscription_legendary
+id=i_deed
+name=legendary power scroll of inscription (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=23
+ 
+[itemdef i_power_scroll_lockpicking_wondrous]
+defname=i_power_scroll_lockpicking_wondrous
+id=i_deed
+name=wondrous power scroll of lockpicking (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=24
+ 
+[itemdef i_power_scroll_lockpicking_exalted]
+defname=i_power_scroll_lockpicking_exalted
+id=i_deed
+name=exalted power scroll of lockpicking (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=24
+ 
+[itemdef i_power_scroll_lockpicking_mythical]
+defname=i_power_scroll_lockpicking_mythical
+id=i_deed
+name=mythical power scroll of lockpicking (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=24
+ 
+[itemdef i_power_scroll_lockpicking_legendary]
+defname=i_power_scroll_lockpicking_legendary
+id=i_deed
+name=legendary power scroll of lockpicking (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=24
+ 
+[itemdef i_power_scroll_magery_wondrous]
+defname=i_power_scroll_magery_wondrous
+id=i_deed
+name=wondrous power scroll of magery (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=25
+ 
+[itemdef i_power_scroll_magery_exalted]
+defname=i_power_scroll_magery_exalted
+id=i_deed
+name=exalted power scroll of magery (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=25
+ 
+[itemdef i_power_scroll_magery_mythical]
+defname=i_power_scroll_magery_mythical
+id=i_deed
+name=mythical power scroll of magery (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=25
+ 
+[itemdef i_power_scroll_magery_legendary]
+defname=i_power_scroll_magery_legendary
+id=i_deed
+name=legendary power scroll of magery (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=25
+ 
+[itemdef i_power_scroll_magicresistance_wondrous]
+defname=i_power_scroll_magicresistance_wondrous
+id=i_deed
+name=wondrous power scroll of magicresistance (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=26
+ 
+[itemdef i_power_scroll_magicresistance_exalted]
+defname=i_power_scroll_magicresistance_exalted
+id=i_deed
+name=exalted power scroll of magicresistance (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=26
+ 
+[itemdef i_power_scroll_magicresistance_mythical]
+defname=i_power_scroll_magicresistance_mythical
+id=i_deed
+name=mythical power scroll of magicresistance (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=26
+ 
+[itemdef i_power_scroll_magicresistance_legendary]
+defname=i_power_scroll_magicresistance_legendary
+id=i_deed
+name=legendary power scroll of magicresistance (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=26
+ 
+[itemdef i_power_scroll_tactics_wondrous]
+defname=i_power_scroll_tactics_wondrous
+id=i_deed
+name=wondrous power scroll of tactics (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=27
+ 
+[itemdef i_power_scroll_tactics_exalted]
+defname=i_power_scroll_tactics_exalted
+id=i_deed
+name=exalted power scroll of tactics (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=27
+ 
+[itemdef i_power_scroll_tactics_mythical]
+defname=i_power_scroll_tactics_mythical
+id=i_deed
+name=mythical power scroll of tactics (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=27
+ 
+[itemdef i_power_scroll_tactics_legendary]
+defname=i_power_scroll_tactics_legendary
+id=i_deed
+name=legendary power scroll of tactics (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=27
+ 
+[itemdef i_power_scroll_snooping_wondrous]
+defname=i_power_scroll_snooping_wondrous
+id=i_deed
+name=wondrous power scroll of snooping (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=28
+ 
+[itemdef i_power_scroll_snooping_exalted]
+defname=i_power_scroll_snooping_exalted
+id=i_deed
+name=exalted power scroll of snooping (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=28
+ 
+[itemdef i_power_scroll_snooping_mythical]
+defname=i_power_scroll_snooping_mythical
+id=i_deed
+name=mythical power scroll of snooping (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=28
+ 
+[itemdef i_power_scroll_snooping_legendary]
+defname=i_power_scroll_snooping_legendary
+id=i_deed
+name=legendary power scroll of snooping (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=28
+ 
+[itemdef i_power_scroll_musicianship_wondrous]
+defname=i_power_scroll_musicianship_wondrous
+id=i_deed
+name=wondrous power scroll of musicianship (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=29
+ 
+[itemdef i_power_scroll_musicianship_exalted]
+defname=i_power_scroll_musicianship_exalted
+id=i_deed
+name=exalted power scroll of musicianship (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=29
+ 
+[itemdef i_power_scroll_musicianship_mythical]
+defname=i_power_scroll_musicianship_mythical
+id=i_deed
+name=mythical power scroll of musicianship (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=29
+ 
+[itemdef i_power_scroll_musicianship_legendary]
+defname=i_power_scroll_musicianship_legendary
+id=i_deed
+name=legendary power scroll of musicianship (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=29
+ 
+[itemdef i_power_scroll_poisoning_wondrous]
+defname=i_power_scroll_poisoning_wondrous
+id=i_deed
+name=wondrous power scroll of poisoning (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=30
+ 
+[itemdef i_power_scroll_poisoning_exalted]
+defname=i_power_scroll_poisoning_exalted
+id=i_deed
+name=exalted power scroll of poisoning (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=30
+ 
+[itemdef i_power_scroll_poisoning_mythical]
+defname=i_power_scroll_poisoning_mythical
+id=i_deed
+name=mythical power scroll of poisoning (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=30
+ 
+[itemdef i_power_scroll_poisoning_legendary]
+defname=i_power_scroll_poisoning_legendary
+id=i_deed
+name=legendary power scroll of poisoning (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=30
+ 
+[itemdef i_power_scroll_archery_wondrous]
+defname=i_power_scroll_archery_wondrous
+id=i_deed
+name=wondrous power scroll of archery (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=31
+ 
+[itemdef i_power_scroll_archery_exalted]
+defname=i_power_scroll_archery_exalted
+id=i_deed
+name=exalted power scroll of archery (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=31
+ 
+[itemdef i_power_scroll_archery_mythical]
+defname=i_power_scroll_archery_mythical
+id=i_deed
+name=mythical power scroll of archery (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=31
+ 
+[itemdef i_power_scroll_archery_legendary]
+defname=i_power_scroll_archery_legendary
+id=i_deed
+name=legendary power scroll of archery (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=31
+ 
+[itemdef i_power_scroll_spiritspeak_wondrous]
+defname=i_power_scroll_spiritspeak_wondrous
+id=i_deed
+name=wondrous power scroll of spiritspeak (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=32
+ 
+[itemdef i_power_scroll_spiritspeak_exalted]
+defname=i_power_scroll_spiritspeak_exalted
+id=i_deed
+name=exalted power scroll of spiritspeak (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=32
+ 
+[itemdef i_power_scroll_spiritspeak_mythical]
+defname=i_power_scroll_spiritspeak_mythical
+id=i_deed
+name=mythical power scroll of spiritspeak (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=32
+ 
+[itemdef i_power_scroll_spiritspeak_legendary]
+defname=i_power_scroll_spiritspeak_legendary
+id=i_deed
+name=legendary power scroll of spiritspeak (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=32
+ 
+[itemdef i_power_scroll_stealing_wondrous]
+defname=i_power_scroll_stealing_wondrous
+id=i_deed
+name=wondrous power scroll of stealing (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=33
+ 
+[itemdef i_power_scroll_stealing_exalted]
+defname=i_power_scroll_stealing_exalted
+id=i_deed
+name=exalted power scroll of stealing (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=33
+ 
+[itemdef i_power_scroll_stealing_mythical]
+defname=i_power_scroll_stealing_mythical
+id=i_deed
+name=mythical power scroll of stealing (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=33
+ 
+[itemdef i_power_scroll_stealing_legendary]
+defname=i_power_scroll_stealing_legendary
+id=i_deed
+name=legendary power scroll of stealing (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=33
+ 
+[itemdef i_power_scroll_tailoring_wondrous]
+defname=i_power_scroll_tailoring_wondrous
+id=i_deed
+name=wondrous power scroll of tailoring (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=34
+ 
+[itemdef i_power_scroll_tailoring_exalted]
+defname=i_power_scroll_tailoring_exalted
+id=i_deed
+name=exalted power scroll of tailoring (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=34
+ 
+[itemdef i_power_scroll_tailoring_mythical]
+defname=i_power_scroll_tailoring_mythical
+id=i_deed
+name=mythical power scroll of tailoring (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=34
+ 
+[itemdef i_power_scroll_tailoring_legendary]
+defname=i_power_scroll_tailoring_legendary
+id=i_deed
+name=legendary power scroll of tailoring (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=34
+ 
+[itemdef i_power_scroll_taming_wondrous]
+defname=i_power_scroll_taming_wondrous
+id=i_deed
+name=wondrous power scroll of taming (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=35
+ 
+[itemdef i_power_scroll_taming_exalted]
+defname=i_power_scroll_taming_exalted
+id=i_deed
+name=exalted power scroll of taming (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=35
+ 
+[itemdef i_power_scroll_taming_mythical]
+defname=i_power_scroll_taming_mythical
+id=i_deed
+name=mythical power scroll of taming (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=35
+ 
+[itemdef i_power_scroll_taming_legendary]
+defname=i_power_scroll_taming_legendary
+id=i_deed
+name=legendary power scroll of taming (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=35
+ 
+[itemdef i_power_scroll_tasteid_wondrous]
+defname=i_power_scroll_tasteid_wondrous
+id=i_deed
+name=wondrous power scroll of tasteid (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=36
+ 
+[itemdef i_power_scroll_tasteid_exalted]
+defname=i_power_scroll_tasteid_exalted
+id=i_deed
+name=exalted power scroll of tasteid (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=36
+ 
+[itemdef i_power_scroll_tasteid_mythical]
+defname=i_power_scroll_tasteid_mythical
+id=i_deed
+name=mythical power scroll of tasteid (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=36
+ 
+[itemdef i_power_scroll_tasteid_legendary]
+defname=i_power_scroll_tasteid_legendary
+id=i_deed
+name=legendary power scroll of tasteid (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=36
+ 
+[itemdef i_power_scroll_tinkering_wondrous]
+defname=i_power_scroll_tinkering_wondrous
+id=i_deed
+name=wondrous power scroll of tinkering (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=37
+ 
+[itemdef i_power_scroll_tinkering_exalted]
+defname=i_power_scroll_tinkering_exalted
+id=i_deed
+name=exalted power scroll of tinkering (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=37
+ 
+[itemdef i_power_scroll_tinkering_mythical]
+defname=i_power_scroll_tinkering_mythical
+id=i_deed
+name=mythical power scroll of tinkering (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=37
+ 
+[itemdef i_power_scroll_tinkering_legendary]
+defname=i_power_scroll_tinkering_legendary
+id=i_deed
+name=legendary power scroll of tinkering (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=37
+ 
+[itemdef i_power_scroll_tracking_wondrous]
+defname=i_power_scroll_tracking_wondrous
+id=i_deed
+name=wondrous power scroll of tracking (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=38
+ 
+[itemdef i_power_scroll_tracking_exalted]
+defname=i_power_scroll_tracking_exalted
+id=i_deed
+name=exalted power scroll of tracking (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=38
+ 
+[itemdef i_power_scroll_tracking_mythical]
+defname=i_power_scroll_tracking_mythical
+id=i_deed
+name=mythical power scroll of tracking (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=38
+ 
+[itemdef i_power_scroll_tracking_legendary]
+defname=i_power_scroll_tracking_legendary
+id=i_deed
+name=legendary power scroll of tracking (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=38
+ 
+[itemdef i_power_scroll_veterinary_wondrous]
+defname=i_power_scroll_veterinary_wondrous
+id=i_deed
+name=wondrous power scroll of veterinary (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=39
+ 
+[itemdef i_power_scroll_veterinary_exalted]
+defname=i_power_scroll_veterinary_exalted
+id=i_deed
+name=exalted power scroll of veterinary (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=39
+ 
+[itemdef i_power_scroll_veterinary_mythical]
+defname=i_power_scroll_veterinary_mythical
+id=i_deed
+name=mythical power scroll of veterinary (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=39
+ 
+[itemdef i_power_scroll_veterinary_legendary]
+defname=i_power_scroll_veterinary_legendary
+id=i_deed
+name=legendary power scroll of veterinary (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=39
+ 
+[itemdef i_power_scroll_swordsmanship_wondrous]
+defname=i_power_scroll_swordsmanship_wondrous
+id=i_deed
+name=wondrous power scroll of swordsmanship (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=40
+ 
+[itemdef i_power_scroll_swordsmanship_exalted]
+defname=i_power_scroll_swordsmanship_exalted
+id=i_deed
+name=exalted power scroll of swordsmanship (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=40
+ 
+[itemdef i_power_scroll_swordsmanship_mythical]
+defname=i_power_scroll_swordsmanship_mythical
+id=i_deed
+name=mythical power scroll of swordsmanship (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=40
+ 
+[itemdef i_power_scroll_swordsmanship_legendary]
+defname=i_power_scroll_swordsmanship_legendary
+id=i_deed
+name=legendary power scroll of swordsmanship (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=40
+ 
+[itemdef i_power_scroll_macefighting_wondrous]
+defname=i_power_scroll_macefighting_wondrous
+id=i_deed
+name=wondrous power scroll of macefighting (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=41
+ 
+[itemdef i_power_scroll_macefighting_exalted]
+defname=i_power_scroll_macefighting_exalted
+id=i_deed
+name=exalted power scroll of macefighting (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=41
+ 
+[itemdef i_power_scroll_macefighting_mythical]
+defname=i_power_scroll_macefighting_mythical
+id=i_deed
+name=mythical power scroll of macefighting (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=41
+ 
+[itemdef i_power_scroll_macefighting_legendary]
+defname=i_power_scroll_macefighting_legendary
+id=i_deed
+name=legendary power scroll of macefighting (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=41
+ 
+[itemdef i_power_scroll_fencing_wondrous]
+defname=i_power_scroll_fencing_wondrous
+id=i_deed
+name=wondrous power scroll of fencing (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=42
+ 
+[itemdef i_power_scroll_fencing_exalted]
+defname=i_power_scroll_fencing_exalted
+id=i_deed
+name=exalted power scroll of fencing (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=42
+ 
+[itemdef i_power_scroll_fencing_mythical]
+defname=i_power_scroll_fencing_mythical
+id=i_deed
+name=mythical power scroll of fencing (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=42
+ 
+[itemdef i_power_scroll_fencing_legendary]
+defname=i_power_scroll_fencing_legendary
+id=i_deed
+name=legendary power scroll of fencing (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=42
+ 
+[itemdef i_power_scroll_wrestling_wondrous]
+defname=i_power_scroll_wrestling_wondrous
+id=i_deed
+name=wondrous power scroll of wrestling (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=43
+ 
+[itemdef i_power_scroll_wrestling_exalted]
+defname=i_power_scroll_wrestling_exalted
+id=i_deed
+name=exalted power scroll of wrestling (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=43
+ 
+[itemdef i_power_scroll_wrestling_mythical]
+defname=i_power_scroll_wrestling_mythical
+id=i_deed
+name=mythical power scroll of wrestling (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=43
+ 
+[itemdef i_power_scroll_wrestling_legendary]
+defname=i_power_scroll_wrestling_legendary
+id=i_deed
+name=legendary power scroll of wrestling (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=43
+ 
+[itemdef i_power_scroll_lumberjacking_wondrous]
+defname=i_power_scroll_lumberjacking_wondrous
+id=i_deed
+name=wondrous power scroll of lumberjacking (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=44
+ 
+[itemdef i_power_scroll_lumberjacking_exalted]
+defname=i_power_scroll_lumberjacking_exalted
+id=i_deed
+name=exalted power scroll of lumberjacking (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=44
+ 
+[itemdef i_power_scroll_lumberjacking_mythical]
+defname=i_power_scroll_lumberjacking_mythical
+id=i_deed
+name=mythical power scroll of lumberjacking (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=44
+ 
+[itemdef i_power_scroll_lumberjacking_legendary]
+defname=i_power_scroll_lumberjacking_legendary
+id=i_deed
+name=legendary power scroll of lumberjacking (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=44
+ 
+[itemdef i_power_scroll_mining_wondrous]
+defname=i_power_scroll_mining_wondrous
+id=i_deed
+name=wondrous power scroll of mining (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=45
+ 
+[itemdef i_power_scroll_mining_exalted]
+defname=i_power_scroll_mining_exalted
+id=i_deed
+name=exalted power scroll of mining (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=45
+ 
+[itemdef i_power_scroll_mining_mythical]
+defname=i_power_scroll_mining_mythical
+id=i_deed
+name=mythical power scroll of mining (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=45
+ 
+[itemdef i_power_scroll_mining_legendary]
+defname=i_power_scroll_mining_legendary
+id=i_deed
+name=legendary power scroll of mining (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=45
+ 
+[itemdef i_power_scroll_meditation_wondrous]
+defname=i_power_scroll_meditation_wondrous
+id=i_deed
+name=wondrous power scroll of meditation (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=46
+ 
+[itemdef i_power_scroll_meditation_exalted]
+defname=i_power_scroll_meditation_exalted
+id=i_deed
+name=exalted power scroll of meditation (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=46
+ 
+[itemdef i_power_scroll_meditation_mythical]
+defname=i_power_scroll_meditation_mythical
+id=i_deed
+name=mythical power scroll of meditation (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=46
+ 
+[itemdef i_power_scroll_meditation_legendary]
+defname=i_power_scroll_meditation_legendary
+id=i_deed
+name=legendary power scroll of meditation (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=46
+ 
+[itemdef i_power_scroll_stealth_wondrous]
+defname=i_power_scroll_stealth_wondrous
+id=i_deed
+name=wondrous power scroll of stealth (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=47
+ 
+[itemdef i_power_scroll_stealth_exalted]
+defname=i_power_scroll_stealth_exalted
+id=i_deed
+name=exalted power scroll of stealth (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=47
+ 
+[itemdef i_power_scroll_stealth_mythical]
+defname=i_power_scroll_stealth_mythical
+id=i_deed
+name=mythical power scroll of stealth (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=47
+ 
+[itemdef i_power_scroll_stealth_legendary]
+defname=i_power_scroll_stealth_legendary
+id=i_deed
+name=legendary power scroll of stealth (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=47
+ 
+[itemdef i_power_scroll_removetrap_wondrous]
+defname=i_power_scroll_removetrap_wondrous
+id=i_deed
+name=wondrous power scroll of removetrap (105 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1050
+more2=48
+ 
+[itemdef i_power_scroll_removetrap_exalted]
+defname=i_power_scroll_removetrap_exalted
+id=i_deed
+name=exalted power scroll of removetrap (110 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1100
+more2=48
+ 
+[itemdef i_power_scroll_removetrap_mythical]
+defname=i_power_scroll_removetrap_mythical
+id=i_deed
+name=mythical power scroll of removetrap (115 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1150
+more2=48
+ 
+[itemdef i_power_scroll_removetrap_legendary]
+defname=i_power_scroll_removetrap_legendary
+id=i_deed
+name=legendary power scroll of removetrap (120 skill)
+type=t_power_scroll
+ 
+on=@create
+color=0481
+more1=1200
+more2=48
+ 
+
+//////////////////////////
+// The typedef and dialogs 
+
+[typedef t_power_scroll]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+elseif (<src.<serv.skill.<more2>.name>> > <more1>)
+  src.sysmessage Your <serv.skill.<more2>.name> is too high for this power scroll.
+  return 1
+//elseif (<more1> != 1050) && (<src.<serv.skill.<more2>.name>> < <eval (<more1>-50)>)
+  //src.sysmessage You can't use this scroll yet.
+  //return 1
+endif
+sdialog d_power_scroll_confirm
+return 1
+
+[dialog d_power_scroll_confirm]
+150,150
+page 0
+
+resizepic 10 10 9200 440 200
+gumppictiled 20 20 420 180 2624
+checkertrans 20 20 420 180
+
+dtext 30 20 1000 <name> 	//(<eval (<more1>/10)> skill):  //this is already on the name of the scroll
+dtext 340 20 1000 <serv.skill.<more2>.name>
+
+dhtmlgump 30 50 400 100 2 1 Using a scroll increases the maximum amount of a specific skill or your maximum statistics. When used, the effect is not immediately seen without a gain of points with that skill or statistic. You can view your maximum skill values in your skills window. You can view your maximum statistc value in your statistics window.
+
+dtext 100 147 1000 Do you wish to use this scroll?
+
+button 80 170 4005 4006 1 0 1
+dtext 120 170 1000 Yes
+
+button 250 170 4005 4006 1 0 0
+dtext 280 170 1000 No
+
+[dialog d_power_scroll_confirm button]
+
+onbutton=1
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+elseif (<src.<serv.skill.<more2>.name>> > <more1>) || (<src.tag0.override.skillcap_<dmore2>> >= <more1>)
+  src.sysmessage Your <serv.skill.<more2>.name> is too high for this power scroll.
+  return 1
+endif
+src.tag0.override.skillcap_<dmore2>=<more1>
+src.sysmessage You feel a surge of magic as the scroll enhances your <serv.skill.<more2>.name>.
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>-1)> W<eval (<src.p.y>+1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<src.p.x> W<src.p.y> B<eval(<src.p.z>+70)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>+1)> W<eval (<src.p.y>-1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.effect=3,0375a,6,90,1
+src.timerf 1,effect=2,i_fx_explode,6,15,1,0498
+src.sound 0243
+consume
+return 1
+
+/////////////////////////////////
+// Skillsum Increase Deed
+
+[itemdef i_deed_skillsum_increase]
+defname=i_deed_skillsum_increase
+id=i_deed
+name=Skillsum Increase
+type=t_script
+
+on=@create
+color=0480
+more1={ 250 4 500 3 750 2 1000 1 }
+Name=<name> +<fval <more1>>
+
+on=@dclick
+if (<topobj> != <src>) && !(<src.isgm>)
+  src.sysmessage You can't use this where it is.
+  return 1
+elseif (<eval (<src.tag0.override.skillsum>+<more1>)> >= 58800)
+  src.sysmessage Using this would exceed the allowable maximum skillsum
+  return 1
+endif
+
+sdialog d_skillsum_increase_confirm
+return 1
+
+[dialog d_skillsum_increase_confirm]
+150,150
+page 0
+
+resizepic 10 10 9200 440 200
+gumppictiled 20 20 420 180 2624
+checkertrans 20 20 420 180
+
+dtext 30 20 1000 <serv.itemdef.<baseid>.name> (<eval (<more1>/10)> skill):
+
+dhtmlgump 30 50 400 100 2 1 Using a scroll increases the maximum amount of skillsum your character may attain. When used, the effect is not immediately seen without a gain of points in a skill. You can view your maximum skillsum by using '.maxskillsum'. 
+
+dtext 100 147 1000 Do you wish to use this scroll?
+
+button 80 170 4005 4006 1 0 1
+dtext 120 170 1000 Yes
+
+button 250 170 4005 4006 1 0 0
+dtext 280 170 1000 No
+
+[dialog d_skillsum_increase_confirm button]
+
+onbutton=1
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+endif
+
+if !(<src.tag0.override.skillsum>)		//make sure their base override is set the normal skillsum limit before anything else
+  src.tag0.override.skillsum=<serv.skillclass.0.skillsum>
+endif
+src.tag0.override.skillsum += <more1>
+src.effect=3,i_fx_heal_effect,6,15,1
+src.sound 04f
+src.sound 0f7
+src.sysmessage You feel a surge of magic as the scroll enhances your total skillsum.
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>-1)> W<eval (<src.p.y>+1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<src.p.x> W<src.p.y> B<eval(<src.p.z>+70)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>+1)> W<eval (<src.p.y>-1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.effect=3,0375a,6,90,1
+src.timerf 1,effect=2,i_fx_explode,6,15,1,0498
+src.sound 0243
+consume
+return 1
+
+/////////////////////////////////
+// Statcap Increase Deed
+
+
+[itemdef i_power_scroll_stat_wondrous]
+defname=i_power_scroll_stat_wondrous
+id=i_deed
+name=wondrous scroll of power
+type=t_statcap_increase_deed
+
+on=@create
+color=0482
+more1=<R0,2>
+more2=105
+doswitch <more1>
+  name=<name> (<dmore2> Strength)
+  name=<name> (<dmore2> Dexterity)
+  name=<name> (<dmore2> Intelligence)
+enddo
+
+[itemdef i_power_scroll_stat_exalted]
+defname=i_power_scroll_stat_exalted
+id=i_deed
+name=exalted scroll of power
+type=t_statcap_increase_deed
+
+on=@create
+color=0482
+more1=<R0,2>
+more2=110
+doswitch <more1>
+  name=<name> (<dmore2> Strength)
+  name=<name> (<dmore2> Dexterity)
+  name=<name> (<dmore2> Intelligence)
+enddo
+
+[itemdef i_power_scroll_stat_mythical]
+defname=i_power_scroll_stat_mythical
+id=i_deed
+name=mythical scroll of power
+type=t_statcap_increase_deed
+
+on=@create
+color=0482
+more1=<R0,2>
+more2=115
+doswitch <more1>
+  name=<name> (<dmore2> Strength)
+  name=<name> (<dmore2> Dexterity)
+  name=<name> (<dmore2> Intelligence)
+enddo
+
+[itemdef i_power_scroll_stat_legendary]
+defname=i_power_scroll_stat_legendary
+id=i_deed
+name=legendary scroll of power
+type=t_script
+
+on=@create
+color=0482
+more1=<R0,2>
+more2=120
+doswitch <more1>
+  name=<name> (<dmore2> Strength)
+  name=<name> (<dmore2> Dexterity)
+  name=<name> (<dmore2> Intelligence)
+enddo
+
+[itemdef i_power_scroll_stat_ultimate]
+defname=i_power_scroll_stat_ultimate
+id=i_deed
+name=ultimate scroll of power
+type=t_statcap_increase_deed
+
+on=@create
+color=0482
+more1=<R0,2>
+more2=125
+doswitch <more1>
+  name=<name> (<dmore2> Strength)
+  name=<name> (<dmore2> Dexterity)
+  name=<name> (<dmore2> Intelligence)
+enddo
+
+[itemdef i_deed_statcap_increase]	//this just makes a random one
+defname=i_deed_statcap_increase
+id=i_deed
+name=Statcap Increase
+type=t_statcap_increase_deed
+
+on=@create
+color=0482
+more1=<R0,2>
+more2={105 5 110 4 115 3 120 2 125 1}
+doswitch <more1>
+  name=<name> (<dmore2> Strength)
+  name=<name> (<dmore2> Dexterity)
+  name=<name> (<dmore2> Intelligence)
+enddo
+
+[typedef t_statcap_increase_deed]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+//elseif (<more2> != 105) && (<src.tag0.override.statcap_<dmore1>> < <eval (<more2>-5)>)
+  //src.sysmessage You can't use this scroll yet.
+  //return 1
+endif
+sdialog d_statcap_increase_confirm
+return 1
+
+[dialog d_statcap_increase_confirm]
+150,150
+page 0
+
+resizepic 10 10 9200 440 200
+gumppictiled 20 20 420 180 2624
+checkertrans 20 20 420 180
+
+dtext 30 20 1000 <name>:
+doswitch <more1>
+  local.stat=strength
+  local.stat=dexterity
+  local.stat=intelligence
+enddo
+dhtmlgump 30 50 400 100 2 1 Using a scroll increases the maximum amount of a stat your character may attain. When used, the effect is not immediately seen without a gain of points in the stat. <def.br>NOTE: You may only have one stat affected by a statcap increase deed, using this will override previously applied deeds.
+
+dtext 100 147 1000 Do you wish to use this scroll?
+
+button 80 170 4005 4006 1 0 1
+dtext 120 170 1000 Yes
+
+button 250 170 4005 4006 1 0 0
+dtext 280 170 1000 No
+
+[dialog d_statcap_increase_confirm button]
+
+onbutton=1
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+endif
+doswitch <more1>
+  local.stat=str
+  local.stat=dex
+  local.stat=int
+enddo
+for n 0 2
+  src.tag0.override.statcap_<dlocal.n>=		//remove any old statcap tags
+endfor
+src.tag0.override.statcap_<dmore1>=<more2>
+src.tag0.override.statsum=<eval (200+<more2>)>	//set their statsum override
+src.effect=3,i_fx_heal_effect,6,15,1
+src.sound 04f
+src.sound 0f7
+src.sysmessage You feel a surge of magic as the scroll enhances your statcap.
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>-1)> W<eval (<src.p.y>+1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<src.p.x> W<src.p.y> B<eval(<src.p.z>+70)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>+1)> W<eval (<src.p.y>-1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.effect=3,0375a,6,90,1
+src.timerf 1,effect=2,i_fx_explode,6,15,1,0498
+src.sound 0243
+consume
+return 1
+
+/////////////////////////////////
+// Skill increase deeds
+
+[itemdef i_deed_skill_increase]
+defname=i_deed_skill_increase
+id=i_deed
+name=Skill Increase Deed
+type=t_skill_increase_deed
+
+on=@create
+color=0487
+more1={01 9 05 6 10 3 20 1} 
+more2={1 48}		//this is done by the various systems that generate them.
+name=<name> of <serv.skill.<more2>.name> (<fval <more1>> skill)
+
+
+[typedef t_skill_increase_deed]
+
+on=@dclick
+local.skillcap=<qval (<src.tag0.override.skillcap_<dmore2>> <= <serv.skillclass.<src.skillclass>.<dmore2>>)?<serv.skillclass.<src.skillclass>.<dmore2>>:<src.tag0.override.skillcap_<dmore2>>)>
+local.skillsum=<qval (<src.tag0.override.skillsum>)?<src.tag0.override.skillsum>:<src.skillclass.skillsum>>
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+elseif (<eval (<src.<serv.skill.<more2>.name>>+<more1>)> > <local.skillcap>) 
+  src.sysmessage Your <serv.skill.<more2>.name> is too high for this skill deed.
+  return 1
+elseif (<eval (<src.skilltotal>+<more1>)> > <local.skillsum>)
+  src.sysmessage Your skillsum is too high for this skill deed.
+  return 1
+endif
+
+sdialog d_skill_increase_confirm
+return 1
+
+[dialog d_skill_increase_confirm]
+150,150
+page 0
+
+resizepic 10 10 9200 440 200
+gumppictiled 20 20 420 180 2624
+checkertrans 20 20 420 180
+
+dtext 30 20 1000 <serv.itemdef.<baseid>.name> (<fval <more1>> skill):
+dtext 330 20 1000 <serv.skill.<more2>.name>
+
+dhtmlgump 30 50 400 100 2 1 Using a scroll increases the current value of a specific skill your character has. When used, the effect can be immediatly seen in your skill scroll.
+
+dtext 100 147 1000 Do you wish to use this scroll?
+
+button 80 170 4005 4006 1 0 1
+dtext 120 170 1000 Yes
+
+button 250 170 4005 4006 1 0 0
+dtext 280 170 1000 No
+
+[dialog d_skill_increase_confirm button]
+
+onbutton=1
+local.skillcap=<qval (<src.tag0.override.skillcap_<dmore2>> <= <serv.skillclass.<src.skillclass>.<dmore2>>)?<serv.skillclass.<src.skillclass>.<dmore2>>:<src.tag0.override.skillcap_<dmore2>>)>
+local.skillsum=<qval (<src.tag0.override.skillsum>)?<src.tag0.override.skillsum>:<src.skillclass.skillsum>>
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+elseif (<src.<serv.skill.<more2>.name>> > <local.skillcap>) 
+  src.sysmessage Your <serv.skill.<more2>.name> is too high for this skill deed.
+  return 1
+elseif (<src.skilltotal> > <local.skillsum>)
+  src.sysmessage Your skillsum is too high for this skill deed.
+  return 1
+endif
+
+src.<more2> += <more1>
+src.sysmessage You feel a surge of magic as the scroll enhances your <serv.skill.<more2>.name>.
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>-1)> W<eval (<src.p.y>+1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<src.p.x> W<src.p.y> B<eval(<src.p.z>+70)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.sendpacket 0c0 00 D0 D0 Wi_fx_fireball W<eval (<src.p.x>+1)> W<eval (<src.p.y>-1)> B<eval(<src.p.z>+60)> W<src.p.x> W<src.p.y> B<eval (<src.p.z>+6)> B03 B16 00 00 00 B0 D0497 D0
+src.effect=3,0375a,6,90,1
+src.timerf 1,effect=2,i_fx_explode,6,15,1,0498
+src.sound 0243
+consume
+return 1
+
+///////////////////
+// Skill Tome
+
+
+[itemdef i_skill_tome]
+id=i_spellbook
+name=Skill Tome
+type=t_normal
+
+on=@create
+tag0.charges=1
+attr=attr_newbie
+color=0480
+timer=86400	//24 hours
+more1=600
+more2=2
+
+on=@dclick
+if (<link.uid> != <src.uid>) && !(<src.isgm>)
+  src.sysmessage This is not your skill tome, you can not use it.
+  return 1
+elseif (<timer> <= 0) && !(<src.isgm>)
+  src.sysmessage This item is expired and can no longer be used.
+  return 1
+endif
+
+sdialog d_skill_tome
+return 1
+
+on=@timer
+remove
+
+[DIALOG d_skill_tome]
+200,100
+
+page 0
+resizepic 10 10 9200 420 400	
+
+page 1
+dtext 120 30 1263 Choose <dmore2> skills to set at <fval <more1>>
+
+for 0 48
+  if (<local._for> < 49) || (<local._for> > 55)
+    checkbox <eval 35+(<local.c>*130)> <eval 60+(18*<local.r>)> 210 211 0 <local._for>
+    dtext <eval 60+(<local.c>*130)> <eval 58+(18*<local.r>)> 1000 <serv.skill.<dlocal._for>.key>
+    local.r += 1	//row
+    if (<local.r> == 18)
+      local.c += 1
+      local.r=
+    endif
+  endif
+endfor
+local.c=
+local.r=
+
+
+button 360 360 4006 4007 1 0 1
+dtext 310 360 1263 Confirm
+
+[dialog d_skill_tome button]
+onbutton=1
+if (<argchk> > <more2>)
+  src.sysmessage You can only select <dmore2> skills from this tome, you chose <dargchk>.
+  sdialog d_skill_tome
+  return 1
+endif
+
+for 0 56
+  if (<argchk[<local._for>]>)
+    more2 -= 1
+    src.<serv.skill.<dlocal._for>.key>=<more1>
+    src.src.anim 17
+    src.effect,1,0
+    src.sound 0028
+  endif
+endfor
+
+if !(<more2>)
+  sound 022a
+  src.sysmessage The tome crumbles into dust, you have learned all you can from it.
+  remove
+endif
+
+///////////////////
+// Stat Potion
+
+[itemdef i_stat_potion]
+id=i_bottle_red
+type=t_normal
+name=Stat Potion
+
+on=@create
+color=0480
+attr=attr_newbie
+timer=86400	//24 hours
+more1=30	
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage you cannot use that where it is.
+  return 1
+endif
+
+if (<timer> <= 0)
+  src.sysmessage This item is expired and can no longer be used.
+  return 1
+endif
+
+if !(<src.tag0.young>)
+  src.sysmessage This item is for young players only.
+  return 1
+endif
+
+if (<link.uid> != <src.uid>) && !(<src.isgm>)
+  src.sysmessage This stat potion is not linked to you, you can not use it.
+  return 1
+endif
+
+
+sdialog d_stat_potion
+return 1
+
+on=@timer
+remove
+
+[dialog d_stat_potion]
+200,100
+
+page 0
+resizepic 10 10  9200 270 200
+
+page 1
+dtext 70 30 1263 Dispense your statpoints 
+
+
+dtext 50 60 1000 Str
+dtext 50 95 <qval <src.ctag0.str_temp2>?046:1000> <eval <src.str>+<src.ctag0.str_temp2>>
+dtext 120 60 1000 Dex
+dtext 120 95 <qval <src.ctag0.dex_temp2>?046:1000> <eval <src.dex>+<src.ctag0.dex_temp2>>
+dtext 200 60 1000 Int
+dtext 200 95 <qval <src.ctag0.int_temp2>?046:1000> <eval <src.int>+<src.ctag0.int_temp2>>
+
+for 1 3
+  button <eval (<local._for>*72)-20> 80 02620 02621 1 0 <local._for>
+endfor
+
+for 4 6
+  button <eval (<local._for>*72)-235> 115 02624 02625 1 0 <local._for>
+endfor
+
+dtext 65 160 44 <dmore1> left
+
+button 220 160 4006 4007 1 0 15
+dtext 170 160 1263 Confirm
+
+[dialog d_stat_potion button]
+
+
+[EOF]

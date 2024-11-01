@@ -1,0 +1,278 @@
+//Part of Soulless' function package
+//v1.0
+//11:47 AM 6/23/2021
+
+
+[plevel 1]		
+website
+vote
+discord
+patch
+//strip		<--- removed, just use undress
+undress
+dress
+disarm
+rearm
+age
+onlinetime
+roll
+usedoor
+opendoor
+closedoor
+gpanic
+maxskillsum
+maxstatsum
+skillcaps
+parapouch
+renamecontainer
+
+[function website]
+timerf 2,weblink <serv.url>
+sysmessage Opening <serv.servname> webpage...
+
+[function vote]
+timerf 2,weblink www.uogateway.com\shard.php?id=1327&act=vote			//www.yeoldesphere.com\?page_id=1750
+sysmessage Opening UOG voting page...
+serv.allclients sysmessage @044 <name> just cast a '.vote' for us!
+
+[function discord]
+timerf 2,weblink www.discord.gg\5wcdHNb
+sysmessage Launching discord in web browser...
+
+[function patch]
+sysmessage No patch currently
+
+[comment function strip]	//<--- this is actually a sphere server console command to get files for AXIS to use
+ref1=<uid>
+for 1 24
+  if (<findlayer.<local._for>.isvalid>) && !(<local._for>==21) && !(<local._for>==16) && !(<local._for>==11)
+    ref2=<findlayer.<local._for>>
+    if !(<findlayer.21>)
+      serv.newitem i_backpack
+      ref1.equip <new>
+    endif
+    ref2.cont=<ref1.findlayer.21>
+    ref2.update
+  endif
+endfor
+
+[function undress]
+ref1=<uid>
+for n 1 12
+  ref2=<findlayer.<local.n>>
+  if (<ref2.isvalid>) && (<local.n> != 11) 
+    local.undressed_items1 .= ,<ref2>
+    ref2.cont=<findlayer.21>
+  endif
+endfor
+for n 13 24
+  ref2=<findlayer.<local.n>>
+  if (<ref2.isvalid>) && (<local.n> != 16) && (<local.n> != 21)
+    local.undressed_items2 .= ,<ref2>
+    ref2.cont=<findlayer.21>
+  endif
+endfor
+for x 1 2
+  args=<streat <local.undressed_items<dlocal.x>>>
+  if (<argv[0]> != 0)
+    ref1.ctag0.undressed_items<dlocal.x>=<local.undressed_items<dlocal.x>>
+  endif 
+endfor
+
+
+
+
+[function dress]
+ref1=<uid>
+for n 1 2
+  args=<ref1.ctag0.undressed_items<dlocal.n>>
+  for x 0 <eval (<argv>-1)>
+    ref2=<argv[<dlocal.x>]>
+    if (<ref2.isvalid>) && (<ref2.topobj>==<ref1>)
+      ref1.equip <ref2>
+    endif
+  endfor
+  ref1.ctag0.undressed_items<dlocal.n>=
+endfor
+//serv.log items 1 <ref1.ctag0.undressed_items1>
+//serv.log items 2 <ref1.ctag0.undressed_items2>
+
+[function disarm]
+ref1=<uid>
+ref1.ctag0.disarmed_items
+for n 1 2
+  if (<findlayer.<local.n>.isvalid>)
+    ref2=<findlayer.<local.n>>
+    ref1.ctag0.disarmed_items .= ,<ref2>
+    ref2.cont=<findlayer.21>
+    ref2.update
+  endif
+endfor
+
+[function rearm]
+ref1=<uid>
+args=<streat <ref1.ctag0.disarmed_items>>
+  for n 0 <eval (<argv>-1)>
+  ref2=<argv[<dlocal.n>]>
+  if (<ref2.isvalid>) && (<ref2.topobj>==<ref1>)
+    ref1.equip <ref2>
+  endif
+ref1.ctag0.disarmed_items=
+endfor
+
+
+[function age]
+sysmessage Your account has a total connect time of <account.totalconnecttime> minutes.
+
+[function onlinetime] 
+sysmessage Your character has been online for <eval <tag0.onlinetime>/60> hours.
+
+[function roll]
+emote roll a <R1,<qval <args>?<args>:100>>
+
+[function usedoor]
+ref1=<uid>
+if (<ref1.flags>&statf_dead) || (<ref1.flags>&statf_freeze) || (<ref1.flags>&statf_stone)
+  return 1
+endif
+foritems 2
+  if ((<type>==t_door) && (<eval (<p.z>-<ref1.p.z>)> < 10) && (<eval (<ref1.p.z>-<p.z>)> < 10)) || (<type>==t_portculis)   
+    if (<link.isvalid>) && (<link.timer> == 60)	//the door linked to this one was just opened
+      return 1
+    endif
+    ref1.dclick <uid>
+  endif
+endfor
+
+[function opendoor]
+ref1=<uid>
+if (<ref1.flags>&statf_dead) || (<ref1.flags>&statf_freeze) || (<ref1.flags>&statf_stone)
+  return 1
+endif
+foritems 2
+  if ((<type>==t_door) && (<eval <ref1.p.z>-<p.z>> < 10) && (<eval <p.z>-<ref1.p.z>> < 10)) || (<type>==t_portculis) 
+    if (<timer> == -1)
+      ref1.dclick <uid> 
+      break
+    endif
+  endif
+endfor
+
+[function closedoor]
+ref1=<uid>
+if (<ref1.flags>&statf_dead) || (<ref1.flags>&statf_freeze) || (<ref1.flags>&statf_stone)
+  return 1
+endif
+foritems 2
+  if ((<type>==t_door) && (<eval <ref1.p.z>-<p.z>> < 10) && (<eval <p.z>-<ref1.p.z>> < 10)) || (<type>==t_portculis)
+    if (<timer> != -1) 
+      ref1.dclick <uid>
+    endif
+  endif
+endfor
+
+[function gpanic]
+if !(<guild>)
+  sysmessage You are not in a guild.
+  return 1
+endif
+serv.allclients f_gpanic_hear <uid>
+
+[function f_gpanic_hear]
+ref1=<args>
+if (<guild>) && (<guild>==<ref1.guild>)
+  sysmessage @040,3,1,1 GUILD : <ref1.name> requesting help at <ref1.p> (<ref1.region.name>)
+endif
+
+[function maxskillsum]
+local.skillcap=<src.tag0.override.skillsum>
+if !(<local.skillcap>)
+  local.skillcap=<serv.skillclass.0.skillsum>
+endif
+sysmessage Your current max skillsum is <fval <local.skillcap>>, you are currently at <fval <skilltotal>> skillpoints, with <fval <eval <local.skillcap>-<skilltotal>>> skillpoints left.
+
+[function maxstatsum]
+local.statsum=<src.tag0.override.statsum>
+if !(<local.statsum>)
+  local.statsum=<serv.skillclass.0.statsum>
+endif
+sysmessage Your current max statsum is <local.statsum>.
+
+[function skillcaps]
+sdialog d_show_skillcaps
+
+[dialog d_show_skillcaps]
+200,100
+
+page 0
+resizepic 10 10 9200 520 500	
+
+page 1
+dtext 190 25 1263 This is your max skillsum:
+dtext 140 40 035 (The total points you can put into all skills)
+local.skillcap=<src.tag0.override.skillsum>
+if !(<local.skillcap>)
+  local.skillcap=<serv.skillclass.0.skillsum>
+endif
+dtext 160 60 1000 Your current max skillsum is <fval <local.skillcap>>
+dtext 80 75 1000 You are currently at <fval <skilltotal>> skillpoints, with <fval <eval <local.skillcap>-<skilltotal>>> skillpoints left.
+
+dtext 120 120 1263 These are your skillcaps for each individual skill:
+dtext 150 135 035 (The value a single skill can reach)
+
+for n 0 48
+  if (<local.n> <= 48) 
+    //local.skillsum=<qval (<src.tag0.override.skillsum>)?<src.tag0.override.skillsum>:<serv.skillclass.0.skillsum>>
+    local.skillcap=<qval (<src.tag0.override.skillcap_<dlocal.n>> <= <serv.skillclass.<skillclass>.<dlocal.n>>)?<serv.skillclass.<skillclass>.<dlocal.n>>:<src.tag0.override.skillcap_<dlocal.n>>)>
+    doswitch <eval ((<local.skillcap>-1000)/50)>
+      local.dtext_hue=1000	//regular white
+      local.dtext_hue=66	//green
+      local.dtext_hue=51	//yellow
+      local.dtext_hue=47	//orange
+      local.dtext_hue=42	//red
+    enddo
+    dtext <eval 60+(150*<local.c>)> <eval 160+(18*<local.r>)> 1000 <serv.skill.<dlocal.n>.key>
+    dtext <eval 160+(150*<local.c>)> <eval 160+(18*<local.r>)> <local.dtext_hue> <fval <local.skillcap>>
+    local.r += 1	//row
+    if (<local.r> == 18)
+      local.c += 1
+      local.r=
+    endif
+  endif
+endfor
+
+[function parapouch]
+forcont <findlayer.21> 0
+  if (<type>==t_container) && (<isevent.t_magic_trapped_container>)
+    src.useitem <uid>
+  endif
+endfor
+
+[function renamecontainer]
+sysmessage This command is no longer available.
+return 1
+sysmessage Target the container you wish to rename
+targetf f_renamecontainer_targ
+
+[function f_renamecontainer_targ]
+ref1=<argo>
+if !(<ref1.isitem>) || (<ref1.type> != t_container) || (<ref1>==<src.findlayer.21>)
+  src.sysmessage That is not a valid container
+  return 1
+elseif (<ref1.topobj> != <src>)
+  src.sysmessage You cannot rename that where it is
+  return 1
+endif
+src.sysmessage what would you like to name the container?
+src.ctag0.renamecontainer=<ref1>
+src.promptconsole f_renamecontainer_prompt
+
+[function f_renamecontainer_prompt]
+ref1=<src.ctag0.renamecontainer>
+src.ctag0.renamecontainer=
+ref1.name=<args>
+src.sysmessage Container renamed to "<args>".
+
+[EOF]
+
+

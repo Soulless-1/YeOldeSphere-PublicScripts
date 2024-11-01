@@ -1,0 +1,105 @@
+//Part of Soulless' function package
+//v1.0
+//11:47 AM 6/23/2021
+
+[comment]
+potion_potency		//returns the potion potency (lesser,normal,greater)
+real_armor		//gets the real armor value of a piece of armor
+real_damage		//gets the real damage value of a weapon
+corpseloot		//adds loot to a corpse; corpseloot baseid,amount,chance
+corpse_chardef		//returns the chardefs baseid from a corpse
+removettr		//removes an attr from the item	
+fixheight		//will place an item at the correct Z according to other items on the tile
+adjust_crafted_value	//will adjust the value of craftable items for balances
+itemcount		//if its a container it will count how many items are inside
+topcont_inbank		//the topmost bag an object is in, not including the backpack or bank
+spellbook_fill		//will fill a spellbook with various circles
+
+[function potion_potency]
+if (<type>==t_potion)
+  if (<more2> > 600) && (<more2> <= 100) 
+    return greater
+  elseif (<more2> > 300) && (<more2> <= 600)
+    return normal
+  elseif (<more2> <= 300)
+    return lesser
+  endif
+endif	
+
+[function real_damage]	//make this calculate more accurate damage
+local.damage=<eval (<dam.lo>+<dam.hi>/2)+<modar>>
+return <dlocal.damage>
+
+[function real_armor]
+local.armorrating=<eval <f_avgvalue <armor>>+<modar>>
+return <eval ((<def0.layer<dlayer>_percentage>*<local.armorrating>)/100)>		//this is in the scripts/custom/defs_templates.scp file
+
+[function corpseloot]	//corpseloot=i_sword_long,1,99	//item,amount,chance
+if (!<isempty <argv[2]>>) && (<R<argv[2]>>)
+  return 1
+endif
+serv.newitem <argv[0]>,<argv[1]>,<uid>
+
+[function corpse_chardef]		//returns the chardef that made the corpse
+local.chardef=<morex>
+if (<morey> > 0)
+  local.chardef .= <morey>
+endif
+return <local.chardef>
+
+[function removeattr]
+attr &= ~ <args>
+
+[function fixheight]
+ref1=<uid>
+local.z=<z>
+foritems 0
+  if (<uid> != <ref1>) && (<z> <= <ref1.z>)
+    local.z += <eval (<height>+1)>
+  endif
+endfor
+ref1.z=<local.z>
+
+[function adjust_crafted_value]
+if (<isitem>)
+  if (<skillmake>) && (<resources>) 	//craftable items need to have their prices set accordingly to prevent economy issues from afk crafting/selling
+    for n 1 <resources.count>
+      local.value += <eval (<f_avgvalue <serv.itemdef.<resources.<dlocal.n>.key>.value>>*<resources.<dlocal.n>.val>)>
+    endfor
+    local.value += <muldiv 60,<local.value>,100>
+    tag.override.value=<local.value>
+    message <name> now has a crafted value of <local.value>g
+  endif
+endif
+
+[function itemcount]
+local.time=<serv.time>
+if (<isitem>)
+  if (<type> == t_container) || (<type>==t_eq_bank_box)
+    forcont <uid> 125
+      local.n += 1
+    endfor
+    //serv.b <eval (<serv.time>-<local.time>)>
+    return <local.n>
+  endif
+endif
+return 0
+  
+[function topcont_inbank]		//this topcont will find the top container inside the bank, and not the bank itself
+ref1=<uid>
+if (<ref1.isitem>) && (<ref1.cont>)		//its an item in a bag
+  while (<ref1.cont>) && (<ref1.cont.isitem>) && !(<local.bankbox>) 	//while we're still inside a container, and haven't found the bank layer
+    if (<ref1.cont>) && (<ref1.cont.type>==t_eq_bank_box)
+      local.bankbox=1
+      if (<ref1.type>==t_container) || (<ref1.type>==t_container_locked)
+        return <ref1>
+      endif
+    endif
+    ref1=<ref1.cont>
+  endwhile
+endif
+return 0
+
+
+
+[EOF]

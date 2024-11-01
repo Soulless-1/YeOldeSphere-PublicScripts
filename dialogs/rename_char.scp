@@ -1,0 +1,58 @@
+
+
+[dialog d_rename_char]
+
+200,200
+
+noclose
+nomove
+
+resizepic 0 0 5054 345 165
+checkertrans 12 13 320 140
+dhtmlgump 17 17 310 50 1 0 <def.bfont_red>Attention: <def.bfont_black>This character was flagged for a mandatory rename please select one below.
+resizepic 17 75 9350 310 30
+dhtmlgump 20 80 50 30 0 0 Name :
+dtextentrylimited 75 80 250 15 0 0 17
+
+//button 30 125  242 243 1 0 0
+button 250 125 248 249 1 0 1
+
+[dialog d_rename_char button]
+
+onbutton=1
+if (<eval strlen (<argtxt[0]>)> < 3)
+  sysmessage Your character name is too short.
+  sdialog d_rename_char
+  return 1
+elseif (<eval strlen (<argtxt[0]>)> > 17)
+  sysmessage Your character name is too long.
+  sdialog d_rename_char
+  return 1
+elseif !(strregex(^[aA-zZ\s]+$,<argtxt[0]>))
+  sysmessage Unacceptable name.
+  sdialog d_rename_char
+  return 1
+elseif (strmatch(lord*,<argtxt[0]>))
+  sysmessage Unacceptable name.
+  sdialog d_rename_char
+  return 1
+endif
+
+local.nametaken=<isusedplayername <argtxt[0]>>
+if (<local.nametaken>) && (<local.nametaken> != <uid>)
+  sysmessage That name is already taken.
+  sdialog d_rename_char
+  return 1
+endif
+
+serv.log Renaming <name>(<uid>) to <argtxt[0]>
+name <argtxt[0]>
+tag0.mustrename=
+stone=0
+message You are now known as <name>
+
+
+
+
+
+[EOF]

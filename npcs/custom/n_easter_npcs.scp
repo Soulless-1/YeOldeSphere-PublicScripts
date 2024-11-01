@@ -1,0 +1,85 @@
+//Easter NPCs by Soulless
+//v1.0
+//10:15 AM 4/17/2022
+
+
+[CHARDEF c_easter_bunny]
+DEFNAME=c_easter_bunny
+ID=c_rabbit
+NAME=Easter Bunny
+SOUND=snd_animals_rabbit3
+ICON=i_pet_rabbit_2
+dam=5,10
+armor=60
+RESOURCES=i_hide_barbed 10, i_ribs_raw 5
+CAN=MT_WALK|MT_RUN
+FOODTYPE=35 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+CATEGORY=Holidays
+SUBSECTION=Easter
+DESCRIPTION=Easter Bunny
+
+on=@create
+	dorand 14
+	  color=0
+ 	  color=009B
+ 	  color=00CD
+ 	  color=00D3
+ 	  color=014D
+ 	  color=01DD
+ 	  color=01E9
+ 	  color=01F4
+ 	  color=0373
+ 	  color=0451
+ 	  color=047F
+  	  color=0489
+ 	  color=0492
+ 	  color=04B5
+  	  color=08AA
+	enddo
+	npc=brain_monster
+	//events=+e_dragon_breathe
+	str={496, 525}
+	dex={86, 105}
+	int={86, 125}
+	//maxhits={298, 315}
+	maxhits={198, 215}
+	//resphysical={55, 65}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={20, 30}
+	evaluatingintel={10.4, 50.0}
+	magery={10.4, 50.0}
+	magicresistance={85.3, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={80.5, 92.5}
+	fame=14000
+	karma=-14000
+
+on=@npcrestock
+	item=i_reag_sulfur_ash
+	ITEM=i_gold,{400 500}
+	item=random_lower_scroll 
+	item=random_potion
+	item=i_easter_egg_dragon,R99
+	item=i_chocolate_bunny,R99
+	item=i_dye_tub_rare_neon,R99
+
+on=@deathcorpse
+	argo.corpseloot=i_easter_clothing,1,99
+
+on=@click
+message @047f <name>
+return 1
+
+//on=@npcseenewplayer
+//if !(<R99>)
+  //serv.newitem i_easter_basket
+  //new.timer=<Serv.DecayTimer>*60
+  //new.p=<p>
+//endif
+
+
+[EOF]

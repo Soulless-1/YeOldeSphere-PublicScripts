@@ -1,0 +1,938 @@
+//Part of Soulless' function package
+//v1.0
+//11:47 AM 6/23/2021
+
+[plevel 6]
+rr
+export_char
+export_container
+export_item
+sectorssleep
+sectorsawake
+mark_suspect
+lagdetector
+forceallspawns
+onlinegift			//gives all online players a gift
+
+[comment]
+teleto
+slap
+rr
+show_region_flags
+show_room_flags
+terrain_info
+statics_info
+statics_flags
+component_info
+bcast
+place_service_stones
+bankcorpse
+makespawn
+follow
+export_char
+export_container
+export_item
+tilechar
+sectorssleep
+sectorsawake
+mark_suspect
+give_players_gift
+add_stalagmite_light
+lagdetetctor
+forceallspawns
+announce			//announces a message to discord
+showattackers	
+
+[function teleto]
+targetf teleto_targ
+sysmessage Who do you want to teleport?
+
+[function teleto_targ]
+if !(<argo>) || !(<argo.ischar>)
+  sysmessage Invalid target.
+  return 1
+endif
+targetfg teleto_move <argo>
+sysmessage Where do you wish to move <argo.name>
+
+[function teleto_move]
+ref1=<args>
+ref1.go <targp>
+
+[function slap]
+targetf f_bitchslap
+sysmessage Who do you wish to bitch slap?
+
+[function f_bitchslap]
+ref1=<argo>
+if (<ref1.isitem>)
+  sysmessage no sense in slapping that
+  return 1
+endif
+if !(<ref1.npc>)
+  if  (<ref1.account.plevel> >= <account.plevel> )
+    sysmessage Target is more privileged than you, You lack privilege to do this. 
+    return 1
+  endif
+endif
+serv.newitem i_blood_pool_large
+new.attr=attr_decay|attr_move_never
+new.timer 10
+new.p=<ref1.p>
+ref1.bark 3
+ref1.sound 563
+ref1.sound 948
+ref1.anim 20
+//ref1.damage <R1,5> dam_god <uid>
+ref1.emote get bitch slapped by <name>
+endif
+
+[function rr]
+serv.resync
+
+[function show_region_flags]
+if (<region.flags>&region_antimagic_all)
+  local.r .= , No Magic
+endif
+if (<region.flags>&region_antimagic_recall_in)
+  local.r .= , No Recall In
+endif
+if (<region.flags>&region_antimagic_recall_out)
+  local.r .= , No Recall Out
+endif
+if (<region.flags>&region_antimagic_gate)
+  local.r .= , No Gate
+endif
+if (<region.flags>&region_antimagic_teleport)
+  local.r .= , No Teleport
+endif
+if (<region.flags>&region_antimagic_damage)
+  local.r .= , No Magic Damage
+endif
+if (<region.flags>&region_flag_ship)
+  local.r .= , Ship
+endif
+if (<region.flags>&region_flag_nobuilding)
+  local.r .= , No Building
+endif
+if (<region.flags>&region_flag_announce)
+  local.r .= , Announce
+endif
+if (<region.flags>&region_flag_insta_logout)
+  local.r .= , Insta Logout
+endif
+if (<region.flags>&region_flag_underground)
+  local.r .= , Underground
+endif
+if (<region.flags>&region_flag_nodecay)
+  local.r .= , No Decay
+endif
+if (<region.flags>&region_flag_safe)
+  local.r .= , Safe Zone
+endif
+if (<region.flags>&region_flag_guarded)
+  local.r .= , Guarded
+endif
+if (<region.flags>&region_flag_no_pvp)
+  local.r .= , NoPvP
+endif
+sysmessage <streat <local.r>>
+return <streat <local.r>>
+
+[function show_room_flags]
+if (<room.flags>&region_antimagic_all)
+  local.r .= , No Magic
+endif
+if (<room.flags>&region_antimagic_recall_in)
+  local.r .= , No Recall In
+endif
+if (<room.flags>&region_antimagic_recall_out)
+  local.r .= , No Recall Out
+endif
+if (<room.flags>&region_antimagic_gate)
+  local.r .= , No Gate
+endif
+if (<room.flags>&region_antimagic_teleport)
+  local.r .= , No Teleport
+endif
+if (<room.flags>&region_antimagic_damage)
+  local.r .= , No Magic Damage
+endif
+if (<room.flags>&region_flag_ship)
+  local.r .= , Ship
+endif
+if (<room.flags>&region_flag_nobuilding)
+  local.r .= , No Building
+endif
+if (<room.flags>&region_flag_announce)
+  local.r .= , Announce
+endif
+if (<room.flags>&region_flag_insta_logout)
+  local.r .= , Insta Logout
+endif
+if (<room.flags>&region_flag_underground)
+  local.r .= , Underground
+endif
+if (<room.flags>&region_flag_nodecay)
+  local.r .= , No Decay
+endif
+if (<room.flags>&region_flag_safe)
+  local.r .= , Safe Zone
+endif
+if (<room.flags>&region_flag_guarded)
+  local.r .= , Guarded
+endif
+if (<room.flags>&region_flag_no_pvp)
+  local.r .= , NoPvP
+endif
+sysmessage <streat <local.r>>
+return <streat <local.r>>
+
+[function terrain_info]
+targetfg f_terrain_info_targ
+sysmessage What terrain tile would you like info about? 
+
+[function f_terrain_info_targ]
+local.terrain=<serv.map(<src.targp.x>,<src.targp.y>).terrain>
+
+if !(<local.terrain>)
+  sysmessage No terrain info for that
+  return 1
+endif
+
+local.flags=<serv.tiledata.terrain(<local.terrain>).flags>
+local.z=<src.targp.terrain.z>
+
+if (<local.flags>&tilef_background)
+  local.flagsTxt .= ,background
+endif
+if (<local.flags>&tilef_weapon)
+  local.flagsTxt .= , weapon
+endif 
+if (<local.flags>&tilef_transparent)
+  local.flagsTxt .= , transparent
+endif
+if (<local.flags>&tilef_translucent)
+  local.flagsTxt .= , translucent
+endif
+if (<local.flags>&tilef_wall)
+  local.flagsTxt .= , wall
+endif
+if (<local.flags>&tilef_damaging)
+  local.flagsTxt .= , damaging
+endif
+if (<local.flags>&tilef_impassable)
+  local.flagsTxt .= , impassible
+endif
+if (<local.flags>&tilef_wet)
+  local.flagsTxt .= , wet
+endif
+if (<local.flags>&tilef_unknown)
+  local.flagsTxt .= , unknown
+endif
+if (<local.flags>&tilef_surface)
+  local.flagsTxt .= , surface
+endif
+if (<local.flags>&tilef_bridge)
+  local.flagsTxt .= , bridge
+endif
+if (<local.flags>&tilef_stackable)
+  local.flagsTxt .= , stackable
+endif
+if (<local.flags>&tilef_window)
+  local.flagsTxt .= , window
+endif
+if (<local.flags>&tilef_noshoot)
+  local.flagsTxt .= , noshoot
+endif
+if (<local.flags>&tilef_prefixA)
+  local.flagsTxt .= , prefixA
+endif
+if (<local.flags>&tilef_internal)
+  local.flagsTxt .= , internal
+endif
+if (<local.flags>&tilef_foliage)
+  local.flagsTxt .= , foliage
+endif
+if (<local.flags>&tilef_partialHue)
+  local.flagsTxt .= , partialHue
+endif
+if (<local.flags>&tilef_unknown_1)
+  local.flagsTxt .= , unknown_1
+endif
+if (<local.flags>&tilef_map)
+  local.flagsTxt .= , map
+endif
+if (<local.flags>&tilef_container)
+  local.flagsTxt .= , container
+endif
+if (<local.flags>&tilef_wearable)
+  local.flagsTxt .= , wearable
+endif
+if (<local.flags>&tilef_lightsource)
+  local.flagsTxt .= , lightsource
+endif
+if (<local.flags>&tilef_animated)
+  local.flagsTxt .= , animated)
+endif
+if (<local.flags>&tilef_hoverover)
+  local.flagsTxt .= , hoverover
+endif
+if (<local.flags>&tilef_unknown_2)
+  local.flagsTxt .= , unknown_2
+endif
+if (<local.flags>&tilef_armor)
+  local.flagsTxt .= , armor
+endif
+if (<local.flags>&tilef_roof)
+  local.flagsTxt .= , roof
+endif
+if (<local.flags>&tilef_door)
+  local.flagsTxt .= , door
+endif
+if (<local.flags>&tilef_stairBack)
+  local.flagsTxt .= , stairBack
+endif
+if (<local.flags>&tilef_stairRight)
+  local.flagsTxt .= , stairRight
+endif
+local.flagsTxt=<streat <local.flagsTxt>>
+sysmessage [TERRAIN: <local.terrain> Flags: <local.flagsTxt>  Z: <local.z>]
+
+[function statics_info]
+targetfg f_statics_info_targ
+
+[function f_statics_info_targ]
+local.statics=<serv.map(<targp.x>,<targp.y>,<targp.z>,<targp.map>).statics>
+
+if !(<local.statics>)
+  sysmessage No statics info for that location
+  return 1
+endif
+
+for n  0 <eval (<local.statics>-1)>
+  serv.log <local.n>
+  local.id=<serv.map(<targp.x>,<targp.y>,<targp.z>,<targp.map>).statics.<local.n>>
+  local.type=<qval (<local.id>)?<serv.itemdef.<local.id>.type>:0>
+  local.flags=<serv.map(<targp.x>,<targp.y>,<targp.z>,<targp.map>).statics.<local.n>.tflags>
+  local.z=<serv.map(<targp.x>,<targp.y>,<targp.z>,<targp.map>).statics.<local.n>.z>
+  local.color=<serv.map(<targp.x>,<targp.y>,<targp.z>,<targp.map>).statics.<dlocal.n>.color>
+  if (<local.flags>&tilef_background)
+    local.flagsTxt .= ,background
+  endif
+  if (<local.flags>&tilef_weapon)
+    local.flagsTxt .= , weapon
+  endif
+  if (<local.flags>&tilef_transparent)
+    local.flagsTxt .= , transparent
+  endif
+  if (<local.flags>&tilef_translucent)
+    local.flagsTxt .= , translucent
+  endif
+  if (<local.flags>&tilef_wall)
+    local.flagsTxt .= , wall
+  endif
+  if (<local.flags>&tilef_damaging)
+    local.flagsTxt .= , damaging
+  endif
+  if (<local.flags>&tilef_impassable)
+    local.flagsTxt .= , impassible
+  endif
+  if (<local.flags>&tilef_wet)
+    local.flagsTxt .= , wet
+  endif
+  if (<local.flags>&tilef_unknown)
+    local.flagsTxt .= , unknown
+  endif
+  if (<local.flags>&tilef_surface)
+    local.flagsTxt .= , surface
+  endif
+  if (<local.flags>&tilef_bridge)
+    local.flagsTxt .= , bridge
+  endif
+  if (<local.flags>&tilef_stackable)
+    local.flagsTxt .= , stackable
+  endif
+  if (<local.flags>&tilef_window)
+    local.flagsTxt .= , window
+  endif
+  if (<local.flags>&tilef_noshoot)
+    local.flagsTxt .= , noshoot
+  endif
+  if (<local.flags>&tilef_prefixA)
+    local.flagsTxt .= , prefixA
+  endif
+  if (<local.flags>&tilef_internal)
+    local.flagsTxt .= , internal
+  endif
+  if (<local.flags>&tilef_foliage)
+    local.flagsTxt .= , foliage
+  endif
+  if (<local.flags>&tilef_partialHue)
+    local.flagsTxt .= , partialHue
+  endif
+  if (<local.flags>&tilef_unknown_1)
+    local.flagsTxt .= , unknown_1
+  endif
+  if (<local.flags>&tilef_map)
+    local.flagsTxt .= , map
+  endif
+  if (<local.flags>&tilef_container)
+    local.flagsTxt .= , container
+  endif
+  if (<local.flags>&tilef_wearable)
+    local.flagsTxt .= , wearable
+  endif
+  if (<local.flags>&tilef_lightsource)
+    local.flagsTxt .= , lightsource
+  endif
+  if (<local.flags>&tilef_animated)
+    local.flagsTxt .= , animated)
+  endif
+  if (<local.flags>&tilef_hoverover)
+    local.flagsTxt .= , hoverover
+  endif
+  if (<local.flags>&tilef_unknown_2)
+    local.flagsTxt .= , unknown_2
+  endif
+  if (<local.flags>&tilef_armor)
+    local.flagsTxt .= , armor
+  endif
+  if (<local.flags>&tilef_roof)
+    local.flagsTxt .= , roof
+  endif
+  if (<local.flags>&tilef_door)
+    local.flagsTxt .= , door
+  endif
+  if (<local.flags>&tilef_stairBack)
+    local.flagsTxt .= , stairBack
+  endif
+  if (<local.flags>&tilef_stairRight)
+    local.flagsTxt .= , stairRight
+  endif
+  local.flagsTxt=<streat <local.flagsTxt>>
+  src.sysmessage [Static #<dlocal.n> - ID: <local.id> (<serv.itemdef.<local.id>.baseid>) TYPE: <local.type> FLAGS: <local.flagsTxt> Z: <local.z> COLOR: <local.color>]
+endfor
+
+[function component_info]
+targetfg f_component_info_targ
+
+[function f_component_info_targ]
+//local.components=<serv.map(<targp.x>,<targp.y>,<targp.z>,<targp.map>).components>
+local.components=<src.targp.components>
+
+if !(<local.components>)
+  sysmessage No components info for that location
+  return 1
+endif
+
+sysmessage [MULTI <src.targp.components.<local.n>.multi>]
+for n 0 <eval (<local.components>-1)>
+  local.id=<src.targp.components.<dlocal.n>.id>
+  local.type=<qval (<local.id>)?<serv.itemdef.<local.id>.type>:0>
+  local.z=<src.targp.components.<local.n>.z>
+  sysmessage [Component #<dlocal.n> - ID: <local.id> TYPE: <local.type> Z: <local.z>]
+endfor
+
+
+
+[function bcast]
+serv.b @0489 <args>
+
+[function place_service_stones]
+serv.newitem i_travel_stone
+new.p=<p>
+serv.newitem i_token_barrel
+new.p=<p>
+new.move <args> 1
+serv.newitem i_repair_stone
+new.p=<p>
+new.move <args> 2
+serv.newitem i_corpse_summoning_stone
+new.p=<p>
+new.move <args> 3
+serv.newnpc c_vendor_supplies
+new.p=<p>
+new.move <args> 4
+serv.newnpc c_vendor_reagents
+new.p=<p>
+new.move <args> 5
+serv.newnpc c_vendor_potions
+new.p=<p>
+new.move <args> 6
+serv.newnpc c_vendor_dye_tickets_armor
+new.p=<p>
+new.move <args> 7
+serv.newnpc c_vendor_dye_tickets_weapon
+new.p=<p>
+new.move <args> 8
+serv.newnpc c_vendor_dye_tickets_animal
+new.p=<p>
+new.move <args> 9
+serv.newnpc c_vendor_sparring_weapons
+new.p=<p>
+new.move <args> 10
+serv.newnpc c_skill_trainer
+new.p=<p>
+new.move <args> 11
+
+[function bankcorpse]
+ref1=<uid>
+serv.newitem i_backpack
+ref2=<new>
+forcont <ref1> 1
+  cont=<ref2>
+  update
+endfor
+ref2.cont=<ref1.findlayer.29>
+ref2.update
+
+[function makespawn]
+if (<isempty <args>>)
+  src.sysmessage Invalid arguments. Usage: 
+  src.sysmessage .makespawn [baseid],[amount],[mintime],[maxtime],[distance]
+  return 1
+endif
+targetfg f_spawn_targ <args>
+sysmessage where would you like to place spawn?
+
+[function f_spawn_targ]
+local.baseid=<argv[0]>
+local.amount=<argv[1]>
+local.mintime=<argv[2]>
+local.maxtime=<argv[3]>
+local.distance=<argv[4]>
+local.amount=<qval (<local.amount> <= 0)?1:<local.amount>>	//if some args are not present use defaults
+local.mintime=<qval (<local.mintime> <= 0)?5:<local.mintime>>
+local.maxtime=<qval (<local.maxtime> <= 0)?15:<local.maxtime>>
+local.distance=<qval (<local.distance> <= 0)?15:<local.distance>>
+serv.newitem i_worldgem_bit
+if (<resourcetype <local.baseid>>==<def.res_chardef>)    //check for if it's an npc or an item
+  new.type=t_spawn_char
+elseif (<resourcetype <local.baseid>>==<def.res_itemdef>)
+  new.type=t_spawn_item
+endif
+new.more1=<local.baseid>
+new.amount=<local.amount>
+new.morex=<local.mintime>
+new.morey=<local.maxtime>
+new.morez=<local.distance>
+new.attr=081
+new.color=020
+new.timer=1
+new.p=<targp>
+
+[function follow]		//replaces the standard follow function
+targetf f_follow_targ
+sysmessage Target character to follow.
+
+[function f_follow_targ]
+ref1=<argo>
+if !(<ref1.ischar>)
+  src.sysmessage Invalid target: must target a character.
+  return 1
+endif
+serv.newitem i_following_char
+new.link=<ref1>
+new.timerms=0
+equip <new>
+sysmessage Follow: on - Use war mode to stop following
+
+[itemdef i_following_char]
+defname=i_following_char
+id=i_memory
+name=Following Char
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.body=c_man_invisible
+
+on=@timer
+if (<topobj.flags>&statf_war) 
+  remove
+  return 1
+endif
+topobj.p=<link.p>
+timer=2
+return 1
+
+on=@unequip
+src.sysmessage Follow: off
+src.body=<src.obody>
+
+// Export functions
+
+//will create a function that can restore a character from an old save
+//export char args : 1= also things on paperdoll, 2= also things in bag, 3= also things in bank
+//example : 'export_char 2' will create a function to restore a chars stats/skills, worn items, and things inside their backpack.
+[function export_char]
+targetf f_export_char_targ <args>
+sysmessage Select the char to export, this will make a function that can restore them
+
+[function f_export_char_targ]
+ref1=<argo>
+local.args=<streat <explode " ",<args>>>
+local.args=<argv[0]>
+local.filename=exported_char_<f_shmush_args <explode " ",<ref1.name>>>_<ref1>
+f_deletefile exportedchars/<local.filename>.scp
+f_writefile exportedchars/<local.filename>.scp [function f_import_char_<ref1>]	
+f_writefile exportedchars/<local.filename>.scp name=<ref1.name>		//general info
+f_writefile exportedchars/<local.filename>.scp obody=<ref1.obody>
+f_writefile exportedchars/<local.filename>.scp body=<ref1.body>
+f_writefile exportedchars/<local.filename>.scp oskin=<ref1.oskin>
+f_writefile exportedchars/<local.filename>.scp color=<ref1.color>
+f_writefile exportedchars/<local.filename>.scp str=<ref1.str>
+f_writefile exportedchars/<local.filename>.scp dex=<ref1.dex>
+f_writefile exportedchars/<local.filename>.scp int=<ref1.int>
+for 1 48		//skills
+  local.skill=<serv.skill.<dlocal._for>.name>
+  f_writefile exportedchars/<local.filename>.scp <local.skill>=<ref1.<local.skill>>
+endfor
+for 0 <eval <ref1.tagcount>-1>	//tags
+  f_writefile exportedchars/<local.filename>.scp tag.<ref1.tagat.<local._for>.key>=<ref1.tagat.<local._for>.val>
+endfor
+args=<ref1.events>		//events
+for 0 <eval <argv>-1>
+  f_writefile exportedchars/<local.filename>.scp events=+<argv[<dlocal._for>]>
+endfor
+
+if (<local.args> >= 1)
+  for 1 24		//things on char
+    ref2=<ref1.findlayer.<dlocal._for>>
+    if (<ref2.isvalid>) && (<local._for> != 21)
+      f_writefile exportedchars/<local.filename>.scp serv.newitem <ref2.baseid>,<ref2.amount>
+      f_writefile exportedchars/<local.filename>.scp new.name=<ref2.name>
+      f_writefile exportedchars/<local.filename>.scp new.color=<ref2.color>
+      f_writefile exportedchars/<local.filename>.scp new.attr=<ref2.attr>
+      f_writefile exportedchars/<local.filename>.scp new.modar=<ref2.modar>
+      if (<ref2.tagcount> >= 1)
+        for 0 <eval <ref2.tagcount>-1>
+          f_writefile exportedchars/<local.filename>.scp new.tag.<ref2.tagat.<local._for>.key>=<ref2.tagat.<local._for>.val>
+        endfor
+      endif
+      args=<ref2.events>
+      if !(<isempty <args>>)
+        for 0 <eval <argv>-1>
+          f_writefile exportedchars/<local.filename>.scp new.events=+<argv[<dlocal._for>]>
+        endfor
+      endif
+      f_writefile exportedchars/<local.filename>.scp new.equip
+    endif
+  endfor
+endif
+
+if (<local.args> >= 2)
+  forcont <ref1.findlayer.21> 99	//things in bag
+    ref2=<uid>
+    f_writefile exportedchars/<local.filename>.scp serv.newitem <ref2.baseid>,<ref2.amount>
+    f_writefile exportedchars/<local.filename>.scp new.name=<ref2.name>
+    f_writefile exportedchars/<local.filename>.scp new.color=<ref2.color>
+    f_writefile exportedchars/<local.filename>.scp new.attr=<ref2.attr>
+    f_writefile exportedchars/<local.filename>.scp new.modar=<ref2.modar>
+    if (<ref2.tagcount>)
+      for 0 <eval <ref2.tagcount>-1>		//item tags
+        f_writefile exportedchars/<local.filename>.scp new.tag.<ref2.tagat.<local._for>.key>=<ref2.tagat.<local._for>.val>
+      endfor
+    endif
+    args=<ref2.events>
+    if !(<isempty <args>>)
+      for 0 <eval <argv>-1>		//item events
+        f_writefile exportedchars/<local.filename>.scp new.events=+<argv[<dlocal._for>]>
+      endfor
+    endif
+    f_writefile exportedchars/<local.filename>.scp new.bounce
+    f_writefile exportedchars/<local.filename>.scp new.contp=<ref2.contp>
+  endfor
+endif
+if (<local.args> >= 3)
+  forcont <ref1.findlayer.29> 99	//things in bank
+    ref2=<uid>
+    f_writefile exportedchars/<local.filename>.scp serv.newitem <ref2.baseid>,<ref2.amount>
+    f_writefile exportedchars/<local.filename>.scp new.name=<ref2.name>
+    f_writefile exportedchars/<local.filename>.scp new.color=<ref2.color>
+    f_writefile exportedchars/<local.filename>.scp new.attr=<ref2.attr>
+    f_writefile exportedchars/<local.filename>.scp new.modar=<ref2.modar>
+    if (<ref2.tagcount> >= 1)
+      for 0 <eval <ref2.tagcount>-1>
+        f_writefile exportedchars/<local.filename>.scp new.tag.<ref2.tagat.<local._for>.key>=<ref2.tagat.<local._for>.val>
+      endfor
+    endif
+    args=<ref2.events>
+    if !(<isempty <args>>)
+      for 0 <eval <argv>-1>
+        f_writefile exportedchars/<local.filename>.scp new.events=+<argv[<dlocal._for>]>
+      endfor
+    endif
+    f_writefile exportedchars/<local.filename>.scp new.f_export_char_bank_newitem
+    f_writefile exportedchars/<local.filename>.scp new.contp=<ref2.contp>
+  endfor
+endif
+
+[function f_export_char_bank_newitem]
+ref1=<src>
+ref1.bounce <ref1>
+
+//will create a function that can restore a character from an old save
+[function export_container]
+targetf f_export_container_targ <args>
+sysmessage Select the container to export, this will make a function that can restore it
+
+[function f_export_container_targ]
+ref1=<argo>
+local.args=<streat <explode " ",<args>>>
+local.args=<argv[0]>
+local.filename=exported_container_<f_shmush_args <explode " ",<ref1.name>>>_<ref1>
+f_deletefile exportedcontainers/<local.filename>.scp
+f_writefile exportedcontainers/<local.filename>.scp [function f_import_container_<ref1>]	
+f_writefile exportedcontainers/<local.filename>.scp f_export_container_bank_newitem
+f_writefile exportedcontainers/<local.filename>.scp name=<ref1.name>		//general info
+for 0 <eval <ref1.tagcount>-1>	//tags
+  f_writefile exportedcontainers/<local.filename>.scp tag.<ref1.tagat.<local._for>.key>=<ref1.tagat.<local._for>.val>
+endfor
+
+args=<ref1.events>		//events
+for 0 <eval <argv>-1>
+  f_writefile exportedcontainers/<local.filename>.scp events=+<argv[<dlocal._for>]>
+endfor
+
+forcont <ref1> 99	//things in bag
+  ref2=<uid>
+  f_writefile exportedcontainers/<local.filename>.scp serv.newitem <ref2.baseid>,<ref2.amount>
+  f_writefile exportedcontainers/<local.filename>.scp new.name=<ref2.name>
+  f_writefile exportedcontainers/<local.filename>.scp new.color=<ref2.color>
+  f_writefile exportedcontainers/<local.filename>.scp new.attr=<ref2.attr>
+  f_writefile exportedcontainers/<local.filename>.scp new.modar=<ref2.modar>
+  if (<ref2.tagcount> >= 1)
+    for 0 <eval <ref2.tagcount>-1>		//item tags
+      f_writefile exportedcontainers/<local.filename>.scp new.tag.<ref2.tagat.<local._for>.key>=<ref2.tagat.<local._for>.val>
+    endfor
+  endif
+  args=<ref2.events>
+  if !(<isempty <args>>)
+    for 0 <eval <argv>-1>		//item events
+      f_writefile exportedcontainers/<local.filename>.scp new.events=+<argv[<dlocal._for>]>
+    endfor
+  endif
+  f_writefile exportedcontainers/<local.filename>.scp new.bounce
+endfor
+
+
+[function f_export_container_bank_newitem]
+ref1=<src>
+ref1.bounce <ref1>
+
+//this is just to export a single item from a characters bag
+[function export_item]
+targetf f_export_item_targ <args>
+sysmessage Select the item to export, this will make a function that can restore it
+
+[function f_export_item_targ]
+ref1=<argo>
+local.args=<streat <explode " ",<args>>>
+local.args=<argv[0]>
+local.filename=exported_item_<f_shmush_args <explode " ",<ref1.name>>>_<ref1>
+f_deletefile exporteditems/<local.filename>.scp
+f_writefile exporteditems/<local.filename>.scp [function f_import_item_<ref1>]	
+f_writefile exporteditems/<local.filename>.scp f_export_item_bank_newitem
+f_writefile exporteditems/<local.filename>.scp name=<ref1.name>		//general info
+for 0 <eval <ref1.tagcount>-1>	//tags
+  f_writefile exporteditems/<local.filename>.scp tag.<ref1.tagat.<local._for>.key>=<ref1.tagat.<local._for>.val>
+endfor
+args=<ref1.events>		//events
+for 0 <eval <argv>-1>
+  f_writefile exporteditems/<local.filename>.scp events=+<argv[<dlocal._for>]>
+endfor
+
+[function f_export_item_bank_newitem]
+ref1=<src>
+ref1.bounce <ref1>
+
+[function tilechar]
+sysmessage Select area to spawn
+targetfg f_tilechar_targ <args>
+
+[function f_tilechar_targ]
+sysmessage Pick other corner: 
+targetfg f_tilechar_targ2 <args>,<targp.x>,<targp.y>
+
+[function f_tilechar_targ2]
+args=<args>,<targp.x>,<targp.y>
+serv.log <args>
+if (<argv[2]> <= <argv[4]>)
+  local.s=1
+  local.py=<eval (<argv[4]>-<argv[2]>)>
+else 
+  local.n=1
+  local.py=<eval (<argv[2]>-<argv[4]>)>
+endif
+if (<argv[1]> <= <argv[3]>)
+  local.e=1
+  local.px=<eval (<argv[3]>-<argv[1]>)>
+else 
+  local.w=1
+  local.px=<eval (<argv[1]>-<argv[3]>)>
+endif
+local.dir=<qval (<local.s>)?S:N><qval (<local.w>)?W:E>
+for x 0 <local.px>
+  for y 0 <local.py>
+    serv.newnpc <argv[0]>
+    if !(strcmpi(NW,<local.dir>))
+      //serv.log NW
+      new.p=<eval (<argv[1]>-<local.x>)>,<eval (<argv[2]>-<local.y>)>
+    elseif !(strcmpi(NE,<local.dir>))
+      //serv.log NE
+      new.p=<eval (<argv[1]>+<local.x>)>,<eval (<argv[2]>-<local.y>)>
+    elseif !(strcmpi(SW,<local.dir>))
+      //serv.log SW
+      new.p=<eval (<argv[1]>-<local.x>)>,<eval (<argv[2]>+<local.y>)>
+    elseif !(strcmpi(SE,<local.dir>))
+      //serv.log SE
+      new.p=<eval (<argv[1]>+<local.x>)>,<eval (<argv[2]>+<local.y>)>
+    endif
+    new.fix
+    new.home=<new.p>
+    new.homedist=30
+  endfor
+endfor
+
+[function sectorssleep]
+serv.newitem i_memory
+ref1=<new>
+local.y=1
+for n 7056
+  local.x += 1
+  if (<local.x> >= 112)
+    local.x=1
+    local.y += 1
+  endif
+  ref1.p=<eval (<local.x>*64)-1>,<eval (<local.y>*64)-1>
+  ref1.sector.sleep
+endfor
+ref1.remove
+
+[function sectorsawake]
+serv.newitem i_memory
+ref1=<new>
+local.y=1
+for n 7056
+  local.x += 1
+  if (<local.x> >= 112)
+    local.x=1
+    local.y += 1
+  endif
+  ref1.p=<eval (<local.x>*64)-1>,<eval (<local.y>*64)-1>
+  ref1.sector.awake
+endfor
+ref1.remove
+
+
+[function mark_suspect]
+targetf f_mark_suspect_targ <args>
+sysmessage Select items to mark as suspect...
+
+[function f_mark_suspect_targ]
+ref1=<argo>
+if !(<ref1.isvalid>) || (<ref1.ischar>)
+  sysmessage Invalid target
+endif
+ref1.tag0.suspect_item=<args>
+if (<ref1.type>==t_container)
+  forcont <ref1> 9999
+    tag0.suspect_item=<args>
+  endfor
+endif
+
+
+[function give_players_gift]
+if (<resourcetype <args>> != <def.res_itemdef>)
+  sysmessage <args> is an invalid itemdef.
+  return 1
+endif
+for 0 <eval (<serv.accounts>-1)>
+  if (<serv.account.<local._for>.chars>)
+    local.account=<serv.account.<local._for>.name>
+    for 0 <eval (<serv.account.<local._for>.chars>-1)>
+      ref1=<serv.account.<local.account>.char.<local._for>>
+      serv.newitem <args>,1,<ref1.findlayer.21>
+    endfor
+  endif
+endfor
+
+[function add_stalagmite_light]
+targetfg f_add_stalagmite_light_targ
+sysmessage Target location to add stalagmite light
+
+[function f_add_stalagmite_light_targ]
+serv.newitem {i_red_lantern 1 i_blue_lantern 1 i_green_lantern 1 i_purple_lantern 1}
+new.type=t_stalagmite_light
+new.attr=010
+new.p=<targp.x>,<targp.y>,<eval (<targp.z>-2)>
+
+
+[function forceallspawns]
+forinstances i_worldgem_bit
+  if (<type>==t_spawn_char)
+    for n 1 <amount>
+      timerf <local.n>,start
+    endfor
+  endif
+endfor
+
+[function announce]
+sdialog d_announcement]
+
+[dialog d_announcement]
+0,0
+page 0
+
+resizepic 165 120 9200 340 240
+dtext 250 130 1263 Add new announcement
+
+resizepic 180 155 3000 305 150
+dtextentrylimited 180 155 305 150 0 1 256 
+
+dtext  215 318 1000 Cancel 
+button 195 320 1209 1210 1 0 2	//cancel entry addition
+
+dtext 395 318 1000 Accept
+button 375 320 1209 1210 1 0 1	//confirm entry
+
+[dialog d_announcement button]
+
+onbutton=1
+f_announce <argtxt[1]>
+
+[function f_announce] 
+f_writefile c:/yeoldesphere/scripts/discord/f_announcement_recent.cmd,curl -H "Content-Type: application/json" -d "{\"username\": \"Towncrier\", \"content\":\"<args>\"}" %WEBHOOK_URL%
+f_writefile c:/yeoldesphere/scripts/discord/f_announcement_recent.cmd,start /b "" cmd /c del "%~f0"&exit /b
+f_update_discord_announcement
+
+
+[function f_update_discord_announcement]
+serv.log Sending recent announcement to discord channel
+local.spawn = <sysspawn c:/yeoldesphere/scripts/discord/f_announcement_to_discord.cmd>
+
+[function showattackers]
+ref1=<uid>
+serv.log Attackers for <ref1.name>(<ref1>)
+for n 0 <eval (<attacker>-1)>
+  serv.log <uid.<attacker.<dlocal.n>>.name>(<attacker.<dlocal.n>>) - <attacker.<dlocal.n>.dam>
+endfor
+
+[function onlinegift]
+for n 0 <eval (<serv.clients>-1)>
+  ref1=<serv.client.<dlocal.n>.uid>
+  serv.newitem i_bag
+  ref2=<new>
+  ref2.color=0480
+  serv.newitem,<args>,1,<ref2>
+  ref2.cont=<ref1.findlayer.29>
+  ref2.update
+  sysmessage @044 You have just received a gift in your bank!
+endif
+
+
+
+
+[EOF]

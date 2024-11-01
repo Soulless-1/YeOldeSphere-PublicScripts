@@ -1,0 +1,488 @@
+//Auction House by Soulless 
+//10:51 PM 2/6/2019
+//v1.0
+
+[defname auction_house_settings]
+auction_category0		Weapons,3913,5114
+auction_category0_types		t_weapon*
+
+auction_category1		Armor,5143,5138
+auction_category1_types		t_armor*
+
+auction_category2		Clothing,7934,5910
+auction_category2_types		t_clothing
+
+auction_category3		Consumables,6871,3828
+auction_category3_types		t_potion,t_bandage,t_scroll,t_wand,t_food,t_drink
+
+auction_category4		Resources,7153,6583
+auction_category4_types		t_ore,t_ingot,t_dragon_scale,t_log,t_leather,t_cloth,t_reagent,t_scroll_blank,t_fish,t_magic_essence,
+
+auction_category5		Pets,8484,8474
+auction_category5_types		t_figurine,t_ethereal_statuette
+
+auction_category6		Deeds,7971,5364
+auction_category6_types		t_deed
+
+auction_category7		Currency,3820,7148
+auction_category7_types		t_gold,t_coin,t_reward_token
+
+auction_category8		Special,6777,7966
+auction_category8_types		t_runebook,t_spellbook,t_dye_tub_vat
+
+auction_category9		Other,5691,6162	//do NOT change or remove this category
+auction_category9_types		//everything that hasn't been categorized yet goes here
+
+
+auction_long			4	//total days for a long auction
+auction_short			2	//total days for a short auction
+auction_buyout_allowed		1	//is it allowed to buyout an auction?
+auction_newbie_items		1	//allowed to auction off newbie items?
+
+
+
+///////////////////////////
+// Auctioneer
+
+
+[chardef c_auctioneer]
+defname=c_auctioneer
+id=c_man
+name=Auctioneer
+can=mt_nonmover|mt_equip|mt_usehands
+
+category=Auction House
+subsection=Npcs
+description=Auctioneer
+
+on=@create
+	flags |= statf_invul
+	npc=brain_human
+	color=083ea
+	src={75 100}
+	maxhits={75 100}
+	dex={75 100}
+	int={75 100}
+        
+
+on=@npcrestock
+	itemnewbie=i_hat_wizards
+	color=colors_neutral
+	itemnewbie=i_robe
+	color=colors_neutral
+
+on=@dclick
+ref1=<var0.auctioneer_chest>
+if !(<ref1>)
+  serv.newitem i_auctioneer_chest
+  var0.auctioneer_chest=<new>
+  new.p=5387,1083,4
+endif
+sdialog d_auction_house
+return 1
+
+on=@timer
+auction_chest_check_items
+timer=300
+return 1
+
+
+////////////////////////////////
+// Auctioner chest 
+
+[itemdef i_auctioneer_chest]
+id=0e43
+name=Auctioneer Chest
+type=t_container
+tevents=t_auctioneer_chest
+
+category=Auction House
+subsection=Items
+description=Auctioneer Chest
+
+on=@create
+attr=090
+color=010
+tag0.nodelete=1
+
+on=@destroy
+while !(<isempty <def.auction_category<dlocal.n>>>)		//list categories
+  args=<def0.auction_category<dlocal.n>>
+  serv.list.auction_house_<argv[0]>_items.clear
+  local.n += 1
+endwhile
+
+[typedef t_auctioneer_chest]
+
+on=@dclick
+if (<src.account.plevel> < 7)
+  src.sysmessage You cannot access this.
+  return 1
+endif
+
+on=@destroy
+if (<tag0.nodelete>)
+  serv.log Cannot delete auctioneer chest <uid> till nodelete tag is removed.
+  return 1
+endif
+
+
+///////////////////////////////
+// Auctioneer Dialog
+
+[dialog d_auction_house]
+25,0
+
+page 0
+
+resizepic 10 10 9270 720 60	//top row black
+resizepic 20 20 3000 700 40	//top white
+
+resizepic 10 70 9270 80 520	//left row  black 
+resizepic 20 80 3000 60 500	//left row white
+
+resizepic 90 70 9270 640 520	//main display
+checkertrans 100 80 620 500
+
+args=<def0.auction_category<src.dctag0.auction_category>>
+dtext 300 28 1263 Auctioneer House <argv[0]>
+local.c=<argv[0]>
+
+dtext 30 30 1263 Search:
+dtextentry 80 30 155 20 0 0 
+gumppictiled 80 50 170 2 10000
+button 245 30 4012 4013 1 0 0		//search button
+
+dtext 600 30 1263 Auction Item
+button 680 30 4009 4010 1 0 9999999	//auction an item
+
+
+while !(<isempty <def.auction_category<dlocal.n>>>)		//list categories
+  args=<def0.auction_category<dlocal.n>>
+  button 30 <eval 95+(<local.n>*45)> 9727 9728 1 0 <eval <local.n>+1>
+  tilepic 24 <eval 95+(<local.n>*45)> <argv[1]>
+  tilepic 28 <eval 95+(<local.n>*45)> <argv[2]>
+  local.n += 1
+endwhile
+gumppic 65 <eval 95+(<src.ctag0.auction_category>*45)> 1227		//category indicator
+
+if (<src.ctag0.auction_page>)
+  button 400 65 9900 9901 1 0 50		//upscroll
+endif
+
+for i <eval <src.ctag0.auction_page>*12> <eval (<src.ctag0.auction_page>*12)+11>
+
+  ref1=<serv.list.auction_house_<local.c>_items.<dlocal.i>>
+  if !(<ref1>)
+    return 0
+  endif
+
+  resizepic 100 <eval 90+<local.x>> 3000 620 40				//item display area
+  tilepichue 100 <eval 100+<local.x>> <eval id(<ref1.dispid>)> <eval (<ref1.color>)>	//item tilepic
+  dcroppedtext 140 <eval 90+<local.x>> 250 20 1263 <ref1.name>		//name of item
+  button 150 <eval 110+<local.x>> 2117 2118 1 0 <eval 11+<local.z>> 	//button to view details of item
+  dtext 170 <eval 107+<local.x>> 1000 Details
+
+
+  gumppictiled 375 <eval 90+<local.x>> 2 40 10003		//time remaining
+  dtext 380 <eval 90+<local.x>> 1263 Time Remaining
+
+  gumppictiled 495 <eval 90+<local.x>> 2 40 10003		//seperator between time and bidding area
+  if !(<ref1.auction_time_left>)				//if auction has ended display ended and show winning bidder 
+    dtext 410 <eval 105+<local.x>> 026 Ended
+    if !(<ref1.tag0.auction_winner>)
+      dtext 550  <eval 100+<local.x>> 1000 No Winner
+      else
+      dtext 500 <eval 100+<local.x>> 1263 Won by: 
+      dtext 550 <eval 100+<local.x>> 1000 <uid.<ref1.tag0.auction_winter>.name>
+    endif
+    else
+
+    dtext 385 <eval 105+<local.x>> 1000 <ref1.auction_time_left>
+    dtext 500 <eval 90+<local.x>> 1263 Price:
+    dtext 550 <eval 90+<local.x>> <qval (<ref1.tag0.auction_winner>==<src>)?267:1000> <ref1.dtag0.auction_bid>g
+    if (<ref1.tag0.auction_winner>==<src>)		//winner doenst need to bid again, but put a visual showing they are currently winning
+      gumppic 660 <eval 75+<local.x>> 4508 267
+      else 
+      if (<ref1.tag0.auction_owner> != <src>)
+        button 685 <eval 95+<local.x>> 2117 2118 1 0 <eval <local.i>+100>	//bid button
+      endif
+    endif
+    if (<def0.auction_buyout_allowed>) && (<ref1.tag0.auction_buyout>)
+      dtext 515 <eval 110+<local.x>> 026 Buyout:
+      dtext 565 <eval 110+<local.x>> 1000 <ref1.dtag0.auction_buyout>g
+      if (<ref1.tag0.auction_owner> != <src>)
+        button 700 <eval 105+<local.x>> 2472 2473 1 0 <eval <local.i>+1000000>	//buyout button
+      endif
+    endif
+  endif
+
+  if (<ref1.tag0.auction_owner> == <src>)
+    //cancel button
+  endif
+
+  local.x += 40
+  local.z += 1
+
+endfor
+
+button 400 575 9906 9907 1 0 51	//downscroll
+
+[dialog d_auction_house button]
+
+onbutton=1,10			//selecting auction category
+argn1 -= 1
+src.ctag0.auction_category=<argn1>
+src.ctag0.auction_page=			//always clear page when changing auction
+sdialog d_auction_house
+
+onbutton=11,22
+serv.b <argn1>
+sdialog d_auction_house
+
+onbutton=50
+src.ctag0.auction_page -= 1
+sdialog d_auction_house
+
+onbutton=51
+src.ctag0.auction_page += 1
+sdialog d_auction_house
+
+onbutton=100,999999				//regular bid
+argn1 -= 100
+local.n=<argn1>
+args=<def0.auction_category<src.dctag0.auction_category>>	
+ref1=<serv.list.auction_house_<argv[0]>_items.<dlocal.n>>
+src.ctag0.auction_bidding_on=<ref1>
+src.sdialog d_auction_house_place_bid
+
+
+onbutton=1000000,1999999				//buyout auction
+if !(<src.isgm>)
+  src.sysmessage staff only option atm...
+  return 1
+endif
+argn1 -= 1000000
+local.n=<argn1>
+args=<def0.auction_category<src.dctag0.auction_category>>
+ref1=<serv.list.auction_house_<argv[0]>_items.<dlocal.n>>
+
+
+if (<src.gold> < <ref1.tag0.auction_buyout>)
+  src.sysmessage You cannot afford to buyout this auction.
+  return 1
+endif
+
+
+src.gold -= <ref1.tag0.auction_buyout>
+ref2=<ref1.tag0.auction_owner>
+ref2.gold += <ref1.tag0.auction_buyout>
+serv.list.auction_house_<argv[0]>_items.<dlocal.n>.remove		//item purchased - remove it
+ref1.bounce <src>
+ref1.cleartags auction
+sound {035 037}
+
+onbutton=9999999			//adding new item to auction house
+src.targetf auction_house_add_item
+src.sysmessage select the item you wish to auction.
+
+///////////////////////////////////
+// Auction house place bid
+
+[dialog d_auction_house_place_bid]
+250,100
+
+page 0
+
+resizepic 10 10 9270 300 45
+resizepic 20 20 3000 280 25
+resizepic 10 50 9270 300 165
+
+dtext 90 20 1263 Confirm Auction Bid
+ref1=<src.ctag0.auction_bidding_on>
+
+dtext 50 75 1000 <ref1.name>
+
+dtext 30 110 1000 Current Bid: 
+dtext 140 110 1000 <ref1.dtag0.auction_bid>g
+
+dtext 30 135 1000 My Bid:
+dtextentrylimited 140 135 150 20 1000 1 20 <eval <ref1.dtag0.auction_bid>+100>
+gumppictiled 140 153 150 1 1803
+
+
+button 50 175 243 248 1 0 0	//cancel
+
+button 190 175 249 248 1 0 1	//okay
+
+[dialog d_auction_house_place_bid button]
+
+onbutton=0
+src.sysmessage Bid canceled.
+sdialog d_auction_house
+
+onbutton=1
+ref1=<src.ctag0.auction_bidding_on>
+if (<ref1.tag0.auction_owner>==<src>)
+  src.sysmessage You cannot bid on your own auction.
+  return 1
+endif
+
+if (<argtxt[1]> < <ref1.tag0.auction_bid>)
+  src.sysmessage You must bid atleast 100g above the current bid price.
+  return 1
+endif
+
+if (<src.gold> < <argtxt[1]>)
+  src.sysmessage You cannot afford to make that bid.
+  return 1
+endif
+
+if (<ref1.tag0.auction_winner=>==<src>)
+  src.sysmessage You are already winning that auction.
+  return 1
+endif
+
+ref1.tag0.auction_bid=<argtxt[1]>
+ref1.tag0.auction_winner=<src>
+sdialog d_auction_house
+src.sysmessage You have placed a bid of <dargtxt[1]> on the <ref1.name>.
+sound {035 037}
+
+
+
+
+/////////////////////////////////
+// Add an auction listing
+
+
+[function auction_house_add_item]
+ref1=<argo>
+ref2=<var0.auctioneer_chest>
+
+if (<ref1.topobj> != <uid>)
+  sysmessage You cannot auction that item where it is
+  return 1
+endif
+
+
+ctag0.auction_listing_item=<ref1>
+sdialog d_auction_house_listing_item
+
+
+[dialog d_auction_house_listing_item]
+200,50
+
+page 0
+
+resizepic 10 10 9270 300 45
+resizepic 20 20 3000 280 25
+resizepic 10 50 9270 300 165
+
+dtext 90 20 1263 New Auction Listing
+dtext 30 85 1000 How long of an auction?
+
+radio 205 85 210 211 1 1
+dtext 200 65 1000 Long
+
+radio 255 85 210 211 0 2
+dtext 245 65 1000 Short
+
+dtext 30 115 1000 Starting Price:
+dtextentrylimited 140 115 150 20 1000 1 20  
+gumppictiled 140 133 150 1 1803
+
+dtext 30 140 1000 Buyout Price:
+dtextentrylimited 140 140 150 20 1000 2 20  
+gumppictiled 140 158 150 1 1803
+
+button 50 175 243 248 1 0 0	//cancel
+
+button 190 175 249 248 1 0 1	//okay
+
+[dialog d_auction_house_listing_item button]
+
+onbutton=0
+src.sysmessage The auction listing has been canceled.
+
+onbutton=1
+ref1=<src.ctag0.auction_listing_item>
+ref2=<var0.auctioneer_chest>
+local.t=<ref1.auction_get_item_type>
+ref3=<ref2.tag0.<local.t>_bag>
+
+if (<ref1.topobj> != <uid>)		//double check here incase they moved it after targeting it
+  src.sysmessage You cannot auction that item where it is
+  return 1
+endif
+
+if (<isempty <argtxt[1]>>)
+  src.sysmessage You must have atleast a starting bid number
+  sdialog d_auction_house_listing_item
+  return 1
+endif
+
+if !(<isnum <argtxt[1]>>) || (!(<isempty <argtxt[2]>>) && !(<isnum <argtxt[2]>>))
+  src.sysmessage You must enter a valid number in the fields
+  sdialog d_auction_house_listing_item
+  return 1
+endif
+
+
+if !(<ref3>)
+  serv.log <ref2.name> doesn't have a <local.t> bag, creating one now...
+  serv.newitem i_backpack,1,<ref2>
+  ref2.tag0.<local.t>_bag=<new>
+  new.name=<local.t> bag
+  ref3=<new>
+endif
+
+serv.list.auction_house_<local.t>_items.add <ref1>
+local.l=<qval (<argchk[1]>)?<def0.auction_long>:<def0.auction_short>>
+//serv.b <dserv.rtime.format %j>+<dlocal.l>=<eval <serv.rtime.format %j>+<local.l>>
+
+ref1.tag0.auction_expires=<serv.rtime.format %Y>,<serv.rtime.format %m>,<eval <serv.rtime.format %j>+<local.l>>,<serv.rtime.format %H>,<serv.rtime.format %M>,<serv.rtime.format %S>	//long or short, tag with the current serv time
+ref1.tag0.auction_bid=<argtxt[1]>
+ref1.tag0.auction_buyout=<argtxt[2]>
+ref1.tag0.auction_owner=<src>		//need to tag owner so you can return unsold items and function checks
+
+ref1.p=<ref3.p>	//move it to the players feet first
+ref1.cont=<ref3>
+ref1.update
+
+
+src.sysmessage Your <ref1.name> has been listed in a <qval <argchk[1]>?long:short> auction for <argtxt[1]>g <qval (<isempty <argtxt[2]>>)?:with a buyout of <argtxt[2]>g>
+
+
+
+///////////////////////////////////////
+// Various auction house functions
+
+
+[function auction_get_item_type]
+ref1=<uid>
+while !(<isempty <def.auction_category<dlocal.n>>>)		//list categories
+  args=<def0.auction_category<dlocal.n>_types>
+  for x 0 <argv>
+    if !(strcmpi(<argv[<dlocal.x>]>,<ref1.type>))
+      args=<def0.auction_category<dlocal.n>>
+      return <argv[0]>
+    endif
+  endfor
+  local.n += 1
+endwhile
+return Other	//all things not categorized go here
+
+[function auction_time_left]
+//SERV.RTICKS.FROMTIME year,month,day,hour,minute,second.
+args=<tag0.auction_expires>
+local.t=<serv.rticks.fromtime <argv[0]>,<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>,<argv[5]>>
+local.t=<eval <local.t>-<serv.rticks>>
+
+local.d=<eval <argv[2]>-<serv.rtime.format %j>>		//fixme: calculate this beter
+local.h=<eval (<local.t>%86400)/3600>
+local.m=<eval ((<local.t>%86400)%3600)/60>
+local.s=<eval ((<local.t>%86400)%3600)%60>
+return <dlocal.d>d <dlocal.h>h <dlocal.m>m <dlocal.s>s
+
+[EOF]

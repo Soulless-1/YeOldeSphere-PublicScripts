@@ -1,0 +1,67 @@
+[chardef c_tunnel_worm]
+defname=c_tunnel_worm
+id=c_bog_thing
+name=Tunnel Worm
+can=mt_walk|mt_run
+
+on=@create
+	npc=brain_monster  //brain_dragon
+	str={1096, 1185}
+	dex={86, 175}
+	int={686, 775}
+	maxhits={658, 711}
+	resphysical={65, 75}
+	resfire={80, 90}
+	rescold={70, 80}
+	respoison={60, 70}
+	resenergy={60, 70}
+	evaluatingintel={80.1, 100.0}
+	magery={80.1, 100.0}
+	meditation={52.5, 75.0}
+	magicresistance={100.5, 150.0}
+	tactics={97.6, 100.0}
+	wrestling={97.6, 100.0}
+	fame=22500
+	karma=-22500
+	serv.newitem i_tunnel_worm_memory
+        new.more1=10
+	new.timerms=250
+        equip <new>
+
+[itemdef i_tunnel_worm_memory]
+defname=i_tunnel_worm_memory
+name=Tunnel Worm Memory
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<topobj>==<uid>)
+  remove
+  return 1
+endif
+serv.newitem i_tunnel_worm_segment
+new.timer=15
+new.p=<topobj.p>
+timerms=250
+return 1
+
+[itemdef i_tunnel_worm_segment]
+defname=i_tunnel_worm_segment
+id=0da5
+name=Tunnel Worm
+type=t_worm_segment
+
+on=@create
+attr=010
+color=colors_brown
+
+on=@timer
+remove
+return 1
+
+on=@step
+src.damage 25
+
+[EOF]
+

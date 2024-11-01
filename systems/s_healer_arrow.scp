@@ -1,0 +1,148 @@
+//Healer Arrow by Soulless
+//v1.0
+//10:34 AM 1/9/2022
+
+//needs healers to add themselves to the 'spawns_healer' list
+
+[plevel 1]
+findhealer
+
+[function findhealer]
+if !(<isonline>)	//only online players can find a healer 
+  return 1	
+elseif !(<flags>&statf_dead) 
+  sysmessage You are already among the living.
+  return 1
+endif
+consume i_healer_arrow
+serv.newitem i_healer_arrow
+if !(<indungeon>)	//only show the nearest healer in the open world
+  new.link=<f_nearest_healer_find>
+endif
+new.equip
+new.timer=0
+
+[itemdef i_healer_arrow]
+defname=i_healer_arrow
+name=Healer Arrow
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.events=+e_healer_arrow
+
+on=@timer
+if !(<topobj.flags>&statf_dead) || !(<topobj.isonline>)	//not dead, remove arrow
+  remove
+  return 1
+elseif (<topobj.indungeon>)	
+  link=04fffffff		//no healer spawns in dungeons
+  topobj.arrowquest 0,0,<def0.arrowquest_healernpc>
+elseif !(<topobj.indungeon>) && (<link> == 04fffffff) 
+  link=<topobj.f_nearest_healer_find>	//there is no healer spawn linked, find one
+endif
+trysrc <topobj> dialogclose d_nearest_healer
+trysrc <topobj> dialog d_nearest_healer
+topobj.f_arrowquest_object <link>,<def0.arrowquest_healernpc>
+timer=1
+return 1
+
+on=@unequip
+src.arrowquest 0,0,<def0.arrowquest_healernpc>
+src.dialogclose d_nearest_healer
+src.events=-e_healer_arrow
+
+[events e_healer_arrow]
+
+on=@regionleave
+ref1=<findid.i_healer_arrow>
+if (<ref1.isvalid>) 
+  ref1.link=04fffffff		//no healer spawns in dungeons
+  arrowquest 0,0,<def0.arrowquest_healernpc>
+endif
+
+[function f_catalog_healer_spawns]
+serv.list.spawns_healer.clear
+serv.list.spawns_healer_evil.clear
+forinstances i_worldgem_bit
+  if (<type>==t_spawn_char) 
+    if ((<more1>==c_h_healer) || (<more1>==c_h_healer_f) || (<more1>==c_h_heal_wander) || (<more1> == c_h_heal_wander_f))
+      serv.list.spawns_healer.add <uid>
+      if (<serv.list.spawns_healer_<region.defname>.findelem <uid>> == -1)	//put it in the region list also, if its not in there
+        serv.log <region.name> missing healer spawn <uid>, adding it now
+        serv.list.spawns_healer_<region.defname>.add <uid>
+      endif
+      local.healerspawns += 1  
+    elseif (<more1>==c_h_healer_evil) || (<more1> == c_h_healer_evil_f))
+      serv.list.spawns_healer_evil.add <uid>
+      if (<serv.list.spawns_healer_evil_<region.defname>.findelem <uid>> == -1)	//put it in the region list also, if its not in there
+        serv.log <region.name> missing evil healer spawn <uid>, adding it now
+        serv.list.spawns_healer_evil_<region.defname>.add <uid>
+      endif
+      local.healerspawns_evil += 1  
+    endif
+  endif
+endfor
+serv.log <local.healerspawns> healer spawns cataloged
+serv.log <local.healerspawns_evil> evil healer spawns cataloged
+
+[function f_nearest_healer_find]
+ref1=<uid>
+//serv.log <ref1.name> is looking for the nearest healer
+local.healertype=<qval (<ismurderer>)?healer_evil:healer>
+if (<serv.list.spawns_<local.healertype>_<region.defname>.count> >= 5)		//each region healer list should have at least 5 healers nearby
+  local.list=spawns_<local.healertype>_<region.defname>		//if there is a specific list for the region use that one
+  //serv.log '<local.list>' has 5 or more elements, use this list
+else
+  local.list=spawns_<local.healertype>			//use the big list (more costly on resources)
+  //serv.log '<local.list>' being used, still building 'spawns_<local.healertype>_<region.defname>' list
+endif
+
+for h <eval (<serv.list.<local.list>.count>-1)> 0	//start searching the list for a healer
+  local.spawn=<serv.list.<local.list>.<dlocal.h>>		//uid of the healer spawn in the list
+  if !(<uid.<local.spawn>.isvalid>) || (<uid.<local.spawn>.type> != t_spawn_char)
+    //serv.log spawner <local.spawn> in list <local.list> invalid, removing it.
+    serv.list.<local.list>.<dlocal.h>.remove
+  else
+    ref2=<local.spawn>
+  endif
+  if (<ref2.isvalid>) && ((<ref1.distance <ref2>> < <local.distance>) || !(<local.distance>))
+    local.distance=<ref1.distance <ref2>>
+    ref3=<ref2>						//store the closeset healer spawn
+  endif
+endfor
+
+if (<serv.list.spawns_<local.healertype>_<region.defname>.findelem <ref3>> == -1)	//add thish healer to the region list if its missing, for later
+  serv.list.spawns_<local.healertype>_<region.defname>.add <ref3>
+  //serv.log Healer spawn <ref3> added to the <region.defname> healer list
+endif
+
+ref4=<ref3.tag0.spawned_healer_last>
+if (<ref4.isvalid>) && (<ref4.spawnitem>==<ref3>)	//use its last healer spawned if they are still alive
+  return <ref4>						//use the healer if they exist
+endif
+return <ref3>						//otherwise return the spawn itself, hopefully a new one will spawn soon
+
+[dialog d_nearest_healer]
+300,20
+//noclose
+nomove
+ref1=<link>
+resizepic 10 10 9200 200 30
+gumppictiled 15 15 190 20 2624
+checkertrans 15 15 190 20
+if (<indungeon>) || (<topobj.flags>&statf_underground)
+  dtext 25 15 33 You must exit the dungeon
+  //src.arrowquest 0,0,<def0.arrowquest_healernpc>
+else
+  if !(<ref1.isvalid>)
+    dtext 30 15 33 No Healer Found
+    //src.arrowquest 0,0,<def0.arrowquest_healernpc>
+  else
+    dtext 30 15 1000 Nearby Healer (<topobj.distance <ref1>> yds)
+  endif
+endif
+
+
+[EOF]

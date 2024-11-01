@@ -1,0 +1,1423 @@
+//****************************************************************************
+// SPHERE by : Menasoft ©1997-2007
+// www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Saturday, November 22, 2003
+//
+VERSION=0.56b
+
+[ITEMDEF i_potion_AgilityLess]
+ID=i_bottle_blue
+NAME=Lesser Agility
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_blood_moss, i_bottle_empty
+SKILLMAKE=ALCHEMY 15.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_Agility
+	MORE2=50.0	//30.0
+
+On=@Dclick
+if (<src.findid.i_rune_agility>)
+  src.sysmessage You are already under a similar effect.
+  return 1
+endif
+
+[ITEMDEF i_potion_Agility]
+ID=i_bottle_blue
+NAME=Agility
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_blood_moss, i_bottle_empty
+SKILLMAKE=ALCHEMY 15.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_Agility
+	MORE2=100.0	//60.0
+
+On=@Dclick
+if (<src.findid.i_rune_agility>)
+  src.sysmessage You are already under a similar effect.
+  return 1
+endif
+
+[ITEMDEF i_potion_AgilityGreat]
+ID=i_bottle_BLUE
+TYPE=T_POTION
+NAME=Greater Agility
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_blood_moss 3, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_Agility
+	MORE2=200.0	//90.0
+
+On=@Dclick
+if (<src.findid.i_rune_agility>)
+  src.sysmessage You are already under a similar effect.
+  return 1
+endif
+
+[ITEMDEF i_potion_CureLess]
+ID=i_bottle_ORANGE
+TYPE=T_POTION
+NAME=Lesser Cure
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_garlic, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 0.0
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_Cure
+	MORE2=30.1
+
+ON=@Dclick
+if !(<src.findid.i_rune_poison>) && !(<src.flags>&statf_poisoned)
+  src.sysmessage You are not poisoned.
+  return 1
+endif
+
+[ITEMDEF i_potion_Cure]
+NAME=Cure
+ID=i_bottle_ORANGE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_garlic 3, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 25.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_Cure
+	MORE2=60.0
+
+ON=@Dclick
+if !(<src.findid.i_rune_poison>) && !(<src.flags>&statf_poisoned)
+  src.sysmessage You are not poisoned.
+  return 1
+endif
+
+[ITEMDEF i_potion_CureGreat]
+NAME=Greater Cure
+ID=i_bottle_ORANGE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_garlic 6, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_cure
+	MORE2=90.0
+
+ON=@Dclick
+if !(<src.findid.i_rune_poison>) && !(<src.flags>&statf_poisoned)
+  src.sysmessage You are not poisoned.
+  return 1
+endif
+
+[ITEMDEF i_potion_ExplosionLess]
+NAME=Lesser Explosion
+ID=i_bottle_PURPLE
+TYPE=T_POTION
+TDATA1=0
+RESOURCES=i_reag_sulfur_ash 3, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 5.1
+tag0.cooldown=3
+
+ON=@Create
+	MORE1=s_explosion
+	MORE2=30.0
+
+[ITEMDEF i_potion_Explosion]
+NAME=Explosion
+ID=i_bottle_PURPLE
+TYPE=T_POTION
+TDATA1=0
+RESOURCES=i_reag_sulfur_ash 5, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=3
+
+ON=@Create
+	MORE1=s_explosion
+	MORE2=60.0
+
+[ITEMDEF i_potion_ExplosionGreat]
+NAME=Greater Explosion
+ID=i_bottle_PURPLE
+TYPE=T_POTION
+TDATA1=0
+RESOURCES=i_reag_sulfur_ash 10, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=3
+
+ON=@Create
+	MORE1=s_explosion
+	MORE2=90.0
+
+[ITEMDEF i_potion_HealLess]
+NAME=Lesser Heal
+ID=i_bottle_YELLOW
+RESOURCES=i_reag_ginseng, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 0.0
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+tag0.cooldown=15
+
+ON=@Create
+	MORE1=s_heal
+	MORE2=30.0
+
+ON=@Dclick
+if (<src.hits> >= <src.maxhits>)
+  src.sysmessage You decide against drinking this potion, as you are already at full health.
+  return 1
+//elseif (<src.findid.i_rune_poison>)
+  //src.message @026 You cannot heal yourself in your current state.
+  //return 1
+endif
+
+[ITEMDEF i_potion_Heal]
+NAME=Heal
+ID=i_bottle_YELLOW
+RESOURCES=i_reag_ginseng 3, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 15.1
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+tag0.cooldown=15
+
+ON=@Create
+	MORE1=s_greater_heal
+	MORE2=60.0
+
+ON=@Dclick
+if (<src.hits> >= <src.maxhits>)
+  src.sysmessage You decide against drinking this potion, as you are already at full health.
+  return 1
+//elseif (<src.findid.i_rune_poison>)
+  //src.message @026 You cannot heal yourself in your current state.
+  //return 1
+endif
+
+[ITEMDEF i_potion_HealGreat]
+NAME=Greater Heal
+ID=i_bottle_YELLOW
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_ginseng 7, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 55.1
+tag0.cooldown=15
+
+ON=@Create
+	MORE1=s_greater_heal
+	MORE2=90.0
+
+ON=@Dclick
+if (<src.hits> >= <src.maxhits>)
+  src.sysmessage You decide against drinking this potion, as you are already at full health.
+  return 1
+//elseif (<src.findid.i_rune_poison>)
+  //src.message @026 You cannot heal yourself in your current state.
+  //return 1
+endif
+
+[ITEMDEF i_potion_Nightsight]
+NAME=Nightsight
+ID=i_bottle_BLACK
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_spider_silk 1, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 0.0
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_night_sight
+	MORE2=100.0
+
+[ITEMDEF i_potion_PoisonLess]
+NAME=Lesser Poison
+ID=i_bottle_GREEN
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_nightshade 1, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 0
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_poison
+	MORE2=25.0
+
+on=@dclick
+	src.sysmessage You decided against trying the poison yourself. Try applying it to something instead.
+	return 1
+
+[ITEMDEF i_potion_Poison]
+NAME=Poison
+ID=i_bottle_GREEN
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_nightshade 2, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 15.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_poison
+	MORE2=50.0
+
+on=@dclick
+	src.sysmessage You decided against trying the poison yourself. Try applying it to something instead.
+	return 1
+
+[ITEMDEF i_potion_PoisonGreat]
+NAME=Greater Poison
+ID=i_bottle_GREEN
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_nightshade 4, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 55.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_poison
+	MORE2=75.0
+
+on=@dclick
+	src.sysmessage You decided against trying the poison yourself. Try applying it to something instead.
+	return 1
+
+[ITEMDEF i_potion_PoisonDeadly]
+NAME=Deadly Poison
+ID=i_bottle_GREEN
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_nightshade 8, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 90.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_poison
+	MORE2=100.0
+
+on=@dclick
+	src.sysmessage You decided against trying the poison yourself. Try applying it to something instead.
+	return 1
+
+[ITEMDEF i_potion_Refresh]
+NAME=Refresh
+ID=i_bottle_RED
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_black_pearl, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 0
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_Refresh
+	MORE2=25.0
+
+[ITEMDEF i_potion_RefreshTotal]
+ID=i_bottle_RED
+NAME=Total Refresh
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_black_pearl 5, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 25.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_Refresh
+	MORE2=100.0
+
+[ITEMDEF i_potion_StrengthLess]
+ID=i_bottle_WHITE
+NAME=Lesser Strength
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_mandrake_root 1, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 15.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_strength
+	MORE2=50.0	//30.0
+
+ON=@Dclick
+if (<src.findid.i_rune_strength>)
+  src.sysmessage You are already under a similar effect.
+  return 1
+endif
+
+[ITEMDEF i_potion_Strength]
+ID=i_bottle_WHITE
+NAME=Strength
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_mandrake_root 2, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 25.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_strength
+	MORE2=100.0	//60.0
+
+ON=@Dclick
+if (<src.findid.i_rune_strength>)
+  src.sysmessage You are already under a similar effect.
+  return 1
+endif
+
+[ITEMDEF i_potion_StrengthGreat]
+NAME=Greater Strength
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_mandrake_root 5, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 45.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_strength
+	MORE2=200.0	//100.0	
+
+ON=@Dclick
+if (<src.findid.i_rune_strength>)
+  src.sysmessage You are already under a similar effect.
+  return 1
+endif
+
+
+//////////////////////////////////////////////////
+// These are sphere's extended (custom) potions
+
+[ITEMDEF i_potion_Shrink]
+ID=i_bottle_WHITE
+NAME=Shrink
+TYPE=T_POTION
+VALUE=18
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_batwing, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+  COLOR=010
+  MORE1=s_shrink
+  MORE2=100.0
+
+on=@dclick
+  target what do you want to shrink?
+  return 1
+
+on=@dropon_char
+  if (<argo.isplayer>) || (<argo.ishuman>)
+    return 0
+  elseif (<argo.owner> != <src>) && !(<src.isgm>)
+    src.sysmessage <argo.name> is not your pet.
+    return 1
+  endif
+  local.bonded=<argo.bonded>
+  local.owner=<argo.owner>
+  src.f_follower_remove <argo>
+  argo.shrink 1
+  //argo.flags &= ~ statf_ridden
+  ref1=<hval <argo.actarg1>&~030000000>		//this is the new shrunken pet statue
+  if (<local.bonded>)
+    ref1.morem=1	//if this setting is present, its bonded and the value is the owner
+    ref1.tag0.owner=<local.owner>
+  endif
+  argo.actarg1=<ref1>
+  consume
+  serv.newitem i_bottle_empty
+  new.bounce <src>
+  return 1
+ 
+on=@targon_char
+  if (<src.targ.owner> != <src>) && !(<src.isgm>)
+    src.sysmessage <src.targ.name> is not your pet.
+    return 1
+  endif
+  local.bonded=<src.targ.bonded>
+  local.owner=<src.targ.owner>
+  src.f_follower_remove <src.targ>
+  src.targ.shrink 1
+  //src.flags &= ~ statf_ridden
+  ref1=<hval <src.targ.actarg1>&~030000000>	//this is the new shrunken pet statue
+  if (<local.bonded>)
+    ref1.morem=1	//if this setting is present, its bonded and the value is the owner
+    ref1.tag0.owner=<local.owner>
+  endif
+  src.targ.actarg1=<ref1>
+  consume 1
+  serv.newitem i_bottle_empty
+  new.bounce <src>
+  return 1
+
+on=@targon_item
+  src.sysmessage Items cannot be shrunk this way
+  return 1
+
+[ITEMDEF i_potion_Invisibility]
+ID=i_bottle_WHITE
+NAME=Invisibility
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=4 i_reag_wyrm_heart, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=0455
+	MORE1=s_invisibility
+	MORE2=100.0
+
+[ITEMDEF i_potion_ManaLess]
+ID=i_bottle_WHITE
+NAME=Lesser Mana Refresh
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=1 i_reag_eye_of_newt, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 25.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=06	//magical blue
+	MORE1=s_mana
+	MORE2=15.0
+
+ON=@Dclick
+if (<src.mana> >= <src.maxmana>)
+  src.sysmessage You decide against drinking this potion, as you are already at full mana.
+  return 1
+endif
+
+[ITEMDEF i_potion_Mana]
+ID=i_bottle_WHITE
+NAME=Mana Refresh
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=3 i_reag_eye_of_newt, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 45.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=06	//magical blue
+	MORE1=s_mana
+	MORE2=25.0
+
+ON=@Dclick
+if (<src.mana> >= <src.maxmana>)
+  src.sysmessage You decide against drinking this potion, as you are already at full mana.
+  return 1
+endif
+
+[ITEMDEF i_potion_ManaGreat]
+defname=i_potion_ManaGreat
+ID=i_bottle_WHITE
+NAME=Greater Mana Refresh
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=6 i_reag_eye_of_newt, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=06	//magical blue
+	MORE1=s_mana
+	MORE2=60.0
+	// Extended potions.
+
+ON=@Dclick
+if (<src.mana> >= <src.maxmana>)
+  src.sysmessage You decide against drinking this potion, as you are already at full mana.
+  return 1
+endif
+
+[ITEMDEF i_potion_ManaTotal]
+defname=i_potion_ManaTotal
+ID=i_bottle_WHITE
+NAME=Total Mana Refresh
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=9 i_reag_eye_of_newt , i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=06	//magical blue
+	MORE1=s_mana
+	MORE2=100.0	//these potions are OP, don't let players craft them, only used for events
+
+ON=@Dclick
+if (<src.mana> >= <src.maxmana>)
+  src.sysmessage You decide against drinking this potion, as you are already at full mana.
+  return 1
+endif
+
+// Extended potions.
+[ITEMDEF i_potion_BeastformLess]
+// This potion polymorphs you into an animal for a while.
+// The animal it turns you into is determined when you make the potion (you can use taste id to determine which animal it does).
+ID=i_bottle_WHITE
+NAME=Lesser Beastform
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=1 i_reag_blood_moss,1 i_reag_ginseng, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=02b	//primal red
+	MORE1=s_BeastForm
+	MORE2=30.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot use this potion while in monster form.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_Beastform]
+// This potion polymorphs you into an animal for a while.
+// The animal it turns you into is determined when you make the potion (you can use taste id to determine which animal it does).
+ID=i_bottle_WHITE
+NAME=Beastform
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_blood_moss,2 i_reag_ginseng, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=02b	//primal red
+	MORE1=s_BeastForm
+	MORE2=60.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot use this potion while in monster form.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_BeastformGreat]
+// This potion polymorphs you into an animal for a while.
+// The animal it turns you into is determined when you make the potion (you can use taste id to determine which animal it does).
+ID=i_bottle_WHITE
+NAME=Greater Beastform
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=3 i_reag_blood_moss,3 i_reag_ginseng, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=02b	//primal red
+	MORE1=s_BeastForm
+	MORE2=90.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot use this potion while in monster form.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_Chameleon]
+// This potion makes your skin match the colors of whatever is behind you.
+ID=i_bottle_WHITE
+NAME=Chameleon skin
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_garlic,2 i_reag_spider_silk, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=0247
+	MORE1=s_Chameleon
+	MORE2=60.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot use this potion while in monster form.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_CleverLess]
+// This potion gives a temporary boost to intelligence.
+ID=i_bottle_WHITE
+NAME=Lesser Cleverness
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=1 i_reag_fertile_dirt, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=044
+	MORE1=s_Cunning
+	MORE2=40.0
+
+[ITEMDEF i_potion_Clever]
+// This potion gives a temporary boost to intelligence.
+ID=i_bottle_WHITE
+NAME=Cleverness
+TYPE=T_POTION
+VALUE=14
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_fertile_dirt, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=044
+	MORE1=s_Cunning
+	MORE2=70.0
+
+[ITEMDEF i_potion_CleverGreat]
+// This potion gives a temporary boost to intelligence.
+ID=i_bottle_WHITE
+NAME=Greater Cleverness
+TYPE=T_POTION
+VALUE=18
+TDATA1=i_bottle_empty
+RESOURCES=3 i_reag_fertile_dirt, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=044
+	MORE1=s_Cunning
+	MORE2=100.0
+
+[ITEMDEF i_potion_Clumsiness]
+// This potion lowers your dexterity temporarily.
+ID=i_bottle_WHITE
+NAME=Clumsiness
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_blood_moss,2 i_reag_blackmoor, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=022
+	MORE1=s_Clumsy
+	MORE2=70.0
+
+[ITEMDEF i_potion_Confusion]
+// This potion lowers your intelligence temporarily.
+ID=i_bottle_WHITE
+NAME=Confusion
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_Nightshade,2 i_reag_fertile_dirt, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=022
+	MORE1=s_feeblemind
+	MORE2=50.0
+
+[ITEMDEF i_potion_ForgetLess]
+// This potion permanently lowers one skill.
+// You can tell which skill the potion lowers by tasting it.
+ID=i_bottle_WHITE
+NAME=Lesser Forgetfulness
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=1 i_reag_blackmoor, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=058
+	MORE1=s_forget
+	MORE2=30.0
+	MOREZ={0 48}	//the skill that will be forgotten
+
+on=@click
+	message <name> (<serv.skill.<morez>.name>)
+	return 1
+
+on=@dclick
+	if (<src> != <topobj>)
+	  src.sysmessage You cannot use that where it is.
+          return 1
+        elseif (<src.findlayer.50>)
+          src.sysmessage You can't drink another potion yet.
+          return 1
+        endif
+	sdialog d_potion_forget_confirm
+	return 1
+
+[ITEMDEF i_potion_Forget]
+// This potion permanently lowers one skill.
+// You can tell which skill the potion lowers by tasting it.
+ID=i_bottle_WHITE
+NAME=Forgetfulness
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2i_reag_blackmoor,2 i_reag_blackmoor, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=058
+	MORE1=s_forget
+	MORE2=60.0
+	MOREZ={0 48}	//the skill that will be forgotten
+
+on=@click
+	message <name> (<serv.skill.<morez>.name>)
+	return 1
+
+on=@dclick
+	if (<src> != <topobj>)
+	  src.sysmessage You cannot use that where it is.
+          return 1
+        elseif (<src.findlayer.50>)
+          src.sysmessage You can't drink another potion yet.
+          return 1
+        endif
+	sdialog d_potion_forget_confirm
+	return 1
+
+[ITEMDEF i_potion_ForgetGreat]
+// This potion permanently lowers one skill.
+// You can tell which skill the potion lowers by tasting it.
+ID=i_bottle_WHITE
+NAME=Greater Forgetfulness
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=6 i_reag_blackmoor, 6 i_reag_blackmoor,1 i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=058
+	MORE1=s_forget
+	MORE2=100.0
+	MOREZ={0 48}	//the skill that will be forgotten
+
+on=@click
+	message <name> (<serv.skill.<morez>.name>)
+	return 1
+
+on=@dclick
+	if (<src> != <topobj>)
+	  src.sysmessage You cannot use that where it is.
+          return 1
+        elseif (<src.findlayer.50>)
+          src.sysmessage You can't drink another potion yet.
+          return 1
+        endif
+	sdialog d_potion_forget_confirm
+	return 1
+
+[dialog d_potion_forget_confirm]
+300,150
+
+resizepic 10 10 9200 300 100
+dhtmlgump 20 20 280 60 1 0 <def.bfont_center> Are you sure you wish to use this potion to forget <fval <more2>> points in <serv.skill.<morez>.name>?
+button 30 83 241 242 1 0 0
+button 230 83 247 248 1 0 1
+
+[dialog d_potion_forget_confirm button]
+
+onbutton=1
+src.spelleffect s_forget <more2> <src> <uid>
+src.potionwait 15
+consume
+
+[ITEMDEF i_potion_Gender]
+// This potion temporarily changes your gender.
+ID=i_bottle_WHITE
+NAME=Gender swap
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_blood_moss, i_reag_ginseng, i_reag_mandrake_root, i_reag_blackmoor, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=018
+	MORE1=s_Gender_Swap
+	MORE2=100.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot use this potion while in monster form.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_Trance]
+// This potion temporarily increases your meditation skill.
+ID=i_bottle_WHITE
+NAME=Trance
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_black_pearl,2 i_reag_blackmoor, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=058
+	MORE1=s_Trance
+	MORE2=50.0
+
+[ITEMDEF i_potion_TranceGreat]
+// This potion temporarily increases your meditation skill.
+ID=i_bottle_WHITE
+NAME=Greater Trance
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=3 i_reag_black_pearl, 3 i_reag_mandrake_root, 3 i_reag_blackmoor, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=058
+	MORE1=s_Trance
+	MORE2=100.0
+
+[ITEMDEF i_potion_RestoreLess]
+// This potion increases both your hit points and your stamina.
+RESOURCES=1i_reag_black_pearl,1 i_reag_mandrake_root, i_bottle_EMPTY
+ID=i_bottle_WHITE
+NAME=Lesser Restoration
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=030
+	MORE1=s_Restore
+	MORE2=10.0
+
+//ON=@Dclick
+//if (<src.findid.i_rune_poison>)
+  //src.message @026 You cannot heal yourself in your current state.
+  //return 1
+//endif
+
+[ITEMDEF i_potion_Restore]
+// This potion increases both your hit points and your stamina.
+RESOURCES=2i_reag_black_pearl,2 i_reag_mandrake_root, i_bottle_EMPTY
+ID=i_bottle_WHITE
+NAME=Restoration
+TYPE=T_POTION
+VALUE=20
+TDATA1=i_bottle_empty
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=030
+	MORE1=s_Restore
+	MORE2=20.0
+
+//ON=@Dclick
+//if (<src.findid.i_rune_poison>)
+  //src.message @026 You cannot heal yourself in your current state.
+  //return 1
+//endif
+
+[ITEMDEF i_potion_RestoreGreat]
+// This potion increases both your hit points and your stamina.
+RESOURCES=3 i_reag_black_pearl, 3 i_reag_mandrake_root, i_bottle_EMPTY
+ID=i_bottle_WHITE
+NAME=Greater Restoration
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=030
+	MORE1=s_Restore
+	MORE2=30.0
+
+//ON=@Dclick
+//if (<src.findid.i_rune_poison>)
+  //src.message @026 You cannot heal yourself in your current state.
+  //return 1
+//endif
+
+[ITEMDEF i_potion_Sustenance]
+// This potion serves to fill you up. (Remember, healing rate depends on how well fed you are!)
+NAME=Sustenance
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_ginseng,2 i_reag_mandrake_root, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=021f
+	MORE1=s_Sustenance
+	MORE2=60.0
+
+[ITEMDEF i_potion_SustenanceGreat]
+// This potion serves to fill you up. (Remember, healing rate depends on how well fed you are!)
+NAME=Sustenance
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=3 i_reag_ginseng, 3 i_reag_mandrake_root, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=021f
+	MORE1=s_Sustenance
+	MORE2=100.0
+ 
+[ITEMDEF i_potion_MonsterLess]
+// This potion polymorphs you into a monster for a while.
+// The monster it turns you into is determined when you make the potion (you can use taste id to determine which animal it does).
+NAME=Lesser Monster form
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=1 i_reag_blood_moss,1 i_reag_mandrake_root, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=01fd
+	MORE1=s_Monster_Form
+	MORE2=35.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_Monster]
+// This potion polymorphs you into a monster for a while.
+// The monster it turns you into is determined when you make the potion (you can use taste id to determine which animal it does).
+NAME=Monster form
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=2 i_reag_blood_moss,2 i_reag_mandrake_root, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=01fd
+	MORE1=s_Monster_Form
+	MORE2=60.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_MonsterGreat]
+// This potion polymorphs you into a monster for a while.
+// The monster it turns you into is determined when you make the potion (you can use taste id to determine which animal it does).
+NAME=Greater Monster form
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=3 i_reag_blood_moss,3 i_reag_mandrake_root, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=01fd
+	MORE1=s_Monster_Form
+	MORE2=90.0
+
+on=@dclick
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[ITEMDEF i_potion_Particle]	//FIXME : SCRIPT THIS
+// This potion turns you into an immobile, but untargetable particle system for a while.
+NAME=Particle form
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_black_pearl, i_reag_blood_moss, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 15.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=018
+	MORE1=s_Particle_Form
+	MORE2=60.0
+
+[ITEMDEF i_potion_Shield]	//FIXME : SCRIPT THIS
+// This potion erects a temporary force field around you. Nobody approaching will be able to get within 1 tile of you, though you can move close to them if you wish.
+NAME=Shield
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_garlic, i_reag_sulfur_ash, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 15.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=018
+	MORE1=s_Shield
+	MORE2=100.0
+
+[ITEMDEF i_potion_StoneskinLess]
+// This potion turns your skin into stone, giving a boost to your AR.
+NAME=Lesser Stoneskin
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_Garlic, i_reag_ginseng, i_reag_mandrake_root, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=060
+	MORE1=s_Stoneskin
+	MORE2=30.0
+
+[ITEMDEF i_potion_Stoneskin]
+// This potion turns your skin into stone, giving a boost to your AR.
+NAME=Stoneskin
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_Garlic 2, i_reag_ginseng 2, i_reag_mandrake_root 2, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=060
+	MORE1=s_Stoneskin
+	MORE2=60.0
+
+[ITEMDEF i_potion_StoneskinGreat]
+// This potion turns your skin into stone, giving a boost to your AR.
+NAME=Greater Stoneskin
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_Garlic 3, i_reag_ginseng 3, i_reag_mandrake_root 3, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=060
+	MORE1=s_Stoneskin
+	MORE2=90.0
+
+[ITEMDEF i_potion_Steelskin]
+// This potion turns your skin into steel, giving a boost to your AR.
+NAME=Steelskin
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=6 i_reag_garlic,6 i_reag_ginseng,6 i_reag_mandrake_root, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=15
+
+ON=@Create
+	COLOR=060
+	MORE1=s_Steelskin
+	MORE2=90.0
+
+[ITEMDEF i_potion_Weakness]
+// This potion temporarily lowers your strength.
+NAME=Weakness
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_mandrake_root, i_reag_blackmoor, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=022
+	MORE1=s_weaken
+	MORE2=100.0
+
+[COMMENT ITEMDEF i_potion_FloatLess]
+ID=i_bottle_WHITE
+NAME=Lesser Float
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_pumice 1, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 35.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=018
+	MORE1=s_Float
+	MORE2=30.0
+
+[COMMENT ITEMDEF i_potion_Float]
+ID=i_bottle_WHITE
+NAME=Float
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_pumice 3, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=018
+	MORE1=s_Float
+	MORE2=50.0
+
+[COMMENT ITEMDEF i_potion_FloatGreat]
+ID=i_bottle_WHITE
+NAME=Greater Float
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_pumice 6, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=018
+	MORE1=s_Float
+	MORE2=100.0
+
+[COMMENT ITEMDEF i_potion_Lava]
+ID=i_bottle_RED
+NAME=Lava Bomb
+TYPE=T_POTION
+TDATA1=0
+RESOURCES=i_reag_volcanic_ash 6, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 85.1
+tag0.cooldown=0
+
+ON=@Create
+	MORE1=s_lava
+	MORE2=50.0
+	COLOR=color_violet_lt
+
+[ITEMDEF i_potion_incognito]
+// This potion temporarily changes your name
+NAME=Incognito
+ID=i_bottle_WHITE
+TYPE=T_POTION
+TDATA1=i_bottle_empty
+RESOURCES=i_reag_blood_moss,i_reag_garlic,i_reag_nightshade, i_bottle_EMPTY
+SKILLMAKE=ALCHEMY 65.1
+tag0.cooldown=0
+
+ON=@Create
+	COLOR=0388
+	MORE1=s_incognito
+	MORE2=100.0
+
+on=@dclick
+if (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot use this potion while in monster form.
+  return 1
+elseif (<src.findid.i_rune_gender_swap>)
+  src.sysmessage You cannot use this potion while gender swapped.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+elseif (<src.findid.i_barracoon_polymorphed_attacker>)
+  src.sysmessage You cannot use this potion while while rat-formed.
+  return 
+endif
+
+[EOF]

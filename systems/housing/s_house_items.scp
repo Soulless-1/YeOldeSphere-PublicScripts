@@ -1,0 +1,98 @@
+//House System by Soulless
+//v1.9
+//12:31 PM 1/31/2019
+
+
+[ITEMDEF 0bd1] 		
+//brass sign 
+DEFNAME=i_sign_brass 
+TYPE=t_sign_gump
+TEVENTS=t_house_sign
+CAN=can_i_dcignoredist
+CATEGORY=Decoration - Signs 
+SUBSECTION=Blank 
+DESCRIPTION=Brass Blank 
+DUPELIST=0bd2 
+
+on=@create
+tag0.house_menu=d_house_menu
+//timerf 0,f_house_initialize
+
+[itemdef i_exiting_house]
+defname=i_exiting_house
+name=exiting house
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+src.events=+e_exiting_house
+
+on=@unequip
+src.events=-e_exiting_house
+
+on=@timer
+if !(<topobj.region.isvalid>) || (<topobj.region.uid> != <link>)
+  topobj.sysmessage House exiting canceled...
+  remove
+elseif (<more1> <= 0)
+  topobj.go <link.link.p>
+  remove
+endif
+topobj.message <dmore1>
+more1 -= 1
+timer=1
+return 1
+
+[itemdef i_house_placement_confirm]
+defname=i_house_placement_confirm
+id=i_memory
+name=Confirming House Placement
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+link.redeed
+trysrc <topobj> link.dialogclose d_house_placement_confirm
+//serv.b <topobj.name> <name> <link.name> <link.link.name>
+remove
+return 1
+
+
+[itemdef i_house_placement_cooldown]
+defname=i_house_placement_cooldown
+name=House Placement Cooldown
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[itemdef i_memory_houseban]
+defname=i_memory_houseban
+name=Banned From House
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+ref1=<region.uid>
+timerd=1
+if (<topobj.p.z> > <ref1.p.z>)
+  topobj.p <ref1.link.p>
+  topobj.sysmessage You are banned from this property. 
+  topobj.move s 1
+endif
+return 1
+
+
+
+
+
+
+[EOF]
+
+
+

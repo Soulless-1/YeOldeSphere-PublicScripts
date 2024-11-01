@@ -1,0 +1,318 @@
+//Loot Generator Functions by Soulless
+//v1.0
+//11:52 AM 5/4/2022
+
+
+//////////////////////
+
+[function f_make_magic_armor]
+local.difficulty=<args>					//could be actual npc base difficulty or just a set value on chest
+local.affixes=<f_npcloot_getaffixes <local.difficulty>>	//the R value for what affixes could be applied, based on difficulty
+attr &= ~ attr_identified				//unidentify it
+//attr |= attr_magic_armor				//this appears to cause issues cause you cant override certain affects of more values
+events=+t_magic_armor					
+tag0.override.value=<eval (<value>*2)>			//make it worth more gold
+local.affixchance=<eval (<local.difficulty>/2)>		//this is the chance to apply an affix is it rolls through
+local.affixchance=<qval (<local.affixchance> < 30)?30:<local.affixchance>>	//just have at least some chance
+while !(<local.x>)
+  if (<local.affixchance> >= <R1,100>)
+    local.affix=<R<local.affixes>>
+    args=<def0.magic_armor_prefix0_<dlocal.affix>>
+    hits += <argv[1]>
+    maxhits += <argv[1]>
+    name=<argv[0]> <name>
+    ocolor=<argv[2]>
+    tag0.override.value += <eval (<local.affix>*25)>
+    local.x=1
+  endif
+  if (<local.affixchance> >= <R1,100>)
+    local.affix=<R<local.affixes>>
+    args=<def0.magic_armor_suffix0_<dlocal.affix>>
+    modar += <argv[1]>
+    name=<name> of <argv[0]>
+    ocolor=<argv[2]>
+    tag0.override.value += <eval (<local.affix>*50)>
+    local.x=1
+  endif
+endwhile
+f_magicgen_extra_bonus
+tag0.itemid_name=<name>
+//oname=<name>						//think this caused them to delete on server start?
+name=<serv.itemdef.<baseid>.name>
+
+[function f_make_magic_weapon]
+local.difficulty=<args>					//could be actual npc base difficulty or just a set value on chest
+local.affixes=<f_npcloot_getaffixes <local.difficulty>>	//the R value for what affixes could be applied, based on difficulty
+attr &= ~ attr_identified				//unidentify it
+//attr |= attr_magic_weapon
+events=+t_magic_weapon
+tag0.override.value=<eval (<value>*2)>			//make it worth more gold
+local.affixchance=<eval (<local.difficulty>/2)>		//this is the chance to apply an affix is it rolls through
+local.affixchance=<qval (<local.affixchance> < 30)?30:<local.affixchance>>	//just have at least some chance
+while !(<local.x>)
+  if (<local.affixchance> >= <R1,100>)
+    local.affix=<R<local.affixes>>
+    args=<def0.magic_weapon_prefix0_<dlocal.affix>>	//+maxhits
+    hits += <argv[1]>
+    maxhits += <argv[1]>
+    name=<argv[0]> <name>
+    ocolor=<argv[2]>
+    tag0.override.value += <eval (<local.affix>*20)>
+    local.x=1
+  endif
+  if (<local.affixchance> >= <R1,100>)
+    local.affix=<R<local.affixes>>
+    args=<def0.magic_weapon_prefix1_<dlocal.affix>>		//skill
+    events=+t_skill_increase
+    tag0.skillbonus=tactics,<argv[1]>
+    name=<argv[0]> <name>
+    ocolor=<argv[2]>
+    tag0.override.value += <eval (<local.affix>*35)>
+    local.x=1
+  endif
+  if (<local.affixchance> >= <R1,100>)
+    local.affix=<R<local.affixes>>
+    args=<def0.magic_weapon_suffix0_<dlocal.affix>>		//+dmg
+    modar += <argv[1]>
+    name=<name> of <argv[0]>
+    ocolor=<argv[2]>
+    tag0.override.value += <eval (<local.affix>*50)>
+    local.x=1
+  endif
+endwhile
+f_magicgen_extra_bonus
+tag0.itemid_name=<name>
+//oname=<name>
+name=<serv.itemdef.<baseid>.name>
+
+[function f_magicgen_extra_bonus]
+if !(<R50>)
+  local.bonus=<eval { 1 9 2 7 3 5 4 3 5 1 }>
+  local.bonus=<qval (<isarmor>)?<eval (<local.bonus>*5)>:<eval ((<local.bonus>*2)-1)>>
+  modar += <local.bonus>
+  name=<name> + <dlocal.bonus> 
+endif
+
+[function f_make_magic_wand]
+attr &= ~ attr_identified	//unidentify it
+//attr |= attr_magic_wand
+//events=+t_glowing_item
+local.type=<R0,10>
+args=<def0.magic_wand_spell<dlocal.type>>
+morex=<argv[1]>		//spell defname
+more2=<eval (<argv[2]>)>	//spell charges
+morey=600	//spell strength
+tag0.itemid_name="<name> of <serv.spell.<morex>.name>"	//<--- this is already taken care of on=@click i guess for attr_magic
+tag0.override.value=<eval (<value>+{50 100})>
+
+[function f_make_enchanted_weapon]
+attr &= ~ attr_identified	//unidentify it
+//attr |= attr_magic_weapon
+events=+t_enchanted_weapon
+tag0.override.value=<eval <value>+{50 100}>
+args=<def0.magic_weapon_enchantment0_<DR0,9>>
+more2=<R10,20>
+morem=<argv[1]>	//morex cannot be used, default sphere breaks it
+morey=600	//strength of spell
+ocolor=<argv[2]>
+tag0.itemid_name="<name> of <argv[0]>"
+//oname="<name> of <argv[0]>"
+
+[function f_make_enchanted_clothing]
+attr &= ~ attr_identified	//unidentify it
+//attr |= attr_magic_clothing
+type=t_enchanted_clothing
+tag0.override.value=<eval <value>+{100 200}>
+args=<def0.magic_clothing_enchantment0_<DR0,9>>
+more2=<R15,30>
+morem=<argv[1]>	//morex cannot be used, default sphere breaks it
+morey=600	//strength of spell
+color=colors_all
+tag0.itemid_name="<name> of <argv[0]>"
+//oname="<name> of <argv[0]>"
+
+[function f_make_enchanted_jewelry]
+attr &= ~ attr_identified	//unidentify it
+args=<serv.skill.<R0,48>.key>,<eval {1 5}*10>
+tag0.skillbonus=<args>
+maxhits={100 200}
+hits=<maxhits>
+ocolor={09c5 0a54}
+events=+t_enchanted_jewelry
+events=+t_skill_increase
+tag0.itemid_name=<name> of +<fval <argv[1]>> <argv[0]>
+//onname=<name> of +<fval <argv[1]>> <argv[0]>
+
+[function f_npc_drop_specific_rare] 
+while !(<isempty <def.rare_drop_<baseid><dlocal.n>>>)
+  args=<def0.rare_drop_<baseid><dlocal.n>>
+  local.odds=<argv[5]>
+  if !(<R<local.odds>>)
+    serv.newitem i_bag
+    ref1=<new>
+    ref1.color=0480
+    ref1.cont=<findlayer.21>
+    serv.newitem <argv[0]>
+    ref2=<new>
+    ref2.attr &= ~ attr_identified	//unidentify it
+    ref2.attr |= attr_magic_weapon
+    ref2.modar=<argv[2]>
+    if (<ref2.isarmor>) || (<ref2.isweapon>)	//increase maxhits for armors and weapons
+      ref2.maxhits += {100 200}
+      ref2.hits=<ref2.maxhits>
+    endif
+    ref2.ocolor=<argv[3]>
+    ref2.events=+t_unique_magic_item
+    if !(<isempty <argv[4]>>)
+      ref2.events=+<argv[4]>
+    endif
+    args=<explode " !",<argv[1]>>	//naming the item
+    for x 0 <eval (<argv>-1)>
+      local.arg=<argv[<dlocal.x>]>
+      if !(strcmpi('$','<local.arg>'))
+        local.arg=<ref2.name>
+      endif
+      local.string .= " <local.arg>"
+    endfor
+    ref2.tag0.itemid_name=<streat <local.string>>
+    local.string=
+    ref2.cont=<ref1>
+  endif
+  local.n += 1
+endwhile
+
+
+[function f_npcloot_getodds]		//drop rate for most standard magical loot (armor, weapons, wands, etc)
+if (<tag0.base_difficulty> >= 90)
+  return 15
+elseif (<tag0.base_difficulty> >= 80)
+  return 30
+elseif (<tag0.base_difficulty> >= 70)
+  return 60
+elseif (<tag0.base_difficulty> >= 60)
+  return 75
+elseif (<tag0.base_difficulty> >= 50)
+  return 90
+else
+  return 180
+endif
+
+[function f_npcloot_getlevel]		//level for standard magical loot (armor, weapons, wands, etc)
+if (<tag0.base_difficulty> >= 90)
+  return ultra
+elseif (<tag0.base_difficulty> >= 80)
+  return great
+elseif (<tag0.base_difficulty> >= 70)
+  return high
+elseif (<tag0.base_difficulty> >= 60)
+  return mid
+else 
+  return low
+endif
+
+[function f_npcloot_getaffixes]				//the affix for standard magic weapons a NPC will drop (power,vanq,etc)
+args=<qval (!<argn>)?<tag0.base_difficulty>:<argn>>	//use their difficulty if we're specified a value
+if (<argn> >= 90)
+  return 3,4				//power, vanq
+elseif (<argn> >= 80)
+  return 2,4				//force, power, vanq
+elseif (<argn> >= 70)
+  return 1,4				//might, force, power, vanq
+elseif (<argn> >= 60)
+  return 1,3				//might, force, power
+elseif (<argn> >= 50)
+  return 0,2				//ruin, might, force
+else	
+  return 0,1				//ruin, might
+endif
+
+[function f_npcraredye_getodds]		//drop odds for dyetubs, hair dyes, skin dyes, etc
+if (<tag0.base_difficulty> >= 90)
+  return 100
+elseif (<tag0.base_difficulty> >= 80)
+  return 200
+elseif (<tag0.base_difficulty> >= 70)
+  return 300
+elseif (<tag0.base_difficulty> >= 60)
+  return 400
+elseif (<tag0.base_difficulty> >= 50)
+  return 500
+else
+  return 600
+endif
+
+[function f_npcraredeco_getodds]		//drop rate for rare decorative items
+if (<tag0.base_difficulty> >= 90)
+  return 100
+elseif (<tag0.base_difficulty> >= 80)
+  return 200
+elseif (<tag0.base_difficulty> >= 70)
+  return 300
+elseif (<tag0.base_difficulty> >= 60)
+  return 400
+elseif (<tag0.base_difficulty> >= 50)
+  return 500
+else
+  return 600
+endif
+
+[function f_npcloot_unique_getodds]		//drop odds for more unique items (random rare unique armor/weapon drops)
+if (<tag0.base_difficulty> >= 90)		//basically it twice as hard to get these unique items from global drops
+  return 400
+elseif (<tag0.base_difficulty> >= 80)
+  return 600
+elseif (<tag0.base_difficulty> >= 70)
+  return 800
+elseif (<tag0.base_difficulty> >= 60)
+  return 1000
+elseif (<tag0.base_difficulty> >= 50)
+  return 1200
+else
+  return 65535	
+endif
+
+[function f_npcpowerscroll_getodds]		//drop odds for advancement scrolls such as skillcap, skillsum, etc
+if (<tag0.base_difficulty> >= 90)		
+  return 400
+elseif (<tag0.base_difficulty> >= 80)
+  return 600
+elseif (<tag0.base_difficulty> >= 70)
+  return 800
+elseif (<tag0.base_difficulty> >= 60)
+  return 1000
+elseif (<tag0.base_difficulty> >= 50)
+  return 1200
+else
+  return 65535	
+endif
+
+[function f_npctreasuremap_getodds]		//drop odds for treasure maps		
+if (<tag0.base_difficulty> >= 90)		//these dont need to be super low odds because the chest also has odds to drop items. consider this X 4
+  return 100				
+elseif (<tag0.base_difficulty> >= 80)
+  return 200
+elseif (<tag0.base_difficulty> >= 70)
+  return 300
+elseif (<tag0.base_difficulty> >= 60)
+  return 400
+elseif (<tag0.base_difficulty> >= 50)
+  return 500
+else
+  return 600	
+endif
+
+[function f_npctreasuremap_getlevel]	//level for treasure map
+if (<tag0.base_difficulty> >= 90)
+  return 5
+elseif (<tag0.base_difficulty> >= 80)
+  return 4
+elseif (<tag0.base_difficulty> >= 70)
+  return 3
+elseif (<tag0.base_difficulty> >= 60)
+  return 2
+else
+  return 1
+endif
+
+
+[EOF]

@@ -1,0 +1,200 @@
+//http://www.uoguide.com/Peacemaking
+//http://www.therodentstones.com/Patrick/BardingDifficultyList.html
+//10:50 PM 4/24/2018
+
+//as of now this only allows targeting of npcs specifically and does not affect player chars. the area effect just makes a noise
+
+[SKILL 9]
+DEFNAME=SKILL_PEACEMAKING
+KEY=Peacemaking
+TITLE=Bard
+FLAGS=skf_scripted
+PROMPT_MSG=Whom do you wish to calm?
+DELAY=6.0
+STAT_STR=0
+STAT_INT=125
+STAT_DEX=70
+BONUS_STR=0
+BONUS_DEX=50
+BONUS_INT=50
+BONUS_STATS=5
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@select
+ref1=<src.findtype.t_musical>
+if !(<ref1.isvalid>)
+  src.sysmessage You do not have a musical instrument.
+  return 1
+endif
+actprv=<ref1>
+return 0
+
+//nothing below here will be called because of return 1 above
+//players wanted it to automatically pick your musical instrument
+ref1=<actprv>
+if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_musical) || (<ref1.topobj> != <src>)
+  src.sysmessage What instrument shall you play?
+  src.targetf f_musical_instrument_select 9
+  return 1
+endif
+return 0
+
+on=@prestart
+src.flags &= ~statf_war		//take them out of combat so they can use this
+
+on=@start
+//act = target
+//actprv = instrument 
+ref1=<actprv>
+
+if !(<act.isvalid>) || !(<ref1.isvalid>) 
+  return 1
+elseif (<ref1.type> != t_musical) || (<ref1.topobj> != <src>)
+  src.sysmessage You do not have a musical instrument.
+  return 1 
+elseif !(<canseelos <act>>)
+  sysmessage Target cannot be seen.
+  return 1
+elseif (<distance <act>> > 10)
+  sysmessage That is too far away.
+  return 1
+elseif !(<act.ischar>) || ((<act.isplayer>) && (<act> != <uid>)) || (<act.tag0.unbardable>) || (<act.tag0.uncalmable>)
+  src.sysmessage You cannot calm that!
+  return 1
+elseif (<act.findid.i_calmed>)
+  src.sysmessage That creature is already being calmed.
+  return 1
+//elseif (<act> == <src>)	//area peacemaking
+  //src.f_peacemaking_area
+  //return 1
+endif
+
+src.sound <ref1.tdata1>
+local.n=<eval (<act.tag0.base_difficulty>-<src.f_barding_modifers <act>>)>
+local.n=<eval ((((<src.peacemaking>/10)-<local.n>)*2)+50)>
+if (<R1,100> > <local.n>)	
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+
+on=@fail
+ref1=<actprv>
+if (<act> == <src>)
+  src.sysmessage You attempt to calm everyone down but fail.
+else
+  src.sysmessage You play poorly, and there is no effect.
+endif
+src.sound <ref1.tdata2>
+src.f_musical_instrument_damage
+
+on=@abort
+src.sysmessage You fail to complete the song.
+
+on=@success
+ref1=<actprv>
+if (<act> == <src>)
+  src.f_peacemaking_area
+else
+  src.f_peacemaking_creature <act>
+endif
+src.f_musical_instrument_damage
+
+on=@gain
+src.skillgain musicianship
+
+[function f_peacemaking_area]
+ref1=<actprv>
+timerf 0,sound <ref1.tdata1> 
+forchars 10
+  if !(<flags>&statf_dead)
+    flags &=~ statf_war
+    if (<isplayer>) && (<isonline>) && (<src> != <uid>) 
+      sendpacket 072 00 00 32 00
+      sysmessage You hear lovely music, and forget to continue battling.
+    endif
+    //FIXME: f_peacemaking_remove_warmemories //addme
+  endif
+endfor
+sysmessage You play your hypnotic music, stopping the battle.
+
+
+[function f_peacemaking_creature]
+ref1=<args>	//target
+ref2=<actprv>	//instrument
+
+if !(<ref1.npc>)
+  return 1
+endif
+ref1.consume i_calmed
+ref1.events=+e_peacemaking_calmed
+ref1.action=-1
+if !(<ref1.owner>)	//only unowned pets should start wandering
+  ref1.action=103
+endif
+serv.newitem i_calmed
+new.link=<uid>
+new.more1=<ref1.f_peacemaking_calming_time>
+ref1.message @0482,3,0,0 *Calmed for <new.dmore1> seconds*
+new.timer=1
+ref1.equip <new>
+timerf 0,src.sysmessage You play hypnotic music, calming your target.
+timerf 0,sound <ref2.tdata1>
+
+
+[itemdef i_calmed]
+id=i_memory
+name=Peacemaking Calmed
+layer=layer_special
+type=t_eq_script
+
+on=@timer
+if (<topobj.distance <link>> > 15) || !(<topobj.canseelos <link>>)	//lost line of sight
+  link.sysmessage You have broken line of sight with your target.
+  remove
+  return 1
+elseif  (<more1> <= 0) || !(<topobj.isonline>)		//expired, target gone, or offline
+  remove
+  return 1
+endif
+
+topobj.flags &=~ statf_war
+if !(<topobj.owner>) 	//only unowned pets should wander
+  topobj.action=103	//set them to wandering
+endif
+more1 -= 1
+timer=1
+return 1
+
+on=@unequip
+src.events=-e_peacemaking_calmed 
+if (<src.ischar>) 
+  //serv.log peacemaking over on <src.name>(<src>)
+  if (<src.attacker> >= 1) && (<src.attacker.id <link>> != -1)
+    //serv.log this is an attacker
+    src.attack <link>
+  endif
+endif
+
+[events e_peacemaking_calmed]
+
+on=@gethit
+if !(<R5>)
+  findid.i_calmed.link.sysmessage An act of aggression has broken your songs affect on <name>
+  findid.i_calmed.remove
+  events=-e_peacemaking_calmed
+endif
+
+on=@attack
+return 1
+
+on=@npcactfight
+return 1
+
+[function f_peacemaking_calming_time]
+local.time=<eval (110-((<tag0.base_difficulty>/5)*5))>
+local.time=<qval (110 < <local.time>)?110:<qval (<local.time> < 10)?10:<local.time>>>
+return <local.time>
+
+
+[EOF]

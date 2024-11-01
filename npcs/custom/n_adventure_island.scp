@@ -1,0 +1,175 @@
+[chardef c_gorilla_evil]
+defname=c_gorilla_evil
+id=c_gorilla
+name=Silverback Gorilla
+sound=snd_ANIMALS_GORILLA1
+icon=i_pet_GORILLA
+dam={1,3}
+armor=20
+resources=6 i_hide,1 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=25 t_crops,25 t_fruit, 25 t_grain
+desires=r_jungle,c_gorilla
+aversions=r_civilization
+description=Gorilla
+subsection=Land (Wild)
+category=Animals Silverback
+
+ON=@Create
+	color=08056
+	npc=brain_monster
+	str={53, 95}
+	dex={36, 55}
+	int={36, 60}
+	maxhits={100, 200}
+	resphysical={20, 25}
+	resfire={5, 10}
+	rescold={10, 15}
+	magicresistance={45.1, 60.0}
+	tactics={43.3, 58.0}
+	wrestling={43.3, 58.0}
+	taming=0
+	fame=450
+	karma=-100
+
+on=@npcrestock
+	item=i_gold,{35 75}
+[CHARDEF C_H_PIRATE_EVIL]
+DEFNAME=C_H_PIRATE_EVIL
+NAME=#NAMES_HUMANMALE the Pirate
+ID=C_MAN
+HIREDAYWAGE=70
+DESIRES=i_gold,e_notoriety,jobpirate,T_GEM
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobpirate
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Outlaws & Rogues
+DESCRIPTION=Evil Pirate (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={ 86 100 }
+	DEX={ 86 100 }
+	INT={ 71 85 }
+	KARMA=-3000
+	FENCING={ 25.0 48.0 }
+	PARRYING={65.0 88.0}
+	SWORDSMANSHIP={55.0 78.0}
+	WRESTLING={45.0 68.0}
+	MACEFIGHTING={25.0 48.0}
+	TACTICS={65.0 88.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_CUTLASS
+	ITEM={ i_bandana 1 i_skull_cap 1 }
+	COLOR=colors_red
+	ITEM=i_boots_thigh
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+[CHARDEF C_H_PIRATE_EVIL_F]
+DEFNAME=C_H_PIRATE_EVIL_F
+NAME=#NAMES_HUMANFEMALE the Pirate
+ID=C_WOMAN
+HIREDAYWAGE=70
+DESIRES=i_gold,e_notoriety,jobpirate,T_GEM
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobpirate
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Outlaws & Rogues
+DESCRIPTION=Evil Pirate (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={86 100}
+	INT={71 85}
+	KARMA=-3000
+	FENCING={25.0 48.0}
+	PARRYING={65.0 88.0}
+	SWORDSMANSHIP={55.0 78.0}
+	WRESTLING={45.0 68.0}
+	MACEFIGHTING={25.0 48.0}
+	TACTICS={65.0 88.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_CUTLASS
+	ITEM={ i_bandana 1 i_skull_cap 1 }
+	COLOR=colors_red
+	ITEM=i_boots_thigh
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+[chardef c_evil_spirit]
+defname=c_evil_spirit
+name=Evil Spirit
+id=c_wraith
+sound=0482
+can=mt_walk|mt_run|mt_equip|mt_usehands
+BLOODCOLOR=042
+dam={1,3}
+armor=28
+
+on=@create
+	faction=faction_undead
+	npc=brain_monster
+	color=0495
+	str={76, 100}
+	dex={76, 95}
+	int={36, 60}
+	maxhits={100,200}
+	resphysical={25, 30}
+	rescold={15, 25}
+	respoison={10, 20}
+	evaluatingintel={55.1, 70.0}
+	magicresistance={55.1, 70.0}
+	tactics={45.1, 60.0}
+	wrestling={45.1, 55.0}
+	fame=4000
+	karma=-100
+
+on=@npcrestock
+	item=i_gold,{35 75}
+
+[EOF]

@@ -1,0 +1,208 @@
+//Fishing System By Soulless.
+//V1.0
+//10:31 PM 2/23/2019
+
+
+[defname gathering_fishing_settings]
+gathering_fishing_settings		t_water,0,0,0,4,1,1*60*60			//tiledata 1-4, timelength, damagetool, node clear time		
+gathering_fishing_resource0		i_sos_bottle,100.0,100.0,1,1,0.1	//itemdef,minskill,maxskill,amountlo,amounthi,chance	
+gathering_fishing_resource1		random_special_fish,50.0,100.0,1,1,10.0
+gathering_fishing_resource2		random_big_fish,0.0,100.0,1,4,80.0	
+gathering_fishing_resource3
+gathering_fishing_resource4
+gathering_fishing_resource5
+gathering_fishing_resource6
+gathering_fishing_resource7
+
+
+random_big_fish 			{ i_fish_big_1 1 i_fish_big_2 1 i_fish_big_3 1 i_fish_big_4 1 }
+random_special_fish			{ i_fish_prize 1 i_fish_wondrous 1 i_fish_rare 1 i_fish_peculiar 1 }
+
+[SKILL 18]
+DEFNAME=Skill_Fishing
+KEY=Fishing
+TITLE=Fisherman
+FLAGS=skf_gather|skf_scripted
+PROMPT_MSG=What water do you want to fish in?
+DELAY=4.0
+STAT_STR=125
+STAT_INT=30
+STAT_DEX=40
+BONUS_STR=10
+BONUS_DEX=90
+BONUS_INT=0
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+VALUES=1,30,200
+RANGE=4	
+
+on=@start
+//act = node
+//actprv = gathering tool 
+//serv.log <src.name>(<src>) started fishing in <src.region.name> (<p>)
+src.actp=<src.targp>
+
+if !(<act.isvalid>) 
+  return 1
+elseif !(<src.findtype.t_fish_pole>)
+  src.sysmessage You do not have a fishing pole.
+  return 1 
+elseif (<src.findlayer.25>)
+  src.sysmessage You can't fish while riding.
+  return 1
+elseif (<src.distance <src.actp>> >= 7)
+  src.sysmessage You need to be closer to the water to fish!
+  return 1
+elseif !(<src.f_can_fish <src.actp>>)	
+  src.sysmessage You cannot fish here.
+  return 1
+endif
+
+src.flags &= ~ statf_hidden
+src.flags &= ~ statf_invisible
+
+if !(<act.more2>)
+  act.f_fishing_format_node
+endif
+
+if !(<act.isvalid>) || (<act.amount> <= 0) || (<act.more2> == 00)	//this shouldnt fire off before the skill finished
+  src.sysmessage The fish don't seem to be biting here.
+  return 1
+endif
+
+ref2=<actprv>	//<src.ctag0.gathering_tool>
+if (<ref2.isvalid>) && (<ref2.type>==t_fish_pole) 
+  if !(<ref2.usescur>)
+    ref2.usesmax={50 60}
+    ref2.usescur=<ref2.usesmax>
+  endif
+  if (<R1,100> <= 3)
+    ref2.usescur -= 1 
+    src.sysmessage Your <ref2.name> has been damaged.
+    if (<ref2.usescur> <= 0)
+      src.sysmessage your <ref2.name> has been destroyed.
+      ref2.consume
+    endif
+  endif
+endif
+
+
+src.anim 12
+src.sound 027
+src.effectLocation <act.p.x>,<act.p.y>,<act.p.z>,2,05675,6,45,30,0,0		//splash
+if !(<src.f_skillsucceed fishing>) || (<act.amount> <= 0) || (<src.fishing> < <act.morex>)
+  actdiff=65535
+else
+  actdiff=0
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You fish a while, but fail to catch anything.
+
+ON=@Abort
+src.sysmessage You pull your line back in and stop fishing.
+
+on=@success
+ref1=<act>	
+if !(<ref1.isvalid>) || (<ref1.amount> <= 0) || (<ref1.more2> == 00)
+  src.sysmessage The fish don't seem to be biting here.
+else
+  local.reap=1	//just 1 fish for fishing
+  local.reap=<qval (<ref1.amount> < <local.reap>)? <ref1.amount> : <local.reap>>		//make sure we can only get as much as is left
+  ref1.amount -= <local.reap>
+  ref1.update
+  if (<src.findlayer.21.weight> > <eval (<src.maxweight>+400)>) && !(<src.isgm>)
+    src.sysmessage You do not have room in your backpack for a fish.
+  else
+    serv.newitem <ref1.more2>,<local.reap>
+    new.cont=<src.findlayer.21>
+    new.update
+    src.sysmessage You pull out an item : a <new.name>
+  endif
+endif
+
+///////////////////////////////////
+// Fishing System
+
+[function f_can_fish]
+local.p=<argv[0]>,<argv[1]>,<src.p.m>
+ref1=<serv.map(<local.p>).region.uid>	//get the multi(ship) if they are in one
+args=<def0.gathering_fishing_settings>
+for 0 3		//4 different possible args for terrain type
+  if !(<ref1.isvalid>) && (<argv[<dlocal._for>]>) && (<serv.map(<local.p>).isneartype <argv[<dlocal._for>]>>) && !(<serv.map(<local.p>).isneartype t_normal>)  
+    return 1
+  endif
+endfor
+return 0
+
+[function f_fishing_find_node]	//used to find if there is a node
+serv.newitem i_memory
+new.p=<args>
+ref1=<new.f_fishing_get_node_uid <args>>
+new.remove
+return <ref1>
+
+[function f_fishing_get_node_uid]
+ref1=<uid>
+foritems 0
+  if (<baseid>==i_worldgem_bit) && (<type>==t_water) && (<uid> != <ref1>)
+    //serv.b <uid>
+    return <uid>	
+  endif
+endfor
+return 0
+
+[function f_fishing_format_node]
+args=<def0.gathering_fishing_settings>
+timer=<argv[6]>
+args=<f_fishing_get_resource>
+morex=<argv[1]>		//min skill req
+morey=<argv[2]>		//max skill req
+more2=<argv[0]>		//resource
+amount=<R<argv[3]>,<argv[4]>>	//amount  
+events=+t_fishing_node
+
+[function f_fishing_get_resource]
+while !(<isempty <def.gathering_fishing_resource<dlocal.n>>>)		//select the fishing resource
+  args=<def0.gathering_fishing_resource<dlocal.n>>
+  local.chance=<R1,1000>
+  if (<src.fishing> >= <argv[1]>) && (<local.chance> <= <argv[5]>)  	//if you are able to get it and by chance it's there
+    return <args>
+  endif
+  local.n += 1
+endwhile
+return <args>		//we're done looking for fish, use this one
+
+
+[typedef t_fishing_node]
+
+on=@click
+message @030 Fishing Node: <qval (<more2> != 00)?<amount> <serv.itemdef.<more2>.name>:Nothing> 
+return 1
+
+on=@timer
+remove
+return 1
+
+[typedef t_fish_pole]
+
+on=@targon_ground
+if (<src.action>==fishing)
+  src.sysmessage You are already fishing
+  return 1
+endif
+//src.ctag.gathering_tool=<uid>
+src.actprv=<uid>
+
+on=@targon_item
+if (<src.targ.type>==t_water) && ((<src.action>==fishing) || (<src.findid.i_sos_fishing>))
+  src.sysmessage You are already fishing
+  return 1
+endif
+//src.ctag.gathering_tool=<uid>
+src.actprv=<uid>
+
+
+
+[EOF]

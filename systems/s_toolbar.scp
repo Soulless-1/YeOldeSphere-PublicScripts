@@ -1,0 +1,177 @@
+//Player Toolbar by Soulless
+//V2.0
+//toolbar letting players quickly click items from their bag
+
+///////////////////////
+// Player Toolbar 
+
+[plevel 1]
+toolbar
+
+[function toolbar]
+sdialog d_player_toolbar
+
+[dialog d_player_toolbar]
+0,600
+page 0
+noclose
+
+//gumppic 10 10 11390
+resizepic 40 40 5054 775 75
+
+//gumppic 56 32 11391		//experience bar
+//gumppictiled 56 32 <eval (715 * ((<tag0.level_exp>*100)/<tag0.level_nextat>)) / 100> 11 11392
+//dtext 403 31 1000 <eval ((<tag0.level_exp>*100)/<tag0.level_nextat>)>%
+
+for n 0 12		//quickslot items
+
+  button <eval 73+(<local.n>*54)> 53 92 92 1 0 <eval <local.n>+1>	//button that controls the usage of the item in the toolbar slot
+  //gumppic <eval 65+(<local.n>*54)> 48 11400			//graphic to cover up the button and contain the item pic
+  resizepic <eval 65+(<local.n>*54)> 48 3500 60 60 
+  ref1=<src.tag0.toolbar_slot<dlocal.n>>
+
+
+  if !(<src.tag0.toolbar_slot<dlocal.n>>) || !(<ref1.isvalid>)		
+    dtext <eval 77+(<local.n>*54)> 67 1000 Empty		//is there really a need to say its empty?
+  elseif (<ref1>)							//show the item they put in the toolbar slot
+    tilepichue <eval 75+(<local.n>*54)> 60 <serv.itemdef.<ref1.baseid>.id> <eval <ref1.color>>
+    dtext <eval 80+(<local.n>*54)> 82 <f_toolbar_slot_counter_hue <src.rescount <ref1.baseid>>>
+    //button <eval 85+(<local.n>*54)> 100 5003 5002 1 0 <eval <local.n>+14>	//buttom that removes an item from the toolbar
+    button <eval 85+(<local.n>*54)> 100 03 04 1 0 <eval <local.n>+14>	//buttom that removes an item from the toolbar
+  endif
+
+endfor
+
+//resizepic 725 0 5054 50 30
+button 775 35 2710 2711 1 0 28	//minimize button
+button 795 35 2708 2709 1 0 29	//close button
+
+[dialog d_player_toolbar button]
+
+onbutton=1,13	//use item & add item
+argn1 -= 1
+ref1=<src.tag0.toolbar_slot<argn1>>
+if !(<ref1>)
+  sdialog d_player_toolbar
+  src.f_toolbar_add_item <argn1>
+  return 1
+elseif (<ref1.topobj> != <src>)
+  src.sysmessage That must be in your pack for you to use it.
+  sdialog d_player_toolbar
+  return 1
+endif
+src.useitem <ref1>
+sdialog d_player_toolbar
+
+onbutton=14,27	//remove item
+argn1 -= 14
+if (<src.tag0.toolbar_slot<argn1>>)
+  src.tag0.toolbar_slot<argn1>=
+endif
+sdialog d_player_toolbar
+
+onbutton=28
+sdialog d_player_toolbar_minimized
+
+onbutton=29
+src.sysmessage You can open the toolbar again by using the '.toolbar' command.
+src.tag0.toolbar_off=1
+
+onbutton=30
+//help button
+
+[dialog d_player_toolbar_minimized]
+625,555
+page 0
+noclose
+
+resizepic 40 35 5054 115 35	//black background
+
+dtext 55 40 1000 Toolbar
+
+button 106 41 2650 2651 1 0 1	//maximize button
+button 127 41 2708 2709 1 0 2	//close button
+
+[dialog d_player_toolbar_minimized button]
+
+onbutton=1
+sdialog d_player_toolbar
+
+onbutton=2
+src.sysmessage You can open the toolbar again by using the '.toolbar' command.
+
+
+[function f_toolbar_add_item]
+targetf f_toolbar_add_item_select <argn>
+sysmessage Select an item to add to toolbar slot <argn>.
+return 1
+
+[function f_toolbar_add_item_select]
+local.s=<argn>
+ref1=<argo>
+
+if (<ref1.topobj.uid> != <src.uid>)
+  sysmessage You must have the item on you in order to add it
+  return 1
+endif
+
+tag0.toolbar_slot<dlocal.s>=<ref1>
+sysmessage You add <ref1.name> to toolbar slot <dlocal.s>
+resend_dialog d_player_toolbar
+return 1
+
+
+/////////////////////////
+// player options menu //
+/////////////////////////
+
+[defname player_options]
+toolbar_options_0	Toggle Toolbar,usetoolbar
+toolbar_options_1	Autoloot Options,autoloot_options
+toolbar_options_2	Toggle Private Messages,togglepm
+
+
+[plevel 7]
+options
+
+[function options]
+sdialog d_player_options
+
+[dialog d_player_options]
+150,50
+
+resizepic 10 10 2600 250 250
+resizepic 20 20 3000 230 230
+
+dtext 70 25 100  Player Options Menu
+
+while !(<isempty <def.toolbar_options_<dlocal.n>>>>)
+  args=<def0.toolbar_options_<dlocal.n>>
+  button 30 <eval 49+(<local.n>*20)> 1209 1210 1 0 <eval <local.n>+1>
+  dtext 50 <eval 45+(<local.n>*20)> 1000 <argv0>
+  local.n += 1
+endwhile
+
+[dialog d_player_options button]
+
+onbutton=1,20
+args=<def0.toolbar_options_<eval <argn>-1>>
+src.say <args>
+sdialog d_player_options
+
+[function f_toolbarslot]
+findid.<tag0.toolbar_slot<dargn>>.dclick
+
+[function f_toolbar_slot_counter_hue]
+if (<args> >= 55)
+  return 044 <args>
+elseif (<args> >= 30)
+  return 036 <args>
+elseif (<args> >= 15)
+  return 44 <args>
+else
+  return 026 <args>
+endif
+
+
+[EOF]

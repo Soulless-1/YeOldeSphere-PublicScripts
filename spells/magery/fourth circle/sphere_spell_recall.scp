@@ -1,0 +1,104 @@
+[SPELL 32]
+DEFNAME=s_recall
+NAME=Recall
+SOUND=snd_spell_recall
+RUNES=KOP
+CAST_TIME=4.0	//1.5
+RESOURCES=i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root
+RUNE_ITEM=i_rune_recall
+SCROLL_ITEM=i_scroll_recall
+FLAGS=spellflag_targ_item|spellflag_playeronly
+EFFECT_ID=i_fx_smoke
+EFFECT=0
+DURATION=0.0
+MANAUSE=11
+SKILLREQ=MAGERY 30.0
+INTERRUPT=100.0,100.0
+
+//Recall is used as a long distance travel method. You can recall off of Marked recall runes
+
+on=@start
+//if (<src.recentpvp> < 300)
+  //src.sysmessage @027 Wouldst thou flee during the heat of battle??
+  //return 1
+//elseif (<src.flags>&statf_criminal) && !(<src.isgm>)
+  //src.sysmessage @027 Thou'rt a criminal and cannot escape so easily...
+  //return 1
+//endif
+
+
+if (<act.isitem>) && (<act.type> == t_key) && (<act.link.type> == t_ship)
+  if (<act.topobj> != <src>)
+    src.sysmessage You must have the ship key with you to recall to it.
+    return 1
+  endif
+  act.link.shipstop
+  serv.newitem i_rune_marker
+  new.morep=<f_recall_shipkey_location <act>>
+  new.events=+t_recall_shipkey
+  new.timerd=<eval (<serv.spell.s_recall.cast_time>+20)>
+  new.type=t_eq_script
+  new.layer=30
+  new.equip
+  new.type=t_rune
+  src.act=<new>
+endif
+
+if !(<act.morep>) || (<act.morex> == -1) || (<act.morey> == -1)		//runes must have a marked location
+  src.sysmessage That rune does not have a marked location.
+  return 1
+endif
+
+if (<act.isvalid>) && (<act.morep>)
+  src.sysmessage <sextantp.<act.morep>>
+endif
+
+
+if !(<src.isgm>)		//GMs can travel anywhere
+  serv.newnpc c_man_invisible		//send a probe item to gather the region flags
+  new.p=<act.morep>
+  new.timerf 0,remove
+  local.z=<new.p.z>
+  ref1=<new.region.uid>
+  if (<new.region.flags>&region_antimagic_all) || (<new.region.flags>&region_antimagic_recall_in)
+    src.sysmessage An anti-magic filed disturbs the spell.
+    local.block=1
+  elseif (<new.p.m> != <src.p.m>) || ((<new.inlostlands>) && !(<src.inlostlands>)) || (!(<new.inlostlands>) && (<src.inlostlands>)) 
+    src.sysmessage You are not allowed to travel there.
+    local.block=1
+  elseif !(<new.canmove>)        
+    src.sysmessage That location is blocked.
+    local.block=1
+  elseif (<ref1.isvalid>) && (<ref1.type>==t_multi)	//we're teleporting into a multi region (house)
+    if !(<def0.house_courtyard_recall>)
+      src.sysmessage That location is blocked.
+      local.block=1
+    elseif (<local.z> > <ref1.p.z>)
+      src.sysmessage That location is blocked.
+      local.block=1
+    endif
+  endif
+  new.remove
+  if (<local.block>)
+    return 1
+  endif
+endif
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+src.sound 01fe					//teleport sound when leaving
+timerf 0,src.sound <serv.spell.32.sound>	//recall sound upon arrival
+
+[function f_recall_shipkey_location]
+ref1=<args>
+args=<ref1.link.p>
+return <argv[0]>,<eval <argv[1]>+1>,<argv[2]>,<argv[3]>
+
+[typedef t_recall_shipkey]
+
+on=@timer
+remove
+return 1
+
+[EOF]

@@ -1,0 +1,46 @@
+[SPELL 13]
+DEFNAME=s_magic_trap
+NAME=Magic Trap
+SOUND=snd_spell_magic_trap
+RUNES=IJ
+CAST_TIME=1.0
+RESOURCES=i_reag_garlic,i_reag_spider_silk,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_magic_trap
+SCROLL_ITEM=i_scroll_magic_trap
+FLAGS=spellflag_dir_anim|spellflag_targ_item|spellflag_playeronly
+EFFECT_ID=0
+EFFECT=0
+DURATION=0.0
+MANAUSE=6
+SKILLREQ=MAGERY 10.0
+INTERRUPT=100.0,100.0
+
+//Magic Trap can be used to trap containers. When opened, these containers will damage the person attempting to open it. For this reason, magic trapped pouches can be used to counter the Paralyze spell.
+
+on=@start
+if (<act.topobj> != <src>)			//not on the player
+  src.sysmessage The object must be on you.
+  return 1
+elseif (<act.type> != t_container) || (<act> == <src.findlayer.21>) 	//not a bag or it's our main bag
+  src.sysmessage You may not magic trap that.
+  return 1
+endif
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+if (<type>==t_container)
+  if !(<isevent.t_magic_trapped_container>)
+    events=+t_magic_trapped_container
+    ocolor=<color>
+    color=0e9
+  endif
+  if (<tag0.charges> >= 20)
+    src.sysmessage that container cannot hold more trap charges.
+  else
+    tag0.charges += 1
+  endif
+endif
+return 1
+
+[EOF]

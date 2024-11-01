@@ -1,0 +1,133 @@
+
+[defname crafting_cartography]
+
+crafting_cartography_flags 	0		//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool
+crafting_cartography_anim 	33
+crafting_cartography_sound	0249,0
+crafting_cartography_tool	t_tool_cartography
+
+crafting_cartography_0_name LAST TEN		//this will be generated as people craft
+
+crafting_cartography_1_name MAPS
+crafting_cartography_1_0	i_map_local
+crafting_cartography_1_1	i_map_city
+crafting_cartography_1_2	i_map_seachart
+crafting_cartography_1_3	i_map_world
+crafting_cartography_1_4	i_tattered_wall_map
+
+
+[comment stock_maps]
+crafting_cartography_0_name MAPS
+crafting_cartography_0_0	i_map_stock_1
+crafting_cartography_0_1	i_map_stock_2
+crafting_cartography_0_2	i_map_stock_3
+crafting_cartography_0_3	i_map_stock_4
+crafting_cartography_0_4	i_map_stock_5
+crafting_cartography_0_5	i_map_stock_6
+crafting_cartography_0_6 	i_map_stock_7
+crafting_cartography_0_7 	i_map_stock_8
+crafting_cartography_0_8 	i_map_stock_9
+crafting_cartography_0_9 	i_map_stock_10
+crafting_cartography_0_10	i_map_stock_11
+crafting_cartography_0_11	i_map_stock_12
+crafting_cartography_0_12 	i_map_stock_13
+crafting_cartography_0_13 	i_map_stock_14
+crafting_cartography_0_14 	i_map_stock_15
+crafting_cartography_0_15 	i_map_stock_16
+crafting_cartography_0_16 	i_map_stock_17
+crafting_cartography_0_17 	i_map_stock_18
+crafting_cartography_0_18 	i_map_stock_19
+crafting_cartography_0_19 	i_map_stock_20
+crafting_cartography_0_20 	i_map_stock_21
+crafting_cartography_0_21 	i_map_stock_22
+crafting_cartography_0_22 	i_map_stock_23
+crafting_cartography_0_23	i_map_stock_24
+crafting_cartography_0_24 	i_map_stock_25
+crafting_cartography_0_25 	i_map_stock_26
+crafting_cartography_0_26 	i_map_stock_27
+crafting_cartography_0_27 	i_map_stock_28
+
+///////////////////////////////
+// Cartography Post Craft
+
+[function f_cartography_prerequisite]
+return 1	//always able to use cartography
+
+[function f_cartography_pre_craft]
+
+[function f_cartography_post_craft]
+
+ref1=<args> 
+if (<ref1.baseid>==i_map_world)
+  ref1.more1=00
+  ref1.more2=0144f0fff
+  return 1	//stop here
+elseif (<ref1.baseid>==i_map_local)
+  local.n=<eval ((<cartography>/10)*2)+64>
+elseif (<ref1.baseid>==i_map_city)
+  local.n=<eval ((<cartography>/10)*4)+64>
+  //displayed height/width = (Cartography * 2) + 64 or 200, whichever is higher
+elseif (<ref1.baseid>==i_map_seachart)
+  local.n=<eval ((<cartography>/10)*10)+32>
+  //displayed height/width = (Cartography * 3.3) + 24
+endif
+ref1.more1l=<eval <p.x>-<local.n>>
+ref1.more1h=<eval <p.y>-<local.n>>
+ref1.more2l=<eval <p.x>+<local.n>>
+ref1.more2h=<eval <p.y>+<local.n>>
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+
+[ITEMDEF i_map_local]
+ID=i_map
+TYPE=T_MAP
+NAME=Local Map
+RESOURCES=i_map_blank
+SKILLMAKE=CARTOGRAPHY 10.0
+VALUE=3
+CATEGORY=Maps
+SUBSECTION=Player Made
+DESCRIPTION=Local Map
+
+[ITEMDEF i_map_city]
+ID=i_map
+TYPE=T_MAP
+NAME=City Map
+RESOURCES=i_map_blank
+SKILLMAKE=CARTOGRAPHY 25.0
+VALUE=3
+CATEGORY=Maps
+SUBSECTION=Player Made
+DESCRIPTION=City Map
+
+[ITEMDEF i_map_seachart]
+ID=i_map
+TYPE=T_MAP
+NAME=Sea chart
+RESOURCES=i_map_blank
+SKILLMAKE=CARTOGRAPHY 35.0
+VALUE=3
+CATEGORY=Maps
+SUBSECTION=Player Made
+DESCRIPTION=Sea Chart
+
+[ITEMDEF i_map_world]
+ID=i_map
+TYPE=T_MAP
+NAME=World Map
+RESOURCES=i_map_blank
+SKILLMAKE=CARTOGRAPHY 60.0
+VALUE=3
+CATEGORY=Maps
+SUBSECTION=Player Made
+DESCRIPTION=Word Map
+//TDATA1=800	//height
+//TDATA2=800	//width
+
+
+
+[EOF]

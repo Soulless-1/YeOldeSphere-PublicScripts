@@ -1,0 +1,441 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2004
+//www.sphereserver.com
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Monday, January 17th, 2005
+// VERSION=0.56a
+
+//******************co-owners*******************
+
+[DIALOG d_house_colist]
+100,25
+IF (!0<ARGS>)
+  ARGS 3
+ENDIF
+gumppic 150 180 2110
+gumppic 100 105 1140
+page 0
+dtext 155 145 105 House Name:
+dcroppedtext 255 145 170 20 46 <NAME>
+button 392 310 1147 1148 1 0 0
+dtext 250 290 46 Info
+button 230 310 2151 2152 1 0 1
+dtext 303 288 46 Friends
+button 280 308 2151 2152 1 0 2
+dtext 362 290 46 Options
+button 340 310 2151 2152 1 0 3
+
+IF (<DEF0.HOUSE_RENAME_TOGGLE>)
+  IF ((<GETFRIENDPOS <SRC.UID>> >= 0 && <DEF0.HOUSE_F_ALLOW_RENAME>) || (<GetCoownerPos <src>> >= 0 && <DEF0.HOUSE_O_ALLOW_RENAME>) || (<SRC.ISGM>) || (<owner>==<src.uid>) || (<f_house_isowner <src>>))
+    dtext 180 300 46 Rename!
+    button 160 320 2151 2152 1 0 4
+  ENDIF
+ENDIF
+dtext 305 360 46 Co-owners of the House
+IF (<ARGS> = 1)
+  gumppic 260 340 2443
+  button 268 345 2181 2181 1 0 5
+ENDIF
+IF (<ARGS> = 2)
+  dtext 185 180 105 Select the OK button to remove
+  dtext 200 200 105 or Cancel button to return
+  button 200 240 1147 1148 1 0 6
+  button 320 240 1144 1145 1 0 0
+  RETURN 0
+ENDIF
+
+FOR x <PAGENUM <DEF0.HOUSE_COOWNER_AMOUNT> 5>
+  PAGE <EVAL <LOCAL.X>>
+  FOR y <EVAL <EVAL <LOCAL.X>*5>+-4> <EVAL <LOCAL.X>*5>
+    IF (<EVAL <LOCAL.Y>> <= <DEF0.HOUSE_COOWNER_AMOUNT>) && (<REGION.TAG0.CO<EVAL <LOCAL.Y>>UID>)
+      dtext 190 <EVAL 170 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*5>+-4>>>> 995 <EVAL <LOCAL.Y>> - <SRC.UID.<REGION.TAG.CO<EVAL <LOCAL.Y>>UID>.NAME>
+      IF (<ARGS> = 1)
+        checkbox 155 <EVAL 168 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*7>+-6>>>> 2151 2153 0 <EVAL <LOCAL.Y>>
+      ENDIF
+      ELSEIF (<EVAL <LOCAL.Y>> <= <DEF0.HOUSE_COOWNER_AMOUNT>)
+      dtext 190 <EVAL 170 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*5>+-4>>>> 995 <EVAL <LOCAL.Y>> - <DEF0.HOUSE_friends_emptry>
+    ENDIF
+  ENDFOR
+  button 126 215 9909 9910 0 <PREVIOUS <EVAL <LOCAL.X>> 1>
+  button 446 215 9903 9905 0 <NEXT <EVAL <LOCAL.X>> <PAGENUM <DEF0.HOUSE_COOWNER_AMOUNT> 5>>
+ENDFOR
+
+[DIALOG d_house_colist BUTTON]  
+ONBUTTON=0
+SDIALOG d_house_menu 2
+
+ONBUTTON=1
+SDIALOG d_house_menu 1
+
+ONBUTTON=2
+SDIALOG d_house_menu 2
+
+ONBUTTON=3
+SDIALOG d_house_menu 3
+
+ONBUTTON=4
+SDIALOG d_house_menu 6
+
+ONBUTTON=5
+FOR x <DEF0.HOUSE_COOWNER_AMOUNT>
+  IF (<ARGCHK[<EVAL <LOCAL.x>>]>==1)
+    TRY REGION.TAG.CO<EVAL <LOCAL.x>>UID
+  ENDIF
+ENDFOR
+SDIALOG d_house_menu 2
+
+ONBUTTON=6
+FOR x <DEF0.HOUSE_COOWNER_AMOUNT>
+  TRY REGION.TAG.CO<EVAL <LOCAL.x>>UID
+ENDFOR
+SDIALOG d_house_menu 2
+
+//******************friends************************
+
+[DIALOG d_house_flist]
+100,25
+IF (!0<ARGS>)
+  ARGS 3
+ENDIF
+gumppic 150 180 2110
+gumppic 100 105 1140
+page 0
+dtext 155 145 105 House Name:
+dcroppedtext 255 145 170 20 46 <NAME>
+button 392 310 1147 1148 1 0 0
+dtext 259 290 46 Info
+button 230 310 2151 2152 1 0 1
+dtext 303 288 46 Friends
+button 280 308 2151 2152 1 0 2
+dtext 362 290 46 Options
+button 340 310 2151 2152 1 0 3
+IF (<DEF0.HOUSE_RENAME_TOGGLE>)
+  IF ((<GETFRIENDPOS <SRC.UID>> >= 0 && <DEF0.HOUSE_F_ALLOW_RENAME>) || (<GetCoownerPos <src>> >= 0 && <DEF0.HOUSE_O_ALLOW_RENAME>) || (<SRC.ISGM>) || (<owner>==<src.uid>) || (<f_house_isowner <src>>))
+    dtext 180 300 46 Rename!
+    button 160 320 2151 2152 1 0 4
+  ENDIF
+ENDIF
+dtext 305 360 46 Friends of the House
+IF (<ARGS> = 1)
+  gumppic 260 340 2443
+  button 268 345 2181 2181 1 0 5
+ENDIF
+IF (<ARGS> = 2)
+  dtext 185 180 105 Select the OK button to remove
+  dtext 200 200 105 or Cancel button to return
+  button 200 240 1147 1148 1 0 6
+  button 320 240 1144 1145 1 0 0
+  RETURN 0
+ENDIF
+
+FOR x <PAGENUM <DEF0.HOUSE_FRIENDS_AMOUNT> 5>
+  PAGE <EVAL <LOCAL.X>>
+  FOR y <EVAL <EVAL <LOCAL.X>*5>+-4> <EVAL <LOCAL.X>*5>
+    IF (<EVAL <LOCAL.Y>> <= <DEF0.HOUSE_FRIENDS_AMOUNT>) && (<REGION.TAG0.F<EVAL <LOCAL.Y>>UID>)
+      dtext 190 <EVAL 170 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*5>+-4>>>> 995 <EVAL <LOCAL.Y>> - <SRC.UID.<REGION.TAG.F<EVAL <LOCAL.Y>>UID>.NAME>
+      IF (<ARGS> = 1)
+        checkbox 155 <EVAL 168 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*7>+-6>>>> 2151 2153 0 <EVAL <LOCAL.Y>>
+      ENDIF
+      ELSEIF (<EVAL <LOCAL.Y>> <= <DEF0.HOUSE_FRIENDS_AMOUNT>)
+      dtext 190 <EVAL 170 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*5>+-4>>>> 995 <EVAL <LOCAL.Y>> - <DEF0.HOUSE_friends_emptry>
+    ENDIF
+  ENDFOR
+  button 126 215 9909 9910 0 <PREVIOUS <EVAL <LOCAL.X>> 1>
+  button 446 215 9903 9905 0 <NEXT <EVAL <LOCAL.X>> <PAGENUM <DEF0.HOUSE_FRIENDS_AMOUNT> 5>>
+ENDFOR
+
+
+[DIALOG d_house_flist BUTTON]  
+ONBUTTON=0
+SDIALOG d_house_menu 2
+
+ONBUTTON=1
+SDIALOG d_house_menu 1
+
+ONBUTTON=2
+SDIALOG d_house_menu 2
+
+ONBUTTON=3
+SDIALOG d_house_menu 3
+
+ONBUTTON=4
+SDIALOG d_house_menu 6
+
+ONBUTTON=5
+FOR x <DEF0.HOUSE_FRIENDS_AMOUNT>
+  IF (<ARGCHK[<EVAL <LOCAL.x>>]>==1)
+    TRY REGION.TAG.F<EVAL <LOCAL.x>>UID
+  ENDIF
+ENDFOR
+SDIALOG d_house_menu 2
+
+ONBUTTON=6
+FOR x <DEF0.HOUSE_FRIENDS_AMOUNT>
+  TRY REGION.TAG.F<EVAL <LOCAL.x>>UID
+ENDFOR
+SDIALOG d_house_menu 2
+
+//*******************banned players*******************
+
+[DIALOG d_house_elist]
+100,25
+IF (!0<ARGS>)  
+  ARGS 3
+ENDIF
+gumppic 150 180 2110
+gumppic 100 105 1140
+page 0
+dtext 155 145 105 House Name:
+dcroppedtext 255 145 170 20 46 <NAME>
+button 392 310 1147 1148 1 0 0
+dtext 250 290 46 Info
+button 230 310 2151 2152 1 0 1
+dtext 303> 288 46 Friends
+button 280 308 2151 2152 1 0 2
+dtext 362 290 46 Options
+button 340 310 2151 2152 1 0 3
+IF (<DEF0.HOUSE_RENAME_TOGGLE>)
+  IF ((<GETFRIENDPOS <SRC.UID>> >= 0 && <DEF0.HOUSE_F_ALLOW_RENAME>) || (<GetCoownerPos <src>> >= 0 && <DEF0.HOUSE_O_ALLOW_RENAME>) || (<SRC.ISGM>) || (<owner>==<src.uid>) || (<f_house_isowner <src>>))
+    dtext 180 300 46 Rename!
+    button 160 320 2151 2152 1 0 4
+  ENDIF
+ENDIF
+dtext 305 360 46 Enemies of the House
+IF (<ARGS> = 1)
+  gumppic 260 340 2443
+  button 268 345 2181 2181 1 0 5
+ENDIF
+IF (<ARGS> = 2)
+  dtext 185 180 105 Select the OK button to remove
+  dtext 200 200 105 or Cancel button to return
+  button 200 240 1147 1148 1 0 6
+  button 320 240 1144 1145 1 0 0
+  RETURN 0
+ENDIF
+
+FOR x <PAGENUM <DEF0.HOUSE_ENEMY_AMOUNT> 5>
+  PAGE <EVAL <LOCAL.X>>
+  FOR y <EVAL <EVAL <LOCAL.X>*5>+-4> <EVAL <LOCAL.X>*5>
+    IF (<EVAL <LOCAL.Y>> <= <DEF0.HOUSE_ENEMY_AMOUNT>) && (<REGION.TAG0.BAN<EVAL <LOCAL.Y>>>)
+      dtext 190 <EVAL 170 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*5>+-4>>>> 995 <EVAL <LOCAL.Y>> - <SRC.UID.<REGION.TAG.BAN<EVAL <LOCAL.Y>>>.NAME>
+      IF (<ARGS> = 1)
+        checkbox 155 <EVAL 168 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*7>+-6>>>> 2151 2153 0 <EVAL <LOCAL.Y>>
+      ENDIF
+      ELSEIF (<EVAL <LOCAL.Y>> <= <DEF0.HOUSE_ENEMY_AMOUNT>)
+      dtext 190 <EVAL 170 + <EVAL 22*<EVAL <LOCAL.Y>+-<EVAL <EVAL <LOCAL.X>*5>+-4>>>> 995 <EVAL <LOCAL.Y>> - <DEF0.HOUSE_friends_emptry>
+    ENDIF
+  ENDFOR
+  button 126 215 9909 9910 0 <PREVIOUS <EVAL <LOCAL.X>> 1>
+  button 446 215 9903 9905 0 <NEXT <EVAL <LOCAL.X>> <PAGENUM <DEF0.HOUSE_ENEMY_AMOUNT> 5>>
+ENDFOR
+
+[DIALOG d_house_elist BUTTON]
+
+ONBUTTON=0
+SDIALOG d_house_menu 2
+
+ONBUTTON=1
+SDIALOG d_house_menu 1
+
+ONBUTTON=2
+SDIALOG d_house_menu 2
+
+ONBUTTON=3
+SDIALOG d_house_menu 3
+
+ONBUTTON=4
+SDIALOG d_house_menu 6
+
+ONBUTTON=5
+FOR x <DEF0.HOUSE_ENEMY_AMOUNT>
+IF (<ARGCHK[<EVAL <LOCAL.x>>]>==1)
+  TRY REGION.TAG.BAN<EVAL <LOCAL.x>>
+ENDIF
+ENDFOR
+SDIALOG d_house_menu 2
+
+ONBUTTON=6
+FOR x <DEF0.HOUSE_ENEMY_AMOUNT>
+  TRY REGION.TAG.BAN<EVAL <LOCAL.x>>
+ENDFOR
+SDIALOG d_house_menu 2
+
+//******************Sell*******************
+
+[DIALOG d_house_sell]
+100,25
+gumppic 150 180 2110
+gumppic 100 105 1140
+page 1
+dtext 155 145 105 House Name:
+dcroppedtext 255 145 170 20 46 <NAME>
+button 392 310 1147 1148 1 0 0
+dtext 250 290 46 Info
+button 230 310 2151 2152 1 0 1
+dtext 303 288 46 Friends
+button 280 308 2151 2152 1 0 2
+dtext 362 290 46 Options
+button 340 310 2151 2152 1 0 3
+
+IF (<DEF0.HOUSE_RENAME_TOGGLE>)
+  IF ((<GETFRIENDPOS <SRC.UID>> >= 0 && <DEF0.HOUSE_F_ALLOW_RENAME>) || (<GetCoownerPos <src>> >= 0 && <DEF0.HOUSE_O_ALLOW_RENAME>) || (<SRC.ISGM>) || (<owner>==<src.uid>) || (<f_house_isowner <src>>))
+    dtext 180 300 46 Rename!
+    button 160 320 2151 2152 1 0 4
+  ENDIF
+ENDIF
+dtext 305 360 46 Sale Status
+gumppic 160 180 1143 
+dtext 170 182 46 Price:
+dtextentry  210 182 250 20 46 1 <QVAL <TAG0.PRICE> ? <EVAL <TAG0.PRICE>>:<VALUE>>
+IF (<TAG0.SELL>)
+  dtext 270 160 31 For Sale !
+  ELSE
+  dtext 260 160 31 Not For Sale
+ENDIF
+dtext 205 212 995 Sell the House
+button 170 210 2151 2152 1 0 5
+dtext 190 232 995 Stop Selling
+button 155 230 2151 2152 1 0 6
+dtext 205 252 995 Accept best offer
+button 170 250 2151 2152 1 0 7
+dtext 365 212 995 Best
+dtext 362 227 995 Offer
+dtext 378 242 46 <EVAL <TAG0.OFFER>>
+
+page 2
+dtext 155 145 105 House Name:
+dcroppedtext 255 145 170 20 46 <NAME>
+dtext 305 360 46 Sale Status
+dtext 170 170 46 Price:
+dtext 210 170 46 <EVAL <TAG0.PRICE>>
+dtext 170 190 46 Best Offer:
+dtext 250 190 46 <EVAL <TAG0.OFFER>>
+gumppic 160 213 1143 
+dtext 170 215 46 My Offer:
+dtextentry  240 215 250 20 995 2 <eval QVAL(<TAG0.PRICE>,<TAG0.OFFER>,<EVAL <TAG0.OFFER>+100>,<EVAL <TAG0.OFFER>+100>,<EVAL <TAG0.PRICE>>)>
+button 200 240 1147 1148 1 0 8
+button 320 240 1144 1145 1 0 1
+
+
+[DIALOG d_house_sell BUTTON]  
+
+ONBUTTON=0
+SDIALOG d_house_menu 1
+
+ONBUTTON=1
+SDIALOG d_house_menu 1
+
+ONBUTTON=2
+SDIALOG d_house_menu 2
+
+ONBUTTON=3
+SDIALOG d_house_menu 3
+
+ONBUTTON=4
+SDIALOG d_house_menu 6
+ONBUTTON=5
+TAG.SELL 1
+TAG.PRICE <ARGTXT[1]>
+LINK.COLOR 026
+SDIALOG d_house_sell 1
+
+ONBUTTON=6
+TAG.SELL
+TAG.PRICE
+TAG.OFFER
+TAG.OFFERUID
+LINK.COLOR 0
+SDIALOG d_house_sell 1
+
+ONBUTTON=7
+IF (!(<TAG0.OFFER>))
+  RETURN 1
+ENDIF
+OBJ <TAG0.OFFERUID>
+IF (<OBJ.BANKBALANCE> >= <TAG0.OFFER>)
+  LOCAL.OLDMORE <LINK.MORE>
+  SERV.NEWITEM=i_key_copper
+  NEW.MORE=<NEW.UID>
+  NEW.LINK=<UID>
+  NEW.CONT=<OBJ.FINDLAYER(21).UID>
+  NEW.UPDATE
+  LOCAL.KEYMORE=<NEW.UID>
+  SERV.NEWITEM=i_key_copper
+  NEW.MORE=<LOCAL.KEYMORE>
+  NEW.LINK=<UID>
+  NEW.UPDATE
+  NEW.CONT=<OBJ.FINDLAYER(29).UID>
+  MORE=<OBJ.UID>
+  LINK.MORE=<LOCAL.KEYMORE>
+  REGION.TAG.NAME <MORE>
+  CHANGELOCKS <LOCAL.OLDMORE>
+  FOR x 50
+    TRY REGION.TAG.F<EVAL <LOCAL.x>>UID
+    TRY REGION.TAG.CO<EVAL <LOCAL.x>>UID
+    TRY REGION.TAG.BAN<EVAL <LOCAL.x>>
+  ENDFOR
+  UPDATEX
+  SRC.SYSMESSAGE @64,3 The house has been sold to <OBJ.NAME>.
+  OBJ.SYSMESSAGE <DEFMSGVAL @64,3 <SRC.NAME> accepted your offer on <SRC.SEX his/her> house.
+  While (!<LOCAL.enough>)
+    IF (<TAG0.OFFER> > 65535)
+      TAG.OFFER -= <OBJ.FINDLAYER.29.findid.i_gold.AMOUNT>
+      OBJ.FINDLAYER.29.findid.i_gold.cont=<SRC.FINDLAYER.21.uid>
+      ELSE 
+      LOCAL.COUNTER <OBJ.FINDLAYER.29.findid.i_gold.AMOUNT>
+      IF (<LOCAL.COUNTER> > <TAG0.OFFER>)
+	LOCAL.LEFT <EVAL <LOCAL.COUNTER>+-<TAG0.OFFER>>
+	OBJ.FINDLAYER.29.findid.i_gold.AMOUNT <LOCAL.LEFT>
+	SERV.newitem i_gold
+	NEW.amount <TAG0.OFFER>
+	NEW.cont=<SRC.FINDLAYER.21.uid>
+	NEW.UPDATE
+	LOCAL.enough 1
+	ELSEIF (<LOCAL.COUNTER> == <TAG0.OFFER>)
+	OBJ.FINDLAYER.29.findid.i_gold.REMOVE
+	SERV.newitem i_gold
+	NEW.amount <TAG0.OFFER>
+	NEW.cont=<SRC.FINDLAYER.21.uid>
+	NEW.update
+	LOCAL.enough 1
+	ELSE
+	TAG0.OFFER -= <LOCAL.COUNTER>
+	OBJ.FINDLAYER.29.findid.i_gold.cont=<SRC.FINDLAYER.21.uid>
+	OBJ.UPDATE
+      ENDIF
+    ENDIF
+  ENDWHILE
+  TAG.OFFER
+  TAG.OFFERUID
+  TAG.PRICE
+  TAG.SELL
+  LINK.COLOR 0
+  RETURN 1
+  ELSE
+  SRC.SYSMESSAGE This house is greatly worn.
+ENDIF
+
+ONBUTTON=8
+IF (<TAG0.OFFERUID> == <SRC.UID>)
+  SRC.SYSMESSAGE @64,3 You must wait for someone else to place another offer.
+  SDIALOG d_house_sell 2
+  RETURN 1
+ENDIF
+IF (isnumber(<ARGTXT[2]>))
+  IF (<ARGTXT[2]> > <TAG0.OFFER>)
+    TAG.OFFER <ARGTXT[2]>
+    TAG.OFFERUID <SRC.UID>
+    ELSE
+    SRC.SYSMESSAGE @64,3 Your offer is too low!
+  ENDIF
+  ELSE
+  SRC.SYSMESSAGE @64,3 You must use only numbers.
+ENDIF
+SDIALOG d_house_sell 2
+
+[EOF]

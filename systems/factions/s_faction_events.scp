@@ -1,0 +1,302 @@
+[events e_factions_player]
+
+on=@click
+//if !(<flags>&statf_incognito)	//this is in the @click under the generic player event
+  //if (<f_faction_isleader>)
+    //message @<qval <f_faction_isally <src>>?05d:027>,0,1 (Commanding Lord of the <def0.faction_<dtag0.faction>> Faction)
+  //elseif (!<isempty <tag.faction_officer>>)
+    //args=<tag0.faction_officer>
+    //message @<qval <f_faction_isally <src>>?05d:027>,0,1 (The <argv[2]> of <uid.<argv[0]>.region.name>, <def0.faction_<dtag0.faction>>)
+  //else
+    //message @<qval <f_faction_isally <src>>?05d:027> (<tag0.faction_title>, <def0.faction_<dtag0.faction>>)
+  //endif
+//endif
+
+on=@notosend		//Change notoriety of the player based on their faction (ally/enemy)
+//this is taken care of in a generic event on all players now
+//if !(<iscriminal>) && !(<ismurderer>) && !(<flags>&statf_incognito)
+  //if (<tag0.faction>) && (<src.tag0.faction>) && (<src> != <uid>)
+    //if (<f_faction_isenemy <src>>)
+      //argn1=5
+    //elseif !((<src.iscriminal>) || (<src.ismurderer>))	// && !(<isguildenemy>)	//these will override ally status
+      //argn1=2
+    //endif
+  //endif
+//endif
+
+//on=@spellcast
+//if (<serv.spell.<argn1>.flags>&spellflag_good) || (<serv.spell.<argn1>.flags>&spellflag_bless)  || (<serv.spell.<argn1>.flags>&spellflag_heal)
+  //src.sysmessage You cannot perform beneficial acts on your target.
+  //return 1
+//endif
+
+on=@kill
+if (<argo.isplayer>)
+  if (<f_faction_isenemy <argo>>) 
+    if (<argo.tag0.faction_points> <= -6)		//too far in defecit
+      local.points=0
+      sysmessage The enemy was not signifigant enough to bring you honor.
+      return 0
+    elseif (<argo.tag0.faction_points> < 20) 	//atleast 1 point under 20
+      local.points=1
+    else
+      local.points=<muldiv 10,<argo.tag0.faction_points>,100>
+    endif
+    local.silver=<eval 40*<local.points>>
+    if (<local.points>)
+      tag0.faction_kills += 1	
+      argo.tag0.faction_points -= <local.points>
+      if (<argo.tag0.faction_points> < -6)
+        argo.tag0.faction_points=-6	//can't go under -6
+      endif
+      tag0.faction_points += <local.points>
+      var0.faction_<tag0.faction>_kill_points += <local.points>
+      sysmessage Thou hast been honored with <dlocal.points> kill point(s) for vanquishing <argo.name>!	
+    endif
+  endif
+elseif (<f_faction_monster_isenemy <argo>>)
+  local.silver=30
+endif
+if (<local.silver>)	//silver was earned via this kill
+  local.tithe=<eval ((<var0.faction_<dtag0.faction>_tithe>*<local.silver>)/100)>
+  serv.newitem i_coin_silver,<eval <local.silver>-<local.tithe>>,<findlayer.21>
+  var0.faction_<dtag0.faction>_treasury += <local.tithe>
+  sound {036 037}
+endif
+
+
+[events e_factions_bots]
+
+[events e_factions_carrying_sigil]
+
+on=@click
+message @11 [Sigil Carrier]
+
+on=@spellcast
+if (<argn1>==22) || (<argn1>==32) || (<argn1>==35) || (<argn1>==52) || (<argn1>==56)
+  sysmessage That spell is restricted while carrying a sigil.
+  return 1
+endif
+
+on=@death
+if (<findid.i_faction_town_sigil>)
+  events=-e_factions_carrying_sigil
+  f_faction_sigil_highlight 0
+  ref1=<attacker.max>
+  if !(<ref1.npc>) && (<ref1.tag0.faction>) && (<ref1.tag0.faction> != <tag0.faction>)
+    ref1.events=+e_factions_carrying_sigil
+    ref2=<findid.i_faction_town_sigil>
+    ref2.cont=<ref1.findlayer.21>	//send sigil to the player killer
+    ref2.update
+  else
+    p=<morep>	//send it back to its last location
+  endif
+endif
+
+on=@logout
+events=-e_factions_carrying_sigil
+f_faction_sigil_highlight 0
+findid.i_faction_town_sigil.p=<findid.i_faction_town_sigil.morep>
+
+on=@itemequip
+act.ocolor=<act.color>
+act.color=11	//always change to purple
+
+on=@itemunequip
+act.color=<act.ocolor>	//always change back to old color
+
+
+[events e_faction_guard]
+
+on=@notosend
+if (<tag0.faction>) && (<src.tag0.faction>) && (<src> != <uid>)
+  if (<f_faction_isenemy <src>>)
+    argn1=5
+  elseif !((<src.iscriminal>) || (<src.ismurderer>))	// && !(<isguildenemy>)	//these will override ally status
+    argn1=2
+  endif
+endif
+
+ON=@NPCRefuseItem
+SAY I cannot be bribed, be gone.
+return 1
+
+//ON=@Click 
+//message @<qval <f_faction_isally <src>>?05d:027>  (Guard, <def0.faction_<dtag0.faction>>)
+
+ON=@npclookatchar
+//depending on how the guards are set : ignore, warn, kill
+// tag0.engagement_<faction> : 0 = attack, 1 = warn, 2 = ignore
+if !(<incombat>)	//as long as we're not already fighting someone else
+  if (<src.tag0.faction>) && !(<src.flags>&statf_invul) && !(<src.flags>&statf_stone) && !(<src.flags>&statf_stone)
+    if (<src.tag0.faction> != <tag0.faction>) && (<tag0.faction_engagement_<src.dtag0.faction>> <= 0)	
+      f_irritatedby <src>
+      attack <src>
+    endif
+  endif
+endif
+
+ON=@npcseenewplayer
+if (<src.tag0.faction>) 
+  if (<tag0.faction_engagement_<src.dtag0.faction>> == 1)
+    f_faction_guard_warn <src>
+  endif
+endif
+
+ON=@Death
+//give silver to killer? what happens when a guard dies
+
+[regiontype r_faction_area]
+
+on=@enter
+if !(<src.tag0.faction>) && !(<src.npc>) && !(<src.isgm>)	//non-faction players cannot enter faction strongholds
+  return 1
+endif
+
+[speech JobFactionGuard]
+
+on=orders attack*
+on=orders warn*
+on=orders ignore*
+if (<var0.faction_<dtag0.faction>_<uid.<tag0.townstone>.region.defname>_sheriff>==<src>)
+  f_faction_guard_war_orders <args>
+endif
+
+on=orders follow
+if (<var0.faction_<dtag0.faction>_<uid.<tag0.townstone>.region.defname>_sheriff>==<src>)
+  targetf f_faction_guard_orders_follow_targ <uid>
+  src.sysmessage Select a target for the guard to follow
+endif
+
+on=orders patrol
+if (<var0.faction_<dtag0.faction>_<uid.<tag0.townstone>.region.defname>_sheriff>==<src>)
+  home=<p>
+  homedist=15
+  action=103
+endif
+
+on=You are fired
+if (<var0.faction_<dtag0.faction>_<uid.<tag0.townstone>.region.defname>_sheriff>==<src>)
+  remove
+endif
+
+
+[events e_faction_vendor]
+
+[speech JobFactionVendor]
+
+on=*buy*
+if !(<src.tag0.faction>)
+  say You are not in a faction, I cannot sell to you!
+  return 1
+elseif (<src.tag0.faction> != <tag0.faction>)
+  say You are not in my faction, I cannot sell to you!
+  return 1
+endif
+buy
+
+on=You are fired
+if (<var0.faction_<dtag0.faction>_<uid.<tag0.townstone>.region.defname>_finance_minister>==<src>)
+  remove
+endif
+
+
+
+[speech JobFactionHorseBreeder]
+
+on=*buy*
+if !(<src.tag0.faction>)
+  say You are not in my faction, I cannot sell you a horse!
+  return 1
+elseif (<src.tag0.faction> != <tag0.faction>)	//this should work with the settings the finance minister declares
+  say You are not in my faction, I cannot sell you a horse!
+  return 1
+endif
+sdialog d_faction_buy_horse
+return 1
+
+on=*orders*
+if (<var0.faction_<dtag0.faction>_<uid.<tag0.townstone>.region.defname>_finance_minister>==<src>)
+  sdialog d_faction_horse_breeder
+endif
+
+on=You are fired
+if (<var0.faction_<dtag0.faction>_<uid.<tag0.townstone>.region.defname>_finance_minister>==<src>)
+  remove
+endif
+
+
+
+
+[events e_factions_npc]
+
+on=@click
+//if (<tag0.faction>) 
+  //if !(<flags>&statf_incognito)
+    //if (<f_faction_isleader>)
+      //message @<qval <f_faction_isally <src>>?05d:027>,0,1 (Commanding Lord of the <def0.faction_<dtag0.faction>> Faction)
+    //elseif (!<isempty <tag.faction_officer>>)
+      //args=<tag0.faction_officer>
+      //message @<qval <f_faction_isally <src>>?05d:027>,0,1 (The <argv[2]> of <uid.<argv[0]>.region.name>, <def0.faction_<dtag0.faction>>)
+    //else
+      //message @<qval <f_faction_isally <src>>?05d:027> (<tag0.faction_title>, <def0.faction_<dtag0.faction>>)
+    //endif 
+  //endif
+//endif
+//notoupdate
+
+on=@notosend		//Change notoriety of the player based on their faction (ally/enemy)
+//if (<npc>==brain_monster)
+  //if (<baseid>==c_silver_serpent) && (<src.tag0.faction>==1)	//true britannians
+    //argn1=5
+  //elseif (<baseid>==c_wisp) && (<src.tag0.faction>==2)		//council of mages
+    //argn1=5
+  //elseif (<baseid>==c_ogre_lord) && (<src.tag0.faction>==3)	//minax
+    //argn1=5
+  //elseif ((<baseid>==c_daemon) || (<baseid>==c_daemon_w_sword)) && (<src.tag0.faction>==4)	//shadow lords
+    //argn1=5
+  //endif
+//endif
+//if (<tag0.faction>)
+  //if !(<iscriminal>) && !(<ismurderer>) && !(<flags>&statf_incognito)
+    //if (<tag0.faction>) && (<src.tag0.faction>) && (<src> != <uid>)
+      //if (<f_faction_isenemy <src>>)
+        //argn1=5
+      //endif
+    //endif
+  //endif
+//endif
+
+[events e_faction_aligned]
+
+on=@notosend
+if !(<owner>) || (<owner> != <src>))
+  if (<src.tag0.faction>) && (<src.tag0.faction> != <tag0.AlignedFaction>)
+    argn1=5
+    return 1
+  endif
+endif
+
+on=@npcseenewplayer
+if !(<owner>) || (<owner> != <src>))
+  if (<src.tag0.faction>) && (<src.tag0.faction> != <tag0.AlignedFaction>)
+    if !(<src.flags>&statf_invul) && !(<src.flags>&statf_stone) && !(<src.flags>&statf_dead)
+      attack <src>
+    endif
+  endif
+endif
+
+on=@combatadd
+ref1=<memoryfind.<src>>
+if (<ref1.isvalid>)
+  if !(<ref1.color>&memory_harmedby) && !(<ref1.color>&memory_irritatedby) 
+    if (<src.tag0.faction>) && (<src.tag0.faction> == <tag0.AlignedFaction>)
+      return 1
+    endif
+  endif
+endif
+
+
+
+
+[EOF]

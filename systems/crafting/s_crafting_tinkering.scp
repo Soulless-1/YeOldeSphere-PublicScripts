@@ -1,0 +1,164 @@
+
+[defname crafting_tinkering]
+crafting_tinkering_flags 	04|08		//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool
+crafting_tinkering_anim 	33
+crafting_tinkering_sound	0241,0
+crafting_tinkering_sound2	0
+crafting_tinkering_tool		t_tool_tinkering
+
+crafting_tinkering_0_name LAST TEN		//this will be generated as people craft
+
+crafting_tinkering_1_name PARTS
+crafting_tinkering_1_0 i_axel
+crafting_tinkering_1_1 i_gears
+crafting_tinkering_1_2 i_hinge
+crafting_tinkering_1_3 i_springs
+crafting_tinkering_1_4 i_SEXTANT_PARTS
+crafting_tinkering_1_5 i_axel_and_gears
+crafting_tinkering_1_6 i_CLOCK_PARTS
+crafting_tinkering_1_7 i_clock_frame
+crafting_tinkering_1_8 i_barrel_hoops
+crafting_tinkering_1_9 i_barrel_tap
+crafting_tinkering_1_10 i_barrel_staves
+crafting_tinkering_1_11 i_barrel_lid
+crafting_tinkering_1_12 i_wire_iron
+crafting_tinkering_1_13 i_wire_copper
+crafting_tinkering_1_14 i_wire_silver
+crafting_tinkering_1_15 i_wire_gold
+crafting_tinkering_1_16 i_beads
+crafting_tinkering_1_17 i_nails
+
+crafting_tinkering_2_name TOOLS
+crafting_tinkering_2_0 i_hatchet
+crafting_tinkering_2_1 i_pickaxe
+crafting_tinkering_2_2 i_shovel
+crafting_tinkering_2_3 i_saw
+crafting_tinkering_2_4 i_saw_dovetail
+crafting_tinkering_2_5 i_plane_jointing
+crafting_tinkering_2_6 i_plane_moulding
+crafting_tinkering_2_7 i_plane_smoothing
+crafting_tinkering_2_8 i_froe
+crafting_tinkering_2_9 i_scorp
+crafting_tinkering_2_10 i_inshave
+crafting_tinkering_2_11 i_knife_draw
+crafting_tinkering_2_12 i_hammer
+crafting_tinkering_2_13 i_scissors
+crafting_tinkering_2_14 i_sewing_kit
+crafting_tinkering_2_15 i_tinker_tools
+crafting_tinkering_2_16 i_arrow_fletching
+crafting_tinkering_2_17 i_tongs
+crafting_tinkering_2_18 i_fishing_pole
+crafting_tinkering_2_19 i_lockpick
+crafting_tinkering_2_20 i_lockpick_set
+crafting_tinkering_2_21 i_mortar_pestle
+crafting_tinkering_2_22 i_hammer_smith
+crafting_tinkering_2_23 i_hammer_sledge
+crafting_tinkering_2_24 i_pen_scribes
+crafting_tinkering_2_25 i_pen_mapmakers
+crafting_tinkering_2_26 i_skillet
+crafting_tinkering_2_27 i_knife_butcher
+crafting_tinkering_2_28 i_cleaver_meat
+
+crafting_tinkering_3_name UTENSILS
+crafting_tinkering_3_0 i_fork
+crafting_tinkering_3_1 i_spoon
+crafting_tinkering_3_2 i_knife
+crafting_tinkering_3_3 i_plate
+crafting_tinkering_3_4 i_skull_mug
+crafting_tinkering_3_5 i_mug_ceramic
+crafting_tinkering_3_6 i_goblet
+crafting_tinkering_3_7 i_mug_pewter
+crafting_tinkering_3_8 i_goblet_2
+crafting_tinkering_3_9 i_spittoon
+crafting_tinkering_3_10 i_flour_sifter
+
+crafting_tinkering_4_name JEWELRY
+crafting_tinkering_4_0 i_necklace_metal_beads
+crafting_tinkering_4_1 i_necklace_gold
+crafting_tinkering_4_2 i_necklace_gold_beads
+crafting_tinkering_4_3 i_earrings_gold
+crafting_tinkering_4_4 i_ring_gold
+crafting_tinkering_4_5 i_bracelet_silver
+crafting_tinkering_4_6 i_necklace_silver
+crafting_tinkering_4_7 i_earrings_silver
+crafting_tinkering_4_8 i_ring_silver
+crafting_tinkering_5_9 i_necklace_silver_beads
+
+crafting_tinkering_5_name TRAPS
+crafting_tinkering_5_0 i_trap_kit_dart
+crafting_tinkering_5_1 i_trap_kit_poison
+crafting_tinkering_5_2 i_trap_kit_explosion
+
+crafting_tinkering_6_name INSTRUMENTS
+crafting_tinkering_6_0 i_tambourine
+crafting_tinkering_6_1 i_drum
+crafting_tinkering_6_2 i_lute
+crafting_tinkering_6_3 i_lyre
+crafting_tinkering_6_4 i_HARP_LARGE
+
+crafting_tinkering_7_name OTHER
+crafting_tinkering_7_0 i_clock
+crafting_tinkering_7_1 i_sextant
+crafting_tinkering_7_2 i_spyglass
+crafting_tinkering_7_3 i_candle
+crafting_tinkering_7_4 i_lantern
+crafting_tinkering_7_5 i_keg_potion
+crafting_tinkering_7_6 i_keg_potion_huge
+crafting_tinkering_7_7 i_keg_potion_mega
+crafting_tinkering_7_8 i_bottle_empty
+crafting_tinkering_7_9 i_dice_cup
+crafting_tinkering_7_10 i_game_board
+crafting_tinkering_7_11 i_backgammon_game
+crafting_tinkering_7_12 i_bola_ball
+crafting_tinkering_7_13 i_bola
+crafting_tinkering_7_14 i_communication_crystal_green
+crafting_tinkering_7_15 i_communication_crystal_red
+crafting_tinkering_7_16 i_lantern_revealing
+crafting_tinkering_7_17 i_mana_crystal
+
+crafting_tinkering_8_name CONTAINERS
+crafting_tinkering_8_0 i_box_brass
+crafting_tinkering_8_1 i_chest_metal
+crafting_tinkering_8_2 i_chest_metal_brass
+
+crafting_tinkering_9_name HOUSE ADDONS
+crafting_tinkering_9_0 i_deed_house_addon_atm
+
+crafting_tinkering_10_name MECHANICAL PETS
+crafting_tinkering_10_0 i_iron_golem_craftable
+
+
+///////////////////////////////
+// Tinkering Post Craft
+
+[function f_tinkering_prerequisite]
+return 1	//can always tinker
+
+[function f_tinkering_pre_craft]
+
+[function f_tinkering_post_craft]
+ref1=<args>
+if (<ref1.isvalid>)
+  if (<ref1.islockablecont>)
+    if (<tinkering> >= 300)
+      ref1.f_carpentry_make_lockable <tinkering> 
+      sysmessage Your tinker skill was sufficient to make the item lockable.
+    endif
+  endif 
+endif
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+[function f_tinkering_make_lockable]
+more2=<args>
+serv.newitem i_key_gold
+new.more1=<uid>
+more1=<uid>
+new.cont=<uid>
+new.update
+
+
+[EOF]

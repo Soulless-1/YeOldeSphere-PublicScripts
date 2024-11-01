@@ -1,0 +1,1072 @@
+
+[CHARDEF C_H_BAR_PATRON]		//these npcs sit in taverns and make emotes
+DEFNAME=C_H_BAR_PATRON
+NAME=#NAMES_HUMANMALE	//the Bar Patron
+ID=C_MAN
+HIREDAYWAGE=0  //10
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+CAN=mt_equip|mt_usehands|mt_nonmover|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=joblaborer
+TSPEECH=jobPEASANT
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Bar Patron (male)
+
+ON=@Create
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	NEED=i_gold
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_shirt_plain
+	COLOR=colors_all
+	itemnewbie=random_pants
+	COLOR=colors_all
+	itemnewbie=random_footwear
+	itemnewbie=backpack_poor
+	itemnewbie=i_bar_patron_memory
+
+
+[CHARDEF C_H_BAR_PATRON_F]
+DEFNAME=C_H_BAR_PATRON_F
+NAME=#NAMES_HUMANFEMALE	//the Bar Patron
+ID=C_WOMAN
+HIREDAYWAGE=0  //10
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+CAN=mt_equip|mt_usehands|mt_nonmover|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=joblaborer
+TSPEECH=jobPEASANT
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_townsfolk
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Bar Patron (female)
+
+ON=@Create
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	NEED=i_gold
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_shirt_plain
+	COLOR=colors_all
+	itemnewbie=random_skirt
+	COLOR=colors_all
+	itemnewbie=random_footwear
+	itemnewbie=backpack_poor
+	itemnewbie=i_bar_patron_memory
+
+[itemdef i_bar_patron_memory]
+defname=i_bar_patron_memory
+id=i_memory
+name=Bar Patron Memory
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer=1
+
+on=@timer
+topobj.f_bar_patron_socialize
+timer={60 120}
+return 1
+
+[function f_bar_patron_socialize]
+dorand 2
+  begin
+    dorand 101
+      say Frankly, my dear, I don't give a damn. 					
+      say I'm gonna make him an offer he can't refuse. 					
+      say You don't understand! I coulda had class. I coulda been a contender. I could've been somebody, instead of a bum, which is what I am.					
+      say Toto, I've a feeling we're not in Kansas anymore. 				
+      say Here's looking at you, kid. 					
+      say Go ahead, make my day. 					
+      say All right, Mr. DeMille, I'm ready for my close-up. 					
+      say May the Force be with you.				
+      say Fasten your seatbelts. It's going to be a bumpy night. 					
+      say You talkin' to me? 					
+      say What we've got here is failure to communicate. 					
+      say I love the smell of napalm in the morning. 					
+      say Love means never having to say you're sorry. 									
+      say The stuff that dreams are made of. 				
+      say E.T. phone home. 					
+      say They call me Mister Tibbs! 					
+      say Rosebud. 					
+      say Made it, Ma! Top of the world! 					
+      say I'm as mad as hell, and I'm not going to take this anymore! 					
+      say Louis, I think this is the beginning of a beautiful friendship. 					
+      say A census taker once tried to test me. I ate his liver with some fava beans and a nice Chianti. 					
+      say Bond. James Bond. 					
+      say There's no place like home. 					
+      say I am big! It's the pictures that got small. 					
+      say Show me the money! 					
+      say Why don't you come up sometime and see me? 					
+      say I'm walkin' here! I'm walkin' here! 					
+      say Play it, Sam. Play 'As Time Goes By.' 					
+      say You can't handle the truth! 					
+      say I want to be alone. 					
+      say After all, tomorrow is another day! 					
+      say Round up the usual suspects. 					
+      say I'll have what she's having. 					
+      say You know how to whistle, don't you, Steve? You just put your lips together and blow. 					
+      say You're gonna need a bigger boat. 				
+      say Badges? We ain't got no badges! We don't need no badges! I don't have to show you any stinking badges! 					
+      say I'll be back! 					
+      say Today, I consider myself the luckiest man on the face of the Earth. 					
+      say If you build it, he will come. 					
+      say Mama always said life was like a box of chocolates. You never know what you're gonna get. 					
+      say We rob banks. 					
+      say Plastics. 					
+      say We'll always have Paris. 					
+      say I see dead people. 					
+      say Stella! Hey, Stella! 					
+      say Oh, Jerry, don't let's ask for the moon. We have the stars. 					
+      say Shane. Shane. Come back! 					
+      say Well, nobody's perfect. 					
+      say It's alive! It's alive! 					
+      say Houston, we have a problem. 					
+      say You've got to ask yourself one question: 'Do I feel lucky?' Well, do ya, punk? 					
+      say You had me at 'hello.' 					
+      say One morning I shot an elephant in my pajamas. How he got in my pajamas, I don't know. 					
+      say There's no crying in baseball! 					
+      say La-dee-da, la-dee-da. 					
+      say A boy's best friend is his mother. 					
+      say Greed, for lack of a better word, is good. 					
+      say Keep your friends close, but your enemies closer. 				
+      say As God is my witness, I'll never be hungry again. 					
+      say Well, here's another nice mess you've gotten me into! 					
+      say say 'hello' to my little friend! 					
+      say What a dump. 					
+      say Mrs. Robinson, you're trying to seduce me. Aren't you? 					
+      say Gentlemen, you can't fight in here! This is the War Room! 					
+      say Elementary, my dear Watson. 					
+      say Get your stinking paws off me, you damned dirty ape. 					
+      say Of all the gin joints in all the towns in all the world, she walks into mine. 					
+      say Here's Johnny! 					
+      say They're here! 					
+      say Is it safe? 					
+      say Wait a minute, wait a minute. You ain't heard nothin' yet! 					
+      say No wire hangers, ever! 				
+      say Mother of mercy, is this the end of Rico? 					
+      say Forget it, Jake, it's Chinatown. 					
+      say I have always depended on the kindness of strangers. 					
+      say Hasta la vista, baby. 					
+      say Soylent Green is people! 					
+      say Open the pod bay doors, HAL. 					
+      say Surely you can't be serious. 					
+      say I am serious … and don't call me Shirley. 					
+      say Yo, Adrian! 					
+      say Hello, gorgeous. 					
+      say Toga! Toga! 					
+      say Listen to them. Children of the night. What music they make. 					
+      say Oh, no, it wasn't the airplanes. It was Beauty killed the Beast. 					
+      say My precious. 					
+      say Attica! Attica! 					
+      say Sawyer, you're going out a youngster, but you've got to come back a star! 					
+      say Listen to me, mister. You're my knight in shining armor. Don't you forget it. You're going to get back on that horse, and I'm going to be right behind you, holding on tight, and away we're gonna go, go, go! 					
+      say Tell 'em to go out there with all they got and win just one for the Gipper. 					
+      say A martini. Shaken, not stirred. 				
+      say Who's on first. 				
+      say Cinderella story. Outta nowhere. A former greenskeeper, now, about to become the Masters champion. It looks like a mirac...It's in the hole! It's in the hole! It's in the hole! 					
+      say Life is a banquet, and most poor suckers are starving to death! 					
+      say I feel the need—the need for speed! 					
+      say Carpe diem. Seize the day, boys. Make your lives extraordinary. 					
+      say Snap out of it! 					
+      say My mother thanks you. My father thanks you. My sister thanks you. And I thank you. 					
+      say Nobody puts Baby in a corner. 					
+      say I'll get you, my pretty, and your little dog too! 					
+      say I'm the king of the world! 	
+    enddo
+  end
+  begin
+    dorand 10
+      topobj.e applaud
+      topobj.e cough
+      topobj.e clear throat
+      topobj.e burp
+      topobj.e giggle
+      topobj.e hiccup
+      topobj.e laugh
+      topobj.e sigh
+      topobj.e sneeze
+      topobj.e yawn
+    enddo
+  end
+enddo
+
+
+[CHARDEF C_H_TOWNSPERSON_PEASANT]		//these npcs use the waypoint system, make the town appear alive
+DEFNAME=C_H_TOWNSPERSON_PEASANT
+NAME=#NAMES_HUMANMALE the Peasant
+ID=C_MAN
+HIREDAYWAGE=0  //10
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=joblaborer
+TSPEECH=jobPEASANT
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_townsfolk
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Townsperson (male)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	NEED=i_gold
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_shirt_plain
+	COLOR=colors_all
+	itemnewbie=random_pants
+	COLOR=colors_all
+	itemnewbie=random_footwear
+	itemnewbie=backpack_poor
+
+
+[CHARDEF C_H_TOWNSPERSON_PEASANT_F]
+DEFNAME=C_H_TOWNSPERSON_PEASANT_F
+NAME=#NAMES_HUMANFEMALE	the Peasant
+ID=C_WOMAN
+HIREDAYWAGE=0  //10
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=joblaborer
+TSPEECH=jobPEASANT
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_townsfolk
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Townsperson (female)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	NEED=i_gold
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_shirt_plain
+	COLOR=colors_all
+	itemnewbie=random_skirt
+	COLOR=colors_all
+	itemnewbie=random_footwear
+	itemnewbie=backpack_poor
+
+
+[CHARDEF C_H_TOWNSPERSON_NOBLE]
+DEFNAME=C_H_TOWNSPERSON_NOBLE
+ID=C_MAN
+NAME=#NAMES_HUMANMALE the Noble
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobNoble
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Noble Townsperson (male)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={31 45}
+	DEX={41 55}
+	INT={51 65}
+	FENCING={15.0 38.0}
+	PARRYING={25.0 48.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={25.0 48.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_shirt_fancy
+	COLOR=colors_all
+	itemnewbie=i_pants_long
+	COLOR=colors_all
+	itemnewbie=i_cape
+	COLOR=colors_all
+	itemnewbie=i_SASH
+	COLOR=colors_all
+	itemnewbie=random_boots
+	itemnewbie=i_sword_long
+	itemnewbie=backpack_loaded
+
+
+[CHARDEF C_H_TOWNSPERSON_NOBLE_F]
+DEFNAME=C_H_TOWNSPERSON_NOBLE_F
+ID=C_WOMAN
+NAME=#NAMES_HUMANFEMALE the Noble
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobNoble
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Noble Townsperson (female)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={31 45}
+	DEX={41 55}
+	INT={51 65}
+	FENCING={15.0 38.0}
+	PARRYING={25.0 48.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={25.0 48.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_dress_full
+	COLOR=colors_neutral
+	itemnewbie=i_cape
+	COLOR=colors_all
+	itemnewbie=i_SASH
+	COLOR=colors_all
+	itemnewbie=random_boots
+	itemnewbie=i_sword_long
+	itemnewbie=backpack_loaded
+
+[CHARDEF C_H_TOWNSPERSON_FIGHTER]
+DEFNAME=C_H_TOWNSPERSON_FIGHTER
+NAME=#NAMES_HUMANMALE the Fighter
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Fighter Townsperson (male)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={81 95}
+	INT={61 75}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_ringmail_tunic
+	itemnewbie=i_ringmail_leggings
+	itemnewbie=i_ringmail_sleeves
+	itemnewbie=i_ringmail_gloves
+	itemnewbie=i_chainmail_coif
+	itemnewbie=i_leather_gorget
+	itemnewbie=i_shield_wood
+	itemnewbie=i_sword_broad
+	itemnewbie=i_boots_calf
+	itemnewbie=random_coin_purse
+
+
+[CHARDEF C_H_TOWNSPERSON_FIGHTER_F]
+DEFNAME=C_H_TOWNSPERSON_FIGHTER_F
+NAME=#NAMES_HUMANFEMALE the Fighter
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Fighter Townsperson (female)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={81 95}
+	INT={61 75}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_ringmail_tunic
+	itemnewbie=i_ringmail_leggings
+	itemnewbie=i_ringmail_sleeves
+	itemnewbie=i_ringmail_gloves
+	itemnewbie=i_chainmail_coif
+	itemnewbie=i_leather_gorget
+	itemnewbie=i_shield_wood
+	itemnewbie=i_boots_calf
+	itemnewbie=i_sword_broad
+	itemnewbie=random_coin_purse
+	itemnewbie=i_waypoint_navigation
+
+[CHARDEF C_H_TOWNSPERSON_PALADIN]
+DEFNAME=C_H_TOWNSPERSON_PALADIN
+NAME=#NAMES_HUMANMALE the Paladin
+ID=C_MAN
+HIREDAYWAGE=0  //80
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobPaladin
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Paladin Townsperson (male)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={96 110}
+	INT={96 110}
+	ARMSLORE={52.0 75.0}
+	FENCING={45.0 68.0}
+	PARRYING={55.0 75.0}
+	SWORDSMANSHIP={65.0 88.0}
+	WRESTLING={55.0 78.0}
+	MACEFIGHTING={45.0 68.0}
+	MAGICRESISTANCE={35.0 55.0}
+	TACTICS={55.0 75.0}
+	HEALING={55.0 75.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_platemail_chest
+	itemnewbie=i_platemail_leggings
+	itemnewbie=i_platemail_arms
+	itemnewbie=i_platemail_gloves
+	itemnewbie=i_platemail_gorget
+	itemnewbie=random_helmet
+	itemnewbie=random_over_armor
+	itemnewbie=i_shield_kite_metal
+	itemnewbie=i_sword_viking
+	itemnewbie=random_boots
+	itemnewbie=random_coin_purse
+	itemnewbie=i_waypoint_navigation
+
+
+[CHARDEF C_H_TOWNSPERSON_PALADIN_F]
+DEFNAME=C_H_PALADIN_TOWNSPERSON_F
+NAME=#NAMES_HUMANFEMALE the Paladin
+ID=C_WOMAN
+HIREDAYWAGE=0  //80
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobPaladin
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_rehello
+TSPEECH=spk_needs
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Paladin Townsperson (female)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={96 110}
+	INT={96 110}
+	ARMSLORE={52.0 75.0}
+	FENCING={45.0 68.0}
+	PARRYING={55.0 75.0}
+	SWORDSMANSHIP={65.0 88.0}
+	WRESTLING={55.0 78.0}
+	MACEFIGHTING={45.0 68.0}
+	MAGICRESISTANCE={35.0 55.0}
+	TACTICS={55.0 75.0}
+	HEALING={55.0 75.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_platemail_chest
+	itemnewbie=i_platemail_leggings
+	itemnewbie=i_platemail_arms
+	itemnewbie=i_platemail_gloves
+	itemnewbie=i_platemail_gorget
+	itemnewbie=random_helmet
+	itemnewbie=random_over_armor
+	itemnewbie=i_shield_kite_metal
+	itemnewbie=i_sword_viking
+	itemnewbie=random_boots
+	itemnewbie=random_coin_purse
+
+
+[CHARDEF C_H_TOWNSPERSON_MAGE]
+DEFNAME=C_H_TOWNSPERSON_MAGE
+NAME=#NAMES_HUMANMALE the Mage
+ID=C_MAN
+DESIRES=i_gold,t_wand,t_reagent
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobMage
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Mage Townsperson
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={71 85}
+	INT={86 100}
+	//SPELLCIRCLES=7-8
+	INSCRIPTION={50.0 65.0}
+	MEDITATION={75.0 100.0}
+	MAGERY={86.0 100.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	make_spellcaster 3,7
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_robe
+	COLOR=colors_all
+	itemnewbie=random_shoes
+	COLOR=colors_all
+	itemnewbie=random_coin_purse
+
+
+[CHARDEF C_H_TOWNSPERSON_MAGE_F]
+DEFNAME=C_H_TOWNSPERSON_MAGE_F
+NAME=#NAMES_HUMANFEMALE the Mage
+ID=C_WOMAN
+DESIRES=i_gold,t_wand,t_reagent
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobMage
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Mage Townsperson
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={71 85}
+	INT={86 100}
+	//SPELLCIRCLES=7-8
+	MEDITATION={75.0 100.0}
+	INSCRIPTION={50.0 65.0}
+	MAGERY={86.0 100.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+        make_spellcaster 3,7
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_robe
+	COLOR=colors_all
+	itemnewbie=random_shoes
+	COLOR=colors_all
+	itemnewbie=random_coin_purse
+
+[CHARDEF C_H_TOWNSPERSON_GYPSY]
+DEFNAME=C_H_TOWNSPERSON_GYPSY
+NAME=#NAMES_HUMANMALE the Gypsy
+ID=C_MAN
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety,t_crystal_ball
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobGypsy
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Gypsy Townsperson (male)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	TIMERF 1,f_create_gypsy_llama_follower
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={51 65}
+	INT={61 75}
+	BEGGING={45.0 68.0}
+	HIDING={45.0 68.0}
+	LOCKPICKING={45.0 68.0}
+	STEALING={45.0 68.0}
+	CAMPING={45.0 68.0}
+	ItemID={45.0 68.0}
+	SNOOPING={45.0 68.0}
+	FENCING={15.0 38.0}
+	PARRYING={35.0 58.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={35.0 58.0}
+	TACTICS={35.0 58.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_shirt_plain
+	COLOR=colors_all
+	itemnewbie=i_pants_short
+	COLOR=colors_all
+	itemnewbie=i_bandana
+	COLOR=colors_blue
+	itemnewbie=random_footwear
+	itemnewbie=random_coin_purse
+
+[CHARDEF C_H_TOWNSPERSON_GYPSY_F]
+DEFNAME=C_H_TOWNSPERSON_GYPSY_F
+NAME=#NAMES_HUMANFEMALE the Gypsy
+ID=C_WOMAN
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety,t_crystal_ball
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=mt_equip|mt_usehands|mt_walk|can_o_nosleep
+TSPEECH=spk_human_prime
+TSPEECH=jobGypsy
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Gypsy Townsperson(female)
+
+ON=@Create
+	//tag0.override.MOVEDELAY=450
+	EVENTS=+e_townsfolk
+	TIMERF 1,f_create_gypsy_llama_follower
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={51 65}
+	INT={61 75}
+	BEGGING={45.0 68.0}
+	HIDING={45.0 68.0}
+	LOCKPICKING={45.0 68.0}
+	STEALING={45.0 68.0}
+	CAMPING={45.0 68.0}
+	ItemID={45.0 68.0}
+	SNOOPING={45.0 68.0}
+	FENCING={15.0 38.0}
+	PARRYING={35.0 58.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={35.0 58.0}
+	TACTICS={35.0 58.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+	itemnewbie=i_waypoint_navigation
+
+ON=@NPCRestock
+	itemnewbie=RANDOM_LIGHT
+	itemnewbie=i_shirt_plain
+	COLOR=colors_all
+	itemnewbie=random_skirt
+	COLOR=colors_all
+	itemnewbie=i_bandana
+	COLOR=colors_blue
+	itemnewbie=random_footwear
+	itemnewbie=random_coin_purse
+
+[function f_create_gypsy_llama_follower]
+ref1=<uid>
+serv.newnpc c_gypsy_llama
+ref2=<new>
+ref2.setowner <ref1>
+ref2.events=+e_townsfolk
+serv.newitem i_gypsy_llama_memory
+new.link=<ref1>
+new.timer=1
+ref2.equip <new>
+ref2.p=<p>
+
+[chardef c_gypsy_llama]
+defname=c_gypsy_llama
+id=c_llama_pack
+name=Pack Llama
+sound=03f3
+soundnotice=-1
+icon=i_pet_llama_pack
+dam={2, 6}
+armor=16
+resources=1 i_ribs_raw
+can=mt_walk|mt_run
+foodtype=5 t_crops, 5 t_fruit, 5 t_grain, 5 I_HAY, 64 t_grass
+desires=c_llama,c_llama_pack,spk_human_prime
+description=Gypsy's Pack Llama
+subsection=Land (Domestic)
+category=Animals
+
+ON=@Create
+	tag.overrid.emovedelay=100
+	modmaxweight=1400
+	npc=brain_animal
+	str={52, 80}
+	dex={36, 55}
+	int={16, 30}
+	maxhits={50}
+	resphysical={25, 35}
+	resfire={10, 15}
+	rescold={10, 15}
+	respoison={10, 15}
+	resenergy={10, 15}
+	magicresistance={15.1, 20.0}
+	tactics={19.2, 29.0}
+	wrestling={19.2, 29.0}
+	taming=29.1
+	fame=0
+	karma=200
+
+[itemdef i_gypsy_llama_memory]
+defname=i_gypsy_llama_memory
+id=i_memory
+name=Gypsy Llama Memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if !(<link.isvalid>)
+  topobj.remove
+  return 1
+endif
+if (<topobj.action> != 100)
+  topobj.act=<link>
+  topobj.action=100
+endif
+if (<topobj.distance <link>> >= 10)
+  topobj.p=<link.p>
+  topobj.update
+endif
+topobj.tag.override.moverate=500
+topobj.tag.override.movedelay=300
+timer=5
+return 1
+
+////////////////////////////////
+// This is an adventurer that would act more like a player
+// Should travel between cities
+// Stop at graveyards and kill undead
+// Loot bodies, and pick up and equip better gear
+// Cure self and others
+// Should attack evil players
+// Go to dungeons and go through first level
+// Go mining, or lumberjacking, or fishing
+// "sell" items from bank to vendors
+
+[CHARDEF c_h_townsperson_adventurer]
+DEFNAME=c_h_townsperson_adventurer
+NAME=#names_humanmale
+id=c_man
+can=mt_walk|mt_run|mt_equip|mt_usehands
+tevents=e_npcai
+
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Adventurer
+
+ON=@Create
+  	//tag0.override.movedelay=425
+	COLOR=colors_skin
+	STR=100
+	DEX=100
+	INT=100
+	NPC=brain_human
+	healing=80.0	//{25.0 50.0}
+	anatomy=80.0	//{25.0 50.0}
+	itemnewbie=i_bandage,100
+	itemnewbie=i_potion_heal,50
+	itemnewbie=i_potion_cure,25 
+	itemnewbie=random_mountedrideable,R2
+	itemnewbie=random_male_hair
+	color=colors_hair
+	itemnewbie=random_facial_hair
+	color=match_hair
+	itemnewbie=i_npcai
+	itemnewbie=i_waypoint_navigation
+	morex=1
+	
+ON=@NPCRestock
+	trysrc <uid> f_simulated_player_outfit<R0,244>
+
+[function remove_townsfolk]		//remove this eventually
+forchars 9999
+  if (strmatch(c_h_townsperson*,<baseid>))
+    remove
+  endif
+endfor
+
+[function remove_adventurers]		//remove this eventually
+forchars 9999
+  if (<baseid>==c_h_townsperson_adventurer)
+    remove
+  endif
+endfor
+
+[function add_adventurers]
+for <argn>
+  serv.newnpc c_h_townsperson_adventurer
+  new.p=<p>
+endfor
+
+
+
+[EOF]

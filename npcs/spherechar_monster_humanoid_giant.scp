@@ -1,0 +1,597 @@
+
+[CHARDEF 1]
+DEFNAME=c_ogre
+NAME=Ogre	//#NAMES_OGRE the Ogre
+SOUND=427
+ICON=i_pet_OGRE
+CAN=MT_WALK|MT_USEHANDS
+dam=9, 11
+armor=32
+RESOURCES=2 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=c_ogre, t_arock
+AVERSIONS=t_TRAP,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Ogre
+
+ON=@Create
+	NPC=brain_monster
+	str={166, 195}
+	dex={46, 65}
+	int={46, 70}
+	maxhits={100, 117}
+	maxmana={0}
+	resphysical={30, 35}
+	resfire={15, 25}
+	rescold={15, 25}
+	respoison={15, 25}
+	resenergy={25}
+	magicresistance={55.1, 70.0}
+	tactics={60.1, 70.0}
+	wrestling={70.1, 80.0}
+	fame=3000
+	karma=-3000
+
+ON=@NPCRestock
+	item=i_gold,{125 172}
+	item=i_club
+	//item=i_treasure_map1,R99
+
+[CHARDEF 83]
+DEFNAME=c_ogre_lord
+NAME=Ogre Lord
+SOUND=427
+ICON=i_pet_OGRE
+dam=20, 25
+armor=50
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+DESIRES=C_OGRE
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Ogre Lord
+
+ON=@Create
+    events=+e_faction_aligned
+    tag0.AlignedFaction=3
+	npc=brain_monster
+	str={767, 945}
+	dex={66, 75}
+	int={46, 70}
+	maxhits={476, 552}
+	resphysical={45, 55}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={40, 50}
+	resenergy={40, 50}
+	magicresistance={125.1, 140.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=15000
+	karma=-15000
+
+ON=@NPCRestock
+	item=i_gold,{600 650}
+	item=i_club
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[CHARDEF 135]
+defname=c_ogre_lord_arctic
+NAME=Arctic Ogre Lord
+SOUND=427
+ICON=i_pet_OGRE
+dam=20, 25
+armor=50
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+DESIRES=C_OGRE
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Arctic Ogre Lord
+
+ON=@Create
+	npc=brain_monster
+	str={767, 945}
+	dex={66, 75}
+	int={46, 70}
+	maxhits={476, 552}
+	resphysical={45, 55}
+	rescold={60, 70}
+	respoison={100}
+	resenergy={40, 50}
+	magicresistance={125.1, 140.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=15000
+	karma=-15000
+
+ON=@NPCRestock
+	item=i_gold,{750 950}
+	item=i_club
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[CHARDEF 18]
+DEFNAME=c_ettin
+NAME=Ettin
+SOUND=367
+ICON=i_pet_ETTIN
+CAN=MT_WALK|MT_USEHANDS
+dam=7, 17
+armor=38
+RESOURCES=4 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=c_ettin,c_ettin_w_axe,t_arock
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Ettin
+
+ON=@Create
+	NPC=brain_monster
+	str={136, 165}
+	dex={56, 75}
+	int={31, 55}
+	maxhits={82, 99}
+	resphysical={35, 40}
+	resfire={15, 25}
+	rescold={40, 50}
+	respoison={15, 25}
+	resenergy={15, 25}
+	magicresistance={40.1, 55.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 60.0}
+	fame=3000
+	karma=-3000
+	
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=random_potion
+	//item=i_treasure_map1,R99
+
+[CHARDEF 012]
+// Ettin with big stone axe.
+DEFNAME=c_ettin_w_axe
+NAME=Ettin
+SOUND=367
+ICON=i_pet_ETTIN
+dam=7, 17
+armor=38
+RESOURCES=20 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=15 t_meat_raw
+DESIRES=c_ettin,c_ettin_w_axe
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Ettin (Axe)
+
+ON=@Create
+	NPC=brain_monster
+	str={136, 165}
+	dex={56, 75}
+	int={31, 55}
+	maxhits={82, 99}
+	resphysical={35, 40}
+	resfire={15, 25}
+	rescold={40, 50}
+	respoison={15, 25}
+	resenergy={15, 25}
+	magicresistance={40.1, 55.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 60.0}
+	fame=3000
+	karma=-3000
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=random_potion
+	//item=i_treasure_map1,R99
+
+[CHARDEF 01124]
+DEFNAME=c_frost_ettin
+NAME=Frost Ettin
+ID=c_ettin
+SOUND=367
+ICON=i_pet_ETTIN
+CAN=MT_USEHANDS|MT_WALK
+dam=7, 17
+armor=38
+RESOURCES=20 i_ribs_raw
+FOODTYPE=5 t_meat_raw
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Frost Ettin
+
+ON=@Create
+	NPC=brain_monster
+	color=0482
+	str={136, 165}
+	dex={56, 75}
+	int={31, 55}
+	maxhits={82, 99}
+	resphysical={35, 40}
+	resfire={15, 25}
+	rescold={40, 50}
+	respoison={15, 25}
+	resenergy={15, 25}
+	magicresistance={40.1, 55.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 60.0}
+	fame=3000
+	karma=-3000
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=random_potion
+	//item=i_treasure_map1,R99
+
+
+[CHARDEF 01128]
+DEFNAME=c_ettin_lord
+NAME=an Ettin Lord
+SOUND=snd_MONSTER_ETTIN1
+ID=c_ettin_w_axe
+DAM=15,20
+ARMOR=20, 22
+RESOURCES=20 i_ribs_raw
+CAN=MT_USEHANDS|MT_WALK
+FOODTYPE=15 t_meat_raw
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Ettin Lord
+
+ON=@Create
+	NPC=brain_monster
+	str={136, 165}
+	dex={56, 75}
+	int={31, 55}
+	maxhits={82, 99}
+	resphysical={35, 40}
+	resfire={15, 25}
+	rescold={40, 50}
+	respoison={15, 25}
+	resenergy={15, 25}
+	magicresistance={40.1, 55.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 60.0}
+	fame=3000
+	karma=-3000
+	make_spellcaster 1
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=random_potion
+	//item=i_treasure_map1,R99
+
+[CHARDEF 53]
+DEFNAME=c_troll_w_axe
+NAME=Troll
+SOUND=461
+ICON=i_pet_TROLL
+dam=8, 14
+armor=40
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Troll (Sword)
+
+ON=@Create
+	NPC=brain_monster
+	str={176, 205}
+	dex={46, 65}
+	int={46, 70}
+	maxhits={106, 123}
+	resphysical={35, 45}
+	resfire={25, 35}
+	rescold={15, 25}
+	respoison={5, 15}
+	resenergy={5, 15}
+	magicresistance={45.1, 60.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 70.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	//item=i_treasure_map1,R99
+
+[CHARDEF 54]
+DEFNAME=c_troll
+NAME=Troll
+SOUND=461
+ICON=i_pet_TROLL
+ANIM=078c7f
+DAM=5,17
+ARMOR=20
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=15 t_meat_raw
+
+DESIRES=i_gold
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Troll
+
+ON=@Create
+	NPC=brain_monster
+	str={176, 205}
+	dex={46, 65}
+	int={46, 70}
+	maxhits={106, 123}
+	resphysical={35, 45}
+	resfire={25, 35}
+	rescold={15, 25}
+	respoison={5, 15}
+	resenergy={5, 15}
+	magicresistance={45.1, 60.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 70.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	//item=i_treasure_map1,R99
+
+[CHARDEF c_troll_w_mace]
+id=c_troll_w_axe
+NAME=Troll
+SOUND=461
+ICON=i_pet_troll
+CAN=MT_WALK|MT_USEHANDS
+DAM=10,23
+ARMOR=20
+RESOURCES=10 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Troll (Mace)
+
+ON=@Create
+	NPC=brain_monster
+	str={176, 205}
+	dex={46, 65}
+	int={46, 70}
+	maxhits={106, 123}
+	resphysical={35, 45}
+	resfire={25, 35}
+	rescold={15, 25}
+	respoison={5, 15}
+	resenergy={5, 15}
+	magicresistance={45.1, 60.0}
+	tactics={50.1, 70.0}
+	wrestling={50.1, 70.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	//item=i_treasure_map1,R99
+
+[CHARDEF 55]
+DEFNAME=c_frost_troll
+NAME=Frost Troll
+SOUND=461
+ICON=i_pet_troll
+dam=14, 20
+ARMOR=50
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Frost Troll
+
+ON=@Create
+	npc=brain_monster
+	str={227, 265}
+	dex={66, 85}
+	int={46, 70}
+	maxhits={140, 156}
+	resphysical={45, 55}
+	rescold={40, 50}
+	respoison={5, 10}
+	resenergy={5, 10}
+	magicresistance={65.1, 80.0}
+	tactics={80.1, 100.0}
+	wrestling={80.1, 100.0}
+	fame=4000
+	karma=-4000
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	item=random_Jewel
+	item=random_weapon
+	//item=i_treasure_map1,R99
+
+[CHARDEF 76]
+DEFNAME=c_titan
+NAME=Titan
+SOUND=snd_MONSTER_TITAN1
+ICON=i_pet_TITAN
+dam=13, 16
+armor=40
+RESOURCES=4 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=15 t_meat_raw
+DESIRES=c_titan
+AVERSIONS=r_civilization
+//RESLEVEL=1
+//RESDISPDNID=c_ogre
+//RESDISPDNHUE=01a2
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Titan
+
+ON=@Create
+	NPC=brain_monster
+	str={536, 585}
+	dex={126, 145}
+	int={281, 305}
+	maxhits={322, 351}
+	resphysical={35, 45}
+	resfire={30, 40}
+	rescold={25, 35}
+	respoison={30, 40}
+	resenergy={30, 40}
+	evaluatingintel={85.1, 100.0}
+	magery={85.1, 100.0}
+	magicresistance={80.2, 110.0}
+	tactics={60.1, 80.0}
+	wrestling={40.1, 50.0}
+	fame=11500
+	karma=-11500
+	make_spellcaster 5,8
+	
+ON=@NPCRestock
+	item=i_gold,{600 900}
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	//item=i_treasure_map5,R99
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+
+[CHARDEF 75]
+DEFNAME=c_cyclops
+NAME=Cyclopean Warrior
+SOUND=604
+ICON=i_pet_CYCLOPS
+CAN=MT_WALK|MT_USEHANDS
+dam=7,23
+armor=48
+RESOURCES=4 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=c_cyclops,t_arock
+AVERSIONS=r_civilization
+//RESLEVEL=1
+//RESDISPDNID=c_ogre
+//RESDISPDNHUE=01a0
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Cyclops
+
+ON=@Create
+	NPC=brain_monster
+	str={336, 385}
+	dex={96, 115}
+	int={31, 55}
+	maxhits={202, 231}
+	maxmana=0
+	resphysical={45, 50}
+	resfire={30, 40}
+	rescold={25, 35}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={60.3, 105.0}
+	tactics={80.1, 100.0}
+	wrestling={80.1, 90.0}
+	fame=4500
+	karma=-4500
+
+
+ON=@NPCRestock
+	item=i_gold,{400 500}
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[CHARDEF 01127]
+DEFNAME=c_cyclops_king
+NAME=Cyclopean King
+SOUND=604
+ID=c_cyclops
+dam=7, 23
+armor=48
+RESOURCES=4 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+CAN=MT_WALK
+CATEGORY=Monsters
+SUBSECTION=Ettins, Ogres, Trolls, Cyclops, and Titans
+DESCRIPTION=Cyclops King
+
+ON=@Create
+	NPC=brain_monster
+	str={336, 385}
+	dex={96, 115}
+	int={31, 55}
+	maxhits={202, 231}
+	maxmana=0
+	resphysical={45, 50}
+	resfire={30, 40}
+	rescold={25, 35}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={60.3, 105.0}
+	tactics={80.1, 100.0}
+	wrestling={80.1, 90.0}
+	fame=4500
+	karma=-4500
+
+ON=@NPCRestock
+	item=i_gold,{400 500}
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[chardef 189]
+defname=c_orc_brute
+name=Orc Brute
+SOUND=045a
+ICON=i_pet_orc
+dam=20, 25
+armor=50
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS|MT_RUN
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+TEVENTS=e_monster_speech
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Orc Brute
+
+ON=@Create
+	NPC=brain_monster
+	str={767, 945}
+	dex={66, 75}
+	int={46, 70}
+	maxhits={476, 552}
+	resphysical={45, 55}
+	resfire={40, 50}
+	rescold={25, 35}
+	respoison={25, 35}
+	resenergy={25, 35}
+	macefighting={90.1, 100.0}
+	magicresistance={125.1, 140.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=15000
+	karma=-15000
+
+ON=@NpcRestock
+	item=i_gold,{750 950}
+	item=i_ore_shadow
+	item=i_ingot_iron
+	//item=tm_magic_items
+	item=i_helm_orc_evil
+	item=i_mask_orc
+	item=i_bola_ball,R20
+
+
+[EOF]

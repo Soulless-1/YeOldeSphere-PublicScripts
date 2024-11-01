@@ -1,0 +1,25 @@
+[function worldsave_notification]
+if (<isdialogopen d_worldsave>) || (<argn>==0)
+  trysrc <uid> src.dialogclose d_worldsave
+else
+  trysrc <uid> src.dialog d_worldsave
+endif
+
+
+[dialog d_worldsave]
+
+200,150
+page 0
+
+resizepic 10 80 5150 370 100
+//checkertrans 20 90  340 70
+dtext 68 117 1271 Worldsave in progress, please be patient..
+
+//tilepic 27 105 4167	//globe
+tilepic 25 115 4029	//open book
+tilepic 19 114 4032	//pen and ink
+
+//tilepic 308 103 4172	//clock
+tilepic 312 113 6167	//hour glass
+
+[EOF]

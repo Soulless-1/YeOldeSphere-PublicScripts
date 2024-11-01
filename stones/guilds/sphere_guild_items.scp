@@ -1,0 +1,69 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2007
+//www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: 14-March-2007
+VERSION=0.56b
+
+
+[itemdef i_sphere_guildstone_blank_entry]
+id=i_gravestone
+type=t_normal
+
+[ITEMDEF i_deed_guildstone]
+ID=i_deed
+NAME=Deed to a Guildstone
+VALUE=25000
+CATEGORY=Provisions - Deeds
+SUBSECTION=Guild and Town Stones
+DESCRIPTION=Guildstone
+
+ON=@Create
+   MORE=i_guildstone
+
+on=@dclick
+ref1=<src.region.uid>
+if (<src.guild>)
+  src.sysmessage You must resign from your current guild before founding another!
+  return 1
+endif
+
+if !(<ref1.isvalid>) && ((<ref1.type>==t_multi) || (<ref1.type>==t_multi_custom))
+  src.sysmessage You can only place a guildstone in a house.
+  return 1
+endif
+
+if !(<ref1.f_house_iscoowner <src>>)
+  src.sysmessage You can only place a guildstone in a house you own!
+  return 1
+endif
+
+if (<ref1.more2>)
+  src.sysmessage Only one guildstone may reside in a given house.
+  return 1
+endif
+
+serv.newitem i_guildstone
+new.attr=011	//identified/move_never
+new.p=<src.p>
+ref1.more2=<new>	//house will store more2 as guildstone
+new.more2=<ref1>
+serv.log <ref1.name>(<ref1>) house guildstone added : <new>
+new.update
+src.dclick <new>	//lets initialize this guildstone
+consume
+return 1
+
+[ITEMDEF i_guildstone]
+DEFNAME=i_guildstone
+ID=0ed4
+NAME=Unnamed Guild
+TYPE=T_STONE_GUILD
+VALUE=15000
+
+[EOF]

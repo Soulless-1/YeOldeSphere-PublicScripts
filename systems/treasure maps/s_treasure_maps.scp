@@ -1,0 +1,552 @@
+//Treasure map system by Soulless v0.9
+//to dig up a chest you need approx 20 skill per map level
+//changed system to use the skilltest function for all checks
+//fixed digging animation to not have an extra stroke, added 2 digging sounds instead of 1
+//removed check for mining directly on the invisible item, players dont see this
+//started using spheres t_container_locked typedef and setting the more2 on it for lock quality
+//you now keep digging until you succeed, no need to click over and over on the ground
+//changed max distance for mining to 4 per
+//corrected problem with skillchecks being too low on map decoding and treasure digging
+//fixed issue with skillchecks, they were too high
+
+
+//SCRIPT ELSEWHERE detecting hidden, difficulty is half the quality of the lock, takes off 10 points of difficulty for lock picking
+//add in check to make sure lower levels arent picking the lock
+//change itemdefs to i_tmap_lvl
+
+
+[defname treasure_maps]
+treasure_chest_decay	60*60*3		//how many minutes does a chest stay spawned
+treasure_map_lvl1	Plainly,{c_mongbat 1 c_orc 1 c_ratman 1 c_headless 1 c_skeleton 1 c_zombie 1},{1 6}
+treasure_map_lvl2	Expertly,{c_orc_mage 1 c_orc_lord 1 c_gargoyle 1 c_gazer 1 c_hellhound 1 c_elem_earth 1},{4 10}
+treasure_map_lvl3	Adeptly,{c_liche 1 c_orc_lord 1 c_spider_giant 1 c_elem_air 1 c_elem_fire 1},{5 10}
+treasure_map_lvl4	Cleverly,{c_spider_giant 1 c_liche 1 c_liche_lord 1 c_daemon 1 c_gazer_elder 1 c_ogre_lord 1},{5 10}
+treasure_map_lvl5 	Deviously,{c_balron 1 c_liche_lord 1 c_daemon 1 c_gazer_elder 1 c_elem_poison 1 c_elem_blood 1},{10 15}
+treasure_map_lvl6	Ingeniously,{c_wyrm_ancient 1 c_liche_lord 1 c_elem_blood 1 c_titan 1 c_balron 1}
+treasure_map_lvl7	Diabolically,{c_wyrm_shadow 1 c_liche_ancient 1 c_elem_poison_greater 1 c_titan 1}
+
+////////////////////////////
+// Treasure Digging Tool
+
+[typedef t_treasure_digging_tool]	//add this to pickaxe and shovel itemdefs
+
+on=@targon_ground
+if (<src.findlayer.25>)
+  topobj.sysmessage You can't mine while riding.
+  return 1
+endif
+serv.newitem i_memory
+ref1=<new>
+ref1.p=<src.targp>
+if (<ref1.f_found_treasure_chest>)
+  src.f_dig_treasure <ref1.f_found_treasure_chest>
+  ref1.remove
+  return 1
+endif
+ref1.remove
+return 0
+
+[function f_found_treasure_chest]
+local.n=<eval (<src.mining>/250)>
+if (<local.n> < 1)
+  local.n=1
+elseif (<local.n> > 4)
+  local.n=4
+endif
+foritems <local.n>
+  if (<baseid>==i_tmap_tile)
+    return <uid>
+  endif
+endfor
+return 0
+
+//////////////////////////
+// Treasure Maps
+
+[itemdef i_treasure_map1]
+id=i_map
+type=t_treasure_map
+name=Tattered, Plainly Drawn Treasure Map
+
+on=@create
+more1=1			//map level
+more2l=270		//cartography req
+more2h=363		//lockpicking
+tag.fragmentchance=83	//chance of treasure map fragment
+
+[itemdef i_treasure_map2]
+id=i_map
+type=t_treasure_map
+name=Tattered, Expertly Drawn Treasure Map
+
+on=@create
+more1=2
+more2l=710
+more2h=760
+
+[itemdef i_treasure_map3]
+id=i_map
+type=t_treasure_map
+name=Tattered, Adeptly Drawn Treasure Map
+
+on=@create
+more1=3
+more2l=810
+more2h=840
+
+[itemdef i_treasure_map4]
+id=i_map
+type=t_treasure_map
+name=Tattered, Cleverly Drawn Treasure Map
+
+on=@create
+more1=4
+more2l=910
+more2h=920
+
+[itemdef i_treasure_map5]
+id=i_map
+type=t_treasure_map
+name=Tattered, Deviously Drawn Treasure Map
+
+on=@create
+more1=5
+more2l=1000
+more2h=1000
+
+[itemdef i_treasure_map6]
+id=i_map
+type=t_treasure_map
+name=Tattered, Ingeniously Drawn Treasure Map
+
+on=@create
+more1=6
+more2l=1050
+more2h=1050
+
+[itemdef i_treasure_map7]
+id=i_map
+type=t_treasure_map
+name=Tattered, Diabolically Drawn Treasure Map
+
+on=@create
+more1=7
+more2l=1150
+more2h=1150
+
+[itemdef i_treasure_map_fragment]
+defname=i_treasure_map_fragment
+id=02db3	//relic fragment
+name=Tattered, Treasure Map Fragment
+type=t_treasure_map_fragment
+
+on=@create
+color=033
+
+[typedef t_treasure_map_fragment]
+
+on=@dclick
+if (<topobj> != <src>) && !(<src.isgm>) 
+  src.sysmessage You cannot use this where it is.
+  return 1
+elseif (<amount> < 3)
+  src.sysmessage You do not have enough fragments to combine them.
+  return 1
+endif
+src.consume i_treasure_map_fragment 3
+serv.newitem i_treasure_map7
+new.bounce
+return 1
+
+/////////////////////////////////
+// Decoding the Treasure Map
+
+[typedef t_treasure_map]
+
+on=@dclick
+if (<topobj> != <src.uid>) && !(<src.isgm>) 
+  src.sysmessage You cannot use this where it is.
+  return 1
+elseif !(<more1>)
+  src.sysmessage This treasure chest has already been found.
+  return 1
+endif
+if !(<morep>)	//coords havent been asigned to this yet
+  if (<src.cartography> < <eval (<more2l>-100)>) && !(<src.isgm>)
+    src.sysmessage The map is too difficult to attempt to decode.
+    return 1
+  elseif !(<src.skillcheck cartography,<eval (<dmore2l>/10>)>)
+    src.message You fail to make anything of the map.
+    if (<timer> <= 0)	//don't spam skillgain on failure
+      src.skillgain cartography
+      timer=3
+    endif
+    return 1
+  else
+    ref1=<uid>
+    while (!<local.locationfound>)		
+      local.Posx=<R1,5119>
+      local.Posy=<R1,4095>
+      serv.newnpc c_man_invisible
+      ref2=<new.uid>
+      ref2.p=<local.posx>,<local.posy>
+      ref2.z
+      if (!<serv.uid.<ref2>.isneartype t_tree 1>) && (!<serv.uid.<ref2>.isneartype t_water 1>) && (!<serv.uid.<ref2>.isneartype t_rock 1>) && (<serv.uid.<ref2>.isneartype t_grass 1>) && (!<serv.uid.<ref2>.region.guarded>) && (<serv.uid.<ref2>.region.type>!=t_multi) && (<serv.uid.<ref2>.region.type>!=t_multi_custom) && !(<serv.uid.<ref2>.flags>&statf_indoors)
+        ref1.morep=<ref2.p.x>,<ref2.p.y>,<ref2.p.z>
+        ref1.tag0.coords=<ref2.sextantp>
+        serv.newitem i_tmap_tile
+        new.timestamp=<serv.time>
+        new.p=<ref2.p>
+        new.fix
+        new.more1=<ref1.more1>		//level from treasure map itemdef
+        new.more2=<ref1.more2h>		//lockpicking req from treasure map itemdef
+        new.link=<ref1>
+        ref1.link=<new>
+        local.locationfound=1 
+      endif
+      ref2.remove
+    endwhile
+    args=<def0.treasure_map_lvl<dmore1l>>
+    //serv.log <args>
+    ref1.name=<argv[0]> Drawn Treasure Map	// - Level <ref1.dmore1l>
+    ref1.message The treasure is marked by the red skull and crossbones. Grab a shovel and go dig it up!
+    src.skillgain cartography
+    src.sysmessage You successfully decode the treasure map.	//so lets tag the treasure map with a location for the treasure.
+    src.sound 585
+  endif
+endif
+
+sdialog d_treasure_map
+return 1
+
+on=@timer
+return 1
+
+[dialog d_treasure_map]
+0,0
+page 0
+resizepic 7 2 5150 434 464
+dtext 115 5 1263 <name>
+gumppic 32 42 5528
+tilepic 47 33 6993
+tilepic 74 45 7003
+tilepic 42 40 3650
+tilepic 23 52 7003
+tilepic 25 67 6995
+tilepichue <eval ((<morex>/13)+15)> <eval ((<morey>/11)+40)> 6929 028
+tilepichue <eval ((<morex>/13)+15)> <eval ((<morey>/11)+40)> 6930 028
+tilepichue <eval ((<morex>/13)+16)> <eval ((<morey>/11)+41)> 6884 028
+
+dtext 75 440 1263 Treasure Coords: <tag0.coords>	//EXACT X,Y,Z Treasure Coords: X <eval <morep.x>> Y <eval <morep.y>> Z <eval <morep.z>>
+if (<src.isgm>)	//button to teleport GM to treasure location
+  button 60 442 1209 1210 1 0 1
+endif
+
+[dialog d_treasure_map button]
+
+onbutton=1
+if (<src.isgm>)
+  src.go <eval <morex>> <eval <morey>> <eval <morez>>	
+endif
+
+[itemdef i_tmap_tile]
+id=0177d
+name=Treasure Map Tile
+type=t_script
+
+on=@click
+message Level <dmore1> <name>
+if (<link.topobj>==<link>)	
+  message Unknown Owner
+else
+  message <uid.<link.topobj>.name>'s map
+endif
+return 1
+
+on=@create
+color=026
+attr=attr_move_never|attr_invis
+
+//////////////////////////////////////
+// Digging up the treasure
+
+[function f_dig_treasure]
+if (<src.findid.i_treasure_digging>)
+  src.sysmessage You are already digging for the treasure.
+  return 1
+endif
+serv.newitem i_treasure_digging
+new.link=<args>
+new.morep=<src.p.x>,<src.p.y>
+equip <new>
+
+[itemdef i_treasure_digging]
+name=digging for treasure
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+more1=5
+topobj.sysmessage You begin to dig for the treasure.
+timer=1
+
+on=@timer
+if (<topobj.findlayer.25>)
+  topobj.sysmessage You can't mine while riding.
+  remove
+  return 1
+elseif (<topobj.p.x><topobj.p.y> != <morex><morey>) || (<topobj.flags>&statf_war)		//can't move while digging for treasure
+  topobj.sysmessage You stop digging for the treasure.
+  remove
+  return 1
+endif
+
+if (<topobj.flags>&statf_hidden) || (<topobj.flags>&statf_invisible)	//dont let them be hidden/invis when trying to dig up treasure
+  topobj.flags &= ~statf_hidden		
+  topobj.flags &= ~statf_invisible
+  topobj.sysmessage You have been revealed.
+  topobj.update
+endif
+
+if !(<R25>) || (<topobj.isgm>)
+  topobj.f_unearth_treasure <link>
+  topobj.sysmessage You unearth the burried treasure.
+  remove
+  return 1
+endif
+
+topobj.anim 11
+topobj.sound <R293,294>
+//local.d=<eval (<topobj.mining>/250)>
+//local.d=<eval <local.d>-(<local.d>*2)>,<local.d>
+local.d={1 3}
+effectLocation <eval <link.p.x>+{<local.d>}>,<eval <link.p.y>+{<local.d>}>,<eval <topobj.p.z>+1>,2,0913,1,128,0,0,0
+timer=2
+topobj.sysmessage Digging...
+return 1
+
+[function f_unearth_treasure]		//the chest has been found, unearth it and create it 
+ref1=<argn>		//treasure tile 
+args=<def0.treasure_map_lvl<ref1.link.dmore1>>
+
+serv.newitem random_chest
+ref2=<new>
+ref2.events=+t_treasure_chest
+ref2.attr=attr_decay | attr_move_never
+ref2.type=t_container_locked		
+ref2.more1=<ref1.link.more1>		//set treasure level	
+ref2.more2=<ref1.link.more2h>		//lock container with the proper lock complexity
+ref2.morez=<argv[2]>			//set max guardians spawnable
+
+ref2.f_stock_treasure_chest<ref2.dmore1>
+if !(<R1>)	//50% of chests are trapped
+  ref2.f_trap_container,{1 3},100,04fffffff	//trap the container with the highest possible damage
+endif
+ref2.timer=<def0.treasure_chest_decay>
+ref2.p=<ref1.p>
+ref2.z=<z>			//we should make it rise up from under the ground
+ref2.f_treasure_spawn_guardians	<eval <ref2.morez>/2>	//spawn half the guardians for the first wave
+ref2.f_treasure_digging_effect
+ref1.link.more1=0		//clear out all the info on the treasure map
+ref1.link.name=Completed <ref1.link.name>
+ref1.link.link=04fffffff
+ref1.remove			//remove treasure tile, no need now
+
+[function f_treasure_digging_effect]
+serv.newitem 0913	//01b71
+new.attr=attr_decay
+new.more1=32
+new.morez=<z>
+z -= 8
+new.timerms=10
+new.type=t_treasure_digging_effect
+new.link=<uid>
+new.p=<p>
+
+[typedef t_treasure_digging_effect]
+
+on=@timer
+if (<more1> <= 0)
+  remove
+  return 1
+endif
+sound <R0339,033a>
+serv.newitem 0914
+new.attr 013
+new.timer=15
+new.p=<p.x>,<p.y>,<eval <morez>+(<morem>/16)>
+more2 += 1
+if (<more2> >= 4)
+  link.z += 1
+  more2=
+endif
+movenear <link> 1
+more1 -= 1
+morem += 1
+timerms 250
+return 1
+
+[function f_treasure_spawn_guardians]
+local.amount=<args>
+args=<def0.treasure_map_lvl<dmore1>>
+for <local.amount>
+    serv.newnpc <argv[1]>
+    new.events=+e_treasure_guardian
+    new.tag0.treasure_chest=<uid>
+    new.p=<p>
+    new.movenear <uid> 5
+    new.home=<p>
+    new.homedist=5
+    morez -= 1		//total guardians
+    morem += 1		//spawned guardians
+endfor
+
+[events e_treasure_guardian]
+
+on=@click
+message @027 <name> [ Guardian ]
+return 1
+
+//on=@death
+//uid.<tag0.treasure_chest>.morem -= 1	//this is already handled on=@destroy
+
+on=@destroy
+if (<uid.<tag0.treasure_chest>.isvalid>) 
+  uid.<tag0.treasure_chest>.morem -= 1
+endif
+
+//////////////////////////////
+// The Treasure Chest
+
+[typedef t_treasure_chest]
+
+on=@dclick
+if (<morem>)	//guardians present
+  src.sysmessage You must kill the nearby guardians first
+  return 1
+endif
+
+on=@pickup_self		//spawn guardians when players remove items from the chest (if any are left)
+ref1=<topobj>	//treasure chest
+ref2=<argo>	//item being moved
+if (<ref1.morem>)	//guardians are spawned nearby
+  src.sysmessage You must kill the nearby guardians first
+  return 1
+elseif (<ref1.morez> >= 1) && !(<R3>)	//can spawn another guardian
+  ref1.f_treasure_spawn_guardians 1	//spawn 1 more
+  close					//chest snaps shut!
+  return 1
+endif
+if (<ref2.isvalid>) && (<ref2.isevent.t_treasure_chest>)
+  ref2.events=-t_treasure_chest
+endif
+
+on=@destroy
+ref1=<uid>
+forchars 20
+  if (<isevent.e_treasure_guardian>) && (<tag0.treasure>==<ref1>)
+    remove
+  endif
+endfor
+
+////////////////////////////////////
+// Stocking the Treasure Chest
+
+[function f_treasure_chest_additem]	//command usage : itemid,amount,odds,rolls,function
+//serv.log f_treasure_chest_additem called with args: <args>
+for <argv[3]>
+  if (<argv[2]> <= 0) || !(<R<argv[2]>>) 
+    serv.newitem <argv[0]>,<argv[1]>,<uid>
+    if (<type>==t_container>)
+      events=+t_treasure_chest	//this must be included on containers inside the main treasure chest.
+    endif
+    if !(<isempty <argv[4]>>)	//function
+      new.<argv[4]>
+    endif
+  endif
+endfor
+
+[function f_stock_treasure_chest1]
+f_treasure_chest_additem i_gold,{2000 3000},1,1
+f_treasure_chest_additem random_jewel,{1 3},1,10
+f_treasure_chest_additem random_reagent,{1 3},1,10
+f_treasure_chest_additem random_scroll,{1 3},1,3
+f_treasure_chest_additem i_magic_wand,1,5,1
+f_treasure_chest_additem random_rare_armor_low,1,5,1
+f_treasure_chest_additem random_rare_weapon_low,1,5,1
+f_treasure_chest_additem i_enchanted_jewelry,1,5,1
+
+[function f_stock_treasure_chest2]
+f_treasure_chest_additem i_gold,{3000 4000},1,1
+f_treasure_chest_additem random_jewel,{1 3},1,15
+f_treasure_chest_additem random_reagent,{1 3},1,15
+f_treasure_chest_additem random_scroll,{1 3},1,6
+f_treasure_chest_additem i_magic_wand,1,5,2
+f_treasure_chest_additem random_rare_armor_low,1,5,2
+f_treasure_chest_additem random_rare_weapon_low,1,5,2
+f_treasure_chest_additem i_enchanted_jewelry,1,5,2
+
+[function f_stock_treasure_chest3]
+f_treasure_chest_additem i_gold,{4000 5000},1,1
+f_treasure_chest_additem random_jewel,{1 3},1,20
+f_treasure_chest_additem random_reagent,{1 3},1,20
+f_treasure_chest_additem random_scroll,{1 3},1,9
+f_treasure_chest_additem i_magic_wand,1,5,3
+f_treasure_chest_additem random_rare_armor_mid,1,5,3
+f_treasure_chest_additem random_rare_weapon_mid,1,5,3
+f_treasure_chest_additem i_enchanted_jewelry,1,5,3
+
+[function f_stock_treasure_chest4]
+f_treasure_chest_additem i_gold,{5000 6000},1,1
+f_treasure_chest_additem random_jewel,{1 3},1,25
+f_treasure_chest_additem random_reagent,{1 3},1,25
+f_treasure_chest_additem random_scroll,{1 3},1,12
+f_treasure_chest_additem i_magic_wand,1,5,4
+f_treasure_chest_additem random_rare_armor_high,1,5,4
+f_treasure_chest_additem random_rare_weapon_high,1,5,4
+f_treasure_chest_additem i_enchanted_jewelry,1,5,5
+
+[function f_stock_treasure_chest5]
+f_treasure_chest_additem i_gold,{6000 7000},1,1
+f_treasure_chest_additem random_jewel,{1 3},1,30
+f_treasure_chest_additem random_reagent,{1 3},1,30
+f_treasure_chest_additem random_scroll,{1 3},1,15
+f_treasure_chest_additem i_magic_wand,1,5,5
+f_treasure_chest_additem random_rare_armor_high,1,5,5
+f_treasure_chest_additem random_rare_weapon_high,1,5,5
+f_treasure_chest_additem i_enchanted_jewelry,1,5,5
+
+[function f_stock_treasure_chest6]
+f_treasure_chest_additem i_gold,{7000 8000},1,1
+f_treasure_chest_additem random_jewel,{1 3},1,35
+f_treasure_chest_additem random_reagent,{1 3},1,35
+f_treasure_chest_additem random_scroll,{1 3},1,18
+f_treasure_chest_additem i_magic_wand,1,5,6
+f_treasure_chest_additem random_rare_armor_great,1,5,5
+f_treasure_chest_additem random_rare_weapon_great,1,5,5
+f_treasure_chest_additem i_enchanted_jewelry,1,5,5
+
+[function f_stock_treasure_chest7]
+f_treasure_chest_additem i_gold,{8000 9000},1,1
+f_treasure_chest_additem random_jewel,{1 3},1,40
+f_treasure_chest_additem random_reagent,{1 3},1,40
+f_treasure_chest_additem random_scroll,{1 3},1,21
+f_treasure_chest_additem i_magic_wand,1,5,7
+f_treasure_chest_additem random_rare_armor_great,1,5,7
+f_treasure_chest_additem random_rare_weapon_great,1,5,7
+f_treasure_chest_additem random_rare_armor_ultra,1,5,7
+f_treasure_chest_additem random_rare_weapon_ultra,1,5,7
+f_treasure_chest_additem i_enchanted_jewelry,1,5,7
+
+[function f_treasure_map_fragment_chance]
+doswitch <eval (<more1>-1)> 
+  return 83
+  return 50
+  return 25
+  return 13
+  return 8
+  return 3
+enddo
+
+[EOF]

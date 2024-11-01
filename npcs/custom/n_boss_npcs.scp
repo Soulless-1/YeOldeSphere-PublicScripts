@@ -1,0 +1,542 @@
+//Boss NPCs by Soulless
+//v1.0
+//7:24 AM 1/10/2022
+
+
+
+////////////////////////////////
+// Headless Horseman (Sleepy Hallow Champ)
+
+//shoots exploding pumpkins a players
+//spawns pumpkins that explode
+//spawns evil pumpkins that attack players
+
+//taunts players to "curse" them
+
+
+[CHARDEF c_headless_horseman] 
+ID=c_man
+NAME=Headless Horseman
+DAM=30,40
+ARMOR=100
+CAN=MT_WALK|MT_RUN|MT_EQUIP|MT_USEHANDS
+SOUNDIDLE=019c
+SOUNDNOTICE=03ea
+SOUNDHIT=015f
+SOUNDGETHIT=
+SOUNDDIE=02bc
+//tspeech=spk_human_prime 
+//tspeech=jobMageEvil 
+//tspeech=spk_needs 
+//tspeech=spk_rehello 
+//tspeech=spk_human_default 
+CATEGORY=Custom
+SUBSECTION=Bosses
+DESCRIPTION=Headless Horseman
+
+ON=@Create 
+events=+e_champion_boss
+events=+e_auto_cure
+events=+e_auto_dispel
+events=+e_poison_immunity
+tag0.unbardable=1
+title=Hessian Mercenary
+color=055555
+str={600 900}
+dex={100 125} 
+int={1000 2500} 
+maxhits={30000}
+PARRYING={100.0 120.0}
+SWORDSMANSHIP={100.0 120.0}
+ARCHERY={100.0 120.0}
+WRESTLING={100.0 120.0}
+MAGICRESISTANCE=1750 
+TACTICS={100.0 120.0}
+//POISONING=100.0
+NPC=brain_monster 
+FAME=-10000
+KARMA=-10000 
+
+on=@NpcRestock
+itemnewbie=i_blackrock_ringmail_tunic
+itemnewbie=i_blackrock_ringmail_sleeves
+itemnewbie=i_blackrock_ringmail_gloves
+itemnewbie=i_blackrock_ringmail_leggings
+itemnewbie=i_cape 
+color=0053f
+item=i_sash
+color=0053f
+item=i_boots_calf
+color=0053f
+itemnewbie=i_sword_long
+itemnewbie=i_pumpkin_launcher
+item=i_mt_horse_tan		//this is the horsemans mount
+name=Daredevil
+color=0455
+
+on=@gethit
+ref1=<uid>
+
+if (<src>==<attacker.target>)	//the target we are attacking
+  if (<ref1.distance <src>> < 2)
+    equip <ref1.findid.i_sword_long>
+  else
+    equip <ref1.findid.i_pumpkin_launcher>
+  endif
+endif
+
+if (<R1,100> <= 5)		//10% throw an exploding pumpkin
+  ref2=<attacker.<eval {0 (<ref1.attacker>-1)}>>
+  if (<ref2.isvalid>) && (<ref2.ischar>) && (<ref1.distance <ref2>> <= 15)
+    ref1.f_headless_horseman_talk
+    ref1.f_headless_horseman_throw_pumpkin <ref2>
+  endif
+endif
+
+if (<R1,100> < 5)		//5% curse the ranged enemy
+  if (<src.ischar>) && (<src> != <ref1>) //&& (<src.distance <uid>> > 4)
+    if !(<src.findid.i_hessian_curse>) && !(<src.flags>&statf_dead)
+      ref1.f_headless_horseman_talk
+      serv.newitem i_hessian_curse
+      new.link=<ref1>
+      src.equip <new>
+    endif
+  endif
+endif
+
+if (<R1,100> < 5)		//5% throw several pumpkin bombs at random
+  ref1.f_headless_horseman_talk
+  local.pumpkins={5 10}
+  for <local.pumpkins>
+    serv.newitem i_pumpkin_bomb
+    new.more1={4 6}
+    new.timer=0
+    new.movenear <ref1.uid> 10
+    sector.allclients sendpacket 0c0 00 D0 D0 Wi_fruit_pumpkin W<p.x> W<p.y> B<eval (<p.z>+12)> W<new.p.x> W<new.p.y> B<eval (<new.p.z>+6)> B05 B16 00 00 00 B0 D03a D0
+  endfor
+endif
+
+on=@npcactfollow
+f_headless_horseman_firetrail
+
+on=@npcactwander
+f_headless_horseman_firetrail
+
+on=@deathcorpse		//add special halloween loot
+serv.newitem i_headless_horsemans_helm,1,<argo>
+serv.newitem i_headless_horsemans_title,1,<argo>
+serv.newitem i_pumpkin_launcher,1,<argo>
+for 5
+  serv.newitem tm_random_halloween_items,1,<argo>
+endfor
+serv.newitem i_dye_tub_rare,1,<argo>
+serv.newitem i_dye_tub_rare,1,<argo>
+
+[function f_headless_horseman_talk]
+if !(<R3>)
+  dorand 5
+    say @03a In the shadowed sky, the fire churns, Your efforts, futile, as Fate's wheel turns.
+    say @03a The town, it yearns, for cleansing fire's might, Time dwindles fast, I'll end the night.
+    say @03a My flames now quenched, no ember's spark, I'll guide you to the lifeless dark.
+    say @03a Fire's relentless, your defeat unveiled, Justice victorious, let it be hailed!
+    say @03a Harken, thou cur! My disdain you've earned, Embrace the searing flames, let your lesson be learned!
+  enddo
+endif
+sound 1002
+
+[function f_headless_horseman_throw_pumpkin]
+ref1=<args>
+sound <R1001,1004>
+serv.newitem i_pumpkin_bomb
+new.link=<ref1>
+new.more=3
+new.timer=0
+new.p=<ref1.p>
+sector.allclients sendpacket 0c0 00 D0 D0 Wi_fruit_pumpkin W<p.x> W<p.y> B<eval (<p.z>+12)> W<new.p.x> W<new.p.y> B<eval (<new.p.z>+6)> B05 B16 00 00 00 B0 D03a D0
+
+[itemdef i_hessian_curse]
+defname=i_hessian_curse
+name=Hessian Curse
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+more1=10
+src.events=+e_hessian_curse
+src.emote become overwhelmed with fear
+src.sysmessage  You feel overwhelming terror...
+timer=1
+
+on=@timer
+ref1=<topobj>
+if (<more1> < 1) || (<ref1.distance <link>> > 10) || !(<ref1.canseelos <link>>) || !(<link.isvalid>) || (<ref1.isgm>)
+  remove
+endif
+ref1.effect=3,i_fx_heal_effect,6,65,1,03a,0
+ref1.effect=3,i_fire_column,6,30,1,03a,0
+ref1.circle_effect,i_fire_column,3,0,03a,4
+forchars 4
+  damage <R5,25> dam_fire 0
+endfor
+more1 -= 1
+timer=3
+ref1.sound 0574
+return 1
+
+on=@unequip
+src.events=-e_hessian_curse
+src.sysmessage  The fear seems to have subsided for now...
+
+[itemdef i_pumpkin_bomb]
+defname=i_pumpkin_bomb
+id=i_fruit_pumpkin
+type=t_script
+name=Explosive Pumpkin
+
+on=@create
+attr=010
+color=03a
+
+on=@timer
+ref1=<uid>)
+if (<more1>)
+  say @02b <dmore1>
+  more1 -= 1
+  timer=1
+  return 1
+endif
+forchars 4
+  if (<baseid> != c_headless_horseman) 
+    effect=3,i_fx_explode,6,30,1,03a,0
+    damage <R5,25> dam_fire 0
+  endif
+endfor
+circle_effect,i_fx_explode,2,1,03a,4
+effect=2,i_fx_explode,6,30,1,03a,0
+sound snd_spell_explosion
+consume
+return 1
+
+[events e_hessian_curse]
+
+on=@dclick
+if (<src> != <uid>)
+  findid.i_hessian_curse.remove
+  emote freed from the hessian curse
+endif
+
+on=@death
+findid.i_hessian_curse.remove
+
+[function f_headless_horseman_firetrail]
+ref1=<uid>
+if (<ref1.dir>==6) || (<ref1.dir>==2)
+  ref1.effectLocation=<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,2,i_fx_field_fire,6,65,0,03a
+elseif (<ref1.dir>==0) || (<ref1.dir>=4)
+  serv.newitem 
+  ref1.effectLocation=<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,2,i_fx_field_fire_ns,6,65,0,03a
+elseif (<ref1.dir>==5) || (<ref1.dir>==1)
+  ref1.effectLocation=<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,2,i_fx_field_fire,6,65,0,03a
+  ref1.effectLocation=<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,2,i_fx_field_fire_ns,6,65,0,03a
+else 
+  ref1.effectLocation=<eval (<ref1.p.x>-1)>,<ref1.p.y>,<ref1.p.z>,2,i_fx_field_fire,6,65,0,03a
+  ref1.effectLocation=<ref1.p.x>,<ref1.p.y>,<ref1.p.z>,2,i_fx_field_fire_ns,6,65,0,03a
+endif
+
+//pumkin launcher
+[itemdef i_pumpkin_launcher]
+defname=i_pumpkin_launcher
+name=Pumpkin Launcher
+id=i_crossbow_heavy
+dam=8,43
+speed=20
+type=t_weapon_xbow
+skill=archery
+twohands=y
+weight=8
+range=0,8
+tdata3=i_fruit_pumpkin
+tdata4=i_fruit_pumpkin
+
+on=@create
+hitpoints={250 500}
+color=05af
+
+[itemdef i_headless_horsemans_helm]
+defname=i_headless_horsemans_helm
+name=Headless Horsemans Helm
+id=i_bone_helmet
+armor=100
+type=t_armor
+
+on=@create
+hitpoints=100
+color=05af
+
+[itemdef i_headless_horsemans_title]
+defname=i_headless_horsemans_title
+name=Sleepy Hallow Title
+id=i_deed
+type=t_normal
+
+on=@create
+color=05af
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+elseif (<src.findid.i_headless_horseman_title_memory>)
+  src.sysmessage You have already applied this title.
+  return 1
+endif
+consume
+src.consume i_headless_horseman_title_memory
+serv.newitem i_headless_horseman_title_memory
+new.timer=604800
+src.equip <new>
+src.message You have been given the title of "Savior of Sleepy Hallow" for 1 week!
+src.sound snd_spell_bless
+src.effect=3,i_fx_heal_effect,6,15,1
+return 1
+
+[itemdef i_headless_horseman_title_memory]
+defname=i_headless_horseman_title_memory
+name=Sleppy Hallow Title
+type=t_eq_script
+id=i_memory
+layer=layer_special
+
+on=@equip
+src.tag0.name.suffix=" Savior of Sleepy Hallow"
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.tag0.name.suffix=
+
+
+//////////////////////////////////
+// MONDAIN
+
+//casts firewall that does half your total hitpoints as damage
+//summon's pillars that rise from the ground and shoot firebolts at nearby players
+//summons horde monsters that attack players
+//calls forth minax who heals him and does radius damage to players (this is the only thing that cant be stopped, but only avoided)
+
+//mondains firewall can be prevented damage with a fire shield
+//mondains statues damage can be prevented with a helm
+//mondains horde can be avoided with a robe of the horde
+//minax can be defeated easier with a special weapon
+
+[chardef c_boss_mondain]
+defname=c_boss_mondain
+id=c_man
+name=Mondain
+can=mt_walk|mt_run|mt_usehands|mt_equip
+armor=100
+dam=20,25
+CATEGORY=Custom
+SUBSECTION=Bosses
+DESCRIPTION=Mondian
+
+on=@create
+events=+e_champion_boss
+events=+e_auto_cure
+events=+e_auto_dispel
+events=+e_poison_immunity
+tag0.unbardable=1
+npc=brain_human
+title=the Wizard
+color=083ea
+str={1551 3276}
+dex={1551 3276}
+int={1551 3276}
+wrestling={100.0 150.0}
+tactics={100.0 150.0}
+magery={100.0 150.0}
+evaluatingintel={100.0 150.0}
+magicresistance={100.0 150.0}
+meditation={100.0 150.0}
+maxhits=15000
+title=the Wizard
+fame=10000
+karma=-10000
+make_spellcaster 6,8
+itemnewbie=i_beard_goatee
+color=colors_black
+itemnewbie=i_backpack
+
+on=@npcrestock
+item=i_doublet
+color=0d
+item=i_skirt_long
+color=colors_green
+item=i_sandals
+color=colors_black
+item=i_ring_gold
+item=i_necklace_gold
+
+on=@npcactfight
+if !(<R25>)
+  f_boss_mondain_firewall
+endif
+if !(<R25>)
+  f_boss_mondain_summon_horde
+endif
+
+
+[function f_boss_mondain_firewall]
+ref1=<uid>
+local.direction=<R0,7>
+local.front=<truedir <local.direction>>
+local.back=<reversetruedir <local.direction>>
+serv.newitem i_boss_mondain_firewall
+new.p=<ref1.p>
+new.morem=<local.direction>
+new.more2=<R18,22>
+new.move <local.back> 10
+new.timer=0
+new.f_boss_mondain_generate_firewall_sides
+serv.newitem i_boss_mondain_firewall2
+new.p=<ref1.p>
+new.morem=<local.direction>
+new.more2=<R18,22>
+new.move <local.back> 10
+new.timer=0
+new.f_boss_mondain_generate_firewall_sides
+ref1.sound 01dd
+
+[itemdef i_boss_mondain_firewall]
+defname=i_boss_mondain_firewall
+id=i_fx_explode		//0398c
+name=Firewall
+type=t_boss_mondain_firewall
+
+[itemdef i_boss_mondain_firewall2]
+defname=i_boss_mondain_firewall2
+id=i_fx_explode		//03996
+name=Firewall
+type=t_boss_mondain_firewall
+
+[typedef t_boss_mondain_firewall]
+
+on=@create
+attr |= attr_move_never
+
+on=@timer
+if (<more1> >= <more2>)
+  remove
+endif
+move <truedir <morem>>
+more1 += 1
+f_boss_mondain_firewall_damage
+dispid={036b0 1 036bd 1}
+effectLocation <p.x>,<p.y>,<p.z>,2,{036b0 1 036bd 1},6,13,0,0,0
+sound <R011b 011e>
+timerms=250
+return 1
+
+[function f_boss_mondain_firewall_damage]
+forchars 0
+  if (<baseid> != c_boss_mondain) && !(<findid.i_boss_mondain_horde>)	// && (<baseid> != c_boss_minax)
+    damage <eval <hits>/2> dam_fire <uid>
+    message
+  endif
+endfor
+
+[function f_boss_mondain_generate_firewall_sides]
+ref1=<uid>
+doswitch <morem>
+  args=w,e	
+  args=nw,se
+  args=n,s
+  args=ne,sw
+  args=e,w
+  args=se,nw
+  args=s,n
+  args=sw,ne
+enddo
+for 15
+  serv.newitem i_boss_mondain_firewall
+  new.p=<ref1.p>
+  new.morem=<ref1.morem>
+  new.more2=<R18,22>
+  new.move <argv[0]> <dlocal._for>
+  new.timer=<ref1.timer>
+  serv.newitem i_boss_mondain_firewall2
+  new.p=<ref1.p>
+  new.morem=<ref1.morem>
+  new.more2=<R18,22>
+  new.move <argv[0]> <dlocal._for>
+  new.timer=<ref1.timer>
+endfor
+for 15
+  serv.newitem i_boss_mondain_firewall
+  new.p=<ref1.p>
+  new.morem=<ref1.morem>
+  new.more2=<R18,22>
+  new.move <argv[1]> <dlocal._for>
+  new.timer=<ref1.timer>
+  serv.newitem i_boss_mondain_firewall2
+  new.p=<ref1.p>
+  new.morem=<ref1.morem>
+  new.more2=<R18,22>
+  new.move <argv[1]> <dlocal._for>
+  new.timer=<ref1.timer>
+endfor
+
+[function f_boss_mondain_summon_horde]
+
+ref1=<uid>
+if (<ref1.attacker> >= 1)
+  for a 0 <ref1.attacker>
+    ref2=<ref1.attacker.<dlocal.a>>
+    if (<ref2.isvalid>)
+      serv.newnpc { c_mongbat 1 c_headless 1 c_lizardman 1 c_ratman 1 c_orc 1}
+      ref3=<new>
+      ref3.name=Mondain's Horde
+      ref3.color=0386
+      ref3.movenear <ref1> 10
+      ref3.face <ref2>
+      serv.newitem i_boss_mondain_horde
+      new.more1=30
+      new.timer=1
+      ref3.equip <new>
+      ref3.bark 3
+      ref3.attack <ref2>
+    endfor
+  endif
+  ref1.sound 0216
+  ref1.emote summon his horde forth
+endif
+
+[itemdef i_boss_mondain_horde]
+defname=i_boss_mondain_horde
+id=i_rune_summon_creature
+name=Horde Summoned by Mondain
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if (<more1> <= 0)
+  topobj.remove
+elseif (<more1>==1)
+  topobj.anim 16
+endif
+more1 -= 1
+timer=1
+return 1
+
+
+
+
+
+
+
+
+[EOF]
+

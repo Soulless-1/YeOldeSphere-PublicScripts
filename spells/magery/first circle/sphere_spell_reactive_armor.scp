@@ -1,0 +1,44 @@
+[SPELL 7]
+DEFNAME=s_reactive_armor
+NAME=Reactive Armor
+SOUND=snd_spell_reactive_armor
+RUNES=FS
+CAST_TIME=1.8	//0.8
+RESOURCES=i_reag_garlic,i_reag_spider_silk,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_reactive_armor
+SCROLL_ITEM=i_scroll_reactive_armor
+FLAGS=spellflag_dir_anim|spellflag_good|spellflag_playeronly|spellflag_fx_targ|spellflag_targ_char|spellflag_scripted	
+EFFECT_ID=i_fx_heal_effect
+EFFECT=10.0,60.0
+LAYER=layer_spell_reactive
+DURATION=2*60.0,3*60.0	//3*60.0,5*60.0
+MANAUSE=4
+SKILLREQ=MAGERY 0.0
+INTERRUPT=100.0,100.0
+
+on=@select
+if (<src.findid.i_rune_reactive_armor>)
+  //src.sysmessage This spell is already in effect.
+  //return 1
+//elseif (<src.findid.i_rune_beneficial_spell_cooldown>) || (<src.findid.i_rune_protection>) || (<src.findid.i_rune_spell_reflection>)
+  //src.sysmessage This spell will not adhere to you at this time. <qval (<src.findid.i_rune_beneficial_spell_cooldown>)?(<src.findid.i_rune_beneficial_spell_cooldown.dtimer>):>
+  //return 1
+//endif
+
+//Reactive Armor reflects melee damage back to the attacker. A certain amount of damage can be absorbed before the spell wears off
+//Formula: Magery + Meditation + Inscription / 3. With a max damage absorbption of 75 points
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval ((<local.spell_strength>+<src.meditation>+<src.inscription>)/10)/3>
+local.effect=<qval (125 <= <local.effect>)?125:<local.effect>>
+effect=3,<serv.spell.7.effect_id>,6,15,1
+consume i_rune_reactive_armor
+consume i_rune_reactive_armor_custom		
+serv.newitem i_rune_reactive_armor_custom
+new.timer=3*60
+new.more2=<local.effect>
+equip <new>
+return 1
+
+[EOF]

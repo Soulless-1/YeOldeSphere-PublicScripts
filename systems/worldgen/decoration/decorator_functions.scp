@@ -1,0 +1,155 @@
+
+[function f_decorate_facet]
+ref1=<uid>
+local.n=<args>
+while !(<isempty <def.worlddecorator_facet_<dlocal.n>_<dlocal.x>>>)
+  args=<def0.worlddecorator_facet_<dlocal.n>_<dlocal.x>>
+  ref1.<argv[1]>
+  var0.<argv[1]> += 1
+  local.x += 1
+endwhile
+ref1.sysmessage @<eval 026+(<local.n>*20)> Decorating <def0.worlddecorator_facet_<dlocal.n>> complete.
+
+[function f_name_shop_signs]	//send an item to 1 1 1 <map_plane> and make it run this function, then remove the item
+local.p=<p>
+for 0 5
+  p=1,1,1,<local._for>
+  foritems 9999
+    if (<type>==t_sign_gump)
+      name=<f_name_new_sign>
+    endif
+  endfor
+endfor
+p=<local.p>
+update
+
+[function f_name_new_sign]
+serv.newitem i_memory
+new.p=<p>
+for N 0 7
+  if !(<isempty <new.tag.name>>)
+    new.remove
+    return <new.tag.name>
+  endif
+  new.p=<p>
+  doswitch <dlocal.n>
+    new.f_find_sign_name n
+    new.f_find_sign_name ne
+    new.f_find_sign_name e
+    new.f_find_sign_name se
+    new.f_find_sign_name s
+    new.f_find_sign_name sw
+    new.f_find_sign_name w
+    new.f_find_sign_name nw
+  enddo
+endfor
+
+[function f_find_sign_name]
+move <args> 2
+if (<room>)
+  tag.name=<room.name>
+  return 1
+endif
+
+[function f_remove_duplicate_doors]
+foritems 9999
+  if (<type>==t_door)
+    ref1=<uid>
+    foritems 0
+      if (<type>==t_door) && (<uid> != <ref1.uid>) && (<z>==<ref1.z>)
+        ref2=<uid>
+        if (<ref2.uid> > <ref1.uid>) //uid of the one placed latest will be a higher number
+          ref2.remove
+        endif
+      endif
+    endfor
+  endif
+endfor
+
+[function f_link_double_doors]	//send an item to 1 1 1 <map_plane> and make it run this function, then remove the item
+local.p=<p>
+for 0 5
+  p=1,1,1,<local._for>
+  foritems 9999
+    if (<type>==t_door)
+      ref1=<uid>
+      foritems 1
+        if (<type>==t_door) && (<uid> != <ref1>)  && (<z>==<ref1.z>)
+          ref2=<uid>
+          ref1.link=<ref2>
+        endif
+      endfor
+    endif
+  endfor
+endfor
+p=<local.p>
+update
+
+[function f_reset_decoration_counters]
+while !<isempty <def.worlddecorator_facet_<dlocal.n>>>
+  while !<isempty <def.worlddecorator_facet_<dlocal.n>_<dlocal.x>>>
+    args=<def0.worlddecorator_facet_<dlocal.n>_<dlocal.x>>
+    var0.<argv[1]>=
+    local.x += 1
+  endwhile
+  local.n += 1
+  local.x=
+endwhile
+
+[function f_destroy_world]
+local.p=<P>
+p=1,1,1,0
+update
+for 0 5
+  p=1,1,1,<dlocal._for>
+  foritems 9999
+    remove
+  endfor
+  forchars 9999
+    if (<npc>)
+       remove
+    endif
+  endfor
+endfor
+p=<local.p>
+update
+f_reset_decoration_counters
+reset_spawn_counters
+sysmessage @026 World completey destroyed
+
+[function f_remove_all_signs]
+local.p=<P>
+p=1,1,1,0
+update
+for 0 5
+  p=1,1,1,<dlocal._for>
+  foritems 9999
+    if (<type>==t_sign_gump)
+      remove
+    endif
+  endfor
+endfor
+p=<local.p>
+update
+sysmessage @026 All signs removed
+
+[function f_remove_all_doors]
+local.p=<P>
+p=1,1,1,0
+update
+for 0 5
+  p=1,1,1,<dlocal._for>
+  foritems 9999
+    if (<type>==t_door) || (<type>==t_door_locked)
+      remove
+    endif
+  endfor
+endfor
+p=<local.p>
+update
+sysmessage @026 All doors removed
+
+
+[EOF]
+
+

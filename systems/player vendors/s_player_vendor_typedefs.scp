@@ -1,0 +1,65 @@
+//Player Vendors by Soulless
+//v1.0
+//2:47 PM 5/21/2021
+
+
+[typedef t_player_vendor_selling]
+
+
+on=@click
+message Price: <qval (<tag0.player_vendor_price> <= 0)?Not for sale.:<dtag0.player_vendor_price>>
+if !(<isempty <tag.player_vendor_description>>)
+  message <tag0.player_vendor_description>
+endif
+//message <qval (<amount> <= 1)?<name>:<amount> <name>>
+//return 1
+
+on=@dclick
+if (<type> != t_container) && (<type> != t_book)
+  src.sysmessage You cannot use that where it is.
+  return 1
+endif
+
+on=@dropon_item
+if !(<argo.topobj.isevent.e_player_vendor>)
+  serv.log <name>(<uid>) taken from player vendor <argo.topobj.name>(<argo.topobj>) at (<argo.topobj.p>)
+  f_player_vendor_remove_props
+endif
+//f_player_vendor_restore_oldattr
+
+on=@dropon_ground
+f_player_vendor_remove_props
+//f_player_vendor_restore_oldattr
+
+on=@dropon_trade
+f_player_vendor_remove_props
+//f_player_vendor_restore_oldattr
+
+on=@spelleffect
+return 1
+
+on=@destroy
+serv.log <name>(<uid>) vendor item destroyed, this should not happen. on <topobj.name>(<topobj>) at <topobj.p>
+
+[typedef t_player_vendor_container]
+
+on=@dropon_self
+//f_player_vendor_receive_item <argo>
+if !(<tag0.player_vendor_price>) || (<argo.topobj.findlayer.21> == <uid>)
+  //argo.tag0.player_vendor_oldattr=<argo.attr>
+  serv.log <topobj.name>(<topobj>) received <argo.name>(<argo>) from <src.name>(<src>) at <src.p>
+  f_player_vendor_receive_item <argo>
+else
+  argo.f_player_vendor_remove_props
+endif
+
+on=@dclick
+open
+return 1
+
+
+
+
+[EOF]
+
+

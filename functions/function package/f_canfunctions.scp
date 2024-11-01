@@ -1,0 +1,87 @@
+//Part of Soulless' function package
+//v1.0
+//11:47 AM 6/23/2021
+
+[comment]
+canattack		//can you attack this char?
+canmount		//can mount this char?
+caneat			//can this char eat an item?
+canpackaccess		//can you access this item via your backpack
+canbankaccess		//can you access this item via your bank
+canbepoisoned		//return 1 if this char can be poisoned
+canlootcorpse		//returns 1 if you are able to loot the corpse
+
+[function canattack]	//returns if this is a valid char target to attack
+//argo = target
+ref1=<argo>
+if !(<ref1.isvalid>) 
+  ref1=<uid>
+endif
+if (<ref1.flags>&statf_invul) || (<ref1.tag0.young>) || (<src.tag0.young>)
+  return 0
+elseif (<ref1.region.flags>&region_flag_safe) || ((<ref1.region.flags>&region_flag_no_pvp) && (<ref1.isplayer>))
+  return 0
+endif
+return 1
+
+[function canmount]
+if !(<ishuman>) && !(<iself>)
+  return 0
+elseif (<flags>&statf_polymorph) || (<flags>&statf_dead)
+  return 0
+endif
+return 1
+
+[function caneat]
+ref1=<uid>	//char
+ref2=<argv[0]>	//food item
+args=<ref1.foodtype>
+for n 0 <eval (<argv>-1)>
+  local.foodtype=<argv[<dlocal.n>]>
+  if (<ref2.type>==<streat <local.foodtype>>)
+    return 1
+  endif
+endfor
+return 0
+
+[function canpackaccess]
+ref1=<args>
+if ((<ref1.isvalid>) && (<ref1.topcont.isvalid>) && (<ref1.topcont> == <findlayer.21>)) || (<isgm>) 
+  return 1
+endif
+return 0
+
+[function canbankaccess]
+ref1=<args>
+if ((<ref1.isvalid>) && (<ref1.topcont.isvalid>) && (<ref1.topcont> == <findlayer.29>) && (<isbankopen>)) || (<isgm>)
+  return 1
+endif
+return 0
+
+[function canbepoisoned]
+if (<npc>) && (<poisoning>)
+  return 0
+elseif (<isevent.e_poison_immunity>) || (<istevent.e_poison_immunity>) || (<isevent.e_undead>) || (<istevent.e_undead>)
+  return 0
+endif
+return 1
+
+[function canlootcorpse]
+ref1=<uid>			//char trying to open corpse
+ref2=<args>			//corpse we're checking
+//serv.log <ref1.name>(<ref1>) checking corpse loot rights on <ref2> : <ref2.tag0.killers>
+if !(<isempty <ref2.tag0.killers>>) 
+  args=<ref2.tag0.killers>	//this is tagged on generic char event
+    for n 1 <argv>
+      ref3=<argv[<dlocal.n>]>
+      if (<ref3.isvalid>) 
+        if (<argv[<dlocal.n>]> == <ref1>)
+          //serv.log valid corpse looter <argv[<dlocal.n>]> <--> <ref1>
+          return 1
+       endif
+    endif
+  endfor
+endif
+return 0
+
+[EOF]

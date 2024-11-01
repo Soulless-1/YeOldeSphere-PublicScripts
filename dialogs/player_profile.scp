@@ -1,0 +1,171 @@
+//Player Profile by Soulless
+//v1.0
+//1:53 AM 10/2/2018
+
+
+[defname player_profile_settings]
+player_profile_rating_delay		60	//how long must a player wait to provide another community rating
+player_profile_friend_request		2	//0=off, 1=instant add, 2=friend confirm
+
+
+/////////////////////////
+// Main player profile
+
+[dialog d_player_profile]
+
+150,75
+
+page 0
+resizepic 10 10 9380 340 340
+dtext 110 13 1263 <name>'s profile :
+
+page 1
+
+resizepic 35 50 3000 290 100
+if (<src>==<uid>)
+  dtextentrylimited 40 55 280 90 0 1 220 <tag.profile_intro>
+  button 295 130 4023 4025 1 0 1
+else
+  dhtmlgump 40 55 290 80 0 0 <def0.bfont_black><tag.profile_intro>
+endif
+
+if (<src> == <uid>) || (<src.isgm>)
+  button 90 162 1209 1210  0 2	//player title button
+  dtext 110 160 1000 <qval (!<isempty <title>>)>?<title>:Select a GM Title>	//button is above
+else
+  dtext 110 160 1000 <title>
+  if (<def0.player_profile_friend_request> >= 1)
+    button 275 185 4009 4010 1 0 4	//friend request
+    if (<serv.list.<src.account>_friends.findelem <uid>> < 0)
+      dtext 195 185 1000 Add Friend
+    else
+      dtext 175 185 1000 Remove Friend
+    endif
+  endif
+  button 195 265 5602 5606 1 0 5	//player community vote buttons
+  button 210 265 5600 5604 1 0 6 
+endif
+
+//button 125 185 4012 4013  0 3	//add a menu to select a face/race/level/birth/backstory, etc
+//dtext 50 185 1000 Player Bio
+
+//dtext 100 220 1000 Since : <strarg <account.firstconnectdate>>
+dtext 60 220 1000 This player was created <eval ((((<create>/10)/60)/60)/24)> days ago
+dtext 100 235 1000 and has <eval (<tag0.onlinetime>/60)> online hours.
+
+
+
+dtext 70 265 1263 Community Rating: 
+dtext 240 265 <qval (<tag0.profile_community_rating> < 0)?027:046> <qval (0 < <dtag0.profile_community_rating>)?+:><dtag0.profile_community_rating>
+
+dtext 70 290 1000 Fame: <fame> / Karma : <karma>
+
+page 2
+
+resizepic 10 10 9380 560 340
+dtext 110 13 1263 Select a new GM skill title : 
+
+local.s=<eval <argn1>*24>
+for 0 48
+  if (<serv.skill.<eval <local.s>+<local.n>>.key>) && (<<serv.skill.<eval <local.s>+<local.n>>.key>> > 999)
+    button <eval 45+(<local.c>*130)> <eval 50+(18*<local.r>)> 1209 1210 1 0 <eval <local.s>+<local.n>+10>
+    dtext <eval 70+(<local.c>*130)> <eval 48+(18*<local.r>)> 1000 <serv.skill.<eval <local.s>+<local.n>>.title>
+  else
+    dtext <eval 70+(<local.c>*130)> <eval 48+(18*<local.r>)> 902 <serv.skill.<eval <local.s>+<local.n>>.title>
+  endif
+
+  local.r += 1	//row
+  local.n += 1
+  if (<local.r> == 13)
+    local.c += 1
+    local.r=
+  endif
+endfor
+
+if (<memoryfindtype.memory_guild.isvalid>)
+  //ref1=<guild.memberfromuid.<uid>.uid>
+  button 200 302 1209 1210 1 0 100
+  dtext 220 300 044 Guild Title: <guild.memberfromuid.<uid>.guildtitle>
+endif
+
+
+button 40 300 4014 4016 0 1
+dtext 80 300 1263 Back
+
+
+[dialog d_player_profile button]
+
+onbutton=1
+tag0.profile_intro=<argtxt[1]>
+sysmessage Profile bio updated.
+dialog d_player_profile
+
+onbutton=2
+dialog d_player_profile_title
+
+onbutton=4
+if (<serv.list.<src.account>_friends.findelem <uid>> < 0)
+  if (<def0.player_profile_friend_request>==0)	//friends disabled
+    src.sysmessage The friends system is not currently enabled
+  elseif (<def0.player_profile_friend_request>==1)	//add without player request
+    src.sysmessage <name> added to your friend list.
+    serv.list.<src.account>_friends.add <uid>
+  //elseif ADDREQUEST
+  endif
+else
+  src.sysmessage <name> removed from friend list.
+  serv.list.<src.account>_friends.<serv.list.<src.account>_friends.findelem <uid>>.remove
+endif
+dialog d_player_profile
+
+onbutton=5
+if (<src.account.lastip> == <account.lastip>) 
+  src.sysmessage You cannot rate this community member.
+  return 1
+elseif (<eval (<serv.time>-<src.account.tag0.last_player_rated>)/10> < 60*<def0.player_profile_rating_delay>)
+  src.sysmessage You cannot rate a community member again so soon.
+  dialog d_player_profile
+  return 1
+endif
+src.account.tag0.last_player_rated=<serv.time>
+tag0.profile_community_rating -= 1
+dialog d_player_profile
+
+onbutton=6
+if (<src.account.lastip> == <account.lastip>) 
+  src.sysmessage You cannot rate this community member.
+  return 1
+elseif (<eval (<serv.time>-<src.account.tag0.last_player_rated>)/10> < 60*<def0.player_profile_rating_delay>)
+  src.sysmessage You cannot rate a community member again so soon.
+  dialog d_player_profile
+  return 1
+endif
+src.account.tag0.last_player_rated=<serv.time>
+tag0.profile_community_rating += 1
+dialog d_player_profile
+
+onbutton=10,59
+argn -= 10
+
+local.t=<f_player_profile_get_gmtitle <<serv.skill.<dargn>.key>>> <serv.skill.<dargn>.title>
+title=<local.t>
+sysmessage Your title has been changed to <local.t>.
+dialog d_player_profile
+
+onbutton=100
+local.t=<guild.memberfromuid.<uid>.guildtitle>
+title=<local.t>
+sysmessage Your title has been changed to <local.t>.
+dialog d_player_profile
+
+[function f_player_profile_get_gmtitle]
+if (<args> >= 1200)
+  return Legendary
+elseif (<args> >= 1100)
+  return Elder
+else (<args> >= 1000)
+  return Grandmaster
+endif
+
+
+[EOF]

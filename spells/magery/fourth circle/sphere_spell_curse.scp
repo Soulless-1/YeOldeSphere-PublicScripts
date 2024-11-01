@@ -1,0 +1,32 @@
+[SPELL 27]
+DEFNAME=s_curse
+NAME=Curse
+SOUND=snd_spell_curse
+RUNES=DS
+CAST_TIME=1.5
+RESOURCES=i_reag_garlic,i_reag_nightshade,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_curse
+SCROLL_ITEM=i_scroll_curse
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|spellflag_curse|spellflag_resist
+EFFECT_ID=i_fx_curse
+EFFECT=5,15
+LAYER=layer_spell_stats
+DURATION=10.0,60.0
+MANAUSE=11
+SKILLREQ=MAGERY 30.0
+INTERRUPT=100.0,100.0
+
+//Temporarily lower all your target's Stats. The effectiveness of this spell is based on the caster's Magery
+//Formula: [Magery/10, rounded down = # of stat points lost] (ie: at 85 magery, your Curse spell would remove 8 Strength, Dexterity, and Intelligence for the duration of the spell)
+on=@effect
+consume i_rune_clumsy
+consume i_rune_feeblemind
+consume i_rune_weaken
+consume i_rune_curse
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval (<local.spell_strength>/10)/10>
+
+
+
+[EOF]

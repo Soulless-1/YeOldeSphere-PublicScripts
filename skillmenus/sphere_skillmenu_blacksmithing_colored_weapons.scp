@@ -1,0 +1,1776 @@
+
+
+[SKILLMENU sm_colored_weapons]
+Colored weapons
+
+ON=0156a Bronze Weapons
+SKILLMENU=sm_bronze_weapons
+
+ON=0156a Rusty Weapons
+SKILLMENU=sm_rusty_weapons
+
+ON=0156a Old Copper Weapons
+SKILLMENU=sm_old_copper_weapons
+
+ON=0156a Dull Copper Weapons
+SKILLMENU=sm_dull_copper_weapons
+
+ON=0156a Copper Weapons
+SKILLMENU=sm_copper_weapons
+
+ON=0156a Silver Weapons
+SKILLMENU=sm_silver_weapons
+
+ON=0156a Golden Weapons
+SKILLMENU=sm_golden_weapons
+
+ON=0156a Black Rock Weapons
+SKILLMENU=sm_blackrock_weapons
+
+ON=0156a Blood Rock Weapons
+SKILLMENU=sm_bloodrock_weapons
+
+ON=0156a Mytheril Weapons
+SKILLMENU=sm_mytheril_weapons
+
+ON=0156a Verite Weapons
+SKILLMENU=sm_verite_weapons
+
+ON=0156a Valorite Weapons
+SKILLMENU=sm_valorite_weapons
+
+ON=0156a Rose Weapons
+SKILLMENU=sm_rose_weapons
+
+ON=0156a Agapite Weapons
+SKILLMENU=sm_agapite_weapons
+
+ON=0156a Shadow Weapons
+SKILLMENU=sm_shadow_weapons
+
+
+/////////////////////////////////////////
+//Start of Bronze Weapons
+
+[SKILLMENU sm_bronze_weapons]
+Bronze Weapons
+
+ON=i_bronze_sword_viking Bronze Swords & Blades
+SKILLMENU=sm_bronze_swords_blades
+
+ON=i_bronze_axe_battle Axes
+SKILLMENU=sm_bronze_axes
+
+ON=i_bronze_mace Bronze Maces & Hammers
+SKILLMENU=sm_bronze_maces_hammers
+
+ON=i_bronze_pitchfork Bronze Spears and Forks
+SKILLMENU=sm_bronze_spears_forks
+
+ON=i_bronze_halberd Bronze Pole Arms
+SKILLMENU=sm_bronze_pole_arms
+
+[SKILLMENU sm_bronze_swords_blades]
+Bronze Swords & Blades
+
+ON=i_bronze_sword_broad <name> (<resmake>)
+MAKEITEM=i_bronze_sword_broad
+
+ON=i_bronze_cutlass <name> (<resmake>)
+MAKEITEM=i_bronze_cutlass
+
+ON=i_bronze_dagger <name> (<resmake>)
+MAKEITEM=i_bronze_dagger
+
+ON=i_bronze_katana <name> (<resmake>)
+MAKEITEM=i_bronze_katana
+
+ON=i_bronze_kryss <name> (<resmake>)
+MAKEITEM=i_bronze_kryss
+
+ON=i_bronze_sword_long <name> (<resmake>)
+MAKEITEM=i_bronze_sword_long
+
+ON=i_bronze_scimitar <name> (<resmake>)
+MAKEITEM=i_bronze_scimitar
+
+ON=i_bronze_sword_viking <name> (<resmake>)
+MAKEITEM=i_bronze_sword_viking
+
+[SKILLMENU sm_bronze_axes]
+Bronze Axes
+
+ON=i_bronze_axe_exec <name> (<resmake>)
+MAKEITEM=i_bronze_axe_exec
+
+ON=i_bronze_axe <name> (<resmake>)
+MAKEITEM=i_bronze_axe
+
+ON=i_bronze_axe_double <name> (<resmake>)
+MAKEITEM=i_bronze_axe_double
+
+ON=i_bronze_axe_battle <name> (<resmake>)
+MAKEITEM=i_bronze_axe_battle
+
+ON=i_bronze_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_bronze_axe_battle_large
+
+ON=i_bronze_axe_war <name> (<resmake>)
+MAKEITEM=i_bronze_axe_war
+
+ON=i_bronze_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_bronze_axe_two_hand
+
+[SKILLMENU sm_bronze_maces_hammers]
+Bronze Maces & Hammers
+
+ON=i_bronze_hammer_pick <name> (<resmake>)
+MAKEITEM=i_bronze_hammer_pick
+
+ON=i_bronze_mace <name> (<resmake>)
+MAKEITEM=i_bronze_mace
+
+ON=i_bronze_maul <name> (<resmake>)
+MAKEITEM=i_bronze_maul
+
+ON=i_bronze_hammer_smith <name> (<resmake>)
+MAKEITEM=i_bronze_hammer_smith
+
+ON=i_bronze_hammer_war <name> (<resmake>)
+MAKEITEM=i_bronze_hammer_war
+
+ON=i_bronze_mace_war <name> (<resmake>)
+MAKEITEM=i_bronze_mace_war
+
+[SKILLMENU sm_bronze_spears_forks]
+Bronze Spears & Forks
+
+ON=i_bronze_spear_short <name> (<resmake>)
+MAKEITEM=i_bronze_spear_short
+
+ON=i_bronze_spear <name> (<resmake>)
+MAKEITEM=i_bronze_spear
+
+ON=i_bronze_war_fork <name> (<resmake>)
+MAKEITEM=i_bronze_war_fork
+
+[SKILLMENU sm_bronze_pole_arms]
+Bronze Pole Arms
+
+ON=i_bronze_bardiche <name> (<resmake>)
+MAKEITEM=i_bronze_bardiche
+
+ON=i_bronze_halberd <name> (<resmake>)
+MAKEITEM=i_bronze_halberd
+
+
+/////////////////////////////////////////
+//Start of Rusty Weapons
+
+[SKILLMENU sm_rusty_weapons]
+Rusty Weapons
+
+ON=i_rusty_sword_viking Rusty Swords & Blades
+SKILLMENU=sm_rusty_swords_blades
+
+ON=i_rusty_axe_battle Rusty Axes
+SKILLMENU=sm_rusty_axes
+
+ON=i_rusty_mace Rusty Maces & Hammers
+SKILLMENU=sm_rusty_maces_hammers
+
+ON=i_rusty_pitchfork Rusty Spears and Forks
+SKILLMENU=sm_rusty_spears_forks
+
+ON=i_rusty_halberd Rusty Pole Arms
+SKILLMENU=sm_rusty_pole_arms
+
+[SKILLMENU sm_rusty_swords_blades]
+Rusty Swords & Blades
+
+ON=i_rusty_sword_broad <name> (<resmake>)
+MAKEITEM=i_rusty_sword_broad
+
+ON=i_rusty_cutlass <name> (<resmake>)
+MAKEITEM=i_rusty_cutlass
+
+ON=i_rusty_dagger <name> (<resmake>)
+MAKEITEM=i_rusty_dagger
+
+ON=i_rusty_katana <name> (<resmake>)
+MAKEITEM=i_rusty_katana
+
+ON=i_rusty_kryss <name> (<resmake>)
+MAKEITEM=i_rusty_kryss
+
+ON=i_rusty_sword_long <name> (<resmake>)
+MAKEITEM=i_rusty_sword_long
+
+ON=i_rusty_scimitar <name> (<resmake>)
+MAKEITEM=i_rusty_scimitar
+
+ON=i_rusty_sword_viking <name> (<resmake>)
+MAKEITEM=i_rusty_sword_viking
+
+[SKILLMENU sm_rusty_axes]
+Rusty Axes
+
+ON=i_rusty_axe_exec <name> (<resmake>)
+MAKEITEM=i_rusty_axe_exec
+
+ON=i_rusty_axe <name> (<resmake>)
+MAKEITEM=i_rusty_axe
+
+ON=i_rusty_axe_double <name> (<resmake>)
+MAKEITEM=i_rusty_axe_double
+
+ON=i_rusty_axe_battle <name> (<resmake>)
+MAKEITEM=i_rusty_axe_battle
+
+ON=i_rusty_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_rusty_axe_battle_large
+
+ON=i_rusty_axe_war <name> (<resmake>)
+MAKEITEM=i_rusty_axe_war
+
+ON=i_rusty_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_rusty_axe_two_hand
+
+[SKILLMENU sm_rusty_maces_hammers]
+Rusty Maces & Hammers
+
+ON=i_rusty_hammer_pick <name> (<resmake>)
+MAKEITEM=i_rusty_hammer_pick
+
+ON=i_rusty_mace <name> (<resmake>)
+MAKEITEM=i_rusty_mace
+
+ON=i_rusty_maul <name> (<resmake>)
+MAKEITEM=i_rusty_maul
+
+ON=i_rusty_hammer_smith <name> (<resmake>)
+MAKEITEM=i_rusty_hammer_smith
+
+ON=i_rusty_hammer_war <name> (<resmake>)
+MAKEITEM=i_rusty_hammer_war
+
+ON=i_rusty_mace_war <name> (<resmake>)
+MAKEITEM=i_rusty_mace_war
+
+[SKILLMENU sm_rusty_spears_forks]
+Rusty Spears & Forks
+
+ON=i_rusty_spear_short <name> (<resmake>)
+MAKEITEM=i_rusty_spear_short
+
+ON=i_rusty_spear <name> (<resmake>)
+MAKEITEM=i_rusty_spear
+
+ON=i_rusty_war_fork <name> (<resmake>)
+MAKEITEM=i_rusty_war_fork
+
+[SKILLMENU sm_rusty_pole_arms]
+rusty Pole Arms
+
+ON=i_rusty_bardiche <name> (<resmake>)
+MAKEITEM=i_rusty_bardiche
+
+ON=i_rusty_halberd <name> (<resmake>)
+MAKEITEM=i_rusty_halberd
+
+
+/////////////////////////////////////////
+//Start of Old Copper Weapons
+
+[SKILLMENU sm_old_copper_weapons]
+old_copper Weapons
+
+ON=i_old_copper_sword_viking Old Copper Swords & Blades
+SKILLMENU=sm_old_copper_swords_blades
+
+ON=i_old_copper_axe_battle Old Copper Axes
+SKILLMENU=sm_old_copper_axes
+
+ON=i_old_copper_mace Old Copper Maces & Hammers
+SKILLMENU=sm_old_copper_maces_hammers
+
+ON=i_old_copper_pitchfork Old Copper Spears and Forks
+SKILLMENU=sm_old_copper_spears_forks
+
+ON=i_old_copper_halberd Old Copper Pole Arms
+SKILLMENU=sm_old_copper_pole_arms
+
+[SKILLMENU sm_old_copper_swords_blades]
+Old Copper Swords & Blades
+
+ON=i_old_copper_sword_broad <name> (<resmake>)
+MAKEITEM=i_old_copper_sword_broad
+
+ON=i_old_copper_cutlass <name> (<resmake>)
+MAKEITEM=i_old_copper_cutlass
+
+ON=i_old_copper_dagger <name> (<resmake>)
+MAKEITEM=i_old_copper_dagger
+
+ON=i_old_copper_katana <name> (<resmake>)
+MAKEITEM=i_old_copper_katana
+
+ON=i_old_copper_kryss <name> (<resmake>)
+MAKEITEM=i_old_copper_kryss
+
+ON=i_old_copper_sword_long <name> (<resmake>)
+MAKEITEM=i_old_copper_sword_long
+
+ON=i_old_copper_scimitar <name> (<resmake>)
+MAKEITEM=i_old_copper_scimitar
+
+ON=i_old_copper_sword_viking <name> (<resmake>)
+MAKEITEM=i_old_copper_sword_viking
+
+[SKILLMENU sm_old_copper_axes]
+Old Copper Axes
+
+ON=i_old_copper_axe_exec <name> (<resmake>)
+MAKEITEM=i_old_copper_axe_exec
+
+ON=i_old_copper_axe <name> (<resmake>)
+MAKEITEM=i_old_copper_axe
+
+ON=i_old_copper_axe_double <name> (<resmake>)
+MAKEITEM=i_old_copper_axe_double
+
+ON=i_old_copper_axe_battle <name> (<resmake>)
+MAKEITEM=i_old_copper_axe_battle
+
+ON=i_old_copper_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_old_copper_axe_battle_large
+
+ON=i_old_copper_axe_war <name> (<resmake>)
+MAKEITEM=i_old_copper_axe_war
+
+ON=i_old_copper_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_old_copper_axe_two_hand
+
+[SKILLMENU sm_old_copper_maces_hammers]
+Old Copper Maces & Hammers
+
+ON=i_old_copper_hammer_pick <name> (<resmake>)
+MAKEITEM=i_old_copper_hammer_pick
+
+ON=i_old_copper_mace <name> (<resmake>)
+MAKEITEM=i_old_copper_mace
+
+ON=i_old_copper_maul <name> (<resmake>)
+MAKEITEM=i_old_copper_maul
+
+ON=i_old_copper_hammer_smith <name> (<resmake>)
+MAKEITEM=i_old_copper_hammer_smith
+
+ON=i_old_copper_hammer_war <name> (<resmake>)
+MAKEITEM=i_old_copper_hammer_war
+
+ON=i_old_copper_mace_war <name> (<resmake>)
+MAKEITEM=i_old_copper_mace_war
+
+[SKILLMENU sm_old_copper_spears_forks]
+Old Copper Spears & Forks
+
+ON=i_old_copper_spear_short <name> (<resmake>)
+MAKEITEM=i_old_copper_spear_short
+
+ON=i_old_copper_spear <name> (<resmake>)
+MAKEITEM=i_old_copper_spear
+
+ON=i_old_copper_war_fork <name> (<resmake>)
+MAKEITEM=i_old_copper_war_fork
+
+[SKILLMENU sm_old_copper_pole_arms]
+Old Copper Pole Arms
+
+ON=i_old_copper_bardiche <name> (<resmake>)
+MAKEITEM=i_old_copper_bardiche
+
+ON=i_old_copper_halberd <name> (<resmake>)
+MAKEITEM=i_old_copper_halberd
+
+
+/////////////////////////////////////////
+//Start of Dull Copper Weapons
+
+[SKILLMENU sm_dull_copper_weapons]
+Dull Copperopper Weapons
+
+ON=i_dull_copper_sword_viking Dull Copper Swords & Blades
+SKILLMENU=sm_dull_copper_swords_blades
+
+ON=i_dull_copper_axe_battle Dull Copper Axes
+SKILLMENU=sm_dull_copper_axes
+
+ON=i_dull_copper_mace Dull Copper Maces & Hammers
+SKILLMENU=sm_dull_copper_maces_hammers
+
+ON=i_dull_copper_pitchfork Dull Copper Spears and Forks
+SKILLMENU=sm_dull_copper_spears_forks
+
+ON=i_dull_copper_halberd Dull Copper Pole Arms
+SKILLMENU=sm_dull_copper_pole_arms
+
+[SKILLMENU sm_dull_copper_swords_blades]
+Dull Copper Swords & Blades
+
+ON=i_dull_copper_sword_broad <name> (<resmake>)
+MAKEITEM=i_dull_copper_sword_broad
+
+ON=i_dull_copper_cutlass <name> (<resmake>)
+MAKEITEM=i_dull_copper_cutlass
+
+ON=i_dull_copper_dagger <name> (<resmake>)
+MAKEITEM=i_dull_copper_dagger
+
+ON=i_dull_copper_katana <name> (<resmake>)
+MAKEITEM=i_dull_copper_katana
+
+ON=i_dull_copper_kryss <name> (<resmake>)
+MAKEITEM=i_dull_copper_kryss
+
+ON=i_dull_copper_sword_long <name> (<resmake>)
+MAKEITEM=i_dull_copper_sword_long
+
+ON=i_dull_copper_scimitar <name> (<resmake>)
+MAKEITEM=i_dull_copper_scimitar
+
+ON=i_dull_copper_sword_viking <name> (<resmake>)
+MAKEITEM=i_dull_copper_sword_viking
+
+[SKILLMENU sm_dull_copper_axes]
+Dull Copper Axes
+
+ON=i_dull_copper_axe_exec <name> (<resmake>)
+MAKEITEM=i_dull_copper_axe_exec
+
+ON=i_dull_copper_axe <name> (<resmake>)
+MAKEITEM=i_dull_copper_axe
+
+ON=i_dull_copper_axe_double <name> (<resmake>)
+MAKEITEM=i_dull_copper_axe_double
+
+ON=i_dull_copper_axe_battle <name> (<resmake>)
+MAKEITEM=i_dull_copper_axe_battle
+
+ON=i_dull_copper_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_dull_copper_axe_battle_large
+
+ON=i_dull_copper_axe_war <name> (<resmake>)
+MAKEITEM=i_dull_copper_axe_war
+
+ON=i_dull_copper_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_dull_copper_axe_two_hand
+
+[SKILLMENU sm_dull_copper_maces_hammers]
+Dull Copper Maces & Hammers
+
+ON=i_dull_copper_hammer_pick <name> (<resmake>)
+MAKEITEM=i_dull_copper_hammer_pick
+
+ON=i_dull_copper_mace <name> (<resmake>)
+MAKEITEM=i_dull_copper_mace
+
+ON=i_dull_copper_maul <name> (<resmake>)
+MAKEITEM=i_dull_copper_maul
+
+ON=i_dull_copper_hammer_smith <name> (<resmake>)
+MAKEITEM=i_dull_copper_hammer_smith
+
+ON=i_dull_copper_hammer_war <name> (<resmake>)
+MAKEITEM=i_dull_copper_hammer_war
+
+ON=i_dull_copper_mace_war <name> (<resmake>)
+MAKEITEM=i_dull_copper_mace_war
+
+[SKILLMENU sm_dull_copper_spears_forks]
+Dull Copper Spears & Forks
+
+ON=i_dull_copper_spear_short <name> (<resmake>)
+MAKEITEM=i_dull_copper_spear_short
+
+ON=i_dull_copper_spear <name> (<resmake>)
+MAKEITEM=i_dull_copper_spear
+
+ON=i_dull_copper_war_fork <name> (<resmake>)
+MAKEITEM=i_dull_copper_war_fork
+
+[SKILLMENU sm_dull_copper_pole_arms]
+Dull Copper Pole Arms
+
+ON=i_dull_copper_bardiche <name> (<resmake>)
+MAKEITEM=i_dull_copper_bardiche
+
+ON=i_dull_copper_halberd <name> (<resmake>)
+MAKEITEM=i_dull_copper_halberd
+
+
+/////////////////////////////////////////
+//Start of Copper Weapons
+
+[SKILLMENU sm_copper_weapons]
+Copper Weapons
+
+ON=i_copper_sword_viking Copper Swords & Blades
+SKILLMENU=sm_copper_swords_blades
+
+ON=i_copper_axe_battle Copper Axes
+SKILLMENU=sm_copper_axes
+
+ON=i_copper_mace Copper Maces & Hammers
+SKILLMENU=sm_copper_maces_hammers
+
+ON=i_copper_pitchfork Copper Spears and Forks
+SKILLMENU=sm_copper_spears_forks
+
+ON=i_copper_halberd Copper Pole Arms
+SKILLMENU=sm_copper_pole_arms
+
+[SKILLMENU sm_copper_swords_blades]
+Copper Swords & Blades
+
+ON=i_copper_sword_broad <name> (<resmake>)
+MAKEITEM=i_copper_sword_broad
+
+ON=i_copper_cutlass <name> (<resmake>)
+MAKEITEM=i_copper_cutlass
+
+ON=i_copper_dagger <name> (<resmake>)
+MAKEITEM=i_copper_dagger
+
+ON=i_copper_katana <name> (<resmake>)
+MAKEITEM=i_copper_katana
+
+ON=i_copper_kryss <name> (<resmake>)
+MAKEITEM=i_copper_kryss
+
+ON=i_copper_sword_long <name> (<resmake>)
+MAKEITEM=i_copper_sword_long
+
+ON=i_copper_scimitar <name> (<resmake>)
+MAKEITEM=i_copper_scimitar
+
+ON=i_copper_sword_viking <name> (<resmake>)
+MAKEITEM=i_copper_sword_viking
+
+[SKILLMENU sm_copper_axes]
+Copper Axes
+
+ON=i_copper_axe_exec <name> (<resmake>)
+MAKEITEM=i_copper_axe_exec
+
+ON=i_copper_axe <name> (<resmake>)
+MAKEITEM=i_copper_axe
+
+ON=i_copper_axe_double <name> (<resmake>)
+MAKEITEM=i_copper_axe_double
+
+ON=i_copper_axe_battle <name> (<resmake>)
+MAKEITEM=i_copper_axe_battle
+
+ON=i_copper_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_copper_axe_battle_large
+
+ON=i_copper_axe_war <name> (<resmake>)
+MAKEITEM=i_copper_axe_war
+
+ON=i_copper_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_copper_axe_two_hand
+
+[SKILLMENU sm_copper_maces_hammers]
+Copper Maces & Hammers
+
+ON=i_copper_hammer_pick <name> (<resmake>)
+MAKEITEM=i_copper_hammer_pick
+
+ON=i_copper_mace <name> (<resmake>)
+MAKEITEM=i_copper_mace
+
+ON=i_copper_maul <name> (<resmake>)
+MAKEITEM=i_copper_maul
+
+ON=i_copper_hammer_smith <name> (<resmake>)
+MAKEITEM=i_copper_hammer_smith
+
+ON=i_copper_hammer_war <name> (<resmake>)
+MAKEITEM=i_copper_hammer_war
+
+ON=i_copper_mace_war <name> (<resmake>)
+MAKEITEM=i_copper_mace_war
+
+[SKILLMENU sm_copper_spears_forks]
+Copper Spears & Forks
+
+ON=i_copper_spear_short <name> (<resmake>)
+MAKEITEM=i_copper_spear_short
+
+ON=i_copper_spear <name> (<resmake>)
+MAKEITEM=i_copper_spear
+
+ON=i_copper_war_fork <name> (<resmake>)
+MAKEITEM=i_copper_war_fork
+
+[SKILLMENU sm_copper_pole_arms]
+Copper Pole Arms
+
+ON=i_copper_bardiche <name> (<resmake>)
+MAKEITEM=i_copper_bardiche
+
+ON=i_copper_halberd <name> (<resmake>)
+MAKEITEM=i_copper_halberd
+
+
+/////////////////////////////////////////
+//Start of Silver Weapons
+
+[SKILLMENU sm_silver_weapons]
+Silver Weapons
+
+ON=i_silver_sword_viking Silver Swords & Blades
+SKILLMENU=sm_silver_swords_blades
+
+ON=i_silver_axe_battle Silver Axes
+SKILLMENU=sm_silver_axes
+
+ON=i_silver_mace Silver Maces & Hammers
+SKILLMENU=sm_silver_maces_hammers
+
+ON=i_silver_pitchfork Silver Spears and Forks
+SKILLMENU=sm_silver_spears_forks
+
+ON=i_silver_halberd Silver Pole Arms
+SKILLMENU=sm_silver_pole_arms
+
+[SKILLMENU sm_silver_swords_blades]
+Silver Swords & Blades
+
+ON=i_silver_sword_broad <name> (<resmake>)
+MAKEITEM=i_silver_sword_broad
+
+ON=i_silver_cutlass <name> (<resmake>)
+MAKEITEM=i_silver_cutlass
+
+ON=i_silver_dagger <name> (<resmake>)
+MAKEITEM=i_silver_dagger
+
+ON=i_silver_katana <name> (<resmake>)
+MAKEITEM=i_silver_katana
+
+ON=i_silver_kryss <name> (<resmake>)
+MAKEITEM=i_silver_kryss
+
+ON=i_silver_sword_long <name> (<resmake>)
+MAKEITEM=i_silver_sword_long
+
+ON=i_silver_scimitar <name> (<resmake>)
+MAKEITEM=i_silver_scimitar
+
+ON=i_silver_sword_viking <name> (<resmake>)
+MAKEITEM=i_silver_sword_viking
+
+[SKILLMENU sm_silver_axes]
+Silver Axes
+
+ON=i_silver_axe_exec <name> (<resmake>)
+MAKEITEM=i_silver_axe_exec
+
+ON=i_silver_axe <name> (<resmake>)
+MAKEITEM=i_silver_axe
+
+ON=i_silver_axe_double <name> (<resmake>)
+MAKEITEM=i_silver_axe_double
+
+ON=i_silver_axe_battle <name> (<resmake>)
+MAKEITEM=i_silver_axe_battle
+
+ON=i_silver_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_silver_axe_battle_large
+
+ON=i_silver_axe_war <name> (<resmake>)
+MAKEITEM=i_silver_axe_war
+
+ON=i_silver_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_silver_axe_two_hand
+
+[SKILLMENU sm_silver_maces_hammers]
+Silver Maces & Hammers
+
+ON=i_silver_hammer_pick <name> (<resmake>)
+MAKEITEM=i_silver_hammer_pick
+
+ON=i_silver_mace <name> (<resmake>)
+MAKEITEM=i_silver_mace
+
+ON=i_silver_maul <name> (<resmake>)
+MAKEITEM=i_silver_maul
+
+ON=i_silver_hammer_smith <name> (<resmake>)
+MAKEITEM=i_silver_hammer_smith
+
+ON=i_silver_hammer_war <name> (<resmake>)
+MAKEITEM=i_silver_hammer_war
+
+ON=i_silver_mace_war <name> (<resmake>)
+MAKEITEM=i_silver_mace_war
+
+[SKILLMENU sm_silver_spears_forks]
+Silver Spears & Forks
+
+ON=i_silver_spear_short <name> (<resmake>)
+MAKEITEM=i_silver_spear_short
+
+ON=i_silver_spear <name> (<resmake>)
+MAKEITEM=i_silver_spear
+
+ON=i_silver_war_fork <name> (<resmake>)
+MAKEITEM=i_silver_war_fork
+
+[SKILLMENU sm_silver_pole_arms]
+Silver Pole Arms
+
+ON=i_silver_bardiche <name> (<resmake>)
+MAKEITEM=i_silver_bardiche
+
+ON=i_silver_halberd <name> (<resmake>)
+MAKEITEM=i_silver_halberd
+
+
+/////////////////////////////////////////
+//Start of Golden Weapons
+
+[SKILLMENU sm_golden_weapons]
+Golden Weapons
+
+ON=i_golden_sword_viking Golden Swords & Blades
+SKILLMENU=sm_golden_swords_blades
+
+ON=i_golden_axe_battle Golden Axes
+SKILLMENU=sm_golden_axes
+
+ON=i_golden_mace Golden Maces & Hammers
+SKILLMENU=sm_golden_maces_hammers
+
+ON=i_golden_pitchfork Golden Spears and Forks
+SKILLMENU=sm_golden_spears_forks
+
+ON=i_golden_halberd Golden Pole Arms
+SKILLMENU=sm_golden_pole_arms
+
+[SKILLMENU sm_golden_swords_blades]
+Golden Swords & Blades
+
+ON=i_golden_sword_broad <name> (<resmake>)
+MAKEITEM=i_golden_sword_broad
+
+ON=i_golden_cutlass <name> (<resmake>)
+MAKEITEM=i_golden_cutlass
+
+ON=i_golden_dagger <name> (<resmake>)
+MAKEITEM=i_golden_dagger
+
+ON=i_golden_katana <name> (<resmake>)
+MAKEITEM=i_golden_katana
+
+ON=i_golden_kryss <name> (<resmake>)
+MAKEITEM=i_golden_kryss
+
+ON=i_golden_sword_long <name> (<resmake>)
+MAKEITEM=i_golden_sword_long
+
+ON=i_golden_scimitar <name> (<resmake>)
+MAKEITEM=i_golden_scimitar
+
+ON=i_golden_sword_viking <name> (<resmake>)
+MAKEITEM=i_golden_sword_viking
+
+[SKILLMENU sm_golden_axes]
+Golden Axes
+
+ON=i_golden_axe_exec <name> (<resmake>)
+MAKEITEM=i_golden_axe_exec
+
+ON=i_golden_axe <name> (<resmake>)
+MAKEITEM=i_golden_axe
+
+ON=i_golden_axe_double <name> (<resmake>)
+MAKEITEM=i_golden_axe_double
+
+ON=i_golden_axe_battle <name> (<resmake>)
+MAKEITEM=i_golden_axe_battle
+
+ON=i_golden_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_golden_axe_battle_large
+
+ON=i_golden_axe_war <name> (<resmake>)
+MAKEITEM=i_golden_axe_war
+
+ON=i_golden_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_golden_axe_two_hand
+
+[SKILLMENU sm_golden_maces_hammers]
+Golden Maces & Hammers
+
+ON=i_golden_hammer_pick <name> (<resmake>)
+MAKEITEM=i_golden_hammer_pick
+
+ON=i_golden_mace <name> (<resmake>)
+MAKEITEM=i_golden_mace
+
+ON=i_golden_maul <name> (<resmake>)
+MAKEITEM=i_golden_maul
+
+ON=i_golden_hammer_smith <name> (<resmake>)
+MAKEITEM=i_golden_hammer_smith
+
+ON=i_golden_hammer_war <name> (<resmake>)
+MAKEITEM=i_golden_hammer_war
+
+ON=i_golden_mace_war <name> (<resmake>)
+MAKEITEM=i_golden_mace_war
+
+[SKILLMENU sm_golden_spears_forks]
+Golden Spears & Forks
+
+ON=i_golden_spear_short <name> (<resmake>)
+MAKEITEM=i_golden_spear_short
+
+ON=i_golden_spear <name> (<resmake>)
+MAKEITEM=i_golden_spear
+
+ON=i_golden_war_fork <name> (<resmake>)
+MAKEITEM=i_golden_war_fork
+
+[SKILLMENU sm_golden_pole_arms]
+Golden Pole Arms
+
+ON=i_golden_bardiche <name> (<resmake>)
+MAKEITEM=i_golden_bardiche
+
+ON=i_golden_halberd <name> (<resmake>)
+MAKEITEM=i_golden_halberd
+
+
+/////////////////////////////////////////
+//Start of Blackrock Weapons
+
+[SKILLMENU sm_blackrock_weapons]
+Blackrock Weapons
+
+ON=i_blackrock_sword_viking Blackrock Swords & Blades
+SKILLMENU=sm_blackrock_swords_blades
+
+ON=i_blackrock_axe_battle Blackrock Axes
+SKILLMENU=sm_blackrock_axes
+
+ON=i_blackrock_mace Blackrock Maces & Hammers
+SKILLMENU=sm_blackrock_maces_hammers
+
+ON=i_blackrock_pitchfork Blackrock Spears and Forks
+SKILLMENU=sm_blackrock_spears_forks
+
+ON=i_blackrock_halberd Blackrock Pole Arms
+SKILLMENU=sm_blackrock_pole_arms
+
+[SKILLMENU sm_blackrock_swords_blades]
+Blackrock Swords & Blades
+
+ON=i_blackrock_sword_broad <name> (<resmake>)
+MAKEITEM=i_blackrock_sword_broad
+
+ON=i_blackrock_cutlass <name> (<resmake>)
+MAKEITEM=i_blackrock_cutlass
+
+ON=i_blackrock_dagger <name> (<resmake>)
+MAKEITEM=i_blackrock_dagger
+
+ON=i_blackrock_katana <name> (<resmake>)
+MAKEITEM=i_blackrock_katana
+
+ON=i_blackrock_kryss <name> (<resmake>)
+MAKEITEM=i_blackrock_kryss
+
+ON=i_blackrock_sword_long <name> (<resmake>)
+MAKEITEM=i_blackrock_sword_long
+
+ON=i_blackrock_scimitar <name> (<resmake>)
+MAKEITEM=i_blackrock_scimitar
+
+ON=i_blackrock_sword_viking <name> (<resmake>)
+MAKEITEM=i_blackrock_sword_viking
+
+[SKILLMENU sm_blackrock_axes]
+Blackrock Axes
+
+ON=i_blackrock_axe_exec <name> (<resmake>)
+MAKEITEM=i_blackrock_axe_exec
+
+ON=i_blackrock_axe <name> (<resmake>)
+MAKEITEM=i_blackrock_axe
+
+ON=i_blackrock_axe_double <name> (<resmake>)
+MAKEITEM=i_blackrock_axe_double
+
+ON=i_blackrock_axe_battle <name> (<resmake>)
+MAKEITEM=i_blackrock_axe_battle
+
+ON=i_blackrock_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_blackrock_axe_battle_large
+
+ON=i_blackrock_axe_war <name> (<resmake>)
+MAKEITEM=i_blackrock_axe_war
+
+ON=i_blackrock_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_blackrock_axe_two_hand
+
+[SKILLMENU sm_blackrock_maces_hammers]
+Blackrock Maces & Hammers
+
+ON=i_blackrock_hammer_pick <name> (<resmake>)
+MAKEITEM=i_blackrock_hammer_pick
+
+ON=i_blackrock_mace <name> (<resmake>)
+MAKEITEM=i_blackrock_mace
+
+ON=i_blackrock_maul <name> (<resmake>)
+MAKEITEM=i_blackrock_maul
+
+ON=i_blackrock_hammer_smith <name> (<resmake>)
+MAKEITEM=i_blackrock_hammer_smith
+
+ON=i_blackrock_hammer_war <name> (<resmake>)
+MAKEITEM=i_blackrock_hammer_war
+
+ON=i_blackrock_mace_war <name> (<resmake>)
+MAKEITEM=i_blackrock_mace_war
+
+[SKILLMENU sm_blackrock_spears_forks]
+Blackrock Spears & Forks
+
+ON=i_blackrock_spear_short <name> (<resmake>)
+MAKEITEM=i_blackrock_spear_short
+
+ON=i_blackrock_spear <name> (<resmake>)
+MAKEITEM=i_blackrock_spear
+
+ON=i_blackrock_war_fork <name> (<resmake>)
+MAKEITEM=i_blackrock_war_fork
+
+[SKILLMENU sm_blackrock_pole_arms]
+Blackrock Pole Arms
+
+ON=i_blackrock_bardiche <name> (<resmake>)
+MAKEITEM=i_blackrock_bardiche
+
+ON=i_blackrock_halberd <name> (<resmake>)
+MAKEITEM=i_blackrock_halberd
+
+
+/////////////////////////////////////////
+//Start of Bloodrock Weapons
+
+[SKILLMENU sm_bloodrock_weapons]
+Bloodrock Weapons
+
+ON=i_bloodrock_sword_viking Bloodrock Swords & Blades
+SKILLMENU=sm_bloodrock_swords_blades
+
+ON=i_bloodrock_axe_battle Bloodrock Axes
+SKILLMENU=sm_bloodrock_axes
+
+ON=i_bloodrock_mace Bloodrock Maces & Hammers
+SKILLMENU=sm_bloodrock_maces_hammers
+
+ON=i_bloodrock_pitchfork Bloodrock Spears and Forks
+SKILLMENU=sm_bloodrock_spears_forks
+
+ON=i_bloodrock_halberd Bloodrock Pole Arms
+SKILLMENU=sm_bloodrock_pole_arms
+
+[SKILLMENU sm_bloodrock_swords_blades]
+Bloodrock Swords & Blades
+
+ON=i_bloodrock_sword_broad <name> (<resmake>)
+MAKEITEM=i_bloodrock_sword_broad
+
+ON=i_bloodrock_cutlass <name> (<resmake>)
+MAKEITEM=i_bloodrock_cutlass
+
+ON=i_bloodrock_dagger <name> (<resmake>)
+MAKEITEM=i_bloodrock_dagger
+
+ON=i_bloodrock_katana <name> (<resmake>)
+MAKEITEM=i_bloodrock_katana
+
+ON=i_bloodrock_kryss <name> (<resmake>)
+MAKEITEM=i_bloodrock_kryss
+
+ON=i_bloodrock_sword_long <name> (<resmake>)
+MAKEITEM=i_bloodrock_sword_long
+
+ON=i_bloodrock_scimitar <name> (<resmake>)
+MAKEITEM=i_bloodrock_scimitar
+
+ON=i_bloodrock_sword_viking <name> (<resmake>)
+MAKEITEM=i_bloodrock_sword_viking
+
+[SKILLMENU sm_bloodrock_axes]
+Bloodrock Axes
+
+ON=i_bloodrock_axe_exec <name> (<resmake>)
+MAKEITEM=i_bloodrock_axe_exec
+
+ON=i_bloodrock_axe <name> (<resmake>)
+MAKEITEM=i_bloodrock_axe
+
+ON=i_bloodrock_axe_double <name> (<resmake>)
+MAKEITEM=i_bloodrock_axe_double
+
+ON=i_bloodrock_axe_battle <name> (<resmake>)
+MAKEITEM=i_bloodrock_axe_battle
+
+ON=i_bloodrock_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_bloodrock_axe_battle_large
+
+ON=i_bloodrock_axe_war <name> (<resmake>)
+MAKEITEM=i_bloodrock_axe_war
+
+ON=i_bloodrock_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_bloodrock_axe_two_hand
+
+[SKILLMENU sm_bloodrock_maces_hammers]
+Bloodrock Maces & Hammers
+
+ON=i_bloodrock_hammer_pick <name> (<resmake>)
+MAKEITEM=i_bloodrock_hammer_pick
+
+ON=i_bloodrock_mace <name> (<resmake>)
+MAKEITEM=i_bloodrock_mace
+
+ON=i_bloodrock_maul <name> (<resmake>)
+MAKEITEM=i_bloodrock_maul
+
+ON=i_bloodrock_hammer_smith <name> (<resmake>)
+MAKEITEM=i_bloodrock_hammer_smith
+
+ON=i_bloodrock_hammer_war <name> (<resmake>)
+MAKEITEM=i_bloodrock_hammer_war
+
+ON=i_bloodrock_mace_war <name> (<resmake>)
+MAKEITEM=i_bloodrock_mace_war
+
+[SKILLMENU sm_bloodrock_spears_forks]
+Bloodrock Spears & Forks
+
+ON=i_bloodrock_spear_short <name> (<resmake>)
+MAKEITEM=i_bloodrock_spear_short
+
+ON=i_bloodrock_spear <name> (<resmake>)
+MAKEITEM=i_bloodrock_spear
+
+ON=i_bloodrock_war_fork <name> (<resmake>)
+MAKEITEM=i_bloodrock_war_fork
+
+[SKILLMENU sm_bloodrock_pole_arms]
+Bloodrock Pole Arms
+
+ON=i_bloodrock_bardiche <name> (<resmake>)
+MAKEITEM=i_bloodrock_bardiche
+
+ON=i_bloodrock_halberd <name> (<resmake>)
+MAKEITEM=i_bloodrock_halberd
+
+
+/////////////////////////////////////////
+//Start of Mytheril Weapons
+
+[SKILLMENU sm_mytheril_weapons]
+Mytheril Weapons
+
+ON=i_mytheril_sword_viking Mytheril Swords & Blades
+SKILLMENU=sm_mytheril_swords_blades
+
+ON=i_mytheril_axe_battle Mytheril Axes
+SKILLMENU=sm_mytheril_axes
+
+ON=i_mytheril_mace Mytheril Maces & Hammers
+SKILLMENU=sm_mytheril_maces_hammers
+
+ON=i_mytheril_pitchfork Mytheril Spears and Forks
+SKILLMENU=sm_mytheril_spears_forks
+
+ON=i_mytheril_halberd Mytheril Pole Arms
+SKILLMENU=sm_mytheril_pole_arms
+
+[SKILLMENU sm_mytheril_swords_blades]
+Mytheril Swords & Blades
+
+ON=i_mytheril_sword_broad <name> (<resmake>)
+MAKEITEM=i_mytheril_sword_broad
+
+ON=i_mytheril_cutlass <name> (<resmake>)
+MAKEITEM=i_mytheril_cutlass
+
+ON=i_mytheril_dagger <name> (<resmake>)
+MAKEITEM=i_mytheril_dagger
+
+ON=i_mytheril_katana <name> (<resmake>)
+MAKEITEM=i_mytheril_katana
+
+ON=i_mytheril_kryss <name> (<resmake>)
+MAKEITEM=i_mytheril_kryss
+
+ON=i_mytheril_sword_long <name> (<resmake>)
+MAKEITEM=i_mytheril_sword_long
+
+ON=i_mytheril_scimitar <name> (<resmake>)
+MAKEITEM=i_mytheril_scimitar
+
+ON=i_mytheril_sword_viking <name> (<resmake>)
+MAKEITEM=i_mytheril_sword_viking
+
+[SKILLMENU sm_mytheril_axes]
+Mytheril Axes
+
+ON=i_mytheril_axe_exec <name> (<resmake>)
+MAKEITEM=i_mytheril_axe_exec
+
+ON=i_mytheril_axe <name> (<resmake>)
+MAKEITEM=i_mytheril_axe
+
+ON=i_mytheril_axe_double <name> (<resmake>)
+MAKEITEM=i_mytheril_axe_double
+
+ON=i_mytheril_axe_battle <name> (<resmake>)
+MAKEITEM=i_mytheril_axe_battle
+
+ON=i_mytheril_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_mytheril_axe_battle_large
+
+ON=i_mytheril_axe_war <name> (<resmake>)
+MAKEITEM=i_mytheril_axe_war
+
+ON=i_mytheril_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_mytheril_axe_two_hand
+
+[SKILLMENU sm_mytheril_maces_hammers]
+Mytheril Maces & Hammers
+
+ON=i_mytheril_hammer_pick <name> (<resmake>)
+MAKEITEM=i_mytheril_hammer_pick
+
+ON=i_mytheril_mace <name> (<resmake>)
+MAKEITEM=i_mytheril_mace
+
+ON=i_mytheril_maul <name> (<resmake>)
+MAKEITEM=i_mytheril_maul
+
+ON=i_mytheril_hammer_smith <name> (<resmake>)
+MAKEITEM=i_mytheril_hammer_smith
+
+ON=i_mytheril_hammer_war <name> (<resmake>)
+MAKEITEM=i_mytheril_hammer_war
+
+ON=i_mytheril_mace_war <name> (<resmake>)
+MAKEITEM=i_mytheril_mace_war
+
+[SKILLMENU sm_mytheril_spears_forks]
+Mytheril Spears & Forks
+
+ON=i_mytheril_spear_short <name> (<resmake>)
+MAKEITEM=i_mytheril_spear_short
+
+ON=i_mytheril_spear <name> (<resmake>)
+MAKEITEM=i_mytheril_spear
+
+ON=i_mytheril_war_fork <name> (<resmake>)
+MAKEITEM=i_mytheril_war_fork
+
+[SKILLMENU sm_mytheril_pole_arms]
+Mytheril Pole Arms
+
+ON=i_mytheril_bardiche <name> (<resmake>)
+MAKEITEM=i_mytheril_bardiche
+
+ON=i_mytheril_halberd <name> (<resmake>)
+MAKEITEM=i_mytheril_halberd
+
+
+/////////////////////////////////////////
+//Start of Verite Weapons
+
+[SKILLMENU sm_verite_weapons]
+Verite Weapons
+
+ON=i_verite_sword_viking Verite Swords & Blades
+SKILLMENU=sm_verite_swords_blades
+
+ON=i_verite_axe_battle Verite Axes
+SKILLMENU=sm_verite_axes
+
+ON=i_verite_mace Verite Maces & Hammers
+SKILLMENU=sm_verite_maces_hammers
+
+ON=i_verite_pitchfork Verite Spears and Forks
+SKILLMENU=sm_verite_spears_forks
+
+ON=i_verite_halberd Verite Pole Arms
+SKILLMENU=sm_verite_pole_arms
+
+[SKILLMENU sm_verite_swords_blades]
+Verite Swords & Blades
+
+ON=i_verite_sword_broad <name> (<resmake>)
+MAKEITEM=i_verite_sword_broad
+
+ON=i_verite_cutlass <name> (<resmake>)
+MAKEITEM=i_verite_cutlass
+
+ON=i_verite_dagger <name> (<resmake>)
+MAKEITEM=i_verite_dagger
+
+ON=i_verite_katana <name> (<resmake>)
+MAKEITEM=i_verite_katana
+
+ON=i_verite_kryss <name> (<resmake>)
+MAKEITEM=i_verite_kryss
+
+ON=i_verite_sword_long <name> (<resmake>)
+MAKEITEM=i_verite_sword_long
+
+ON=i_verite_scimitar <name> (<resmake>)
+MAKEITEM=i_verite_scimitar
+
+ON=i_verite_sword_viking <name> (<resmake>)
+MAKEITEM=i_verite_sword_viking
+
+[SKILLMENU sm_verite_axes]
+Verite Axes
+
+ON=i_verite_axe_exec <name> (<resmake>)
+MAKEITEM=i_verite_axe_exec
+
+ON=i_verite_axe <name> (<resmake>)
+MAKEITEM=i_verite_axe
+
+ON=i_verite_axe_double <name> (<resmake>)
+MAKEITEM=i_verite_axe_double
+
+ON=i_verite_axe_battle <name> (<resmake>)
+MAKEITEM=i_verite_axe_battle
+
+ON=i_verite_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_verite_axe_battle_large
+
+ON=i_verite_axe_war <name> (<resmake>)
+MAKEITEM=i_verite_axe_war
+
+ON=i_verite_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_verite_axe_two_hand
+
+[SKILLMENU sm_verite_maces_hammers]
+Verite Maces & Hammers
+
+ON=i_verite_hammer_pick <name> (<resmake>)
+MAKEITEM=i_verite_hammer_pick
+
+ON=i_verite_mace <name> (<resmake>)
+MAKEITEM=i_verite_mace
+
+ON=i_verite_maul <name> (<resmake>)
+MAKEITEM=i_verite_maul
+
+ON=i_verite_hammer_smith <name> (<resmake>)
+MAKEITEM=i_verite_hammer_smith
+
+ON=i_verite_hammer_war <name> (<resmake>)
+MAKEITEM=i_verite_hammer_war
+
+ON=i_verite_mace_war <name> (<resmake>)
+MAKEITEM=i_verite_mace_war
+
+[SKILLMENU sm_verite_spears_forks]
+Verite Spears & Forks
+
+ON=i_verite_spear_short <name> (<resmake>)
+MAKEITEM=i_verite_spear_short
+
+ON=i_verite_spear <name> (<resmake>)
+MAKEITEM=i_verite_spear
+
+ON=i_verite_war_fork <name> (<resmake>)
+MAKEITEM=i_verite_war_fork
+
+[SKILLMENU sm_verite_pole_arms]
+Verite Pole Arms
+
+ON=i_verite_bardiche <name> (<resmake>)
+MAKEITEM=i_verite_bardiche
+
+ON=i_verite_halberd <name> (<resmake>)
+MAKEITEM=i_verite_halberd
+
+
+/////////////////////////////////////////
+//Start of Valorite Weapons
+
+[SKILLMENU sm_valorite_weapons]
+Valorite Weapons
+
+ON=i_valorite_sword_viking Valorite Swords & Blades
+SKILLMENU=sm_valorite_swords_blades
+
+ON=i_valorite_axe_battle Valorite Axes
+SKILLMENU=sm_valorite_axes
+
+ON=i_valorite_mace Valorite Maces & Hammers
+SKILLMENU=sm_valorite_maces_hammers
+
+ON=i_valorite_pitchfork Valorite Spears and Forks
+SKILLMENU=sm_valorite_spears_forks
+
+ON=i_valorite_halberd Valorite Pole Arms
+SKILLMENU=sm_valorite_pole_arms
+
+[SKILLMENU sm_valorite_swords_blades]
+Valorite Swords & Blades
+
+ON=i_valorite_sword_broad <name> (<resmake>)
+MAKEITEM=i_valorite_sword_broad
+
+ON=i_valorite_cutlass <name> (<resmake>)
+MAKEITEM=i_valorite_cutlass
+
+ON=i_valorite_dagger <name> (<resmake>)
+MAKEITEM=i_valorite_dagger
+
+ON=i_valorite_katana <name> (<resmake>)
+MAKEITEM=i_valorite_katana
+
+ON=i_valorite_kryss <name> (<resmake>)
+MAKEITEM=i_valorite_kryss
+
+ON=i_valorite_sword_long <name> (<resmake>)
+MAKEITEM=i_valorite_sword_long
+
+ON=i_valorite_scimitar <name> (<resmake>)
+MAKEITEM=i_valorite_scimitar
+
+ON=i_valorite_sword_viking <name> (<resmake>)
+MAKEITEM=i_valorite_sword_viking
+
+[SKILLMENU sm_valorite_axes]
+Valorite Axes
+
+ON=i_valorite_axe_exec <name> (<resmake>)
+MAKEITEM=i_valorite_axe_exec
+
+ON=i_valorite_axe <name> (<resmake>)
+MAKEITEM=i_valorite_axe
+
+ON=i_valorite_axe_double <name> (<resmake>)
+MAKEITEM=i_valorite_axe_double
+
+ON=i_valorite_axe_battle <name> (<resmake>)
+MAKEITEM=i_valorite_axe_battle
+
+ON=i_valorite_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_valorite_axe_battle_large
+
+ON=i_valorite_axe_war <name> (<resmake>)
+MAKEITEM=i_valorite_axe_war
+
+ON=i_valorite_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_valorite_axe_two_hand
+
+[SKILLMENU sm_valorite_maces_hammers]
+Valorite Maces & Hammers
+
+ON=i_valorite_hammer_pick <name> (<resmake>)
+MAKEITEM=i_valorite_hammer_pick
+
+ON=i_valorite_mace <name> (<resmake>)
+MAKEITEM=i_valorite_mace
+
+ON=i_valorite_maul <name> (<resmake>)
+MAKEITEM=i_valorite_maul
+
+ON=i_valorite_hammer_smith <name> (<resmake>)
+MAKEITEM=i_valorite_hammer_smith
+
+ON=i_valorite_hammer_war <name> (<resmake>)
+MAKEITEM=i_valorite_hammer_war
+
+ON=i_valorite_mace_war <name> (<resmake>)
+MAKEITEM=i_valorite_mace_war
+
+[SKILLMENU sm_valorite_spears_forks]
+Valorite Spears & Forks
+
+ON=i_valorite_spear_short <name> (<resmake>)
+MAKEITEM=i_valorite_spear_short
+
+ON=i_valorite_spear <name> (<resmake>)
+MAKEITEM=i_valorite_spear
+
+ON=i_valorite_war_fork <name> (<resmake>)
+MAKEITEM=i_valorite_war_fork
+
+[SKILLMENU sm_valorite_pole_arms]
+Valorite Pole Arms
+
+ON=i_valorite_bardiche <name> (<resmake>)
+MAKEITEM=i_valorite_bardiche
+
+ON=i_valorite_halberd <name> (<resmake>)
+MAKEITEM=i_valorite_halberd
+
+
+/////////////////////////////////////////
+//Start of Rose Weapons
+
+[SKILLMENU sm_rose_weapons]
+Rose Weapons
+
+ON=i_rose_sword_viking Rose Swords & Blades
+SKILLMENU=sm_rose_swords_blades
+
+ON=i_rose_axe_battle Rose Axes
+SKILLMENU=sm_rose_axes
+
+ON=i_rose_mace Rose Maces & Hammers
+SKILLMENU=sm_rose_maces_hammers
+
+ON=i_rose_pitchfork Rose Spears and Forks
+SKILLMENU=sm_rose_spears_forks
+
+ON=i_rose_halberd Rose Pole Arms
+SKILLMENU=sm_rose_pole_arms
+
+[SKILLMENU sm_rose_swords_blades]
+Rose Swords & Blades
+
+ON=i_rose_sword_broad <name> (<resmake>)
+MAKEITEM=i_rose_sword_broad
+
+ON=i_rose_cutlass <name> (<resmake>)
+MAKEITEM=i_rose_cutlass
+
+ON=i_rose_dagger <name> (<resmake>)
+MAKEITEM=i_rose_dagger
+
+ON=i_rose_katana <name> (<resmake>)
+MAKEITEM=i_rose_katana
+
+ON=i_rose_kryss <name> (<resmake>)
+MAKEITEM=i_rose_kryss
+
+ON=i_rose_sword_long <name> (<resmake>)
+MAKEITEM=i_rose_sword_long
+
+ON=i_rose_scimitar <name> (<resmake>)
+MAKEITEM=i_rose_scimitar
+
+ON=i_rose_sword_viking <name> (<resmake>)
+MAKEITEM=i_rose_sword_viking
+
+[SKILLMENU sm_rose_axes]
+Rose Axes
+
+ON=i_rose_axe_exec <name> (<resmake>)
+MAKEITEM=i_rose_axe_exec
+
+ON=i_rose_axe <name> (<resmake>)
+MAKEITEM=i_rose_axe
+
+ON=i_rose_axe_double <name> (<resmake>)
+MAKEITEM=i_rose_axe_double
+
+ON=i_rose_axe_battle <name> (<resmake>)
+MAKEITEM=i_rose_axe_battle
+
+ON=i_rose_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_rose_axe_battle_large
+
+ON=i_rose_axe_war <name> (<resmake>)
+MAKEITEM=i_rose_axe_war
+
+ON=i_rose_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_rose_axe_two_hand
+
+[SKILLMENU sm_rose_maces_hammers]
+Rose Maces & Hammers
+
+ON=i_rose_hammer_pick <name> (<resmake>)
+MAKEITEM=i_rose_hammer_pick
+
+ON=i_rose_mace <name> (<resmake>)
+MAKEITEM=i_rose_mace
+
+ON=i_rose_maul <name> (<resmake>)
+MAKEITEM=i_rose_maul
+
+ON=i_rose_hammer_smith <name> (<resmake>)
+MAKEITEM=i_rose_hammer_smith
+
+ON=i_rose_hammer_war <name> (<resmake>)
+MAKEITEM=i_rose_hammer_war
+
+ON=i_rose_mace_war <name> (<resmake>)
+MAKEITEM=i_rose_mace_war
+
+[SKILLMENU sm_rose_spears_forks]
+Rose Spears & Forks
+
+ON=i_rose_spear_short <name> (<resmake>)
+MAKEITEM=i_rose_spear_short
+
+ON=i_rose_spear <name> (<resmake>)
+MAKEITEM=i_rose_spear
+
+ON=i_rose_war_fork <name> (<resmake>)
+MAKEITEM=i_rose_war_fork
+
+[SKILLMENU sm_rose_pole_arms]
+Rose Pole Arms
+
+ON=i_rose_bardiche <name> (<resmake>)
+MAKEITEM=i_rose_bardiche
+
+ON=i_rose_halberd <name> (<resmake>)
+MAKEITEM=i_rose_halberd
+
+
+/////////////////////////////////////////
+//Start of Agapite Weapons
+
+[SKILLMENU sm_agapite_weapons]
+Agapite Weapons
+
+ON=i_agapite_sword_viking Agapite Swords & Blades
+SKILLMENU=sm_agapite_swords_blades
+
+ON=i_agapite_axe_battle Agapite Axes
+SKILLMENU=sm_agapite_axes
+
+ON=i_agapite_mace Agapite Maces & Hammers
+SKILLMENU=sm_agapite_maces_hammers
+
+ON=i_agapite_pitchfork Agapite Spears and Forks
+SKILLMENU=sm_agapite_spears_forks
+
+ON=i_agapite_halberd Agapite Pole Arms
+SKILLMENU=sm_agapite_pole_arms
+
+[SKILLMENU sm_agapite_swords_blades]
+Agapite Swords & Blades
+
+ON=i_agapite_sword_broad <name> (<resmake>)
+MAKEITEM=i_agapite_sword_broad
+
+ON=i_agapite_cutlass <name> (<resmake>)
+MAKEITEM=i_agapite_cutlass
+
+ON=i_agapite_dagger <name> (<resmake>)
+MAKEITEM=i_agapite_dagger
+
+ON=i_agapite_katana <name> (<resmake>)
+MAKEITEM=i_agapite_katana
+
+ON=i_agapite_kryss <name> (<resmake>)
+MAKEITEM=i_agapite_kryss
+
+ON=i_agapite_sword_long <name> (<resmake>)
+MAKEITEM=i_agapite_sword_long
+
+ON=i_agapite_scimitar <name> (<resmake>)
+MAKEITEM=i_agapite_scimitar
+
+ON=i_agapite_sword_viking <name> (<resmake>)
+MAKEITEM=i_agapite_sword_viking
+
+[SKILLMENU sm_agapite_axes]
+Agapite Axes
+
+ON=i_agapite_axe_exec <name> (<resmake>)
+MAKEITEM=i_agapite_axe_exec
+
+ON=i_agapite_axe <name> (<resmake>)
+MAKEITEM=i_agapite_axe
+
+ON=i_agapite_axe_double <name> (<resmake>)
+MAKEITEM=i_agapite_axe_double
+
+ON=i_agapite_axe_battle <name> (<resmake>)
+MAKEITEM=i_agapite_axe_battle
+
+ON=i_agapite_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_agapite_axe_battle_large
+
+ON=i_agapite_axe_war <name> (<resmake>)
+MAKEITEM=i_agapite_axe_war
+
+ON=i_agapite_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_agapite_axe_two_hand
+
+[SKILLMENU sm_agapite_maces_hammers]
+Agapite Maces & Hammers
+
+ON=i_agapite_hammer_pick <name> (<resmake>)
+MAKEITEM=i_agapite_hammer_pick
+
+ON=i_agapite_mace <name> (<resmake>)
+MAKEITEM=i_agapite_mace
+
+ON=i_agapite_maul <name> (<resmake>)
+MAKEITEM=i_agapite_maul
+
+ON=i_agapite_hammer_smith <name> (<resmake>)
+MAKEITEM=i_agapite_hammer_smith
+
+ON=i_agapite_hammer_war <name> (<resmake>)
+MAKEITEM=i_agapite_hammer_war
+
+ON=i_agapite_mace_war <name> (<resmake>)
+MAKEITEM=i_agapite_mace_war
+
+[SKILLMENU sm_agapite_spears_forks]
+Agapite Spears & Forks
+
+ON=i_agapite_spear_short <name> (<resmake>)
+MAKEITEM=i_agapite_spear_short
+
+ON=i_agapite_spear <name> (<resmake>)
+MAKEITEM=i_agapite_spear
+
+ON=i_agapite_war_fork <name> (<resmake>)
+MAKEITEM=i_agapite_war_fork
+
+[SKILLMENU sm_agapite_pole_arms]
+Agapite Pole Arms
+
+ON=i_agapite_bardiche <name> (<resmake>)
+MAKEITEM=i_agapite_bardiche
+
+ON=i_agapite_halberd <name> (<resmake>)
+MAKEITEM=i_agapite_halberd
+
+
+/////////////////////////////////////////
+//Start of Shadow Weapons
+
+[SKILLMENU sm_shadow_weapons]
+Shadow Weapons
+
+ON=i_shadow_sword_viking Shadow Swords & Blades
+SKILLMENU=sm_shadow_swords_blades
+
+ON=i_shadow_axe_battle Shadow Axes
+SKILLMENU=sm_shadow_axes
+
+ON=i_shadow_mace Shadow Maces & Hammers
+SKILLMENU=sm_shadow_maces_hammers
+
+ON=i_shadow_pitchfork Shadow Spears and Forks
+SKILLMENU=sm_shadow_spears_forks
+
+ON=i_shadow_halberd Shadow Pole Arms
+SKILLMENU=sm_shadow_pole_arms
+
+[SKILLMENU sm_shadow_swords_blades]
+Shadow Swords & Blades
+
+ON=i_shadow_sword_broad <name> (<resmake>)
+MAKEITEM=i_shadow_sword_broad
+
+ON=i_shadow_cutlass <name> (<resmake>)
+MAKEITEM=i_shadow_cutlass
+
+ON=i_shadow_dagger <name> (<resmake>)
+MAKEITEM=i_shadow_dagger
+
+ON=i_shadow_katana <name> (<resmake>)
+MAKEITEM=i_shadow_katana
+
+ON=i_shadow_kryss <name> (<resmake>)
+MAKEITEM=i_shadow_kryss
+
+ON=i_shadow_sword_long <name> (<resmake>)
+MAKEITEM=i_shadow_sword_long
+
+ON=i_shadow_scimitar <name> (<resmake>)
+MAKEITEM=i_shadow_scimitar
+
+ON=i_shadow_sword_viking <name> (<resmake>)
+MAKEITEM=i_shadow_sword_viking
+
+[SKILLMENU sm_shadow_axes]
+Shadow Axes
+
+ON=i_shadow_axe_exec <name> (<resmake>)
+MAKEITEM=i_shadow_axe_exec
+
+ON=i_shadow_axe <name> (<resmake>)
+MAKEITEM=i_shadow_axe
+
+ON=i_shadow_axe_double <name> (<resmake>)
+MAKEITEM=i_shadow_axe_double
+
+ON=i_shadow_axe_battle <name> (<resmake>)
+MAKEITEM=i_shadow_axe_battle
+
+ON=i_shadow_axe_battle_large <name> (<resmake>)
+MAKEITEM=i_shadow_axe_battle_large
+
+ON=i_shadow_axe_war <name> (<resmake>)
+MAKEITEM=i_shadow_axe_war
+
+ON=i_shadow_axe_two_hand <name> (<resmake>)
+MAKEITEM=i_shadow_axe_two_hand
+
+[SKILLMENU sm_shadow_maces_hammers]
+Shadow Maces & Hammers
+
+ON=i_shadow_hammer_pick <name> (<resmake>)
+MAKEITEM=i_shadow_hammer_pick
+
+ON=i_shadow_mace <name> (<resmake>)
+MAKEITEM=i_shadow_mace
+
+ON=i_shadow_maul <name> (<resmake>)
+MAKEITEM=i_shadow_maul
+
+ON=i_shadow_hammer_smith <name> (<resmake>)
+MAKEITEM=i_shadow_hammer_smith
+
+ON=i_shadow_hammer_war <name> (<resmake>)
+MAKEITEM=i_shadow_hammer_war
+
+ON=i_shadow_mace_war <name> (<resmake>)
+MAKEITEM=i_shadow_mace_war
+
+[SKILLMENU sm_shadow_spears_forks]
+Shadow Spears & Forks
+
+ON=i_shadow_spear_short <name> (<resmake>)
+MAKEITEM=i_shadow_spear_short
+
+ON=i_shadow_spear <name> (<resmake>)
+MAKEITEM=i_shadow_spear
+
+ON=i_shadow_war_fork <name> (<resmake>)
+MAKEITEM=i_shadow_war_fork
+
+[SKILLMENU sm_shadow_pole_arms]
+Shadow Pole Arms
+
+ON=i_shadow_bardiche <name> (<resmake>)
+MAKEITEM=i_shadow_bardiche
+
+ON=i_shadow_halberd <name> (<resmake>)
+MAKEITEM=i_shadow_halberd
+
+[EOF]

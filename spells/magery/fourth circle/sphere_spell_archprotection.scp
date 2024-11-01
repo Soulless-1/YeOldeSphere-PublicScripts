@@ -1,0 +1,30 @@
+[SPELL 26]
+DEFNAME=s_archprotection
+NAME=Arch Protection
+SOUND=snd_spell_archprotection
+RUNES=VUS
+CAST_TIME=2.5	//1.5
+RESOURCES=i_reag_garlic,i_reag_ginseng,i_reag_mandrake_root,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_archprotection
+SCROLL_ITEM=i_scroll_archprotection
+FLAGS=spellflag_fx_targ|spellflag_good|spellflag_playeronly|spellflag_area|spellflag_bless
+EFFECT_ID=i_fx_bless_effect
+EFFECT=5,15
+LAYER=layer_spell_protection	//No real need, since this calls s_protection... but for some custom modifications for arch spells this may be needed
+DURATION=30.0,1000.0
+MANAUSE=11
+SKILLREQ=MAGERY 30.0
+INTERRUPT=100.0,100.0
+
+//Provides a temporary bonus to a players armor class based on the casters magery skill. This is an area of effect spell.
+//Formula: (Magery / 10) + 1
+ON=@Success
+local.arearadius=3
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval ((<local.spell_strength>/10)/10)+1>
+
+
+[EOF]

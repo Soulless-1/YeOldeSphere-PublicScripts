@@ -1,0 +1,78 @@
+//shows a quick command list
+
+[defname player_command_list]
+player_command0		website
+player_command1		vote
+player_command2		discord
+player_command3		patch
+player_command4		strip
+player_command5		undress
+player_command6		dress
+player_command7		age
+player_command8		onlinetime
+player_command9		gpanic
+player_command10	roll
+player_command11	usedoor
+player_command12	opendoor
+player_command13	closedoor
+player_command14	changelog
+player_command15	chat
+player_command16	chaton
+player_command17	chatoff
+player_command18	c
+player_command19	g
+player_command20	f
+player_command21	drink
+player_command22	emotions
+player_command23	emo
+player_command24	e
+player_command25	iamstuck
+player_command26	online
+player_command27	messages
+player_command28	reags
+player_command29	regs
+player_command30	worldmap
+player_command31	whereami
+player_command32	findhealer
+player_command33	help
+player_command34	commands
+player_command35	score
+player_command36	duel
+player_command37	petlist
+player_command38	sac
+player_command39	sacall
+player_command40	toolbar
+player_command41	afk
+player_command42	where
+player_command43	hungry
+player_command44	cast
+player_command45	tele
+player_command46	suicide
+player_command47	password
+player_command48	email
+player_command49	houselist
+player_command50	shiplist
+player_command51	boatlist
+player_command52	petlist
+player_command53	maxskillsum
+player_command54	maxstatsum
+player_command55	maxskillcaps
+player_command56	renamecontainer
+player_command57
+
+[function commands]
+sdialog d_commands
+return 1
+
+[dialog d_commands]
+150, 150
+resizepic 1 21 5150 300 280
+dtext 110 25 1263 Command List
+local.player_commands=,	
+while !<isempty <def.player_command<dlocal.c>>>
+  local.player_commands .= .<def0.player_command<dlocal.c>><def.br>
+  local.c += 1
+endwhile
+dhtmlgump 35 55 235 210 0 1 <def.bfont_black><streat <local.player_commands>>
+
+[EOF]

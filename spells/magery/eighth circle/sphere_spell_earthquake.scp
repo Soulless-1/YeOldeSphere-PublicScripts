@@ -1,0 +1,37 @@
+[SPELL 57]
+DEFNAME=s_earthquake
+NAME=Earthquake
+SOUND=snd_spell_earthquake
+RUNES=IVP
+CAST_TIME=2.5
+RESOURCES=i_reag_blood_moss,i_reag_ginseng,i_reag_mandrake_root,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_earthquake
+SCROLL_ITEM=i_scroll_earthquake
+FLAGS=spellflag_harm|spellflag_damage|spellflag_area|spellflag_fx_targ|spellflag_playeronly
+EFFECT_ID=i_fx_smoke
+EFFECT=30,45
+DURATION=30.0
+MANAUSE=50
+SKILLREQ=MAGERY 70.0
+// NOTE: does Earthquake use a duration?? IF so, no more then 30secs. This spell is more like an irradiating wave thus should have a set distance/time it can be effective
+INTERRUPT=100.0,100.0
+
+//Earthquake is an area aggressive spell which damages all nearby creatures and players. The spell reaches up to 8 tiles away from where it is casted, and takes 1/2 of the health of all targets in range.
+//Formula: 50% of a players total current Hp, with a maximum damage of 50. Versus monsters the damage is capped at 75.
+ON=@Success
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.arearadius=<eval 1+(<local.spell_strength>/150)>
+
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_physical>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval (<hitpoints>/2)>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+local.effect=<qval (<npc>)?<qval (75 < <local.effect>)?75:<local.effect>>:<qval (50 < <local.effect>)?50:<local.effect>>>
+if (<src> == <uid>) || (<flags>&statf_invul) || (<flags>&statf_stone) || (<isevent.e_champion_boss>)
+  return 1	//don't do damage to self or chars with specific exclusions
+endif
+
+[EOF]

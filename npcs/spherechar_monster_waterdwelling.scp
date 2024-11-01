@@ -1,0 +1,315 @@
+
+
+[CHARDEF 05f]
+// This body cannot be viewed on newer clients and will cause
+// client crashes. Use c_sea_monster instead.
+DEFNAME=c_sea_monster_old
+NAME=Sea Monster
+SOUND=snd_MONSTER_SEASERP1
+ICON=i_pet_snake
+CAN=MT_SWIM
+ANIM=078c7f
+DAM=5,15
+ARMOR=15
+RESOURCES=50 i_ribs_raw,8 i_reag_serpent_scale
+FOODTYPE=25 t_meat_raw,t_fish
+DESIRES=t_ship
+//SHELTER=r_water
+AVERSIONS=r_civilization
+//RESLEVEL=1
+//RESDISPDNID=c_sea_serpent
+//RESDISPDNHUE=0123
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Sea Monster
+
+ON=@Create
+	NPC=brain_monster
+	FAME={2000 6000}
+	KARMA={-3000 -3999}
+	//ALIGNMENT=NEUTRAL
+	STR={165 225}
+	DEX={58 85}
+	INT={53 85}
+	PARRYING={65.0 75.0}
+	MAGICRESISTANCE={60.0 75.0}
+	TACTICS={60.0 70.0}
+	WRESTLING={60.0 75.0}
+	FISHING=80.0
+
+ON=@NPCRestock
+	ITEM=loot_SEA_SERPENT
+
+[CHARDEF c_sea_monster]
+// This is a copy of 05f that uses a sea serpent as its main body. Older
+// clients will be shown the sea monster body
+ID=c_sea_serpent
+NAME=Sea Monster
+SOUND=snd_MONSTER_SEASERP1
+ICON=i_pet_snake
+CAN=MT_SWIM
+ANIM=078c7f
+DAM=5,15
+ARMOR=15
+RESOURCES=50 i_ribs_raw
+FOODTYPE=25 t_meat_raw,t_fish
+DESIRES=t_ship
+//SHELTER=r_water
+AVERSIONS=r_civilization
+//RESLEVEL=4
+//RESDISPDNID=05f
+//RESDISPDNHUE=08000
+
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Sea Monster
+
+ON=@Create
+	COLOR=0123
+	NPC=brain_monster
+	FAME={2000 6000}
+	KARMA={-3000 -3999}
+	//ALIGNMENT=NEUTRAL
+	STR={165 225}
+	DEX={58 85}
+	INT={53 85}
+	PARRYING={65.0 75.0}
+	MAGICRESISTANCE={60.0 75.0}
+	TACTICS={60.0 70.0}
+	WRESTLING={60.0 75.0}
+	FISHING=80.0
+
+ON=@NPCRestock
+	ITEM=loot_SEA_SERPENT
+
+[CHARDEF 150]
+DEFNAME=c_sea_serpent
+NAME=Sea Serpent
+SOUND=447
+ICON=i_pet_shark
+ANIM=01ff
+CAN=MT_SWIM
+dam=7, 13
+armor=30
+RESOURCES=i_dragon_scale_blue 8, i_hide_horned 10, i_fish_cut_raw
+FOODTYPE=25 t_meat_raw,t_fish
+DESIRES=t_ship
+//SHELTER=r_water
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Sea Serpent
+
+ON=@Create
+	NPC=brain_monster
+	str={168, 225}
+	dex={58, 85}
+	int={53, 95}
+	maxhits={110, 127}
+	//resphysical={25, 35}
+	resfire={50, 60}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={15, 20}
+	magicresistance={60.1, 75.0}
+	tactics={60.1, 70.0}
+	wrestling={60.1, 70.0}
+	fame=6000
+	karma=-6000
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=i_sos_bottle,R400
+	//item=i_fishing_net_special
+	item={i_treasure_map1 1 i_treasure_map2 1},R99
+
+
+[chardef c_leviathan]
+ID=77
+defname=c_leviathan
+NAME=Leviathan
+SOUND=353
+ICON=i_pet_kraken
+dam=25, 33
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+armor=50
+CAN=MT_USEHANDS|MT_SWIM|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+MOVERATE=40
+RANGE=8
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Leviathan
+
+ON=@Create
+	COLOR=0481
+	NPC=brain_monster
+	str={1000}
+	dex={501, 520}
+	int={501, 515}
+	maxhits={1500}
+	//resphysical={55, 65}
+	resfire={45, 55}
+	rescold={45, 55}
+	respoison={35, 45}
+	resenergy={25, 35}
+	evaluatingintel={97.6, 107.5}
+	magery={97.6, 107.5}
+	magicresistance={97.6, 107.5}
+	meditation={97.6, 107.5}
+	tactics={97.6, 107.5}
+	wrestling={97.6, 107.5}
+	fame=22500
+	karma=-22500
+
+
+
+ON=@NpcRestock
+	item=i_gold,{2600 3000}
+	item=random_tm_magic_items
+	item=i_rope,2
+	item=i_sos_bottle,R99
+
+[chardef 77]
+defname=c_kraken
+NAME=Kraken
+SOUND=353
+ICON=i_pet_kraken
+dam=19, 33
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+armor=50
+CAN=MT_USEHANDS|MT_SWIM
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+RANGE=3
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Kraken
+
+ON=@Create
+	NPC=brain_monster
+	str={756, 780}
+	dex={226, 245}
+	int={26, 40}
+	maxhits={454, 468}
+	maxmana={0}
+	//resphysical={45, 55}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={20, 30}
+	resenergy={10, 20}
+	magicresistance={15.1, 20.0}
+	tactics={45.1, 60.0}
+	wrestling={45.1, 60.0}
+	fame=11000
+	karma=-11000
+
+
+ON=@NpcRestock
+	item=i_gold,{275 325}
+	item=i_rope
+	item=i_sos_bottle,R99
+	//item=i_treasure_map4,R99
+
+
+[chardef c_Sea_Serpent_Crystal]
+defname=c_Sea_Serpent_Crystal
+name=crystal sea serpent
+SOUND=447
+id=150
+can=mt_swim
+dam=	10, 18
+
+on=@create
+	npc=brain_monster
+	color=047E
+	str={250, 450}
+	dex={100, 150}
+	int={90, 190}
+	maxhits={230, 330}
+	//resphysical={50, 70}
+	resfire={0}
+	rescold={70, 90}
+	respoison={20, 30}
+	resenergy={60, 80}
+	fame=7500
+	karma=-7500
+
+on=@npcrestock
+	item=i_gold,50
+	item=i_crushed_crystal
+	//item=i_someones_dagger
+	item=i_icy_heart
+	
+	
+[chardef c_sea_serpent_deep]
+defname=c_sea_serpent_deep
+name=deep sea serpent
+id=150
+sound=447
+can=mt_swim
+resources=i_hide_horned 10,i_ribs_raw 10, i_dragon_scale_blue 10
+dam=6, 14
+armor=60
+
+on=@create
+	npc=brain_monster
+	color=08A0
+	str={251, 425}
+	dex={87, 135}
+	int={87, 155}
+	maxhits={151, 255}
+	//resphysical={30, 40}
+	resfire={70, 80}
+	rescold={40, 50}
+	respoison={30, 40}
+	resenergy={15, 20}
+	magicresistance={60.1, 75.0}
+	tactics={60.1, 70.0}
+	wrestling={60.1, 70.0}
+	fame=6000
+	karma=-6000
+
+on=@npcrestock
+	item=i_gold,{50 100}
+	//item=i_treasure_map2,R99
+	item=i_sos_bottle,R99
+	//item=i_fishing_net_special
+	item=i_reag_sulfur_ash,4
+
+
+
+
+[chardef 144]	//not seen in game yet
+defname=c_sea_horse
+name=Sea Horse
+sound=
+can=mt_swim
+dam=
+armor=
+
+on=@create
+	npc=brain_monster
+	str={251, 425}
+	dex={87, 135}
+	int={87, 155}
+	maxhits={151, 255}
+	//resphysical={30, 40}
+	resfire={70, 80}
+	rescold={40, 50}
+	respoison={30, 40}
+	resenergy={15, 20}
+	magicresistance={60.1, 75.0}
+	tactics={60.1, 70.0}
+	wrestling={60.1, 70.0}
+	fame=6000
+	karma=-6000
+
+
+[EOF]
+
+
+

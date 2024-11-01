@@ -1,0 +1,187 @@
+//Bulk Order Deed System by Soulless
+//v0.5
+//1:28 AM 8/21/2022
+
+[defname bulk_order_system]
+
+bulk_orders_blacksmithing		1	//1 bulk orders enabled, 0 disabled
+bulk_orders_blacksmithing_color		038a	//color of the deed
+bulk_orders_blacksmithing_craftables	50	//last number in craftable list
+bulk_orders_blacksmithing_materials	14	//last number in material list
+
+bulk_orders_tailoring			1	
+bulk_orders_tailoring_color		023c
+bulk_orders_tailoring_craftables	51
+bulk_orders_tailoring_materials		3
+
+/////////////////////////
+// Blacksmithing
+
+bulk_orders_blacksmithing_craftable0			i_ringmail_gloves
+bulk_orders_blacksmithing_craftable1			i_ringmail_leggings
+bulk_orders_blacksmithing_craftable2			i_ringmail_sleeves
+bulk_orders_blacksmithing_craftable3			i_ringmail_tunic
+bulk_orders_blacksmithing_craftable4			i_chainmail_coif
+bulk_orders_blacksmithing_craftable5			i_chainmail_leggings
+bulk_orders_blacksmithing_craftable6			i_chainmail_tunic
+bulk_orders_blacksmithing_craftable7			i_platemail_arms
+bulk_orders_blacksmithing_craftable8			i_platemail_gloves
+bulk_orders_blacksmithing_craftable9			i_platemail_gorget
+bulk_orders_blacksmithing_craftable10			i_platemail_leggings
+bulk_orders_blacksmithing_craftable11			i_platemail_chest
+bulk_orders_blacksmithing_craftable12			i_armor_female_plate
+bulk_orders_blacksmithing_craftable13			i_platemail_helm
+bulk_orders_blacksmithing_craftable14			i_bascinet
+bulk_orders_blacksmithing_craftable15			i_helm_closed
+bulk_orders_blacksmithing_craftable16			i_helm_open
+bulk_orders_blacksmithing_craftable17			i_helm_norse
+bulk_orders_blacksmithing_craftable18			i_platemail_helm
+bulk_orders_blacksmithing_craftable19			i_shield_buckler
+bulk_orders_blacksmithing_craftable20			i_shield_round_bronze
+bulk_orders_blacksmithing_craftable21			i_shield_heater
+bulk_orders_blacksmithing_craftable22			i_shield_round_metal
+bulk_orders_blacksmithing_craftable23			i_shield_kite_metal
+bulk_orders_blacksmithing_craftable24			i_shield_kite_wood
+bulk_orders_blacksmithing_craftable25			i_sword_broad
+bulk_orders_blacksmithing_craftable26			i_cutlass
+bulk_orders_blacksmithing_craftable27			i_dagger
+bulk_orders_blacksmithing_craftable28			i_katana
+bulk_orders_blacksmithing_craftable29			i_kryss
+bulk_orders_blacksmithing_craftable30			i_sword_long
+bulk_orders_blacksmithing_craftable31			i_scimitar
+bulk_orders_blacksmithing_craftable32			i_sword_viking
+bulk_orders_blacksmithing_craftable33			i_sword_long
+bulk_orders_blacksmithing_craftable34			i_axe
+bulk_orders_blacksmithing_craftable35			i_axe_battle
+bulk_orders_blacksmithing_craftable36			i_axe_double
+bulk_orders_blacksmithing_craftable37			i_axe_exec
+bulk_orders_blacksmithing_craftable38			i_axe_battle_large
+bulk_orders_blacksmithing_craftable39			i_axe_two_hand
+bulk_orders_blacksmithing_craftable40			i_axe_war
+bulk_orders_blacksmithing_craftable41			i_bardiche
+bulk_orders_blacksmithing_craftable42			i_halberd
+bulk_orders_blacksmithing_craftable43			i_spear_short
+bulk_orders_blacksmithing_craftable44			i_spear
+bulk_orders_blacksmithing_craftable45			i_war_fork
+bulk_orders_blacksmithing_craftable46			i_hammer_pick
+bulk_orders_blacksmithing_craftable47			i_mace
+bulk_orders_blacksmithing_craftable48			i_maul
+bulk_orders_blacksmithing_craftable49			i_mace_war
+bulk_orders_blacksmithing_craftable50			i_hammer_war
+
+
+bulk_orders_blacksmithing_material			i_ingot_iron			//the default material
+bulk_orders_blacksmithing_material0			i_ingot_blackrock,110.0,0.5
+bulk_orders_blacksmithing_material1			i_ingot_mytheril,105.0,0.5
+bulk_orders_blacksmithing_material2			i_ingot_valorite,99.0,1.4
+bulk_orders_blacksmithing_material3			i_ingot_verite,95.0,2.8
+bulk_orders_blacksmithing_material4			i_ingot_bloodrock,95.0,2.8
+bulk_orders_blacksmithing_material5			i_ingot_agapite,90.0,4.2
+bulk_orders_blacksmithing_material6			i_ingot_rose,90.0,4.2
+bulk_orders_blacksmithing_material7			i_ingot_gold,85.0,5.6
+bulk_orders_blacksmithing_material8			i_ingot_silver,85.0,5.6
+bulk_orders_blacksmithing_material9			i_ingot_bronze,80.0,7.0
+bulk_orders_blacksmithing_material10			i_ingot_copper,75.0,8.4
+bulk_orders_blacksmithing_material11			i_ingot_shadow,70.0,9.8
+bulk_orders_blacksmithing_material12			i_ingot_dull_copper,65.0,11.2
+bulk_orders_blacksmithing_material13			i_ingot_old_copper,65.0,11.2
+bulk_orders_blacksmithing_material14				//i_ingot_iron,0.0,50.0	
+
+//Blacksmithing Rewards
+//itemdef,amount,chance	
+bulk_orders_blacksmithing_reward0			{i_power_scroll_blacksmithing_wondrous 4 i_power_scroll_blacksmithing_exalted 3 i_power_scroll_blacksmithing_mythical 2 i_power_scroll_blacksmithing_legendary 1},1,2.0
+bulk_orders_blacksmithing_reward1			{i_power_scroll_mining_wondrous 4 i_power_scroll_mining_exalted 3 i_power_scroll_mining_mythical 2 i_power_scroll_mining_legendary 1},1,2.0
+bulk_orders_blacksmithing_reward2			{i_portable_forge 1 i_portable_anvil 1},1,3.0
+bulk_orders_blacksmithing_reward3			{i_apron_blacksmiths 1 i_gloves_miners 1},1,3.0	
+bulk_orders_blacksmithing_reward4			{i_decorative_armor 1 i_decorative_armor_d 1 i_decorative_armor2 1 i_decorative_armor2_d 1},1,3.0
+bulk_orders_blacksmithing_reward5			{i_decorative_weapons_1 1 i_decorative_weapons_2 1 i_decorative_weapons_3 1 i_decorative_weapons_4 1},1,3.0
+bulk_orders_blacksmithing_reward6			{i_decorative_shield_12_sword_under_ne 1 i_decorative_shield_12_sword_over_ne 1 i_decorative_shield_12_sword_over_nw 1 i_decorative_shield_12_sword_under_nw 1 i_decorative_shield_13_sword_under_ne 1 i_decorative_shield_13_sword_over_nw 1 i_decorative_shield_13_sword_under_nw 1},1,3.0
+bulk_orders_blacksmithing_reward7			{i_decorative_shield 1 i_decorative_shield_2 1 i_decorative_shield_3 1 i_decorative_shield_4 1 i_decorative_shield_5 1 i_decorative_shield_6 1 i_decorative_shield_7 1 i_decorative_shield_8 1 i_decorative_shield_9 1 i_decorative_shield_10 1 i_decorative_shield_11 1},1,3.0
+bulk_orders_blacksmithing_reward8			{i_ringmail_leggings_decoration 1 i_ringmail_tunic_decoration 1 i_ringmail_sleeves_decoration 1},1,3.0
+bulk_orders_blacksmithing_reward9			{i_brazier 1 i_brazier_2 1 i_brazier_tall 1},1,3.0	
+bulk_orders_blacksmithing_reward10			i_pickaxe_gargoyle,1,5.0
+bulk_orders_blacksmithing_reward11			i_pickaxe_sturdy,1,10.0
+bulk_orders_blacksmithing_reward12			i_supply_bag_ore,1,20.0	
+bulk_orders_blacksmithing_reward13			i_gold,1,75.0	
+bulk_orders_blacksmithing_reward14		
+
+
+
+
+///////////////////////////
+// Tailoring
+
+bulk_orders_tailoring_craftable0			i_sandals
+bulk_orders_tailoring_craftable1			i_shoes_plain
+bulk_orders_tailoring_craftable2			i_boots_calf
+bulk_orders_tailoring_craftable3			i_boots_thigh
+bulk_orders_tailoring_craftable4			i_shirt_plain
+bulk_orders_tailoring_craftable5			i_shirt_fancy
+bulk_orders_tailoring_craftable6			i_doublet
+bulk_orders_tailoring_craftable7			i_jester_suit
+bulk_orders_tailoring_craftable8			i_tunic
+bulk_orders_tailoring_craftable9			i_surcoat
+bulk_orders_tailoring_craftable10			i_robe
+bulk_orders_tailoring_craftable11			i_dress_plain
+bulk_orders_tailoring_craftable12			i_dress_full
+bulk_orders_tailoring_craftable13			i_cape
+bulk_orders_tailoring_craftable14			i_sash
+bulk_orders_tailoring_craftable15			i_hooded_shroud
+bulk_orders_tailoring_craftable16			i_pants_short
+bulk_orders_tailoring_craftable17			i_pants_long
+bulk_orders_tailoring_craftable18			i_skirt_long
+bulk_orders_tailoring_craftable19			i_kilt
+bulk_orders_tailoring_craftable20			i_bandana
+bulk_orders_tailoring_craftable21			i_skull_cap
+bulk_orders_tailoring_craftable22			i_hat_floppy
+bulk_orders_tailoring_craftable23			i_hat_wide_brim
+bulk_orders_tailoring_craftable24			i_hat_feather
+bulk_orders_tailoring_craftable25			i_hat_tricorne
+bulk_orders_tailoring_craftable26			i_hat_straw_tall
+bulk_orders_tailoring_craftable27			i_hat_straw
+bulk_orders_tailoring_craftable28			i_bonnet
+bulk_orders_tailoring_craftable29			i_hat_jester
+bulk_orders_tailoring_craftable30			i_hat_wizards
+bulk_orders_tailoring_craftable31			i_mask_blue
+bulk_orders_tailoring_craftable32			i_mask_tribal_red
+bulk_orders_tailoring_craftable33			i_apron_half
+bulk_orders_tailoring_craftable34			i_apron_full
+bulk_orders_tailoring_craftable35			i_leather_cap
+bulk_orders_tailoring_craftable36			i_leather_gorget
+bulk_orders_tailoring_craftable37			i_leather_sleeves
+bulk_orders_tailoring_craftable38			i_leather_tunic
+bulk_orders_tailoring_craftable39			i_leather_gloves
+bulk_orders_tailoring_craftable40			i_leather_leggings
+bulk_orders_tailoring_craftable41			i_armor_female_shorts
+bulk_orders_tailoring_craftable42			i_armor_female_leather
+bulk_orders_tailoring_craftable43			i_armor_female_skirt
+bulk_orders_tailoring_craftable44			i_armor_female_bustier
+bulk_orders_tailoring_craftable45			i_studded_gloves
+bulk_orders_tailoring_craftable46			i_studded_gorget
+bulk_orders_tailoring_craftable47			i_studded_sleeves
+bulk_orders_tailoring_craftable48			i_studded_tunic
+bulk_orders_tailoring_craftable49			i_studded_leggings
+bulk_orders_tailoring_craftable50			i_armor_female_bustier_studded
+bulk_orders_tailoring_craftable51			i_armor_female_studded
+bulk_orders_tailoring_craftable52			//i_bone_gloves		//these items are nearly impossible to get exceptional on
+bulk_orders_tailoring_craftable53			//i_bone_arms
+bulk_orders_tailoring_craftable54			//i_bone_chest
+bulk_orders_tailoring_craftable55			//i_bone_leggings
+bulk_orders_tailoring_craftable56			//i_bone_helmet
+		
+bulk_orders_tailoring_material				i_hides_cut
+bulk_orders_tailoring_material0				i_hides_cut_barbed,70.0,0.5
+bulk_orders_tailoring_material1				i_hides_cut_horned,65.0,2.0
+bulk_orders_tailoring_material2				i_hides_cut_spined,65.0,12.5
+bulk_orders_tailoring_material3				
+
+//Tailoring Rewards
+//itemdef,amount,chance
+bulk_orders_tailoring_reward0				{i_power_scroll_tailoring_wondrous 4 i_power_scroll_tailoring_exalted 3 i_power_scroll_tailoring_mythical 2 i_power_scroll_tailoring_legendary 1},1,2.0		
+bulk_orders_tailoring_reward1				{i_portable_loom 1 i_portable_spinning_wheel 1},1,3.0
+bulk_orders_tailoring_reward2				random_rare_dyetub,1,3.0
+bulk_orders_tailoring_reward3				random_pet_statue,1,5.0
+bulk_orders_tailoring_reward4				i_gold,1,75.0		
+
+
+[EOF]

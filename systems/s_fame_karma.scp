@@ -1,0 +1,98 @@
+//fame and karma system by Soulless
+//v1.0
+//5:11 AM 1/12/2021
+//http://uorforum.com/threads/fame-karma-%E2%80%93-reputation-system.6438/
+//https://uo.stratics.com/content/reputation/karmalock.shtml#:~:text=Maybe%20you%20want%20to%20be,thinking%20your%20intentions%20are%20good.
+
+//resurrect loses = fame / 10
+
+//add fame and karma decay
+
+//Compassion	desert west of Covetous		mu
+//Honesty	Ice Isle			ahm
+//Honor		south of Trinsic		summ
+//Humility	Fire Isle			lum
+//Justice	east of Yew moongate		beh
+//Sacrifice	north of Vesper			cah
+//Spirituality	northwest of Trinsic		om
+//Valor		southwest of Serpent's Hold	ra
+
+[events e_fame_karma]
+
+on=@FameChange
+if (<argo.isvalid>) && (<argo.ischar>) 
+  argn1=<f_fame_value <argo>> 
+  if !(<npc>) && (<eval (<fame>+<argn1>)> > 10000)
+    argn1=<eval (10000-<fame>)>
+  endif
+endif
+
+on=@KarmaChange
+if (<argo.isvalid>) && (<argo.ischar>)
+  argn1=<f_karma_value <argo>>
+  if (<tag0.karma_locked>) && (<argn1> > 0 )
+    return 1
+  endif
+  if !(<npc>)
+    if (<eval (<karma>+<argn1>)> > 10000)
+      argn1=<eval (10000-<karma>)>		//only add what allows them to get to 10,000 karma
+    elseif (<eval (<karma>+<argn1>)> < 10000)
+      argn1=<eval (10000-<karma>)>		//only add what allows them to get to -10,000 karma
+    endif
+  endif
+  if (<karma> >= 0) && (<eval (<karma>+<argn1>)> < 0)	//lock players karma when going negative
+    sysmessage @026 Karma is locked. A mantra spoken at a shrine will unlock it again
+    tag0.karma_locked=1
+    return 1
+  endif
+endif
+
+[function f_fame_value]
+ref1=<argv[0]>		//uid of the creature
+if (<ref1.isvalid>)						
+  if (<ref1.ismonster>) && (<fame> < <ref1.fame>)	//you can only gain fame from killing monsters with higher fame
+    local.fame=<eval ((<ref1.fame>-<fame>)/100)>	
+  endif
+  return <local.fame>
+endif
+return 0
+
+[function f_karma_value]
+ref1=<argv[0]>		//uid of the creature
+if (<ref1.isvalid>)
+  if (<ref1.isevil>) && (<karma> < <eval (-<ref1.karma>)>)
+    local.karma=<eval ((-<ref1.karma>-<karma>)/100)> 
+    local.karma=<qval (<local.karma> < 0)?0:<local.karma>>	//can't get negative karma from killing something evil
+  elseif (<ref1.isinnocent>) && (<karma> > <eval (-<ref1.karma>)>)
+    local.karma=<eval ((-<ref1.karma>-<karma>)/100)>		//should result in negative karma for killing something good
+  endif
+endif
+return <local.karma>
+
+[function f_fame_karma_message]
+if (<argn> > 40)
+  return You have gained a lot of
+elseif (<argn> > 20) 
+  return You have gained a good amount of
+elseif (<argn> > 10)
+  return You have gained some 
+elseif (<argn> > 0) 
+  return You have gained a little 
+elseif (<argn> < -40)
+  return You have lost a lot of 
+elseif (<argn> < -20)
+  return You have lost a good amount of
+elseif (<argn> < -10)
+  return You have lost some
+elseif (<argn> < 0)
+  return You have lost a little
+endif
+
+
+
+
+
+
+
+
+[EOF]

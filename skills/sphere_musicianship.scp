@@ -1,0 +1,115 @@
+//https://uo2.stratics.com/skill-guides/skills-and-professions/musicianship/
+//http://www.uoguide.com/Musicianship
+//10:14 PM 4/24/2018
+
+[SKILL 29]
+DEFNAME=Skill_Musicianship
+KEY=Musicianship
+TITLE=Bard
+FLAGS=skf_scripted
+PROMPT_MSG=
+DELAY=2.0
+STAT_STR=20
+STAT_INT=50
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=80
+BONUS_INT=20
+BONUS_STATS=10
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@select
+//serv.log <src.name>(<src>) selected musicanship, shouldnt be able to do this without using instrument
+
+on=@start
+//act = none
+//actprv = instrument
+ref1=<actprv>
+
+if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_musical) 
+  return 1
+elseif (<ref1.topobj> != <src>)
+  src.sysmessage You do not have a musical instrument.
+  return 1 
+elseif !(<src.f_skillsucceed musicianship>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+src.sound <ref1.tdata1>
+return 0
+
+ON=@Fail
+src.sysmessage You play poorly..
+src.sound <uid.<actprv>.tdata2>
+src.f_musical_instrument_damage
+
+ON=@Abort
+src.sysmessage You put down your instrument.
+
+on=@success
+src.sysmessage You play well.
+src.sound <uid.<actprv>.tdata1>
+src.f_musical_instrument_damage
+
+[function f_musical_instrument_select]
+if !(<argo.isitem>)
+  sysmessage That is not a musical instrument.
+  return 1
+elseif !(<canpackaccess <argo>>) && !(<canbankaccess <argo>>)
+  src.sysmessage You cannot use that where it is!
+  return 1
+elseif (<argo.type> != t_musical)
+  sysmessage That is not a musical instrument.
+  return 1
+endif
+actprv=<argo>
+sysmessage Selected <argo.name> as instrument.
+if (<argn>)	//we used another skill that made us select the instrument, go back to that skill
+  skillselect <argn>
+endif
+  
+[function f_barding_modifers]	//need to add some things to this like the exceptional tag for crafted items
+ref1=<args>	//this is the barding target
+ref2=<actprv>	//this should be the instrument
+if (<ref1.isvalid>) && (<ref1.isevent.t_exceptional_item>)	//Reduce base difficulty by 5 (10%) when using an exceptional instrument.
+  local.n += 50
+endif
+//Reduce base difficulty by 10 points (20%) when using an enchanted instrument of aligned type.		//not sure ill either of these two.
+//Increase base difficulty by 10 points (20%) when using an enchanted instrument of opposite aligned type.
+if (<musicianship> > 1000)
+  local.n += <eval ((<musicianship>-1000)/2)>	//If Musicianship is above 100, subtract 100 from your Musicianship skill and divide the result by 2.  This is your Musicianship bonus.
+endif
+if (<ref1.isvalid>) && (<ref1.ischar>)
+  if (<ref1.findid.i_provoked>)	//Reduce base difficulty by 5 points (10%) when performing Provocation.
+    local.n += 50
+  endif
+  if  (<ref1.findid.i_discorded>) || (<ref1.findid.i_calmed>)	//Reduce base difficulty by 10 points (20%) when performing Discordance or Targeted Peacemaking.
+    local.n += 100
+  endif
+endif
+return <eval (<local.n>/10)>
+
+[comment old barding difficulty]
+local.str=<eval (<str>*1.6)>
+local.skilltotal=<eval (<skilltotal>/10)>
+local.magery=<eval (<magery>/10)>
+local.posioning=<eval (<poisoning>/10)>
+local.barding_difficulty=<eval ((<local.str>+<dex>+<int>+<local.skilltotal>+<local.magery>+<local.poisoning>) / 10) >
+if (<local.barding_difficulty> > 1600)
+  local.barding_difficulty=1600
+endif
+return <dlocal.barding_difficulty>
+
+[function f_musical_instrument_damage]
+ref1=<actprv>
+if (<R1,100> <= 3)	//3% chance to damage 
+  ref1.usescur -= 1
+  if (<ref1.usescur> <= 0)
+    //src.sysmessage Your musical instrument has broken.
+    src.sysmessage The instrument played its last tune.
+    ref1.consume
+  endif
+endif
+
+[EOF]

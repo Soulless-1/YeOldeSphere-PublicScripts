@@ -1,0 +1,1009 @@
+//All demonic type monsters should go in here
+
+
+[CHARDEF 09]
+DEFNAME=c_daemon
+NAME=Daemon //#NAMES_DAEMON the Daemon
+SOUND=357
+ICON=i_pet_DAEMON
+CAN=MT_WALK|MT_FLY|MT_USEHANDS
+dam=7, 14
+armor=58
+RESOURCES=1 i_ribs_raw
+FOODTYPE=
+DESIRES=i_gold
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Daemons & Gargoyles
+DESCRIPTION=Daemon
+
+ON=@Create
+        events=+e_faction_aligned
+        tag0.AlignedFaction=4
+	tag.controlslots=4
+	NPC=brain_monster
+	str={476, 505}
+	dex={76, 95}
+	int={301, 325}
+	maxhits={286, 303}
+	resphysical={45, 60}
+	resfire={50, 60}
+	rescold={30, 40}
+	respoison={20, 30}
+	resenergy={30, 40}
+	evaluatingintel={70.1, 80.0}
+	magery={70.1, 80.0}
+	magicresistance={85.1, 95.0}
+	tactics={70.1, 80.0}
+	wrestling={60.1, 80.0}
+	fame=15000
+	karma=-15000
+	make_spellcaster 6,8
+
+ON=@NPCRestock
+item=i_gold,{550 650}
+//item=random_second_circle
+//item=random_second_circle
+//item=tm_magic_items
+//item=i_treasure_map4,R99	//todo
+
+[CHARDEF 0A]
+DEFNAME=c_daemon_knight
+DEFNAME2=c_daemon_w_sword
+NAME=Daemon Knight	//#NAMES_DAEMON the Daemon Knight
+SOUND=357
+ICON=i_pet_DAEMON
+CAN=MT_WALK|MT_FLY|MT_USEHANDS
+dam=7, 14
+armor=58
+RESOURCES=1 i_ribs_raw
+FOODTYPE=
+DESIRES=i_gold
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Daemons & Gargoyles
+DESCRIPTION=Daemon Knight
+
+ON=@Create
+	NPC=brain_monster
+	str={476, 505}
+	dex={76, 95}
+	int={301, 325}
+	maxhits={286, 303}
+	resphysical={45, 60}
+	resfire={50, 60}
+	rescold={30, 40}
+	respoison={20, 30}
+	resenergy={30, 40}
+	evaluatingintel={70.1, 80.0}
+	magery={70.1, 80.0}
+	magicresistance={85.1, 95.0}
+	tactics={70.1, 80.0}
+	wrestling={60.1, 80.0}
+	fame=15000
+	karma=-15000
+	make_spellcaster 6,8
+	
+ON=@NPCRestock
+item=i_gold,{550 650}
+//item=random_second_circle
+//item=random_second_circle
+//item=tm_magic_items
+//item=i_treasure_map4,R99	//todo
+
+[CHARDEF 43]
+DEFNAME=c_icefiend
+NAME=Ice Fiend
+ID=c_daemon
+SOUND=357
+ICON=i_pet_DAEMON
+dam=8, 19
+armor=60
+RESOURCES=9 i_ribs_raw, 8 i_reag_daemon_bone
+CAN=MT_FLY|MT_WALK
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+CATEGORY=Monsters
+SUBSECTION=Daemons & Gargoyles
+DESCRIPTION=Ice Fiend
+
+ON=@Create
+   	color=color_ice
+	npc=brain_monster
+	str={376, 405}
+	dex={176, 195}
+	int={201, 225}
+	maxhits={226, 243}
+	evaluatingintel={80.1, 90.0}
+	magery={80.1, 90.0}
+	magicresistance={75.1, 85.0}
+	tactics={80.1, 90.0}
+	wrestling={80.1, 100.0}
+	resphysical={55, 65}
+	resfire={10, 20}
+	rescold={60, 70}
+	respoison={20, 30}
+	resenergy={30, 40}
+	fame=18000
+	karma=-18000
+	make_spellcaster 5,7
+
+ON=@NPCRestock
+item=i_gold,{650 800}
+//item=random_second_circle
+//item=random_second_circle
+//item=tm_magic_items
+//item=i_treasure_map4,R99	//todo
+
+[CHARDEF 74]
+DEFNAME=c_imp
+NAME=Imp
+SOUND=422
+ICON=i_pet_mongbat
+dam=10, 14
+ARMOR=15
+RESOURCES=1 i_ribs_raw, 6 i_hide_spined	//todo
+CAN=MT_FLY|MT_WALK
+FOODTYPE=9 t_meat_raw
+DESIRES=c_IMP
+AVERSIONS=r_civilization,r_water
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Imp
+
+ON=@Create
+	str={91, 115}
+	dex={61, 80}
+	int={86, 105}
+	maxhits={55, 70}
+	resphysical={25, 35}
+	resfire={40, 50}
+	rescold={20, 30}
+	respoison={30, 40}
+	resenergy={30, 40}
+	evaluatingintel={20.1, 30.0}
+	magery={90.1, 100.0}
+	magicresistance={30.1, 50.0}
+	tactics={42.1, 50.0}
+	wrestling={40.1, 44.0}
+	necromancy={20}
+	spiritspeak={20}
+	fame=2500
+	karma=-2500
+    make_spellcaster 2,4
+	
+on=@npcrestock
+item=i_gold,{50 100}
+//ITEM=random_first_circle
+
+[CHARDEF 40]
+DEFNAME=c_balron
+NAME=Balron
+SOUND=357
+ICON=i_pet_daemon
+dam=22, 29
+armor=90
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK|MT_FLY
+DESIRES=c_DAEMON,i_gold,t_wand
+AVERSIONS=r_water,r_mountains
+CATEGORY=Monsters
+SUBSECTION=Daemons & Gargoyles
+DESCRIPTION=Balron
+
+ON=@Create
+	npc=brain_monster
+	color=colors_balron
+	str={986, 1185}
+	dex={177, 255}
+	int={151, 250}
+	maxhits={592, 711}
+	resphysical={65, 80}
+	resfire={60, 80}
+	rescold={50, 60}
+	respoison={100}
+	resenergy={40, 50}
+	anatomy={25.1, 50.0}
+	evaluatingintel={90.1, 100.0}
+	magery={95.5, 100.0}
+	meditation={25.1, 50.0}
+	magicresistance={100.5, 150.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=24000
+	karma=-24000
+	make_spellcaster 6,8
+	dorand 3
+	  name=The Lord of the Abyss
+	  name=The Collector of Souls
+	  name=The Slayer
+	enddo
+	tag0.override.movedelay=500
+
+ON=@NPCRestock
+item=i_gold,{1200 1500}
+//item=random_second_circle
+//item=random_second_circle
+//item=tm_magic_items
+//item=i_treasure_map5,R99		
+
+[CHARDEF 149]
+DEFNAME=c_Succubus
+NAME=Succubus
+SOUND=04B0
+ICON=9770
+resources=1 i_ribs_raw
+dam=18, 28
+armor=80
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_FLY|MT_FEMALE
+MOVERATE=30
+ARMOR=85
+TEVENTS=+e_life_drain
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_woman
+//RESLEVEL=2
+//RESDISPDNHUE=01
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Succubus
+
+ON=@Create
+	NPC=brain_monster
+	str={488, 620}
+	dex={121, 170}
+	int={498, 657}
+	maxhits={312, 353}
+	resphysical={80, 90}
+	resfire={70, 80}
+	rescold={40, 50}
+	respoison={50, 60}
+	resenergy={50, 60}
+	evaluatingintel={90.1, 100.0}
+	magery={99.1, 100.0}
+	meditation={90.1, 100.0}
+	magicresistance={100.5, 150.0}
+	tactics={80.1, 90.0}
+	wrestling={80.1, 90.0}
+	fame=24000
+	karma=-24000
+
+ON=@NpcRestock
+item=i_gold,{1000 1200}
+//item=random_second_circle
+//item=random_second_circle
+//item=tm_magic_items
+//item=i_treasure_map5,R99	
+
+[chardef 796]			//not really in the game
+defname=c_horde_daemon
+defname2=c_Horde_minion_Large
+name=Horde Daemon
+ICON=i_pet_hordedaemon
+SOUND=357
+DAM=15,30
+ARMOR=26
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=40
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Horde Daemon
+
+ON=@Create
+	NPC=brain_monster
+	FAME={100 3000}
+	KARMA={-5000 -6999}
+	STR={200 240}
+	MAXHITS={300 400}
+	INT={200 250}
+	DEX={40 70}
+	TACTICS={90.0 100.0}
+	WRESTLING={100.0 110.0}
+	MAGICRESISTANCE=50.0
+
+[chardef 999]		//not really in the game
+defname=c_horde_minion_colored
+name=Horde Daemon
+SOUND=357
+ICON=i_pet_hordedaemon
+DAM=1,40
+ARMOR=20
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Multi Colored Horde Daemon
+
+ON=@Create
+NPC=brain_monster
+FAME={100 3000}
+KARMA={-5000 -6999}
+STR={200 240}
+MAXHITS={300 400}
+INT={200 250}
+DEX={40 70}
+TACTICS={90.0 100.0}
+WRESTLING={100.0 110.0}
+MAGICRESISTANCE=50.0
+
+[chardef 776]
+defname=c_horde_minion
+defname2=c_horde_minion_small
+name=horde minion
+SOUND=357
+ICON=i_pet_hordedaemon
+dam=5, 10
+armor=18
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=40
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=horde minion (small)
+
+ON=@Create
+	NPC=brain_monster
+	str={16, 40}
+	dex={31, 60}
+	int={11, 25}
+	maxhits={10, 24}
+	resphysical={15, 20}
+	resfire={5, 10}
+	magicresistance={10.0}
+	tactics={0.1, 15.0}
+	wrestling={25.1, 40.0}
+	fame=500
+	karma=-500
+
+ON=@NpcRestock
+item={random_body_parts_1 1 random_body_parts_2 1}
+item=random_bones
+
+[chardef c_Horde_minon_Medium]	
+defname=c_Horde_minion_medium
+id=c_horde_minion_small
+name=Horde Minion
+SOUND=357
+ICON=i_pet_hordedaemon
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+DAM=8,20
+ARMOR=16
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=40
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=horde minion (medium)
+
+ON=@Create
+	NPC=brain_monster
+	str={16, 40}
+	dex={31, 60}
+	int={11, 25}
+	maxhits={10, 24}
+	resphysical={15, 20}
+	resfire={5, 10}
+	magicresistance={10.0}
+	tactics={0.1, 15.0}
+	wrestling={25.1, 40.0}
+	fame=500
+	karma=-500
+
+ON=@NpcRestock
+item={random_body_parts_1 1 random_body_parts_2 1}
+item=random_bones
+
+[chardef 0310]
+defname=c_arcane_daemon
+NAME=Arcane Daemon
+SOUND=047d
+ICON=i_pet_arcanedaemon
+DAM=23,31
+armor=55
+CAN=MT_WALK|MT_FLY|MT_RUN
+MOVERATE=45
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Arcane Daemon
+
+ON=@Create
+	NPC=brain_monster
+	str={131, 150}
+	dex={126, 145}
+	int={301, 350}
+	maxhits={101, 115}
+	dam={12, 16}
+	resphysical={50, 60}
+	resfire={70, 80}
+	rescold={10, 20}
+	respoison={50, 60}
+	resenergy={30, 40}
+	magicresistance={85.1, 95.0}
+	tactics={70.1, 80.0}
+	wrestling={60.1, 80.0}
+	magery={80.1, 90.0}
+	evaluatingintel={70.1, 80.0}
+	meditation={70.1, 80.0}
+	fame=7000
+	karma=-10000
+
+ON=@NpcRestock
+item=i_gold,{250 300}
+
+[chardef 792]
+defname=c_chaos_daemon
+name=Chaos Daemon
+SOUND=03e9
+ICON=i_pet_chaosdaemon
+dam=12, 17
+armor=15
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_USEHANDS|MT_FLY|MT_RUN
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Chaos Daemon
+
+ON=@Create
+	NPC=brain_monster
+	str={106, 130}
+	dex={171, 200}
+	int={56, 80}
+	maxhits={91, 110}
+	resphysical={50, 60}
+	resfire={60, 70}
+	rescold={40, 50}
+	respoison={20, 30}
+	resenergy={20, 30}
+	magicresistance={85.1, 95.0}
+	tactics={70.1, 80.0}
+	wrestling={95.1, 100.0}
+	fame=3000
+	karma=-4000
+
+on=@npcrestock
+item=i_gold,{175 225}
+
+
+[chardef 0311]
+defname=c_Moloch
+name=Moloch
+SOUND=0300
+ICON=i_pet_fourarmed_daemon
+dam=15, 23
+armor=32
+RESOURCES=
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=999 t_corpse
+MOVERATE=60
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Moloch
+
+ON=@Create
+	NPC=brain_monster
+	str={331, 360}
+	dex={66, 85}
+	int={41, 65}
+	maxhits={171, 200}
+	resphysical={60, 70}
+	resfire={60, 70}
+	rescold={40, 50}
+	respoison={20, 30}
+	resenergy={20, 30}
+	magicresistance={65.1, 75.0}
+	tactics={75.1, 90.0}
+	wrestling={70.1, 90.0}
+	fame=7500
+	karma=-7500
+
+ON=@NpcRestock
+ITEM=i_gold,{300 350}
+
+
+[chardef 314]
+defname=c_ravager
+NAME=Ravager
+SOUND=357
+ICON=i_pet_ravager
+dam=15, 20
+armor=54
+CAN=MT_USEHANDS|MT_WALK|MT_RUN|MT_EQUIP
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_headless
+//RESLEVEL=3
+//RESDISPDNHUE=80
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Ravager
+
+ON=@Create
+	NPC=brain_monster
+	str={251, 275}
+	dex={101, 125}
+	int={66, 90}
+	maxhits={161, 175}
+	resphysical={50, 60}
+	resfire={50, 60}
+	rescold={60, 70}
+	respoison={30, 40}
+	resenergy={20, 30}
+	magicresistance={50.1, 75.0}
+	tactics={75.1, 100.0}
+	wrestling={70.1, 90.0}
+	fame=3500
+	karma=-3500
+
+ON=@NpcRestock
+item=i_gold,{275 325}
+//item=i_treasure_map4,R99
+
+[chardef 303]
+defname=c_devourer
+NAME=Devourer of Souls
+SOUND=357
+ICON=i_pet_devourer
+dam=22, 26
+armor=44
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_skeleton
+//RESLEVEL=3
+//RESDISPDNHUE=55
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Devourer of Souls
+
+ON=@Create
+	str={801, 950}
+	dex={126, 175}
+	int={201, 250}
+	maxhits={650}
+	resphysical={45, 55}
+	resfire={25, 35}
+	rescold={15, 25}
+	respoison={60, 70}
+	resenergy={40, 50}
+	necromancy={90.1, 100.0}
+	spiritspeak={90.1, 100.0}
+	evaluatingintel={90.1, 100.0}
+	magery={90.1, 100.0}
+	meditation={90.1, 100.0}
+	magicresistance={90.1, 105.0}
+	tactics={75.1, 85.0}
+	wrestling={80.1, 100.0}
+	fame=9500
+	karma=-9500
+
+ON=@NpcRestock
+	item=i_gold,{1000 1200}
+	item=random_reagent_necro
+
+
+
+
+[chardef 308]
+defname=c_bone_daemon
+NAME=Bone Daemon
+SOUND=snd_monster_skletn1
+ICON=i_pet_bonedaemon
+dam=34, 36
+armor=44
+ARMOR=20
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_skeleton
+//RESLEVEL=3
+//RESDISPDNHUE=55
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Bone Daemon
+
+ON=@Create
+	NPC=brain_monster
+	str={1000}
+	dex={151, 175}
+	int={171, 220}
+	maxhits={3600}
+	resphysical={75}
+	resfire={60}
+	rescold={90}
+	respoison={100}
+	resenergy={60}
+	detectinghidden={80.0}
+	evaluatingintel={77.6, 87.5}
+	magery={77.6, 87.5}
+	meditation={100.0}
+	magicresistance={50.1, 75.0}
+	tactics={100.0}
+	wrestling={100.0}
+	fame=20000
+	karma=-20000
+
+ON=@NpcRestock
+	item=i_gold,{4000 5000}
+	//item=tm_magic_items	//todo
+
+
+
+[chardef 312]
+defname=c_abyssmal_horror
+NAME=Abyssmal Horror
+SOUND=0451
+ICON=i_pet_abysmallhorror
+dam=13, 17
+armor=54
+CAN=MT_USEHANDS|MT_WALK|MT_RUN|MT_SWIM
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_sea_serpent
+//RESLEVEL=3
+//RESDISPDNHUE=55
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Abyssmal Horror
+
+ON=@Create
+	NPC=brain_monster
+	str={401, 420}
+	dex={81, 90}
+	int={401, 420}
+	maxhits={6000}
+	resphysical={30, 35}
+	resfire={100}
+	rescold={50, 55}
+	respoison={60, 65}
+	resenergy={77, 80}
+	evaluatingintel={200.0}
+	magery={112.6, 117.5}
+	meditation={200.0}
+	magicresistance={117.6, 120.0}
+	tactics={100.0}
+	wrestling={84.1, 88.0}
+	fame=26000
+	karma=-26000
+
+ON=@NpcRestock
+	item=i_gold,{1600 2000}
+	//item=tm_magic_items	//todo
+
+[chardef 307]
+defname=c_gibberling
+NAME=Gibberling
+SOUND=422
+ICON=i_pet_gibberling
+dam=12, 17
+armor=27
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_headless
+//RESLEVEL=3
+//RESDISPDNHUE=55
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Gibberling
+
+ON=@Create
+	NPC=brain_monster
+	str={141, 165}
+	dex={101, 125}
+	int={56, 80}
+	maxhits={85, 99}
+	resphysical={45, 55}
+	resfire={25, 35}
+	rescold={25, 35}
+	respoison={10, 20}
+	resenergy={30, 40}
+	magicresistance={45.1, 70.0}
+	tactics={67.6, 92.5}
+	wrestling={60.1, 80.0}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{50 100}
+
+
+[CHARDEF 241]
+Name=Oni
+DEFNAME=c_oni
+dam=14, 20
+ARMOR=40
+ICON=i_pet_oni
+SOUND=04E0
+CAN=MT_WALK|MT_RUN
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=55
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Oni
+
+on=@create
+	NPC=BRAIN_MONSTER
+	str={801, 910}
+	dex={151, 300}
+	int={171, 195}
+	maxhits={401, 530}
+	resphysical={65, 80}
+	resfire={50, 70}
+	rescold={35, 50}
+	respoison={45, 70}
+	resenergy={45, 65}
+	evaluatingintel={100.1, 125.0}
+	magery={96.1, 106.0}
+	anatomy={85.1, 95.0}
+	magicresistance={85.1, 100.0}
+	tactics={86.1, 101.0}
+	wrestling={90.1, 100.0}
+	fame=15000
+	karma=-15000
+
+on=@npcrestock
+	item=i_gold,{1600 1850}
+	//item=tm_magic_items	//todo
+	item=random_items
+	//item=i_treasure_map4,R99
+	item=i_bonsai_seed
+
+
+[chardef c_Crystal_Daemon]
+defname=c_Crystal_Daemon
+name=crystal daemon
+id=c_arcane_daemon
+sound=047D
+can=mt_walk|mt_run|mt_usehands
+dam=16, 20
+
+on=@create
+	npc=brain_monster
+	color=03E8
+	str={140, 200}
+	dex={120, 150}
+	int={800, 850}
+	maxhits={200, 220}
+	resphysical={20, 40}
+	resfire={0, 20}
+	rescold={60, 80}
+	respoison={20, 40}
+	resenergy={65, 75}
+	wrestling={60.0, 80.0}
+	tactics={70.0, 80.0}
+	magicresistance={100.0, 110.0}
+	magery={120.0, 130.0}
+	evaluatingintel={100.0, 110.0}
+	meditation={100.0, 110.0}
+	fame=15000
+	karma=-15000
+
+on=@npcrestock
+	item=i_gold,{650 650}
+
+
+[chardef c_daemon_fire]
+defname=c_daemon_fire
+name=fire daemon
+id=c_daemon
+sound=047D
+resources=1 i_ribs_raw
+can=mt_walk|mt_run|mt_usehands
+dam=7, 14
+armor=58
+
+on=@create
+	npc=brain_monster
+	color=1636
+	str={504, 539}
+	dex={126, 145}
+	int={329, 364}
+	maxhits={1026, 1174}
+	resphysical={45, 60}
+	resfire={100}
+	rescold={-10, 0}
+	respoison={20, 30}
+	resenergy={30, 40}
+	anatomy={75.5, 84.9}
+	magicresistance={95.7, 109.8}
+	tactics={81.0, 98.6}
+	wrestling={40.2, 78.7}
+	evaluatingintel={91.1, 104.5}
+	magery={91.3, 105.0}
+	meditation={90.1, 103.7}
+	detectinghidden={66.0}
+	fame=15000
+	karma=-15000
+
+on=@npcrestock
+	item=i_gold,{600 1000}
+	//item=tm_magic_items	//todo
+	//item=tm_magic_items
+	//item=tm_magic_items
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_daemon_claw
+	//item=i_treasure_map4,R99
+
+[chardef c_Pit_Fiend]
+defname=c_Pit_Fiend
+id=c_icefiend
+name=Pit fiend
+sound=357
+can=mt_walk|mt_run|mt_usehands
+dam=15, 20
+armor=60
+
+on=@create
+	npc=brain_monster
+	color=1863
+	str={376, 405}
+	dex={176, 195}
+	int={201, 225}
+	maxhits={226, 243}
+	evaluatingintel={80.1, 90.0}
+	magery={80.1, 90.0}
+	magicresistance={75.1, 85.0}
+	tactics={80.1, 90.0}
+	wrestling={80.1, 100.0}
+	resphysical={55, 65}
+	resfire={10, 20}
+	rescold={60, 70}
+	respoison={20, 30}
+	resenergy={30, 40}
+	fame=18000
+	karma=-18000
+
+[CHARDEF 247]
+Name=Fan Dancer
+DEFNAME=c_fan_dancer
+SOUND=0372
+CAN=MT_WALK|MT_RUN
+ICON=i_pet_fandancer
+maxhits={351, 430}
+dam=12, 17
+ARMOR=15
+//RESDISPDNID=c_woman
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Fan Dancer
+
+on=@create
+	NPC=BRAIN_MONSTER
+	str={301, 375}
+	dex={201, 255}
+	int={21, 25}
+	resphysical={40, 60}
+	resfire={50, 70}
+	rescold={50, 70}
+	respoison={50, 70}
+	resenergy={40, 60}
+	magicresistance={100.1, 110.0}
+	tactics={85.1, 95.0}
+	wrestling={85.1, 95.0}
+	anatomy={85.1, 95.0}
+	fame=9000
+	karma=-9000
+
+on=@Npcrestock
+	item=i_gold,{700 100}
+	//item=tm_magic_items
+	item=i_tessen
+	item=random_jewel,2
+	item=i_seed_bonsai
+	item=i_oragami_paper
+	//item=i_treasure_map3,R99
+
+
+[chardef c_Arch_Daemon]
+defname=c_Arch_Daemon
+name=Arch Deamon
+id=40
+sound=357
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=22, 29
+armor=90
+
+
+on=@create
+        npc=brain_monster
+	color=0455
+	str={986, 1185}
+	dex={177, 255}
+	int={151, 250}
+	maxhits={592, 711}
+	//resphysical={65, 80}
+	resfire={60, 80}
+	rescold={50, 60}
+	respoison={100}
+	resenergy={40, 50}
+	anatomy={25.1, 50.0}
+	evaluatingintel={90.1, 100.0}
+	magery={95.5, 100.0}
+	meditation={25.1, 50.0}
+	magicresistance={100.5, 150.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=24000
+	karma=-24000
+
+on=@npcrestock
+	item=i_gold,{650 650}
+
+
+[chardef c_Abyssal_Abomination]
+defname=c_Abyssal_Abomination
+name=Abyssal abomination
+id=0138
+sound=0451
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=13, 17
+armor=54
+
+on=@create
+	npc=brain_monster
+	color=0487	//769
+	str={401, 420}
+	dex={81, 90}
+	int={401, 420}
+	maxhits={600, 750}
+	//resphysical={30, 35}
+	resfire={100}
+	rescold={50, 55}
+	respoison={60, 65}
+	resenergy={77, 80}
+	evaluatingintel={200.0}
+	magery={112.6, 117.5}
+	spiritspeak={200.0}
+	necromancy={112.6, 117.5}
+	meditation={200.0}
+	magicresistance={117.6, 120.0}
+	tactics={100.0}
+	wrestling={84.1, 88.0}
+	fame=26000
+	karma=-26000
+
+on=@npcrestock
+	item=i_gold,{650 650}
+
+
+
+		
+
+[EOF]
+
+

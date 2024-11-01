@@ -1,0 +1,38 @@
+[itemdef i_waypoint_marker]
+id=i_sextant	//097e	//cheese wheel lol
+name=Waypoint Marker
+type=t_script
+
+on=@click
+message @030 Waypoint <serv.list.waypoints_<tag0.waypoints_group>.findelem <uid>>/<eval <serv.list.waypoints_<tag0.waypoints_group>.count>-1>
+message @0482 <tag0.waypoints_group> Group
+if (<link> != 04fffffff)
+  message @0b5 Linked : <link> 
+  link.message @0b5 <link> connected
+endif
+if !(<isempty <tag.restrictedto>>)
+  message @026 Restricted : <tag0.restrictedto>
+endif
+return 1
+
+on=@create
+attr=attr_move_never|attr_invis
+color=0387
+
+on=@step
+if (<src.npc>) && (<src.findid.i_waypoint_navigation>)
+  src.findid.i_waypoint_navigation.timerms=0
+endif
+
+on=@destroy
+if !(<tag0.remove>)
+  serv.log Attempting to delete waypoint at <region.name>(<p>) incorrectly. Use .remove_waypoint or .clear_waypoints command.
+  return 1
+endif
+serv.list.waypoints_<tag0.waypoints_group>.<serv.list.waypoints_<tag0.waypoints_group>.findelem <uid>>.remove
+if (<link.isvalid>)
+  link.link=04fffffff		//always reset the link's link, so we dont mess up other waypoints by removing one.
+endif
+
+
+[EOF]

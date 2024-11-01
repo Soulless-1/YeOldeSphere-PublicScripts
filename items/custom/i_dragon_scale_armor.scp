@@ -1,0 +1,77 @@
+//Dragonscale Armor by Soulless
+//v1.0
+//12:45 AM 1/13/2022
+
+[itemdef i_dragon_scale_helm]
+defname=i_dragon_scale_helm
+id=i_helm_closed
+name=dragon scale helm
+type=t_armor
+armor=39
+weight=5
+skillmake=72.6 blacksmithing
+resources=20 i_dragon_scale, 15 i_ingot_iron
+value=130,160
+
+on=@create
+hitpoints={90 120}
+
+[itemdef i_dragon_scale_tunic]
+defname=i_dragon_scale_tunic
+id=i_ringmail_tunic
+name=dragon scale tunic
+type=t_armor
+armor=39
+weight=10
+skillmake=85.0 blacksmithing
+resources=36 i_dragon_scale, 25 i_ingot_iron
+value=200,250
+
+on=@create
+hitpoints={90 120}
+
+[itemdef i_dragon_scale_sleeves]
+defname=i_dragon_scale_sleeves
+id=i_ringmail_sleeves
+name=dragon scale sleeves
+type=t_armor
+armor=39
+weight=2
+skillmake=86.3 blacksmithing
+resources=24 i_dragon_scale, 18 i_ingot_iron
+value=150,185
+
+on=@create
+hitpoints={90 120}
+
+[itemdef i_dragon_scale_gloves]
+defname=i_dragon_scale_gloves
+id=i_ringmail_gloves
+name=dragon scale gloves
+type=t_armor
+armor=39
+weight=2
+skillmake=68.9 blacksmithing
+resources=16 i_dragon_scale, 12 i_ingot_iron
+value=105,130
+
+on=@create
+hitpoints={90 120}
+
+[itemdef i_dragon_scale_leggings]
+defname=i_dragon_scale_leggings
+id=i_ringmail_leggings
+name=dragon scale leggings
+type=t_armor
+armor=39
+weight=6
+skillmake=78.8 blacksmithing
+resources=28 i_dragon_scale, 20 i_ingot_iron
+value=165,205
+
+on=@create
+hitpoints={90 120}
+
+
+[EOF]
+

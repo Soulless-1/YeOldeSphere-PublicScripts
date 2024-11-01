@@ -1,0 +1,1200 @@
+// Typedefs that we've either made custom, or overriden (try not to override typedefs)
+//3:34 AM 1/19/2021
+
+[typedef t_eq_memory_obj]
+
+on=@destroy
+if (<color>&memory_ipet) && !(<topobj.flags>&statf_conjured)
+  serv.log Prevented pet memory destroying on <topobj.name>(<topobj>)
+  return 1
+endif
+
+[typedef t_corpse]
+
+on=@click
+if (<link> != 04fffffff)
+  link.notoupdate
+endif
+
+on=@dclick
+//serv.log Checking to see if <src.name>(<src>) can loot <name>(<uid>) : (<tag0.killers>)
+if (<link> == 04fffffff) && !(<baseid>==i_bones) && !(<src.isgm>)
+  if (<eval (<timer>/60)> >= <eval (<serv.CorpseNPCDecay>/2)>) && (!<isempty <tag.killers>>) && !(<src.canlootcorpse <uid>>)
+    src.sysmessage You did not earn the right to loot this creature!
+    return 1
+  endif
+endif
+
+[typedef t_book]
+
+on=@dclick
+if (<topobj> != <uid>) && (<topobj> != <src>) && !(<src.isgm>) 
+  src.sysmessage You cannot use that where it is.
+  return 1
+endif
+if (<pages>)
+  if (strregex([^A-Za-z0-9\s]+,<name>) == 1) || ( strregex([^A-Za-z0-9\s]+,<body.0>) == 1)
+    name=
+    author=
+    erase
+    src.sysmessage This book has invalid characters and has been erased.
+  endif
+endif
+
+on=@targon_item
+if (<src.targ.topobj.uid> != <src.uid>)
+  src.sysmessage You can not dye this where it is.
+  return 1
+elseif (<src.targ.type> != t_dye_vat)
+  src.sysmessage The dye just drips off this.
+  return 1
+endif
+
+on=@targon_char
+src.sysmessage You cannot dye that with this.
+return 1
+
+[typedef t_dye_vat]
+
+on=@targon_item
+if (<src.targ.topobj.uid> != <src.uid>)		//cannot dye something that is not with you
+  src.sysmessage You can not dye this where it is.
+  return 1
+elseif !(<src.targ.isdyeable>) || (<src.targ> == <uid>)
+  src.sysmessage the dye just drips off this.
+  return 1
+endif
+
+on=@targon_char
+src.sysmessage You cannot dye that with this.
+return 1
+
+[typedef t_roof_hole]
+
+on=@step
+src.z -= 20
+
+[typedef t_spinwheel]
+
+on=@dclick
+src.sysmessage Use wool or cotton on spinning wheels.
+return 1
+
+[typedef t_loom]
+
+on=@dclick
+src.sysmessage Use thread or yarn on looms.
+return 1
+
+[typedef t_tool_alchemy]
+
+on=@dclick
+f_crafting_open_dialog alchemy
+return 1
+
+[typedef t_tool_bowcraft]
+
+on=@dclick
+f_crafting_open_dialog bowcraft
+return 1
+
+[typedef t_tool_blacksmithing]
+
+on=@dclick
+if (<layer>) && (<topobj> == <src>)
+  src.equip <uid>
+endif
+if (<src.f_forge_and_anvil> < 2)
+  src.sysmessage You must be near an anvil and forge to smith items.
+  return 1
+endif
+f_crafting_open_dialog blacksmithing
+return 1
+
+[typedef t_tool_carpentry]
+
+on=@dclick
+f_crafting_open_dialog carpentry
+return 1
+
+[typedef t_tool_cartography]
+
+on=@dclick
+f_crafting_open_dialog cartography
+return 1
+
+[typedef t_tool_cooking]
+
+on=@dclick
+f_crafting_open_dialog cooking
+return 1
+
+[typedef t_tool_inscription]
+
+on=@dclick
+f_crafting_open_dialog inscription
+return 1
+
+[typedef t_tool_tailoring]
+
+on=@dclick
+f_crafting_open_dialog tailoring
+return 1
+
+[typedef t_tool_tinkering]
+
+on=@dclick
+f_crafting_open_dialog tinkering
+return 1
+
+[typedef t_weapon_mace_crook]	//shepherd's crook
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+src.targetf f_herding_animal_select
+src.sysmessage Target the animal you wish to herd.
+src.actprv=<uid>
+return 1
+
+[typedef t_kindling]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can not use that where it is.
+  return 1
+elseif (<src.region.flags>&region_flag_nobuilding)
+  //src.sysmessage you can not setup a campsite here.
+  //return 1
+endif
+
+src.actprv=<uid>
+
+foritems 5
+  if (<isevent.t_campsite_item>)
+    src.sysmessage You can't setup camp close to another campsite.
+    return 1
+  endif
+endfor
+
+src.action camping
+return 1
+
+[typedef t_campsite_item]
+
+on=@dclick
+src.sysmessage You can't think of a way to use that item.
+return 1
+
+[typedef t_camp_fire]
+
+on=@timer
+if (<more2> == 30)	//takes 30 seconds to secure the camp
+  forchars 5
+    sysmessage The camp is now secure.
+  endfor
+elseif !(<more1>)
+  remove
+endif
+more1 -= 1
+more2 += 1	//more established camps are more secure
+timer=1
+return 1
+
+[typedef t_stalagmite_light]	//really just a placeholder
+
+[typedef t_flax]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+
+on=@targon_item
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+
+[typedef t_wool]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+
+on=@targon_item
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+
+[typedef t_thread]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+
+on=@targon_item
+if (<topobj> != <src>)
+  src.sysmessage You cannot use this where it is.
+  return 1
+endif
+
+[typedef t_weapon_axe]
+
+on=@TargOn_Item				
+if (<src.targ.type>==t_log)
+  if (<src.targ.topobj> != <src>)
+    src.sysmessage You can not cut that where it is.
+    return 1
+  endif
+  serv.newitem <argo.tdata1>
+  new.amount=<argo.amount>
+  src.targ.remove
+  new.bounce
+  sound 023d
+  return 1
+endif
+
+[typedef t_weapon_sword]
+
+on=@targon_item
+if (<src.targ.type> == t_potion) && (<src.targ.more1> == s_explosion)
+  return 1
+endif
+
+[typedef t_weapon_fence]
+
+on=@targon_item
+if (<src.targ.type> == t_potion) && (<src.targ.more1> == s_explosion)
+  return 1
+endif
+
+on=@targon_char
+if (<src.targ.baseid> == c_sheep_woolly)
+  if (<src.distance <src.targ>> >= 3)
+    src.sysmessage That is too far away.
+    return 1
+  endif
+  src.targ.body=c_sheep_shorn
+  serv.newitem i_wool_regrowing
+  new.timer=<eval (<serv.WoolGrowthTime>*60)>
+  src.targ.equip <new>
+  serv.newitem i_wool,1,<src.findlayer.21>
+  src.sysmessage You place the gathered wool into your backpack.
+  return 1
+endif
+
+[typedef t_hair_dye]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is!
+  return 1
+endif
+
+[typedef t_fishing_net_special]
+
+[typedef t_obsolete_item]	//this typedef itself is obsolete, using 't_legacy_item' now
+
+[typedef t_legacy_item]
+
+[typedef t_newbie_chest]
+
+on=@dropon_self
+ref1=<uid>
+forcont <uid> 0
+  if (<baseid>==<argo.baseid>)
+    local.<baseid>_count += 1
+  endif
+endfor
+if (<local.<argo.baseid>_count> >= 5)
+  src.sysmessage There is already enough of those present in this container
+  return 1
+endif
+
+[typedef t_remove_ontimer]
+
+on=@timer
+remove
+return 1
+
+[typedef t_lockpick]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can not use that where it is.
+  return 1
+endif
+src.actprv=<uid>
+target What do you want to pick? 
+return 1
+
+on=@targon_item
+src.act=<src.targ>
+src.action=lockpicking
+return 1
+
+[typedef t_container]
+
+on=@click
+if (<src.flags>&statf_underground) && (<topobj> == <uid>)
+  message <name>
+  return 1
+endif
+message <name>
+message (<fcount> items, <eval (<weight>/10)> stones)
+return 1
+
+on=@dropon_self
+if !((<cont>) && (<cont.ischar>)) && !(<src.isgm>)								//this is either a container or bankbox, backpack's cont is a character
+  ref1=<uid>
+  if (<ref1.cont>)
+    ref1=<topcont>								//by default all items will use the very top container to judge how much room is left
+    if (<ref1.type>==t_eq_bank_box)						//if this is going into a bank box we need both uids for the cont and the bank
+      ref2=<topcont_inbank>							//get the top most container right before the bank object
+      local.BankCount=<ref1.fcount>						//store the amount of items in the bank								
+    endif
+  endif
+  local.ItemsMoving=<qval (<argo.type>==t_container)?<argo.fcount>:1>		//containers are not respecting the item limit properly.
+  local.ItemsInContainer=<qval (<ref2.isvalid>)?<ref2.fcount>:<ref1.fcount>>
+  local.NewCount=<eval (<local.ItemsMoving>+<local.ItemsInContainer>)>	 	//we found the container up above, use its fcount
+  local.MaxItems=125
+  //serv.b <qval (<ref2.isvalid>)?<ref2.name>:<ref1.name>>: <local.itemsincontainer> + <local.itemsmoving> = <local.newcount> (<local.maxitems>)
+  //src.sysmessage @0481 maxitems allowed 125
+  if (<local.NewCount> > 125)							//check to make sure its not overloading (125 items)
+    src.sysmessage That container cannot hold more items. 
+    src.bounce <argo>
+    return 1
+  endif
+  if (<ref2.isvalid>) && (<eval (<ref1.fcount>+<local.ItemsMoving>)> > 250)	//check to make sure the bank isn't overloading itself (250 items)
+    src.sysmessage Your bankbox can't hold more items.
+    src.bounce <argo>
+    return 1
+  endif
+endif
+
+[typedef t_container_locked]
+//MORE1 = "ID" from the key that can unlock this item (If the MORE1 of the key matches the MORE1 of the container then they are linked)
+//MORE2 = The lock complexity (how hard it is to pick the lock)
+//MOREX = The trap type (not used yet?)
+//TDATA2 = The gumpID of the container (this is not an ITEMDEF)
+//TDATA3 = The minimum gump size
+//TDATA4 = The maximum gump size
+//LINK = UID of a secondary key?
+
+on=@click
+if (<src.flags>&statf_underground) && (<topobj> == <uid>)
+  message <name>
+  return 1
+endif
+message <name>
+message (<fcount> items, <eval (<weight>/10)> stones)
+return 1
+
+on=@dclick
+//make auto open if has a key to it
+src.sysmessage This item is locked.
+return 1
+
+on=@pickup_self
+if !(<src.isgm>)
+  return 1
+endif
+
+on=@dropon_item
+if !(<src.isgm>) 
+  src.sysmessage You must unlock the container first.
+  return 1
+endif
+
+[typedef t_eq_bank_box]
+
+on=@dropon_self
+if !(<src.isgm>) 
+  local.ItemsMoving=<qval (<argo.type>==t_container)?<argo.fcount>:1>		//comertainers are not respecting the item limit properly.
+  local.RoomInContainer=<qval ((<type>==t_container) && (<topcont>))?<topcont.fcount>:<fcount>>
+  local.NewCount=<eval (<local.itemsmoving>+<local.roomincontainer>)>
+  local.MaxItems=250
+  //src.sysmessage @0481 maxitems allowed <local.MaxItems>
+  if (<local.newcount> > <local.maxitems>)		//usually serv.containermaxitems, but item limit seems broken
+    src.sysmessage Your bankbox can't hold more items.
+    return 1
+  endif
+endif
+
+
+[typedef t_key]
+
+on=@targon_item
+if !(<src.isgm>) 
+  if (<src.targ.type>==t_container) || (<src.targ.type>==t_container_locked) 
+    if (<src.targ.topobj.ischar>) && (<src.targ.topobj> != <src>)
+      src.sysmessage You can't reach it.
+      return 1
+    endif
+  endif
+endif
+
+[typedef t_spellbook]
+
+on=@click
+tag0.name.suffix=" (<spellcount> spells)"
+
+[typedef t_magic_trapped_container]
+
+on=@click
+message (<dtag0.charges> charges)
+
+on=@dclick
+if (<tag0.charges> <= 1)
+  color=<ocolor>
+  events=-t_magic_trapped_container
+endif
+tag0.charges -= 1
+src.damage 0 dam_god
+src.effect=3,i_fx_explode,6,25
+src.sound 0307
+return 1
+
+[typedef t_potion]
+
+on=@dclick
+if (<topobj> != <src>)		//must be on you
+  src.sysmessage You cannot use that where it is.
+  return 1
+elseif (<more1> == s_cure) 		//no cooldown for these potions
+  if !(<src.findid.i_rune_poison>) 
+    src.sysmessage You are not poisoned.
+    return 1
+  endif
+  src.spelleffect <more1>,<more2>,<src>,<uid>		//excute the potion, we don't need to wait
+  src.sound 031
+  consume
+  return 1
+elseif (<more1> == s_explosion) 		//explosion potions have a separate cooldown rule
+  ref1=<src.findlayer.31>			//any explosion potion currently being held?
+  if (<ref1.isvalid>) && (<ref1.type> == t_potion) && (<ref1.more1> == s_explosion) 
+    ref1.target					//just pull the target back up
+    return 1
+  elseif (<src.findid.i_potion_cooldown_explosion>)	//this is lighter than the above function
+    src.sysmessage You can't throw another potion yet.
+    return 1
+  elseif (<src.region.flags>&region_flag_guarded)
+    src.sysmessage You think better of using this item in a guarded region.
+    return 1
+  endif
+  serv.newitem i_potion_cooldown_explosion		//explosion potion has its own unique cooldown timer
+  new.timer=4
+  src.equip <new>
+endif
+
+on=@targon_char
+if (<more1> == s_explosion)
+  if (<src.region.flags>&region_flag_guarded)
+    src.sysmessage You think better of using this item in a guarded region.
+    return 1
+  endif
+endif
+
+on=@targon_ground
+if (<more1> == s_explosion)
+  if (<src.region.flags>&region_flag_guarded)
+    src.sysmessage You think better of using this item in a guarded region.
+    return 1
+  endif
+endif
+
+on=@targon_item
+if (<more1> == s_explosion)
+  if (<src.region.flags>&region_flag_guarded)
+    src.sysmessage You think better of using this item in a guarded region.
+    return 1
+  endif
+  src.targp=<src.targ.topobj.p>		//change the target to the top object
+endif
+
+on=@dropon_char
+if (<more1> == s_explosion)
+  if (<timer> != -1) 
+    src.timerf 0,sysmessage You cannot move this to that location.
+    src.timerf 0,drop <uid>
+  endif
+endif
+
+on=@dropon_item		//meaning dropped into your bag?
+if (<more1> == s_explosion)
+  if (<timer> != -1) 
+    src.timerf 0,sysmessage You cannot move this to that location.
+    src.timerf 0,drop <uid>
+  endif
+endif
+
+[typedef t_portculis]
+
+on=@dclick
+if (<src.distance <uid>> > 2) && !(<src.isgm>)
+  src.sysmessage You can't reach that.
+  return 1
+elseif (<src.flags>&statf_dead) && !(<src.isgm>)
+  src.sysmessage Your ghostly hand passes through the object.
+  return 1
+elseif (<morey>)
+  src.sysmessage That is already being used.
+  return 1
+endif
+sound 239
+ref1=<uid>
+foritems 5
+  if (<baseid>==i_door_portculis)
+    morez=<ref1.morez>
+    morex=<ref1.morex>
+    z=<ref1.z>
+    timerms=10
+  endif
+endfor
+return 1
+
+on=@timer
+morey=1		//currently in use
+if (<morez> < 20) && (!<morex>)	//if not completely open
+  morez= += 2
+  z += 2
+  if (<morez> >= 20)	//fully open
+    morey=		//mark as not inuse
+    morex=1		//mark as opened
+    timer=60
+    return 1
+  endif
+  sound 240
+else			//not completely closed
+  morez -= 2		
+  z -= 2
+  if (<morez> <= 0)	//fully closed
+    morey=		//mark as not inuse
+    morex=		//mark as closed
+    return 1
+  endif
+  sound 239
+endif
+timerms=50
+return 1
+
+[typedef t_light_out]
+
+on=@click
+message <name>	//charges? don't use charges...
+return 1
+
+on=@dclick
+id=<tdata3>
+type=t_light_lit
+sound 047
+update
+return 1
+
+on=@timer
+if (<attr>&attr_decay) && (<topobj> == <uid>)
+  remove	
+endif
+return 1
+
+[typedef t_light_lit]
+
+on=@click
+message <name>
+return 1
+
+on=@dclick
+id=<tdata3>
+type=t_light_out
+sound 03be
+update
+return 1
+
+on=@timer
+if (<attr>&attr_decay) && (<topobj> == <uid>)
+  remove	
+endif
+return 1
+
+[typedef t_musical]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+elseif (<src.action> == musicianship)
+  src.sysmessage You must wait to perform another action
+  return 1
+endif
+
+src.actprv=<uid>
+src.action=musicianship
+return 1
+
+[typedef t_figurine]
+
+on=@click
+ref1=<more2>
+if (<ref1.isvalid>) && (<ref1.ischar>)
+  if (<morem> == 1)
+    message ( bonded )
+  endif
+  src.sysmessage You have a <fval <src.f_pet_control_chance <ref1>>>% control chance with <ref1.name>. (<ref1.baseid>)
+endif
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+elseif (<more1> == 1) && (<tag0.owner> != <src>)
+  src.sysmessage The pet cannot be unshrunk because it's bonded and you're not it's master.
+  return 1
+endif
+
+ref1=<more2>
+if !(<ref1.isvalid>) || !(<ref1.ischar>) || !(<ref1.npc>) 
+  if (<resourceindex <more1>> != 00)	//more1 setting holds baseid of NPC that was shrunk
+    serv.newnpc <more1>
+  else
+    serv.newnpc <resourceindex <tdata3>>	//original baseid setting in chardef
+  endif 
+  more2=<new>
+  ref1=<new>
+endif
+
+if (<eval (<src.curfollower>+<ref1.controlslots>)> > <src.maxfollower>)
+  src.sysmessage You have too many followers to control that creature.
+  return 1
+elseif !(<src.f_pet_can_own <ref1>>)
+  src.sysmessage The pet cannot be unshrunk because it will not obey you.
+  return 1
+endif
+if (<ref1.npc> != brain_animal)
+  ref1.setowner <src>	//if its not properly set as an animal set the owner again
+endif
+src.f_follower_add <ref1>
+if (<color>)
+  ref1.oskin=<color>
+  ref1.color=<color>
+endif
+if (<morem>==1)
+  if (<tag0.owner>) && (<tag0.owner> != <src>)	//if this is present check the owner
+    src.sysmessage <ref1.name> does not recognize you as the master it bonded with!
+  else
+    ref1.timerf 0,bonded=1			//re-add the bonding to the pet
+    ref1.timerf 0,events=+e_pet_bonded
+  endif
+endif
+ref1.events=+e_pet_system
+ref1.food=<qval (<ref1.food> < 5)?5:<ref1.food>>		//give them at least 5 food.
+
+[typedef t_armor]
+
+on=@equip
+src.tag0.heavy_armor += 1
+
+on=@unequip
+src.tag0.heavy_armor -= 1
+if (<src.tag0.heavy_armor> < 0)
+  src.tag0.heavy_armor=0
+endif
+
+[typedef t_armor_leather]
+
+on=@equip
+if !(<isarmor_leather>)
+  src.tag0.heavy_armor += 1
+endif
+
+on=@unequip
+if !(<isarmor_leather>)
+  src.tag0.heavy_armor -= 1
+  if (<src.tag0.heavy_armor> < 0)
+    src.tag0.heavy_armor=0
+  endif
+endif
+
+[typedef t_food]
+
+on=@dclick
+f_consume_food_item
+return 1
+
+[typedef t_fruit]
+
+on=@dclick
+f_consume_food_item
+return 1
+
+[function f_consume_food_item]
+if (<topobj> != <src>)
+  src.sysmessage you cannot use that where it is.
+  return 1
+elseif (<src.food> >= <src.maxfood>)
+  src.sysmessage You are simply too full to eat any more!
+  return 1
+endif
+
+consume
+local.foodvalue=<morem>
+local.foodvalue=<qval (<local.foodvalue> <= 0)?1:<local.foodvalue>>
+src.food += <local.foodvalue>
+src.sound {03a 03c}
+src.stam += 5
+if (<src.stam> >= <src.maxstam>)
+  src.stam=<src.maxstam>
+endif
+if (<morez>)
+  src.poison <morez>
+endif
+if (<morex>)
+  src.spelleffect <morex>,<morey>,<src>,<uid>
+endif
+doswitch <eval (<src.food>/4)>
+  src.sysmessage You eat the food, but still are extremely hungry.
+  src.sysmessage You eat the food, and begin to feel more satiated.
+  src.sysmessage You eat the food, you feel much less hungry.
+  src.sysmessage You feel quite full after consuming the food
+  src.sysmessage You manage to eat the food, but you are stuffed
+enddo
+if (<resources.count>) 
+  for 1 <resources.count>
+    if (<resources.<local._for>.key>==i_bowl_wood) || (<resources.<local._for>.key>==i_bowl_wood_lg) || (<resources.<local._for>.key>==i_bowl_pewter)
+      serv.newitem <resources.<local._for>.key>,1,<src.findlayer.21>
+    endif 
+  endfor
+endif
+if (<src.food> > <src.maxfood>)
+  src.food=<src.maxfood>
+endif
+//src.emote eat some <name>
+src.trigger @eat
+return 1
+
+[typedef t_fish_special]
+
+on=@dclick
+if (<topobj> != <src>) && !(<src.isgm>)
+  src.sysmessage you cannot use that where it is.
+  return 1
+endif
+src.sound {03a 03c}
+if (<morex>)
+  src.spelleffect <morex>,<morey>,<src>,<uid>
+endif
+consume
+return 1
+
+
+[typedef t_scissors]
+
+on=@targon_char
+if (<src.targ.distance> >= 3)
+  src.sysmessage That is too far away.
+  return 1
+elseif (<src.targ> != <src>)
+  src.sysmessage You cannot cut their hair.
+  return 1
+elseif !(<src.targ.findlayer.11>) && !(<src.targ.findlayer.16>)
+  src.sysmessage You have no hair to cut.
+else
+  if (<src.findlayer.11.isvalid>)
+    src.findlayer.11.remove
+  endif
+  if (<src.findlayer.16.isvalid>)
+    src.findlayer.16.consume
+  endif
+  src.sound 584
+endif
+return 1
+
+on=@targon_item
+local.amount=<src.targ.amount>
+local.color=<src.targ.color>
+local.cont=<src.targ.cont>
+//serv.log <src.name>(<src>) using <name>(<uid>) on <src.targ.name>(<src.targ>)
+
+if (<src.targ.topobj> != <src>) || ((<src.findlayer.<src.targ.layer>.isvalid>) && (<src.findlayer.<src.targ.layer>.uid>==<src.targ.uid>))
+  src.sysmessage Items you wish to cut must be in your backpack
+  return 1
+elseif (<src.targ.attr>&attr_newbie)
+  src.sysmessage You cannot cut that item.
+  return 1
+elseif (<src.targ.baseid>==i_cloth_cut)		//this is scraps, but also t_cloth so check this first
+  src.targ.remove
+  serv.newitem i_bandage,<local.amount>
+  new.color=<local.color>
+  new.cont=<src.findlayer.21>
+  src.sound 584
+  return 1
+elseif (<src.targ.type>==t_cloth) 	//cuting folder cloth
+  local.newitem=<src.targ.tdata1>
+  local.newitem=<qval (!<local.newitem>)?i_cloth_cut:<local.newitem>>
+  src.targ.remove
+  serv.newitem <local.newitem>,<local.amount>
+  new.color=<local.color>
+  new.cont=<src.findlayer.21>
+  src.sound 584
+  return 1
+elseif (<src.targ.type>==t_cloth_bolt)	//cloth bolt
+  src.targ.remove
+  serv.newitem i_cloth,<eval (<local.amount>*50)>
+  new.color=<local.color>
+  new.cont=<src.findlayer.21>
+  src.sound 584
+  return 1
+elseif  (<src.targ.type>==t_hide)	//cutting hides
+  local.newitem=<src.targ.tdata1>
+  local.newitem=<qval (!<local.newitem>)?i_hides_cut:<local.newitem>>
+  src.targ.remove
+  serv.newitem <local.newitem>,<local.amount>
+  new.color=<local.color>
+  new.cont=<src.findlayer.21>
+  src.sound 584
+  return 1
+elseif (<src.targ.resources>) && ((<src.targ.type>==t_clothing) || (<src.targ.type>==t_armor_leather) || (<src.targ.type>==t_armor) || (<src.targ.type>==t_container))
+  for r 1 <src.targ.resources.count>
+    if (<src.targ.resources.<dlocal.r>.key>==i_cloth)
+      local.amount=<eval (<src.targ.resources.<dlocal.r>.val>/2)>
+      local.amount=<qval (<local.amount> <= 0)?1:<local.amount>>
+      local.resource=<qval (<src.targ.tag0.matoverride_i_cloth>)?<src.targ.tag0.matoverride_i_cloth>:i_cloth>
+      src.targ.remove
+      serv.newitem <local.resource>,<local.amount>
+      new.color=<local.color>
+      new.cont=<src.findlayer.21>
+      src.sound 584 
+      local.cancut=1
+    elseif (<src.targ.resources.<dlocal.r>.key>==i_hide) || (<src.targ.resources.<dlocal.r>.key>==i_hides_cut)
+      if (<src.targ.type>==t_container) && (<src.targ.count> >= 1)
+        src.sysmessage You can only cut empty leather bags.
+        return 1
+      endif
+      local.amount=<eval (<src.targ.resources.<dlocal.r>.val>/2)>
+      local.amount=<qval (<local.amount> <= 0)?1:<local.amount>>
+      local.resource=<qval (<src.targ.tag0.matoverride_i_hides_cut>)?<src.targ.tag0.matoverride_i_hides_cut>:i_hides_cut>
+      src.targ.remove
+      serv.newitem <local.resource>,<local.amount>
+      new.color=<local.color>
+      new.cont=<src.findlayer.21>
+      src.sound 584 
+      local.cancut=1
+    endif
+  endfor
+endif
+if !(<local.cancut>)
+  src.sysmessage Scissors cannot be used on that to produce anything.
+endif
+return 1
+
+[comment old stuff ??]
+
+elseif (<src.targ.type>==t_clothing) || (<src.targ.type>==t_enchanted_clothing)		//cutting articles of clothing into i_cloth_cut
+  if (<src.targ.resources>) && (<src.targ.resources.1.key>==i_cloth)		//most regular clothing
+    local.amount=<eval (<src.targ.resources.1.val>/2)>
+    local.amount=<qval (<local.amount> <= 0)?1:<local.amount>>
+    local.resource=<qval (<src.targ.tag0.matoverride_i_cloth>)?<src.targ.tag0.matoverride_i_cloth>:i_cloth>
+    src.targ.remove
+    serv.newitem <local.resource>,<local.amount>
+    new.color=<local.color>
+    new.cont=<local.cont>
+    src.sound 584 
+  elseif (<src.targ.resources>) && (<src.targ.resources.1.key>==i_hides_cut) 	//boots
+    local.amount=<eval (<src.targ.resources.1.val>/2)>
+    local.amount=<qval (<local.amount> <= 0)?1:<local.amount>>
+    local.resource=<qval (<src.targ.tag0.matoverride_i_hides_cut>)?<src.targ.tag0.matoverride_i_hides_cut>:i_hides_cut>
+    src.targ.remove
+    serv.newitem <local.resource>,<local.amount>
+    new.color=<local.color>
+    new.cont=<local.cont>
+    src.sound 584 
+  endif
+elseif (<src.targ.type>==t_armor_leather) || ((<src.targ.type>==t_armor) && (<src.targ.resources.1.key>==i_hides_cut)) || (<src.targ.type>==t_container)
+  if (<src.targ.type>==t_container) && (<src.targ.count> >= 1)
+    src.sysmessage You can only cut empty leather bags.
+    return 1
+  endif
+  if (<src.targ.resources>) && (<src.targ.resources.1.key>==i_hides_cut) 
+    local.amount=<eval (<src.targ.resources.1.val>/2)>
+    local.amount=<qval (<local.amount> <= 0)?1:<local.amount>>
+    local.resource=<qval (<src.targ.tag0.matoverride_i_hides_cut>)?<src.targ.tag0.matoverride_i_hides_cut>:i_hides_cut>
+    src.targ.remove
+    serv.newitem <local.resource>,<local.amount>
+    new.color=<local.color>
+    new.cont=<local.cont>
+    src.sound 584 
+  endif
+else
+  src.sysmessage Scissors cannot be used on that to produce anything.
+endif
+return 1
+
+[typedef t_bboard]
+
+on=@click
+message <name> with <count> posted messages
+return 1
+
+[typedef t_shaft]
+
+on=@dclick
+src.sysmessage you can't think of a way to use that item.
+return 1
+
+[typedef t_feather]
+
+on=@dclick
+src.sysmessage you can't think of a way to use that item.
+return 1
+
+
+////////////////////////////////////
+// Training Dummy
+
+[typedef t_train_dummy]
+
+on=@dclick
+if (<more2>) 
+  if (<more2> != <src>)
+    message Someone else is already using that.
+  else
+    message You are already using that.
+  endif
+  return 1
+elseif (<timer> != -1) 
+  message You have to wait until it stops swinging.
+  return 1
+elseif (<eval (<serv.time>-<src.ctag0.training_dummy_lastuse>)> < 30)
+  message You must wait a moment to use that. 
+  return 1
+endif
+src.ctag0.training_dummy_lastuse=<serv.time>
+more2=<src>
+dispid += 1
+update
+timer=0
+return 1
+
+on=@timer
+ref1=<more2>	//player currently using the training dummy
+//serv.log <qval (<ref1.weapon>)?<ref1.<ref1.weapon.skill>>:<ref1.wrestling>> >= <Serv.SkillPracticeMax>
+if !(<ref1>) || !(<ref1.isvalid>) || !(<ref1.isonline>) || (<ref1.flags>&statf_dead) || (<ref1.distance <uid>> > 1) 
+  trysrc <more2> message You can't reach that. 
+  local.stop_practicing=1
+elseif (<qval (<ref1.weapon>)?<ref1.<ref1.weapon.skill>>:<ref1.wrestling>> >= <Serv.SkillPracticeMax>)
+  trysrc <more2> message Your skill cannot improve any further by simply practicing with a dummy.
+  local.stop_practicing=1
+elseif  (<ref1.weapon.isvalid>) && (<ref1.weapon.skill> == 31 )
+  trysrc <more2> message You must practice with melee weapons on this.
+  local.stop_practicing=1
+elseif (<ref1.findlayer.25.isvalid>)
+  trysrc <more2> message You can't practice on this while on a mount.
+  local.stop_practicing=1
+endif
+
+if !(<ref1.isvalid>) || (<local.stop_practicing>)
+  more2=
+  timer=-1
+  dispid=<baseid>
+  update
+  return 1
+endif
+
+local.skill=<qval (<ref1.weapon>)?<ref1.weapon.skill>:43>
+if !(<ref1.skilllock.<local.skill>>)
+  ref1.skillgain <local.skill>
+endif
+if (<ref1.tactics> < <Serv.SkillPracticeMax>) && !(<ref1.skilllock.tactics>)
+  ref1.skillgain tactics
+endif
+ref1.trigger @skillfinish, <def.tat_as_argn>, <local.skill>
+ref1.trigger @skillfinish, <def.tat_as_argn>, 27	//tactics
+ref1.anim {9 14}
+ref1.face <uid>
+timerf 1,sound {013a 013d}
+timer=3
+return 1
+
+///////////////////////////////////
+// Archery Butte
+
+
+[typedef t_archery_butte]
+
+on=@click
+message <name>
+message <dmorex> arrows / <dmorey> bolts
+return 1
+
+on=@dclick 
+if (<distance <src>> <= 1) && ((<morex> >= 1) || (<morey> >= 1))
+  serv.newitem i_arrow,<morex>,<src.findlayer.21>
+  serv.newitem i_xbolt,<morey>,<src.findlayer.21>
+  morex=
+  morey=
+  src.message You gather the arrows and bolts.
+  return 1
+endif
+
+
+if (<more2>) 
+  if (<more2> != <src>)
+    message Someone else is already using that.
+  else
+    message You are already using that.
+  endif
+  return 1
+elseif (<timer> != -1) 
+  message You must wait a moment before shooting another arrow.
+  return 1
+elseif (<eval (<serv.time>-<src.ctag0.archery_butte_lastuse>)> < 30)
+  message You must wait a moment to use that.
+  return 1
+endif
+src.ctag0.archery_butte_lastuse=<serv.time>
+more2=<src>
+timer=0	
+return 1
+
+on=@timer
+ref1=<more2>	//player currently using the training dummy
+if !(<ref1.isvalid>) || !(<ref1>) || !(<ref1.isonline>) || (<ref1.flags>&statf_dead) 
+  local.stop_practicing=1
+elseif !(<ref1.weapon.isvalid>) || (<ref1.weapon.skill> != 31)
+  trysrc <more2> message You must practice with ranged weapons on this.
+  local.stop_practicing=1
+elseif ((<f_archery_butte_dir>==2) && (<ref1.p.x> <= <p.x>)) || ((<f_archery_butte_dir>==4) && (<ref1.p.y> <= <p.y>))
+  trysrc <more2> message You would do better to stand in front of the archery butte.
+  local.stop_practicing=1
+elseif ((<f_archery_butte_dir>==2) && (<ref1.p.y> != <p.y>)) || ((<f_archery_butte_dir>==4) && (<ref1.p.x> != <p.x>))
+  trysrc <more2> message You aren't properly lined up with the archery butte to get an accurate shot.
+  local.stop_practicing=1
+elseif (<ref1.distance <uid>> < <serv.ArcheryMinDist>)
+  trysrc <more2> message You are too close to the target.
+  local.stop_practicing=1
+elseif (<ref1.distance <uid>> > <eval <serv.ArcheryMaxDist>/2>)
+  trysrc <more2> message You are too far away from the archery butte to get an accurate shot.
+  local.stop_practicing=1
+elseif !(<ref1.findid.<serv.itemdef.<ref1.weapon.tdata4>.baseid>>)
+  trysrc <more2> message You do not have any <serv.itemdef.<ref1.weapon.tdata4>.name>s with which to practice.
+  local.stop_practicing=1
+elseif (<ref1.archery> >= <Serv.SkillPracticeMax>) 
+  trysrc <more2> message Your skill cannot improve any further by simply practicing with a target.
+  local.stop_practicing=1
+elseif (<ref1.findlayer.25.isvalid>)
+  trysrc <more2> message You can't practice on this while on a mount.
+  local.stop_practicing=1
+endif
+
+if !(<ref1.isvalid>) || (<local.stop_practicing>)
+  more2=
+  timer=-1
+  return 1
+endif
+
+if (<ref1.weapon.tdata3>==i_arrow)
+  morex += 1
+elseif (<ref1.weapon.tdata3>==i_xbolt)
+  morey += 1
+endif
+
+ref1.consume 1 <serv.itemdef.<ref1.weapon.tdata4>.baseid>
+if !(<ref1.skilllock.archery>)
+  ref1.skillgain archery
+endif
+if (<ref1.tactics> < <Serv.SkillPracticeMax>) && !(<ref1.skilllock.tactics>)
+  ref1.skillgain tactics	//skillgain with tactics automatically happens with archery
+endif
+ref1.trigger @skillfinish, <def.tat_as_argn>, 31
+//ref1.trigger @skillfinish, <def.tat_as_argn>, 27	//tactics
+ref1.anim <qval (<ref1.weapon.type>==t_weapon_bow)?18:19>
+ref1.face <uid>
+ref1.sound 02b1
+trysrc <ref1> effect=0,<ref1.weapon.tdata4>,6,15,0,0,0
+timer=3
+return 1
+
+[function f_archery_butte_dir]
+if (<dispid>==i_archery_butte)
+  return 2		//east
+elseif (<dispid>==0100b)
+  return 4		//south
+endif
+return 0
+
+
+//////////////////////////////////
+// Pick Pocket Dip
+
+[typedef t_train_pickpocket]
+
+on=@dclick
+if (<src.ctag0.pickpocket_dip>) && (<src.ctag0.pickpocket_dip> != <uid>)
+  message You must wait a moment to use that.
+  return 1
+elseif (<more2>) 
+  if (<more2> != <src>)
+    message Someone else is already using that.
+  else
+    message You are already using that.
+  endif
+  return 1
+elseif (<timer> != -1) 
+  message You have to wait until it stops swinging.
+  return 1
+endif
+src.ctag0.pickpocket_dip=<uid>
+more2=<src>
+dispid += 1
+update
+timer=0
+return 1
+
+on=@timer
+ref1=<more2>	//player currently using the training dummy
+if !(<ref1>) || !(<ref1.isvalid>) || !(<ref1.isonline>) || (<ref1.flags>&statf_dead) || (<ref1.distance <uid>> > 1)
+  trysrc <more2> message You can't reach that.
+  local.stop_practicing=1
+elseif (<ref1.stealing> >= <Serv.SkillPracticeMax>)
+  trysrc <more2> message Your ability to steal cannot improve any further by simply practicing on a dip.
+  local.stop_practicing=1
+elseif (<ref1.findlayer.25.isvalid>)
+  trysrc <more2> message You can't practice on this while on a mount.
+  local.stop_practicing=1
+endif
+
+if !(<ref1.isvalid>) || (<local.stop_practicing>)
+  ref1.ctag0.pickpocket_dip=
+  more2=
+  timer=-1
+  dispid=i_pickpocket_dip_n
+  update
+  return 1
+endif
+
+if (<ref1.skillcheck stealing> != 1)
+  trysrc <more2> message you carelessly bump the dip and start it swinging.
+  sound {038f 0390}
+else
+  trysrc <more2> message You successfully avoid disturbing the dip while searching it.
+  sound 04f
+endif
+if !(<ref1.skilllick.stealing>) 
+  ref1.skillgain stealing
+endif
+ref1.trigger @skillfinish, <def.tat_as_argn>, 33
+ref1.face <uid>
+ref1.anim 33
+timer=3
+return 1
+
+
+[EOF]

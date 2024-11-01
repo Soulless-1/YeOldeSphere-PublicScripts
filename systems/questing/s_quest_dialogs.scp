@@ -1,0 +1,349 @@
+//Quest System By Soulless
+//v1.0
+//1:23 AM 11/13/2019
+
+
+///////////////////////////////////////////
+// NPC Quest Offer Dialog 
+
+[dialog d_quest_offer]		//quest offer dialog	//all osi style menu gumps
+150,50
+
+page 0			
+resizepic 60 40 9250 420 425
+resizepic 75 45 5120 380 410
+gumppictiled 65 40 405 15 10100	//top bar
+gumppictiled 65 445 405 15 10100 //bottom bar
+gumppictiled 75 55 30 390 10460	//left bar
+gumppictiled 440 55 30 390 10460 //right bar
+gumppic 10 30 10400 		//(left dragon)head
+gumppic 10 310 10402 		//middle body
+gumppic 73 160 10411 		//tail
+gumppic 450 30 10441 		//right dragon
+gumppic 395 75 1417		//circular stone
+gumppic 405 85 5504		//UO Symbol
+gumppic 115 60 9005		//badge (gray)
+gumppictiled 155 90 180 1 9101	//underline
+
+local.q=<src.ctag0.quest>		
+ref1=<src.f_quest_find_memory <dlocal.q>>
+local.quest_accepted=<qval <src.f_quest_isaccepted <local.q>>?1:0>
+local.quest_isdone=<qval <f_quest_progress <ref1>> < 100?0:1>
+dhtmlgump 160 70 180 25 0 0 <def.bfont_white>Quest <qval <local.quest_accepted>? <qval <local.quest_isdone>?Complete:Conversation>:Offer>
+if (<local.q>)
+  if (<isnum <def0.quest<src.dctag0.quest>_namelocalized>>)
+    xmfhtmlgumpcolor 160 95 225 25 <def0.quest<src.dctag0.quest>_namelocalized> 0 0 7952	//title
+  else
+    dhtmlgump 160 95 225 25 0 0 <def0.bfont_dteal><def.center><def0.quest<src.dctag0.quest>_namelocalized>	//title
+  endif
+endif
+
+page 1		
+
+if !(<src.ctag0.quest>)		//display the list of quests for the player
+  for n 1 <tag0.quests>
+    local.q=<dtag0.quest<dlocal.n>>
+
+
+    if (<def0.quest<dlocal.q>_chainprev>)
+      
+    endif
+    if (<src.f_quest_eligible <local.q>>)
+      if (<isnum <def0.quest<dlocal.q>_namelocalized>>)
+        xmfhtmlgumpcolor 120 <eval 165+<local.y>> 305 25 <def0.quest<local.q>_namelocalized> 0 0 32767	//white color
+      else
+        dhtmlgump 120 <eval 165+<local.y>> 305 25 0 0 <def.bfont_white><def0.quest<local.q>_namelocalized>
+      endif
+      button 390 <eval 165+<local.y>> 9904 9905 1 0 <local.q>	//select specific quest   
+      local.y += 20
+    endif
+  endfor
+  if (!<local.y>)
+    dhtmlgump 120 <eval 165+<local.y>> 305 25 0 0 <def.bfont_white>I'm sorry I have nothing for you currently.
+  endif
+  return 0
+else	//the player has picked a quest to look at
+  local.text=textlocalized
+  if (<local.quest_accepted>) 
+    local.text=textuncompletelocalized
+    if (<local.quest_isdone>)
+      local.text=textcompletelocalized
+    endif
+  endif
+  if (<isnum <def.quest<src.dctag0.quest>_namelocalized>>)
+    xmfhtmlgumpcolor 125 170 305 185 <def0.quest<dlocal.q>_<local.text>> 0 1 26574	//description - olive drab color
+  else
+    dhtmlgump 125 170 305 185 0 1 <def0.bfont_dteal>Description<def.br><def.bfont_lolive><def0.quest<dlocal.q>_<local.text>>	//description
+  endif
+  if (<local.quest_accepted>) 	//accepted
+    if (<local.quest_isdone>)		//quest is done
+      button 310 395 12009 12010 0 2	//next page to see the objectives we completed
+    else
+      button 350 420 12012 12013 1 0 0	//close
+    endif
+  else
+    button 310 395 12009 12010 0 2		//continue button 
+    button 125 420 12018 12019 0 4
+    button 350 420 12000 12001 1 0 <eval <dlocal.q>+1000>	//accept button
+  endif
+  button 160 395 12015 12016 1 0 65536	//previous button
+endif
+
+page 2				//viewing the quest Objectives
+dhtmlgump 125 170 305 70 0 0 <def0.bfont_dteal>Objective(s):<def.br>All of the following   
+for 1 <def0.quest<dlocal.q>_objectiveamount>
+  local.t=<def0.quest_objective_type<def0.quest<dlocal.q>_objective<dlocal._for>_type>>
+  args=<explode " ",<def0.quest<dlocal.q>_objective<dlocal._for>>>
+  if !(strcmpi(<local.t>,obtain))
+      dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Obtain <def.bfont_white><argv[0]> <def.bfont_white><serv.itemdef.<argv[1]>.name>
+      local.endpoint=<def.bfont_lolive>Return to<def.bfont_white> <name>
+    elseif !(strcmpi(<local.t>,kill))	//kill type objective
+      dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Kill <def.bfont_white><argv[0]> <serv.chardef.<argv[1]>.description> 
+      local.endpoint=<def.bfont_lolive>Return to<def.bfont_white> <name>
+    elseif !(strcmpi(<local.t>,deliver))
+      dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Deliver <def.bfont_white><argv[0]> <serv.itemdef.<argv[1]>.name> 
+      local.endpoint=<def.bfont_lolive>Deliver to <def.bfont_white><serv.chardef.<def0.quest<dlocal.q>_objective<dlocal._for>_receiver>.name>
+    elseif !(strcmpi(<local.t>,escort))
+      dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Escort <def.bfont_white><name>
+      local.endpoint=<def.bfont_lolive>Escort to <def.bfont_white><argv[0]>
+  endif
+  local.y += 1
+endfor
+dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <local.endpoint>
+
+if (<local.quest_accepted>) 
+  if (<local.quest_isdone>)			//quest is done
+    button 160 395 12015 12016 0 1		//previous button
+    button 310 395 12009 12010 0 3	//next page to see the reward we get
+  else
+    button 350 420 12012 12013 1 0 0	//close
+  endif
+else
+  button 160 395 12015 12016 0 1		//previous button
+  button 310 395 12009 12010 0 3		//continue button
+  button 125 420 12018 12019 0 4 
+  button 350 420 12000 12001 1 0 <eval <dlocal.q>+1000>	//accept button
+endif
+
+page 3				//Viewing the quest rewards
+local.y=
+dhtmlgump 125 170 305 185 0 0 <def0.bfont_dteal>Reward
+
+for 1 <def0.quest<dlocal.q>_prizes>
+  gumppic 135 <eval 192+(<local.y>*15)> 1209
+  dhtmlgump 160 <eval 190+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive><streat <def0.quest<dlocal.q>_prizeid<dlocal._for>>>     
+  local.y += 1
+endfor
+
+if (<local.quest_accepted>)			//quest accepted
+  if (<local.quest_isdone>)			//quest is done
+    button 160 395 12015 12016 0 2		//previous button
+    button 310 395 12000 12001 1 0 <eval <dlocal.q>+2000>		//receive reward button
+  else
+    button 350 420 12012 12013 1 0 0	//close
+  endif
+else
+  button 160 395 12015 12016 0 2		//previous button
+  button 125 420 12018 12019 0 4 		//refuse
+  button 350 420 12000 12001 1 0 <eval <dlocal.q>+1000>	//accept button
+endif
+
+page 4		//Viewing the quest refusal text
+if (<isnum <def.quest<src.dctag0.quest>_namelocalized>>)
+  xmfhtmlgumpcolor 125 170 305 185 <def0.quest<dlocal.q>_textrefuselocalized> 0 1 26574	//description - olive drab color
+else
+  dhtmlgump 125 170 305 185 0 1 <def0.bfont_dteal>Description<def.br><def.bfont_lolive><def0.quest<dlocal.q>_textrefuselocalized>	//description
+endif
+button 350 420 12012 12013 1 0 0	//close
+
+[dialog d_quest_offer button]
+onbutton=0
+src.ctag0.quest=
+
+onbutton=1,1000		//view quest button
+src.ctag0.quest=<argn1>
+sdialog d_quest_offer
+
+onbutton=1001,2000		//accept
+f_quest_accept <eval <argn1>-1000>
+
+onbutton=2001,3000		//receive reward
+local.q=<eval <argn1>-2000>
+f_quest_complete <local.q>
+if (<def0.quest<dlocal.q>_chainnext>)	//there's another quest in the chain, offer it now
+  src.ctag0.quest=<def0.quest<dlocal.q>_chainnext>
+  sdialog d_quest_offer
+endif
+
+onbutton=65536		//back to main menu (if there is more than one quest available)
+src.ctag0.quest=
+sdialog d_quest_offer
+
+
+///////////////////////////////////////////
+// Player Quest Log Dialog 
+
+[dialog d_quest_log]		//players quest log
+150,50
+
+page 0			
+//all osi style menu gumps
+resizepic 60 40 9250 420 425
+resizepic 75 45 5120 380 410
+gumppictiled 65 40 405 15 10100	//top bar
+gumppictiled 65 445 405 15 10100 //bottom bar
+gumppictiled 75 55 30 390 10460	//left bar
+gumppictiled 440 55 30 390 10460 //right bar
+gumppic 10 30 10400 		//(left dragon)head
+gumppic 10 310 10402 		//middle body
+gumppic 73 160 10411 		//tail
+gumppic 450 30 10441 		//right dragon
+gumppic 395 75 1417		//circular stone
+gumppic 405 85 5504		//UO Symbol
+gumppic 115 60 9005		//badge (gray)
+gumppictiled 155 90 180 1 9101	//underline
+dhtmlgump 160 70 180 25 0 0 <def.bfont_white>Quest Log
+
+local.q=<ctag0.quest>
+if (<argn1> > 1)	//show quest title if not main page
+  if (<isnum <def0.quest<dlocal.q>_namelocalized>>)
+    xmfhtmlgumpcolor 160 95 225 25 <def0.quest<dlocal.q>_namelocalized> 0 0 7952	//title
+  else
+    dhtmlgump 160 95 225 25 0 0 <def0.bfont_dteal><def.center><def0.quest<dlocal.q>_namelocalized>	//title
+  endif
+endif
+
+page 1				//players current quest log
+if (<serv.list.quest_log<src>.count>)
+  for 0 <eval <serv.list.quest_log<src>.count>-1>
+    local.x=<serv.list.quest_log<src>.<dlocal._for>>
+    if (<isnum <def0.quest<dlocal.x>_namelocalized>>)
+      xmfhtmlgumpcolor 120 <eval 165+(<local._for>*20)> 305 25 <def0.quest<dlocal.x>_namelocalized> 0 0 32767	//white color
+    else
+      dhtmlgump 120 <eval 165+(<local._for>*20)> 305 25 0 0 <def.bfont_white><def0.quest<dlocal.x>_namelocalized>
+    endif
+    button 390 <eval 165+(<local._for>*20)> 9904 9905 1 0 <local.x>	//select specific quest
+  endfor
+endif
+button 350 420 12012 12013 1 0 0	//okay (close)
+if !(<ctag0.quest>)
+  return 0	//dont display anymore if they didnt select a quest
+endif
+
+
+page 2			//viewing quest text while in quest log
+ref1=<src.f_quest_find_memory <dlocal.q>>	//this is the quest memory item for the quest we're viewing 
+if (<isnum <def.quest<dlocal.q>_namelocalized>>)
+  xmfhtmlgumpcolor 125 170 305 185 <def0.quest<dlocal.q>_textlocalized> 0 1 26574	//description - olive drab color
+else
+  dhtmlgump 125 170 305 185 0 1 <def0.bfont_dteal>Description<def.br><def.bfont_lolive><def0.quest<dlocal.q>_textlocalized>	//description
+endif
+
+button 310 395 12009 12010 0 3		//continue button 
+button 125 420 12021 12022 1 0 <eval <dlocal.q>+1000>	//resign button
+button 350 420 12012 12013 0 1	//okay (main menu)
+button 160 395 12015 12016 0 1	//previous
+
+page 3					//veiwing the objectives while being offered the quest or viewing in journal
+dhtmlgump 125 170 305 70 0 0 <def0.bfont_dteal>Objective(s):<def.br>All of the following   
+dhtmlgump 300 170 305 70 0 0 <def0.bfont_white><f_quest_progress <ref1>>% Complete
+for n 1 <ref1.tag0.quest<dlocal.q>_objectiveamount>
+  args=<ref1.tag0.quest<dlocal.q>_objective<dlocal.n>>
+  //serv.b <args> <dlocal.n> <ref1.tag0.quest<dlocal.q>_objectiveamount>
+  if (<argv[0]>==1)	//obtain quest	
+    dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Obtain <def.bfont_white><argv[2]> <def.bfont_white><serv.itemdef.<argv[1]>.name>
+    dhtmlgump 300 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_white><rescount <argv[1]>>/<argv[2]>
+    local.endpoint=<def.bfont_lolive>Return to <def.bfont_white><ref1.link.name>
+
+  elseif (<argv[0]>==2)	//kill
+    dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Kill <def.bfont_white><argv[2]> <serv.chardef.<argv[1]>.description> 
+    dhtmlgump 300 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_white><eval <argv[2]>-<ref1.tag0.quest<ref1.dcolor>_objective<dlocal.n>_count>>/<argv[2]>
+    local.endpoint=<def.bfont_lolive>Return to <def.bfont_white><ref1.link.name>
+
+  elseif (<argv[0]>==3)	//deliver	
+    dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Deliver <def.bfont_white><argv[2]> <serv.itemdef.<argv[1]>.name> 
+    local.endpoint=<def.bfont_lolive>Deliver to <def.bfont_white><ref1.tag0.receiver>
+
+  elseif (<argv[0]>==4)	//escort
+    dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive>Escort <def.bfont_white><name>
+    local.endpoint=<def.bfont_lolive>Escort to <def.bfont_white><argv[2]>
+  endif
+  local.y += 1
+endfor
+dhtmlgump 125 <eval 205+(<local.y>*15)> 305 35 0 0 <local.endpoint>
+
+button 160 395 12015 12016 0 2		//previous button
+button 310 395 12009 12010 0 4		//continue button 
+button 125 420 12021 12022 1 0 <eval <dlocal.q>+1000>	//resign button
+button 350 420 12012 12013 0 1	//okay (main menu)
+
+page 4					//viewing the rewards while being offered the quest or viewing in journel
+local.y=
+dhtmlgump 125 170 305 185 0 0 <def0.bfont_dteal>Reward
+
+for 1 <def0.quest<dlocal.q>_prizes>
+  gumppic 135 <eval 192+(<local.y>*15)> 1209
+  dhtmlgump 160 <eval 190+(<local.y>*15)> 305 35 0 0 <def.bfont_lolive><streat <def0.quest<dlocal.q>_prizeid<dlocal._for>>>     
+  local.y += 1
+endfor
+
+button 160 395 12015 12016 0 3		//previous button
+button 125 420 12021 12022 1 0 <eval <dlocal.q>+1000>	//resign button
+button 350 420 12012 12013 0 1	//okay (main menu)
+
+	
+[dialog d_quest_log button]
+
+onbutton=1,1000		//view quest details
+src.ctag0.quest=<argn1>
+sdialog d_quest_log 2
+
+onbutton=1001,2000		//resign from quest
+sdialog d_quest_resign <eval <argn>-1000>
+
+
+///////////////////////////////
+// resign from quest gump
+
+[DIALOG d_quest_resign]
+150,50
+
+page 0
+resizepic 10 10 5120 380 245
+checkertrans 20 20 360 225
+
+gumppic 10 10 216	//top left gem
+gumppic 375 10 216	//top right gem
+
+gumppic 375 240 216	//bottom right gem
+gumppic 10 240 216	//left bottom gem
+
+gumppictiled 10 25 15 215 10150		//left border
+gumppictiled 25 10 350 15 10100		//top border
+gumppictiled 375 25 15 215 10150	//right border
+gumppictiled 25 240 350 15 10100	//bottom border
+
+radio 35 170 9722 9723 1 1
+radio 35 205 9722 9723 0 0
+button 315 215 247 248 1 0 1
+dhtmlgump 35 35 335 25 0 0 <def.bfont_lred>Confirm Quest Cancellation
+gumppictiled 35 55 220 3 9357	//underline
+dhtmlgump 35 70 335 95 0 0 <def.bfont_white>This quest will give you valuable information, skills and equipment that will help you advance in the game at a quicker pace. <def.br><def.br>Are you certain you wish to cancel at this time?
+dhtmlgump 65 175 305 25 0 0 <def.bfont_white>Yes, I really want to quit this quest!
+dhtmlgump 65 210 240 25 0 0 <def.bfont_white>No, I don't want to quit.
+
+[dialog d_quest_resign button]
+
+onbutton=0
+sdialog d_quest_log
+
+onbutton=1
+if (<argchkid[1]>==1)
+  src.f_quest_resign <src.ctag0.quest>
+endif
+sdialog d_quest_log
+
+
+
+[EOF]
+

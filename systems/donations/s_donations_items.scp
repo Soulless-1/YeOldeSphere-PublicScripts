@@ -1,0 +1,321 @@
+///////////////////////////
+// Donation Reward
+// These are items you can only get via donating to the server
+
+[typedef t_donation_item]
+
+on=@dclick
+if (<link> != <src>)
+  src.sysmessage You can't use this item because it does not belong to you.
+  return 1
+endif
+
+
+///////////////////////////
+// Player statue
+
+[itemdef i_deed_personal_statue]
+id=i_scroll_x_blue
+type=t_script
+name=Personal Statue Deed
+//tevents=+t_donation_item
+
+on=@create
+color=0554
+attr=attr_newbie
+
+on=@dclick
+if (<topobj> != <src>) 
+  src.sysmessage You cannot use this where it is.
+  return 1
+elseif ((<src.region.flags>&region_flag_nobuilding) || (<src.region.flags>&region_flag_guarded) || (<src.region.flags>&region_flag_safe)) && !(<src.isgm>)
+  src.sysmessage You cannot place your statue here.
+  return 1
+endif
+
+serv.newitem i_statue_pedestal
+new.link=<src>
+new.p=<src.p>
+new.update
+new.f_personal_statue_update <src>
+consume
+return 1
+
+[function f_personal_statue_update]
+if (<uid.<more1>.isvalid>)
+  uid.<more1>.remove
+endif
+ref1=<argv[0]>
+serv.newnpc <ref1.body>
+ref2=<new>
+more1=<ref2>
+ref2.str=100
+ref2.hits=<ref2.maxhits>
+ref2.dex=0
+ref2.int=0
+ref2.flags |= statf_invul
+ref2.flags |= statf_freeze
+ref2.color=<ref1.color>
+ref2.name=Statue of <ref1.name>
+ref2.events=+e_personal_statue
+ref2.speech=+personal_statue
+ref2.p=<p>
+ref2.z += 3
+ref2.turn s
+for n 0 24
+  ref3=<ref2.findlayer.<dlocal.n>>	//statue
+  ref4=<ref1.findlayer.<dlocal.n>>	//owner
+  if (<ref3.isvalid>) 
+    ref3.remove
+  endif
+  if (<ref4.isvalid>)
+    serv.newitem <ref4.baseid>
+    new.name=<ref4.name>
+    new.color=<ref4.color>
+    new.attr=attr_newbie
+    ref2.equip <new>
+  endif
+endfor
+
+[itemdef 032f2]
+defname=i_statue_pedestal
+name=Statue Pedestal
+type=t_sign_gump
+
+on=@dclick
+if (<src> != <link>)
+  src.sysmessage This is not yours and you cannot use it. 
+  return 1
+endif
+sdialog d_personal_statue
+//f_personal_statue_update <src>
+//src.sysmessage Your personal statue has been updated.
+return 1
+
+[dialog d_personal_statue]
+250,50
+resizepic 7 7 9200 235 350
+
+dtext 80 15 1263 Personal Statue
+
+for n 1 18
+  button <eval (40+<local.y>)> <eval (45+<local.x>)> 1209 1210 1 0 <local.n>
+  dtext <eval( 60+<local.y>)> <eval (41+<local.x>)> 1000 Pose <dlocal.n>
+  local.x += 15
+  if (<local.n> == 9)
+    local.x=
+    local.y=100
+  endif
+endfor
+
+button 20 200 4006 4007 1 0 100
+dtext 55 200 1263 Update
+
+button 20 225 4006 4007 1 0 101
+dtext 55 225 1263 Relocate
+
+button 130 200 4006 4007 1 0 102
+dtext 165 200 1263 Redeed
+
+button 130 225 4006 4007 1 0 103
+dtext 165 225 1263 Destroy
+
+
+[dialog d_personal_statue button]
+
+onbutton=1,20
+ref1=<more1>
+ref1.canmask=mt_statue
+ref1.tag0.statue_anim=<argn1>
+ref1.tag0.statue_frame=4
+ref1.update
+sdialog d_personal_statue
+
+onbutton=100
+f_personal_statue_update <src>
+
+
+[events e_personal_statue]
+
+on=@dclick
+return 1
+
+[speech personal_statue]
+
+on=**
+return 1
+
+////////////////
+
+
+[itemdef i_deed_levelup]
+id=i_deed
+type=t_script
+name=Levelup Deed 
+//tevents=+t_donation_item
+
+on=@create
+attr=attr_newbie
+color=0988
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+endif
+
+src.f_gain_exp <eval <src.tag0.level_nextat> - <src.tag0.exp>>
+consume
+
+return 1
+
+
+////////////////////
+//Skill Ball 100%
+
+[itemdef i_skill_ball_1000]
+id=i_virtstone_7
+name=skill ball
+type=t_script
+//tevents=+t_donation_item
+
+on=@create
+attr=attr_newbie
+color=0480
+more1=1000
+
+on=@click
+message a <fval <more1>>% skill ball
+return 1
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+endif
+
+sdialog d_skill_ball
+return 1
+
+/////////////////////
+//Skill Ball 150%
+
+[itemdef i_skill_ball_1500]
+id=i_virtstone_7
+name=skill ball
+type=t_script
+//tevents=+t_donation_item
+
+on=@create
+attr=attr_newbie
+color=0480
+more1=1500
+
+on=@click
+message a <fval <more1>>% skill ball
+return 1
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+endif
+
+sdialog d_skill_ball
+return 1
+
+
+///////////////////////
+// Skill Ball Menu
+
+[dialog d_skill_ball]
+
+150,50
+
+page 0	//skill selection
+
+resizepic 10 10 9200 410 380	
+resizepic 20 20 3000 390 360
+
+dtext 80 30 1263 Select a skill to raise up <fval <more1>>%
+
+local.c=
+local.r=
+for 0 48
+  if !(<f_skill_ball_restricted_selection <local._for>>)
+    button <eval 35+(<local.c>*130)> <eval 70+(15*<local.r>)> 1209 1210 1 0 <eval <local._for>+1>
+    dtext <eval 55+(<local.c>*130)> <eval 67+(15*<local.r>)> 1000 <serv.skill.<dlocal._for>.key>
+    local.r += 1	//row
+    if (<local.r> == 18)
+      local.c += 1
+      local.r=
+    endif
+  endif
+endfor
+
+[dialog d_skill_ball button]
+onbutton=1,999
+argn -= 1
+
+src.<serv.skill.<dargn>.key> = <more1>
+if (<src.<serv.skill.<dargn>.key>> >= <serv.skillclass.<src.skillclass>.<serv.skill.<dargn>.key>>)
+  src.<serv.skill.<dargn>.key>=<serv.skillclass.<src.skillclass>.<serv.skill.<dargn>.key>>
+endif
+
+src.effect=3,i_fx_sparkle,6,15,1
+src.sound 01f9
+consume
+return 1
+
+[function f_skill_ball_restricted_selection]
+if (<args> == 0) || (<args> == 7) || (<args> == 8) || (<args> == 11) || (<args> == 12) || (<args> == 13) || (<args> == 18) || (<args> == 23) || (<args> == 33) || (<args> == 34) || (<args> == 37) || (<args> == 44) || (<args> == 45)
+  return 1
+endif
+return 0
+
+[itemdef i_deed_change_sex]
+defname=i_deed_change_sex
+id=i_deed
+name=Sex Change Deed
+type=t_normal
+
+on=@create
+attr=attr_newbie
+color=0480
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+endif
+src.obody=<qval (<src.obody>==c_man)?c_woman:c_man>
+src.body=<src.obody>
+if (<src.body>==c_woman) && (<src.findlayer.16.isvalid>)
+  src.findlayer.16.remove
+endif
+src.update
+src.bark 3
+src.message You have changed from a <src.sex woman/man> to a <src.sex man/woman>!
+consume
+return 1
+
+[itemdef i_deed_change_name]
+defname=i_deed_change_name
+id=i_deed
+name=Name Change Deed
+type=t_normal
+
+on=@create
+attr=attr_newbie
+color=0480
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+endif
+src.tag0.mustrename=1
+src.sdialog d_rename_char
+return 1
+
+[EOF]

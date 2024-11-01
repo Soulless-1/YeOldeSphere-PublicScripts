@@ -1,0 +1,69 @@
+[SKILL 48]
+DEFNAME=SKILL_REMOVE_TRAP
+KEY=RemoveTrap
+TITLE=Jack
+FLAGS=skf_scripted
+PROMPT_MSG=Select the trap to disarm
+DELAY=7.0
+STAT_STR=20
+STAT_INT=60
+STAT_DEX=125
+BONUS_STR=0
+BONUS_DEX=80
+BONUS_INT=20
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start
+//act = target
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> >= 2)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <act>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif (<act.ischar>) 
+  src.sysmessage You feel that such an action would be inappropriate.
+  return 1
+elseif (<src.lockpicking> < 500)
+  src.sysmessage You do not know enough about locks. Become better at picking locks.
+  return 1
+elseif (<src.detectinghidden> < 500)
+  src.sysmessage You are not perceptive enough. Become better at detect hidden.
+  return 1
+elseif (<act.type>==t_container_locked)
+  src.sysmessage That is locked.
+  return 1
+elseif !(<act.isevent.t_trapped_container>)
+  src.sysmessage that doesn't appear to be trapped.
+  return 1
+endif
+message @0482,3,0,0 *You delicately manipulate the trigger mechanism...*
+sound 0241
+//Wearing gloves will make it harder to succeed. The heavier the gloves, the worse it is.
+if !(<src.f_skillsucceed removetrap>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+
+ON=@Fail
+//If you fail at using the skill, there is a high chance the trap will go off, if you are lucky the trap will not go off and you will receive a message stating that you failed to remove the trap instead.
+src.sysmessage You fail to disarm the trap... but you don't set it off 	//You fail to disarm the trap.
+
+ON=@Abort
+src.sysmessage You give up trying to disarm the trap.
+
+on=@success
+act.events=-t_trapped_container
+src.sysmessage You successfully render the trap harmless
+sound 0241
+
+
+[EOF]

@@ -1,0 +1,239 @@
+//Mining System by Soulless
+//v1.0
+//4:06 PM 1/4/2022
+
+[defname gathering_mining_settings]		
+gathering_mining_settings		t_rock,0,0,0,4,1,1*60*60			//type,tiledata 1-3, timelength, damagetool, node clear time
+gathering_mining_resource0		i_ore_blackrock,110.0,120.0,1,6,0.5		//itemdef,minskill,maxskill,amountlo,amounthi,chance
+gathering_mining_resource1		i_ore_mytheril,105.0,120.0,2,7,0.5
+gathering_mining_resource2		i_ore_valorite,99.0,120.0,3,8,1.4
+gathering_mining_resource3		i_ore_verite,95.0,120.0,4,9,2.8
+gathering_mining_resource4		i_ore_bloodrock,95.0,120.0,5,9,2.8
+gathering_mining_resource5		i_ore_agapite,90.0,120.0,6,10,4.2
+gathering_mining_resource6		i_ore_rose,90.0,120.0,6,10,4.2
+gathering_mining_resource7		i_ore_gold,85.0,120.0,6,10,5.6
+gathering_mining_resource8		i_ore_silver,85.0,120.0,6,10,5.6
+gathering_mining_resource9		i_ore_bronze,80.0,120.0,7,11,7.0
+gathering_mining_resource10		i_ore_copper,75.0,120.0,7,11,8.4
+gathering_mining_resource11		i_ore_shadow,70.0,120.0,7,11,9.8
+gathering_mining_resource12		i_ore_dull_copper,65.0,120.0,8,12,11.2
+gathering_mining_resource13		i_ore_old_copper,65.0,120.0,8,12,11.2
+gathering_mining_resource14		i_ore_iron,0.0,120.0,8,12,50.0 
+
+
+
+[SKILL 45]
+DEFNAME=SKILL_MINING
+KEY=Mining
+TITLE=Miner
+FLAGS=skf_gather|skf_scripted
+PROMPT_MSG=Where would you like to mine?
+DELAY=2.0
+STAT_STR=125
+STAT_INT=30
+STAT_DEX=45
+BONUS_STR=100
+BONUS_DEX=30
+BONUS_INT=0
+BONUS_STATS=20
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+VALUES=1,10,80
+RANGE=2
+
+
+on=@start
+//act = node
+//actprv = gathering tool 
+//serv.log <src.name>(<src>) started mining in <src.region.name> (<p>)
+src.actp=<src.targp>
+
+if !(<act.isvalid>) 
+  return 1
+elseif !(<src.findtype.t_weapon_mace_pick>)
+  src.sysmessage You do not have a pickaxe.
+  return 1 
+elseif (<src.findlayer.25>)
+  src.sysmessage You can't mine while riding.
+  return 1
+elseif (<src.distance <src.actp>> >= 3)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.f_can_mine <src.actp>>)	
+  src.sysmessage You cannot mine here.
+  return 1
+endif
+
+src.flags &= ~ statf_hidden
+src.flags &= ~ statf_invisible
+
+ref1=<src.actprv>	//<src.ctag0.gathering_tool>	//the pickaxe		//CHANGE TOOL TO REF1, NODE TO ref1 , for each skill
+src.ctag.gathering_tool=
+if (<ref1.isvalid>) && (<ref1.type>==t_weapon_mace_pick) 
+  if !(<ref1.usescur>)
+    ref1.usesmax={50 60}
+    ref1.usescur=<ref1.usesmax>
+  endif
+  if (<R1,100> <= 3)
+    ref1.usescur -= 1 
+    src.sysmessage Your <ref1.name> has been damaged.
+    if (<ref1.usescur> <= 0)
+      src.sysmessage your <ref1.name> has been destroyed.
+      ref1.consume
+    endif
+  endif
+endif
+
+if !(<act.more2>)
+  act.f_mining_format_node
+endif
+
+if !(<act.isvalid>) || (<act.amount> <= 0) || (<act.more2> == 00)	//this shouldnt fire off before the skill finished
+  src.sysmessage There is no metal here to mine.
+  return 1
+endif
+
+
+//src.anim 13	//apparently not needed
+//src.sound {930-940}
+src.sendpacket 0c0 00 D0 D0 W03779 W<src.targp.x> W<src.targp.y> B<src.targp.z> W<src.targp.x> W<src.targp.y> B<eval (<src.targp.z>+5)> B0 B15 00 00 00 B0 D0455 D5
+src.sendpacket 0c0 00 D0 D0 W03779 W<src.targp.x> W<src.targp.y> B<eval (<src.targp.z>+10)> W<src.targp.x> W<src.targp.y> B<src.targp.z> B0 B15 00 00 00 B0 D0455 D5
+local.mining_skill=<src.mining>
+if (<uid.<src.actprv>.baseid> == i_pickaxe_gargoyle)
+  local.mining_skill += 200
+endif
+if !(<f_skillsucceed mining>) || (<act.amount> <= 0) || (<local.mining_skill> < <act.morex>)	//(<src.mining> < <act.morex>)
+  actdiff=65535
+else
+  actdiff=0
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You loosen some rocks but fail to find any useable ore.
+
+ON=@Abort
+src.sysmessage You decide not to mine for now.
+
+ON=@Success
+ref1=<act>
+if !(<ref1.isvalid>) || (<ref1.amount> <= 0) || (<ref1.more2> == 00)
+  src.sysmessage There is no metal here to mine.
+else
+  local.reap=<R1,4>
+  local.reap=<qval (<ref1.amount> < <local.reap>)? <ref1.amount> : <local.reap>>		//make sure we can only get as much as is left
+  ref1.amount -= <local.reap>
+  ref1.update
+  if (<src.findlayer.21.weight> > <eval (<src.maxweight>+400)>) && !(<src.isgm>)
+    src.sysmessage Your backpack is full, so the ore you mined is lost.
+  else
+    serv.newitem <ref1.more2>,<local.reap>
+    new.cont=<src.findlayer.21>
+    new.update
+    src.sysmessage You dig some <new.name> and put it in your backpack.
+  endif
+endif
+
+
+///////////////////////////////////
+// Mining System
+
+[function f_can_mine]
+local.p=<argv[0]>,<argv[1]>,<src.p.m>
+ref1=<serv.map(<local.p>).region.uid>	//get the multi(ship) if they are in one
+args=<def0.gathering_mining_settings>
+for 0 3		//4 different possible args for terrain type
+  if !(<ref1.isvalid>) && (<argv[<dlocal._for>]>) && (<serv.map(<local.p>).isneartype <argv[<dlocal._for>]>>)
+    return 1
+  endif
+endfor
+return 0
+
+[function f_mining_find_node]	//used to find if there is a node
+serv.newitem i_memory
+new.p=<args>
+ref1=<new.f_mining_get_node_uid <args>>
+new.remove
+return <ref1>
+
+[function f_mining_get_node_uid]
+ref1=<uid>
+foritems 0
+  if (<baseid>==i_worldgem_bit) && (<type>==t_rock) && (<uid> != <ref1>)
+    return <uid>
+  endif
+endfor
+return 0
+
+[function f_mining_format_node]
+args=<def0.gathering_mining_settings>
+timer=<argv[6]>
+args=<f_mining_get_resource>
+morex=<argv[1]>		//min skill req
+morey=<argv[2]>		//max skill req
+more2=<argv[0]>		//resource
+amount=<R<argv[3]>,<argv[4]>>	//amount  
+events=+t_mining_node
+
+[function f_mining_get_resource]
+ref1=<src.actprv>
+while !(<isempty <def.gathering_mining_resource<dlocal.n>>>)		//select the mining resource
+  args=<def0.gathering_mining_resource<dlocal.n>>
+  local.chance=<R1,1000>
+  if (<src.mining> >= <argv[1]>) && (<local.chance> <= <argv[5]>) 	//if you have the skill and it's there by chance
+    if (<ref1.baseid> == i_pickaxe_gargoyle)
+      local.n -= 2		//ore is upgraded when using the gargoyle's pickaxe
+      local.n=<qval (<local.n> < 0)?0:<local.n>>
+      args=<def0.gathering_mining_resource<dlocal.n>>
+    endif 
+    return <args>
+  endif
+  local.n += 1
+endwhile
+if (<ref1.baseid> == i_pickaxe_gargoyle)	
+  local.n -= 2		//ore is upgraded when using the gargoyle's pickaxe
+  local.n=<qval (<local.n> < 0)?0:<local.n>>
+  args=<def0.gathering_mining_resource<dlocal.n>>
+endif 
+return <args>		//we've gone through all the ores, if we're here use it
+
+[typedef t_mining_node]
+
+on=@click
+message @030 Mining Node: <qval (<more2> != 00)?<amount> <serv.itemdef.<more2>.name>:Nothing> 
+return 1
+
+on=@timer
+remove
+return 1
+
+[itemdef i_rock_loose]
+defname=i_rock_loose
+name=Loose Rock
+id=i_ore_iron
+type=t_normal
+weight=2
+
+on=@create
+color=0482
+
+
+[typedef t_weapon_mace_pick]
+
+on=@targon_ground
+if (<src.action>==mining)
+  src.sysmessage You are already mining.
+  return 1
+endif
+//src.ctag.gathering_tool=<uid>
+src.actprv=<uid>
+
+on=@targon_item
+if (<src.targ.type>==t_rock) && ((<src.action>==mining) || (<src.findid.i_treasure_digging>))
+  src.sysmessage You are already mining.
+  return 1
+endif
+//src.gathering_tool=<uid>
+src.actprv=<uid>
+
+
+[EOF]

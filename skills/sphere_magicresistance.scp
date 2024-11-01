@@ -1,0 +1,85 @@
+//Magic Resistance by Soulless
+//v1.0
+//3:09 PM 5/11/2021
+
+//http://www.uoguide.com/Resisting_Spells
+//http://wiki.uosecondage.com/Resisting_Spells
+//3:45 AM 3/31/2018
+
+//using second age resistance mechanics
+
+[SKILL 26]
+DEFNAME=Skill_MagicResist
+KEY=MagicResistance
+TITLE=Resistor
+FLAGS=skf_scripted
+PROMPT_MSG=
+EFFECT=0.0,90.0
+STAT_STR=40
+STAT_INT=125
+STAT_DEX=40
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=50
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+
+on=@start
+return 1 //this script is taken care of in e_magic_resistance event
+
+[comment]
+RESIST CHANCE
+Figuring your chance to resist a spell is done as follows: Your chance to resist a spell is the greater of either:
+Your resistance skill divided by 5
+Your_Chance_to_Resist = Your_Resistance / 5
+Your resistance skill minus the sum of (your attackers magery skill (less 20 points) divided by five) and (the circle of the spell multiplied by 5)
+Your_Chance_to_Resist = Your_Resistance - (( Attackers_Magery - 20 )/5 + Spell_Circle*5))
+
+DAMAGE RESISTED
+Actual_Damage_done = (Base_Spell_Damage - 50% [if Resisted]) + Eval_Intelligence_Damage_Modifier
+
+EVAL INT BONUS
+If your resistance is higher than your opponents evaluate intelligence, then the equation is:
+(1 + (Attackers_EI - Your_resistance) / 200 )
+If your resistance is lower than your opponents evaluate intelligence, then the equation is:
+(1 + (Attackers_EI - Your_resistance) / 500 )
+
+[function f_magic_resistance_chance]	//usage f_magic_resistance_chance 'spell number'
+//serv.log <name>(<uid>) <src.name>(<src>) <args>
+local.spell=<argv[0]>
+local.spellcircle=<eval ((<local.spell>/8)+1)>
+local.resistchance=<eval ((<magicresistance>/10)/5)>
+local.resistchancealt=<eval (<magicresistance>/10)-((((<src.magery>/10)-20)/5)+(<local.spellcircle>)*5)>
+local.resistchance=<qval (<local.resistchance> < <local.resistchancealt>)?<local.resistchancealt>:<local.resistchance>>
+local.resistchance /= 2		//Sphere players mostly do not understand or like the OSI version of magic resistance skill
+return <local.resistchance>
+
+[EVENTS e_magic_resistance]	
+
+on=@spelleffect
+if (<src.npc> == 0) 		//a spell cast on me from a player
+  if ((<tag0.young>) && (<src> != <uid>)) || ((<tag0.young>) && !(<src.tag0.young>))	//these situations do not call for resistance
+    return 0			//prevent this code from going off, can abuse fire fields 
+  endif
+endif
+
+local.damagemodifier=<eval (100+((<src.evaluatingintel>-<magicresistance>)/<qval (<src.evaluatingintel> < <magicresistance>)?20:50>))>
+if (<serv.spell.<argn1>.flags>&spellflag_resist) 		//&& ((<serv.spell.<argn1>.flags>&spellflag_damage) || (<serv.spell.<argn1>.flags>&spellflag_harm))	<-- dont need this, if it can be resisted it can be resisted
+  local.resistchance=<f_magic_resistance_chance <argn1>>
+  if (<R1,100> < <local.resistchance>) 
+    local.damagemodifier -= <muldiv 25,<local.damagemodifier>,100>	//50% is default but this seems to take too much away
+    //sysmessage You feel yourself resisting magical energy.
+    message @0482,3,0,0 *resisting magic*
+  endif
+  if (<serv.spell.<argn1>.flags>&spellflag_field) 		//skillgain portion 
+    if !(<R20>)							//only gain 1 out of 25 times
+      skillgain magicresistance					//running through fields should not give you insane gains
+    endif
+  else
+    skillgain magicresistance					//otherwise gain always attempted
+  endif
+endif
+local.damagemodifier=<qval (<local.damagemodifier> < 0)?0:<local.damagemodifier>>
+
+
+[EOF]

@@ -1,0 +1,131 @@
+//Polymorph Menu by Soulless
+//V1.0
+
+[comment add this as an event, or into a generic event for players]
+ 
+on=@skillmenu
+if <args>==sm_polymorph
+  sdialog d_polymorph_Menu
+  return 1
+endif
+
+[defname polymorph_menu]
+polymorph_menu0			Animals
+polymorph_menu0_0		c_chicken,Chicken
+polymorph_menu0_1		c_dog,Dog
+polymorph_menu0_2		c_wolf,Wolf
+polymorph_menu0_3		c_panther,Panther
+polymorph_menu0_4		c_gorilla,Gorilla
+polymorph_menu0_5		c_bear_black,Black Bear
+polymorph_menu0_6		c_bear_grizzly,Grizzly Bear
+polymorph_menu0_7		c_bear_polar,Polar Bear
+polymorph_menu0_8		c_man,Human Male
+
+polymorph_menu1			Monsters
+polymorph_menu1_0		c_slime,Slime
+polymorph_menu1_1		c_orc,Orc
+polymorph_menu1_2		c_lizardman,Lizardman
+polymorph_menu1_3		c_gargoyle,Gargoyle
+polymorph_menu1_4		c_ogre,Ogre
+polymorph_menu1_5		c_troll,Troll
+polymorph_menu1_6		c_ettin,Ettin
+polymorph_menu1_7		c_daemon,Daemon
+polymorph_menu1_8		c_woman,Woman
+
+
+[dialog d_polymorph_menu]
+100,100
+page 0
+
+//BACKGROUND
+resizepic 10 40 5054 625 400
+
+//TITLE BAR
+//gumppictiled 20 20 510 25 2624
+dhtmlgump 190 50 300 20 0 0 POLYMORPH MENU
+
+
+///////////////////////
+//CATEGORIES AND ITEMS AREA
+//gumppictiled 20 50 200 255 2624
+//gumppictiled 225 50 305 255 2624
+
+//NOTICES AREA
+//gumppictiled 20 310 150 50 2624
+//gumppictiled 175 310 355 50 2624
+
+//ACTIONS AREA
+//gumppictiled 20 365 510 90 2624
+
+//checkertrans 20 20 510 435
+
+
+//////////////////////
+//CATEGORIES SECTION
+while !(<isempty <def.polymorph_menu<dlocal.c>>>)
+  dhtmlgump 25 <eval (75+(<local.c>*25))> 160 25 1 0 <def0.polymorph_menu<dlocal.c>>
+  button 185 <eval (75+(<local.c>*25))> 4005 4006 1 0 <eval (<local.c>+1)>
+  local.c += 1
+endwhile
+
+//////////////////////
+//ACTIONS SECTION
+//LEFT SIDE
+
+button 25 395 4005 4006 1 0 100		//poly morph into the body type
+dhtmlgump 60 395 200 20 0 0 OKAY
+
+button 280 395 4005 4006 1 0 0 
+dhtmlgump 315 395 100 20 0 0 EXIT
+
+//////////////////////
+//SELECTIONS SECTION
+
+page <argn1>
+local.c=<argn1>		//the category
+src.ctag0.polymorph_category=<dargn1>
+resizepic 225 75 3000 400 275
+while !(<isempty <def.polymorph_menu<dlocal.c>_<dlocal.s>>>)
+  args=<def.polymorph_menu<dlocal.c>_<dlocal.s>>
+  dhtmlgump <eval (230+(<local.x>*150))> <eval (75+(<local.y>*65))> 300 20 0 0 <argv[1]>
+  radio <eval (230+(<local.x>*150))> <eval (90+(<local.y>*65))> 210 211 0 <eval (<local.s>+1)>	/	/polymorph button
+  tilepic <eval (250+(<local.x>*150))> <eval (100+(<local.y>*65))> <eval id(<serv.chardef.<argv[0]>.icon>)> 
+  local.s += 1
+
+  local.x += 1
+  if (<local.x> >= 3)		//3 bodies per row
+    local.x=
+    local.y += 1
+  endif
+endwhile
+
+[dialog d_polymorph_menu button]
+
+onbutton=1,2
+argn1 -= 1
+sdialog d_polymorph_menu <dargn1>
+
+onbutton=100
+local.c=<src.ctag.polymorph_category>		//set the category
+args=<def0.polymorph_menu<dlocal.c>_<eval (<dargchkid>-1)>>		//get the body id
+local.id=<argv[0]>
+if (<argchkid> == -1)	//no body selected
+  return 1
+elseif (<src.mana> < <serv.spell.s_polymorph.manause>)
+  src.sysmessage You lack sufficient mana for this spell.
+  return 1
+endif
+args=<serv.spell.s_polymorph.resources>
+for r 1 <argv> 
+  local.resource=<serv.spell.s_polymorph.resources.<dlocal.r>.key>
+  local.amount=<serv.spell.s_polymorph.resources.<dlocal.r>.val>
+  if (<src.rescount <local.resource>> < <local.amount>)
+    src.sysmessage You lack the <serv.itemdef.<local.resource>.name> for this spell.
+    return 1
+  endif
+endfor
+src.action=-1
+src.poly <local.id>
+
+
+[EOF]

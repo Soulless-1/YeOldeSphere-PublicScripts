@@ -1,0 +1,512 @@
+//environment System by Soulless
+//V1.0
+//5:05 PM 8/9/2018
+
+//add temperature in 2047
+
+[comment about Britannian time]
+Time
+The concept of Time in Sosaria is much the same as on Earth. Each day is divided into 24 hours, although daylight lasts much longer, roughly 18 hours per day, from 6 AM until midnight. In terms of time comparison, one Sosarian day equates to two Earth hours, or twelve Sosarian days in one Earth day.
+However, for simplicity's sake, almost without exception, when events, item effects or other time periods are mentioned, even by NPC's, they typically refer to Earth time. For example, an NPC Escort might say you must wait five minutes before being able to undertake the quest to escort them, they really mean five Earth minutes.
+Generally, few if any players pay any attention to Sosarian time. This is only exacerbated by the fact that most everyone wears items imparting Night Sight abilities, so the passing of days and nights goes unnoticed by them.
+Time in Sosaria also mimics Earth in another fashion, namely timezones. It may be night time in one portion of Sosaria while it is daylight elsewhere. The time changes slightly if you cross a Server line as each region has its own time of day.
+Finding out the time of day can be done by using a Clock, Holiday Timepiece, Sundial, Grandfather Clock, or just asking any NPC by saying their name and the word time. Using timepieces will give you the exact time, while an NPC will merely tell you the last hour that has passed, even though it could be just a minute until the next hour.
+
+History
+Knowing the time of day was helpful in the early days of Ultima Online as it governed the progression of phases of the moons Trammel and Felucca. This, in turn, would determine where a particular Moongate would take you. This is partly why the Holiday Timepiece was considered such a useful Holiday 1999 gift and was highly prized. These days, you can choose to take any moongate to pretty much any other one at will.
+
+Also...
+Here are some facts relating to time in Ultima Online:[1]
+Time in Britannia passes quickly compared to our Earth time.
+In 2 Earth hours an entire Britannian day will have passed.
+Twelve Britannian days makes one Earth day.
+Just as on Earth, a Britannian year has twelve months.
+Each Britannian month, however, consists of 73 days.
+This makes a Britannian year last 876 Britannian days, which is 73 Earth days.
+One Earth year equals five Britannian years.
+The release date of Ultima Online was in the Britannian year 289.
+
+[defname environment_system_ini]
+
+//World
+enviornment_minute		5		//how many minute pass per real world minute
+environment_hour_length		60		//minutes per hour
+environment_day_length		24		//hours per day
+environment_week_length		7		//days per week
+environment_month_length	73		//days per month
+environment_year_length		12		//months per year
+environment_brightest		1		//the maximum brightness
+environment_darkest		15		//maximum darkness
+environment_dungeons		26		//dungeon darkness
+
+//Hours
+environment_sunrise	5		
+environment_sunset	23	//night is only 6 hours of darkness		
+
+//Days
+environment_day0			Sunday
+environment_day1			Monday
+environment_day2			Tuesday
+environment_day3			Wednesday
+environment_day4			Thursday
+environment_day5			Friday
+environment_day6			Saturday
+
+//Months
+environment_month_days		31,28,31,30,31,30,31,31,30,31,30,31	//this should only be used if not the proper 73 days
+environment_month0		January	
+environment_month0_temp		{20 36}		//average temperature of this month (degrees)
+environment_month0_rain		25		//average precipitation of this month (inches)(decimal)
+environment_month0_tstorm	2		//chance that rain will turn into a thunderstorm
+environment_month1		February
+environment_month1_temp		{23 41}
+environment_month1_rain		22
+environment_month1_tstorm	2
+environment_month2		March		//spring equinox march 20
+environment_month2_temp		{32 52}
+environment_month2_rain		39
+environment_month2_tstorm	4
+environment_month3		April
+environment_month3_temp		{41 63}
+environment_month3_rain		33
+environment_month3_tstorm	5
+environment_month4		May
+environment_month4_temp		{52 73}
+environment_month4_rain		39
+environment_month4_tstorm	13
+environment_month5		June		//Summer Solstice June 21
+environment_month5_temp		{61 82}
+environment_month5_rain		41
+environment_month5_tstorm	50
+environment_month6		July
+environment_month6_temp		{65 85}
+environment_month6_rain		46
+environment_month6_tstorm	50
+environment_month7		August
+environment_month7_temp		{63 84}
+environment_month7_rain		37
+environment_month7_tstorm	25
+environment_month8		September	//autumnul equinox sept 22
+environment_month8_temp		{56 77}
+environment_month8_rain		29
+environment_month8_tstorm	9
+environment_month9		October
+environment_month9_temp		{44 65}	
+environment_month9_rain		23
+environment_month9_tstorm	7
+environment_month10		November
+environment_month10_temp	{35 52}
+environment_month10_rain	31
+environment_month10_tstorm	5
+environment_month11		December	//winter solstice dc 21
+environment_month11_temp	{26 41}	
+environment_month11_rain	29
+environment_month11_tstorm 	2
+
+//Seasons
+environment_season0		Spring
+environment_season0_start	2	
+environment_season1		Summer
+environment_season1_start	5
+environment_season2		Fall
+environment_season2_start	8
+environment_season3		Winter
+environment_season3_start	11
+
+//Moons
+environment_trammel_phase0     	new moon
+environment_trammel_phase1    	waxing crescent
+environment_trammel_phase2    	first quarter
+environment_trammel_phase3     	waxing gibbous
+environment_trammel_phase4    	full moon
+environment_trammel_phase5    	waning gibbous
+environment_trammel_phase6     	third quarter
+environment_trammel_phase7    	waning crescent
+environment_trammel_phase8	new moon
+
+environment_felucca_phase0	new moon
+environment_felucca_phase1	waxing crescent
+environment_felucca_phase2	waxing crescent
+environment_felucca_phase3	first quarter
+environment_felucca_phase4	first quarter
+environment_felucca_phase5	waxing gibbous
+environment_felucca_phase6	waxing gibbous
+environment_felucca_phase7	full moon
+environment_felucca_phase8	waning gibbous
+environment_felucca_phase9	waning gibbous
+environment_felucca_phase10	third qarter
+environment_felucca_phase11	third quarter
+environment_felucca_phase12	waning crescent
+environment_felucca_phase13	waning crescent
+environment_felucca_phase14	new moon
+
+[events e_environmental]
+
+on=@evironchange
+//we need to update the sectors light here
+
+[function f_progress_time]
+var0.minute += <def0.enviornment_minute>
+var0.update_time += 1
+//f_adjust_world_light		//WARNING: This lags the server
+
+if (<var0.update_time> >= 3)	//only need to do this every 15 minutes
+  var0.time=<f_clock_get_time>
+  var0.update_time=
+endif
+
+if (<var0.minute> >=  <def0.environment_hour_length>)
+  var0.hour += 1
+  var0.minute=
+endif
+
+if (<var0.hour> >= <def0.environment_day_length>)
+  var0.day += 1
+  var0.weekday += 1
+  var0.hour=
+  var0.avg_temp=<eval (<def0.environment_month<dvar0.month>_temp>)>
+  f_adjust_moons
+endif
+
+if (<var0.weekday> >= <def0.environment_week_length>)
+  var0.weekday=
+endif
+
+//args=<def0.environment_month_days>
+//if (<var0.day> > <argv[<eval <var0.month>>]>)		//days per month based off real world 
+if (<var0.day> >= <def0.environment_month_length>)
+  //check_season //change season in game 
+  var0.month += 1
+  var0.day=
+endif
+
+if (<var0.month> >= <def0.environment_year_length>)
+  var0.year += 1
+  var0.month=
+endif
+
+[function f_adjust_moons]
+var0.trammel_cycle += 1
+if (<var0.trammel_cycle> >= 8)
+  var0.trammel_cycle=0
+endif
+var0.felucca_cycle += 1
+if (<var0.felucca_cycle> >= 14)
+  var0.felucca_cycle=0
+endif
+
+[function f_adjust_world_light]		//WARNING: This lags the server
+serv.newitem i_memory	//
+new.p=1 1 10 0
+
+if ((<var0.hour> == <def0.environment_sunrise>) || (<var0.hour> == <def0.environment_sunset>)) && (<var0.minute> == 0)
+  new.f_toggle_lightsources 	
+endif
+
+////DAYTIME
+if (<f_daytime>) && (<new.sector.light> > <def0.environment_brightest>)
+  new.region.light=<eval (<new.sector.light>-1)>
+
+////NIGHTTIME
+elseif ((<var0.hour> >= <def0.environment_sunset>) || (<var0.hour> < <def0.environment_sunrise>)) && (<new.sector.light> < <def0.environment_darkest>)
+  new.region.light=<eval (<new.sector.light>+1)>
+endif
+
+new.p=5125 1 30 0	//SET DUNGEON LIGHT LEVEL
+new.region.light=<def0.environment_dungeons>    
+new.remove
+
+[function f_daytime]
+if ((<var0.hour> >= <def0.environment_sunrise>) && (<var0.hour> < <def0.environment_sunset>))
+  return 1
+endif
+return 0
+
+[function f_nighttime]
+if ((<var0.hour> >= <def0.environment_sunset>) || (<var0.hour> < <def0.environment_sunrise>))
+  return 1
+endif
+return 0
+
+[function f_toggle_lightsources]
+local.daytime=<f_daytime>		//is it daytime?
+for n 1 3
+  forinstances i_lamppost<dlocal.n>
+    if ((<local.daytime>) && (<type>==t_light_lit)) || (!(<local.daytime> ) && (<type>==t_light_out))
+      id=<tdata3>
+      update
+    endif
+  endfor
+  forinstances i_lamppost<dlocal.n>_lit
+    if ((<local.daytime>) && (<type>==t_light_lit)) || (!(<local.daytime>) && (<type>==t_light_out))
+      id=<tdata3>
+      update
+    endif
+  endfor
+endfor
+
+
+[plevel 6]
+checktime
+checkmoons
+checktemp
+realtime
+
+[function checktime]
+sysmessage <var0.time>
+
+[function checkmoons]	//integrate with t_spy_glass
+sysmessage Trammel is in the <def0.environment_trammel_phase<dvar0.trammel_cycle>> phase.
+sysmessage Felucca is in the <def0.environment_felucca_phase<dvar0.felucca_cycle>> phase.
+
+[function checktemp]
+sysmessage  The temperature in <region.name> is <dtemperature> degrees F*.
+
+[function temperature]	//use this on characters environchange
+local.y=2047	//this is the very middle of the map (equator)
+if (<p.y> > <local.y>)
+  //serv.log <eval <p.y>-<local.y>> feet away from the equator
+  local.n=<eval (<p.y>-<local.y>)>
+else
+  //serv.log <eval (2047-<p.y>)> feet away from the equator
+  local.n=<eval (2047-<p.y>)>
+endif
+local.n /= 50
+local.t=<eval ((<var0.avg_temp>-<local.n>)-(<sector.light>/2))>
+return <local.t>
+
+[function realtime]	//integrate with t_clock item
+sysmessage It's <qval (<var0.hour>==0)?12:<qval (<var0.hour> < 13)?<dvar0.hour>:<eval <var0.hour>-12>>>:<qval <var0.minute> < 10 ? 0<dvar0.minute>:<dvar0.minute>> <qval <var0.hour> < 12 ?AM:PM> on <def0.environment_day<dvar0.weekday>> of <def0.environment_month<dvar0.month>> <dvar0.day>, in the year <dvar0.year>
+
+[function f_rain_chance]
+args=<def0.environment_month_days>
+local.m=<argv[<eval <var0.month>-1>]>			//days in the month
+local.r=<def0.environment_month<dvar0.month>_rain>	//avg precipitation
+local.d=<eval ((<local.m>*10)/<local.r>)/2>		//(number of days / avg precipitation ) / 2l
+local.p=<muldiv <local.d>,100,<local.m>>		//chance of rain per day
+return <local.p>
+
+[function f_adjust_weather]
+if (<f_rain_chance> < <R1,100>)
+  sector rain
+  if (<temperature> < 31)
+    sector snow
+  elseif (<def0.environment_month<dvar0.month>_tstorm> > <R1,100>)
+    var0.weather=tstorm
+    serv.allclients sysmessage You see severe weather on the horizon.
+    serv.allclients sound 016
+  endif
+else
+  sector dry
+  sysmessage The rain is starting to stop.
+endif
+
+[function environ]
+environment
+
+[function environment]
+sdialog d_environment
+
+[dialog d_environment]
+
+200,150
+page 0
+resizepic 10 80 9200 200 230 
+
+dtext 60 90 1263 Time Settings
+
+dtext 30 110 1263 Hour :
+dtext 30 130 1263 Min :
+dtext 30 150 1263 Weekday :
+dtext 30 170 1263 Day # :
+dtext 30 190 1263 Month :
+dtext 30 210 1263 Year :
+dtext 30 230 1263 Season : 
+
+resizepic 110 113 3000 60 20
+resizepic 110 133 3000 60 20
+resizepic 110 153 3000 60 20
+resizepic 110 173 3000 60 20
+resizepic 110 193 3000 60 20
+resizepic 110 213 3000 60 20
+resizepic 110 233 3000 60 20
+
+dtextentrylimited 120 113 60 20 0 0 2 <dvar0.hour>
+dtextentrylimited 120 133 60 20 0 1 2 <dvar0.minute>
+dtextentrylimited 120 153 60 20 0 2 1 <dvar0.weekday>
+dtextentrylimited 120 173 60 20 0 3 2 <dvar0.day>
+dtextentrylimited 120 193 60 20 0 4 2 <dvar0.month>
+dtextentrylimited 120 213 60 20 0 5 6 <dvar0.year>
+dtextentrylimited 120 233 60 20 0 6 1 <dvar0.season>
+
+button 20 275 242 243 1 0 0
+button 130 275 248 249 1 0 1
+
+[dialog d_environment button]
+//hitting okay will change each variable
+onbutton=0
+src.sysmessage No changes have been made to the current date/time.
+
+onbutton=1
+src.sysmessage The time/date settings have been adjusted.
+var0.hour <argtxt[0]>
+var0.minute <argtxt[1]>
+var0.weekday <argtxt[2]>
+var0.day <argtxt[3]>
+var0.month <argtxt[4]>
+var0.year <argtxt[5]>
+var0.season <argtxt[6]>
+serv.newitem i_memory
+new.p 1 1 1 0
+new.region.season <var0.season>
+new.remove 
+src.checktime
+
+
+
+/////////////////////////////////////////
+////////WEATHER REALATED EFFECTS/////////
+/////////////////////////////////////////
+
+
+[function thunderstorm]
+lightning
+sound <R014,016>
+sound <R010,011>
+sector.rain
+sector.light=15
+
+
+[function lightning]	//creates light/sfx to simulate lightning.
+serv.newitem i_lightning
+new.link <uid>
+new.equip
+new.timerms=25
+serv.newnpc c_man_invisible
+new.movenear <topobj> 10
+new.effect 1,1
+new.timerf 0,remove
+
+[itemdef i_lightning]
+defname=i_lightning
+name=Environmental Lightning Strike
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@create
+attr=090
+more1={5 10}
+
+on=@timer
+if !(<more1>)  
+  link.sendpacket 04f <link.sector.light>
+  link.sound {40 41}
+  //link.sound {0220 0222} 
+  remove
+  return 1
+endif
+link.sendpacket 04f {0 <link.sector.light>}
+more1 -= 1
+timerms={50 100}
+return 1
+
+
+[itemdef i_rain_puddle]
+defname=i_rain_puddle
+id=i_blood_pool_large
+name=puddle
+type=t_normal
+
+ON=@Create
+attr=attr_move_never|attr_can_decay
+dispid={0122a 0122e}
+color=91
+timer={60 180}
+
+on=@Step
+if !(<argn>)
+  sfx 0027
+endif
+
+on=@timer
+remove
+return 1
+
+[itemdef i_snow_pile]
+id=i_blood_pool_large
+name=snow
+
+one=@Create
+attr=attr_move_never|attr_can_decay
+dispid={0122a 0122e}
+color=0481
+timer={90 180}
+
+one=@Step
+if !(<argn>)
+  sfx 012e
+endif
+
+on=@timer
+remove
+return 1
+
+[typedef t_clock]
+
+on=@create
+canmask=can_i_dcignoredist
+
+on=@dclick
+message <var0.time>
+return 1
+
+[function f_clock_get_time]
+local.h=<var0.hour>
+if (<var0.minute> >= 45)
+  local.h=<eval (<var0.hour>+1)>
+  local.h=<qval (<local.h> == 24)?0:<local.h>>
+  local.m=quarter till
+elseif (<var0.minute> >= 30)
+  local.m=half past
+elseif (<var0.minute> >= 15)
+  local.m=quarter past
+endif
+if (<var0.hour> <= 12)
+  local.p=o'clock in the morning
+elseif (<var0.hour> >= 21)
+  local.p=o'clock at night
+elseif (<var0.hour> >= 18) && (<var0.hour> < 21)
+  local.p=o'clock in the evening
+else
+  local.p=o'clock in the afternoon
+endif
+doswitch <qval (<local.h> >= 12)?<eval (<local.h>-12)>:<local.h>>
+  local.h=<qval (<local.h> == 0)?midnight:noon>
+  local.h=one <local.p>
+  local.h=two <local.p>
+  local.h=three <local.p> 
+  local.h=four <local.p> 
+  local.h=five <local.p> 
+  local.h=six <local.p> 
+  local.h=seven <local.p>  
+  local.h=eight <local.p>  
+  local.h=nine <local.p>
+  local.h=ten <local.p>
+  local.h=eleven <local.p>
+enddo
+return <qval (<var0.minute> >= 15)?a <local.m>:> <local.h>
+
+
+
+[typedef t_spy_glass]
+
+on=@dclick
+src.sysmessage Trammel is in the <def0.environment_trammel_phase<dvar0.trammel_cycle>> phase.
+src.sysmessage Felucca is in the <def0.environment_felucca_phase<dvar0.felucca_cycle>> phase.
+return 1
+
+
+
+
+[EOF]

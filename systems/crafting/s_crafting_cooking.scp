@@ -1,0 +1,77 @@
+
+[defname crafting_cooking]
+
+crafting_cooking_flags 	0		//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool
+crafting_cooking_anim 	33
+crafting_cooking_sound	050,0	//020 bubbling
+crafting_cooking_tool	t_tool_cooking
+
+crafting_cooking_0_name LAST TEN		//this will be generated as people craft
+
+crafting_cooking_1_name INGREDIENTS
+crafting_cooking_1_0 i_flour_sack
+crafting_cooking_1_1 i_jar_honey
+crafting_cooking_1_2 
+
+crafting_cooking_2_name BAKING
+crafting_cooking_2_0 i_bread_loaf
+crafting_cooking_2_1 i_bread_french
+crafting_cooking_2_2 i_cake
+crafting_cooking_2_3 i_pan_cookies
+crafting_cooking_2_4 i_pizza
+crafting_cooking_2_5 i_pie_baked
+crafting_cooking_2_6
+
+crafting_cooking_3_name BARBEQUE
+crafting_cooking_3_0 i_bird_cooked
+crafting_cooking_3_1 i_chicken_leg
+crafting_cooking_3_2 i_fish_cut_cooked
+crafting_cooking_3_3 i_eggs_fried
+crafting_cooking_3_4 i_lamb_leg
+crafting_cooking_3_5 i_ribs_cooked
+crafting_cooking_3_6 i_bowl_stew_lg
+crafting_cooking_3_7 i_roast_dragons
+
+crafting_cooking_4_name OTHER
+crafting_cooking_4_0 i_tribal_paint
+crafting_cooking_4_1
+
+crafting_cooking_5_name
+crafting_cooking_5_0
+
+//ehchanted
+//chocolatiering
+//beverages
+
+[function f_cooking_source]
+foritems 3
+  if (<type>==t_fire) || (<type>==t_campfire) || (<isevent.t_camp_fire>)
+     return 1
+  endif
+endfor
+return 0
+
+///////////////////////////////
+// Cooking Post Craft
+
+[function f_cooking_prerequisite]	//before the skill is even started
+if !(<f_cooking_source> >= 1)	
+  ctag0.cooking_notice=You must be near a fire source to cook.
+  return 0
+endif
+return 1
+
+
+[function f_cooking_pre_craft]
+
+[function f_cooking_post_craft]
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+
+
+
+[EOF]

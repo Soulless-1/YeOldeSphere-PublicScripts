@@ -1,0 +1,14 @@
+//NPC Variants by Soulless
+//v1.0
+//12:02 AM 1/14/2022
+
+//This will occassionally turn an NPC into a variant about, giving them higher stats, and special abilities, with garunteed loot and a chance for higher 
+//tier loot
+//maybe 1 out of 500 monsters?
+
+[defname npc_variant_settings]	//name,color,strength increase%,event,function
+npc_variant_c_daemon_0		Gateway Daemon,color_o_blackrock,50,e_gateway_daemon
+
+
+
+[EOF]

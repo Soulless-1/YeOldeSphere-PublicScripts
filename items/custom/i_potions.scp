@@ -1,0 +1,563 @@
+//Custom Potions by Soulless
+//v1.0
+//11:39 AM 11/29/2021
+
+[itemdef i_potion_freedom]
+defname=i_potion_freedom
+name=Freedom of Movement
+id=i_bottle_white
+type=t_potion	//t_container
+skillmake=alchemy 15.1
+resources=i_reag_blood_moss, i_bottle_empty
+
+on=@create
+attr |= attr_canuse_paralyzed
+more1=s_freedom
+more2=100.0
+
+//on=@click
+//message <qval (1 < <amount>)?<damount>:> <name>
+//return 1
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is
+  return 1
+endif
+src.consume i_rune_paralyze
+src.consume i_rune_paralyze_field
+src.consume i_memory_paralyzed_char
+src.sound snd_spell_dispel
+src.sound 030
+src.effect=3,i_fx_heal_effect,6,15,1
+consume 1
+serv.newitem i_bottle_empty,1,<src.findlayer.21>
+return 1
+
+[comment]
+on=@dropon_self
+if (<argo.topobj> != <topobj>)
+  return 1
+endif
+if (<argo.baseid> == <baseid>)
+  amount += <argo.amount>
+  argo.consume <argo.amount>
+endif
+
+
+/////////////////
+// Lava Potion //
+/////////////////
+
+[itemdef i_potion_lava]
+defname=i_potion_lava
+id=i_bottle_white
+name=Lava Potion
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_potion_lava
+skillmake=alchemy 1450
+resources=i_reag_spider_silk 50, i_reag_sulfur_ash 50, i_bottle_empty
+
+on=@create
+color=0489
+
+[function f_potion_lava]
+ref1=<uid>
+sound snd_spell_explosion
+for 0 8
+  newitem i_potion_tile_lava
+  new.link=<ref1>
+  new.attr=012
+  new.timer=10
+  new.p=<ref1.p>
+  doswitch <local._for>
+    new.move n
+    new.move ne
+    new.move e
+    new.move se
+    new.move s
+    new.move sw
+    new.move w
+    new.move nw
+  enddo
+  new.effect=2,0398c,6,<eval <new.timer>*20>,0
+  new.effect=2,03996,6,<eval <new.timer>*20>,0
+endfor
+
+
+[itemdef i_potion_tile_lava]
+defname=i_potion_tile_lava
+id=0136e
+name=Lava 
+type=t_script
+
+on=@create
+color=0489
+
+on=@step
+src.damage <R10,30> dam_fire <link>
+src.sound 01dd
+
+/////////////////////
+// Iceblock Potion //
+/////////////////////
+
+[itemdef i_potion_iceblock]
+defname=i_potion_iceblock
+id=i_bottle_white
+name=Iceblock Potion
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_potion_iceblock
+skillmake=alchemy 1450
+resources=i_reag_garlic 33, i_reag_mandrake_root 33, i_reag_spider_silk 33, i_bottle_empty
+
+on=@create
+color=0480
+
+[function f_potion_iceblock]
+ref1=<uid>
+sound 0014
+sound 0210
+for 0 8
+  newitem i_potion_tile_iceblock
+  new.link=<ref1>
+  new.attr=012
+  new.timer=10
+  new.p=<ref1.p>
+  doswitch <local._for>
+    new.move n
+    new.move ne
+    new.move e
+    new.move se
+    new.move s
+    new.move sw
+    new.move w
+    new.move nw
+  enddo
+endfor
+
+[itemdef i_potion_tile_iceblock]
+defname=i_potion_tile_iceblock
+id=01350
+name=Ice
+type=t_script
+
+on=@create
+color=0480
+
+//////////////////////
+// Gas Cloud Potion //
+//////////////////////
+
+[itemdef i_potion_gascloud]
+defname=i_potion_gascloud
+id=i_bottle_white
+name=Gas Cloud Potion
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_potion_gascloud
+skillmake=alchemy 1450
+resources=i_reag_black_pearl 33, i_reag_nightshade 33, i_reag_spider_silk 33, i_bottle_empty
+
+on=@create
+color=044
+ 
+[function f_potion_gascloud]
+ref1=<uid>
+sound 0228
+for 0 8
+  newitem i_potion_tile_gascloud
+  new.link=<ref1>
+  new.attr=012
+  new.timer=10
+  new.p=<ref1.p>
+  doswitch <local._for>
+    new.move n
+    new.move ne
+    new.move e
+    new.move se
+    new.move s
+    new.move sw
+    new.move w
+    new.move nw
+  enddo
+  new.effect=2,0374a,6,<eval <new.timer>*20>,0,0455
+endfor
+
+[itemdef i_potion_tile_gascloud]
+defname=i_potion_tile_gascloud
+id=i_fx_explode
+name=Gas Cloud
+type=t_script
+
+on=@create
+color=044
+
+on=@step
+if (<argn1>==0)
+  src.poison 1500 <link>
+  src.sound <src.sex 1056/785>
+endif
+
+//////////////////////
+// Mass Heal Potion //
+//////////////////////
+
+[itemdef i_potion_massheal]
+defname=i_potion_massheal
+id=i_bottle_white
+name=Mass Heal Potion
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_potion_massheal
+skillmake=alchemy 1450
+resources=i_reag_garlic 25, i_reag_ginseng 25, i_reag_mandrake_root 25 ,i_reag_spider_silk 25, i_bottle_empty
+
+on=@create
+color=0481
+
+[function f_potion_massheal]
+ref1=<uid>
+sound 00ff
+for 0 8
+  newitem i_potion_tile_massheal
+  new.link=<ref1>
+  new.attr=012
+  new.timer=10
+  new.p=<ref1.p>
+  doswitch <local._for>
+    new.move n
+    new.move ne
+    new.move e
+    new.move se
+    new.move s
+    new.move sw
+    new.move w
+    new.move nw
+  enddo
+  new.effect=2,03740,6,<eval <new.timer>*20>,0,0481
+  new.effect=2,03740,6,<eval <new.timer>*20>,0,0481
+endfor
+
+[itemdef i_potion_tile_massheal]
+defname=i_potion_tile_massheal
+id=01822
+name=Mass Heal
+type=t_script
+
+on=@create
+color=0481
+
+on=@step
+src.spelleffect s_greater_heal 1500
+src.sound snd_spell_heal
+
+///////////////////////
+// whirlwhind Potion //
+///////////////////////
+
+[itemdef i_potion_whirlwind]
+defname=i_potion_whirlwind
+id=i_bottle_white
+name=Whirlwhind Potion
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_potion_whirlwind
+skillmake=alchemy 1450
+resources=i_reag_blood_moss 50, i_reag_mandrake_root 50, i_bottle_empty
+
+on=@create
+color=0482
+
+[function f_potion_whirlwind]
+ref1=<uid>
+sound 0015
+sound 0016
+for 0 8
+  newitem i_potion_tile_whirlwind
+  new.link=<ref1>
+  new.attr=012
+  new.timer=10
+  new.p=<ref1.p>
+  doswitch <local._for>
+    new.move n
+    new.move ne
+    new.move e
+    new.move se
+    new.move s
+    new.move sw
+    new.move w
+    new.move nw
+  enddo
+endfor
+
+[itemdef i_potion_tile_whirlwind]
+defname=i_potion_tile_whirlwind
+id=037cc
+name=Whirlwind
+type=t_script
+
+on=@create
+color=0482
+
+on=@step
+src.moveback
+src.sound 015
+
+
+///////////////////////
+// Ice Sheet Potion //
+//////////////////////
+
+[itemdef i_potion_frozenwater]
+defname=i_potion_frozenwater
+id=i_bottle_white
+name=Frozen Water Potion
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_potion_frozenwater
+skillmake=alchemy 1450
+resources=i_reag_garlic 33, i_reag_mandrake_root 33, i_reag_spider_silk 33, i_bottle_empty
+
+on=@create
+color=0480
+
+[function f_potion_frozenwater]
+ref1=<uid>
+sound 0014
+sound 0210
+for 0 8
+  newitem i_potion_tile_frozen_water
+  new.link=<ref1>
+  new.attr=012
+  new.timer=10
+  new.p=<ref1.p>
+  doswitch <local._for>
+    new.move n
+    new.move ne
+    new.move e
+    new.move se
+    new.move s
+    new.move sw
+    new.move w
+    new.move nw
+  enddo
+endfor
+
+[itemdef i_potion_tile_frozen_water]
+defname=i_potion_tile_frozen_water
+id=i_blood_pool_large
+name=Frozen Water
+type=t_script
+
+on=@create
+color=0480
+
+////////////////////
+// Undeath Potion //
+////////////////////
+
+[itemdef i_potion_undeath]
+defname=i_potion_undeath
+id=i_bottle_white
+name=Undeath Potion
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_potion_undeath
+skillmake=alchemy 1450
+resources=i_reag_blood_moss 50, i_reag_mandrake_root 50, i_bottle_empty
+
+on=@create
+color=0455
+
+[function f_potion_undeath]
+ref1=<uid>
+sound 015e
+sound 03ea
+effect=2,i_fx_smoke,6,60,0,0455
+for 8
+  serv.newnpc c_skeleton
+  ref2=<new>
+  new.tag.spawntime=<serv.time>
+  new.events=+e_undead_horror
+  new.flags=statf_conjured
+  new.name=Undead Horror
+  new.color=0455
+  new.home=<ref1.p>
+  new.homedist=6
+  new.dam=20
+  new.movenear <ref1> 2
+  serv.newitem i_undead_horror_memory
+  ref2.equip <new>
+endfor
+
+[events e_undead_horror]
+
+[itemdef i_undead_horror_memory]
+defname=i_undead_horror_memory
+id=i_Memory
+type=t_eq_script
+layer=layer_special
+name=Undead Horror Memory
+
+on=@create
+timer=10
+
+on=@npclookatchar
+if !(<flags>&statf_war)
+  attack <src>
+endif
+
+on=@timer
+cont.hits=0
+return 1
+
+
+///////////////////////////
+// Custom Potion Typedef //
+///////////////////////////
+
+[typedef t_potion_custom]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is
+  return 1
+elseif (<src.findlayer.78>) || (<src.findid.i_potion_wait>)
+  src.sysmessage You can't throw another potion yet
+  return 1
+endif
+
+link=<src>
+
+if (<tag0.throw>)
+  src.sysmessage select target
+  targetg
+  return 1
+endif
+
+on=@targon_ground
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is
+  return 1
+elseif (<src.findlayer.78>) || (<src.findid.i_potion_wait>)
+  src.sysmessage You can't throw another potion yet
+  return 1
+elseif !(<src.canseelos <src.targp>>) 
+  src.sysmessage You can not see your target
+  return 1
+endif
+src.potionwait 15
+serv.newitem <baseid>
+new.link=<link>
+new.attr=010
+new.timer=1
+new.more1=3
+new.p=<src.targp>
+new.effect=0,<id>,6,15,0,<color>,0
+consume 1
+return 1
+
+on=@targon_char
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is
+  return 1
+elseif (<src.findlayer.78>) || (<src.findid.i_potion_wait>)
+  src.sysmessage You can't throw another potion yet
+  return 1
+elseif !(<src.canseelos <src.targp>>) 
+  src.sysmessage You can not see your target
+  return 1
+endif
+
+src.potionwait 15
+serv.newitem <baseid>
+new.link=<link>
+new.p=<src.targp>
+new.attr=010
+new.timer=1
+new.more1=3
+new.p=<src.targp>
+new.effect=0,<id>,6,15,0,<color>,0
+consume 1
+return 1
+
+on=@timer
+if (<tag0.throw>)
+  if (<more1> <= 0)
+    <tag.effect>
+    consume
+  endif
+  say @026 <dmore1>
+  more1 -= 1
+  timer=1
+  return 1
+endif
+
+
+
+
+////////////////////////////
+// Gunpoweder_keg
+
+[itemdef i_gunpowder_keg]
+id=i_keg_wood
+name=Gunpowder Keg
+type=t_potion_custom
+tag.throw=1
+tag.effect=f_gunpowder_keg
+skillmake=alchemy 1450
+resources=15 i_gunpowder_packet, 1 i_keg_small
+
+on=@create
+color=0455
+
+[function f_gunpowder_keg]
+ref1=<args>
+serv.newitem i_memory
+//new.link=<ref1.link>
+new.type=t_nuke
+new.timerms=10
+new.more1=15
+new.more2=<new.more1>
+new.p=<p>
+
+
+[typedef t_nuke]
+
+on=@timer
+ref1=<link>
+if !(<more1>)
+  remove
+  return 1
+endif
+
+circle_effect,i_fire_column,<eval <more2>-<more1>>,0,0489,0
+forchars <eval <more2>-<more1>>
+  effect=3,i_fx_explode,6,15,0,0
+  damage 5 dam_god <ref1>
+endfor
+sound=0222
+sound={011b 011e} 
+more1 -= 1
+timerms=25
+return 1
+
+
+[itemdef i_gunpowder_packet]
+id=i_flour_sack
+name=Gunpowder Packet
+type=t_script
+skillmake=alchemy 1450
+
+on=@create
+color=0386
+
+
+
+
+
+[EOF]
+

@@ -1,0 +1,46 @@
+[SPELL 15]
+DEFNAME=s_protection
+NAME=Protection
+SOUND=snd_spell_protection
+RUNES=US
+CAST_TIME=2.0	//1.0
+RESOURCES=i_reag_garlic,i_reag_ginseng,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_protection
+SCROLL_ITEM=i_scroll_protection
+FLAGS=spellflag_dir_anim|spellflag_good|spellflag_playeronly|spellflag_bless|spellflag_targ_char|spellflag_fx_targ	//|spellflag_scripted		
+EFFECT_ID=i_fx_sparkle
+EFFECT=5,35
+LAYER=layer_spell_protection
+DURATION=2*60.0,3*60.0	//3*60.0,5*60.0
+MANAUSE=6
+SKILLREQ=MAGERY 10.0
+INTERRUPT=100.0,100.0
+
+on=@select
+//if (<src.findid.i_rune_protection>)
+  //src.sysmessage This spell is already in effect.
+  //return 1
+//elseif (<src.findid.i_rune_beneficial_spell_cooldown>) || (<src.findid.i_rune_reactive_armor>) || (<src.findid.i_rune_magic_reflection>)
+  //src.sysmessage This spell will not adhere to you at this time. <qval (<src.findid.i_rune_beneficial_spell_cooldown>)?(<src.findid.i_rune_beneficial_spell_cooldown.dtimer>):>
+  //return 1
+//endif
+
+//Provides a temporary boost to your chances to avoid spell interuption.f
+//Formula: Evaluating Intelligence + Meditation + Inscription /4. With a max duration of 75 seconds. After the spell expires you must wait 60 seconds before casting another beneficial spell.
+//NOTE: on this shard it does + 25 armor	//Evaluating Intelligence + Meditation + Inscription /12.
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval ((<src.evaluatingintel>+<src.meditation>+<src.inscription>)/10)/12>
+effect=3,<serv.spell.15.effect_id>,6,15,1
+//consume i_rune_protection
+//serv.newitem i_rune_protection
+//new.more2=<local.effect>
+//equip <new>
+//new.morex=15
+//events=+e_spell_protection
+//modar += 25
+//f_addbuff 1029,1075814,1070722,75
+//return 1
+
+[EOF]

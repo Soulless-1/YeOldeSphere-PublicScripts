@@ -1,0 +1,634 @@
+//Part of Soulless' function package
+//v1.0
+//11:47 AM 6/23/2021
+
+[comment]
+truedir
+reversetruedir
+backfacing
+moveback
+playmusic
+soundp
+elem_type
+res
+resend_dialog
+make_smoke
+make_fireworks
+actionname
+showlayers
+monster_type		
+statsum			//will return the total sum of all the chars stats
+make_stronger		//will make the NPC stronger by a %
+make_spellcaster	//will make the NPC into a spellcaster with the spell circles specified
+bankcount		//total numbers of items in the bank
+controlslots		//returns an NPCs required control slots
+standingstill		//how long has the char been standing still
+poisonstrength		//returns the level of poison 1-5
+bankconsumegold		//will consume the amount of gold from the players bank account
+removeflags		//removes a flag from the char
+char_bankall		//will bank everything the player is wearing and everything in their bag
+char_destroyall		//destroys everything the player is wearing and has in their bag
+char_repairlayers	//repairs all layers a char is wearing
+char_dyelayers		//dyes all layers a char is wearing
+organizebank		//will organize a bank in general, grouping item types in bags
+potionwait		//will not be able to use a potion for N seconds
+paralyzechar		//will paralyze a char for N seconds
+bleed			//char will bleed for N seconds
+nomove			//prevents movement for N seconds
+recentpvp		//how long since the last time they damaged another player
+turn			//turns the player a specific direction
+setowner		//same as the f_pet_setowner function
+ownercount		//returns the total number of owners a pet had
+noshowonline		//returns 1 if they should not show up online or on the status page
+webcharname		//gets the name if 'noshowonline' isn't true
+webcharfame		//gets the fame if 'noshowonline' isn't true
+webcharkarma		//gets the karma if 'noshowonline' isn't true
+webcharkills		//gets the kills if 'noshowonline' isn't true
+recently_aggrieved	//returns 1 if you were aggrieved within the last 2 minutes by the 'args' player
+setcriminal		//makes the player a criminal for x seconds
+warmode			//puts a char into war mode
+peacemode		//puts a chare into peace mode
+
+[function truedir]
+local.dir=<qval (<isempty <args>>)?<dir>:<argn>>
+doswitch <local.dir>
+  return n
+  return ne
+  return e
+  return se
+  return s
+  return sw
+  return w
+  return nw
+enddo
+
+[function reversetruedir]
+doswitch <argn>
+  return s
+  return sw
+  return w
+  return nw
+  return n
+  return ne
+  return e
+  return se
+enddo
+
+[function backfacing]
+doswitch <dir>
+  return s
+  return sw
+  return w
+  return nw
+  return n
+  return ne
+  return e
+  return se
+  return s
+enddo
+
+[function moveback]
+if (<canmove <backfacing>>)
+  move <backfacing>
+endif
+
+[function playmusic]
+if (<src.isonline>)  
+  src.sendpacket b06d w0 
+  src.sendpacket b06d w<argn> 
+endif
+
+[function soundp]
+//ARGN1: sound_id
+//ARGN2: object playing the sound
+REF1=<ARGN2>
+IF !(<REF1>)
+  REF1=<UID>
+ENDIF
+SENDPACKET 054 B1 W<ARGN1> W0 W<REF1.P.X> W<REF1.P.Y> W<REF1.P.Z>
+
+
+[function elem_type]
+args=<explode _,<baseid>>
+return <argv[2]> <argv[3]>
+
+[function res]
+if (<ischar>) && (<flags>&statf_dead)
+  if !(<isempty <args>>) && (<args> >= 1)
+    trysrc <uid> dialogclose d_resurrect_confirm
+    resurrect 1000
+  else
+    resurrect 
+  endif
+endif
+
+[function resend_dialog]
+if (<isdialogopen.<args>>)
+  dialogclose <args>
+  sdialog <args>
+endif
+
+[function make_smoke]
+serv.newitem i_fx_smoke
+new.attr=attr_decay|attr_move_never
+new.timer=3
+new.p=<p>
+new.nudgeup {1 15}
+dorand 8
+  new.move n
+  new.move ne
+  new.move e
+  new.move se
+  new.move s
+  new.move sw
+  new.move w
+  new.move nw
+enddo
+
+[function make_fireworks]
+serv.newitem i_memory
+new.p=<src.p>
+new.nudgeup=<eval {40 50}> 
+dorand 8
+  new.move n <eval {1 3}>
+  new.move ne <eval {1 3}>
+  new.move e <eval {1 3}>
+  new.move sw <eval {1 3}>
+  new.move w <eval {1 3}>
+  new.move nw <eval {1 3}>
+enddo
+new.effect=0,i_fx_fireball_small,15
+new.effect=2,i_fx_bless_effect,6,60,1,<eval {1 50}>,2
+new.sound 011d
+new.remove
+
+
+[comment function timerfms]	//this was added to the source
+findid.i_memory_timerfs.remove
+serv.newitem i_memory_timerfms
+new.timerms=<argv[0]>
+new.tag0.function=<streat <args>>
+equip <new>
+
+[itemdef i_memory_timerfms]
+defname=i_memory_timerfms
+id=i_memory
+name=timerfms
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+topobj.<tag0.function>
+remove
+return 1
+
+
+[function actionname]
+if (<action> >= 0) && (<action> <= 48) 	
+  return Using <serv.skill.<eval <action> & 0ff>.key>
+elseif (<action> == 100)
+  return Following
+elseif (<action> == 101)
+  return Staying
+elseif (<action> == 102)
+  return Going To
+elseif (<action> == 103)
+  return Wandering
+elseif (<action> == 104)
+  return Looking
+elseif (<action> == 105)
+  return Fleeing
+elseif (<action> == 106)
+  return Talking
+elseif (<action> == 107)
+  return TalkFollow
+elseif (<action> == 108)
+  return Guarding
+elseif (<action> == 109)
+  return Going Home
+elseif (<action> == 110)
+  return Breathing
+elseif (<action> == 111)
+  return Ridden
+elseif (<action> == 112)
+  return Throwing
+elseif (<action> == 113)
+  return Training
+elseif (<action> == 115)
+  return Searching for Food
+elseif (<action> == 116)
+  return Running To
+else
+  return Idling
+endif
+
+[function show_layers]
+for 0 100
+  if (<findlayer.<dlocal._for>>)
+    serv.log <findlayer.<dlocal._for>.name> (<findlayer.<dlocal._for>>)
+  endif
+endfor
+
+[function monster_type]
+if (strmatch(c_orc*,<baseid>))
+  return orc
+elseif (strmatch(c_ratman*,<baseid>))
+  return ratman
+elseif (strmatch(c_lizardman*,<baseid>))
+  return lizardman
+elseif (<baseid>==c_wisp)
+  return wisp
+endif
+
+[function statsum]
+return <eval (<ostr>+<odex>+<oint>)>
+
+[function make_stronger]		//increases by percentage "make_stronger 19" makes npc stronger by 19%
+ref1=<uid>
+if !(<ref1.npc>)
+  serv.log Cannot use 'make_stronger' on player character <ref1name>(<ref1>)
+  return 1
+endif
+ref1.str += <muldiv <argn>,<ref1.str>,100>
+ref1.maxhits += <muldiv <argn>,<ref1.maxhits>,100>
+ref1.hits=<ref1.maxhits>
+ref1.dex += <muldiv <argn>,<ref1.dex>,100>
+ref1.maxstam += <muldiv <argn>,<ref1.maxstam>,100>
+ref1.stam=<ref1.maxstam>
+ref1.int += <muldiv <argn>,<ref1.int>,100>
+ref1.maxmana += <muldiv <argn>,<ref1.maxmana>,100>
+ref1.mana=<ref1.maxmana>
+ref1.modar += <muldiv <argn>,<ref1.armor>,100>
+//ref1.dam=<eval <ref1.dam.lo>+<muldiv <argn>,<ref1.dam.lo>,100>>,<eval <ref1.dam.hi>+<muldiv <argn>,<ref1.dam.hi>,100>>
+for 0 47
+  ref1.<serv.skill.<local._for>.name> += <muldiv <argn>,<ref1.<serv.skill.<local._for>.name>>,100>
+endfor
+ref1.tag0.base_difficulty=<ref1.f_base_difficulty>
+
+[function make_spellcaster]	//'make_spellcaster 2,4' will give them every spell they need from the circles 2 to 4
+ref1=<uid>
+if (<ref1.isitem>)
+  return 1
+endif
+consume i_spellbook
+if !(strlen(<argv[1]>))
+  args=<argv[0]>,<argv[0]>
+endif
+serv.newitem i_spellbook,1,<ref1>
+new.attr=attr_newbie
+
+if (<argv[0]> <= 1) && (<argv[1]> >= 1)		//1st 
+  new.addspell=s_magic_arrow
+  new.addspell=s_heal
+  new.addspell=s_reactive_armor
+endif
+if (<argv[0]> <= 2) && (<argv[1]> >= 2)		//2nd
+  new.addspell=s_cure
+  new.addspell=s_harm	
+  new.addspell=s_protection
+endif
+if (<argv[0]> <= 3) && (<argv[1]> >= 3)		//3rd
+  new.addspell=s_bless
+  new.addspell=s_fireball	
+  new.addspell=s_poison
+  //new.addspell=s_teleport			//use this in specific scenarios with NPCai
+endif
+if (<argv[0]> <= 4) && (<argv[1]> >= 4)		//4th
+  new.addspell=s_greater_heal	
+  new.addspell=s_lightning
+endif
+if (<argv[0]> <= 5) && (<argv[1]> >= 5)		//5th
+  new.addspell=s_magic_reflection
+  //new.addspell=s_paralyze			//use this in specific scenarios with NPCai
+endif
+if (<argv[0]> <= 6) && (<argv[1]> >= 6)		//6th
+  //new.addspell=s_dispel			//use this in specific scenarios with NPCai
+  new.addspell=s_energy_bolt	
+  new.addspell=s_explosion
+  //new.addspell=s_reveal			//use this in specific scenarios with NPCai
+endif
+if (<argv[0]> <= 7) && (<argv[1]> >= 7))		//7th
+  new.addspell=s_flamestrike
+endif
+//if (<argv[0]> <= 8) && (<argv[1]> >= 8))		//8th
+  //if !(<ref1.flags>&statf_conjured)		//summoned monsters should not summon monsters
+    //new.accspell=s_energy_vortex		//there's really nothing 8th circle that monsters should cast
+  //endif
+//endif
+
+for 2
+  local.n=<qval (<argv[1]> < <argv[0]>)?<argv[0]>:<argv[1]>>	//highest circle 
+  if !(<R4>)
+    doswitch <eval (<local.n>-1)>
+      serv.newitem random_first_circle
+      serv.newitem random_second_circle
+      serv.newitem random_third_circle
+      serv.newitem random_fourth_circle
+      serv.newitem random_fifth_circle
+      serv.newitem random_sixth_circle
+      serv.newitem random_seventh_circle
+      serv.newitem random_eighth_circle
+    enddo
+    new.cont=<ref1> 
+  endif
+endfor
+
+[function bankcount]
+ref1=<findlayer.29>
+if !(<ref1>)
+  return 0
+endif
+forcont <ref1> 125
+  local.n += 1
+endfor
+return <local.n>
+
+[function controlslots]
+return <qval (<tag0.controlslots>)?<tag0.controlslots>:1>
+
+[function standingstill]	//in 10th of a second
+return <eval (<serv.time>-<tag0.lastmovedtime>)>
+
+[function poisonstrength]
+ref1=<findid.i_rune_poison>
+if (<ref1.isvalid>)
+  if (<ref1.morey> >= 1000)		//lethal
+    return 5
+  elseif (<ref1.morey> >= 800)		//deadly
+    return 4
+  elseif (<ref1.morey> >= 400) 		//greater
+    return 3
+  elseif (<ref1.morey> >= 200)		//normal
+    return 2
+  else					//lesser
+    return 1
+  endif
+endif
+return 0
+
+[function consumegold]
+forconttype t_gold 
+  if (<amount> <= <argn1>)
+    argn1 -= <amount>
+    remove
+  else
+    consume <argn1>
+    return 1
+  endif
+endwhile
+
+[function newgold]
+if (<argn1> >= 1)
+  for <eval (<argn1>/60000)+1>
+    if (<argn1> >= 60000)
+      serv.newitem i_gold,60000,<uid>
+      argn1 -= 60000
+    else
+      serv.newitem i_gold,<argn1>,<uid>
+      return 1
+    endif
+  endfor
+endif
+
+[function removeflag]
+flags &= ~ <args>
+
+[function char_bankall]
+ref1=<uid>
+serv.newitem i_backpack
+ref2=<new>
+for 24
+  if !(<local._for>==21) && !(<local._for>==16) && !(<local._for>==11)
+    if (<findlayer.<local._for>.isvalid>)
+      findlayer.<local._for>.cont=<ref2>
+    endif
+  endif
+endfor
+forcont <findlayer.21> 99
+  cont=<ref2>
+endfor
+if !(<ref2.count>) 
+  ref2.remove
+  return 1
+endif
+ref2.cont <ref1.findlayer.29>
+ref1.findlayer.29.open
+ref2.open			//this updates all the items placed in the bag
+ref1.findlayer.29.close
+serv.log Moved <ref1.name>'s (<ref1>) possessions into pack (<ref2>) into <ref1.name>'s (<ref1>) bankbox (<ref1.findlayer.29.uid>).
+
+[function char_destroyall]	//careful with this funciton, it will straight up remove ALL the items off the player
+for 24
+  if <findlayer.<local._for>.uid>
+    if !(<local._for>==21) && !(<local._for>==16) && !(<local._for>==11)
+      findlayer.<local._for>.remove
+    endif
+  endif
+endfor
+forcont <findlayer.21>
+  remove
+endfor
+
+[function char_repairlayers]
+for 24
+  if (<findlayer.<local._for>.isvalid>) && !(<local._for>==21) && !(<local._for>==16) && !(<local._for>==11)
+    findlayer.<local._for>.hits=<findlayer.<local._for>.maxhits>
+  endif
+endfor
+
+[function char_dyelayers]
+for 24
+  if (<findlayer.<local._for>.isvalid>) && !(<local._for>==21) && !(<local._for>==16) && !(<local._for>==11) 
+    findlayer.<local._for>.color <argn>
+  endif
+endfor
+
+[function organizebank]
+if !(<isgm>) 
+  sysmessage You may not use that command.
+  return 1
+endif
+ref1=<uid>
+forcont <findlayer.29> 99
+  if (!<local.<type>_bag>) && (<type>!=t_container)	//place similar items into same bag
+    serv.newitem i_backpack
+    new.tag0.item_type=<type>
+    new.cont=<ref1.findlayer.29>
+    local.<type>_bag=<new>
+  endif
+  if (<local.<type>_bag>)
+    cont=<local.<type>_bag>
+  endif
+endfor
+serv.newitem i_backpack
+ref3=<new>
+forcont <findlayer.29> 99	//consolidate bags with only a couple items in them
+  if (<type>==t_container)
+    if (<count> <= 1)
+      ref2=<uid>
+      forcont <ref2> 99
+        cont=<ref3>
+      endfor
+      ref2.remove
+    endif
+  endif
+endfor
+ref3.cont=<ref1.findlayer.29>
+
+[function potionwait]
+ref1=<uid>			//uid of the player
+args=<explode " ",<args>>	//argv0=wait time, argv1=potion type
+serv.newitem i_handr_1
+new.type=t_spell		//was a spell effect
+new.attr=06			//decay + newbie
+new.more1=<argv[1]>
+new.more2=1			//not sure? potions set it though
+new.link=<uid>
+new.equip			//need to equip it before timer is set
+new.layer=50			//potion cooldown layer
+new.timer=<argv[0]>		//time to wait
+
+[function paralyzechar]
+consume i_memory_paralyzed_char
+serv.newitem i_memory_paralyzed_char
+new.equip
+new.timer=<args>
+flags |= statf_freeze
+f_addbuff 1037,1075827,1075828,<args>
+
+[itemdef i_memory_paralyzed_char]
+defname=i_memory_paralyzed_char
+id=i_rune_paralyze
+name=Paralyzed
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+on=@unequip
+src.flags &= ~ statf_freeze
+src.removebuff 1037
+
+[function bleed]
+consume i_bleeding
+serv.newitem i_bleeding
+new.more1=<argv[0]>	//time
+new.more2=<argv[1]>	//strength
+new.link=<argv[2]>	//attacker
+new.equip
+
+[itemdef i_bleeding]
+defname=i_bleeding
+id=i_blood_pool_large
+name=Bleeding
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer=1
+
+on=@timer
+if (<topobj.flags>&statf_dead) || (<more1> <= 0)
+  remove
+  return 1
+endif
+topobj.damage <more2> dam_god <link>
+topobj.f_make_blood 3
+more1 -= 1
+timer=1
+return 1
+
+[function f_make_blood]
+serv.newitem i_memory
+for <argv[0]>
+  new.movenear <uid> 1
+  new.effect=2,{ 0122b 1 0122c 1 0122d 1 0122e 1},1,45,0		
+endfor
+new.remove
+
+[function nomove]		//freeze for 'n' seconds
+tag0.nomovetill=<eval <serv.time>+(<argn>*10)>
+
+[function recentpvp]	//tell us how recently someone damaged another player
+local.recentpvp=<eval (<serv.time>-<ctag0.recentpvp>)>
+return <local.recentpvp>
+
+[function turn]
+ref1=<uid>
+for 7
+  flip
+  if !(strcmpi(<ref1.truedir>,<args>))
+    break
+  endif
+endfor
+
+[function setowner]        // setowner <uid>
+f_pet_setowner <args>
+
+[function ownercount]
+args=<tag0.recent_owners>
+for n 0 <eval (<argv>-1)>
+  if (<argv[<local.n>]> != 0) 
+    local.owners += 1
+  endif
+endfor
+return <local.owners>
+
+[function noshowonline]
+if (<tag0.online_menu_flags>&<def0.online_menu_flag11>) && !((<iscriminal>) || (<ismurderer>))
+  return 1
+endif
+return 0
+
+[function webcharname]
+if !(<noshowonline>)
+  return <name>
+endif
+return (private)
+
+[function webcharfame]
+if !(<noshowonline>)
+  return <fame>
+endif
+return n/a
+
+[function webcharkarma]
+if !(<noshowonline>)
+  return <karma>
+endif
+return n/a
+
+[function webcharkills]
+if !(<noshowonline>)
+  return <kills>
+endif
+return n/a
+
+[function recently_aggrieved]
+ref1=<args>			//aggriever
+ref2=<memoryfind.<ref1>>	//aggrievers memory on victim
+if (<ref2.timer> >= <eval (<serv.AttackerTimeout>-120)>) 
+  return 1
+endif
+return 0
+
+[function setcriminal]
+criminal 1
+findlayer.43.timer=<argn>
+
+[function warmode]
+flags |= statf_war
+
+[function peacemode]
+flags &= ~ statf_war
+
+
+
+
+
+
+
+
+[EOF]

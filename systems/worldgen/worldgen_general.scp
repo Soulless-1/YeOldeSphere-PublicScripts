@@ -1,0 +1,5 @@
+[itemdef i_worldgen_general_blank_entry]
+id=i_deed
+type=t_normal
+
+[EOF]

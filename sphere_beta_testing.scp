@@ -1,0 +1,188 @@
+//Beta Tester Stone by Soulless
+//v1.0
+//dclick stone and you get all skills all stats and a bunch of items in your bank account
+
+[itemdef i_beta_tester_stone]
+id=i_grave_stone
+name=Beta Test Stone
+type=t_script
+
+on=@create
+attr=attr_static
+color=0480
+
+on=@dclick
+sdialog d_beta_tester
+return 1
+
+
+[dialog d_beta_tester]
+150,50
+
+
+page 0
+resizepic 10 10 9200 300 300 
+
+dtext 100 30 100 Beta Tester Boost
+
+dhtmlgump 40 60 250 250 0 0 <def.bfont_black>This stone will set your skills and stats to the maximum allowed. It will also give you a large sum of tools, resources, reags, gold, full spellbook, runebook, etheral mounts, and a selection of other items in your bank; please test them all. Thank you for your support and continued interest in the shard!
+
+dtext 60 210 100 Press okay to boost your char
+//dtext 75 225 100 Press default to reset it
+
+button 40 250 0f2 0f3 1 0 0 
+
+//button 120 250 01456 01457 1 0 2
+
+button 200 250 0f8 0f9 1 0 1
+
+[dialog d_beta_tester button]
+
+onbutton=0
+src.sysmessage You can always come back and use this stone later
+
+onbutton=1
+src.beta_tester_setup
+message @044 Your beta tester items have been deposited in your bank
+
+onbutton=2
+src.beta_tester_reset
+
+
+[function beta_tester_setup]
+strip
+allskills=1000
+str=<serv.skillclass.0.str>
+maxhits=<str>
+dex=<serv.skillclass.0.dex>
+maxstam=<str>
+int=<serv.skillclass.0.int>
+maxmana=<str>
+serv.newitem tm_beta_tester_tools,1,<findlayer.29>
+serv.newitem tm_beta_tester_resources,1,<findlayer.29>
+serv.newitem tm_beta_tester_resources,1,<findlayer.29>
+serv.newitem tm_beta_tester_reags,1,<findlayer.29>
+serv.newitem tm_beta_tester_reags,1,<findlayer.29>
+serv.newitem tm_beta_tester_reags,1,<findlayer.29>
+serv.newitem tm_beta_tester_potions,1,<findlayer.29>
+serv.newitem tm_beta_tester_potions,1,<findlayer.29>
+serv.newitem i_arrow,2500,<findlayer.29>
+serv.newitem i_xbolt,2500,<findlayer.29>
+serv.newitem tm_beta_tester_gold,1,<findlayer.29>
+serv.newitem i_spellbook_full,1,<findlayer.29>
+serv.newitem i_runebook,1,<findlayer.29>
+serv.newitem i_ethereal_mount_selector,1,<findlayer.29>
+serv.newitem i_ethereal_mount_selector,1,<findlayer.29>
+serv.newitem i_ethereal_mount_selector,1,<findlayer.29>
+serv.newitem i_ethereal_mount_selector,1,<findlayer.29>
+serv.newitem i_dye_tub_armor,1,<findlayer.29>
+serv.newitem i_dye_tub_weapon,1,<findlayer.29>
+serv.newitem i_dye_tub_animal,1,<findlayer.29>
+serv.newitem i_dye_tub_book,1,<findlayer.29>
+serv.newitem i_dye_tub_furniture,1,<findlayer.29>
+serv.newitem i_dye_tub_ultimate,1,<findlayer.29>
+serv.newitem i_house_placement_tool,1,<findlayer.29>
+serv.newitem i_clock,1,<findlayer.29>
+serv.newitem i_spyglass,1,<findlayer.29>
+
+
+message @044 You have been given all skills set at 150.0 and all stats set at 100, You do not need to choose a character template
+timerf 10,message @044 In your bank you have been given many items to help you test our PvP, Crafting, Housing, and various systems
+timerf 20,message @044 This world will persist but characters may be removed during server refreshes, at the end we will wipe clean
+
+
+[template tm_beta_tester_gold]
+container=i_box_brass
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_gold,50000
+item=i_coin_silver,50000
+item=i_coin_silver,50000
+item=i_coin_silver,50000
+item=i_coin_silver,50000
+item=i_coin_silver,50000
+
+[template tm_beta_tester_resources]
+container=i_backpack
+color=color_o_silver
+item=i_ingot_iron,2000
+item=i_ingot_old_copper,2000
+item=i_ingot_dull_copper,2000
+item=i_ingot_bronze,2000
+item=i_ingot_copper,2000
+item=i_ingot_gold,2000
+item=i_ingot_rose,2000
+item=i_ingot_agapite,2000
+item=i_ingot_shadow,2000
+item=i_ingot_bloodrock,2000
+item=i_ingot_verite,2000
+item=i_ingot_valorite,2000
+item=i_ingot_blackrock,2000
+item=i_ingot_mytheril,2000
+item=i_hides_cut,2000
+item=i_cloth,2000
+item=i_log,2000
+item=i_scroll_blank,2000
+item=i_bottle_empty,2000
+
+[template tm_beta_tester_tools]
+container=i_backpack
+color=065
+item=i_hammer_smith
+item=i_pickaxe
+item=i_hammer_sledge
+item=i_mortar_pestle
+item=i_pen_and_ink
+item=i_sewing_kit
+item=i_scissors
+item=i_tinker_tools
+item=i_hammer
+item=i_saw
+item=i_fishing_pole
+item=i_hatchet
+
+[template tm_beta_tester_reags]
+container=i_bag
+color=045
+item=i_reag_black_pearl,1000
+item=i_reag_blood_moss,1000
+item=i_reag_garlic,1000
+item=i_reag_ginseng,1000
+item=i_reag_mandrake_root,1000
+item=i_reag_nightshade,1000
+item=i_reag_sulfur_ash,1000
+item=i_reag_spider_silk,1000
+
+[template tm_beta_tester_potions]
+container=i_bag
+color=0da
+item=i_keg_potion
+item=i_potion_agilitygreat,1000
+item=i_potion_curegreat,1000
+item=i_potion_explosiongreat,1000
+item=i_potion_healgreat,1000
+item=i_potion_nightsight,1000
+item=i_potion_poisondeadly,1000
+item=i_potion_refreshtotal,1000
+item=i_potion_strengthgreat,1000
+item=i_potion_manatotal,1000
+item=i_potion_shrink,1000
+
+[EOF]

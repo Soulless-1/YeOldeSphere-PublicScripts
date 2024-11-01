@@ -1,0 +1,32 @@
+[SPELL 12]
+DEFNAME=s_harm
+NAME=Harm
+SOUND=snd_spell_harm
+RUNES=AM
+CAST_TIME=1.0
+RESOURCES=i_reag_nightshade,i_reag_spider_silk
+RUNE_ITEM=i_rune_harm
+SCROLL_ITEM=i_scroll_harm
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_resist
+EFFECT_ID=i_fx_curse
+EFFECT=3,8
+DURATION=0.0
+MANAUSE=6
+SKILLREQ=MAGERY 10.0
+INTERRUPT=100.0,100.0
+
+//Harm is an offensive spell which is harder to resist than Magic Arrow. Damage is instant.
+//Formula: 1D15, 100% Damage at 1 Tile Range, 50% damage at 2 tile range. 25% damage if beyond 2 tiles.
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_physical>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<R5,15>	//<R1,15>
+if (<src.distance <uid>> >= 3)
+  local.effect=<muldiv 25,<local.effect>,100>
+elseif (<src.distance <uid>> >= 2)
+  local.effect=<muldiv 50,<local.effect>,100>
+endif
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+
+[EOF]

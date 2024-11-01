@@ -1,0 +1,26 @@
+//This was taken from the faction system in the script sharing pack that I used as inspiration to make mine
+//It doesn't seem correct even for older versions of the faction system
+
+page 5				//unless we cant to try and continue this we can remove it, keep it for now though
+dtext 220 120 0 CAMPAIGN FOR LEADERSHIP
+
+dtext 170 160 62 Led by : <qval <ref1>?<ref1.name>:Currently there is no leadership>
+dtext 170 180 62 Minimum Score Required : 70
+button 170 205 4005 4007 1 0 7
+dtext 210 205 0 Campaign for Commander position
+button 170 230 4005 4007 1 0 8  
+dtext 210 230 0 Campaign for Sheriff position
+button 170 255 4005 4007 1 0 9 
+dtext 210 255 0 Campaign for Finance Minister position
+
+dtext 170 290 62 Minimum Score Required : 90
+button 170 315 4005 4007 1 0 10
+dtext 210 315 0 Campaign for Faction Leader position
+button 170 340 4005 4007 1 0 11 
+dtext 210 340 0 Campaign for Faction Co-Leader position
+button 170 365 4005 4007 1 0 12 
+dtext 210 365 0 Campaign for Faction Regulator Position
+
+button 460 410 4005 4007 0 6   	//to the standings page
+button 200 410 4014 4016 0 1	//main menu
+dtext 235 410 0 BACK

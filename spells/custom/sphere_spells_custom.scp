@@ -1,0 +1,666 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2007
+//www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: 11-Jan-2006
+
+VERSION=0.56b
+
+
+[Spell 65]
+DEFNAME=s_summon_undead
+NAME=Summon Undead
+SOUND=snd_SPELL_SUMMON_UNDEAD
+RUNES=KNM
+CAST_TIME=200
+RESOURCES=i_reag_blood_moss
+RUNE_ITEM=i_RUNE_ALCHEM_1
+SCROLL_ITEM=i_scroll_X_GREEN2
+FLAGS=SPELLFLAG_TARG_XYZ | SPELLFLAG_SUMMON
+EFFECT_ID=0
+EFFECT=0
+DURATION=2*60.0,3*60.0
+MANAUSE=15
+SKILLREQ=MAGERY 20.0, NECROMANCY 40.0
+INTERRUPT=100.0,100.0
+
+[Spell 66]
+DEFNAME=s_animate_dead
+NAME=Animate Dead
+SOUND=snd_SPELL_ANIMATE_DEAD
+RUNES=IAMG
+CAST_TIME=60
+RESOURCES=i_reag_blood_moss
+RUNE_ITEM=i_RUNE_ALCHEM_2
+SCROLL_ITEM=i_scroll_X_TEAL2
+FLAGS=SPELLFLAG_TARG_ITEM
+EFFECT_ID=0
+EFFECT=0
+DURATION=2*60.0,3*60.0
+MANAUSE=15
+// NOTE: This spell, in past testings, when used on a player corpse, would cause the loss of all players effects upon decay. I suggest code that when used on a player corpse and the player is in the area that it ressurects the player, retains the items, but leaves him controlled by the caster for the duration of the spell, like a pet  :)
+SKILLREQ=MAGERY 20.0, NECROMANCY 40.0
+INTERRUPT=100.0,100.0
+
+[Spell 67]
+DEFNAME=s_bone_armor
+NAME=Bone Armor
+SOUND=snd_SPELL_BONE_ARMOR
+RUNES=ICSY
+CAST_TIME=60
+RESOURCES=i_reag_blood_moss
+RUNE_ITEM=i_RUNE_ALCHEM_3
+SCROLL_ITEM=i_scroll_X_BROWN2
+FLAGS=SPELLFLAG_TARG_OBJ
+EFFECT_ID=0
+EFFECT=0
+DURATION=0.0
+MANAUSE=15
+SKILLREQ=MAGERY 20.0, NECROMANCY 40.0
+INTERRUPT=100.0,100.0
+
+[Spell 68]
+DEFNAME=s_light
+NAME=Light
+SOUND=snd_SPELL_LIGHT
+RUNES=IL
+CAST_TIME=60
+RESOURCES=i_reag_spider_silk,i_reag_sulfur_ash
+RUNE_ITEM=i_light_source
+SCROLL_ITEM=I_SCROLL_X_RED
+FLAGS=SPELLFLAG_TARG_CHAR| SPELLFLAG_GOOD
+EFFECT_ID=0
+EFFECT=0
+DURATION=3*60.0,5*60.0
+MANAUSE=15
+SKILLREQ=MAGERY 20.0, NECROMANCY 40.0
+INTERRUPT=100.0,100.0
+
+[Spell 69]
+DEFNAME=s_fire_bolt
+NAME=Fire Bolt
+SOUND=snd_SPELL_FIRE_BOLT
+RUNES=VFP
+CAST_TIME=60
+RESOURCES=i_reag_black_pearl,i_reag_sulfur_ash,i_reag_nightshade
+RUNE_ITEM=i_rune_FIREBALL
+SCROLL_ITEM=I_SCROLL_X_BLUE
+FLAGS=SPELLFLAG_TARG_CHAR|SPELLFLAG_DIR_ANIM|SPELLFLAG_HARM|SPELLFLAG_FX_BOLT|SPELLFLAG_RESIST|SPELLFLAG_DAMAGE
+EFFECT_ID=i_fx_firesnake
+EFFECT=30,50
+DURATION=0.0
+MANAUSE=15
+SKILLREQ=MAGERY 20.0, NECROMANCY 40.0
+INTERRUPT=100.0,100.0
+
+[Spell 70]
+DEFNAME=s_Hallucination
+NAME=Hallucination
+SOUND=snd_Z_END_MYSTERY1
+RUNES=WN
+CAST_TIME=60
+RESOURCES=i_reag_garlic,i_reag_nightshade
+RUNE_ITEM=i_rune_MIND_BLAST
+SCROLL_ITEM=i_scroll_MIND_BLAST
+FLAGS=SPELLFLAG_TARG_CHAR|SPELLFLAG_DIR_ANIM| SPELLFLAG_HARM | SPELLFLAG_FX_TARG| SPELLFLAG_RESIST |spellflag_tick
+EFFECT_ID=i_fx_curse
+EFFECT=2,5
+DURATION=2*60.0,4*60.0
+MANAUSE=15
+SKILLREQ=MAGERY 20.0, NECROMANCY 40.0
+INTERRUPT=100.0,100.0
+
+// Potions are just spells that have and effect attached at the potion layer.
+// All spells and potion effects can be added to equipped items.
+
+[Spell 71]
+DEFNAME=s_Stone
+NAME=Stone
+FLAGS=SPELLFLAG_TARG_CHAR|SPELLFLAG_DIR_ANIM| SPELLFLAG_HARM | SPELLFLAG_FX_TARG | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+[Spell 72]
+DEFNAME=s_Shrink
+NAME=Shrink
+FLAGS=SPELLFLAG_TARG_CHAR|SPELLFLAG_DIR_ANIM| SPELLFLAG_HARM | SPELLFLAG_FX_TARG | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+[Spell 73]
+DEFNAME=s_Refresh
+NAME=Refresh
+FLAGS=SPELLFLAG_TARG_CHAR | SPELLFLAG_FX_TARG | SPELLFLAG_GOOD | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+EFFECT_ID=i_fx_HEAL_EFFECT
+EFFECT=40,180
+
+on=@effect
+local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<muldiv <eval (<local.spell_strength>/10)>,<maxstam>,100>
+stam += <local.effect>
+stam=<qval (<maxstam> < <stam>)?<maxstam>:<stam>>
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+
+[Spell 74]
+DEFNAME=s_Restore
+NAME=Restore
+FLAGS=SPELLFLAG_TARG_CHAR | SPELLFLAG_FX_TARG | SPELLFLAG_GOOD | SPELLFLAG_PLAYERONLY | SPELLFLAG_SCRIPTED
+RUNE_ITEM=i_RUNE_ALCHEM_3
+EFFECT_ID=i_fx_HEAL_EFFECT
+EFFECT=10,100
+
+on=@effect
+local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+//spelleffect s_heal,<local.spell_strength>,<ref1>,<ref1>
+//spelleffect s_refresh,<local.spell_strength>,<ref1>,<ref1>
+local.hitstamavg=<eval ((<maxhits>+<maxstam>)/2)>
+local.effect=<muldiv <eval (<local.spell_strength>/10)>,<local.hitstamavg>,100>
+//say spellstr: <local.spell_strength> effect: <local.effect> hitstamavg <local.hitstamavg>
+hits += <local.effect>
+stam += <local.effect>
+hits=<qval (<maxhits> < <hits>)?<maxhits>:<hits>>
+stam=<qval (<maxstam> < <stam>)?<maxstam>:<stam>>
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+return 0
+
+[Spell 75]
+DEFNAME=s_Mana
+NAME=Mana
+FLAGS=SPELLFLAG_TARG_CHAR | SPELLFLAG_FX_TARG | SPELLFLAG_GOOD | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+EFFECT_ID=i_fx_HEAL_EFFECT
+EFFECT=10,100
+
+on=@effect
+local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<muldiv <eval (<local.spell_strength>/10)>,<maxmana>,100>
+mana += <local.effect>
+mana=<qval (<maxmana> < <mana>)?<maxmana>:<mana>>
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+
+[Spell 76]
+DEFNAME=s_Sustenance
+NAME=Sustenance
+FLAGS=SPELLFLAG_TARG_CHAR|SPELLFLAG_DIR_ANIM| SPELLFLAG_GOOD | SPELLFLAG_FX_TARG | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+EFFECT_ID=i_fx_HEAL_EFFECT
+EFFECT=4,100
+
+on=@effect
+local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<muldiv <eval <local.spell_strength>/10>,<maxfood>,100>
+food += <local.effect>
+food=<qval (<maxfood> < <food>)?<maxfood>:<food>>
+local.fullness=<muldiv <food>,100,<maxfood>>
+doswitch <eval ((<local.fullness>/20)-1)>
+  sysmessage You drink the potion, but still are extremely hungry.
+  sysmessage You drink the potion, and begin to feel more satiated.
+  sysmessage You drink the potion, you feel much less hungry.
+  sysmessage You feel quite full after drinking the potion.
+  sysmessage You manage to drink the potion, but you are stuffed.
+enddo
+
+[Spell 77]
+// This potion makes your skin match the colors of whatever is behind you.
+DEFNAME=s_Chameleon
+NAME=Chameleon
+FLAGS=SPELLFLAG_TARG_CHAR|SPELLFLAG_DIR_ANIM| SPELLFLAG_HARM | SPELLFLAG_FX_TARG | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+on=@effect
+if (<findid.i_rune_chameleon>)
+  findid.i_rune_chameleon.remove
+else
+  local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+  ref1=<qval (!<argo>)?<src>:<argo>>
+  local.spell_strength=<ref1.f_spell_get_strength>
+  local.effect=<local.spell_strength>
+  local.duration=<eval (<local.effect>/10)>
+  args=<serv.spell.s_chameleon.duration>
+  consume i_rune_chameleon
+  serv.newitem i_rune_chameleon
+  new.morey=<local.effect>
+  new.more1=<muldiv <local.duration>,<argv[1]>,100>
+  new.more1=<qval (<new.more1> < <argv[0]>)?<argv[0]>:<new.more1>>
+  new.equip
+  new.timer=1
+endif
+
+[Spell 78]
+// This potion polymorphs you into an animal for a while.
+DEFNAME=s_BeastForm
+NAME=Beast Form
+FLAGS=SPELLFLAG_HARM| SPELLFLAG_RESIST| SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+on=@effect
+if (<findid.i_rune_beastform>)
+  findid.i_rune_beastform.remove
+else
+  local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+  ref1=<qval (!<argo>)?<src>:<argo>>
+  local.spell_strength=<ref1.f_spell_get_strength>
+  local.effect=<local.spell_strength>
+  local.duration=<eval <local.effect>/10>
+  args=<serv.spell.s_beastform.duration>
+  consume i_rune_beastform
+  serv.newitem i_rune_beastform
+  new.morey=<local.effect>
+  new.more1=<muldiv <local.duration>,<argv[1]>,100>
+  new.more1=<qval (<new.more1> < <argv[0]>)?<argv[0]>:<new.more1>>
+  new.equip
+  new.timer=1
+endif
+
+[Spell 79]
+// This potion polymorphs you into a monster for a while.
+DEFNAME=s_Monster_Form
+NAME=Monster Form
+FLAGS=SPELLFLAG_HARM| SPELLFLAG_RESIST| SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+on=@effect
+if (<findid.i_rune_monster_form>)
+  findid.i_rune_monster_form.remove
+else
+  local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+  ref1=<qval (!<argo>)?<src>:<argo>>
+  local.spell_strength=<ref1.f_spell_get_strength>
+  local.effect=<local.spell_strength>
+  local.duration=<eval (<local.effect>/10)>
+  args=<serv.spell.s_monster_form.duration>
+  consume i_rune_monster_form
+  serv.newitem i_rune_monster_form
+  new.morey=<local.effect>
+  new.more1=<muldiv <local.duration>,<argv[1]>,100>
+  new.more1=<qval (<new.more1> < <argv[0]>)?<argv[0]>:<new.more1>>
+  new.equip
+  new.timer=1
+endif
+
+[Spell 80]
+// This potion permanently lowers one skill.
+DEFNAME=s_Forget
+NAME=Forget
+FLAGS=SPELLFLAG_PLAYERONLY	//	SPELLFLAG_HARM|SPELLFLAG_RESIST| 
+RUNE_ITEM=i_RUNE_ALCHEM_3
+
+on=@effect
+local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<local.spell_strength>
+local.skill=<ref1.morez>
+local.effect=<qval (<<local.skill>> < <local.effect>)?<<local.skill>>:<local.effect>>
+src.<local.skill> -= <local.effect>
+
+[Spell 81]
+// This potion permanently changes your gender.
+DEFNAME=s_Gender_Swap
+NAME=Gender Swap
+FLAGS=SPELLFLAG_HARM| SPELLFLAG_RESIST| SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+on=@effect
+if (<findid.i_rune_gender_swap>)
+  findid.i_rune_gender_swap.remove
+else
+  local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+  ref1=<qval (!<argo>)?<src>:<argo>>
+  local.spell_strength=<ref1.f_spell_get_strength>
+  local.effect=<local.spell_strength>
+  local.duration=<eval <local.effect>/10>
+  args=<serv.spell.s_gender_swap.duration>
+  consume i_rune_gender_swap
+  serv.newitem i_rune_gender_swap
+  new.morey=<local.effect>
+  new.more1=<muldiv <local.duration>,<argv[1]>,100>
+  new.more1=<qval (<new.more1> < <argv[0]>)?<argv[0]>:<new.more1>>
+  new.equip
+  new.timer=1
+endif
+
+[Spell 82]
+// This potion temporarily increases your meditation skill.
+DEFNAME=s_Trance
+NAME=Trance
+FLAGS=SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+EFFECT_ID=i_fx_HEAL_EFFECT
+DURATION=2*60.0,4*60.0
+
+on=@effect
+local.damagetype=(<def.dam_fire>|<def.dam_magic>)
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<local.spell_strength>
+local.duration=<eval (<local.effect>/10)>
+args=<serv.spell.s_trance.duration>
+consume i_rune_trance
+serv.newitem i_rune_trance
+new.morey=<local.effect>
+new.more1=<muldiv <local.duration>,<argv[1]>,100>
+new.more1=<qval (<new.more1> < <argv[0]>)?<argv[0]>:<new.more1>>
+new.equip
+new.timer=1
+
+[Spell 83]
+// This potion turns you into an immobile but untargetable particle system for a while.
+DEFNAME=s_Particle_Form
+NAME=Particle Form
+FLAGS=SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+[Spell 84]
+// This potion erects a temporary force field around you. Nobody approaching will be able to get within 1 tile of you though you can move close to them if you wish.
+DEFNAME=s_Shield
+NAME=Shield
+FLAGS=SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+[Spell 85]
+// This potion turns your skin into steel, giving a boost to your AR.
+DEFNAME=s_Steelskin
+NAME=Steel Skin
+FLAGS=SPELLFLAG_TARG_CHAR | SPELLFLAG_FX_TARG| SPELLFLAG_GOOD | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+EFFECT=4,40
+DURATION=300	//2*60.0,4*60.0
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<local.spell_strength>
+consume i_rune_steelskin
+consume i_rune_stoneskin
+serv.newitem i_rune_steelskin
+new.morey=<local.effect>
+new.more1=<serv.spell.s_steelskin.duration>
+new.equip
+new.timer=1
+
+[Spell 86]
+DEFNAME=s_Stoneskin
+NAME=Stone Skin
+SOUND=010e
+RUNES=SU
+CAST_TIME=0.8
+FLAGS=SPELLFLAG_TARG_CHAR | SPELLFLAG_FX_TARG| SPELLFLAG_GOOD | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_STONESKIN
+SCROLL_ITEM=i_scroll_protection
+EFFECT_ID=037b9
+EFFECT=4,40
+LAYER=layer_special
+DURATION=300	//2*60.0,4*60.0
+MANAUSE=6
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<local.spell_strength>
+consume i_rune_stoneskin
+consume i_rune_steelskin
+serv.newitem i_rune_stoneskin
+new.morey=<local.effect>
+new.more1=<serv.spell.s_stoneskin.duration>
+new.equip
+new.timer=1
+
+[SPELL 87]
+// Regen hit points at fast rate.
+DEFNAME=s_Regenerate
+NAME=Regeneration
+FLAGS=SPELLFLAG_TARG_CHAR | SPELLFLAG_FX_TARG | SPELLFLAG_GOOD | SPELLFLAG_PLAYERONLY |SPELLFLAG_TICK
+RUNE_ITEM=i_RUNE_ALCHEM_3
+DURATION=2*60.0,4*60.0
+
+[SPELL 88]
+// Enchant a weapon or armor.
+// Effect of all enchanted weapons is tied to EFFECT here !
+DEFNAME=s_Enchant
+NAME=Enchantment
+FLAGS=SPELLFLAG_TARG_OBJ | SPELLFLAG_TARG_ITEM | SPELLFLAG_GOOD | SPELLFLAG_PLAYERONLY
+RUNE_ITEM=i_RUNE_ALCHEM_3
+MANAUSE=200
+SKILLREQ=MAGERY 200.0
+EFFECT=1,15
+
+[SPELL 89]
+// Identify an unidentified item.
+DEFNAME=s_identify
+NAME=Identification
+FLAGS=spellflag_targ_item | spellflag_playeronly
+RUNE_ITEM=i_RUNE_ALCHEM_3
+CAST_TIME=1.3
+MANAUSE=200
+SKILLREQ=MAGERY 200.0
+EFFECT=1,15
+SOUND=snd_spell_telekinesis
+EFFECT_ID=i_fx_heal_effect
+
+on=@effect
+src.f_identify_item <uid>
+
+[SPELL 90]
+// Identify an unidentified item.
+DEFNAME=s_freedom
+NAME=Freedom of Movement
+FLAGS=spellflag_good
+RUNE_ITEM=i_RUNE_ALCHEM_3
+CAST_TIME=0.8
+MANAUSE=200
+SKILLREQ=MAGERY 0
+EFFECT=1,15
+SOUND=snd_spell_dispel
+EFFECT_ID=i_fx_heal_effect
+
+on=@effect
+src.consume i_rune_paralyze
+src.consume i_memory_paralyzed_char
+src.effect=3,<serv.spell.s_freedom.effect_id>,6,15,1
+src.sound <serv.spell.s_freedom.sound>
+
+[SPELL 200]
+// Identify an unidentified item.
+DEFNAME=s_buff_hitchance
+NAME=Hitchance Buff
+FLAGS=spellflag_good
+RUNE_ITEM=i_RUNE_ALCHEM_3
+CAST_TIME=0.8
+MANAUSE=200
+SKILLREQ=MAGERY 0
+EFFECT=1,15
+SOUND=	//snd_spell_telekinesis
+EFFECT_ID=i_fx_heal_effect
+
+on=@effect
+src.consume i_rune_paralyze
+src.consume i_memory_paralyzed_char
+src.effect=3,<serv.spell.s_buff_hitchance.effect_id>,6,15,1
+src.consume i_buff_hitchance
+serv.newitem i_buff_hitchance
+new.timer=15*60
+src.equip <new>
+//src.sysmessage You feel more more confident with your <qval (<src.weapon>)?<serv.itemdef.<src.weapon.baseid>.name>:weapon>
+
+[itemdef i_buff_hitchance]
+defname=i_buff_hitchance
+name=Hitchance Buff
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[SPELL 200]
+DEFNAME=s_dragons_breathe
+NAME=Dragon's Breathe
+SOUND=0227	//snd_spell_fireball
+CAST_TIME=1.0
+RUNE_ITEM=i_rune_fireball
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_bolt	//|spellflag_harm|spellflag_damage
+EFFECT_ID=i_fx_fireball
+EFFECT=0
+DURATION=0.0
+MANAUSE=0
+SKILLREQ=magery 0.0
+INTERRUPT=0.0,0.0	//100.0,100.0
+
+ON=@cast
+src.anim 9
+src.sound 362
+
+//This is a dragon shooting a fireball at it's target (also used for nightmare)
+ON=@Effect
+local.damagetype=(<def.dam_fire>|<def.dam_god>)
+local.effect=<eval ({<src.dam>})>
+local.health=<muldiv <src.hits>,100,<src.maxhits>>	//% of health
+local.effect=<muldiv <local.health>,<local.effect>,100>	//do that % of the base damage
+damage <local.effect> <local.damagetype> <src> <src>
+return 0
+
+[SPELL 201]
+DEFNAME=s_frost_bolt
+NAME=Frost Bolt
+SOUND=snd_spell_fireball
+CAST_TIME=3.0
+RUNE_ITEM=i_rune_fireball
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_bolt	//|spellflag_harm|spellflag_damage
+EFFECT_ID=i_fx_fireball
+EFFECT=8,16
+DURATION=0.0
+MANAUSE=0
+SKILLREQ=magery 0.0
+INTERRUPT=0.0,0.0	//100.0,100.0
+
+ON=@cast
+src.anim 9
+
+//This is a bolt of ice that slows it's target for a moment
+ON=@Effect
+local.damagetype=(<def.dam_cold>|<def.dam_god>)
+local.effect=<eval ({<src.dam>})>
+local.health=<muldiv <src.hits>,100,<src.maxhits>>	//% of health
+local.effect=<muldiv <local.health>,<local.effect>,100>	//do that % of the base damage
+local.effectColor=0480
+damage <local.effect> <local.damagetype> <src> <src>
+return 0
+
+[SPELL 202]
+DEFNAME=s_poison_bolt
+NAME=Poison Bolt
+SOUND=snd_spell_fireball
+CAST_TIME=3.0
+RUNE_ITEM=i_rune_fireball
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_bolt	//|spellflag_harm|spellflag_damage
+EFFECT_ID=i_fx_fireball
+EFFECT=8,16
+DURATION=0.0
+MANAUSE=0
+SKILLREQ=magery 0.0
+INTERRUPT=0.0,0.0	//100.0,100.0
+
+on=@cast
+src.anim 9
+
+//This a bolt of poison that is shot at it's target
+ON=@Effect
+local.damagetype=(<def.dam_poison>|<def.dam_god>)
+local.effect=<eval ({<src.dam>})>
+local.health=<muldiv <src.hits>,100,<src.maxhits>>	//% of health
+local.effect=<muldiv <local.health>,<local.effect>,100>	//do that % of the base damage
+local.effectColor=044
+damage <local.effect> <local.damagetype> <src> <src>
+poison <src.poisoning>
+return 0
+
+[SPELL 203]
+DEFNAME=s_evil_bolt
+NAME=Evil Bolt
+SOUND=snd_spell_fireball
+CAST_TIME=3.0
+RUNE_ITEM=i_rune_fireball
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_bolt	//|spellflag_harm|spellflag_damage
+EFFECT_ID=i_fx_fireball
+EFFECT=8,16
+DURATION=0.0
+MANAUSE=0
+SKILLREQ=magery 0.0
+INTERRUPT=0.0,0.0	//100.0,100.0
+
+ON=@cast
+src.anim 9
+
+//This is a bolt of pure evil that poisons its target
+ON=@Effect
+local.damagetype=(<def.dam_fire>|<def.dam_cold>|<def.dam_poison>|<def.dam_god>)
+local.effect=<eval ({<src.dam>})>
+local.health=<muldiv <src.hits>,100,<src.maxhits>>	//% of health
+local.effect=<muldiv <local.health>,<local.effect>,100>	//do that % of the base damage
+local.effectColor=0455
+damage <local.effect> <local.damagetype> <src> <src>
+poison 800
+return 0
+
+[SPELL 204]
+DEFNAME=s_petlist_summon
+NAME=Petlist Summon
+SOUND=snd_spell_recall
+RUNES=PX
+CAST_TIME=6.0
+RESOURCES=0	//i_gold 100	//i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root
+RUNE_ITEM=0
+FLAGS=spellflag_playeronly|spellflag_targ_dead
+EFFECT_ID=i_fx_smoke
+EFFECT=0
+DURATION=0.0
+MANAUSE=0
+SKILLREQ=magery 0.0
+INTERRUPT=0.0,0.0	//100.0,100.0
+
+on=@select
+return 6
+
+on=@cast
+argn2=0
+
+//This is used via the .petlist menu and costs gold
+on=@effect
+go <src.p>
+
+
+
+
+
+
+[EOF]

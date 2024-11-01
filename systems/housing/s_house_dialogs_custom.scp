@@ -1,0 +1,501 @@
+//Housing System by Soulless 
+//v1.0
+//4:11 PM 12/29/2020
+//This is a dialog that works with the same system, though the design of the dialog was taken from an old system once made by BEN_C
+
+
+[DIALOG d_house_menu_custom]
+100,25
+
+PAGE 0
+
+if (<def0.HOUSE_DECO_TOGGLE>)
+  if ((<GETFRIENDPOS <src.uid>> >= 0 && <def0.HOUSE_F_ALLOW_DECO>) || (<GETCOownerPOS <src>> >= 0 && <def0.HOUSE_O_ALLOW_DECO>) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner <src>>))
+    gumppic 150 180 2110
+    dtext 245 360 46 House Decoration
+    button 210 359 2151 2152 1 0 23
+  endif
+endif
+
+gumppic 100 105 1140
+dtext 155 145 105 House Name
+dcroppedtext 255 145 170 20 46 <NAME>
+button 392 310 1147 1148 1 0 0
+dtext 250 290 46 Info
+button 230 310 2151 2152 0 1
+dtext 303 288 46 Options
+button 285 308 2151 2152 0 2
+dtext 362 290 46 Friends
+button 340 310 2151 2152 0 3
+
+PAGE 1			// INFO 
+dtext 155 165 105 Owned by:
+dtext 235 165 995 <owner.NAME>
+
+//dtext 155 190 105 Max locked down items:
+//dtext 335 190 995 <qval (<def0.house_lock_secure_limit>)?<maxlockdowns>:Unlimited>
+dtext 245 190 46 Secure Storage
+dtext 155 220 105 Locked down items:
+dtext 335 220 995 <qval (<def0.house_lock_secure_limit>)?<lockdowns>:Unlimited>
+
+dtext 155 205 105 Max secure containers:
+dtext 335 205 995 <qval (<def0.house_lock_secure_limit>)?<maxstorage>:Unlimited>
+dtext 155 235 105 Secure containers:
+dtext 335 235 995 <qval (<def0.house_lock_secure_limit>)?<GetSecuredContainers>:Unlimited>
+
+if (<def0.house_secure_public>)
+  if (<housetype>==house_public)
+    dtext 155 260 995 This house is open to the public.
+  elseif (<housetype>==house_private)
+    dtext 155 260 995This house is private.
+  elseif (<housetype>==house_guild)
+    dtext 155 260 995 This house is for guild members only.
+  endif
+endif
+
+if (!(<src.isgm>) && !(<owner>==<src.uid>) || (<f_house_isowner <src>>))
+  if (<tag0.forsale>)
+    dtext 410 165 31 For Sale !
+    dtext 410 220 46 Place an
+    dtext 410 245 46 Offer
+    button 395 195 2151 2152 1 0 24
+  endif
+endif
+
+PAGE 3			// Friends
+
+dtext 205 172 995 List
+button 170 170 2151 2152 1 0 21
+dtext 190 192 995 Add
+button 155 190 2151 2152 1 0 22
+dtext 205 212 995 Clear List
+button 170 210 2151 2152 1 0 23
+dtext 190 232 995 Remove
+button 155 230 2151 2152 1 0 24
+if (<GETFRIENDPOS <src.uid>> >= 0) || (<GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner <src>>)
+  dtext 205 252 995 Eject someone from the house
+  button 170 250 2151 2152 1 0 27
+endif
+
+dtext 355 172 995 Friends
+radio 320 170 2151 2153 1 60
+
+dtext 340 192 995 Co-owners
+radio 305 190 2151 2153 0 61
+
+dtext 355 212 995 <qval (<housetype>==house_private)?Guests:Enemies>
+radio 320 210 2151 2153 0 62
+
+page 2			// OPTIONS 
+if (<GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+  dtext 205 172 995 Rename the house sign.
+  button 170 170 2151 2152 0 4
+endif
+
+
+if (<housetype>==house_private)
+  if (<GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+    //dtext 190 192 995 Declare this building public
+    //button 155 190 2151 2152 1 0 3
+  endif
+  if (<GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+    //dtext 205 212 995 Change the house's locks
+    //button 170 210 2151 2152 1 0 4
+  endif
+else
+  if (<GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+    //dtext 190 192 995 Declare this building private
+    //button 155 190 2151 2152 1 0 3
+  endif
+  if (<GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+    dtext 205 212 995 Change the sign type
+    button 170 210 2151 2152 0 5
+  endif
+endif
+
+if (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+  dtext 190 232 995 Transfer house ownership
+  button 155 230 2151 2152 1 0 6
+endif
+if (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+  dtext 205 252 995 Demolish the house
+  button 170 250 2151 2152 0 9
+endif
+
+if (<src.isgm>) 
+  button 400 180 2151 2152 0 11
+  dtext 430 190 46 Staff
+  dtext 430 205 46 Control
+  dtext 430 220 46 Panel
+endif
+if (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>)
+  button 385 200 2151 2152 0 10
+  dtext 388 230 46 Sell
+endif
+
+PAGE 4		// RENAME HOUSE
+gumppic 160 200 1143 
+dtextentry  170 202 250 20 46 0 <NAME> 
+button 200 240 1147 1148 1 0 2
+button 320 240 1144 1145 1 0 1
+
+PAGE 5	//THRU 8	//CHANGE HOUSE SIGN
+local.p=5
+while <local.s> < 106
+  radio <eval 155+(<local.x>*55)> <eval 170+(<local.y>*35)> 2151 2153 0 <local.s>
+  tilepic <eval 175+(<local.x>*55> <eval 172+(<local.y>*35)> <eval 2980+<local.s>>
+  local.s += 2
+  local.x += 1
+  if (<local.x> > 4)
+    local.y += 1
+    if (<local.y> > 2)
+      local.p += 1
+      local.y=
+      button 446 215 9903 9905 0 <local.p>
+      button 380 270 239 240 1 0 5	//apply
+      PAGE=<local.p>
+      button 126 215 9909 9910 0 <eval <local.p>-1>
+    endif
+    local.x=
+  endif
+endwhile
+button 380 270 239 240 1 0 5	//apply
+
+PAGE 9 	// DEMOLISH HOUSE CONFIRMATION
+dtext 195 170 105 Select the OK button to redeed
+dtext 205 190 31 *WARNING* This will delete
+dtext 225 210 31 all locked down items
+button 200 240 1147 1148 1 0 7
+button 320 240 1144 1145 1 0 30
+
+page 10	//SELL HOUSE
+gumppic 160 180 1143 
+dtext 170 182 46 Price:
+dtextentry  210 182 250 20 46 1 <qval <tag.forsale>?<dtag0.forsale>:<value>>
+if (<tag0.forsale>)
+  dtext 270 160 26 For Sale !
+else
+  dtext 260 160 26 Not For Sale
+endif
+dtext 205 212 995 Sell the House
+button 170 210 2151 2152 1 0 8
+dtext 190 232 995 Stop Selling
+button 155 230 2151 2152 1 0 9
+dtext 205 252 995 Accept Best Offer
+button 170 250 2151 2152 1 0 10
+dtext 365 212 995 Best
+dtext 362 227 995 Offer
+dtext 378 242 46 <dtag0.bestoffer>g
+dtext 328 257 46 By:
+dtext 348 257 995 <qval (<uid.<tag0.bestofferer>.isvalid>)?<uid.<tag0.bestofferer>.name>:N/A>
+
+PAGE 11	// STAFF CONTROL PAGE
+dtext 155 230 46 Refresh!
+button 230 228 2151 2152 1 0 11
+dtext 155 170 105 Account of:
+dtext 240 170 995 <owner.account>
+dtext 280 200 995 <EVAL <TIMER>/86400>d, <EVAL <EVAL <TIMER>/3600>-<EVAL <EVAL <TIMER>/86400>*24>>h, <EVAL <EVAL <TIMER>/60>-<EVAL <EVAL <TIMER>/3600>*60>>min
+dtext 155 200 105 House Time left:
+
+page  12 	//list, add, clear, and remove friends,coowners, and enemies.. etc..
+local.x=
+gumppic 150 180 2110
+gumppic 100 105 1140
+dtext 155 145 105 House Name:
+dcroppedtext 255 145 170 20 46 <NAME>
+button 392 310 1147 1148 1 0 0
+dtext 250 290 46 Info
+button 230 310 2151 2152 0 1
+dtext 303 288 46 Options
+button 285 308 2151 2152 0 2
+dtext 362 290 46 Friends
+button 340 310 2151 2152 0 3
+args=<src.ctag.house_list>
+ref1=<owner>
+dtext 225 360 46 <argv[0]> of the House
+if (strlen(<args>))
+  if (<<argv[0]>> > 0)		//if the list has someone on it 
+    if (<argv[2]>==2)			//clearing the list, we need to show a confirm dialog 
+        dtext 185 180 105 Select the OK button to clear <argv[0]>
+        dtext 190 195 105 or Cancel button to abort this action
+        button 200 240 1147 1148 1 0 26			//confirm
+        button 320 240 1144 1145 1 0 25			//cancel
+      else
+      for 0 <eval <<argv[0]>>-1>
+        ref2=<<argv[1]>.<dlocal.c>>
+        if !(<argv[2]>)				//viewing
+          dtext 175 <eval 155+(<local.y>*15)> 1000 *<ref2.name>
+        elseif (<argv[2]>)	//removing, show remove button
+          if (<ref2> != <src>)	//shouldnt be able to remove myself
+            button 155 <eval 160+(<local.y>*15)> 1209 1210 1 0 <eval <local.c>+500>		
+          endif
+          dtext <eval 175+(<local.x>*50)> <eval 155+(<local.y>*15)> 1000 *<ref2.name>
+        endif
+        local.y += 1
+        local.c += 1
+        if (<local.y> > 13)
+          local.x += 1
+          local.y=
+        endif
+      endfor
+    endif
+  endif
+endif
+
+[DIALOG d_house_menu_custom button]
+
+onbutton=1			// cancel house rename
+src.sysmessage You decide not to change the house name.
+sdialog d_house_menu 2
+
+onbutton=2			// rename house
+name=<argtxt[0]>
+link.name=<argtxt[0]>
+link.message <name>
+sdialog d_house_menu 2
+
+onbutton=3				//change house between public and private
+housetype=<qval (<housetype>==house_private)?house_public:house_private>
+if (<housetype>==house_private)
+  src.sysmessage This propery is now private & may only be accessed by co-owners/friends.
+  else
+  src.sysmessage This property is now public and may be accessed by anyone with the key.
+endif
+sdialog d_house_menu 2
+
+onbutton=4			//change door locks
+if (strmatch(*tent*,<baseid>))			//tents aint got no doors lieutenant dan!
+  src.sysmessage This has no doors to change locks!
+  return 1
+endif
+RemoveKeys <src>
+RemoveKeys <src.findlayer.29>
+Addkey <src>,1
+sound 01f4
+
+onbutton=5		
+link.dispid=<eval 2980+<argchkid>>
+link.update
+return 1
+
+onbutton=6			//transfer house to another player
+if (<tag0.demolition>)
+  src.sysmessage this house is scheduled for demolition and can not be traded.
+  return 1
+endif
+src.sysmessage Target the person to whom you wish to give this house.
+src.targetf f_house_trade <uid>
+
+onbutton=7 			// demolish
+ref1=<owner>
+ref2=<uid>	
+ref3=<tag0.guildstone>
+if (<housetype>==house_guild)
+  src.sysmessage This house is a guild house.
+  src.sysmessage You must remove the guild declaration and move the guildstone before you can demolish the building
+  return 1
+endif
+if (<ref3.region.uid>==<ref2>)
+  src.sysmessage You must move the guildstone before you can demolish the building
+  return 1
+endif
+//local.v=<f_house_value>
+//ref1.gold += <local.v>
+movealltocrate 01
+movingcrate.remove
+redeed 0 0
+//src.sysmessage You have been refunded <dlocal.v>gp for this property.
+src.sysmessage The house has been redeeded and placed in your bag
+src.sysmessage The number of houses you own is now <eval <ref1.houses>-1>.
+
+onbutton=8	
+tag0.forsale=<argtxt[1]>	//place the house for sale
+link.color=026
+src.sysmessage The house has been listed for sale at a price of <argtxt[1]> gold.
+sdialog d_house_menu 10
+
+onbutton=9		//take the house off the market
+tag0.forsale=
+link.color=
+src.sysmessage The house has been taken off the market
+sdialog d_house_menu 10
+
+onbutton=10		//accept the current best offer
+ref1=<tag0.bestofferer>
+owner=<ref1>
+if (<ref1.gold> < <tag0.bestoffer>)	//the offer should be validated at the start and gold placed in escrow, check anyways though
+  src.sysmessage This person does not have enough gold to cover the purchase.
+  return 1
+endif
+src.delhouse <uid>
+owner=<ref1>
+delban -1
+delfriend -1
+delaccess -1
+delfriend -1
+ref1.gold -= <tag0.bestoffer>
+serv.newitem i_gold,<tag0.bestoffer>,<src.findlayer.29>
+sound {033 035}
+tag0.lasttransfer=<serv.rtime>
+src.sysmessage You have accepted <ref1.name>'s best offer of <dtag0.bestoffer> gold for your <name> in <region.name>, the money has been placed directly in your bank box.
+ref1.sysmessage <src.name> has accepted your offer of <tag0.bestoffer> gold for <src.sex his/her> house <name> in <region.name>, the gold has been withdrawn from your bank box.
+
+onbutton=11
+timer=<eval (((<def0.house_can_decay>*24)*60)*60)>
+src.sysmessage The house's age and contents have been refreshed.
+return 1
+
+
+onbutton=13		//buy the house for price listed
+owner.sysmessage House sold to <ref1.name> for <argtxt[2]>
+ref1.sysmessage You now own <name> in <region.name>
+
+
+onbutton=21				// display an access list
+if (<argchk[60]>==1)
+  if ((<def0.HOUSE_F_ALLOW_L_FRIEND> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_L_FRIEND> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=Friends,friend,0		//list name, obj, 0=view,1=remove,2=clearing
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't see the friends list
+    return 1
+  endif
+elseif (<argchk[61]>==1)
+  if ((<def0.HOUSE_F_ALLOW_L_owner> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_L_owner> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=Coowners,Coowner,0		//list name, obj, 0=view,1=remove,2=clearing
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't see the co-owners list
+    return 1
+  endif
+elseif (<argchk[62]>==1)
+  if ((<def0.HOUSE_F_ALLOW_L_ENEMY> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_L_ENEMY> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=<qval (<housetype>==house_private)?Accesses:Bans>,<qval (<housetype>==house_private)?access:ban>,0
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't see the <qval (<housetype>==house_private)?guests:enemies> list
+    return 1
+  endif
+endif
+
+onbutton=22				// add a player to an access list
+if (<argchk[60]>==1)
+  if ((<def0.HOUSE_F_ALLOW_A_FRIEND> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_A_FRIEND> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    TARGETF f_house_add_list 2
+    src.sysmessage Target the person you wish to name a friend of your household.
+    return 1
+    else
+    src.sysmessage You can't add new friends.
+    return 1
+  endif
+elseif (<argchk[61]>==1)
+  if ((<def0.HOUSE_F_ALLOW_A_owner> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_A_owner> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    TARGETF f_house_add_list 1
+    src.sysmessage Target the person you wish to name a co-owner of your household.
+    return 1
+    else
+    src.sysmessage You can't add new co-owners.
+    return 1
+  endif
+elseif (<argchk[62]>==1)
+  if ((<def0.HOUSE_F_ALLOW_A_ENEMY> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_A_ENEMY> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    TARGETF f_house_add_list <qval (<housetype>==house_private)?3:4>
+    src.sysmessage Target the individual to name as a <qval (<housetype>==house_private)?guests:enemies> of your household.
+    return 1
+    else
+    src.sysmessage You can't add new <qval (<housetype>==house_private)?guests:enemies>.
+    return 1 
+  endif
+endif
+
+onbutton=23				// clear an access list
+if (<argchk[60]>==1)
+  if ((<def0.HOUSE_F_ALLOW_C_FRIEND> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_C_FRIEND> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=Friends,friend,2		//list name, obj, 0=view,1=remove,2=clearing
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't clear friends list.
+    return 1
+  endif
+elseif (<argchk[61]>==1)
+  if ((<def0.HOUSE_F_ALLOW_C_owner> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_C_owner> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=Coowners,Friend,2		//list name, obj, 0=view,1=remove,2=clearing
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't clear co-owners list.
+    return 1
+  endif
+elseif (<argchk[62]>==1)
+  if ((<def0.HOUSE_F_ALLOW_C_ENEMY> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_C_ENEMY> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=<qval (<housetype>==house_private)?Accesses:Bans>,<qval (<housetype>==house_private)?access:ban>,2
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't clear <qval (<housetype>==house_private)?guests:enemies> list.
+    return 1
+  endif
+endif
+
+onbutton=24				//remove someone from an access list
+if (<argchk[60]>==1)
+  if ((<def0.HOUSE_F_ALLOW_R_FRIEND> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_R_FRIEND> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=Friends,Friend,1		//list name, obj, 0=view,1=remove,2=clearing
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't remove friends.
+    return 1
+  endif
+elseif (<argchk[61]>==1)
+  if ((<def0.HOUSE_F_ALLOW_R_owner> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_R_owner> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=Coowners,Coowner,1		//list name, obj, 0=view,1=remove,2=clearing
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't remove co-owners.
+    return 1
+  endif
+elseif (<argchk[62]>==1)
+  if ((<def0.HOUSE_F_ALLOW_R_ENEMY> && <GETFRIENDPOS <src.uid>> >= 0) || (<def0.HOUSE_O_ALLOW_R_ENEMY> && <GETCOownerPOS <src>> >= 0) || (<src.isgm>) || (<owner>==<src.uid>) || (<f_house_isowner>))
+    src.CTAG0.HOUSE_LIST=<qval (<housetype>==house_private)?Accesses:Bans>,<qval (<housetype>==house_private)?access:ban>,1
+    SDIALOG d_house_menu 12 
+    return 1
+    else
+    src.sysmessage You can't remove <qval (<housetype>==house_private)?guests:enemies>
+    return 1
+  endif
+endif
+
+onbutton=25			//cancel house list clear
+sdialog d_house_menu 3
+src.sysmessage Action canceled.
+
+onbutton=26			//confirm house list clear
+args=<src.ctag0.house_list>
+del<argv[1]>=-1
+sdialog d_house_menu 3
+src.sysmessage The <argv[0]> list has been cleared.
+
+onbutton=500,1000		//remove a player
+argn1 -= 500
+args=<src.ctag0.house_list>,<argn>
+ref1=<<argv[1]>.<argv[3]>>
+src.sysmessage <ref1.name> Removed from the <argv[0]> list
+del<argv[1]> <ref1>
+sdialog d_house_menu 3
+
+onbutton=27				//eject a player from the house
+src.sysmessage Target the individual to eject form this house.
+targetf f_house_eject
+return 1
+
+onbutton=30
+src.sysmessage House demolition canceled
+sdialog d_house_menu 2 
+
+[EOF]

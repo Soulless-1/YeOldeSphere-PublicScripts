@@ -1,0 +1,77 @@
+//https://uo.stratics.com/content/skills/evaluateint_archive.shtml
+//10:51 PM 3/27/2018
+
+[SKILL 16]
+DEFNAME=Skill_EvalInt
+KEY=EvaluatingIntel
+TITLE=Scholar
+FLAGS=skf_scripted
+PROMPT_MSG=Select char to inspect.
+DELAY=1.0
+STAT_STR=5
+STAT_INT=125
+STAT_DEX=10
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=50
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start
+//act = target
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> >= 8)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <act>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif (<act.isitem>) || (<act.int> <= 0)
+  act.message It looks smarter than a rock, but dumber than piece of wood.
+  return 1
+elseif (<act> == <src>)
+  act.message Hmm, that person looks really silly.
+  return 1
+endif
+if !(<src.f_skillsucceed evaluatingintel>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+act.message You cannot quite judge <qval (<act.ishuman>)?<qval <act.ismale>?his:her>:its> mental abilities.
+
+ON=@Abort
+src.sysmessage You fail to inspect the creature completely.
+
+on=@success
+local.int=<eval (<act.int>/10)>
+if (<local.int> > 10)
+  local.int=10
+endif
+doswitch <local.int>
+  local.msg=slightly less intelligent than a rock
+  local.msg=fairly Stupid
+  local.msg=not the brightest
+  local.msg=about Average
+  local.msg=moderately intelligent
+  local.msg=very intelligent
+  local.msg=extremely intelligent
+  local.msg=extraordinarily intelligent
+  local.msg=like a formidable intellect, well beyond even the extraordinary
+  local.msg=like a definite genius
+  local.msg=superhumanly intelligent in a manner you cannot comprehend
+enddo
+
+act.message It looks <local.msg>
+if (<src.evaluatingintel> >= 760)
+  act.message This being is at <muldiv <act.mana>,100,<act.int>>% mental strength
+endif
+
+
+[EOF]

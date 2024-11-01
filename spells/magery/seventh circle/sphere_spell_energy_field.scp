@@ -1,0 +1,29 @@
+[SPELL 50]
+DEFNAME=s_energy_field
+NAME=Energy Field
+SOUND=snd_spell_energy_field
+RUNES=ISG
+CAST_TIME=2.3
+RESOURCES=i_reag_black_pearl,i_reag_mandrake_root,i_reag_spider_silk,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_energy_field
+SCROLL_ITEM=i_scroll_energy_field
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly
+EFFECT_ID=0
+EFFECT=0
+DURATION=1*30.0,2*30.0
+MANAUSE=40
+SKILLREQ=MAGERY 60.0
+INTERRUPT=100.0,100.0
+
+//Creates an impassable field of energy. Longer lasting and longer physical length version of the wall of stone spell, except this wall is made of energy instead of stone. Used mostly to block bridges and other narrow entrance/exit points. Lasts for (2 + (Magery * 0.28)) seconds.
+//Formula: (2 + (Magery * 0.28)) seconds
+ON=@Success
+LOCAL.FieldWidth=5
+
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_energy>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.duration=<eval 2 + <muldiv 28,(<local.spell_strength>/10),100>>
+
+[EOF]

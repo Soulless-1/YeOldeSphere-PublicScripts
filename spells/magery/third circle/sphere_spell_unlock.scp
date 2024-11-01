@@ -1,0 +1,23 @@
+[SPELL 23]
+DEFNAME=s_unlock
+NAME=Magic Unlock
+SOUND=snd_spell_unlock
+RUNES=EP
+CAST_TIME=1.3
+RESOURCES=i_reag_blood_moss,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_unlock
+SCROLL_ITEM=i_scroll_unlock
+FLAGS=spellflag_dir_anim|spellflag_targ_item|spellflag_fx_targ|spellflag_playeronly
+EFFECT_ID=i_fx_heal_effect
+EFFECT=0
+DURATION=0.0
+MANAUSE=9
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+//Unlocks magically locked containers or low level (level one or two) treasure chests. Success on treasure chests depends on the magery skill.
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+
+[EOF]

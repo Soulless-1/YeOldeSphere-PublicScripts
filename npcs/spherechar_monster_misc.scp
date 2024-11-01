@@ -1,0 +1,1635 @@
+//Misc monsters that can't fit into another category go here
+//4:15 AM 4/1/2018
+
+[CHARDEF 08]
+DEFNAME=c_corpser
+NAME=Corpser
+SOUND=684
+ICON=i_pet_CORPSER
+CAN=MT_NONHUM|MT_WALK	//MT_NONMOVER
+dam=10, 23
+armor=18
+RESOURCES=
+FOODTYPE=24 t_meat_raw
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Corpser
+
+ON=@Create
+NPC=brain_monster
+str={156, 180}
+dex={26, 45}
+int={26, 40}
+maxhits={94, 108}
+maxmana={0}
+resphysical={15, 20}
+resfire={15, 25}
+rescold={10, 20}
+respoison={20, 30}
+magicresistance={15.1, 20.0}
+tactics={45.1, 60.0}
+wrestling={45.1, 60.0}
+fame=1000
+karma=-1000
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item={i_log 1 i_board 1},10
+	item=random_reagent,3
+
+
+[CHARDEF 22]
+DEFNAME=c_gazer
+NAME=Gazer
+SOUND=377
+ICON=i_pet_GAZER
+dam=5, 10
+armor=36
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=
+DESIRES=c_gazer
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Gazer
+
+ON=@Create
+NPC=brain_monster
+str={96, 125}
+dex={86, 105}
+int={141, 165}
+maxhits={58, 75}
+resphysical={35, 40}
+resfire={40, 50}
+rescold={20, 30}
+respoison={10, 20}
+resenergy={20, 30}
+evaluatingintel={50.1, 65.0}
+magery={50.1, 65.0}
+magicresistance={60.1, 75.0}
+tactics={50.1, 70.0}
+wrestling={50.1, 70.0}
+fame=3500
+karma=-3500
+make_spellcaster 3,5
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	item=random_reagent,4
+	item=random_potion	
+	//item=i_treasure_map4,R99
+
+[CHARDEF 47]	
+DEFNAME=c_reaper
+NAME=Reaper
+SOUND=442
+ICON=i_pet_REAPER
+dam=9, 11
+armor=40
+RESOURCES=8 i_reag_bone
+FOODTYPE=15 t_meat_raw
+CAN=MT_NONHUM|MT_WALK
+DESIRES=r_foliage
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Reaper
+
+ON=@Create
+NPC=brain_monster
+str={66, 215}
+dex={66, 75}
+int={101, 250}
+maxhits={40, 129}
+resphysical={35, 45}
+resfire={15, 25}
+rescold={10, 20}
+respoison={40, 50}
+resenergy={30, 40}
+evaluatingintel={90.1, 100.0}
+magery={90.1, 100.0}
+magicresistance={100.1, 125.0}
+tactics={45.1, 60.0}
+wrestling={50.1, 60.0}
+fame=3500
+karma=-3500
+make_spellcaster 1,2
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	item={i_log 1 i_board 1},10
+	item=random_reagent,5
+	item=i_reag_dead_wood
+	//item=i_treasure_map2,R99
+
+
+[CHARDEF 023d]
+//T2A ENERGY VORTEX
+//Can't be seen by non-T2A clients, so we need to fix this before it should be used.
+//Regular clients will not be able to see what is attacking them.
+//In the mean time when this monster is summoned it will call monster number 1063, a hand-edited energy vortex.
+DEFNAME=c_vortex
+NAME=Energy Vortex
+CAN=MT_WALK|MT_FLY|MT_RUN|MT_USEHANDS	//|MT_FIRE_IMMUNE
+SOUND=snd_ELEMENTL_AIRELEM5
+ICON=i_FX_Blade_Spirit_1
+DAM=8,10
+ARMOR=10
+FOODTYPE=
+//RESLEVEL=1
+//RESDISPDNID=c_elem_air
+//RESDISPDNHUE=01a2
+BLOODCOLOR=colors_pink
+CATEGORY=Miscellaneous
+SUBSECTION=Blade Spirits
+DESCRIPTION=Energy Vortex
+
+ON=@Create
+	BODY=c_elem_air //Edit Out to be New Style
+	NAME=Energy Vortex
+	COLOR=0d // Edit out to be new style
+	NPC=brain_berserk
+	STR=300
+	DEX=1000
+	INT=1
+	TACTICS=500.0
+	WRESTLING=500.0
+	POISONING=600.0
+	FAME=500
+	KARMA=-100
+        make_spellcaster 3,5
+	ITEMNEWBIE=i_light_source
+	ATTR=attr_magic|attr_newbie
+
+
+[CHARDEF 164]	//01063
+DEFNAME=c_energy_vortex
+NAME=Energy Vortex
+soundnotice=015
+soundidle=015
+sounddie=015
+soundgethit=015
+soundhit=028
+ID=c_elem_air
+ICON=37eb
+DAM=13,17
+ARMOR=40
+CAN=MT_WALK|MT_FLY|MT_RUN|MT_USEHANDS	
+FOODTYPE=
+CATEGORY=Miscellaneous
+SUBSECTION=Blade Spirits
+DESCRIPTION=Energy Vortex
+
+ON=@Create
+	tag.controlslots=2
+	COLOR=076
+	NPC=brain_berserk 
+	str={100 200}
+	dex={150 200}
+	int=100
+	tag.override.moverate=500
+	tag.override.movedelay=250
+	resphysical={60 70}
+	resfire={40 50}
+	rescold={40 50}
+	respoison={40 50}
+	resenergy={90 100}
+	TACTICS=100.0
+	WRESTLING=120.0
+	magicresistance 99.9
+	poisoning=120.0
+	karma=0
+	fame=0
+	make_spellcaster 3,5
+	itemnewbie=i_light_source
+	attr=attr_magic|attr_newbie
+	
+on=@combatadd	
+if (<src.npc>==brain_berserk)
+  return 1
+endif
+
+[CHARDEF 574]
+DEFNAME=c_blade_spirit
+DEFNAME2=blade_spirits
+Name=Blade Spirits
+soundnotice=023a
+soundidle=023a
+sounddie=023a
+soundgethit=023a
+soundhit=03b8
+ICON=i_FX_Blade_Spirit_1
+DAM=10,14
+ARMOR=40
+CAN=MT_WALK|MT_RUN|MT_FLY
+DESCRIPTION=Blade Spirits
+SUBSECTION=Blade Spirits
+CATEGORY=Miscellaneous
+
+ON=@Create
+	tag.controlslots=2
+	NPC=brain_berserk
+	STR=150
+	DEX=150
+	INT=100
+	tag.override.moverate=500
+	tag.override.movedelay=500
+	resphysical={30 40}
+	resfire={40 50}
+	rescold={30 40}
+	respoison=100
+	resenergy={20 30}
+	magicresistance=70.0
+	tactics=90.0
+	wrestling=90.0
+	poisoning=120.0
+	FAME=0
+	KARMA=0
+	
+on=@combatadd	
+if (<src.npc>==brain_berserk)
+  return 1
+endif
+
+
+[CHARDEF 03db]	
+DEFNAME=c_man_gm
+NAME=GM
+ICON=i_pet_MAN
+FOODTYPE=15 t_food, t_fruit
+CAN=MT_EQUIP|MT_WALK|MT_RUN|MT_USEHANDS|MT_SWIM|MT_GHOST
+DESCRIPTION=GM Body
+SUBSECTION=Other Bodies
+CATEGORY=Miscellaneous
+
+ON=@Create
+	STR={130 150}
+	INT={170 190}
+	DEX={100 150}
+
+
+[CHARDEF 23]
+DEFNAME=c_direwolf
+NAME=Dire Wolf
+sound=0e5
+dam=11, 17
+armor=22
+RESOURCES=7 i_hide_spined, 1 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+DESIRES=c_DIREWOLF
+AVERSIONS=r_civilization
+DESCRIPTION=Dire Wolf
+SUBSECTION=Land (Wild)
+CATEGORY=Animals
+
+ON=@Create
+	NPC=brain_animal
+	str={96, 120}
+	dex={81, 105}
+	int={36, 60}
+	maxhits={58, 72}
+	maxmana={0}
+	resphysical={20, 25}
+	resfire={10, 20}
+	rescold={5, 10}
+	respoison={5, 10}
+	resenergy={10, 15}
+	magicresistance={57.6, 75.0}
+	tactics={50.1, 70.0}
+	wrestling={60.1, 80.0}
+	necromancy={18.0}
+	spiritspeak={18.0}
+	fame=2500
+	karma=-2500
+
+[CHARDEF c_hellhound]
+DEFNAME=c_hellhound
+NAME=Hell Hound
+ID=c_wolf
+SOUND=229
+dam=11, 17
+armor=30
+CAN=MT_WALK//|MT_FIRE_IMMUNE
+RESOURCES=1 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=c_HELLHOUND,c_daemon,c_daemon_w_sword
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Hell Hound
+
+ON=@Create
+	NPC=brain_monster
+	str={100, 350}
+	dex={80, 300}
+	int={30, 180}
+	maxhits={130, 300}
+	resphysical={0, 56}
+	resfire={30, 40}
+	respoison={10, 20}
+	resenergy={10, 20}
+	anatomy={0, 5}
+	magicresistance={0, 75}
+	tactics={0, 80}
+	wrestling={0, 80}
+	necromancy={18}
+	spiritspeak={18}
+	fame=3400
+	karma=-3400
+
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=i_reag_sulfur_ash
+
+
+[CHARDEF 01034]
+DEFNAME=c_gazer_elder
+NAME=Elder Gazer
+ID=c_GAZER
+SOUND=snd_MONSTER_GAZER1
+CAN=MT_WALK
+dam=8, 19
+armor=50
+RESOURCES=8 i_ribs_raw
+DESIRES=c_gazer
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Elder Gazer
+
+ON=@Create
+	npc=brain_monster
+	str={296, 325}
+	dex={86, 105}
+	int={291, 385}
+	maxhits={178, 195}
+	resphysical={45, 55}
+	resfire={60, 70}
+	rescold={40, 50}
+	respoison={40, 50}
+	resenergy={40, 50}
+	anatomy={62.0, 100.0}
+	evaluatingintel={90.1, 100.0}
+	magery={90.1, 100.0}
+	magicresistance={115.1, 130.0}
+	tactics={80.1, 100.0}
+	wrestling={80.1, 100.0}
+	fame=12500
+	karma=-12500
+	make_spellcaster 3,5
+
+ON=@NPCRestock
+	ITEM=loot_ELDER_GAZER
+
+
+[CHARDEF 01036]
+DEFNAME=c_hellcat
+NAME=Hellcat
+id=c_panther
+SOUND=0ba
+ICON=i_pet_PANTHER_2
+DAM=6,12
+ARMOR=30
+RESOURCES=i_ribs_raw,i_hide_spined 10
+CAN=MT_WALK
+FOODTYPE=2 t_meat_raw
+DESIRES=c_hellcat,c_daemon,c_daemon_w_sword
+AVERSIONS=r_water,r_civilization
+DESCRIPTION=Hellcat
+SUBSECTION=Miscellaneous
+CATEGORY=Monsters
+
+on=@create
+	npc=brain_monster
+	color={0647 1 0650 1 0659 1 0662 1 066B 1 0674 1}
+	str={51, 100}
+	dex={52, 150}
+	int={13, 85}
+	maxhits={48, 67}
+	//resphysical={25, 35}
+	resfire={80, 90}
+	resenergy={15, 20}
+	magicresistance={45.1, 60.0}
+	tactics={40.1, 55.0}
+	wrestling={30.1, 40.0}
+	necromancy={18.0}
+	spiritspeak={18.0}
+	taming=71.1
+	fame=1000
+	karma=-1000
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+
+[CHARDEF 01037]
+DEFNAME=c_hellcat_pred
+NAME=Predator Hellcat
+ID=c_panther
+SOUND=0ba
+ICON=i_pet_panther_2
+dam=5, 17
+ARMOR=15
+RESOURCES=i_ribs_raw,i_hide_spined 10
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+DESIRES=c_hellcat_pred
+AVERSIONS=r_civilization,r_water
+DESCRIPTION=Predator Hellcat
+SUBSECTION=Miscellaneous
+CATEGORY=Monsters
+
+on=@create
+	npc=brain_monster
+	str={161, 185}
+	dex={96, 115}
+	int={76, 100}
+	maxhits={97, 131}
+	//resphysical={25, 35}
+	resfire={30, 40}
+	resenergy={5, 15}
+	magicresistance={75.1, 90.0}
+	tactics={50.1, 65.0}
+	wrestling={50.1, 65.0}
+	fame=2500
+	karma=-2500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+
+
+[CHARDEF 116]
+DEFNAME=c_nightmare
+NAME=Nightmare
+SOUND=0a8
+ICON=i_pet_horse_brown_dk
+dam=16, 22
+armor=60
+RESOURCES=i_hide_barbed 10, i_ribs_raw 5
+CAN=MT_WALK|MT_RUN
+FOODTYPE=35 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Nightmare
+
+on=@create
+	tag.controlslots=2
+	color=0455
+	npc=brain_monster
+	events=+e_nightmare
+	str={496, 525}
+	dex={86, 105}
+	int={86, 125}
+	maxhits={298, 315}
+	//resphysical={55, 65}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={20, 30}
+	evaluatingintel={10.4, 50.0}
+	magery={10.4, 50.0}
+	magicresistance={85.3, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={80.5, 92.5}
+	taming=95.1
+	fame=14000
+	karma=-14000
+	make_spellcaster 1,8
+
+on=@npcrestock
+	item=i_reag_sulfur_ash
+	ITEM=i_gold,{400 500}
+	item=random_lower_scroll 
+	item=random_potion
+
+[CHARDEF 66]
+DEFNAME=c_swamp_tentacles
+NAME=Swamp Tentacles
+SOUND=353
+ICON=i_pet_CORPSER
+CAN=MT_WALK
+FOODTYPE=24 t_meat_raw
+dam=6, 12
+armor=28
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Swamp Tentacles
+
+on=@create
+	npc=brain_monster
+	str={96, 120}
+	dex={66, 85}
+	int={16, 30}
+	maxhits={58, 72}
+	maxmana={0}
+	//resphysical={25, 35}
+	resfire={10, 20}
+	rescold={10, 20}
+	respoison={60, 80}
+	resenergy={10, 20}
+	magicresistance={15.1, 20.0}
+	tactics={65.1, 80.0}
+	wrestling={65.1, 80.0}
+	fame=3000
+	karma=-3000
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	item=random_reagents
+	
+
+[chardef 778]
+defname=c_gazer_larva
+NAME=Gazer Larva
+SOUND=377
+ICON=i_pet_swarm
+dam=2, 9
+//RESDISPDNID=c_gazer
+//RESLEVEL=2
+RESOURCES=i_ribs_raw
+//RESDISPDNHUE=78
+armor=25
+CAN=MT_USEHANDS|MT_WALK|MT_FLY
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+MOVERATE=90
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Gazer Larva
+
+ON=@Create
+	npc=brain_monster
+	str={76, 100}
+	dex={51, 75}
+	int={56, 80}
+	maxhits={36, 47}
+	//resphysical={15, 25}
+	magicresistance={70.0}
+	tactics={70.0}
+	wrestling={70.0}
+	fame=900
+	karma=-900
+
+ON=@NpcRestock
+	item=i_gold,{25 50}
+
+
+
+[chardef 101]
+defname=c_centaur
+name=Centaur
+SOUND=679
+ICON=i_pet_centaur
+dam=13, 24
+armor=50
+RESOURCES=1 i_ribs_raw,10 i_hide_spined
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Centaur
+MOVERATE=40
+
+ON=@Create
+	npc=brain_monster
+	str={202, 300}
+	dex={104, 260}
+	int={91, 100}
+	maxhits={130, 172}
+	//resphysical={45, 55}
+	resfire={35, 45}
+	rescold={25, 35}
+	respoison={45, 55}
+	resenergy={35, 45}
+	anatomy={95.1, 115.0}
+	archery={95.1, 100.0}
+	magicresistance={50.3, 80.0}
+	tactics={90.1, 100.0}
+	wrestling={95.1, 100.0}
+	fame=6500
+	karma=0
+
+ON=@NpcRestock
+	item=i_gold,{275 325}
+	item=i_arrow,{80 90}
+	item=i_bow
+	item=random_jewel
+
+
+[chardef 788]
+defname=c_Sphynx
+name=Sphynx
+SOUND=0515
+ICON=i_pet_sphynx
+DAM=10, 15
+ARMOR=70
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=50
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Sphynx
+
+ON=@Create
+	NPC=brain_monster
+	str={1001, 1200}
+	dex={176, 195}
+	int={301, 400}
+	//resphysical={60, 80}
+	resfire={30, 50}
+	rescold={40, 60}
+	respoison={40, 50}
+	resenergy={40, 50}
+	wrestling={901, 1000}
+	tactics={901, 1000}
+	magicresistance={1005, 1500}
+	magery={955 1000}
+	anatomy={251, 500}
+	evaluatingintel={901, 1000}
+	meditation={951, 1200}
+	detectinghidden={1000}
+	fame=15000
+	karma=0
+
+on=@npcrestock
+	item=i_gold,{1001 1200}
+
+[chardef 0309]
+defname=c_Doppleganger
+name=Doppleganger
+SOUND=0451
+ICON=i_pet_droppelganger
+//RESDISPDNID=c_zombie
+//RESLEVEL=2
+//RESDISPDNHUE=33
+dam=8, 12
+armor=55
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=50
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Doppleganger
+
+ON=@Create
+	npc=brain_monster
+	str={81, 110}
+	dex={56, 75}
+	int={81, 105}
+	maxhits={101, 120}
+	//resphysical={50, 60}
+	resfire={10, 20}
+	rescold={40, 50}
+	respoison={50, 60}
+	resenergy={30, 40}
+	magicresistance={75.1, 85.0}
+	tactics={70.1, 80.0}
+	wrestling={80.1, 90.0}
+	fame=1000
+	karma=-1000
+
+
+ON=@NpcRestock
+	item=i_gold,{125 150}
+
+
+[chardef 301]
+defname=c_treefellow
+NAME=Treefellow
+soundidle=443
+sounddie=31
+soundhit=672
+ICON=i_pet_treefellow
+dam=12, 16
+resources=i_log {20 35}
+//RESDISPDNID=c_reaper
+//RESLEVEL=3
+//RESDISPDNHUE=0ad
+armor=24
+CAN=MT_WALK
+MOVERATE=40
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Treefellow
+
+ON=@Create
+	npc=brain_monster
+	str={196, 220}
+	dex={31, 55}
+	int={66, 90}
+	maxhits={118, 132}
+	//resphysical={20, 25}
+	rescold={50, 60}
+	respoison={30, 35}
+	resenergy={20, 30}
+	magicresistance={40.1, 55.0}
+	tactics={65.1, 90.0}
+	wrestling={65.1, 85.0}
+	fame=500
+	karma=1500
+
+
+ON=@NpcRestock
+	item=i_gold,{125 175}
+
+
+
+
+[chardef 316]
+defname=c_wanderer_void
+NAME=Wanderer of the Void
+SOUND=377
+ICON=i_pet_wanderervoid
+dam=11, 13
+//RESDISPDNID=c_skeleton
+//RESLEVEL=3
+//RESDISPDNHUE=33
+armor=44
+CAN=MT_USEHANDS|MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Wanderer of the Void
+
+ON=@Create
+	npc=brain_monster
+	str={111, 200}
+	dex={101, 125}
+	int={301, 390}
+	maxhits={351, 400}
+	//resphysical={40, 50}
+	resfire={15, 25}
+	rescold={40, 50}
+	respoison={50, 75}
+	resenergy={40, 50}
+	evaluatingintel={60.1, 70.0}
+	magery={60.1, 70.0}
+	meditation={60.1, 70.0}
+	magicresistance={50.1, 75.0}
+	tactics={60.1, 70.0}
+	wrestling={60.1, 70.0}
+	fame=20000
+	karma=-20000
+	make_spellcaster 1,6
+
+
+ON=@NpcRestock
+	item=i_reag_daemon_bone,50
+	//item=i_treasure_map3,R99
+
+[chardef 264]
+defname=c_Changeling
+name=Changeling
+soundidle=046e
+soundhit=0470
+soundgethit=046d
+sounddie=0471
+soundnotice=046f
+ICON=i_worldgem_bit
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+dam=9, 15
+RESOURCES=15 i_ribs_raw
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP|MT_FLY
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Changeling
+
+ON=@Create
+	npc=brain_monster
+	str={36, 105}
+	dex={212, 262}
+	int={317, 399}
+	maxhits={201, 211}
+	maxstam={212, 262}
+	maxmana={317, 399}
+	//resphysical={81, 90}
+	resfire={40, 50}
+	rescold={40, 49}
+	respoison={40, 50}
+	resenergy={43, 50}
+	wrestling={10.4, 12.5}
+	tactics={101.1, 108.3}
+	magicresistance={121.6, 132.2}
+	magery={91.6, 99.5}
+	evaluatingintel={91.5, 98.8}
+	meditation={91.7, 98.5}
+	//spellweaving{91.6, 99.5}
+	fame=15000
+	karma=-15000
+
+
+ON=@NpcRestock
+	ITEM=random_jewel,{1 4}
+	ITEM=i_gold,{80 130}
+
+[chardef 266]
+defname=c_Dryad
+name=Dryad
+SOUND=057B
+ICON=i_worldgem_bit
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+dam=11, 20
+ARMOR=28
+RESOURCES=1 i_ribs_raw
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Dryad
+
+ON=@Create
+	npc=brain_monster
+	str={132, 149}
+	dex={152, 168}
+	int={251, 280}
+	maxhits={304, 321}
+	//resphysical={40, 50}
+	resfire={15, 25}
+	rescold={40, 45}
+	respoison={30, 40}
+	resenergy={25, 35}
+	meditation={80.0, 90.0}
+	evaluatingintel={70.0, 80.0}
+	magery={70.0, 80.0}
+	anatomy={0}
+	magicresistance={100.0, 120.0}
+	tactics={70.0, 80.0}
+	wrestling={70.0, 80.0}
+	karma=5000
+
+ON=@NpcRestock
+	item=i_gold,{500 750}
+	//item=random_seed
+
+
+
+[chardef 273]
+defname=c_Fetid_Essence
+name=Fetid Essence
+soundnotice=056d
+soundidle=056b
+soundhit=056c
+soundgethit=056c
+sounddie=056e
+ICON=i_worldgem_bit
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+dam=21, 25
+ARMOR=15
+RESOURCES=15 i_ribs_raw
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Fetid Essence
+
+ON=@Create
+	npc=brain_monster
+	str={101, 150}
+	dex={210, 250}
+	int={451, 550}
+	maxhits={551, 650}
+	//resphysical={40, 50}
+	resfire={40, 50}
+	rescold={40, 50}
+	respoison={70, 90}
+	resenergy={75, 80}
+	meditation={91.4, 99.4}
+	evaluatingintel={88.5, 92.3}
+	magery={97.9, 101.7}
+	poisoning={ 100}
+	anatomy={0, 4.5}
+	magicresistance={103.5, 108.8}
+	tactics={81.0, 84.6}
+	wrestling={81.3, 83.9}
+	fame=3700  // Guessed
+	karma=-3700  // Guessed
+
+
+[CHARDEF 246]
+NAME=Bake Kitsune
+DEFNAME=c_bake_kitsune
+soundnotice=04de
+soundidle=04dd
+soundhit=04dc
+soundgethit=04df
+sounddie=04db
+CAN=MT_WALK|MT_RUN|MT_EQUIP
+ICON=i_pet_bakekitsune
+resources=i_hide 30, i_ribs_raw 3
+dam=32, 45
+ARMOR=18
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Bake Kitsune
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+
+ON=@Create
+	tag.controlslots=3
+	npc=brain_monster
+	str={171, 220}
+	dex={126, 145}
+	int={376, 425}
+	maxhits={301, 350}
+	//resphysical={40, 60}
+	resfire={70, 90}
+	rescold={40, 60}
+	respoison={40, 60}
+	resenergy={40, 60}
+	evaluatingintel={80.1, 90.0}
+	magery={80.1, 90.0}
+	magicresistance={80.1, 100.0}
+	tactics={70.1, 90.0}
+	wrestling={50.1, 55.0}
+	taming=80.7
+	fame=8000
+	karma=-8000
+
+on=@npcrestock
+	item=i_gold,{700 1000}
+	item=i_seed_bonsai
+
+
+
+[chardef c_dryad_insane]
+defname=c_dryad_insane
+id=c_dryad
+name=Insane Dryad
+SOUND=057B
+ICON=i_worldgem_bit
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+dam=11, 20
+ARMOR=28
+RESOURCES=1 i_ribs_raw
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Insane Dryad
+
+ON=@Create
+	npc=brain_monster
+	str={132, 149}
+	dex={152, 168}
+	int={251, 280}
+	maxhits={304, 321}
+	//resphysical={40, 50}
+	resfire={15, 25}
+	rescold={40, 45}
+	respoison={30, 40}
+	resenergy={25, 35}
+	meditation={80.0, 90.0}
+	evaluatingintel={70.0, 80.0}
+	magery={70.0, 80.0}
+	anatomy={0}
+	magicresistance={100.0, 120.0}
+	tactics={70.0, 80.0}
+	wrestling={70.0, 80.0}
+	fame=5000
+	karma=-5000
+
+
+[chardef 259]
+defname=c_Interred_Grizzle
+name=Interred Grizzle
+id=259
+soundnotice=0581
+soundidle=0582
+soundhit=0580
+soundgethit=0583
+sounddie=0584
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=16, 19
+
+on=@create
+	npc=brain_monster
+	str={451, 500}
+	dex={201, 250}
+	int={801, 850}
+	maxhits={1500}
+	maxstam={150}
+	//resphysical={35, 55}
+	resfire={20, 65}
+	rescold={55, 80}
+	respoison={20, 35}
+	resenergy={60, 80}
+	meditation={77.7, 84.0}
+	evaluatingintel={72.2, 79.6}
+	magery={83.7, 89.6}
+	poisoning={ 0}
+	anatomy={0}
+	magicresistance={80.2, 87.3}
+	tactics={104.5, 105.1}
+	wrestling={105.1, 109.4}
+	fame=3700  // Guessed
+	karma=-3700  // Guessed
+
+
+
+
+[chardef 0A8]
+defname=c_Shadow_Fiend
+name=shadow fiend
+soundidle=037a
+soundnotice=0379
+sounddie=0381
+soundhit=037f
+soundgethit=0380
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=10, 22
+
+on=@create
+	npc=brain_monster
+	str={46, 55}
+	dex={121, 130}
+	int={46, 55}
+	maxhits={28, 33}
+	maxstam={46, 55}
+	//resphysical={20, 25}
+	resfire={20, 25}
+	rescold={40, 45}
+	respoison={60, 70}
+	resenergy={5, 10}
+	magicresistance={20.1, 30.0}
+	tactics={20.1, 30.0}
+	wrestling={20.1, 30.0}
+	karma=-1000
+
+
+[chardef c_Whipping_Vine]
+defname=c_Whipping_Vine
+name=whipping vine
+id=c_corpser
+dam={7, 25}
+armor=45
+sound=353
+can=mt_walk|mt_run|mt_equip|mt_usehands
+
+on=@create
+	npc=brain_monster
+	color=0851
+	str={251, 300}
+	dex={76, 100}
+	int={26, 40}
+	maxmana={0}
+	//resphysical={75, 85}
+	resfire={15, 25}
+	rescold={15, 25}
+	respoison={75, 85}
+	resenergy={35, 45}
+	magicresistance={70.0}
+	tactics={70.0}
+	wrestling={70.0}
+	fame=1000
+	karma=-1000
+
+on=@npcrestock
+item=i_reag_fertile_dirt,{1 10}
+item=i_reag_executioners_cap
+item={02cf9 02cfc},1,R20
+
+[chardef c_wisp_Crystal]
+defname=c_wisp_Crystal
+id=c_wisp
+name=crystal wisp
+sound=466
+can=mt_walk|mt_run|mt_equip
+dam=17, 18
+armor=40
+tevents=e_wisp_speech
+
+on=@create
+	npc=brain_monster
+	color=0455
+	str={196, 225}
+	dex={196, 225}
+	int={196, 225}
+	maxhits={118, 135}
+	//resphysical={35, 45}
+	resfire={20, 40}
+	rescold={10, 30}
+	respoison={5, 10}
+	resenergy={50, 70}
+	evaluatingintel={80.0}
+	magery={80.0}
+	magicresistance={80.0}
+	tactics={80.0}
+	wrestling={80.0}
+	necromancy={80.0}
+	spiritspeak={80.0}
+	fame=4000
+	karma=-4000
+	make_spellcaster 5,7
+	itemnewbie=i_light_source
+	attr=attr_magic|attr_newbie
+
+on=@npcrestock
+	item=i_gold,{400 500}
+
+
+[chardef c_Wisp_dark]
+defname=c_Wisp_dark
+name=dark wisp
+id=c_wisp
+sound=466
+can=mt_walk|mt_run|mt_equip
+dam=17, 18
+armor=40
+tevents=e_wisp_speech
+
+on=@create
+	npc=brain_monster
+	color=0455
+	str={196, 225}
+	dex={196, 225}
+	int={196, 225}
+	maxhits={118, 135}
+	//resphysical={35, 45}
+	resfire={20, 40}
+	rescold={10, 30}
+	respoison={5, 10}
+	resenergy={50, 70}
+	evaluatingintel={80.0}
+	magery={80.0}
+	magicresistance={80.0}
+	tactics={80.0}
+	wrestling={80.0}
+	necromancy={80.0}
+	spiritspeak={80.0}
+	fame=15000
+	karma=-10000
+	itemnewbie=i_light_source
+	attr=attr_magic|attr_newbie
+
+on=@npcrestock
+	item=i_gold,{400 500}
+	//item=i_treasure_map5,R99
+	item=i_faery_dust
+
+
+[chardef c_Treefellow_feral]
+defname=c_Treefellow_feral
+name=feral treefellow
+id=c_treefellow
+soundidle=443
+sounddie=31
+soundhit=672
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=26, 35
+armor=24
+
+on=@create
+	npc=brain_monster
+	str={1351, 1600}
+	dex={301, 550}
+	int={651, 900}
+	maxhits={1170, 1320}
+	//resphysical={60, 70}
+	rescold={70, 80}
+	respoison={60, 70}
+	resenergy={40, 60}
+	magicresistance={40.1, 55.0}// Unknown
+	tactics={65.1, 90.0}// Unknown
+	wrestling={65.1, 85.0}// Unknown
+	fame=12500  
+	karma=-12500 
+
+on=@npcrestock
+item=i_gold,{1000 1200}
+item=i_log,50
+
+[chardef 721]
+defname=c_Maddening_Horror
+name=maddening horror
+sound=1551
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=15, 27
+
+on=@create
+	npc=brain_monster
+	str={270, 290}
+	dex={80, 100}
+	int={850}
+	maxhits={660}
+	//resphysical={55, 65}
+	resfire={20, 30}
+	rescold={50, 60}
+	respoison={40, 50}
+	resenergy={50, 60}
+	evaluatingintel={120.0, 130.0}
+	magery={120.0, 130.0}
+	meditation={100.0, 110.0}
+	magicresistance={180.0, 195.0}
+	tactics={95.0, 100.0}
+	wrestling={80.0, 85.0}
+	poisoning={ 110.0}
+	detectinghidden={100.0}
+	necromancy={120.0}
+	spiritspeak={120.0}
+	fame=23000
+	karma=-23000
+
+on=@npcrestock
+	item=i_gold,{1600 1800}
+	item=i_vile_tentacles
+
+
+[chardef c_Tangling_Roots]
+defname=c_Tangling_Roots
+name=tangling root
+id=c_corpser
+sound=684
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=10, 23
+armor=18
+
+
+on=@create
+	npc=brain_monster
+	str={157, 189}
+	dex={51, 64}
+	int={26, 39}
+	maxhits={231, 246}
+	maxmana={0}
+	//resphysical={35, 40}
+	rescold={10, 20}
+	respoison={100}
+	resenergy={10, 20}
+	magicresistance={15.1, 20.0}
+	tactics={45.1, 60.0}
+	wrestling={45.1, 60.0}
+	fame=3000
+	karma=-3000
+
+on=@npcrestock
+	item=i_gold,{100 300}
+	item=i_log,{5 10}
+	item=random_reagent,{1 3}
+	item=random_reagent,{1 3}
+
+[chardef 637]
+defname=c_spectral_armor
+name=spectral armor
+soundidle=0200
+sounddie=376A
+soundhit=056
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=10, 22
+armor=18
+
+on=@create
+	color=08026
+	npc=brain_monster
+	str={101, 110}
+	dex={101, 110}
+	int={101, 110}
+	maxhits={178, 201}
+	//resphysical={178, 201}
+	rescold={10, 20}
+	respoison={100}
+	resenergy={10, 20}
+	wrestling={75.1, 100.0}
+	tactics={0.1, 100.0}
+	magicresistance={90.1, 100}
+	fame=7000
+	karma=-7000
+
+on=@npcrestock
+	item=i_gold,{240 375}
+
+
+
+[chardef 284]
+name=armor Steed
+defname=c_armor_steed
+icon=i_pet_horse
+DAM=10,15
+armor=20
+resources=15 i_ribs_raw,10 i_hide
+can=MT_WALK|MT_RUN
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_horse_gray
+foodtype=55 i_ribs_raw
+desires=c_man,c_woman
+aversions=e_carnivores3
+category=New Monsters
+subsection=ML
+description=armored Steed (Mondain's Steed)
+
+ON=@Create
+	str=1042
+	dex=672
+	int=564
+	maxhits=946
+	wrestling=89.0
+	tactics=78.0
+	anatomy=75.6
+
+[CHARDEF 084]
+DEFNAME=c_kirin
+NAME=Kirin
+SOUND=snd_kirin
+ICON=i_pet_kirin
+DAM=10,30
+ARMOR=35
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN
+FOODTYPE=40 t_meat_raw
+DESIRES=e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=40
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_llama	//c_horse_gray
+//RESDISPDNHUE=08037
+CATEGORY=Animals
+SUBSECTION=New Mounts
+DESCRIPTION=Kirin
+
+ON=@Create
+	tag.controlslots=2
+	NPC=brain_animal
+	KARMA=-2000
+	FAME={100 3000}
+	STR={150 200}
+	MAXHITS=300
+	INT={300 340}
+	DEX={90 110}
+	PARRYING={60.0 95.0}
+	MAGICRESISTANCE={99.0 100.0}
+	TACTICS={98.0 100.0}
+	WRESTLING={95.0 100.0}
+	TAMING=105.0
+	MAGERY=125.0
+
+on=@npcrestock
+item=i_gold,{300 350}
+item=random_lower_scroll
+item=random_lower_scroll
+
+
+[CHARDEF 031a]
+DEFNAME=c_swamp_dragon
+NAME=Swamp Dragon
+DAM=7,9
+ARMOR=20
+SOUND=snd_monster_dragon1
+ICON=i_pet_swampdragon
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+RESOURCES=60 i_ribs_raw
+FOODTYPE=80 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+MOVERATE=40
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_horse_gray
+//RESDISPDNHUE=2129
+
+CATEGORY=Monsters
+SUBSECTION=New Mounts
+DESCRIPTION=Swamp Dragon
+
+ON=@Create
+	NPC=brain_animal
+	COLOR=2129
+	KARMA=-2000
+	STR={160 200}
+	DEX={83 92}
+	INT={51 90}
+	FAME={3000 9000}
+	PARRYING={65.0 80.0}
+	MAGICRESISTANCE={65.0 80.0}
+	TACTICS={65.0 90.0}
+	WRESTLING={65.0 80.0}
+	TAMING=100.0
+
+[CHARDEF 031f]
+DEFNAME=c_armored_swamp_dragon
+NAME=Armored Swamp Dragon
+DAM=10,24
+ARMOR=50
+SOUND=snd_monster_dragon1
+ICON=i_pet_swampdragon
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+RESOURCES=60 i_ribs_raw
+FOODTYPE=80 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+MOVERATE=40
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_horse_gray
+CATEGORY=Monsters
+SUBSECTION=New Mounts
+DESCRIPTION=Armoured Swamp Dragon
+
+ON=@Create
+	NPC=brain_animal
+	KARMA=-2000
+	STR={150 230}
+	DEX={73 82}
+	INT={51 90}
+	FAME={3000 9000}
+	PARRYING={65.0 80.0}
+	MAGICRESISTANCE={65.0 80.0}
+	TACTICS={65.0 90.0}
+	WRESTLING={65.0 80.0}
+	TAMING=90.0
+
+[CHARDEF 0bb]
+DEFNAME=c_ridgeback
+NAME=Ridgeback
+SOUND=snd_animal_ostard_desert1
+ICON=i_pet_ridgeback
+DAM=4,12
+ARMOR=9
+ANIM=01fff
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN
+FOODTYPE=55 t_crops, 55 t_fruit, 55 t_grain, 64 t_grass
+DESIRES=e_OSTARDS,c_man,c_woman
+MOVERATE=40
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_llama
+//RESDISPDNHUE=033
+CATEGORY=Monsters
+SUBSECTION=New Mounts
+DESCRIPTION=Ridgeback
+
+ON=@Create
+	NPC=brain_animal
+	KARMA=-2000
+	STR={94 170}
+	DEX={36 55}
+	INT={6 10}
+	PARRYING={35.0 45.0}
+	MAGICRESISTANCE={25.0 30.0}
+	TACTICS={29.0 44.0}
+	WRESTLING={29.0 44.0}
+	TAMING=80.0
+
+[CHARDEF 0bc]
+DEFNAME=c_savage_ridgeback
+NAME=Savage Ridgeback
+SOUND=snd_animal_ostard_frenzied1
+ICON=i_pet_ridgeback
+DAM=8,23
+ARMOR=15
+ANIM=01fff
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN
+FOODTYPE=55 t_crops, 55 t_fruit, 55 t_grain, 64 t_grass
+DESIRES=e_OSTARDS,c_man,c_woman
+MOVERATE=40
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_llama
+//RESDISPDNHUE=033
+CATEGORY=Monsters
+SUBSECTION=New Mounts
+DESCRIPTION=Ridgeback
+
+ON=@Create
+	NPC=brain_animal
+	KARMA=-2000
+	STR={94 170}
+	DEX={96 115}
+	INT={6 10}
+	PARRYING={75.0 85.0}
+	MAGICRESISTANCE={75.0 80.0}
+	TACTICS={79.0 94.0}
+	WRESTLING={79.0 94.0}
+	TAMING=80.0
+
+[CHARDEF 0319]
+DEFNAME=c_skeletal_steed
+NAME=Skeletal Mount
+SOUND=snd_monster_skletn1
+ICON=i_pet_skeletalmount
+DAM=18,22
+ARMOR=30
+RESOURCES=25 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN
+FOODTYPE=40 t_meat_raw
+DESIRES=e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=60
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_horse_gray
+//RESDISPDNHUE=08097
+CATEGORY=Monsters
+SUBSECTION=New Mounts
+DESCRIPTION=Skeletal Mount
+
+ON=@Create
+	tag.controlslots=2
+	NPC=brain_animal
+	KARMA=-2000
+	FAME={100 2000}
+	STR={200 230}
+	INT={300 340}
+	DEX={86 105}
+	PARRYING={55.0 95.0}
+	MAGICRESISTANCE={99.0 100.0}
+	TACTICS={98.0 100.0}
+	WRESTLING={90.0 93.0}
+	TAMING=105.0
+	MAGERY=100.0
+
+[CHARDEF 07a]
+DEFNAME=c_unicorn
+NAME=Unicorn
+SOUND=snd_animals_horse1
+ICON=i_pet_unicorn
+DAM=10,15
+ARMOR=20
+RESOURCES=3 i_ribs_raw,10 i_hide_horned
+CAN=MT_WALK|MT_RUN
+FOODTYPE=55 t_crops, 55 t_fruit, 55 t_grain, 64 t_grass
+DESIRES=e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=40
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_horse_gray
+//RESDISPDNHUE=08254
+CATEGORY=Monsters
+SUBSECTION=New Mounts
+DESCRIPTION=Unicorn
+
+ON=@Create
+	tag.controlslots=2
+	NPC=brain_animal
+	KARMA=-2000
+	FAME=3000
+	STR={100 150}
+	INT={200 240}
+	DEX={100 150}
+	PARRYING={40.0 50.0}
+	MAGICRESISTANCE={25.0 30.0}
+	TACTICS={30.0 50.0}
+	WRESTLING={45.0 60.0}
+	MAGERY=90.0
+	TAMING=80.0
+
+on=@npcrestock
+item=i_gold,{300 350}
+item=random_lower_scroll
+item=random_potion
+
+
+
+[EOF]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

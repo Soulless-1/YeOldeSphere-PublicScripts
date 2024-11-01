@@ -1,0 +1,1244 @@
+//Bomberman Game by Soulless 
+//v1.0
+//4:28 PM 9/12/2017
+//Let's players join a bomberman match with up to 3 other players
+
+[defname bomberman_settings]
+bomberman_explosion_dist	2	//base desistance explosions will go
+bomberman_powerup_timer		10	//how long they stay on ground, and how long the power lasts
+
+[events e_bomberman]
+
+on=@itemdclick
+if (<act.baseid> != i_bomberman_bomb) && (<act> != <findlayer.21>)
+  sysmessage You can only use bomberman bombs
+  return 1
+endif
+
+on=@skillstart
+sysmessage no skill usage during bomberman
+return 1
+
+on=@spellcast
+sysmessage no spells during bomberman
+return 1
+
+on=@gethit
+src.sysmessage no combat during bomberman
+return 1
+
+on=@logout
+src.findid.i_bomberman.remove
+
+
+//////////////////////////////////////////
+// Bomberman stone to join
+
+[itemdef i_bomberman_stone]
+id=i_grave_stone
+type=t_script
+name=Bomberman Join Stone
+
+on=@create
+attr=attr_move_never
+color=0b78
+
+on=@click
+if !(<tag0.bomberman_match>)
+  message [Open]
+elseif (<tag0.bomberman_match>==1)
+  message [Looking for Players]
+elseif (<tag0.bomberman_match>==2)
+  message [Match in Progress]
+endif
+message <name>
+return 1
+
+on=@dclick
+if !(<tag0.bomberman_player1_spot>)
+  tag0.bomberman_player1_spot=<eval <p.x>+1>,<eval <p.y>+1>,<eval <p.z>-5>,<p.m>
+  tag0.bomberman_player2_spot=<eval <p.x>+15>,<eval <p.y>+1>,<eval <p.z>-5>,<p.m>
+  tag0.bomberman_player3_spot=<eval <p.x>+1>,<eval <p.y>+15>,<eval <p.z>-5>,<p.m>
+  tag0.bomberman_player4_spot=<eval <p.x>+15>,<eval <p.y>+15>,<eval <p.z>-5>,<p.m>
+  src.sysmessage Initialized..
+endif
+sdialog d_bomberman
+return 1
+
+on=@timer	
+if (<tag0.bomberman_players> <= 1)	//cancel the match not enough players joined
+  tag0.bomberman_match=
+  tag0.bomberman_players=
+  for 4
+    tag0.bomberman_player<dlocal._for>=
+  endfor
+  say Bomberman match canceled because there was not enough players
+  return 1
+endif
+
+tag0.bomberman_match=2		//begin the match if atleast two players joined
+for 1 4
+  ref1=<tag0.bomberman_player<dlocal._for>>
+  if (<ref1>)
+    serv.newitem i_bomberman
+    new.link=<uid>
+    new.more1=<dlocal._for>
+    ref1.equip <new>
+    serv.newitem i_bomberman_bomb,50
+    new.cont=<ref1.findlayer.21>
+	new.update
+    ref1.go <tag0.bomberman_player<dlocal._for>_spot>
+  endif
+endfor
+say The bomberman match has begun with <dtag0.bomberman_players> players, have fun!
+return 1
+
+//////////////////////////////////////
+// Functions to clear arena and reset
+
+[function reset_bomberman_arena]
+foritems 20
+  if (<baseid>==i_bomberman_block)
+    timer=<R1,3>
+  endif
+endfor
+
+[function blank_bomberman_arena]
+foritems 20
+  if (<baseid>==i_bomberman_block2)
+    remove
+  endif
+endfor
+
+[function remove_bomberman_arena]
+foritems 20
+  if (<baseid>==i_bomberman_block) || (<baseid>==i_bomberman_block2) || (<baseid>==i_floor_marble_3) || (<baseid>==i_bomberman_block_outside) 
+    tag.multicomponent=
+    remove
+  endif
+endfor
+
+
+////////////////////////////////
+// Bomberman Join Stone Dialog
+
+[dialog d_bomberman]
+150,75
+
+page 0
+
+resizepic 10 10 9200 220 270 
+//checkertrans 20 20 200 250 
+dtext 90 30 100 Bomberman
+
+resizepic 30 50 3000 180 180
+if <tag0.bomberman_match>==2
+  dhtmlgump 35 50 170 170 0 0 A bomberman match is currently in progress with <dtag0.bomberman_players> players, please wait till they finish
+  else
+    if (<tag0.bomberman_player1>==<src>) && (<tag0.bomberman_players> >= 2)
+    dhtmlgump 35 50 170 170 0 0 There are currently <dtag0.bomberman_players> players qeued and ready, would you like to force start the match?
+    else
+    dhtmlgump 35 50 170 170 0 0 <qval <tag0.bomberman_match>?There is currently a bomberman match with <dtag0.bomberman_players> players qeued and ready. The match will begin in <dtimer> seconds, would you like to join?:Would you like to start a new bomberman match?>
+  endif
+  button 35 240 242 243 1 0 0
+  button 145 240 247 248 1 0 1
+endif
+
+[dialog d_bomberman button]
+
+onbutton=0
+
+onbutton=1
+if (<tag0.bomberman_players> >= 4)
+  src.sysmessge This bomberman game is currently fully, please wait for the next match
+  return 1
+endif
+
+if !(<tag0.bomberman_match>)		//start a new match, no matchmaking currently happening
+  for 4
+    tag0.bomberman_player<dlocal._for>=
+  endfor
+  tag0.bomberman_match=1
+  tag0.bomberman_players=1
+  tag0.bomberman_player<dtag0.bomberman_players>=<src>
+  timer=300
+  say <src.name> has started a bomberman match, Join <src.sex him/her>, the match will begin in <dtimer> seconds.
+  return 1
+endif
+
+if (<tag0.bomberman_match>==1)			//game is currently in matchmaking process
+  if (<tag0.bomberman_players> >= 2) && (<src>==<tag0.bomberman_player1>)		//force start the match if its the player who initiated the game
+    timer=1
+    say <src.name> has force started the match, have fun!
+    return 1
+  endif
+  for 4
+    if <tag0.bomberman_player<dlocal._for>>==<src>
+      src.sysmessage You've already queued up for this match.
+      return 1
+    endif
+  endfor
+  tag0.bomberman_players += 1
+  tag0.bomberman_player<dtag0.bomberman_players>=<src>
+  say <src.name> has joined the bomberman match.
+  return 1
+endif
+
+if (<tag0.bomberman_match>==2)	//already in a match, don't allow any actions
+  src.sysmessage There is a bomberman match currently going on, please wait for it to finish.
+  return 1
+endif
+
+///////////////////////////////
+// Memory Items and Powerups
+
+
+[itemdef i_bomberman]
+id=i_memory
+type=t_eq_script
+name=Bomberman Match Memory
+layer=layer_special
+
+on=@create
+timer=900
+
+on=@equip
+src.dismount
+src.events=+e_bomberman
+
+on=@unequip
+link.tag0.bomberman_player<dmore1>=
+link.tag0.bomberman_players -= 1
+if (<link.tag0.bomberman_players> < 2)
+  for 1 4
+    ref1=<link.tag0.bomberman_player<dlocal._for>>
+    if (<ref1>)
+      ref1.findid.i_bomberman.remove
+      ref1.reset_bomberman_arena
+      link.say the bomberman match is over, the winner was <ref1.name>
+    endif
+  endfor
+  link.tag0.bomberman_match=
+endif
+src.consume 65535 i_bomberman_bomb
+if (<src.findid.i_bomberman_powerup_speed.isvalid>)
+  src.findid.i_bomberman_powerup_speed.remove
+endif
+src.events=-e_bomberman
+src.p=<link.p>
+src.move nw 2
+src.updatex
+
+on=@timer
+link.tag0.bomberman_match=
+cont.sysmessage the bomberman match has expired due to length of time spent in the arena.
+remove
+return 1
+
+
+/////////////////////////////////////////
+// Bomberman bomb, charge, and explosion
+
+[itemdef i_bomberman_bomb]
+id=i_bag
+name=Bomb
+type=t_script
+weight=0
+
+on=@create
+color=0489
+attr=attr_newbie
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is.
+  return 1
+endif
+
+if !(<src.isevent.e_bomberman>)
+  src.sysmessage You can't use this outside the bomberman arena.
+  return 1
+endif
+
+consume 1
+serv.newitem i_bomberman_charge
+new.link=<src>
+new.tag0.range += <src.findid.i_bomberman.tag0.range>
+new.p=<src.p>
+serv.newitem i_bomberman_fuse
+new.p=<src.p>
+new.z += 3
+return 1
+
+[itemdef i_bomberman_charge]
+id=02256
+type=t_script
+name=Bomb Charge
+
+on=@create
+color=01
+attr=attr_move_never
+more1=2
+timer=1
+
+on=@timer
+more1 -= 1
+timer=1
+if !(<more1>)
+effect=2,i_fx_explode,6,15,1
+sound snd_spell_explosion
+for 0 3
+  serv.newitem i_bomberman_explosion
+  doswitch <local._for>
+    new.tag0.dir=n
+    new.tag0.dir=e
+    new.tag0.dir=s
+    new.tag0.dir=w
+  enddo
+  new.p=<p>
+  new.z -= 5
+  new.tag0.range += <tag0.range>
+  //new.bomberman_explosion
+  new.timerms=10
+endfor
+remove
+endif
+return 1
+
+[itemdef i_bomberman_fuse]
+id=i_candle_lg_lit
+name=Bomberman Fuse
+type=t_script
+
+on=@create
+color=01
+timer=2
+
+on=@timer
+remove
+return 1
+
+//explosion that moves outward
+
+[itemdef i_bomberman_explosion]
+id=i_memory
+type=t_script
+name=Bomberman Explosion
+
+on=@create
+attr=attr_move_never
+
+on=@timer
+bomberman_explosion <uid>
+if (<more1> >= <eval <def0.bomberman_explosion_dist>+<tag0.range>>)
+  remove
+  return 1
+endif
+more1 += 1
+move <tag0.dir> 1
+effect=2,i_fx_explode,6,15,0
+timerms=75
+return 1
+
+[function bomberman_explosion]
+ref1=<args>
+foritems 0
+  if (<baseid>==i_bomberman_block) || (<baseid>==i_bomberman_block_outside)
+    ref1.remove
+    elseif <baseid>=i_bomberman_block2
+    if !(<R4>)
+      serv.newitem {i_bomberman_powerup_bombs 1 i_bomberman_powerup_speed 1 i_bomberman_powerup_range 1}
+      new.p=<p>
+    endif
+    remove
+    ref1.remove
+    return 1
+  endif
+endfor
+forchars 0
+  bark 4
+  findid.i_bomberman.link.say <name> was blown up!!
+  findid.i_bomberman.remove
+endfor
+
+////////////////////////////////////
+// Various blocks to build arena
+
+[itemdef i_bomberman_block_outside]
+id=i_stairs_marble
+type=t_script
+name=Bomberman Arena
+can=can_i_block
+
+on=@step
+if !(<src.isgm>) 
+  src.moveback
+endif
+return 1
+
+on=@create
+color=0482
+attr=attr_move_never
+
+[itemdef i_bomberman_block]
+id=i_stairs_marble
+type=t_script
+name=Block
+can=can_i_block
+
+on=@step
+if !(<src.isgm>) 
+  src.moveback
+endif
+return 1
+
+on=@create
+color=0482
+attr=attr_move_never
+timer=1
+
+on=@timer
+for 0 7
+  if !<R2>
+    serv.newitem i_bomberman_block2
+    new.p=<p>
+    doswitch <local._for>
+      new.move n 1
+      new.move ne 1
+      new.move e 1
+      new.move se 1
+      new.move s 1
+      new.move sw 1
+      new.move w 1
+      new.move nw 1
+    enddo
+    new.bomberman_duplicate_blocks
+  endif
+endfor
+return 1
+
+[function bomberman_duplicate_blocks]
+ref1=<uid>
+foritems 0
+  if (<baseid>==i_bomberman_block2) && (<uid> != <ref1>)
+    consume
+  endif
+endfor
+
+[itemdef i_bomberman_block2]
+id=i_stairs_stone_5
+type=t_script
+name=Bomberman Arena
+can=can_i_block
+
+on=@step
+if !(<src.isgm>) 
+  src.moveback
+endif
+return 1
+
+on=@create
+color=0482
+attr=attr_move_never
+
+
+/////////////////////////////////
+// Power Ups
+
+
+
+
+/////////////////
+// Bombs
+
+[itemdef i_bomberman_powerup_bombs]
+id=i_barrel_water
+name=Bonus Bombs
+type=t_script
+
+on=@create
+attr=attr_move_never
+color=0455
+timer=<def0.bomberman_powerup_timer>
+
+on=@step
+if (<src.findid.i_bomberman_bomb.isvalid>)
+  src.findid.i_bomberman_bomb.amount += <R3,9>
+else
+  serv.newitem i_bomberman_bomb,<R3,9>
+  new.cont=<src.findlayer.21>
+endif
+src.message @044 Bombs
+sound 0143
+remove
+
+on=@timer
+remove
+return 1
+
+/////////////////
+// Speed powerup
+
+[itemdef i_bomberman_powerup_speed]
+id=i_boots_calf
+name=Speed Boost
+type=t_script
+
+on=@create
+attr=attr_move_never|attr_decay
+color=0480
+timer=<def0.bomberman_powerup_timer>
+
+on=@step
+src.findid.i_bomberman.tag0.speed += 1
+serv.newitem i_memory_bomberman_powerup_speed
+src.equip <new>
+src.message @044 Speed
+sound 0143
+remove
+
+[itemdef i_memory_bomberman_powerup_speed]
+id=i_memory
+type=t_eq_script
+name=Bomberman Speed Powerup
+layer=layer_special
+
+on=@equip
+src.speedmode=1
+timer=<def0.bomberman_powerup_timer>
+
+on=@unequip
+src.speedmode=
+
+on=@timer
+remove
+return 1
+
+////////////////////
+// Range powerup
+
+[itemdef i_bomberman_powerup_range]
+id=01f18
+name=Bomberman Range Boost
+type=t_script
+
+on=@create
+attr=attr_move_never
+color=026
+timer=<def0.bomberman_powerup_timer>
+
+on=@step
+src.findid.i_bomberman.tag0.range += 1
+src.message @044 Range
+sound 0143
+remove
+
+on=@timer
+remove
+return 1
+
+
+
+/////////////////////////////////
+// Bomberman Multi
+
+[itemdef m_bomberman_arena]
+defname=m_bomberman_arena
+name=Bomberman Arena
+type=t_multi
+regionflags=region_flag_safe
+
+category=Multis
+subsection=Events
+description=Bomberman Arena
+
+multiregion=-7,-7,9,9
+component=050F -7 -7 0 1
+component=i_bomberman_block_outside -7 -7 0 1
+component=050F -7 -6 0 1
+component=i_bomberman_block_outside -7 -6 0 1
+component=050F -7 -5 0 1
+component=i_bomberman_block_outside -7 -5 0 1
+component=050F -7 -4 0 1
+component=i_bomberman_block_outside -7 -4 0 1
+component=050F -7 -3 0 1
+component=i_bomberman_block_outside -7 -3 0 1
+component=050F -7 -2 0 1
+component=i_bomberman_block_outside -7 -2 0 1
+component=050F -7 -1 0 1
+component=i_bomberman_block_outside -7 -1 0 1
+//component=0720 -7 0 0 1
+component=050F -7 0 0 1
+component=i_bomberman_block_outside -7 0 0 1
+//component=0720 -7 1 0 1
+component=050F -7 1 0 1
+component=i_bomberman_block_outside -7 1 0 1
+//component=0720 -7 2 0 1
+component=050F -7 2 0 1
+component=i_bomberman_block_outside -7 2 0 1
+//component=0720 -7 3 0 1
+component=050F -7 3 0 1
+component=i_bomberman_block_outside -7 3 0 1
+//component=0720 -7 4 0 1
+component=050F -7 4 0 1
+component=i_bomberman_block_outside -7 4 0 1
+//component=0720 -7 5 0 1
+component=050F -7 5 0 1
+component=i_bomberman_block_outside -7 5 0 1
+//component=0720 -7 6 0 1
+component=050F -7 6 0 1
+component=i_bomberman_block_outside -7 6 0 1
+//component=0720 -7 7 0 1
+component=050F -7 7 0 1
+component=i_bomberman_block_outside -7 7 0 1
+//component=0720 -7 8 0 1
+component=050F -7 8 0 1
+component=i_bomberman_block_outside -7 8 0 1
+//component=0720 -7 9 0 1
+component=050F -7 9 0 1
+component=i_bomberman_block_outside -7 9 0 1
+//component=0720 -6 -7 0 1
+component=050F -6 -7 0 1
+component=i_bomberman_block_outside -6 -7 0 1
+//component=0720 -6 -6 0 1
+component=050F -6 -6 0 1
+//component=0720 -6 -5 0 1
+component=050F -6 -5 0 1
+//component=0720 -6 -4 0 1
+component=050F -6 -4 0 1
+//component=0720 -6 -3 0 1
+component=050F -6 -3 0 1
+//component=0720 -6 -2 0 1
+component=050F -6 -2 0 1
+//component=0720 -6 -1 0 1
+component=050F -6 -1 0 1
+//component=0720 -6 0 0 1
+component=050F -6 0 0 1
+//component=0720 -6 1 0 1
+component=050F -6 1 0 1
+//component=0720 -6 2 0 1
+component=050F -6 2 0 1
+//component=0720 -6 3 0 1
+component=050F -6 3 0 1
+//component=0720 -6 4 0 1
+component=050F -6 4 0 1
+//component=0720 -6 5 0 1
+component=050F -6 5 0 1
+//component=0720 -6 6 0 1
+component=050F -6 6 0 1
+//component=0720 -6 7 0 1
+component=050F -6 7 0 1
+//component=0720 -6 8 0 1
+component=050F -6 8 0 1
+//component=0720 -6 9 0 1
+component=050F -6 9 0 1
+component=i_bomberman_block_outside -6 9 0 1
+//component=0720 -5 -7 0 1
+component=050F -5 -7 0 1
+component=i_bomberman_block_outside -5 -7 0 1
+//component=0720 -5 -6 0 1
+component=050F -5 -6 0 1
+//component=0720 -5 -5 0 1
+component=050F -5 -5 0 1
+component=i_bomberman_block_outside -5 -5 0 1
+//component=0720 -5 -4 0 1
+component=050F -5 -4 0 1
+//component=0720 -5 -3 0 1
+component=050F -5 -3 0 1
+component=i_bomberman_block -5 -3 0 1
+//component=0720 -5 -2 0 1
+component=050F -5 -2 0 1
+//component=0720 -5 -1 0 1
+component=050F -5 -1 0 1
+component=i_bomberman_block -5 -1 0 1
+//component=0720 -5 0 0 1
+component=050F -5 0 0 1
+//component=0720 -0 1 0 1
+component=050F -0 1 0 1
+component=i_bomberman_block -5 1 0 1
+//component=0720 -5 2 0 1
+component=050F -5 2 0 1
+//component=0720 -5 3 0 1
+component=050F -5 3 0 1
+component=i_bomberman_block -5 3 0 1
+//component=0720 -5 4 0 1
+component=050F -5 4 0 1
+//component=0720 -5 5 0 1
+component=050F -5 5 0 1
+component=i_bomberman_block -5 5 0 1
+//component=0720 -5 6 0 1
+component=050F -5 6 0 1
+//component=0720 -5 7 0 1
+component=050F -5 7 0 1
+component=i_bomberman_block_outside -5 7 0 1
+//component=0720 -5 8 0 1
+component=050F -5 8 0 1
+//component=0720 -5 9 0 1
+component=050F -5 9 0 1
+component=i_bomberman_block_outside -5 9 0 1
+//component=0720 -4 -7 0 1
+component=050F -4 -7 0 1
+component=i_bomberman_block_outside -4 -7 0 1
+//component=0720 -4 -6 0 1
+component=050F -4 -6 0 1
+//component=0720 -4 -5 0 1
+component=050F -4 -5 0 1
+//component=0720 -4 -4 0 1
+component=050F -4 -4 0 1
+//component=0720 -4 -3 0 1
+component=050F -4 -3 0 1
+//component=0720 -4 -2 0 1
+component=050F -4 -2 0 1
+//component=0720 -4 -1 0 1
+component=050F -4 -1 0 1
+//component=0720 -4 0 0 1
+component=050F -4 0 0 1
+//component=0720 -4 1 0 1
+component=050F -4 1 0 1
+//component=0720 -4 2 0 1
+component=050F -4 2 0 1
+//component=0720 -4 3 0 1
+component=050F -4 3 0 1
+//component=0720 -4 4 0 1
+component=050F -4 4 0 1
+//component=0720 -4 5 0 1
+component=050F -4 5 0 1
+//component=0720 -4 6 0 1
+component=050F -4 6 0 1
+//component=0720 -4 7 0 1
+component=050F -4 7 0 1
+//component=0720 -4 8 0 1
+component=050F -4 8 0 1
+//component=0720 -4 9 0 1
+component=050F -4 9 0 1
+component=i_bomberman_block_outside -4 9 0 1
+//component=0720 -3 -7 0 1
+component=050F -3 -7 0 1
+component=i_bomberman_block_outside -3 -7 0 1
+//component=0720 -3 -6 0 1
+component=050F -3 -6 0 1
+//component=0720 -3 -5 0 1
+component=050F -3 -5 0 1
+component=i_bomberman_block -3 -5 0 1
+//component=0720 -3 -4 0 1
+component=050F -3 -4 0 1
+//component=0720 -3 -3 0 1
+component=050F -3 -3 0 1
+component=i_bomberman_block -3 -3 0 1
+//component=0720 -3 -2 0 1
+component=050F -3 -2 0 1
+//component=0720 -3 -1 0 1
+component=050F -3 -1 0 1
+component=i_bomberman_block -3 -1 0 1
+//component=0720 -3 0 0 1
+component=050F -3 0 0 1
+//component=0720 -3 1 0 1
+component=050F -3 1 0 1
+component=i_bomberman_block -3 1 0 1
+//component=0720 -3 2 0 1
+component=050F -3 2 0 1
+//component=0720 -3 3 0 1
+component=050F -3 3 0 1
+component=i_bomberman_block -3 3 0 1
+//component=0720 -3 4 0 1
+component=050F -3 4 0 1
+//component=0720 -3 5 0 1
+component=050F -3 5 0 1
+component=i_bomberman_block -3 5 0 1
+//component=0720 -3 6 0 1
+component=050F -3 6 0 1
+//component=0720 -3 7 0 1
+component=050F -3 7 0 1
+component=i_bomberman_block -3 7 0 1
+//component=0720 -3 8 0 1
+component=050F -3 8 0 1
+//component=0720 -3 9 0 1
+component=050F -3 9 0 1
+component=i_bomberman_block_outside -3 9 0 1
+//component=0720 -2 -7 0 1
+component=050F -2 -7 0 1
+component=i_bomberman_block_outside -2 -7 0 1
+//component=0720 -2 -6 0 1
+component=050F -2 -6 0 1
+//component=0720 -2 -5 0 1
+component=050F -2 -5 0 1
+//component=0720 -2 -4 0 1
+component=050F -2 -4 0 1
+//component=0720 -2 -3 0 1
+component=050F -2 -3 0 1
+//component=0720 -2 -2 0 1
+component=050F -2 -2 0 1
+//component=0720 -2 -1 0 1
+component=050F -2 -1 0 1
+//component=0720 -2 0 0 1
+component=050F -2 0 0 1
+//component=0720 -2 1 0 1
+component=050F -2 1 0 1
+//component=0720 -2 2 0 1
+component=050F -2 2 0 1
+//component=0720 -2 3 0 1
+component=050F -2 3 0 1
+//component=0720 -2 4 0 1
+component=050F -2 4 0 1
+//component=0720 -2 5 0 1
+component=050F -2 5 0 1
+//component=0720 -2 6 0 1
+component=050F -2 6 0 1
+//component=0720 -2 7 0 1
+component=050F -2 7 0 1
+//component=0720 -2 8 0 1
+component=050F -2 8 0 1
+//component=0720 -2 9 0 1
+component=050F -2 9 0 1
+component=i_bomberman_block_outside -2 9 0 1
+//component=0720 -1 -7 0 1
+component=050F -1 -7 0 1
+component=i_bomberman_block_outside -1 -7 0 1
+//component=0720 -1 -6 0 1
+component=050F -1 -6 0 1
+//component=0720 -1 -5 0 1
+component=050F -1 -5 0 1
+component=i_bomberman_block -1 -5 0 1
+//component=0720 -1 -4 0 1
+component=050F -1 -4 0 1
+//component=0720 -1 -3 0 1
+component=050F -1 -3 0 1
+component=i_bomberman_block -1 -3 0 1
+//component=0720 -1 -2 0 1
+component=050F -1 -2 0 1
+//component=0720 -1 -1 0 1
+component=050F -1 -1 0 1
+component=i_bomberman_block -1 -1 0 1
+//component=0720 -1 0 0 1
+component=050F -1 0 0 1
+//component=0720 -1 1 0 1
+component=050F -1 1 0 1
+component=i_bomberman_block -1 1 0 1
+//component=0720 -1 2 0 1
+component=050F -1 2 0 1
+//component=0720 -1 3 0 1
+component=050F -1 3 0 1
+component=i_bomberman_block -1 3 0 1
+//component=0720 -1 4 0 1
+component=050F -1 4 0 1
+//component=0720 -1 5 0 1
+component=050F -1 5 0 1
+component=i_bomberman_block -1 5 0 1
+//component=0720 -1 6 0 1
+component=050F -1 6 0 1
+//component=0720 -1 7 0 1
+component=050F -1 7 0 1
+component=i_bomberman_block -1 7 0 1
+//component=0720 -1 8 0 1
+component=050F -1 8 0 1
+//component=0720 -1 9 0 1
+component=050F -1 9 0 1
+component=i_bomberman_block_outside -1 9 0 1
+//component=0720 0 -7 0 1
+component=050F 0 -7 0 1
+component=i_bomberman_block_outside 0 -7 0 1
+//component=0720 0 -6 0 1
+component=050F 0 -6 0 1
+//component=0720 0 -5 0 1
+component=050F 0 -5 0 1
+//component=0720 0 -4 0 1
+component=050F 0 -4 0 1
+//component=0720 0 -3 0 1
+component=050F 0 -3 0 1
+//component=0720 0 -2 0 1
+component=050F 0 -2 0 1
+//component=0720 0 -1 0 1
+component=050F 0 -1 0 1
+//component=0720 0 0 0 1
+component=050F 0 0 0 1
+//component=0720 0 1 0 1
+component=050F 0 1 0 1
+//component=0720 0 2 0 1
+component=050F 0 2 0 1
+//component=0720 0 3 0 1
+component=050F 0 3 0 1
+//component=0720 0 4 0 1
+component=050F 0 4 0 1
+//component=0720 0 5 0 1
+component=050F 0 5 0 1
+//component=0720 0 6 0 1
+component=050F 0 6 0 1
+//component=0720 0 7 0 1
+component=050F 0 7 0 1
+//component=0720 0 8 0 1
+component=050F 0 8 0 1
+//component=0720 0 9 0 1
+component=050F 0 9 0 1
+component=i_bomberman_block_outside 0 9 0 1
+//component=0720 1 -7 0 1
+component=050F 1 -7 0 1
+component=i_bomberman_block_outside 1 -7 0 1
+//component=0720 1 -6 0 1
+component=050F 1 -6 0 1
+//component=0720 1 -5 0 1
+component=050F 1 -5 0 1
+component=i_bomberman_block 1 -5 0 1
+//component=0720 1 -4 0 1
+component=050F 1 -4 0 1
+//component=0720 1 -3 0 1
+component=050F 1 -3 0 1
+component=i_bomberman_block 1 -3 0 1
+//component=0720 1 -2 0 1
+component=050F 1 -2 0 1
+//component=0720 1 -1 0 1
+component=050F 1 -1 0 1
+component=i_bomberman_block 1 -1 0 1
+//component=0720 1 0 0 1
+component=050F 1 0 0 1
+//component=0720 1 1 0 1
+component=050F 1 1 0 1
+component=i_bomberman_block 1 1 0 1
+//component=0720 1 2 0 1
+component=050F 1 2 0 1
+//component=0720 1 3 0 1
+component=050F 1 3 0 1
+component=i_bomberman_block 1 3 0 1
+//component=0720 1 4 0 1
+component=050F 1 4 0 1
+//component=0720 1 5 0 1
+component=050F 1 5 0 1
+component=i_bomberman_block 1 5 0 1
+//component=0720 1 6 0 1
+component=050F 1 6 0 1
+//component=0720 1 7 0 1
+component=050F 1 7 0 1
+component=i_bomberman_block 1 7 0 1
+//component=0720 1 8 0 1
+component=050F 1 8 0 1
+//component=0720 1 9 0 1
+component=050F 1 9 0 1
+component=i_bomberman_block_outside 1 9 0 1
+//component=0720 2 -7 0 1
+component=050F 2 -7 0 1
+component=i_bomberman_block_outside 2 -7 0 1
+//component=0720 2 -6 0 1
+component=050F 2 -6 0 1
+//component=0720 2 -5 0 1
+component=050F 2 -5 0 1
+//component=0720 2 -4 0 1
+component=050F 2 -4 0 1
+//component=0720 2 -3 0 1
+component=050F 2 -3 0 1
+//component=0720 2 -2 0 1
+component=050F 2 -2 0 1
+//component=0720 2 -1 0 1
+component=050F 2 -1 0 1
+//component=0720 2 0 0 1
+component=050F 2 0 0 1
+//component=0720 2 1 0 1
+component=050F 2 1 0 1
+//component=0720 2 2 0 1
+component=050F 2 2 0 1
+//component=0720 2 3 0 1
+component=050F 2 3 0 1
+//component=0720 2 4 0 1
+component=050F 2 4 0 1
+//component=0720 2 5 0 1
+component=050F 2 5 0 1
+//component=0720 2 6 0 1
+component=050F 2 6 0 1
+//component=0720 2 7 0 1
+component=050F 2 7 0 1
+//component=0720 2 8 0 1
+component=050F 2 8 0 1
+//component=0720 2 9 0 1
+component=050F 2 9 0 1
+component=i_bomberman_block_outside 2 9 0 1
+//component=0720 3 -7 0 1
+component=050F 3 -7 0 1
+component=i_bomberman_block_outside 3 -7 0 1
+//component=0720 3 -6 0 1
+component=050F 3 -6 0 1
+//component=0720 3 -5 0 1
+component=050F 3 -5 0 1
+component=i_bomberman_block 3 -5 0 1
+//component=0720 3 -4 0 1
+component=050F 3 -4 0 1
+//component=0720 3 -3 0 1
+component=050F 3 -3 0 1
+component=i_bomberman_block 3 -3 0 1
+//component=0720 3 -2 0 1
+component=050F 3 -2 0 1
+//component=0720 3 -1 0 1
+component=050F 3 -1 0 1
+component=i_bomberman_block 3 -1 0 1
+//component=0720 3 0 0 1
+component=050F 3 0 0 1
+//component=0720 3 1 0 1
+component=050F 3 1 0 1
+component=i_bomberman_block 3 1 0 1
+//component=0720 3 2 0 1
+component=050F 3 2 0 1
+//component=0720 3 3 0 1
+component=050F 3 3 0 1
+component=i_bomberman_block 3 3 0 1
+//component=0720 3 4 0 1
+component=050F 3 4 0 1
+//component=0720 3 5 0 1
+component=050F 3 5 0 1
+component=i_bomberman_block 3 5 0 1
+//component=0720 3 6 0 1
+component=050F 3 6 0 1
+//component=0720 3 7 0 1
+component=050F 3 7 0 1
+component=i_bomberman_block 3 7 0 1
+//component=0720 3 8 0 1
+component=050F 3 8 0 1
+//component=0720 3 9 0 1
+component=050F 3 9 0 1
+component=i_bomberman_block_outside 3 9 0 1
+//component=0720 4 -7 0 1
+component=050F 4 -7 0 1
+component=i_bomberman_block_outside 4 -7 0 1
+//component=0720 4 -6 0 1
+component=050F 4 -6 0 1
+//component=0720 4 -5 0 1
+component=050F 4 -5 0 1
+//component=0720 4 -4 0 1
+component=050F 4 -4 0 1
+//component=0720 4 -3 0 1
+component=050F 4 -3 0 1
+//component=0720 4 -2 0 1
+component=050F 4 -2 0 1
+//component=0720 4 -1 0 1
+component=050F 4 -1 0 1
+//component=0720 4 0 0 1
+component=050F 4 0 0 1
+//component=0720 4 1 0 1
+component=050F 4 1 0 1
+//component=0720 4 2 0 1
+component=050F 4 2 0 1
+//component=0720 4 3 0 1
+component=050F 4 3 0 1
+//component=0720 4 4 0 1
+component=050F 4 4 0 1
+//component=0720 4 5 0 1
+component=050F 4 5 0 1
+//component=0720 4 6 0 1
+component=050F 4 6 0 1
+//component=0720 4 7 0 1
+component=050F 4 7 0 1
+//component=0720 4 8 0 1
+component=050F 4 8 0 1
+//component=0720 4 9 0 1
+component=050F 4 9 0 1
+component=i_bomberman_block_outside 4 9 0 1
+//component=0720 5 -7 0 1
+component=050F 5 -7 0 1
+component=i_bomberman_block_outside 5 -7 0 1
+//component=0720 5 -6 0 1
+component=050F 5 -6 0 1
+//component=0720 5 -5 0 1
+component=050F 5 -5 0 1
+component=i_bomberman_block 5 -5 0 1
+//component=0720 5 -4 0 1
+component=050F 5 -4 0 1
+//component=0720 5 -3 0 1
+component=050F 5 -3 0 1
+component=i_bomberman_block 5 -3 0 1
+//component=0720 5 -2 0 1
+component=050F 5 -2 0 1
+//component=0720 5 -1 0 1
+component=050F 5 -1 0 1
+component=i_bomberman_block 5 -1 0 1
+//component=0720 5 0 0 1
+component=050F 5 0 0 1
+//component=0720 0 1 0 1
+component=050F 0 1 0 1
+component=i_bomberman_block 5 1 0 1
+//component=0720 5 2 0 1
+component=050F 5 2 0 1
+//component=0720 5 3 0 1
+component=050F 5 3 0 1
+component=i_bomberman_block 5 3 0 1
+//component=0720 5 4 0 1
+component=050F 5 4 0 1
+//component=0720 5 5 0 1
+component=050F 5 5 0 1
+component=i_bomberman_block 5 5 0 1
+//component=0720 5 6 0 1
+component=050F 5 6 0 1
+//component=0720 5 7 0 1
+component=050F 5 7 0 1
+component=i_bomberman_block 5 7 0 1
+//component=0720 5 8 0 1
+component=050F 5 8 0 1
+//component=0720 5 9 0 1
+component=050F 5 9 0 1
+component=i_bomberman_block_outside 5 9 0 1
+//component=0720 6 -7 0 1
+component=050F 6 -7 0 1
+component=i_bomberman_block_outside 6 -7 0 1
+//component=0720 6 -6 0 1
+component=050F 6 -6 0 1
+//component=0720 6 -5 0 1
+component=050F 6 -5 0 1
+//component=0720 6 -4 0 1
+component=050F 6 -4 0 1
+//component=0720 6 -3 0 1
+component=050F 6 -3 0 1
+//component=0720 6 -2 0 1
+component=050F 6 -2 0 1
+//component=0720 6 -1 0 1
+component=050F 6 -1 0 1
+//component=0720 6 0 0 1
+component=050F 6 0 0 1
+//component=0720 6 1 0 1
+component=050F 6 1 0 1
+//component=0720 6 2 0 1
+component=050F 6 2 0 1
+//component=0720 6 3 0 1
+component=050F 6 3 0 1
+//component=0720 6 4 0 1
+component=050F 6 4 0 1
+//component=0720 6 5 0 1
+component=050F 6 5 0 1
+//component=0720 6 6 0 1
+component=050F 6 6 0 1
+//component=0720 6 7 0 1
+component=050F 6 7 0 1
+//component=0720 6 8 0 1
+component=050F 6 8 0 1
+//component=0720 6 9 0 1
+component=050F 6 9 0 1
+component=i_bomberman_block_outside 6 9 0 1
+//component=0720 7 -7 0 1
+component=050F 7 -7 0 1
+component=i_bomberman_block_outside 7 -7 0 1
+//component=0720 7 -6 0 1
+component=050F 7 -6 0 1
+//component=0720 7 -5 0 1
+component=050F 7 -5 0 1
+component=i_bomberman_block_outside 7 -5 0 1
+//component=0720 7 -4 0 1
+component=050F 7 -4 0 1
+//component=0720 7 -3 0 1
+component=050F 7 -3 0 1
+component=i_bomberman_block 7 -3 0 1
+//component=0720 7 -2 0 1
+component=050F 7 -2 0 1
+//component=0720 7 -1 0 1
+component=050F 7 -1 0 1
+component=i_bomberman_block 7 -1 0 1
+//component=0720 7 0 0 1
+component=050F 7 0 0 1
+//component=0720 7 1 0 1
+component=050F 7 1 0 1
+component=i_bomberman_block 7 1 0 1
+//component=0720 7 2 0 1
+component=050F 7 2 0 1
+//component=0720 7 3 0 1
+component=050F 7 3 0 1
+component=i_bomberman_block 7 3 0 1
+//component=0720 7 4 0 1
+component=050F 7 4 0 1
+//component=0720 7 5 0 1
+component=050F 7 5 0 1
+component=i_bomberman_block 7 5 0 1
+//component=0720 7 6 0 1
+component=050F 7 6 0 1
+//component=0720 7 7 0 1
+component=050F 7 7 0 1
+component=i_bomberman_block_outside 7 7 0 1
+//component=0720 7 8 0 1
+component=050F 7 8 0 1
+//component=0720 7 9 0 1
+component=050F 7 9 0 1
+component=i_bomberman_block_outside 7 9 0 1
+//component=0720 8 -7 0 1
+component=050F 8 -7 0 1
+component=i_bomberman_block_outside 8 -7 0 1
+//component=0720 8 -6 0 1
+component=050F 8 -6 0 1
+//component=0720 8 -5 0 1
+component=050F 8 -5 0 1
+//component=0720 8 -4 0 1
+component=050F 8 -4 0 1
+//component=0720 8 -3 0 1
+component=050F 8 -3 0 1
+//component=0720 8 -2 0 1
+component=050F 8 -2 0 1
+//component=0720 8 -1 0 1
+component=050F 8 -1 0 1
+component=050F 8 -1 0 1
+//component=0720 8 0 0 1
+component=050F 8 0 0 1
+//component=0720 8 1 0 1
+component=050F 8 1 0 1
+//component=0720 8 2 0 1
+component=050F 8 2 0 1
+//component=0720 8 3 0 1
+component=050F 8 3 0 1
+//component=0720 8 4 0 1
+component=050F 8 4 0 1
+//component=0720 8 5 0 1
+component=050F 8 5 0 1
+//component=0720 8 6 0 1
+component=050F 8 6 0 1
+//component=0720 8 7 0 1
+component=050F 8 7 0 1
+//component=0720 8 8 0 1
+component=050F 8 8 0 1
+//component=0720 8 9 0 1
+component=050F 8 9 0 1
+component=i_bomberman_block_outside 8 9 0 1
+//component=0720 9 -7 0 1
+component=050F 9 -7 0 1
+component=i_bomberman_block_outside 9 -7 0 1
+//component=0720 9 -6 0 1
+component=050F 9 -6 0 1
+component=i_bomberman_block_outside 9 -6 0 1
+//component=0720 9 -5 0 1
+component=050F 9 -5 0 1
+component=i_bomberman_block_outside 9 -5 0 1
+//component=0720 9 -4 0 1
+component=050F 9 -4 0 1
+component=i_bomberman_block_outside 9 -4 0 1
+//component=0720 9 -3 0 1
+component=050F 9 -3 0 1
+component=i_bomberman_block_outside 9 -3 0 1
+//component=0720 9 -2 0 1
+component=050F 9 -2 0 1
+component=i_bomberman_block_outside 9 -2 0 1
+//component=0720 9 -1 0 1
+component=050F 9 -1 0 1
+component=i_bomberman_block_outside 9 -1 0 1
+//component=0720 9 0 0 1
+component=050F 9 0 0 1
+component=i_bomberman_block_outside 9 0 0 1
+//component=0720 9 1 0 1
+component=050F 9 1 0 1
+component=i_bomberman_block_outside 9 1 0 1
+//component=0720 9 2 0 1
+component=050F 9 2 0 1
+component=i_bomberman_block_outside 9 2 0 1
+//component=0720 9 3 0 1
+component=050F 9 3 0 1
+component=i_bomberman_block_outside 9 3 0 1
+//component=0720 9 4 0 1
+component=050F 9 4 0 1
+component=i_bomberman_block_outside 9 4 0 1
+//component=0720 9 5 0 1
+component=050F 9 5 0 1
+component=i_bomberman_block_outside 9 5 0 1
+//component=0720 9 6 0 1
+component=050F 9 6 0 1
+component=i_bomberman_block_outside 9 6 0 1
+//component=0720 9 7 0 1
+component=050F 9 7 0 1
+component=i_bomberman_block_outside 9 7 0 1
+//component=0720 9 8 0 1
+component=050F 9 8 0 1
+component=i_bomberman_block_outside 9 8 0 1
+//component=0720 9 9 0 1
+component=050F 9 9 0 1
+component=i_bomberman_block_outside 9 9 0 1
+component=i_bomberman_stone -7 -7 6 1
+
+[EOF]
+

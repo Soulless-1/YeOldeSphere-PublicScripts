@@ -1,0 +1,590 @@
+
+
+[defname crafting_blacksmithing]
+	
+crafting_blacksmithing_flags 	01|02|04|08|040			//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool
+crafting_blacksmithing_anim 	11				//crafting animation
+crafting_blacksmithing_sound 	02a,0,02b,0			//crafting sounds
+crafting_blacksmithing_recycle	SMELT ITEM,f_smelt 1		//1 = open crafting menu when complete
+crafting_blacksmithing_require	t_forge,t_anvil			//items we need to be near
+crafting_blacksmithing_tool	t_tool_blacksmithing		//event associated with crafting item
+
+crafting_blacksmithing_resource0		i_ingot_iron			//this the base resource things are compared against
+crafting_blacksmithing_resource0_0		i_ingot_iron			//first resource a player may select to use
+crafting_blacksmithing_resource0_1 		i_ingot_old_copper		
+crafting_blacksmithing_resource0_2		i_ingot_dull_copper
+crafting_blacksmithing_resource0_3		i_ingot_shadow
+crafting_blacksmithing_resource0_4		i_ingot_copper
+crafting_blacksmithing_resource0_5		i_ingot_bronze
+crafting_blacksmithing_resource0_6		i_ingot_silver
+crafting_blacksmithing_resource0_7		i_ingot_gold
+crafting_blacksmithing_resource0_8		i_ingot_rose
+crafting_blacksmithing_resource0_9		i_ingot_agapite
+crafting_blacksmithing_resource0_10		i_ingot_bloodrock	
+crafting_blacksmithing_resource0_11		i_ingot_verite
+crafting_blacksmithing_resource0_12		i_ingot_valorite
+crafting_blacksmithing_resource0_13		i_ingot_mytheril
+crafting_blacksmithing_resource0_14		i_ingot_blackrock
+crafting_blacksmithing_resource0_15
+	
+crafting_blacksmithing_resource1		i_dragon_scale
+crafting_blacksmithing_resource1_0		i_dragon_scale_blue
+crafting_blacksmithing_resource1_1		i_dragon_scale_yellow
+crafting_blacksmithing_resource1_2		i_dragon_scale_red
+crafting_blacksmithing_resource1_3		i_dragon_scale_green
+crafting_blacksmithing_resource1_4		i_dragon_scale_white
+crafting_blacksmithing_resource1_5		i_dragon_scale_black
+crafting_blacksmithing_resource1_6
+
+crafting_blacksmithing_matvalue_bonus_i_ingot_iron		0	//the % that an item made with this material will increase in value
+crafting_blacksmithing_matvalue_bonus_i_ingot_old_copper	5
+crafting_blacksmithing_matvalue_bonus_i_ingot_dull_copper	10
+crafting_blacksmithing_matvalue_bonus_i_ingot_shadow		15
+crafting_blacksmithing_matvalue_bonus_i_ingot_copper		20
+crafting_blacksmithing_matvalue_bonus_i_ingot_bronze		25
+crafting_blacksmithing_matvalue_bonus_i_ingot_gold		30
+crafting_blacksmithing_matvalue_bonus_i_ingot_rose		35
+crafting_blacksmithing_matvalue_bonus_i_ingot_agapite		40
+crafting_blacksmithing_matvalue_bonus_i_ingot_bloodrock		45
+crafting_blacksmithing_matvalue_bonus_i_ingot_silver		50
+crafting_blacksmithing_matvalue_bonus_i_ingot_verite		55
+crafting_blacksmithing_matvalue_bonus_i_ingot_valorite		60
+crafting_blacksmithing_matvalue_bonus_i_ingot_mytheril		65
+crafting_blacksmithing_matvalue_bonus_i_ingot_blackrock		70
+
+crafting_blacksmithing_matvalue_bonus_i_dragon_scale		0
+crafting_blacksmithing_matvalue_bonus_i_dragon_scale_blue	5
+crafting_blacksmithing_matvalue_bonus_i_dragon_scale_yellow	10
+crafting_blacksmithing_matvalue_bonus_i_dragon_scale_red	15
+crafting_blacksmithing_matvalue_bonus_i_dragon_scale_green	20
+crafting_blacksmithing_matvalue_bonus_i_dragon_scale_white	25
+crafting_blacksmithing_matvalue_bonus_i_dragon_scale_black	30
+
+crafting_blacksmithing_0_name LAST TEN		//this will be generated as people craft
+
+crafting_blacksmithing_1_name RINGMAIL
+crafting_blacksmithing_1_resource_replace	1
+crafting_blacksmithing_1_0 i_ringmail_gloves
+crafting_blacksmithing_1_1 i_ringmail_leggings
+crafting_blacksmithing_1_2 i_ringmail_sleeves
+crafting_blacksmithing_1_3 i_ringmail_tunic
+
+crafting_blacksmithing_2_name CHAINMAIL
+crafting_blacksmithing_2_resource_replace	1
+crafting_blacksmithing_2_0 i_chainmail_coif
+crafting_blacksmithing_2_1 i_chainmail_leggings
+crafting_blacksmithing_2_2 i_chainmail_tunic
+
+crafting_blacksmithing_3_name PLATEMAIL
+crafting_blacksmithing_3_resource_replace	1
+crafting_blacksmithing_3_0 i_platemail_arms
+crafting_blacksmithing_3_1 i_platemail_gloves
+crafting_blacksmithing_3_2 i_platemail_gorget
+crafting_blacksmithing_3_3 i_platemail_leggings
+crafting_blacksmithing_3_4 i_platemail_chest
+crafting_blacksmithing_3_5 i_armor_female_plate
+crafting_blacksmithing_3_6 i_platemail_helm
+
+crafting_blacksmithing_4_name HELMETS
+crafting_blacksmithing_4_resource_replace	1
+crafting_blacksmithing_4_0 i_bascinet
+crafting_blacksmithing_4_1 i_helm_closed
+crafting_blacksmithing_4_2 i_helm_open
+crafting_blacksmithing_4_3 i_helm_norse
+crafting_blacksmithing_4_4 i_platemail_helm
+
+crafting_blacksmithing_5_name SHIELDS
+crafting_blacksmithing_5_resource_replace	1
+crafting_blacksmithing_5_0 i_shield_buckler
+crafting_blacksmithing_5_1 i_shield_round_bronze
+crafting_blacksmithing_5_2 i_shield_heater
+crafting_blacksmithing_5_3 i_shield_round_metal
+crafting_blacksmithing_5_4 i_shield_kite_metal
+crafting_blacksmithing_5_5 i_shield_kite_wood
+crafting_blacksmithing_5_6 //i_shield_order		
+crafting_blacksmithing_5_7 //i_shield_chaos
+
+crafting_blacksmithing_6_name BLADED
+crafting_blacksmithing_6_resource_replace	1
+crafting_blacksmithing_6_0 i_sword_broad
+crafting_blacksmithing_6_1 i_cutlass
+crafting_blacksmithing_6_2 i_dagger
+crafting_blacksmithing_6_3 i_katana
+crafting_blacksmithing_6_4 i_kryss
+crafting_blacksmithing_6_5 i_sword_long		//i_sword_long_b
+crafting_blacksmithing_6_6 i_scimitar
+crafting_blacksmithing_6_7 i_sword_viking
+
+crafting_blacksmithing_7_name AXES
+crafting_blacksmithing_7_resource_replace	1
+crafting_blacksmithing_7_0 i_axe
+crafting_blacksmithing_7_1 i_axe_battle
+crafting_blacksmithing_7_2 i_axe_double
+crafting_blacksmithing_7_3 i_axe_exec
+crafting_blacksmithing_7_4 i_axe_battle_large
+crafting_blacksmithing_7_5 i_axe_two_hand
+crafting_blacksmithing_7_6 i_axe_war
+
+crafting_blacksmithing_8_name POLEARMS
+crafting_blacksmithing_8_resource_replace	1
+crafting_blacksmithing_8_0 i_bardiche
+crafting_blacksmithing_8_1 i_halberd
+crafting_blacksmithing_8_2 i_spear_short
+crafting_blacksmithing_8_3 i_spear
+crafting_blacksmithing_8_4 i_war_fork
+crafting_blacksmithing_8_5 i_pitchfork
+
+crafting_blacksmithing_9_name BASHING
+crafting_blacksmithing_9_resource_replace	1
+crafting_blacksmithing_9_0 i_hammer_pick
+crafting_blacksmithing_9_1 i_mace
+crafting_blacksmithing_9_2 i_maul
+crafting_blacksmithing_9_3 i_mace_war
+crafting_blacksmithing_9_4 i_hammer_war
+
+crafting_blacksmithing_10_name DRAGONSCALE ARMOR
+crafting_blacksmithing_10_resource_replace	1
+crafting_blacksmithing_10_0 i_dragon_scale_tunic
+crafting_blacksmithing_10_1 i_dragon_scale_gloves
+crafting_blacksmithing_10_2 i_dragon_scale_helm
+crafting_blacksmithing_10_3 i_dragon_scale_leggings
+crafting_blacksmithing_10_4 i_dragon_scale_sleeves
+
+
+
+/////////////////////
+// Apply ingot attrs
+
+[function f_blacksmithing_apply_i_ingot_iron]
+//nothing happens for iron ingots
+
+[function f_blacksmithing_apply_i_ingot_old_copper]
+ref1=<args>
+name=old copper <name>
+color=color_o_old_copper
+modar += <qval (<isarmor>)?5:1>
+maxhits += 5
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_old_copper
+tag.resilience = 5
+
+[function f_blacksmithing_apply_i_ingot_dull_copper]
+ref1=<args>
+name=dull copper <name>
+color=color_o_dull_copper
+modar += <qval (<isarmor>)?8:2>
+maxhits += 8
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_dull_copper
+tag.resilience = 10
+
+[function f_blacksmithing_apply_i_ingot_shadow]
+ref1=<args>
+name=shadow <name>
+color=color_o_shadow
+modar += <qval (<isarmor>)?10:3>
+maxhits += 10
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_shadow
+tag.resilience = 15
+
+[function f_blacksmithing_apply_i_ingot_copper]
+ref1=<args>
+name=copper <name>
+color=color_o_copper
+modar += <qval (<isarmor>)?13:4>
+maxhits += 13
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_copper
+tag.resilience = 20
+
+[function f_blacksmithing_apply_i_ingot_bronze]
+ref1=<args>
+name=bronze <name>
+color=color_o_bronze
+modar += <qval (<isarmor>)?15:5>
+maxhits += 15
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_bronze
+tag.resilience = 25
+
+[function f_blacksmithing_apply_i_ingot_silver]
+ref1=<args>
+name=silver <name>
+color=color_o_silver
+modar += <qval (<isarmor>)?15:5>
+maxhits += 15
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_silver
+tag.resilience = 30
+
+[function f_blacksmithing_apply_i_ingot_gold]
+ref1=<args>
+name=gold <name>
+color=color_o_gold
+modar += <qval (<isarmor>)?18:6>
+maxhits += 18
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_gold
+tag.resilience = 35
+
+[function f_blacksmithing_apply_i_ingot_rose]
+ref1=<args>
+name=rose <name>
+color=color_o_rose
+modar += <qval (<isarmor>)?20:7>
+maxhits += 20
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_rose
+tag.resilience = 40
+
+[function f_blacksmithing_apply_i_ingot_agapite]
+ref1=<args>
+name=agapite <name>
+color=color_o_agapite
+modar += <qval (<isarmor>)?20:7>
+maxhits +=  20
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_agapite
+tag.resilience = 45
+
+[function f_blacksmithing_apply_i_ingot_bloodrock]
+ref1=<args>
+name=bloodrock <name>
+color=color_o_bloodrock
+modar += <qval (<isarmor>)?23:8>
+maxhits += 23
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_bloodrock
+tag.resilience = 50
+
+[function f_blacksmithing_apply_i_ingot_verite]
+ref1=<args>
+name=verite <name>
+color=color_o_verite
+modar += <qval (<isarmor>)?23:8>
+maxhits += 23
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_verite
+tag.resilience = 55
+
+[function f_blacksmithing_apply_i_ingot_valorite]
+ref1=<args>
+name=valorite <name>
+color=color_o_valorite
+modar += <qval (<isarmor>)?25:9>
+maxhits += 25
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_valorite
+tag.resilience = 60
+
+[function f_blacksmithing_apply_i_ingot_mytheril]
+ref1=<args>
+name=mytheril <name>
+color=color_o_mytheril
+modar += <qval (<isarmor>)?30:10>
+maxhits += 30
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_mytheril
+tag.resilience = 65
+
+[function f_blacksmithing_apply_i_ingot_blackrock]
+ref1=<args>
+name=blackrock <name>
+color=color_o_blackrock
+modar += <qval (<isarmor>)?35:11>
+maxhits += 35
+hits=<maxhits>
+tag.matoverride_i_ingot_iron=i_ingot_blackrock
+tag.resilience = 70
+
+////////////////////////////
+// Dragon Scale
+
+[function f_blacksmithing_apply_i_dragon_scale_blue]
+ref1=<args>
+name=blue <name>
+color=color_dragon_scale_blue
+modar += 3
+maxhits += 5
+hits=<maxhits>
+tag.matoverride_i_dragon_scale=i_dragon_scale_blue
+
+[function f_blacksmithing_apply_i_dragon_scale_yellow]
+ref1=<args>
+name=yellow <name>
+color=color_dragon_scale_yellow
+modar += 6
+maxhits += 10
+hits=<maxhits>
+tag.matoverride_i_dragon_scale=i_dragon_scale_yellow
+
+[function f_blacksmithing_apply_i_dragon_scale_red]	//this isnt replacing a source, just a base one for dragon scale armor
+ref1=<args>
+name=red <name>
+color=color_dragon_scale_red
+modar += 9
+maxhits += 15
+hits=<maxhits>
+tag.matoverride_i_dragon_scale=i_dragon_scale_red
+
+[function f_blacksmithing_apply_i_dragon_scale_green]
+ref1=<args>
+name=green <name>
+color=color_dragon_scale_green
+modar += 12
+maxhits += 20
+hits=<maxhits>
+tag.matoverride_i_dragon_scale=i_dragon_scale_green
+
+[function f_blacksmithing_apply_i_dragon_scale_white]
+ref1=<args>
+name=white <name>
+color=color_dragon_scale_white
+modar += 15
+maxhits += 25
+hits=<maxhits>
+tag.matoverride_i_dragon_scale=i_dragon_scale_white
+
+[function f_blacksmithing_apply_i_dragon_scale_black]
+ref1=<args>
+name=black <name>
+color=color_dragon_scale_black
+modar += 18
+maxhits += 30
+hits=<maxhits>
+tag.matoverride_i_dragon_scale=i_dragon_scale_black
+
+
+
+[typedef t_blacksmithed]
+
+
+//////////////////////////////
+//CHECK FOR FORGE AND ANVIL
+
+[function f_forge_and_anvil]
+foritems 3
+  if (<type>==t_forge)
+    local.forge += 1
+  elseif (<type>==t_anvil)
+    local.anvil += 1
+  endif
+endfor
+if (<local.forge>) && (<local.anvil>) 
+  return 3
+elseif (<local.forge>)
+  return 2
+elseif (<local.anvil>)
+  return 1
+else
+  return 0
+endif
+
+
+[typedef t_forge]
+
+on=@dclick
+src.f_smelt
+//src.sysmessage Use a blacksmith's tongs to smelt ore into ingots.
+return 1
+
+[typedef t_anvil]
+
+on=@dclick
+src.sysmessage Use a blacksmith's hammer on this to craft metalworks.
+return 1
+
+[function f_smelt]
+sysmessage What would you like to smelt?
+targetf f_smelt_targ <args>
+
+[function f_smelt_targ]
+if (<argn> == 1)
+  src.timerf 0,sdialog d_crafting_menu <src.ctag0.crafting_lastpage>
+endif
+
+if !(<argo.isvalid>) || !(<argo.isitem>) 
+  ctag0.<ctag0.crafting_skill>_notice=Invalid Target
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  return 1	//targeted nothing.. the ground?
+elseif (<f_forge_and_anvil> < 2)
+  ctag0.<ctag0.crafting_skill>_notice=You require a forge to smelt this.
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  return 1
+elseif !(<argo.isitem>)
+  ctag0.<ctag0.crafting_skill>_notice=You can't smelt <argo.name>
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  return 1
+elseif (<argo.topobj> != <uid>)	//it's not with them
+  ctag0.<ctag0.crafting_skill>_notice=You can't smelt that where it is.
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  return 1
+elseif (<topobj.findlayer.<argo.layer>>) && (<argo> == <topobj.findlayer.<argo.layer>.uid>)
+  ctag0.<ctag0.crafting_skill>_notice=You can't smelt something being worn.
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  return 1
+elseif !(<argo.issmeltable>)	//(<argo.type> != t_ore) && (<argo.skillmake.1.key> != skill_blacksmith)	// && (<argo.type> != t_armor) && (<argo.type> != t_shield) 
+  ctag0.<ctag0.crafting_skill>_notice=You can not smelt that down to ingots
+  sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+  return 1
+endif
+
+if (<argo.type>==t_ore)		//we're working with ore
+  if (<argo.amount> < 2)
+    ctag0.<ctag0.crafting_skill>_notice=There is not enough metal-bearing ore in this pile to make an ingot.
+    sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+    return 1
+  elseif (<mining> < <argo.skillmake.0.val>)
+    ctag0.<ctag0.crafting_skill>_notice=You have no idea how to smelt this strange ore!
+    sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+    return 1
+  elseif (<R1,100> > <f_smelt_ore_success_chance <argo>>)
+    ctag0.<ctag0.crafting_skill>_notice=You smelt the <argo.name> but are left with nothing useful.
+    sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+    argo.consume <eval (<argo.amount>/2)+1>		//lose 50% of ore pile when failing
+  else
+    local.amount=<argo.amount>
+    local.ingot=<argo.tdata1>
+    argo.remove
+    serv.newitem <local.ingot>,<local.amount>
+    new.bounce
+    ctag0.<ctag0.crafting_skill>_notice=You smelt the ore removing the impurities and put the metal in your backpack.
+    sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+    skillgain mining
+  endif
+
+else		//must be an item with ingots in the resource list
+
+  for r 1 <argo.resources.count>
+    if (<argo.resources.<dlocal.r>.val> > 2)
+      local.item=<argo.resources.<dlocal.r>.key>
+      local.amount=<muldiv <argo.resources.<dlocal.r>.val>,60,100>
+      if (<serv.itemdef.<local.item>.type>==t_ingot)
+        if (<argo.resources.<dlocal.r>.key>==i_ingot_iron)	//check for ingot material overrides
+          if (<argo.tag.matoverride_i_ingot_iron>)
+            local.item=<argo.tag.matoverride_i_ingot_iron>
+          endif
+        elseif (<argo.resources.<dlocal.r>.key>==i_dragon_scale)	//check for dragon scale material overrides
+          if (<argo.tag.matoverride_i_dragon_scale>)
+            local.item=<argo.tag.matoverride_i_dragon_scale>
+          endif
+        endif
+        ctag0.<ctag0.crafting_skill>_notice=You smelt the <argo.name>.
+        sysmessage <ctag0.<ctag0.crafting_skill>_notice>
+        serv.newitem <local.item>,<local.amount>
+        new.bounce
+      endif
+    endif
+  endfor
+  argo.consume
+endif
+
+
+//skillgain blacksmithing 	//you do not gain skill from smelting something, its only to recycle resources
+f_forge_smelt_effect
+anim 11
+sound 02b  
+return 1
+
+///////////////////////
+// Ore smelting
+
+[typedef t_ore]
+
+on=@dclick
+if (<topobj> != <src>)  	//it's not with them
+  src.sysmessage You can't smelt that where it is.
+  return 1
+elseif (<src.f_forge_and_anvil> < 2)
+  src.sysmessage You require a forge to smelt this.
+  return 1
+elseif (<amount> < 2)
+  src.sysmessage there is not enough metal-bearing ore in this pile to make an ingot.
+  return 1
+elseif (<src.mining> < <skillmake.0.val>)
+  src.sysmessage you have no idea how to smelt this strange ore!
+  return 1
+elseif (<R1,100> > <f_smelt_ore_success_chance <uid>>)
+  //src.say <f_smelt_ore_success_chance <uid>>
+  src.sysmessage You smelt the <name> but are left with nothing useful.
+  consume <eval ((<amount>/2)+1)>	//lose 50% of ore pile when failing
+else 
+  local.amount=<amount>
+  local.ingot=<tdata1>
+  remove
+  serv.newitem <local.ingot>,<local.amount>
+  new.bounce
+  src.sysmessage You smelt the ore removing the impurities and put the metal in your backpack.
+endif
+src.skillgain mining
+src.f_forge_smelt_effect
+src.anim 11		
+src.sound 02b 
+return 1
+
+[function f_smelt_ore_success_chance]
+ref1=<args>
+local.skillmake=<ref1.skillmake.1.val>
+local.skillmake=<qval (<local.skillmake> < 250)?250:<local.skillmake>>
+local.success=<qval (<ref1.baseid> != i_ore_iron)?50:0>
+local.success += <eval (((<src.mining>-<local.skillmake>)/10)*2)>
+//serv.log <name> smelting <ref1.name> : success = <local.success>%
+return <local.success>
+
+[function f_forge_smelt_effect]
+foritems 4
+  if (<type>==t_forge)
+    newitem=i_memory
+    new.p=<p>
+    new.z += 7
+    new.effect=2,i_fire,1,60,0,0,4
+    new.remove
+    return 1
+  endif
+endfor
+
+[function issmeltable]
+if (<type> == t_ore)
+  return 1
+elseif (<resources.count>)
+  for r 1 <resources.count>
+    if (<serv.itemdef.<resources.<dlocal.r>.key>.type> == t_ingot)
+      return 1
+    endif 
+  endfor
+endif
+return 0
+
+///////////////////////////////
+// Blacksmithing Post Craft
+
+[function f_blacksmithing_prerequisite]	//before the skill is even started
+if !(<f_forge_and_anvil> >= 3)	
+  ctag0.blacksmithing_notice=You must be near an anvil and forge to smith items.
+  return 0
+endif
+return 1
+
+[function f_blacksmithing_pre_craft]	//what happens to the item pre crafting
+
+
+[function f_blacksmithing_post_craft]	//what happens to the item post crafting
+ref1=<args>
+if (<tag0.faction>) && (<var0.faction_control_<region.defname>> == <tag0.faction>)
+  if (<ctag0.blacksmithing_resource0> == i_ingot_iron) && (<rescount i_coin_silver> >= 1000) && (<room>) && (<room.tag0.blacksmith> == 1)
+    //prevent the crafting menu from coming up
+    ref1.events=+t_faction_imbue_prompt
+    trysrc <uid> uid.<args>.sdialog d_faction_crafting_imbue
+    return 1
+  endif
+endif
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+
+
+[EOF]

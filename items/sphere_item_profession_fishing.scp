@@ -1,0 +1,150 @@
+//****************************************************************************
+// SPHERE by : Menasoft ©1997-2007
+// www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Wednesday, May 3, 2006
+//
+VERSION=0.56b
+
+[ITEMDEF 0dbf]
+//Fishing Pole
+DEFNAME=i_fishing_pole
+TYPE=T_FISH_POLE
+TEVENTS=t_sos_fishing_tool
+WEIGHT=2
+SKILL=fencing
+SPEED=45
+DAM=1,1
+CATEGORY=Items by Professions
+SUBSECTION=Fisherman
+DESCRIPTION=Fishing Pole
+RESOURCES=5 i_cloth, 5 i_board
+SKILLMAKE=CARPENTRY 68.4, TAILORING 40.0	//t_carpentry
+DUPELIST=0dc0
+
+ON=@Create
+	USESMAX={50 60}
+
+[ITEMDEF 0dc0]
+//fishing pole
+DUPEITEM=0dbf
+
+[ITEMDEF 0dc8]
+//fishing net
+DEFNAME=i_fishing_net
+RESOURCES=10 I_ROPE, 10 I_THREAD, 4 I_SHELL
+CATEGORY=Items by Professions
+SUBSECTION=Fisherman
+DESCRIPTION=Fishing Net
+
+[ITEMDEF 0dc9]
+//fishing net
+DEFNAME=i_fishing_net_2
+RESOURCES=10 I_ROPE, 10 I_THREAD, 4 I_SHELL
+CATEGORY=Items by Professions
+SUBSECTION=Fisherman
+DESCRIPTION=Fishing Net
+
+[ITEMDEF 0dca]
+//fishing net
+DEFNAME=i_fishing_net_3
+RESOURCES=10 I_ROPE, 10 I_THREAD, 4 I_SHELL
+CATEGORY=Items by Professions
+SUBSECTION=Fisherman
+DESCRIPTION=Fishing Net
+
+[ITEMDEF 0dcb]
+//fishing net
+DEFNAME=i_fishing_net_4
+RESOURCES=10 I_ROPE, 10 I_THREAD, 4 I_SHELL
+CATEGORY=Items by Professions
+SUBSECTION=Fisherman
+DESCRIPTION=Fishing Net
+DUPELIST=0dd0,0dd1,0dd2,0dd3,0dd4,0dd5
+
+[ITEMDEF 0dcc]
+//fishing weight
+DEFNAME=i_fishing_weight
+WEIGHT=1
+RESOURCES=1 i_ingot_iron
+CATEGORY=Items by Professions
+SUBSECTION=Fisherman
+DESCRIPTION=Fishing Weight
+DUPELIST=0dcd,0dce,0dcf
+
+[ITEMDEF 0dcd]
+//fishing weight
+DUPEITEM=0dcc
+
+[ITEMDEF 0dce]
+//fishing weight
+DUPEITEM=0dcc
+
+[ITEMDEF 0dcf]
+//fishing weight
+DUPEITEM=0dcc
+
+[ITEMDEF 0dd0]
+//fishing net
+DUPEITEM=0dcb
+
+[ITEMDEF 0dd1]
+//fishing net
+DUPEITEM=0dcb
+
+[ITEMDEF 0dd2]
+//fishing net
+DUPEITEM=0dcb
+
+[ITEMDEF 0dd3]
+//fishing net
+DUPEITEM=0dcb
+
+[ITEMDEF 0dd4]
+//fishing net
+DUPEITEM=0dcb
+
+[ITEMDEF 0dd5]
+//fishing net
+DUPEITEM=0dcb
+
+[ITEMDEF 0dd6]
+//Small Fish
+DEFNAME=i_fish_small
+TYPE=t_fish
+VALUE=2
+WEIGHT=1
+CAN=0	//CAN_I_PILE
+CATEGORY=Items by Professions
+SUBSECTION=Fisherman
+DESCRIPTION=Small Fish
+DUPELIST=0dd7,0dd8,0dd9
+
+[ITEMDEF 0dd7]
+//small fish
+DUPEITEM=0dd6
+
+[ITEMDEF 0dd8]
+//small fish
+DUPEITEM=0dd6
+
+[ITEMDEF 0dd9]
+//small fish
+DUPEITEM=0dd6
+
+
+[ITEMDEF 01e18]
+//raw fish, cut open, minus head, facing NE
+DUPEITEM=01e17
+
+[ITEMDEF 01e1a]
+//fish head facing NE
+DUPEITEM=01e19
+
+
+[EOF]

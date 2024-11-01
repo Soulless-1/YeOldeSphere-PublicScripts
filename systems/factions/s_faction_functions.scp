@@ -1,0 +1,665 @@
+//functions for factions go here
+
+[function setup_factions]
+remove_factions		//get rid of old faction world items
+for f 1 4	//place faction join, stones, and monoliths
+  serv.newitem i_faction_stone_signup
+  new.attr=010
+  new.more1=<dlocal.f>
+  new.color=<def0.faction_<dlocal.f>_colors>
+  new.p=<def0.faction_<dlocal.f>_joinstone>
+  serv.newitem i_faction_stone
+  new.attr |= attr_move_never
+  new.more1=<dlocal.f>
+  new.color=<def0.faction_<dlocal.f>_colors>
+  new.p=<def0.faction_<dlocal.f>_base>
+  new.timer=1
+  local.x=	//clear these for faction monolith placement
+  local.y=
+  for t 0 7		//place the faction monoliths
+    args=<def0.faction_<dlocal.f>_monoliths>,<def0.faction_controlled_town_<dlocal.t>>
+    serv.newitem i_faction_monolith
+    new.attr |= attr_move_never
+    new.more1=<local.t>	//set the town it belongs to
+    new.more2=<local.f>	//set the faction owner of this monolith
+    new.color=<def0.faction_<dlocal.f>_colors>
+    new.name=The Faction Sigil Monolith of <argv[8]>
+    if !(strcmpi(s,<argv[4]>))
+      new.p=<eval <argv[0]>+(<argv[5]>*<local.x>)>,<eval <argv[1]>-(<argv[6]>*<local.y>)>,<argv[2]>,<argv[3]>
+      local.y += 1
+      if (<local.y> >= 2)
+        local.y=
+        local.x += 1
+      endif
+    elseif !(strcmpi(e,<argv[4]>))
+      new.p=<eval <argv[0]>+(<argv[5]>*<local.x>)>,<eval <argv[1]>-(<argv[6]>*<local.y>)>,<argv[2]>,<argv[3]>
+      local.x += 1
+      if (<local.x> >= 2)
+        local.x=
+        local.y += 1
+      endif  
+    endif
+  endfor
+endfor
+for t 0 7		//place town stones, sigils and monoliths
+  args=<def0.faction_controlled_town_<dlocal.t>>
+  serv.newitem i_faction_town_sigil
+  serv.var0.faction_town_sigil_<dlocal.t>=<new>
+  new.attr |= attr_move_never
+  new.dispid += <dlocal.t>	//each sigil should look different
+  new.more1=<dlocal.t>	//store the town as more1
+  new.name=The Faction Town Sigil of <argv[1]>
+  new.p=<def0.faction_controlled_town_<dlocal.t>_sigil>
+  new.z += 18
+  new.morep=<new.p>
+  ref1=<new>
+  serv.newitem i_faction_town_monolith
+  ref1.link=<new>
+  new.attr |= attr_move_never
+  new.more1=<dlocal.t>	//store the town as more1
+  new.name=The Faction Town Sigil Monolith of <argv[1]>
+  new.p=<def0.faction_controlled_town_<dlocal.t>_sigil>
+  serv.newitem i_faction_town_stone
+  new.name=The Faction Town Stone of <argv[1]>
+  new.p=<def0.faction_controlled_town_<dlocal.t>_stone>
+  var0.faction_townstone_<new.region.defname>=<new>
+  for 1 4
+    var0.faction_<dlocal.t>_<new.region.defname>_sheriff=
+    var0.faction_<dlocal.t>_<new.region.defname>_finance_minister=
+  endfor
+endfor
+
+[function servlog_faction_sigils_monoliths]
+forinstances i_faction_town_sigil
+  serv.log <name> <more1>
+endfor
+forinstances i_faction_town_monolith
+  serv.log <name> <more1>
+endfor
+forinstances i_faction_monolith
+  serv.log <name> <more1>
+endfor
+
+[function remove_factions]
+forchars 9999
+  if (<npc>) && (strmatch(c_h_faction*,<baseid>))
+    remove
+  endif
+endfor
+forinstances i_faction_stone_signup
+  remove
+endfor
+forinstances i_faction_stone
+  remove
+endfor
+forinstances i_faction_town_sigil
+  remove
+endfor
+forinstances i_faction_town_monolith
+  remove
+endfor
+forinstances i_faction_town_stone
+  remove
+endfor
+forinstances i_faction_monolith
+  remove
+endfor
+
+
+[function f_faction_join]
+if (<tag0.young>) 		//no young players
+  sysmessage You may not join factions at this time.
+  return 1
+elseif (<skilltotal> < 3000)
+  sysmessage You cannot join a faction yet.	//You must have atleast 300.0 skill points to join a faction.
+  return 1
+elseif (<tag0.onlinetime> < 2)
+  sysmessage Your character must have at least 2 days of gametime to join a faction.
+  return 1
+elseif (<account.tag0.faction>)	&& (<account.tag0.faction> != <argv[0]>)	//only 1 char can be in a faction on accounts (disregard this check if they are already in the faction, only applies to guild recruitment)
+  sysmessage You cannot join a faction because you already declared your allegiance with another character.
+  return 1
+elseif (<guild>) 		//only guild owners can enlist the entire guild, no single guild member can join
+  if (<guild.masteruid> != <uid>) && (<uid.<guild.masteruid>.tag0.faction> != <argv[0]>) 
+    sysmessage You cannot join this guild until your guildmaster has joined. 	
+    return 1
+  elseif (<guild.masteruid> == <uid>)
+    ref1=<guild>
+    if (<ref1.align> != 0)
+      sysmessage You must be in a 'Standard' guild only to join a faction!	
+      return 1
+    endif
+    ref1.allmembers -1,sysmessage @68,0,1 Guild Message: Your guild is now joining the <def0.faction_<dargv[0]>> faction. Members with characters in other factions on the same account, less than 300.0 skillpoints, or young will be ejected from the guild.
+    ref1.allmembers -1,f_faction_guild_join <argv[0]>   
+    ref1.tag0.faction=<argv[0]>
+    sysmessage You have joined the faction along with your guildmates.
+    return 1
+  endif
+elseif  (<serv.list.faction_<df_faction_largest>_members.count> > 200)		
+  if (<serv.list.faction_<dargv[0]>_members> > <eval <serv.list.faction_<df_faction_smallest>_members>*3>)	//if a faction is over 200 members, 
+    sysmessage In the interest of faction stability, this faction declines to accept new members for now.
+    return 1
+  endif
+endif
+if (<tag0.faction> == <argv[0]>)
+  return 0	//skip everything if they are already in the faction (only happens for guild recruitment)
+endif
+events=+e_factions_player
+serv.list.faction_<dargv[0]>_members.add <uid>
+tag0.faction=<argv[0]>
+account.tag0.faction=<argv[0]>
+tag0.faction_rank=<f_faction_get_rank>
+tag0.faction_title=<f_faction_get_title>
+notoupdate
+sysmessage You have joined the faction. 
+serv.newitem i_robe
+new.events=+ei_faction_item
+new.tag0.faction=<argv[0]>
+new.attr |= attr_newbie|attr_blessed|attr_faction
+new.color=<def0.faction_<dargv[0]>_colors>
+new.cont=<findlayer.21>
+new.update
+sysmessage You have been granted a robe which signifies your faction.	
+effect=2,i_fx_sparkle,6,30,1
+sound 0209
+
+[function f_faction_guild_join]
+if (<tag0.young>) 		//no young players
+  guild.resign
+  sysmessage You may not join factions at this time. You have been ejected from the guild.
+  return 1
+elseif (<skilltotal> < 3000)
+  guild.resign
+  sysmessage You cannot join a faction yet	//You must have atleast 300.0 skill points to join a faction. You have been ejected from the guild.
+  return 1
+elseif (<account.tag0.faction>)	&& (<tag0.faction> != <argv[0]>)	//only 1 char can be in a faction on accounts
+  guild.resign
+  sysmessage You cannot join a faction because you already declared your allegiance with another character. You have been ejected from the guild.
+  return 1
+endif
+events=+e_factions_player
+serv.list.faction_<dargv[0]>_members.add <uid>
+tag0.faction=<argv[0]>
+account.tag0.faction=<argv[0]>
+tag0.faction_rank=<f_faction_get_rank>
+tag0.faction_title=<f_faction_get_title>
+notoupdate
+serv.newitem i_robe
+new.events=+ei_faction_item
+new.tag0.faction=<argv[0]>
+new.attr=attr_newbie|attr_blessed|attr_faction
+new.color=<def0.faction_<dargv[0]>_colors>
+trysrc <uid> new.bounce
+sysmessage You have been granted a robe which signifies your faction.	
+effect=2,i_fx_sparkle,6,30,1
+
+[function f_faction_smallest]
+for f 2 4
+  local.smallest=1
+  if (<serv.list.faction_<dlocal.f>_members> < <serv.list.faction_<dlocal.smallest>_members>)
+    local.smallest=<dlocal.f>
+    //serv.b <local.smallest>
+  endif  
+endfor
+return <local.smallest>
+
+[function f_faction_largest]
+for f 2 4
+  local.largest=1
+  if (<serv.list.faction_<dlocal.f>_members.count> > <serv.list.faction_<dlocal.largest>_members.count>)
+    local.largest=<dlocal.f>
+  endif  
+endfor
+return <local.largest>
+
+[function f_faction_leave]
+if (<guild>) && (<guild.tag0.faction>) && (<guild.masteruid> == <uid>)
+  uid.<guild>.tag0.faction=	//if the guild master has officially quite, remove the faction tag from the stone.
+  guild.allmembers -1,f_faction_leave	//all other members must be removed from the faction as well
+else
+  events=-e_factions_player
+  serv.list.faction_<dtag0.faction>_members.<serv.list.faction_<dtag0.faction>_members.findelem <uid>>.remove
+  tag0.faction=
+  account.tag0.faction=
+  tag0.faction_points=
+  tag0.faction_kills=
+  notoupdate
+  sysmessage You have left the faction.
+  if (<findid.i_faction_leaving.isvalid>)
+    findid.i_faction_leaving.remove	//make sure this is removed, incase this function was fired manually
+  endif
+endif
+
+
+//takes seven days to leave a faction completely
+//only way for a guilded player to leave a faction is to leave the guild itself
+//while resigning for 7 days you can sitll attack/beattacked but you cannot use the faction stone or vote
+//noto takes priority over faction noto
+//guilds at war within a faction can attack each other
+//The precedence order for lawful aggression is by reputation, then by guild, then by faction. Lawful aggression is any aggression that will not flag the attacker as a criminal. Aggressive party actions are not listed because they themselves never allow free lawful aggression between players.
+
+[function f_setup_town_sigil]
+if (<link>==04fffffff)	//no link
+  serv.newitem i_faction_town_monolith
+  new.p=<p>
+  new.link=<uid>
+  link=<new>
+  z += 18
+endif
+
+[function f_faction_get_rank]
+//Your faction point ranking / total members in faction = %x
+local.score=<f_faction_get_score>
+if (<local.score> < 20 )
+  local.rank=1
+elseif (<local.score> < 90)
+  local.rank=<eval ((<local.score>/10)-1)>
+elseif (<local.score> < 99)
+  local.rank=<eval ((<local.score>/5)-10)>
+else
+  local.rank=10
+endif
+return <local.rank>
+
+
+[function f_faction_get_title]
+args=<def0.faction_<dtag0.faction>_titles>	//why is there a 0 in this...
+return <argv[<eval (<tag0.faction_rank>-1)>]>
+
+[function f_faction_get_score]
+//local.score=<muldiv <tag0.faction_points>,100,<serv.list.faction_<dtag0.faction>_members.count>>
+if (<tag0.faction_points> > 0) && (<var0.faction_<dtag0.faction>_points> > 0)	// player must have a point, and the faction must have overall points
+  local.score=<muldiv <tag0.faction_points>,100,<var0.faction_<dtag0.faction>_points>>
+endif
+local.score=<qval (100 < <local.score>)?100:<qval (<local.score> < 0)?0:<local.score>>>
+return <local.score>
+
+[function f_faction_total_points]
+for p 0 <eval (<serv.list.faction_<dargv[0]>_members.count>-1)>
+  ref1=<serv.list.faction_<dargv[0]>_members.<local.p>>
+  if (<ref1.isvalid>) 
+    local.points += <ref1.tag0.faction_points>
+  endif
+endfor
+return <local.points>
+
+[function f_faction_isally]
+ref1=<args>
+if (<ref1.tag0.faction>==<tag0.faction>) || (<ref1>==<uid>)
+  return 1
+endif
+return 0
+
+[function f_faction_isenemy]
+ref1=<args>
+if (<tag0.faction>) && (<ref1.tag0.faction>) && (<ref1.tag0.faction> != <tag0.faction>) 
+  return 1 
+endif
+if (<ref1.npc>==brain_monster)
+  if (<ref1.baseid>==c_silver_serpent) && (<tag0.faction>==1)	//true britannians
+    return 1
+  elseif (<ref1.baseid>==c_wisp) && (<tag0.faction>==2)		//council of mages
+    return 1
+  elseif (<ref1.baseid>==c_ogre_lord) && (<tag0.faction>==3)	//minax
+    return 1
+  elseif ((<ref1.baseid>==c_daemon) || (<ref1.baseid>==c_daemon_w_sword)) && (<tag0.faction>==4)	//shadow lords
+    return 1
+  endif
+endif
+return 0
+
+
+[function f_faction_worth_silver]	timer=60*60*3	//3 hours
+ref1=<argv[0]>
+forcharlayer 30
+  if (<baseid.i_faction_kill_memory>) && (<link>==<ref1>)		//already killed this player
+    return 0
+  endif
+endfor
+if (<rescount i_faction_kill_memory> >= 5)
+  return 0 	//no more than 5 players in the "silver given" list, anything after 5 doesnt give silver
+else
+  return 1
+endif
+
+[function f_faction_point_transfer]
+targetf f_faction_point_transfer_targ
+sysmessage Who's leadership do you wish to honor?
+
+[function f_faction_point_transfer_targ]
+if (<argo.tag0.faction> != <tag0.faction>) || (<argo> == <uid>) || (<argo.npc>)
+  sysmessage You cannot honor that target.
+  return 1
+endif
+tag0.faction_points -= 5
+argo.tag0.faction_points += 4
+sysmessage You have honored <argo.name>'s leadership 
+argo.sysmessage <name> has honored your leadership
+
+[function f_factions_assign_titles]
+for n 0 <eval <serv.accounts>-1>
+  for x 0 <eval <account.chars>-1>
+    ref1=<serv.account.<dlocal.n>.char.<dlocal.x>>
+    if (<ref1.isvalid>)
+      if (<ref1.tag0.faction>)
+        ref1.tag0.faction_rank=<ref1.f_faction_get_rank>
+        ref1.tag0.faction_title=<ref1.f_faction_get_title>
+      endif
+    endif
+  endfor
+endfor
+
+[function f_faction_sigil_highlight]
+ref1=<uid>
+if (<argn> > 0)	//color purple
+  ref1.color=11
+  for l 1 24
+    ref2=<ref1.findlayer.<local.l>>
+    if (<ref2>) 
+      if !(<ref2.color>==11)
+        ref2.ocolor=<ref2.color>
+        ref2.color=11
+      endif
+    endif
+  endfor
+else		//return to old color
+  ref1.color=<ref1.oskin>
+  for l 1 24
+    ref2=<ref1.findlayer.<local.l>>
+    if (<ref2>) 
+      ref2.color=<ref2.ocolor>
+    endif
+  endfor
+endif
+
+[function f_faction_announcement]
+serv.allclients f_faction_announcement_hear <args>
+
+[function f_faction_announcement_hear]
+if (<tag0.faction>)
+  sysmessage @11 <args>
+endif
+
+[function f_faction_place_guard]
+sysmessage Where would you like to place the guard?
+targetfg f_faction_place_guard_targ <args>
+
+[function f_faction_place_guard_targ]
+if (<src.distance <src.targp>> > 10)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <src.targp>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+endif
+serv.newnpc {c_h_faction_guard_<argv[1]> 1 c_h_faction_guard_<argv[1]>_f 1}
+ref1=<new>
+new.tag0.townstone=<argv[0]>
+new.tag0.faction=<src.tag0.faction>
+new.tag0.region=<uid.<argv[0]>.region.defname>
+new.events=+e_faction_guard
+new.speech=+JobFactionGuard
+new.p=<src.targp>
+new.home=<new.p>
+new.homedist=15
+new.tag0.override.movedelay 500
+new.tag0.npc_type=<argv[1]>
+serv.list.faction_<src.dtag0.faction>_<region.defname>_<new.tag0.npc_type>.add <new>
+var0.faction_<src.dtag0.faction>_<region.defname>_silver -= <new.hiredaywage>
+var0.faction_<src.dtag0.faction>_<region.defname>_sheriff_upkeep += <eval <new.hiredaywage>/2>
+serv.newitem i_faction_payroll
+new.tag0.payroll=sheriff
+new.link=<argv[0]>
+new.timer=60*60*24
+ref1.equip <new>
+
+[function f_faction_guard_invasion]
+ref1=<uid>
+for <argn>
+  dorand 3
+    serv.newnpc {c_h_faction_guard_henchman 1 c_h_faction_guard_henchman_f 1}
+    serv.newnpc {c_h_faction_guard_mercenary 1 c_h_faction_guard_mercenary_f 1}
+  enddo
+  new.tag0.faction=5
+  new.tag0.region=<uid.<argv[0]>.region.defname>
+  new.events=+e_faction_guard
+  new.speech=+JobFactionGuard
+  new.tag0.override.movedelay 500
+  new.tag0.npc_type=<argv[1]>
+  new.movenear <ref1> 10
+endfor
+
+
+
+[function f_faction_place_vendor]
+sysmessage Where would you like to place the vendor?
+targetfg f_faction_place_vendor_targ <args>
+
+[function f_faction_place_vendor_targ]
+if (<src.distance <src.targp>> > 10)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <src.targp>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+endif
+serv.newnpc {c_h_faction_vendor_<argv[1]> 1 c_h_faction_vendor_<argv[1]>_f 1}
+ref1=<new>
+new.tag0.townstone=<argv[0]>
+new.tag0.faction=<src.tag0.faction>
+new.tag0.region=<uid.<argv[0]>.region.defname>
+new.events=+e_faction_vendor
+new.p=<src.targp>
+new.home=<new.p>
+new.homedist=5
+new.tag0.npc_type=<argv[1]>
+serv.list.faction_<src.dtag0.faction>_<region.defname>_<new.tag0.npc_type>.add <new>
+var0.faction_<src.dtag0.faction>_<region.defname>_silver -= <new.hiredaywage>
+var0.faction_<src.dtag0.faction>_<region.defname>_finance_minister_upkeep += <eval <new.hiredaywage>/2>
+serv.newitem i_faction_payroll
+new.tag0.payroll=finance_minister
+new.link=<argv[0]>
+new.timer=60*60*24
+ref1.equip <new>
+
+[function f_faction_isleader]
+if (<var0.faction_<dtag0.faction>_leader>==<uid>)
+  return 1
+else
+  return 0
+endif
+
+[function f_faction_hire_sheriff]
+ref1=<args>	//the town stone
+if !(<argo.ischar>)
+  src.sysmessage That would not make a very good sheriff.
+  return 1
+elseif (<argo.tag0.faction> != <src.tag0.faction>) || (<var0.faction_<src.dtag0.faction>_<region.defname>_finance_minister>==<argo>) || (<argo.tag0.faction_officer>) ||(<argo.npc>)
+  src.sysmessage You cannot appoint them as Sheriff.
+  return 1
+elseif (<argo> == <src>)
+  src.sysmessage You cannot appoint yourself as Sheriff.
+  return 1
+elseif (<var0.faction_<src.dtag0.faction>_<ref1.region.defname>_sheriff>)
+  src.sysmessage You must first fire the current Sheriff.
+  return 1
+endif
+var0.faction_<src.dtag0.faction>_<ref1.region.defname>_sheriff=<argo>
+serv.list.faction_<src.dtag0.faction>_officer.add <argo>
+src.sysmessage <argo.name> has been appointed as Sheriff of <ref1.region.name>
+argo.tag0.faction_officer=<ref1>,sheriff,Sheriff
+argo.sysmessage You have been appointed as the Sheriff of <ref1.region.name>
+
+[function f_faction_hire_finance_minister]
+ref1=<args>	//the town stone
+if !(<argo.ischar>)
+  src.sysmessage That would not make a very good Finance Minister.
+  return 1
+elseif (<argo.tag0.faction> != <src.tag0.faction>) || (<var0.faction_<src.dtag0.faction>_<ref1.region.defname>_sheriff>==<argo>) || (<argo.npc>)
+  src.sysmessage You cannot appoint them as Finance Minister.
+  return 1
+elseif (<argo> == <src>) && !(<src.isgm>)
+  src.sysmessage You cannot appoint yourself as Finance Minister.
+  return 1
+elseif (<var0.faction_<src.dtag0.faction>_<ref1.region.defname>_finance_minister>)
+  src.sysmessage You must first fire the current Finance Minister.
+  return 1
+endif
+var0.faction_<src.dtag0.faction>_<ref1.region.defname>_finance_minister=<argo>
+serv.list.faction_<src.dtag0.faction>_officer.add <argo>
+src.sysmessage <argo.name> has been appointed as the Finance Minister of <ref1.region.name>
+argo.tag0.faction_officer=<ref1>,finance_minister,Finance Minister
+argo.sysmessage You have been appointed as the Finance Minister of <ref1.region.name>
+
+
+[function f_faction_guard_orders_follow_targ]
+ref1=<args>
+if (<argo.tag0.faction>) && (<argo.tag0.faction>==<ref1.tag0.faction>)
+  ref1.say following <argo.name>
+  ref1.act=<argo>
+  ref1.action=108
+endif
+
+[function f_faction_guard_war_orders]
+//0=attack, 1=warn, 2=ignore
+args=<explode " ",<args>>
+if !(strcmpi(true britannians,<argv[2]> <argv[3]>))
+  local.faction=1
+elseif !(strcmpi(council of mages,<argv[2]> <argv[3]> <argv[4]>))
+  local.faction=2
+elseif !(strcmpi(minax,<argv[2]>))
+  local.faction=3
+elseif !(strcmpi(shadowlords,<argv[2]>))
+  local.faction=4
+else	//must be one of the above
+  return 1
+endif
+
+if (<src.tag0.faction>==<local.faction>)	//cant engage your own faction
+  return 1	
+elseif !(strcmpi(attack,<argv[1]>))
+  tag0.faction_engagement_<dlocal.faction>=
+  say <def0.faction_<dlocal.faction>_attack>
+elseif !(strcmpi(warn,<argv[1]>))
+  tag0.faction_engagement_<dlocal.faction>=1
+  say <def0.faction_<dlocal.faction>_warn>
+elseif !(strcmpi(ignore,<argv[1]>))
+  tag0.faction_engagement_<dlocal.faction>=2
+  say <def0.faction_<dlocal.faction>_ignore>
+endif
+
+[function f_faction_commander_message]
+if (<tag0.faction>==<src.tag0.faction>)
+  sysmessage @11 Faction Commander : <args>
+endif
+
+[function f_faction_monster_isenemy]
+ref1=<args>
+if (<tag0.faction>) 
+  if (<ref1.baseid>==c_silver_serpent) && (<tag0.faction> != 1)	//true britannians
+    return 1
+  elseif (<ref1.baseid>==c_wisp) && (<tag0.faction> != 2)		//council of mages
+    return 1
+  elseif (<ref1.baseid>==c_ogre_lord) && (<tag0.faction> != 3)		//minax
+    return 1
+  elseif ((<ref1.baseid>==c_daemon) || (<ref1.baseid>==c_daemon_w_sword)) && !(<flags>&statf_conjured) && (<tag0.faction> != 4)	//shadow lords
+    return 1
+  endif
+endif
+return 0
+
+[function f_faction_imbue_item]
+ref1=<uid>	//player
+ref2=<argv[0]>	//crafted item
+ref3=<argv[1]>	//tool used to craft the item
+local.color=<argv[2]>	//the color selected
+
+if (<ref3.baseid>==i_hammer_runic_dull_copper)		//Durable Accurate (+5 Tactics)
+  ref2.tag0.skillbonus=<qval (<ref2.isweapon>)?tactics,50:>
+  ref2.maxhits += <qval (<ref2.isarmor>)?5:10>
+
+elseif (<ref3.baseid>==i_hammer_runic_shadow)		//Durable of Ruin (+1 damage)
+  ref2.modar += <qval (<ref2.isarmor>)?5:1>
+  ref2.maxhits += <qval (<ref2.isarmor>)?5:10>
+
+elseif (<ref3.baseid>==i_hammer_runic_copper)		//Fortified Surpassingly Accurate of Ruin (+10 Tactics and +1 damage)
+  ref2.tag0.skillbonus=<qval (<ref2.isweapon>)?tactics,100:>
+  ref2.modar += <qval (<ref2.isarmor>)?5:1>
+  ref2.maxhits += <qval (<ref2.isarmor>)?20:40>
+
+elseif (<ref3.baseid>==i_hammer_runic_bronze)		//Fortified Surpassingly Accurate of Might (+10 Tactics and +3 damage)
+  ref2.tag0.skillbonus=<qval (<ref2.isweapon>)?tactics,100:>
+  ref2.modar += <qval (<ref2.isarmor>)?10:3>
+  ref2.maxhits += <qval (<ref2.isarmor>)?20:40>
+
+elseif (<ref3.baseid>==i_hammer_runic_gold)		//Indestructible Eminently Accurate of Force (+15 Tactics and +5 damage)
+  ref2.tag0.skillbonus=<qval (<ref2.isweapon>)?tactics,150:>
+  ref2.modar += <qval (<ref2.isarmor>)?15:5>
+  ref2.maxhits += <qval (<ref2.isarmor>)?25:50>
+
+elseif (<ref3.baseid>==i_hammer_runic_agapite)		//Indestructible Eminently Accurate of Power (+15 Tactics and +7 damage)
+  ref2.tag0.skillbonus=<qval (<ref2.isweapon>)?tactics,150:>
+  ref2.modar += <qval (<ref2.isarmor>)?20:7>
+  ref2.maxhits += <qval (<ref2.isarmor>)?25:50>
+
+elseif (<ref3.baseid>==i_hammer_runic_verite)		//Indestructible Exceedingly Accurate of Power (+20 Tactics and +7 damage)
+  ref2.tag0.skillbonus=<qval (<ref2.isweapon>)?tactics,200:>
+  ref2.modar += <qval (<ref2.isarmor>)?20:7>
+  ref2.maxhits += <qval (<ref2.isarmor>)?25:50>
+
+elseif (<ref3.baseid>==i_hammer_runic_valorite)		//Indestructible Supremely Accurate of Vanquishing (+25 Tactics and +9 damage)
+  ref2.tag0.skillbonus=<qval (<ref2.isweapon>)?tactics,250:>
+  ref2.modar += <qval (<ref2.isarmor>)?25:9>
+  ref2.maxhits += <qval (<ref2.isarmor>)?25:50>
+endif
+ref2.tag0.faction=<src.tag0.faction>
+ref2.color=<local.color>
+ref2.attr |= attr_newbie|attr_blessed|attr_faction
+ref2.events=+t_faction_item	//this only lasts 2 weeks
+if (<ref2.isweapon>)
+  ref2.events=+t_skill_increase	//they are all skill items
+endif
+ref2.hits=<ref2.maxhits>
+ref2.timestamp=<serv.time>
+
+[function f_faction_remove_vendors]
+local.faction=<argn>
+args=Bottle,Wood,Ore,Reagent,Horsebreeder
+for v 0 4 
+  for n 0 <eval (<serv.list.faction_<local.faction>_<region.defname>_<argv[<dlocal.v>]>.count>-1)>
+    ref1=<serv.list.faction_<local.faction>_<region.defname>_<argv[<dlocal.v>]>.<dlocal.n>>
+    if (<ref1.isvalid>) 
+      ref1.remove
+    endif
+  endfor
+endfor
+
+[function f_faction_remove_guards]
+local.faction=<argn>
+args=Henchman,Mercenary,Knight,Paladin
+for g 0 3
+  for n 0 <eval (<serv.list.faction_<local.faction>_<region.defname>_<argv[<dlocal.g>]>.count>-1)>
+    ref1=<serv.list.faction_<local.faction>_<region.defname>_<argv[<dlocal.g>]>.<dlocal.n>>
+    if (<ref1.isvalid>) 
+      ref1.remove
+    endif
+  endfor
+endfor
+
+[function f_faction_guard_warn]
+ref1=<args>
+dorand 6
+  say I warn you, <ref1.name>, you would do well to leave this area before someone shows you the world of gray.
+  say It would be wise to leave this area, <ref1.name>, lest your head become my commanders' trophy.
+  say You are bold, <ref1.name>, for one of the meager <def0.faction_<ref1.dtag0.faction>>. Leave now, lest you be taught the taste of dirt.
+  say Your presence here is an insult, <ref1.name>. Be gone now, knave.
+  say Dost thou wish to be hung by your toes, <ref1.name>? Nay? Then come no closer.
+  say Hey, <ref1.name>. Yeah, you. Get out of here before I beat you with a stick.
+enddo
+
+
+
+[EOF]
+
+
+

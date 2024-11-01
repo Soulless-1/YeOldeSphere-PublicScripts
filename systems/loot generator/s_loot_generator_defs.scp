@@ -1,0 +1,190 @@
+//Made by Soulless
+//v1.0
+//10:10 PM 8/8/2022
+
+[defname rare_loot_ini]
+rare_drop_unidentified		1	//will drop as an unidentified item
+rare_drop_sparkle		1	//will the npc corpse alert the client of the item drop? corpse will sparkle
+
+//////////
+// affixname,hitpoints,color
+// magic armor
+magic_armor_prefix0_0		durable,5,1650		//armor prefix +to item hp
+magic_armor_prefix0_1		substantial,10,	1430
+magic_armor_prefix0_2		massive,15,1353
+magic_armor_prefix0_3		fortified,20,1805
+magic_armor_prefix0_4		indestructible,25,1887
+
+magic_armor_suffix0_0		defense,5,1650		//armor suffix +to ar	
+magic_armor_suffix0_1		guarding,10,1430
+magic_armor_suffix0_2		hardening,15,1353
+magic_armor_suffix0_3		fortification,20,1805
+magic_armor_suffix0_4		invulnerability,25,1887
+
+//////////
+// affixname,hitpoints,color
+// magic weapons
+magic_weapon_prefix0_0		durable,10,1650		//weapons prefix +to item hp
+magic_weapon_prefix0_1		substantial,20,1430
+magic_weapon_prefix0_2		massive,30,1353
+magic_weapon_prefix0_3		fortified,40,1805
+magic_weapon_prefix0_4		indestructible,50,1887
+
+magic_weapon_prefix1_0		accurate,50,1650	//weapons prefix#2 +to tactics	
+magic_weapon_prefix1_1		surpassingly accurate,100,1430
+magic_weapon_prefix1_2		eminently accurate,150,1353
+magic_weapon_prefix1_3		exceedingly accurate,200,1805
+magic_weapon_prefix1_4		supremely accurate,250,1887
+
+magic_weapon_suffix0_0		ruin,1,1650		//weapons suffix +to damage
+magic_weapon_suffix0_1		might,3,1430
+magic_weapon_suffix0_2		force,5,1353
+magic_weapon_suffix0_3		power,7,1805
+magic_weapon_suffix0_4		vanquishing,9,1887
+
+//////////////////////////
+// spellname,spelldef,charges
+// magic wands
+
+magic_wand_spell0	clumsy,s_clumsy,{5 30}
+magic_wand_spell1	feeblemind,s_feeblemind,{5 30}
+magic_wand_spell2	magic arrow,s_magic_arrow,{5 30}
+magic_wand_spell3	weaken,s_weaken,{5 30}
+magic_wand_spell4	harm,s_harm,{5 30}
+magic_wand_spell5	heal,s_heal,{10 25}
+magic_wand_spell6	fireball,s_fireball,{5 15}
+magic_wand_spell7	greater heal,s_greater_heal,{1 5}
+magic_wand_spell8	lightning,s_lightning,{5 20}
+magic_wand_spell9	mana drain,s_mana_drain,{5 30}
+magic_wand_spell10	identify,s_identify,{25 175}
+
+//////////
+// spellname,spelldef,color
+// enchanted_weapons
+magic_weapon_enchantment0_0	clumsiness,s_clumsy,0185
+magic_weapon_enchantment0_1	feeblemindedness,s_feeblemind,020c
+magic_weapon_enchantment0_2	burning,s_magic_arrow,084d
+magic_weapon_enchantment0_3	weakness,s_weaken,01e3
+magic_weapon_enchantment0_4	wounding,s_harm,0845
+magic_weapon_enchantment0_5	evil,s_curse,0452
+magic_weapon_enchantment0_6	daemon's breath,s_fireball,066d
+magic_weapon_enchantment0_7	thunder,s_lightning,011
+magic_weapon_enchantment0_8	mages bane,s_mana_drain,084a
+magic_weapon_enchantment0_9	ghoul's touch,s_paralyze,08a1
+
+/////////
+// spellname,spelldef
+// enchanted clothing
+magic_clothing_enchantment0_0	clumsy,s_clumsy
+magic_clothing_enchantment0_1	feeblemind,s_feeblemind
+magic_clothing_enchantment0_2	weaken,s_weaken
+magic_clothing_enchantment0_3	agility,s_agility
+magic_clothing_enchantment0_4	cunning,s_cunning
+magic_clothing_enchantment0_5	strength,s_strength
+magic_clothing_enchantment0_6	curses,s_curse
+magic_clothing_enchantment0_7	night eyes,s_night_sight
+magic_clothing_enchantment0_8	blessings,s_bless
+magic_clothing_enchantment0_9	spell reflection,s_magic_reflection
+magic_clothing_enchantment0_10	invisibility,s_invisibility
+
+/////////////////////////////
+// npc specific rare drops		itemid,name,modar,color,typedef,odds ($ is the current name of the item)
+// this is now organized by NPC and npcs get more dififculty as they go
+			
+rare_drop_c_zombie0			random_leather_armor,rotting flesh armor,10,0a67,t_rotting_flesh_armor,200//
+rare_drop_c_zombie1			i_club,severed zombie limb,3,950,t_severed_zombie_limb,200//
+rare_drop_c_skeleton0			random_bone_armor,gravesworn $,15,950,t_gravesworn_armor,200//
+rare_drop_c_skeleton1			i_hatchet,skeletal $,5,950,t_skeletal_hatchet,200//
+rare_drop_c_elem_earth0			random_ringmail_armor,elemental warden's $,25,08d5,t_elemental_wardens_armor,200//
+rare_drop_c_elem_earth1			{i_sword_long 1 i_staff_gnarled 1 i_mace 1},earth elemental $,8,895,t_earth_elemental_weapon,200//periodic earth damage
+rare_drop_c_cyclops1			random_platemail_armor,cyclopean $,30,08bd,t_cyclopean_armor,200//
+rare_drop_c_cyclops1			i_halberd,colossal cleaver,10,08fc,t_colossal_clever,200//potential colossal hit
+rare_drop_c_elem_air0			random_platemail_armor,stormforged $,35,08f6,t_stormforged_armor,200//
+rare_drop_c_elem_air1			{i_sword_long 1 i_staff_gnarled 1 i_mace 1},air elemental $,11,481,t_air_elemental_weapon,200//periodic wind damage
+rare_drop_c_elem_air2			i_cloak,stormcaller's mantle,0,707,t_stormcallers_mantle,200//
+rare_drop_c_h_evilmage0			random_leather_armor,mage $,35,099f,t_mage_armor,200//
+rare_drop_c_h_evilmage1			i_robe,arcane archivist's robe,0,07bb,t_arcane_archivists_robe,200//
+rare_drop_c_ogre_lord0			random_chainmail_armor, ironclad $,35,07a5,t_ironclad_armor,200//
+rare_drop_c_ogre_lord1			i_maul,bone mauler,11,07a3,t_bone_mauler,200//periodic crushing blow
+rare_drop_c_silver_serpent0		random_platemail_armor,serpentine $,35,482,t_serpentine_armor,200//
+rare_drop_c_silver_serpent1		i_kryss,serpent's kiss,11,889,t_serpents_kiss_weapon,200//low poison with no charges
+rare_drop_c_ogre_lord_artcic0		i_platemail_arms,permafrost armguards,35,860,t_permafrost_armguards,200//some fire damage reduction
+rare_drop_c_ogre_lord_artcic1		i_sword_long,frostforged warblade,11,08d3,t_frostforged_warblade,200//periodic frost damage
+rare_drop_c_reaper0			random_studded_armor,ranger $,35,0b0c,t_ranger_armor,200//
+rare_drop_c_reaper1			random_bone_armor,eldertree $,35,08de,t_eldertree_armor,200//
+rare_drop_c_ophidian_warrior0		random_ringmail_armor,serpentlord's $,35,08c6,t_serpentlords_armor,200//
+rare_drop_c_ophidian_warrior1		i_bardiche,hydracoil reaper,11,925,t_hydracoil_reaper,200//occasional bleeding damage
+rare_drop_c_h_dreadlord0		random_platemail_armor,mirror $,40,0ab5,t_mirror_plate,200//
+rare_drop_c_h_dreadlord1		i_sword_long,shadow $,13,0ae3,t_shadow_weapon,200//periodic shadow damage
+rare_drop_c_lich0			i_platemail_chest,phylactery chestplate,40,0a6b,t_phylactery_chestplate,200//
+rare_drop_c_lich1			i_robe,lich's robe,0,0a6b,t_lichs_robe,200//
+rare_drop_c_daemon0			random_bone_armor,daemon $,40,0abd,t_daemon_bone_armor,200//
+rare_drop_c_daemon1			i_mace,abyssal $,13,08b3,t_abyssal_mace,200//periodic abyssal damage
+rare_drop_c_dameon_w_sword0		random_bone_armor,daemon $,40,0abd,t_daemon_bone_armor,200//
+rare_drop_c_dameon_w_sword1		i_sword_long,daemon's $,13,0b01,t_daemons_sword,200//occasional hit for bonus damage
+rare_drop_c_icefiend0			random_platemail_armor,abyssal frost $,40,08df,t_abyssal_frostplate,200//
+rare_drop_c_icefiend1			i_platemail_leggings,daemon's frostbite greaves,40,0ad7,t_daemons_frostbite_greaves,200//
+rare_drop_c_gazer_elder0		i_helm_norse,gazer's eyeplate,40,0aaf,t_gazers_eyeplate,200//meditate in any armor
+rare_drop_c_gazer_elder1		i_robe,tentacle-embraced robes,0,0aae,t_tentacle_embraced_robes,200//meditation increase
+rare_drop_c_terathan_matriarch0		random_bone_armor,venom queen's carapace,40,950,t_venom_queens_carpace,200//
+rare_drop_c_terathan_matriarch1		i_wand_1,broodmother's embrace,0,09af,t_broodmothers_embrace,200//this feels very ominous
+rare_drop_c_terathan_avenger0		random_ringmail_armor,tarantulite $,40,854,t_tarantulite_armor,200//
+rare_drop_c_terathan_avenger1		i_spear,terathan spear,13,08f5,t_terathan_spear,200//extra damage to terathans
+rare_drop_c_titan0			random_platemail_armor,aegis of the titan $,40,990,t_aegis_titan_armor,200//
+rare_drop_c_titan1			i_platemail_gloves,giant's gauntlets,40,0b17,t_giants_gauntlets,200//gives you strength
+rare_drop_c_elem_blood0			random_platemail_armor,bloodwell $,40,0b1e,t_bloodwell_armor,200//
+rare_drop_c_elem_blood1			i_helm_closed,bloodseers helm,40,0b1f,t_bloodseers_helm,200//converts health into mana
+rare_drop_c_elem_blood2			i_spear_short,hemoglaive,13,0b1f,t_hemoglaive,200//drain blood form target (transfer any negative buffs)
+rare_drop_c_ophidian_queen0		random_chainmail_armor,coilweaver's $,40,098b,t_coilweavers_armor,200//
+rare_drop_c_ophidian_queen1		i_bardiche,hydracoil warstaff,13,098b,t_hydracoil_warstaff,200//
+rare_drop_c_dread_spider0		random_studded_armor,venomshroud $,40,056b,t_venomshroud_armor,200//protection from poison
+rare_drop_c_dread_spider1		i_cape,dreadweave cloak,0,625,t_dreadweave_cloak,200//high chance to hide without skill
+rare_drop_c_lich_lord0			random_bone_armor,evil  $,45,097f,t_gravesworn_armor,200//
+rare_drop_c_lich_lord1			i_axe,deathknell $,15,0b00,t_deathknell_axe,200//bonus undead damage
+rare_drop_c_wyrm_white0			random_platemail_armor,snowbound $,45,481,t_snowbound_armor,200//
+rare_drop_c_wyrm_white1			i_bow,arctic $,15,08d3,t_artic_weapon,200//periodic cold damage
+rare_drop_c_elem_poison0		i_robe,plaguebearer's raiment,0,910,t_plaguebearers_raiment,200//25% resistance to poison
+rare_drop_c_elem_poison1		i_cape,noxious mist cloak,0,910,t_noxious_mist_cloak,200//25% resistance to poison
+rare_drop_c_h_dreadlord_captain0	random_platemail_armor,crimson $,50,564,t_crimson_armor,200//
+rare_drop_c_h_dreadlord_captain1	i_bow,vortex $,16,0ac5,t_vortex_bow,200//contains a trapped energy vortex
+rare_drop_c_balron0			random_bone_armor,satanic $,50,981,t_satanic_bone_armor,200//
+rare_drop c_balron1			random_platemail_armor,pandemonium $,50,086a,t_pandemonium_armor,200//
+rare_drop_c_balron2			i_axe_exec,moltensteel $,16,08d6,t_moltensteel_weapon,200//periodic molten damage
+rare_drop_c_phoenix0			random_ringmail_armor,phoenix $,50,986,t_phoenix_armor,200//
+rare_drop_c_phoenix1			i_platemail_chest,phoenixborn raiment,50,569,t_phoenixborn_raiment,200//resurrection chance (destroys item)
+rare_drop_c_phoenix2			i_cloak,phoenix feather cloak,0,569,t_phoenix_cloak,200//resurrection chance (destroys item)
+rare_drop_c_h_evilmagelord0		random_leather_armor,mage $,50,099f,t_mage_armor,200//
+rare_drop_c_h_evilmagelord1		i_robe,eldritch veil,50,572,t_eldritch_veil,200//spell damage bonus
+rare_drop_c_dragon_red0			random_platemail_armor,fire $,50,0afa,t_fire_armor,200//less damage from dragonkin
+rare_drop_c_dragon_red1			i_shield_heater,draconian shield,50,0b01,t_draconian_shield,200//
+rare_drop_c_dragon_green0		random_platemail_armor,fire $,50,0afa,t_fire_armor,200//less damage from dragonkin
+rare_drop_c_dragon_green1		i_shield_heater,draconian shield,50,0b53,t_draconian_shield,200//
+rare_drop_c_wyrm_ice0			random_platemail_armor,eternal ice $,55,0af3,t_eternal_ice_armor,200//
+rare_drop_c_wyrm_ice1			i_bow,frozen $,18,0af3,t_frozen_weapon,200//periodic frozen damage
+rare_drop_c_rotting_corpse0		i_platemail_chest,blighted plagueplate,55,0b32,t_blighted_plaguplate,200//occasionally poison attacker
+rare_drop_c_rotting_corpse1		i_hooded_shroud,plague doctor's shroud,55,0b79,t_plague_doctors_shroud,200//you know this is useful, but not yet how
+rare_drop_c_rotting_corpse2		i_ring_gold,rotting corpses ring,0,09af,t_rotting_corpses_ring,200//the most repulsive yet intriguing rings you've seen before
+rare_drop_c_wyrm_ancient0		random_platemail_armor,wyrmforged $,60,871,t_wyrmforged_armor,200//
+rare_drop_c_wyrm_ancient1		i_spear,flameforged warspear,20,0b17,t_flameforged_warspear,200//periodic flame damage
+rare_drop_c_wyrm_ancient2		i_robe,emberweave robe,60,0b17,t_emberweave_robe,200//increase your fire spell damage
+rare_drop_c_wyrm_shadow0		random_platemail_armor,champion's valor $,60,0b54,t_champions_valor_armor,200//strongest armor in the game
+rare_drop_c_wyrm_shadow1		i_hammer_war,umbral warhammer,20,06fb,t_umbral_warhammer,200//you feel a shadowy apparition is watching you
+rare_drop_c_wyrm_shadow2		i_sword_long,excalibur,20,09c3,t_excalibur,200//extra damage to dragons
+rare_drop_c_liche_ancient0		random_bone_armor,$ of the undying,65,08d4,t_undying_armor,200//
+rare_drop_c_liche_ancient1		i_hooded_shroud,ancient lich's raiment,0,08d4,t_lichs_raiment,200//you are not certain
+rare_drop_c_liche_ancient2		i_spellbook_full,grimoire of the lich,65,08d4,t_lich_grimoire,200//bonus magery 
+
+//094d  teardrop - great dark color
+
+rare_deco_all		{ rare_deco_bottles 1 rare_deco_books 1 rare_deco_blood 1 rare_deco_pillows 1 rare_deco_lanterns 1 rare_deco_smallrugs 1 rare_deco_statues 1 }
+rare_deco_bottles	{ 0182a 01848 }
+rare_deco_books		{ 01e20 01e25 }
+rare_deco_blood		{ {0122a 0122f} 1 {01d92 01d96} 1 }
+rare_deco_pillows	{ 013a4 013ae } 
+rare_deco_lanterns	{ 040fe 04101 }
+rare_deco_smallrugs	{ {03f08 03f0a} 1 03f0d 3 03f11 3 {03f17 03f18} 1 } 
+rare_deco_statues	{ 0139a 0139d }
+
+[EOF]
+ 
+ 

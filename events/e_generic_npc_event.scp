@@ -1,0 +1,221 @@
+//these are fixes or adjustments to general NPC behavior
+
+[events e_generic_npc_event]
+
+on=@create
+tag0.base_difficulty=<f_base_difficulty>	//used for many things
+//tag0.override.movedelay=750
+//tag0.override.moverate=250
+modar=<serv.chardef.<baseid>.armor>	//this should be set on all NPCs
+//if (<npc> >= brain_human) && (<npc> <= brain_animal_trainer)
+  //speechcoloroverride=<eval 06+(5*{1 14})>	//FIXME: speech color affects message color also, though it should not
+//endif
+f_initialize_ambient_vendor_sounds		//add vendor ambient noise memory item to vendors with valid jobs
+//gold=<muldiv 50,<gold>,100>	//can adjust npc gold globally here to control it's supply from npcs
+if (<var0.mondains_horde_size> < <def0.mondains_horde_size>) && (<region>) && (<indungeon>) && ((<npc>==brain_monster) || (<npc>==brain_dragon))		//room in the horde, valid region that is dungeon, and a monster?
+  if !(<R<def0.mondains_horde_odds>>)		//Roll to see if its a horde monster
+    //f_mondains_horde_npc_join
+  endif
+endif
+height=12
+
+on=@environchange
+//if (<spawnitem.isvalid>) && (<region.flags>&region_flag_guarded) && (<spawnitem.room.isvalid>)
+  //if !(<room.isvalid>) || (<room.uid> != <spawnitem.room.uid>)
+    //if (<npc>==brain_vendor) || (<npc>==brain_vendor) ||  (<npc>==brain_banker)
+      //serv.log <name>(<uid>) a <job> being sent to their spawnitem(<uid>)
+      //go <spawnitem.p>
+    //endif
+  //endif
+//endif
+
+on=@hunger
+ref1=<owner>
+if !(<ref1.isvalid>) || (<ref1.npc>)
+  return 1
+endif
+
+on=@click
+if (<owner>) && !(<isevent.e_player_vendor>) && !(<npc>==brain_berserk)
+  message @0482,3,0,0 <qval (<ishumanoid>)?(hired):(tame) <qval (<bonded>)?(bonded):>>
+endif
+
+//if (<ismonster>)
+  //if (<tag0.base_difficulty> >= 100) 
+    //local.DifficultyColor=114
+  //elseif (<tag0.base_difficulty> >= 80) 
+    //local.DifficultyColor=138
+  //elseif (<tag0.base_difficulty> >= 60) 
+    //local.DifficultyColor=144
+  //elseif (<tag0.base_difficulty> >= 40) 
+    //local.DifficultyColor=154
+  //else
+    //local.DifficultyColor=164
+  //endif
+  //message @<local.DifficultyColor>,3,0,1 *<qval (<tag0.base_difficulty> >= 40)?*:><qval (<tag0.base_difficulty> >= 60)?*:><qval (<tag0.base_difficulty> >= 80)?*:><qval (<tag0.base_difficulty> >= 100)?*:>
+//endif
+
+if (<isevent.e_enraged>)
+  args .= ", Enraged"
+endif
+if (<isevent.e_burning_aura>)
+  args .= ", Burning Aura"
+endif
+if (<isevent.e_frozen_aura>)
+  args .= ", Frozen Aura"
+endif
+if (<isevent.e_spectral>)
+  args .= ", Spectral"
+endif
+if (<isevent.e_summoner>)
+  args .= ", Summoner"
+endif
+args=<streat <args>>	//get rid of the first comma
+if !(<isempty <args>>)
+  message @,,0 ( <args> )
+endif
+
+if (<isevent.e_mondains_horde>)
+  ref1=<src.findid.i_huntsman_contract>
+  if (<ref1.isvalid>) && (<ref1.more2> == <uid>)
+    message @030 (Servant of Mondain)
+    message @030 <def0.mondains_horde_rank<dtag0.mondains_horde_rank>> <name>
+  else
+    message @027 (Servant of Mondain)
+    message @027 <def0.mondains_horde_rank<dtag0.mondains_horde_rank>> <name>
+  endif
+  return 1  
+endif
+
+on=@npcactwander			//make npcs that wander not zoom around
+if !(<owner>) 				//no owner
+  if (<findid.i_waypoint_navigation>)	//these npcs need to wander fast still
+    tag0.override.moverate=10
+    tag0.override.movedelay=450
+  else					//everything else
+    tag0.override.moverate=0		
+    tag0.override.movedelay=0
+  endif
+endif
+
+on=@npcactfollow			//make npcs moving with a purpose 
+if !(<owner>)				//no owner
+  if (<findid.i_waypoint_navigation>)	//custom waypoint npcs
+    tag0.override.moverate=10
+    tag0.override.movedelay=450
+  else					//every thing else
+    tag0.override.moverate=50
+    tag0.override.movedelay=500
+  endif
+endif
+
+on=@npcactcast
+if (<argo.flags>&statf_reflection)
+  argn1=5				//theyve got reflect, just use magic arrow
+endif
+if (<argn1> == 20)			//casting poison
+  if (<argo.findid.i_rune_poison>)	//they're already poisoned
+    argn1=18				//let's cast a fireball instead then
+  endif
+endif
+
+on=@spellcast
+//tag0.NPCNoCastTill=<eval ((<serv.time>+(<argn3>*2))+10)>
+if (<npc> >= 2) && (<npc> <= 7)		//these are humans
+  local.wop=1				//show the words of power
+  local.wopcolor=03b2			//in a light gray text color
+else
+  local.wop=0
+endif
+
+on=@spelleffect
+if (<flags>&statf_ridden) && (<serv.spell.<argn1>.flags>&spellflag_field) 
+  return 1
+endif
+
+on=@gethit
+if (<argn2>&dam_poison)	//some monsters are totally immune to poison, others will become resistant after time
+  if (<poisoning>)
+    consume i_rune_poison 
+    message @03b2,3,0,0 *The poison seems to have no effect*
+    return 1
+  endif
+  //events=+e_poison_resistance		//i dont think we need this anymore
+endif
+
+on=@death
+//if (<istevent.e_undead>) || (<isevent.e_undead>)
+  //if (<serv.rtime.format %mm>==10) && ((<serv.rtime.format %dd> >= 24) || (<serv.rtime.format %dd> <= 31))	//the week running to halloween
+    //serv.newnpc c_halloween_spirit
+    //new.p=<p>
+  //endif
+//endif
+
+on=@deathcorpse
+ref1=<uid>	//npc
+ref2=<argo>	//corpse
+ref1=<attacker.max>
+if (<ref1.isvalid>) && (<ref2.isvalid>)		//if there is an npc and it makes a corpse
+  if (<ref1.owner>)
+    argo.more2=<ref1.owner>		//pets owner is considered the corpses killer
+  elseif (<ref1.findid.i_provoked>)
+    argo.more2=<ref1.findid.i_provoked.link>	//provoker is considered the corpses killer
+  endif
+  ref2.tag0.base_difficulty=<tag0.base_difficulty>
+endif
+
+
+//EXPERIENCE GAIN CODE
+[comment]	// this is for later, with talent trees
+on=@death 
+if (<npc>) && !(<flags>&statf_conjured) && !(<owner>)		//get exp from kills
+  local.maxexp=<eval ((<str>/20)+1)>
+  for n 0 <eval (<attacker>-1)>	//first off lets eliminate player's pets and add their scores together
+    ref1=<attacker.<dlocal.n>>
+    if (<ref1.isvalid>) 	//attacker is valid still on death?
+      if (<ref1.npc>) && (<ref1.owner>)		 //this is someone's pet, let's focus on the owner
+        ref2=<ref1.owner>
+        if (<attacker.<ref2>.id> == -1)		//my owner isnt in the attacker list, let's add him
+          attacker.add <ref2>
+          local.effort=<muldiv <attacker.<dlocal.n>.damage>,100,<maxhits>>	//determine what % damage they did
+          local.exp=<muldiv <local.effort>,<local.maxexp>,100>	//determine how many points they get based on %
+          if (<local.exp>)
+            ref2.exp += <local.exp>
+            ref2.sysmessage @010 You gain <dlocal.exp> xp!
+          endif
+        else
+          attacker.<attacker.id <ref2>>.damage=<attacker.<attacker.id <ref2>>.damage>+<attacker.<dlocal.n>.damage>	//add damage to the owner
+          attacker.<dlocal.n>.delete		//remove this pet
+        endif
+      endif
+    endif
+  endfor
+  for x 0 <eval (<attacker>-1)>	
+    ref1=<attacker.<dlocal.x>>
+    if (<ref1.isplayer>)
+      local.effort=<muldiv <attacker.<dlocal.x>.damage>,100,<maxhits>>	//determine what % damage they did
+      local.exp=<muldiv <local.effort>,<local.maxexp>,100>	//determine how many points they get based on %
+      serv.log ----player----
+      serv.log <ref1.name> <ref1.uid>)
+      serv.log dmg: <dlocal.effort>% of <local.maxexp> = <dlocal.exp> xp gained
+      if (<local.exp>)
+        ref1.exp += <local.exp>
+        if (<ref1.isgm>)
+          ref1.sysmessage @010 You gain <dlocal.exp> xp!
+        endif
+      endif
+    endif
+  endfor
+endif
+
+
+[function f_halloween_spirit_transform]
+
+
+
+
+
+
+
+
+[EOF]

@@ -1,0 +1,34 @@
+[SPELL 4]
+DEFNAME=s_heal
+NAME=Heal
+SOUND=snd_spell_heal
+RUNES=IM
+CAST_TIME=1.8	//0.8
+RESOURCES=i_reag_garlic,i_reag_ginseng,i_reag_spider_silk
+RUNE_ITEM=i_rune_heal
+SCROLL_ITEM=i_scroll_heal
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly|spellflag_heal
+EFFECT_ID=i_fx_heal_effect
+EFFECT=5,20
+DURATION=0.0
+MANAUSE=4
+SKILLREQ=MAGERY 0.0
+INTERRUPT=100.0,100.0
+
+on=@success
+//if (<act.findid.i_rune_poison>)
+  //src.message @026 You cannot heal <qval (<act>==<src>)?yourself in your:that target in their> current state.
+  //return 1
+//endif
+
+//Heals your target for 1-10 damage based on caster's Magery
+//Formula: Magery * .1 + 1d6 (11-16 HP)
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval (<muldiv 10,(<local.spell_strength>/10),100>)+{1 6}>
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+
+[EOF]

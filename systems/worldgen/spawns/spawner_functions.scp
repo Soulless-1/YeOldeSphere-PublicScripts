@@ -1,0 +1,248 @@
+
+
+//    0     1     2     3     4     5   6 7 8   9     10      11         12         13        14     15    16     17     18     19     20
+//*|List1|List2|List3|List4|List5|List6|X|Y|Z|facet|MinTime|MaxTime|WalkingRange|HomeRange|SpawnID|Count1|Count2|Count3|Count4|Count5|Count6
+
+
+[function f_create_spawner]
+for 0 5
+  if !(<isempty <argv<dlocal._for>>>)
+    if (strmatch(*:*,<argv<dlocal._for>>))	//check to see if more than one npc on the spawner
+      local.spawn_array=<explode :,<argv<dlocal._for>>>
+    endif
+
+//////for validation purposes
+    if (<var0.f_validate_spawns>)
+      if (<local.spawn_array>)
+        f_validate_spawn <explode , <local.spawn_array>>
+      else
+        f_validate_spawn <argv<dlocal._for>>
+      endif
+      f_reset_spawn_counters
+      return 1
+    endif
+/////end of validation
+
+    if (<resourcetype <argv[<dlocal._for>]>>==<def.res_chardef>)	//check for if it's an npc or an item
+      local.type=t_spawn_char
+    elseif (<resourcetype <argv[<dlocal._for>]>>==<def.res_itemdef>)	//<serv.itemdef.<argv<dlocal._for>>>
+      local.type=t_spawn_item
+    endif
+
+    serv.newitem i_worldgem_bit
+    new.type=<local.type>					//<qval <serv.chardef.<argv<dlocal._for>>>?t_spawn_char:t_spawn_item>
+    if (<new.type>==t_spawn_char)
+      new.events=+t_custom_spawner_char
+    else
+      new.events=+t_custom_spawner_item		//this will apply for items/multis
+      new.attr=090    
+    endif
+    if (<local.spawn_array>)
+      new.tag.spawn_array=<local.spawn_array>
+      new.more1=<strarg <local.spawn_array>>
+    else
+      new.more1=<argv<dlocal._for>> 					//more1
+    endif
+    new.p=<argv[6]>,<argv[7]>,<argv[8]>,<dvar0.spawner_facet>	//<argv[9]>	//p
+    new.morep=<argv[10]>,<argv[11]>,<argv[12]>				//morep
+    new.amount=<argv[<eval 15 + <local._for>>]>				//amount
+    new.update	
+    new.timer=<R<argv[10]>,<argv[11]>>
+  endif
+  local.spawn_array=
+endfor
+
+
+////VALIDATION
+[function f_validate_spawn]
+for n 0 <eval <argv> -1>
+  local.spawn=<def0.<argv[<dlocal.n>]>>
+  if !(<resourceindex <local.spawn>>) && !(<resourceindex <local.spawn>>)
+    serv.log <local.spawn> is not a valid chardef or itemdef
+  endif
+endfor
+////VALIDATION
+
+
+[function f_remove_all_spawns]
+forinstances i_worldgem_bit
+  if (<type>==t_spawn_char) || (<type>==t_spawn_item)
+    remove
+  endif
+endfor
+f_reset_spawn_counters
+sysmessage @026 All spawns removed
+
+
+[function f_reset_spawn_counters]
+while !<isempty <def.worldspawner_facet_<dlocal.n>>>
+  while !<isempty <def.worldspawner_facet_<dlocal.n>_<dlocal.x>>>
+    args=<def0.worldspawner_facet_<dlocal.n>_<dlocal.x>>
+    var0.<argv[1]>=
+    local.x += 1
+  endwhile
+  local.n += 1
+  local.x=
+endwhile
+
+[function f_remove_all_npcs]	//removes all npcs that are not invul, or owned
+local.p=<P>
+p=1,1,1,0
+update
+for 0 5
+  p=1,1,1,<dlocal._for>
+  forchars 10000
+    if (<npc>) 
+      if (<owner>) || (<flags>&statf_invul)
+        serv.log Can't remove <name>. (<qval (<owner.isvalid>)?<owner.name>:Nobody> owns it and it's <qval <flags>&statf_invul?Invulneralbe: Not Invulnerable>)
+      elseif (<isevent.e_townsfolk>) || (<isevent.e_patrolling_guard>)
+        serv.log Can't remove <name>. (townsfolk or patrolling guard)
+      else
+        remove
+      endif
+    endif
+  endfor
+endfor
+p=<local.p>
+update
+sysmessage @026 All NPCs removed
+
+[function f_kill_all_npcs]
+local.p=<P>
+p=1,1,1,0
+update
+for 0 5
+p=1,1,1,<dlocal._for>
+  forchars 10000
+    if (<npc>) 
+      if (<owner>) || (<flags>&statf_invul)
+        serv.log Can't kill <name>. (<qval (<owner.isvalid>)?<owner.name>:Nobody> owns it and it's <qval <flags>&statf_invul?Invulneralbe: Not Invulnerable>)
+      elseif (<isevent.e_townsfolk>) || (<isevent.e_patrolling_guard>)
+        serv.log Can't kill <name>. (townsfolk or patrolling guard)
+      else
+        hits 0
+      endif
+    endif
+  endfor
+  //f_remove_all_corpses
+endfor
+p=<local.p>
+update
+sysmessage @026 All NPCs killed
+
+[function f_remove_all_corpses]
+foritems 9999
+  if (<type>==t_corpse)
+    timer=1
+  endif
+endfor
+
+
+[function f_adjust_dungeon_chest_spawns]		//increase respawn to 60-120 minutes for dungeon chest items
+forinstances i_worldgem_bit
+  if (<type>==t_spawn_item) && (strmatch(i_dungeon_chest*,<more1>))
+    timelo=120
+    timehi=180
+  endif
+endfor
+
+
+[function f_clearout_bookcases]
+ref1=<uid>
+foritems 9999
+if (<baseid>==i_bookcase_full)
+  forcont <uid> 9999
+    remove
+  endfor
+endif
+endfor
+
+[function f_stock_bookcases]
+ref1=<uid>
+foritems 9999
+if (<baseid>==i_bookcase_full)
+  for 5
+    serv.newitem { i_book_lg_pub 1 i_book_sm_pub 1 i_book_sm 1 i_book_lg 1}    
+    new.attr |= attr_move_never
+    new.type=t_book
+    new.f_populate_book_writing
+    ref1.useitem <new>
+    new.cont=<uid>
+    new.update
+  endfor
+endif
+endfor
+
+[function f_populate_book_writing]
+dorand 45
+  new.more1=b_sphere
+  new.more1=b_hitchhiker
+  new.more1=b_tennyson
+  new.more1=b_arrowsong
+  new.more1=b_mrmeantto
+  new.more1=b_villageblack
+  new.more1=b_greatmen
+  new.more1=b_hazardous
+  new.more1=b_swine
+  new.more1=b_greatenvy
+  new.more1=b_theprince
+  new.more1=b_voiceofreason
+  new.more1=b_atlasshrugged
+  new.more1=b_divinecomedy
+  new.more1=b_talktowisp
+  new.more1=b_orcgrammar
+  new.more1=b_xmasscarol
+  new.more1=b_virtues
+  new.more1=b_principal_truth
+  new.more1=b_principal_love
+  new.more1=b_principal_courage
+  new.more1=b_politic_anarchy
+  new.more1=b_primer_arms_weapons
+  new.more1=b_song_samlethe
+  new.more1=b_tale_three_tribes
+  new.more1=b_beltrans_guild_guide
+  new.more1=b_britannia_birds
+  new.more1=b_britannian_flora
+  new.more1=b_classic_childrens_tales
+  new.more1=b_classic_tales_of_vesper
+  new.more1=b_deceit_dungeon_of_horrors
+  new.more1=b_dimensional_travel
+  new.more1=b_ethical_hedonism
+  new.more1=b_sherrys_story
+  new.more1=b_diversity_of_our_land
+  new.more1=b_quest_of_virtues
+  new.more1=b_regarding_llamas
+  new.more1=b_taming_dragons
+  new.more1=b_burning_of_trinsic
+  new.more1=b_the_fight
+  new.more1=b_travelling_minstrel
+  new.more1=b_major_trade_associations
+  new.more1=b_rankings_of_trades
+  new.more1=b_the_wild_girl
+  new.more1=b_treatsie_on_alchemy
+enddo
+
+[function f_use_spawners]
+ref1=<uid>
+forinstances i_worldgem_bit
+  if (<type>==t_spawn_char) || (<type>==t_spawn_item)
+    ref1.go <p>
+    ref1.useitem <uid>
+    //timer=1
+  endif
+endfor
+
+[function f_use_spawners2]
+ref1=<uid>
+foritems 15
+  if (<type>==t_spawn_char) || (<type>==t_spawn_item)
+    ref1.go <p>
+    ref1.useitem <uid>
+  endif
+endfor
+
+
+
+
+
+[EOF]

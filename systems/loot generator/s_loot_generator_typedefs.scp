@@ -1,0 +1,675 @@
+
+///////////////////////////////////
+///////////TYPEDEFS////////////////
+///////////////////////////////////
+
+[typedef t_magic_armor]
+[typedef t_magic_weapon]
+
+[typedef t_skill_increase]
+
+on=@equip
+args=<tag0.skillbonus>
+if (<args> != 0)
+  //serv.log <src.name> equipping skill item <name>(<uid>) with args : <args>
+  if !(<src.tag0.override.skillsum>)	//make sure their base override is set the normal skillsum limit before anything else
+    src.tag0.override.skillsum=<serv.skillclass.0.skillsum>
+  endif
+  if (<argv1> > 250)
+    serv.log WARNING: skill increase item out of spec giving <argv[1]> <argv[0]> to <src.name>(<src>)
+  endif
+  src.tag0.override.skillsum += <argv[1]>
+  src.<argv[0]> += <argv[1]>
+endif
+
+on=@unequip
+args=<tag0.skillbonus>
+if (<args> != 0)
+  //serv.log <src.name> unequipping skill item <name>(<uid>) with args : <args>
+  if (<eval (<src.<argv[0]>> - <argv[1]>)> < 0)
+    local.difference=<eval <argv[1]>-<src.<argv[0]>> > 
+  endif
+  src.<argv[0]> -= <eval (<argv[1]>-<local.difference>)>
+  src.tag0.override.skillsum -= <argv[1]>
+endif
+
+[typedef t_glowing_item]
+
+on=@equip
+//src.equiphalo
+
+on=@unequip
+//src.findid.i_light_source.remove
+
+//////////////////////////////
+// Enchanted items
+
+[typedef t_enchanted_clothing]	
+
+on=@click
+//tag0.name.suffix=" (<dmore2> charges)"
+tag0.name.suffix=" (faded magic)"
+
+on=@dclick
+src.sysmessage The magic has faded from this item.
+return 1			//these items are no longer valid
+if (<topobj> != <src>) 
+  src.sysmessage You cannot use this where it is.
+  return 1
+elseif (<more2> >= 1) && (<topobj.findlayer.<layer>>==<uid>)
+  if (<src.findid.i_enchanted_clothing_cooldown>)
+    src.sysmessage You cannot use this again so soon
+  else
+    src.spelleffect <morem>,600,<src>,<uid>
+    src.sound <serv.spell.<morem>.sound>
+    src.effect=3,<serv.spell.<morem>.effect_id>,6,15,1
+    more2 -= 1
+    serv.newitem i_enchanted_clothing_cooldown
+    new.timer=15
+    src.equip <new>
+  endif
+endif
+equip
+return 1
+
+on=@equip
+return 0			//just equip it like regular clothing
+if (<more2> >= 1) 
+  if !(<src.findid.i_enchanted_clothing_cooldown>)
+    src.spelleffect <morem>,600,<src>,<uid>
+    src.sound <serv.spell.<morem>.sound>
+    src.effect=3,<serv.spell.<morem>.effect_id>,6,15,1
+    more2 -= 1
+    serv.newitem i_enchanted_clothing_cooldown
+    new.timer=15
+    src.equip <new>
+  endif
+endif
+
+[comment this code for the newer style ]
+
+on=@dclick
+if (<topobj> != <src>) 
+  src.sysmessage You cannot use this where it is.
+  return 1
+elseif  (<more2> >= 1) && (<topobj.findlayer.<layer>>==<uid>)
+  if ((<morem>==7) && (<src.findid.i_rune_reactive_armor2)) || ((<morem>==15) && (<src.findid.i_rune_protection2>)) || ((<morem>==36) && (<src.findid.i_rune_magic_reflection2>))
+    src.sysmessage This spell is already in effect.
+  elseif ((<morem>==7) || (<morem>==15) || (<morem>==36)) && ((<src.findid.i_rune_beneficial_spell_cooldown>) || (<src.findid.i_rune_reactive_armor2>) || (<src.findid.i_rune_protection2>) || (<src.findid.i_rune_magic_reflection2>))
+    src.sysmessage This spell will not adhere to you at this time. <qval (<src.findid.i_rune_beneficial_spell_cooldown>)?(<src.findid.i_rune_beneficial_spell_cooldown.dtimer>):>
+  elseif (<src.findid.i_enchanted_clothing_cooldown>)
+    src.sysmessage You cannot use that again so soon.
+  else
+    src.spelleffect <morem>,600,<src>,<uid>
+    src.sound <serv.spell.<morem>.sound>
+    src.effect=3,<serv.spell.<morem>.effect_id>,6,15,1
+    more2 -= 1
+    serv.newitem i_enchanted_clothing_cooldown
+    new.timer=15
+    src.equip <new>
+  endif
+endif
+equip
+return 1
+
+on=@equip
+if (<more2> >= 1) 
+  if ((<morem>==7) && (<src.findid.i_rune_reactive_armor2)) || ((<morem>==15) && (<src.findid.i_rune_protection2>)) || ((<morem>==36) && (<src.findid.i_rune_magic_reflection2>))
+    src.sysmessage This spell is already in effect.
+  elseif ((<morem>==7) || (<morem>==15) || (<morem>==36)) && ((<src.findid.i_rune_beneficial_spell_cooldown>) || (<src.findid.i_rune_reactive_armor2>) || (<src.findid.i_rune_protection2>) || (<src.findid.i_rune_magic_reflection2>))
+    src.sysmessage This spell will not adhere to you at this time. <qval (<src.findid.i_rune_beneficial_spell_cooldown>)?(<src.findid.i_rune_beneficial_spell_cooldown.dtimer>):>
+  elseif !(<src.findid.i_enchanted_clothing_cooldown>)
+    src.spelleffect <morem>,600,<src>,<uid>
+    src.sound <serv.spell.<morem>.sound>
+    src.effect=3,<serv.spell.<morem>.effect_id>,6,15,1
+    more2 -= 1
+    serv.newitem i_enchanted_clothing_cooldown
+    new.timer=15
+    src.equip <new>
+  endif
+endif
+
+[itemdef i_enchanted_clothing_cooldown]
+defname=i_enchanted_clothing_cooldown
+name=enchanted clothing cooldown
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+
+[typedef t_enchanted_weapon]
+
+on=@click
+//tag0.name.suffix=" (<dmore2> charges)"
+tag0.name.suffix=" (faded magic)"
+
+on=@timer
+return 1
+
+[typedef t_wand]
+
+on=@click
+tag0.name.suffix=" (<dmore2> charges)"
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+elseif (<src.weapon> != <uid>)
+  src.equip <uid> 
+  //src.sysmessage You must equip this item to use it.
+  return 1
+//elseif (<src.action> == magery)
+  //src.action=-1
+  //src.sysmessage You have not yet recovered from you previous spell.
+  //return 1
+elseif  (<src.findid.i_wand_cooldown_timer>)	//	(<timer> != -1) 
+  src.sysmessage You must want a moment for the wand to recharge.	//You must want a moment to use another wand. (makes more sense for global cooldown?)
+  return 1
+elseif !(<more2>)
+  src.sysmessage The item is out of charges.
+  return 1
+endif
+target Select target...
+return 1
+
+on=@targon_char
+if !(<src.canseelos <src.targ>>) || (<src.distance <src.targ>> >= 15)
+  src.sysmessage You cannot see the target.
+  return 1
+elseif !(<serv.spell.<morex>.flags>&spellflag_targ_char)
+  src.sysmessage You cannot target a character with this spell.
+  return 1
+endif
+more2 -= 1
+if (<more2> == 0)
+  src.sysmessage The item is out of charges.
+endif
+if (<src.action> == magery)
+  src.action=-1
+endif
+src.targ.spelleffect <morex>,<morey>,<src>,<uid>
+if (<morex> != 89)	////identify wand does not have a cooldown
+  //timer=4		//<eval ((<serv.spell.<morex>.cast_time>/10)*2)>
+  serv.newitem i_wand_cooldown_timer
+  new.timer=5	//<timer>
+  src.equip <new>
+endif
+return 1
+
+on=@targon_item	//add check for target options here, correct spells with wrong flags
+if (<src.targ.topobj> != <src>) && (!(<src.canseelos <src.targ>>) || (<src.distance <src.targ>> > 15))
+  src.sysmessage You cannot see the target.
+  return 1
+elseif !(<serv.spell.<morex>.flags>&spellflag_targ_item)
+  src.sysmessage You cannot target an item with this spell.
+  return 1
+endif
+more2 -= 1
+if (<more2>==0)
+  src.sysmessage The item is out of charges.
+endif
+if (<src.action> == magery)
+  src.action=-1
+endif
+src.targ.spelleffect <morex>,<morey>,<src>,<uid>
+if (<morex> != 89)	//identify wand does not have a cooldown
+  //timer=4		//<eval ((<serv.spell.<morex>.cast_time>/10)*2)>
+  serv.newitem i_wand_cooldown_timer
+  new.timer=5	//<timer>
+  src.equip <new>
+endif
+return 1
+
+on=@timer
+return 1
+
+[itemdef i_wand_cooldown_timer]
+defname=i_wand_cooldown_timer
+name=Wand Cooldown
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[typedef t_enchanted_jewelry]
+
+////////////////////////////////////////////
+// These are specific unique magic items 
+//
+// NOTE some of these will not have any thing under them
+
+[typedef t_unique_magic_item]		//just a generic event
+
+[typedef t_rotting_flesh_armor]		
+
+[typedef t_severed_zombie_limb]		
+
+[typedef t_gravesworn_armor]	
+
+[typedef t_skeletal_hatchet]	
+
+[typedef t_elemental_wardens_armor]
+	
+[typedef t_earth_elemental_weapon]	//periodic earth damage
+
+on=@equip
+src.damphysical += 1
+
+on=@unequip
+src.damphysical -= 1
+
+[typedef t_cyclopean_armor]		
+
+[typedef t_colossal_clever]		//potential colossal hit	
+
+on=@equip
+src.damphysical += 1
+
+on=@unequip
+src.damphysical -= 1
+
+[typedef t_stormforged_armor]
+
+[typedef t_air_elemental_weapon]	//periodic wind damage
+
+on=@equip
+src.damcold += 1
+
+on=@unequip
+src.damcold -= 1
+
+[typedef t_stormcallers_mantle]
+
+[typedef t_mage_armor]			//add mage skills
+
+on=@equip
+src.magery += 25
+src.magicresistance += 25
+src.evaluatingintel += 25
+src.meditation += 25
+src.inscription += 25
+
+on=@unequip
+src.magery -= 25
+src.magicresistance  -= 25
+src.evaluatingintel -= 25
+src.meditation -= 25
+src.inscription -= 25
+
+[typedef t_arcane_archivists_robe]
+
+[typedef t_ironclad_armor]
+
+[typedef t_bone_mauler]			//periodic crushing blow
+
+[typedef t_serpentine_armor]
+
+[typedef t_serpents_kiss_weapon]	//low poison with no charges
+
+[typedef t_permafrost_armguards]	//some fire damage reduction
+
+on=@equip
+src.rescold += 1
+
+on=@unequip
+src.rescold -= 1
+
+[typedef t_frostforged_warblade]	//periodic frost damage
+
+on=@equip
+src.damcold += 1
+
+on=@unequip
+src.damcold -= 1
+
+[typedef t_ranger_armor]
+
+on=@equip
+src.archery += 25
+src.tactics += 25
+src.hiding += 25
+src.stealth += 25
+
+on=@unequip
+src.archery -= 25
+src.tactics -= 25
+src.hiding -= 25
+src.stealth -= 25
+
+[typedef t_eldertree_armor]
+
+[typedef t_serpentlords_armor]
+
+[typedef t_hydracoil_reaper]		//occasional bleeding damage
+
+[typedef t_mirror_plate]
+
+on=@equip
+src.resenergy += 1
+
+on=@unequip
+src.resenergy -= 1
+
+[typedef t_shadow_weapon]		
+
+[typedef t_phylactery_chestplate]
+
+[typedef t_lichs_robe]
+
+[typedef t_daemon_bone_armor]
+
+[typedef t_abyssal_mace]		//peroidic firedamage
+
+on=@equip
+src.damfire += 1
+
+on=@unequip
+src.damfire -= 1
+
+[typedef t_daemon_bone_armor]
+
+[typedef t_daemons_sword]		//occasional hit for bonus damage
+
+on=@equip
+src.damphysical += 1
+
+on=@unequip
+src.damphysical -= 1
+
+[typedef t_abyssal_frostplate]
+
+[typedef t_daemons_frostbite_greaves]
+
+[typedef t_gazers_eyeplate]		//meditate in any armor
+
+[typedef t_tentacle_embraced_robes]	//meditation increase
+
+on=@equip
+src.meditation += 100
+
+on=@unequip
+src.meditation -= 100
+
+[typedef t_venom_queens_carpace]
+
+[typedef t_broodmothers_embrace]	//this feels very ominous
+
+[typedef t_tarantulite_armor]
+
+[typedef t_terathan_spear]		//extra damage to terathans
+
+[typedef t_aegis_titan_armor]		
+
+[typedef t_giants_gauntlets]		//gives you strength
+
+on=@equip
+src.str += 10
+
+on=@unequip
+src.str -= 10
+
+[typedef t_bloodwell_armor]
+
+[typedef t_bloodseers_helm]		//increases your health regen
+
+on=@equip
+src.tag0.regenhits += 1			//FIXME change this ? Add this ?
+
+on=@unequip
+src.tag0.regenhits -= 1
+
+[typedef t_hemoglaive]			//drain blood form target (beware negative debuffs)
+
+on=@equip
+src.tag0.lifedrain += 1			//FIXME change this ? Add this? 
+
+on=@unequip
+src.tag0.lifedrain -= 1
+
+[typedef t_coilweavers_armor]
+
+[typedef t_hydracoil_warstaff]
+
+[typedef t_venomshroud_armor]		//some resistance to poison
+
+on=@equip
+src.respoison += 1
+
+on=@unequip
+src.respoison -= 1
+
+[typedef t_dreadweave_cloak]		//high chance to hide without skill
+
+[typedef t_evil_bone_armor]
+
+on=@equip 
+sound 0100 
+
+[typedef t_deathknell_axe]		//bonus undead damage
+
+on=@equip
+src.tag0.damundead += 1
+
+on=@unequip
+src.tag0.damundead -= 1
+
+[typedef t_snowbound_armor]
+
+[typedef t_arctic_weapon]		//periodic cold damage
+
+on=@equip
+src.damcold += 1
+
+on=@unequip
+src.damcold -= 1
+
+[typedef t_plaguebearers_raiment]
+
+on=@equip
+src.respoison += 1
+
+on=@unequip
+src.respoison -= 1
+
+[typedef t_noxious_mist_cloak]
+
+on=@equip
+src.respoison += 1
+
+on=@unequip
+src.respoison -= 1
+
+[typedef t_crimson_armor]
+
+[typedef t_vortex_bow]
+
+on=@equip 
+ammotype=-1	//i_arrow
+ammoanim=i_fx_oil_flask
+ammosoundhit=snd_spell_magic_untrap
+tag.hiteffect=3,037C4,6,15,1 
+src.effect 3,i_fx_heal_effect,6,15,1 
+src.sound snd_spell_night_sight
+//src.message Hit em' with a Vortex, HELL YAH!
+src.sysmessage The Vortex bow lets out a spine chilling howl!
+
+on=@unequip
+//src.message Vortex bow will be back! You can't live without me!
+src.sysmessage The Vortex bow screams as you abandon it!
+
+on=@attackeffect
+
+[typedef t_satanic_bone_armor]
+
+on=@equip 
+//src.sysmessage Satans got your back... 
+src.emote become engulfed in protective flames 
+sound 0054 
+sound 0157 
+sound 0160 
+sound 019c 
+
+[typedef t_pandemonium_armor]
+
+[typedef t_moltensteel_weapon]
+
+[typedef t_phoenix_armor]
+
+on=@equip
+src.swordsmanship += 25
+src.macefighting += 25
+src.fencing += 25
+src.tactics += 25
+src.parrying += 25
+
+on=@unequip
+src.swordsmanship -= 25
+src.macefighting -= 25
+src.fencing -= 25
+src.tactics -= 25
+src.parrying -= 25
+
+[typedef t_phoenixborn_raiment]
+
+[typedef t_phoenix_cloak]
+
+
+[typedef t_eldritch_veil]
+
+[typedef t_draconian_shield]
+
+[typedef t_fire_armor]
+
+on=@equip 
+src.tag0.resdragons += 1
+src.sysmessage You withstand the heat. 
+src.emote become engulfed in protective flames 
+sound 0054 
+
+on=@unequip
+src.tag0.resdragons -= 1
+
+[typedef t_eternal_ice_armor]
+
+on=@equip 
+src.sysmessage An icy mist surrounds your body 
+src.emote become surrounded by an icy mist
+src.sound 0215 
+
+[typedef t_frozen_weapon]
+
+on=@equip
+src.damcold += 1
+
+on=@unequip
+src.damcold -= 1
+
+[typedef t_blighted_plagueplate]
+
+on=@equip
+src.dampoison += 1
+
+on=@unequip
+src.dampoison -= 1
+
+[typedef t_plague_doctors_shroud]
+
+[typedef t_rotting_corpses_ring]
+
+[typedef t_wyrmforged_armor]
+
+[typedef t_flameforged_warspear]
+
+on=@equip
+src.damfire += 1
+
+on=@unequip
+src.damfire -= 1
+
+[typedef t_emberweave_robe]
+
+on=@equip
+src.damfire += 1
+
+on=@unequip
+src.damfire -= 1
+
+[typedef t_champions_valor_armor]
+
+[typedef t_umbral_warhammer]
+
+[typedef t_excalibur]
+
+on=@equip 
+src.tag0.damdragons += 1
+src.swordsmanship += 100
+src.tactics += 100
+src.message You feel a kingly blood flow through your veins. 
+
+on=@unequip
+src.tag0.damdragons -= 1
+src.message You lose your noble aire. 
+src.swordsmanship -= 100
+src.tactics -= 100
+
+[typedef t_undying_armor]
+
+on=@equip
+tag0.regenhits + 1
+
+on=@unequip
+tag0.regenhits -= 1
+
+[typedef t_lichs_raiment]
+
+on=@equip
+src.magery += 50
+
+on=@unequip
+src.magery -= 50
+
+[typedef t_lich_grimoire]
+
+on=@equip
+src.magery += 50
+
+on=@unequip
+src.magery -= 50
+
+
+//////////////////////////
+// this is random, do we need it?
+
+[typedef t_pulsing_colors]
+
+on=@equip
+timer=0
+color=<more1l>
+
+on=@timer
+if !(<morex>)
+  color += 1
+else
+  color -=1
+endif
+if (<color> >= <more1h>)
+  morex=1
+elseif (<color> <= <more1l>)
+  morex=
+endif
+timer=1
+return 1
+
+
+
+
+
+[eof]

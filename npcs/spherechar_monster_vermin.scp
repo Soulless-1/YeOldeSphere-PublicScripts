@@ -1,0 +1,570 @@
+//Monsters that are diseased/undesirable go here
+//5:09 PM 1/10/2019
+
+[CHARDEF c_acid_slug]
+ID=c_slime
+NAME=acid slug
+ICON=i_pet_slime
+SOUND=1496
+CAN=MT_WALK|MT_NONHUM
+DAM=1,5
+ARMOR=5
+DESIRES=r_swamp,r_jungle,r_caves,t_coin,t_gold,t_gem
+AVERSIONS=r_civilization,t_light_lit
+FOODTYPE=t_meat_raw
+MAXFOOD=10
+resources=
+TEVENTS=e_carnivores
+
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Acid Slug
+
+ON=@Create
+	COLOR={242 245}
+	NPC=brain_monster
+	str={213, 294}
+	dex={80, 82}
+	int={18, 22}
+	maxhits={333, 370}
+	dam={21, 28}
+	//resphysical={10, 15}
+	resfire={0}
+	rescold={10, 15}
+	respoison={60, 70}
+	resenergy={10, 15}
+	magicresistance={25.0}
+	tactics={30.0, 50.0}
+	wrestling={30.0, 80.0}
+
+ON=@NPCRestock
+	item=i_congealed_slug_acid
+	item=i_acid_sacs
+	item=i_vitriol_vials
+
+
+[CHARDEF 94]
+DEFNAME=c_slime
+NAME=Slime
+SOUND=456
+ICON=i_pet_SLIME
+CAN=MT_WALK
+dam=1, 5
+armor=8
+//tevents=e_multiply
+FOODTYPE=35 t_meat_raw,t_garbage,t_leather,t_food,t_fruit,t_cloth,t_crops
+DESIRES=c_slime
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Slime
+
+
+ON=@Create
+	events=+e_acid_blood
+	NPC=brain_monster
+	color={0899 08b0}
+	str={22, 34}
+	dex={16, 21}
+	int={16, 20}
+	maxhits={15, 19}
+	resphysical={5, 10}
+	respoison={10, 20}
+	poisoning={30.1, 50.0}
+	magicresistance={15.1, 20.0}
+	tactics={19.3, 34.0}
+	wrestling={19.3, 34.0}
+	fame=300
+	karma=-300
+
+ON=@NPCRestock
+	item=i_gold,{25 50}
+	item=random_jewel
+
+
+[CHARDEF 0d7]
+//RAT (GIANT)
+DEFNAME=c_rat_giant
+NAME=Giant Rat
+SOUND=0cc
+ICON=i_pet_RAT_2
+dam=1, 2
+armor=6
+RESOURCES=6 i_hide, i_ribs_raw
+CAN=MT_WALK|MT_RUN
+FOODTYPE=9 t_meat_raw
+DESIRES=c_rat,c_rat_sewer,c_rat_giant,r_spooky
+AVERSIONS=t_TRAP
+DESCRIPTION=Giant Rat
+SUBSECTION=Land (Wild)
+CATEGORY=Animals
+
+ON=@Create
+	NPC=brain_monster
+	str={9}
+	dex={35}
+	int={5}
+	maxhits={6}
+	maxmana={0}
+	//resphysical={5, 10}
+	respoison={5, 10}
+	magicresistance={4.0}
+	tactics={4.0}
+	wrestling={4.0}
+	fame=150
+	karma=-150
+
+on=@npcrestock
+	item=i_gold,{25 50}
+
+
+
+
+[CHARDEF 01035]
+DEFNAME=c_frostooze
+NAME=Frost Ooze
+ID=94
+SOUND=456
+dam=3, 9
+armor=38
+RESOURCES=3 t_eerie_stuff
+CAN=MT_WALK
+FOODTYPE=35 t_meat_raw
+DESIRES=c_frostooze,c_SLIME
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Frost Ooze
+
+ON=@Create
+	str={18, 30}
+	dex={16, 21}
+	int={16, 20}
+	maxhits={13, 17}
+	//resphysical={15, 20}
+	rescold={40, 50}
+	respoison={20, 30}
+	resenergy={10, 20}
+	magicresistance={5.1, 10.0}
+	tactics={19.3, 34.0}
+	wrestling={25.3, 40.0}
+	fame=450
+	karma=-450
+
+
+
+ON=@NPCRestock
+	item=random_jewel,{1 3}
+
+
+[chardef 789]
+defname=c_quagmire
+NAME=Quagmire
+SOUND=352
+ICON=i_pet_quagmire
+dam=10, 14
+//RESDISPDNID=c_corpser
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+armor=32
+RANGE=3
+CAN=MT_WALK
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Quagmire
+
+ON=@Create
+	npc=brain_monster
+	str={101, 130}
+	dex={66, 85}
+	int={31, 55}
+	maxhits={91, 105}
+	//resphysical={50, 60}
+	resfire={10, 20}
+	rescold={10, 20}
+	respoison={100}
+	resenergy={20, 30}
+	magicresistance={65.1, 75.0}
+	tactics={50.1, 60.0}
+	wrestling={60.1, 80.0}
+	fame=1500
+	karma=-1500
+
+ON=@NpcRestock
+	item=i_gold,{125 175}
+
+ON=@Hit
+	IF !(<SRC.FLAGS>&statf_poisoned)
+		SRC.SPELLEFFECT S_POISON,500,<UID>
+	endif
+
+[chardef 775]
+defname=c_plague_beast
+NAME=Plague Beast
+soundidle=01bf
+soundhit=01c0
+soundgethit=01c1
+sounddie=01c2
+ICON=i_pet_plaguebeast
+dam=20, 24
+//RESDISPDNID=c_slime
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+armor=30
+CAN=MT_WALK
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Plague Beast
+
+ON=@Create
+	str={302, 500}
+	dex={80}
+	int={16, 20}
+	maxhits={318, 404}
+	//resphysical={45, 55}
+	resfire={40, 50}
+	rescold={25, 35}
+	respoison={65, 75}
+	resenergy={25, 35}
+	magicresistance={35.0}
+	tactics={100.0}
+	wrestling={100.0}
+	fame=13000
+	karma=-13000
+
+ON=@NpcRestock
+	item=i_gold,{450 600}
+	item=random_jewel,{1 3}
+	//item=i_healthy_gland
+	//item=i_treasure_map2,R99
+	//item=i_seed_peculiar
+	//item=i_seed_fragrant
+
+ON=@Hit
+	IF !(<SRC.FLAGS>&statf_poisoned)
+		SRC.SPELLEFFECT S_POISON,500,<UID>
+	endif
+
+ON=@ItemStep
+	IF (<ACT.TYPE>==t_corpse)
+		IF !(<ACT.TAG0.PLAGUEEATEN>)
+			MAXHITS += 200
+			HITS += 200
+			ACT.TAG.PLAGUEEATEN=1
+			SAY @03c1,3,1 * <NAME> eats a corpse *
+		endif
+	endif
+
+
+[chardef 779]
+defname=c_bogling
+NAME=Bogling
+SOUND=422
+ICON=i_pet_bogling
+dam=5, 7
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+armor=28
+CAN=MT_WALK|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Bogling
+
+ON=@Create
+	NPC=brain_monster
+	str={96, 120}
+	dex={91, 115}
+	int={21, 45}
+	maxhits={58, 72}
+	//resphysical={20, 25}
+	resfire={10, 20}
+	rescold={15, 25}
+	respoison={15, 25}
+	resenergy={15, 25}
+	magicresistance={75.1, 100.0}
+	tactics={55.1, 80.0}
+	wrestling={55.1, 75.0}
+	fame=450
+	karma=-450
+
+ON=@NpcRestock
+	item=i_gold,{50 100}
+	//item=random_seed
+	item=i_log,4
+
+ON=@Hit
+	IF !(<SRC.FLAGS>&statf_poisoned)
+		SRC.SPELLEFFECT S_POISON,300,<UID>
+	endif
+
+
+[chardef 780]
+defname=c_bog_thing
+name=Bog Thing
+SOUND=snd_monster_corpsr1
+ICON=i_pet_bogthing
+armor=28
+dam=10, 23
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Bog Thing
+
+ON=@Create
+	npc=brain_monster
+	str={801, 900}
+	dex={46, 65}
+	int={36, 50}
+	maxhits={481, 540}
+	maxmana={0}
+	//resphysical={30, 40}
+	resfire={20, 25}
+	rescold={10, 15}
+	respoison={40, 50}
+	resenergy={20, 25}
+	magicresistance={90.1, 95.0}
+	tactics={70.1, 85.0}
+	wrestling={65.1, 80.0}
+	fame=8000
+	karma=-8000
+
+ON=@NpcRestock
+	item=i_gold,{275 325}
+	//item=random_seed,2
+	item=random_reagents,3
+	item={i_board 1 i_log 1},10
+
+ON=@Hit
+	IF !(<SRC.FLAGS>&statf_poisoned)
+		SRC.SPELLEFFECT S_POISON,1000,<UID>
+	endif
+
+
+[chardef 319]
+defname=c_mound_maggots
+NAME=Mound of Maggots
+SOUND=898
+ICON=i_pet_mound_maggots
+dam=3, 9
+//RESDISPDNID=c_slime
+//RESLEVEL=3
+//RESDISPDNHUE=33
+armor=24
+CAN=MT_USEHANDS|MT_WALK
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Mound of Maggots
+
+ON=@Create
+	NPC=brain_monster
+	str={61, 70}
+	dex={61, 70}
+	int={10}
+	maxmana={0}
+	//resphysical={90}
+	respoison={100}
+	tactics={50.0}
+	wrestling={50.1, 60.0}
+	fame=1000
+	karma=-1000
+
+
+[chardef 307]
+defname=c_Bulbous_Putrification
+name=Bulbous Putrification
+SOUND=0165
+ICON=i_worldgem_bit
+//RESLEVEL=5
+//RESDISPDNHUE=33
+DAM=22,29
+armor=60
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Bulbous Putrification
+
+ON=@Create
+	NPC=brain_monster
+	STR={755 800}
+	INT={53 60}
+	DEX={51 59}
+	MAXHITS={1211 1231}
+	//RESPHYSICAL={55 65}
+	//RESFIRE={40 50}
+	//RESCOLD={40 50}
+	//RESPOISON={55 77}
+	//RESENERGY={50 60}
+	WRESTLING={104.8 114.7}
+	TACTICS={111.9 119.1}
+	MAGICRESISTANCE={55.5 64.1}
+	ANATOMY={110.0}
+	POISONING={80.0}
+	FAME={100 3000}
+	KARMA={-5000 -6999}
+
+ON=@NpcRestock
+	item=random_jewel,{1 4}
+	item=i_gold,{80 130}
+
+
+[chardef c_Plague_Beast_Lord]
+defname=c_Plague_Beast_Lord
+name=plague beast lord
+id=775
+sound=679
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=20, 25
+armor=50
+
+on=@create
+	npc=brain_monster
+	str={500}
+	dex={100}
+	int={30}
+	maxhits={1800}
+	//resphysical={45, 55}
+	resfire={40, 50}
+	rescold={25, 35}
+	respoison={75, 85}
+	resenergy={25, 35}
+	tactics={100}
+	wrestling={100}
+	fame=2000
+	karma=-2000
+
+on=@npcrestock
+	//item=i_mutation_core
+
+
+[chardef c_Plague_Spawn]
+defname c_plague_spawn
+name=plague spawn
+id=c_slime
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=11, 17
+armor=20
+
+on=@create
+	npc=brain_monster
+	color=010
+	str={201, 300}
+	dex={80}
+	int={16, 20}
+	maxhits={121, 180}
+	//resphysical={35, 45}
+	resfire={30, 40}
+	rescold={25, 35}
+	respoison={65, 75}
+	resenergy={25, 35}
+	magicresistance={25.0}
+	tactics={25.0}
+	wrestling={50.0}
+	fame=1000
+	karma=-1000
+	body={c_elem_earth 1 c_headless 1 {c_man 1 c_woman 1} 1 c_gorilla 1 c_serpent_giant 1 c_slime 1}
+
+on=@npcrestock
+	item=i_gold,{25 50}
+
+
+
+[chardef c_Slime_Corrosive]
+defname=c_Slime_Corrosive
+name=corrosive slime
+id=c_slime
+sound=456
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=1, 5
+armor=8
+
+on=@create
+	color=colors_green
+	npc=brain_monster
+	str={22, 34}
+	dex={16, 21}
+	int={16, 20}
+	maxhits={15, 19}
+	//resphysical={5, 10}
+	respoison={15, 20}
+	poisoning={ 36.0, 49.1}
+	anatomy={0}
+	magicresistance={15.9, 18.9}
+	tactics={24.6, 26.1}
+	wrestling={24.9, 26.1}
+	fame=300
+	karma=-300
+
+on=@npcrestock
+	item=i_gold,{32 36}
+	//item=random_summoning_key
+
+
+[chardef 732]
+defname=c_Rotworm
+name=rotworm
+sound=062D
+can=mt_walk|mt_run
+dam=1, 5
+
+on=@create
+	npc=brain_monster
+	str={200, 300}
+	dex={80}
+	int={15, 20}
+	maxhits={200, 250}
+	maxstam={50}
+	//resphysical={35, 45}
+	resfire={30, 40}
+	rescold={25, 35}
+	respoison={65, 75}
+	resenergy={25, 35}
+	magicresistance={25.0}
+	tactics={25.0}
+	wrestling={50.0}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{26 30}
+
+
+[chardef 287]
+defname=c_BloodWorm
+name=bloodworm
+sound=1503
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=11, 17
+
+on=@create
+	npc=brain_monster
+	str={401, 473}
+	dex={80}
+	int={18, 19}
+	maxhits={374, 422}
+	//resphysical={52, 55}
+	resfire={42, 50}
+	rescold={29, 31}
+	respoison={69, 75}
+	resenergy={26, 27}
+	magicresistance={35.0}
+	tactics={100.0}
+	wrestling={100.0}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{401 473}
+
+
+[EOF]
+

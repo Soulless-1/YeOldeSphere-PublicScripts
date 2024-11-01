@@ -1,0 +1,204 @@
+//House System by Soulless
+//v1.9
+//12:31 PM 1/31/2019
+
+[speech spk_house_cmds]
+
+ON=exit
+if (<src.flags>&statf_freeze)
+  src.sysmessage You cannot use this house command in your current state.
+  return 1
+else
+  ref1=<region.uid>
+  src.consume i_exiting_house
+  serv.newitem i_exiting_house	//need to be a timer on this to avoid players from abusing it
+  new.link=<ref1>
+  new.more1=10
+  new.timer=1
+  new.equip
+  src.sysmessage You will be moved outside the house in a moment.
+  //src.go <uid.<ref1.link>.p>
+endif
+
+ON=*house commands*
+src.sdialog d_house_commands
+
+//ON=**
+//if (<src.flags>&statf_dead)
+  //return 1
+//endif
+//return 0
+
+ON=*move this west*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_move 6
+  src.sysmessage What do you wish to move?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+ON=*move this north*
+ref1=<src.region.uid>
+if !(<ref1.isvalid>)
+  return 1
+elseif (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_move 0
+  src.sysmessage What do you wish to move?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+ON=*move this east*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_move 2
+  src.sysmessage What do you wish to move?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+ON=*move this south*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_move 4
+  src.sysmessage What do you wish to move?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+
+ON=*move this down*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_move 8
+  src.sysmessage What do you wish to move?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+ON=*move this up*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_move 9
+  src.sysmessage What do you wish to move?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+
+ON=*flip this*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_move 10
+  src.sysmessage What do you wish to move?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+ON=*lock this down*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_lockdown
+  src.sysmessage What do you wish to lockdown?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+ON=*secure this*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_secure
+  src.sysmessage What do you wish to secure?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+return 1
+endif
+
+ON=*release this*
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  src.targetf f_house_release
+  src.sysmessage What do you wish to release?
+  return 1
+else
+  src.sysmessage You must be in your house to do that.
+  return 1
+endif
+
+ON=*bank*
+ref1=<region.uid>
+if (<src.isgm>)
+  src.bankself
+  return 1
+endif
+if (<def0.house_can_bank>)  
+  if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<ref1.GetFriendPos <src>> >= 0) || (<src.isgm>)
+    src.bankself
+    //src.sysmessage You have <src.bankbalance> gold in your Bank Box
+    src.message Bank container has <src.bankcount> items, <src.findlayer.29.weight> stones.
+  else
+    return 0
+  endif
+endif
+
+ON=remove thyself
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<ref1.GetFriendPos <src>> >= 0) ||(<src.isgm>)
+  src.targetf f_house_eject
+  src.sysmessage Target the individual to eject from this house.
+endif
+
+ON=i ban thee
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<ref1.GetFriendPos <src>> >= 0) || (<src.isgm>)
+  src.targetf <qval (<ref1.housetype>==house_private)?f_house_remove_list 3:f_house_add_list 4>
+  src.sysmessage Target the individual to ban from this house.
+endif
+
+ON=place trash barrel
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  if (<ref1.tag0.trashbarrel>)
+    src.sysmessage You already have a trash barrel.
+    return 1
+  else
+    serv.newitem i_trash_barrel
+    new.p=<src.p>
+    new.attr=attr_move_never
+    ref1.tag0.trashbarrel=<new.uid>
+  endif
+endif
+
+ON=remove trash barrel
+ref1=<region.uid>
+if (<ref1.f_house_isowner <src>>) || (<ref1.GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  if (<ref1.tag0.trashbarrel>)
+    try uid.<ref1.tag0.trashbarrel>.remove 
+    ref1.tag.trashbarrel
+  else
+    src.sysmessage You have no trash barrel to remove.
+    return 1
+  endif
+endif
+
+
+
+[eof]

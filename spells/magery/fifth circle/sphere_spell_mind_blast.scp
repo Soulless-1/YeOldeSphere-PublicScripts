@@ -1,0 +1,38 @@
+[SPELL 37]
+DEFNAME=s_mind_blast
+NAME=Mind Blast
+SOUND=snd_spell_mind_blast
+RUNES=PCW
+CAST_TIME=1.8
+RESOURCES=i_reag_black_pearl,i_reag_mandrake_root,i_reag_nightshade,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_mind_blast
+SCROLL_ITEM=i_scroll_mind_blast
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_resist|spellflag_nounparalyze
+EFFECT_ID=i_fx_curse
+EFFECT=5,20
+DURATION=0.0
+MANAUSE=14
+SKILLREQ=MAGERY 40.0
+INTERRUPT=100.0,100.0
+
+//Mind blast checks the targets stats and determines which stat is the highest and lowest then determines the difference between the two. This number is halved and checked to make sure it is not more than 40 damage. Should the target player pass a resist check the damage would be halved.
+//Example 1: Str: 100: Dex:25 Int:100, Highest Stat 100, Lowest Stat 25, Difference:75
+//Result 1: Damage:37, Resisted Damage:18
+//Example 2: Str: 100: Dex:25 Int:110, Highest Stat 110, Lowest Stat 25, Difference:85
+//Result 2: Damage:40, Resisted Damage:20
+//Example 3: Str: 90: Dex:45 Int:90, Highest Stat 90, Lowest Stat 45, Difference:45
+//Result3: Damage:22, Resisted Damage:11
+//As you can see balanced stats are critical when mitigating the damage from the mind blast spell.
+//Formula: (Highest Stat - Lowest Stat) / 2
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_cold>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.higheststat=<qval (<str> < <dex>)?<qval (<dex> < <int>)?int:dex>:<qval (<str> < <int>)?int:str>>
+local.loweststat=<qval (<str> < <dex>)?<qval (<str> < <int>)?str:int>:<qval (<dex> < <int>)?dex:int>>
+local.effect=<eval (<<local.higheststat>> - <<local.loweststat>>)/2>
+local.effect=<qval (<local.effect> <= 40)?<local.effect>:40>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+
+[EOF]

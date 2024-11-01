@@ -1,0 +1,911 @@
+//all custom, sphere specific, or non-origin npcs should go in this file
+
+
+[chardef c_gorilla_silverback]
+id=c_gorilla
+name=silerback gorilla
+can=mt_walk|mt_run
+
+category=Custom
+subsection=Monsters
+description=Silverback Gorilla
+
+on=@create
+npc=brain_monster
+color=805
+str={53, 95}
+dex={36, 55}
+int={36, 60}
+maxhits={38, 51}
+//resphysical={20, 25}
+resfire={5, 10}
+rescold={10, 15}
+magicresistance={45.1, 60.0}
+tactics={43.3, 58.0}
+wrestling={43.3, 58.0}
+taming=0
+fame=450
+karma=0
+
+
+
+[CHARDEF 01064]
+DEFNAME=c_goblin
+NAME=#NAMES_GOBLIN the Goblin
+ID=c_ORC
+RESOURCES=6 i_ribs_raw
+DAM=3,9
+ARMOR=10,10
+FOODTYPE=15 t_meat_raw
+//SHELTER==r_caves,r_dungeon,r_orc_camp
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+CATEGORY=Monsters
+SUBSECTION=Goblins
+DESCRIPTION=Goblin
+
+ON=@Create
+	COLOR=colors_green
+	STR={50 75}
+	DEX={50 75}
+	INT={36 60}
+	//ALIGNMENT=EVIL
+	MAGICRESISTANCE={50.0 75.0}
+	PARRYING={35.0 55.0}
+	TACTICS={55.0 80.0}
+	WRESTLING={35.0 55.0}
+	KARMA={-3000 -1000}
+	FAME={100 500}
+	NPC=BRAIN_MONSTER
+
+ON=@NPCRestock
+	CONTAINER=i_backpack
+	ITEM={ poor_gold_pile 1 meager_gold_pile 1 }
+	ITEM={ i_boots_thigh 1 0 1 }
+	ITEM={ poor_gold_pile 1 meager_gold_pile 1 0 1 }
+
+
+[CHARDEF 01065]
+DEFNAME=c_goblin_mage
+NAME=#NAMES_GOBLIN the Goblin Mage
+ID=c_ORC
+RESOURCES=6 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+//ALIGNMENT=EVIL
+DAM=3,9
+ARMOR=10
+//SHELTER==r_caves,r_dungeon,r_orc_camp
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+CATEGORY=Monsters
+SUBSECTION=Goblins
+DESCRIPTION=Goblin Mage
+
+ON=@Create
+	COLOR=colors_green
+	STR={50 75}
+	DEX={50 75}
+	INT={60 90}
+	MAGERY={35.0 60.0}
+	MAGICRESISTANCE={50.0 75.0}
+	PARRYING={35.0 55.0}
+	TACTICS={55.0 80.0}
+	WRESTLING={35.0 55.0}
+	NPC=BRAIN_MONSTER
+	KARMA={-3000 -1000}
+	FAME={100 500}
+    make_spellcaster 1,4
+	
+
+ON=@NPCRestock
+	CONTAINER=i_backpack
+	ITEM={ meager_gold_pile 3 average_gold_pile 1 }
+	ITEM={ poor_gold_pile 1 meager_gold_pile 1 0 1 }
+	//ITEM=random_first_circle,R3
+	//item=random_second_circle,R6
+
+
+[CHARDEF 01066]
+DEFNAME=c_goblin_chief
+NAME=#NAMES_GOBLIN the Goblin Chief
+ID=c_orc_lord
+RESOURCES=6 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+//ALIGNMENT=EVIL
+DAM=5,12
+ARMOR=13
+//SHELTER==r_caves,r_dungeon,r_orc_camp
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+CATEGORY=Monsters
+SUBSECTION=Goblins
+DESCRIPTION=Goblin Chief
+
+ON=@Create
+	NPC=BRAIN_MONSTER
+	COLOR=colors_green
+	STR={65 90}
+	DEX={60 80}
+	INT={36 60}
+	MAGICRESISTANCE={50.0 75.0}
+	PARRYING={50.0 70.0}
+	TACTICS={55.0 80.0}
+	WRESTLING={50.0 70.0}
+	KARMA={-3000 -1000}
+	FAME={100 500}
+
+ON=@NPCRestock
+	ITEM={ meager_monster_backpack 1 average_monster_backpack 3 }
+	ITEM={ i_boots_thigh 1 0 1 }
+	ITEM={ meager_gold_pile 1 0 1 }
+	ITEM=random_weapons
+
+
+[CHARDEF 01125]
+DEFNAME=c_goblin_shaman
+NAME=#NAMES_GOBLIN the Goblin Shaman
+ID=c_ORC
+ARMOR=14,14
+DAM=10,13
+RESOURCES=9 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+//ALIGNMENT=EVIL
+//SHELTER==r_caves,r_dungeon,r_orc_camp
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+CATEGORY=Monsters
+SUBSECTION=Goblins
+DESCRIPTION=Goblin Shaman
+
+ON=@Create
+	COLOR=colors_green
+	STR={45 65}
+	DEX={60 70}
+	INT={55 80}
+	MAGICRESISTANCE={51.6 75.2}
+	PARRYING={56.2 75.2}
+	TACTICS={55.7 88.5}
+	MAGERY={60.0 75.0}
+	WRESTLING={46.5 68.6}
+	NPC=BRAIN_MONSTER
+	KARMA={-1000 -4000}
+	FAME={450 800}
+	make_spellcaster 1,4
+
+ON=@NPCRestock
+	CONTAINER=i_backpack
+	ITEM=random_coin_purse
+	ITEM=i_boots_thigh
+	ITEM=average_gold_pile,{1 3}
+	//ITEM=random_scroll
+	//ITEM=random_scroll
+	//ITEM=random_scroll
+	ITEM=random_body_armor,{1 2},R5
+	//ITEM=random_eighth_circle,R25
+
+
+[CHARDEF 01126]
+DEFNAME=c_goblin_lord
+NAME=#NAMES_GOBLIN the Goblin Lord
+ID=c_ORC_LORD
+DAM=5,10
+ARMOR=10,12
+RESOURCES=9 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+//SHELTER==r_caves,r_dungeon,r_orc_camp
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+CATEGORY=Monsters
+SUBSECTION=Goblins
+DESCRIPTION=Goblin Lord  (club)
+
+ON=@Create
+	COLOR=colors_green
+	STR={50 75}
+	DEX={40 50}
+	INT={25 35}
+	//ALIGNMENT=EVIL
+	MACEFIGHTING={40.0 55.0}
+	MAGICRESISTANCE={25.0 35.0}
+	PARRYING={45.0 60.0}
+	TACTICS={45.0 55.5}
+	WRESTLING={50.0 65.0}
+	NPC=BRAIN_MONSTER
+	KARMA={-100 -499}
+	FAME={100 250}
+
+ON=@NPCRestock
+	ITEM=i_club
+	CONTAINER=i_backpack
+	ITEM=random_coin_purse,{4 6}
+	ITEM=i_boots_thigh
+	ITEM=average_gold_pile
+	ITEM=i_leather_tunic,R7
+	ITEM=random_chest_armor,R23
+	ITEM=random_all_armor,R30
+	ITEM=random_coifs,R6
+	//ITEM=random_first_circle,R15
+	ITEM=random_all_armor,R15
+	ITEM=random_all_armor,R25
+	ITEM=random_all_armor,R35
+	ITEM=random_extra_armor,R40
+	ITEM=random_shields,R20
+	ITEM=random_shields,R30
+	//ITEM=random_scroll,R3
+	//ITEM=random_scroll,R3
+	//ITEM=random_scroll,R3
+	//ITEM=random_eighth_circle,R20
+	//ITEM=random_eighth_circle,R20
+	ITEM=random_all_armor
+	ITEM=i_deed,R5000
+
+
+[CHARDEF 01069]
+DEFNAME=c_ghost
+ID=c_Grim_Reaper
+NAME=Ghost
+SOUND=snd_MONSTER_GHOST1
+ICON=i_pet_GHOUL
+DAM=12,20
+ARMOR=20,25
+FOODTYPE=
+CAN=MT_WALK
+TEVENTS=e_Undead
+CATEGORY=Monsters
+SUBSECTION=Undeads
+DESCRIPTION=Ghost
+
+ON=@Create
+	NPC=brain_monster
+	COLOR=colors_gray
+	STR={100 125}
+	DEX={90 120}
+	INT={60 90}
+	MAGICRESISTANCE={60.0 85.0}
+	PARRYING={60.0 85.0}
+	TACTICS={60.0 85.0}
+	WRESTLING={60.0 85.0}
+	KARMA={-4000 -3001}
+	FAME={1500 3000}
+
+ON=@NPCRestock
+	ITEM={ average_undead_backpack 1 rich_undead_backpack 1 }
+	ITEM={ random_gold_pile 1 0 2 }
+
+
+
+[CHARDEF 01091]
+DEFNAME=c_scorpion_prince
+NAME=Scorpion Prince
+ID=c_SCORPION_GIANT
+SOUND=snd_MONSTER_GSCORP1
+ICON=i_pet_SCORP
+DAM=6,15
+ARMOR=20
+RESOURCES=8 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+//SHELTER==r_dungeon,r_caves,r_desert
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Scorpion Race
+DESCRIPTION=Scorpion Prince
+
+ON=@Create
+	COLOR=0387
+	STR={150 175}
+	DEX={76 95}
+	INT={16 30}
+	//ALIGNMENT=EVIL
+	PARRYING={70.0 80.0}
+	MAGICRESISTANCE={40.0 45.0}
+	TACTICS={70.0 85.0}
+	WRESTLING={60.0 75.0}
+	POISONING={90.0 100.0}
+	NPC=brain_monster
+	FAME={1000 2000}
+	KARMA={-3000 -3999}
+
+ON=@NPCRestock
+	ITEM={ random_jewel 1 0 1 }
+	ITEM={ random_jewel 1 0 1 }
+	ITEM=i_gold,{100 200}
+
+
+[CHARDEF 01092]
+DEFNAME=c_scorpion_king
+NAME=Scorpion King
+ID=c_SCORPION_GIANT
+SOUND=snd_MONSTER_GSCORP1
+ICON=i_pet_SCORP
+DAM=10,18
+ARMOR=30
+RESOURCES=8 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+//SHELTER==r_dungeon,r_caves,r_desert
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Scorpion Race
+DESCRIPTION=Scorpion King
+
+ON=@Create
+	//ALIGNMENT=EVIL
+	COLOR=0505
+	STR={300 350}
+	DEX={80 95}
+	INT={300 350}
+	PARRYING={80.0 90.0}
+	MAGICRESISTANCE={50.0 65.0}
+	TACTICS={80.0 95.0}
+	WRESTLING={70.0 85.0}
+	POISONING={99.0 100.0}
+	MAGERY={90.0 100.0}
+	EVALUATINGINTEL={90.0 95.0}
+	NPC=brain_monster
+	FAME={3000 5000}
+	KARMA={-4000 -4999}
+
+ON=@NPCRestock
+	ITEM={ random_jewel 1 0 1 }
+	ITEM={ random_jewel 1 0 1 }
+	ITEM={ random_jewel 1 0 1 }
+	ITEM={ random_jewel 1 0 1 }
+	ITEM=i_gold, {600 800}
+	//ITEM=random_upper_scroll
+	//ITEM=random_upper_scroll
+
+
+[CHARDEF 01093]
+DEFNAME=c_scorpion_queen
+NAME=Scorpion Queen
+ID=c_SCORPION_GIANT
+SOUND=snd_MONSTER_GSCORP1
+ICON=i_pet_SCORP
+DAM=10,20
+ARMOR=30
+RESOURCES=8 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+//SHELTER==r_dungeon,r_caves,r_desert
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Scorpion Race
+DESCRIPTION=Scorpion Queen
+
+ON=@Create
+	COLOR=0513
+	//ALIGNMENT=EVIL
+	STR={450 500}
+	DEX={80 95}
+	INT={600 650}
+	PARRYING={80.0 90.0}
+	MAGICRESISTANCE={50.0 65.0}
+	TACTICS={80.0 95.0}
+	WRESTLING={70.0 85.0}
+	POISONING={99.0 100.0}
+	MAGERY={90.0 100.0}
+	DETECTINGHIDDEN={90.0 100.0}
+	EvaluatingIntel={90.0 95.0}
+	NPC=brain_monster
+	FAME={4000 6000}
+	KARMA={-5000 -6999}
+
+ON=@NPCRestock
+	ITEM=random_jewel,R3
+	ITEM=random_jewel,R3
+	ITEM=random_jewel,R3
+	ITEM=random_jewel,R3
+	ITEM=random_jewel,R3
+	ITEM=random_jewel,R3
+	ITEM=i_gold,{500 1200}
+	//ITEM=random_upper_scroll
+	//ITEM=random_upper_scroll
+	//ITEM=random_upper_scroll
+	//ITEM=random_upper_scroll
+
+
+[CHARDEF 01094]
+DEFNAME=c_scorpion_thrall
+NAME=Scorpion Thrall
+ID=c_SPIDER_GIANT
+SOUND=snd_MONSTER_GISPIDR1
+ICON=i_pet_SPIDER_GIANT
+DAM=5,15
+ARMOR=12
+RESOURCES=8 i_reag_spider_silk
+//ALIGNMENT=EVIL
+CAN=MT_WALK
+FOODTYPE=15 i_ribs_raw
+//SHELTER==t_WEB,r_caves,r_dungeon
+CATEGORY=Monsters
+SUBSECTION=Scorpion Race
+DESCRIPTION=Scorpion Thrall
+
+ON=@Create
+	COLOR=colors_gray
+	STR={100 150}
+	DEX={100 150}
+	INT={36 60}
+	PARRYING={55.0 65.0}
+	MAGICRESISTANCE={25.0 40.0}
+	TACTICS={55.0 70.0}
+	WRESTLING={70.0 85.0}
+	POISONING={90.0 99.0}
+	NPC=brain_monster
+	FAME={800 1500}
+	KARMA={-1999 -3999}
+
+ON=@NPCRestock
+	ITEM={i_reag_spider_silk 1 0 1},{3 10}
+	ITEM={ random_jewel 1 0 1 }
+	ITEM=i_gold,{50 100}
+
+
+[CHARDEF 01106]
+DEFNAME=c_dragon_crystal
+ID=c_DRAGON_RED
+NAME=Crystal Dragon	//#NAMES_DRAGON the Crystal Dragon
+SOUND=362
+ICON=i_pet_dragon
+dam=16, 22
+armor=60
+RESOURCES=19 i_ribs_raw,7 i_reag_dragon_scale, 20 i_hide_barbed
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=80 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Crystal Dragon
+
+ON=@Create
+color=05555
+tag.controlslots=3
+NPC=brain_monster
+str={796, 825}
+dex={86, 105}
+int={436, 475}
+maxhits={478, 495}
+resphysical={55, 65}
+resfire={60, 70}
+rescold={30, 40}
+respoison={25, 35}
+resenergy={35, 45}
+evaluatingintel={30.1, 40.0}
+magery={30.1, 40.0}
+magicresistance={99.1, 100.0}
+tactics={97.6, 100.0}
+wrestling={90.1, 92.5}
+taming=93.9
+fame=15000
+karma=-15000
+make_spellcaster 6
+
+ON=@NPCRestock
+	item=i_gold,{1000 1200}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+
+
+[COMMENT CHARDEF 01107]	
+defname=c_drake_green
+DEFNAME2=c_dragon_greendrake
+ID=c_DRAGON_SMALL_BLACK
+NAME=#NAMES_DRAGON the Green Drake
+SOUND=snd_MONSTER_DRAGON1
+ICON=i_pet_dragon
+dam=11, 17
+armor=46
+RESOURCES=2 i_reag_dragon_scale,20 i_hide_horned, 10 i_ribs_raw
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake, Green
+
+ON=@Create
+color=0175
+tag.controlslots=2
+NPC=brain_monster
+str={401, 430}
+dex={133, 152}
+int={101, 140}
+maxhits={241, 258}
+resphysical={45, 50}
+resfire={50, 60}
+rescold={40, 50}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={65.1, 90.0}
+wrestling={65.1, 80.0}
+taming=84.3
+fame=5500
+karma=-5500
+make_spellcaster 4
+
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+
+[CHARDEF 01108]
+defname=c_drake_copper
+DEFNAME2=c_dragon_copperdrake
+ID=c_DRAGON_SMALL_BLACK
+NAME=#NAMES_DRAGON the Copper Drake
+SOUND=362
+ICON=i_pet_dragon
+dam=11, 17
+armor=46
+RESOURCES=2 i_reag_dragon_scale,20 i_hide_horned, 10 i_ribs_raw
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake, Copper
+
+ON=@Create
+color=091
+tag.controlslots=2
+NPC=brain_monster
+str={401, 430}
+dex={133, 152}
+int={101, 140}
+maxhits={241, 258}
+resphysical={45, 50}
+resfire={50, 60}
+rescold={40, 50}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={65.1, 90.0}
+wrestling={65.1, 80.0}
+taming=84.3
+fame=5500
+karma=5500
+make_spellcaster 4
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+
+[CHARDEF 01109]
+defname=c_drake_blue
+DEFNAME2=c_dragon_bluedrake
+ID=c_DRAGON_SMALL_BLACK
+NAME=#NAMES_DRAGON the Blue Drake
+SOUND=362
+ICON=i_pet_dragon
+dam=11, 17
+armor=46
+RESOURCES=2 i_reag_dragon_scale,20 i_hide_horned, 10 i_ribs_raw
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake, Blue
+
+ON=@Create
+color=05d
+tag.controlslots=2
+NPC=brain_monster
+str={401, 430}
+dex={133, 152}
+int={101, 140}
+maxhits={241, 258}
+resphysical={45, 50}
+resfire={50, 60}
+rescold={40, 50}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={65.1, 90.0}
+wrestling={65.1, 80.0}
+taming=84.3
+fame=5500
+karma=-5500
+make_spellcaster 4
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+
+
+[CHARDEF 01110]
+defname=c_drake_gold
+DEFNAME2=c_dragon_golddrake
+ID=c_DRAGON_SMALL_BLACK
+NAME=#NAMES_DRAGON the Gold Drake
+SOUND=snd_MONSTER_DRAGON1
+ICON=i_pet_dragon
+dam=11, 17
+armor=46
+RESOURCES=2 i_reag_dragon_scale,20 i_hide_horned, 10 i_ribs_raw
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake, Gold
+
+ON=@Create
+color=033
+tag.controlslots=2
+NPC=brain_monster
+str={401, 430}
+dex={133, 152}
+int={101, 140}
+maxhits={241, 258}
+resphysical={45, 50}
+resfire={50, 60}
+rescold={40, 50}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={65.1, 90.0}
+wrestling={65.1, 80.0}
+taming=84.3
+fame=5500
+karma=5500
+make_spellcaster 4
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+
+
+[CHARDEF 01111]
+defname=c_drake_black
+DEFNAME2=c_dragon_blackdrake
+ID=c_DRAGON_SMALL_BLACK
+NAME=#NAMES_DRAGON the Black Drake
+SOUND=362
+ICON=i_pet_dragon
+dam=11, 17
+armor=46
+RESOURCES=2 i_reag_dragon_scale,20 i_hide_horned, 10 i_ribs_raw
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake, Black
+
+ON=@Create
+color=0455
+tag.controlslots=2
+NPC=brain_monster
+str={401, 430}
+dex={133, 152}
+int={101, 140}
+maxhits={241, 258}
+resphysical={45, 50}
+resfire={50, 60}
+rescold={40, 50}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={65.1, 90.0}
+wrestling={65.1, 80.0}
+taming=84.3
+fame=5500
+karma=-5500
+make_spellcaster 4
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+
+
+[CHARDEF 01112]
+defname=c_drake_silver
+DEFNAME2=c_dragon_silverdrake
+ID=c_DRAGON_SMALL_RED
+NAME=#NAMES_DRAGON the Silver Drake
+SOUND=362
+ICON=i_pet_dragon
+dam=11, 17
+armor=46
+RESOURCES=2 i_reag_dragon_scale,20 i_hide_horned, 10 i_ribs_raw
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake, Silver
+
+ON=@Create
+color=037a
+tag.controlslots=2
+NPC=brain_monster
+str={401, 430}
+dex={133, 152}
+int={101, 140}
+maxhits={241, 258}
+resphysical={45, 50}
+resfire={50, 60}
+rescold={40, 50}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={65.1, 90.0}
+wrestling={65.1, 80.0}
+taming=84.3
+fame=5500
+karma=5500
+make_spellcaster 4
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+
+
+[CHARDEF 01113]
+defname=c_drake_crystal
+DEFNAME2=c_dragon_crystaldrake
+ID=c_DRAGON_SMALL_RED
+NAME=#NAMES_DRAGON the Crystal Drake
+SOUND=362
+ICON=i_pet_dragon
+dam=11, 17
+armor=46
+RESOURCES=2 i_reag_dragon_scale,20 i_hide_horned, 10 i_ribs_raw
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake, Crystal
+
+ON=@Create
+color=07fff
+tag.controlslots=2
+NPC=brain_monster
+str={401, 430}
+dex={133, 152}
+int={101, 140}
+maxhits={241, 258}
+resphysical={45, 50}
+resfire={50, 60}
+rescold={40, 50}
+respoison={20, 30}
+resenergy={30, 40}
+magicresistance={65.1, 80.0}
+tactics={65.1, 90.0}
+wrestling={65.1, 80.0}
+taming=84.3
+fame=5500
+karma=-5500
+make_spellcaster 4
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+
+[CHARDEF 01086]
+DEFNAME=c_black_cat
+NAME=Black Cat
+SOUND=snd_ANIMALS_CAT1
+ID=c_CAT
+DAM=2
+ARMOR=4
+RESOURCES=2 i_ribs_raw
+//ALIGNMENT=EVIL
+FOODTYPE=5 t_meat_raw, 5 t_FISH
+//SHELTER==r_HOUSE
+DESIRES=e_Human_Greet,t_WINDOW
+CAN=MT_WALK|MT_RUN
+DESCRIPTION=Black Cat
+SUBSECTION=Witches (Evil)
+CATEGORY=Civilized
+
+ON=@Create
+	COLOR=047f
+	STR=25
+	DEX=35
+	INT=5
+	PARRYING=10.0
+	MAGICRESISTANCE=20.0
+	TACTICS=25.0
+	WRESTLING=25.0
+	TAMING=40.0
+	NPC=brain_animal
+	FAME={2500 4000}
+	KARMA={-1000 -2000}
+
+[CHARDEF 98]
+Name=Ice Hound
+DEFNAME=c_ice_hound
+//RESDISPDNID=c_dog
+//RESLEVEL=3
+SOUND=snd_animals_dog1
+ICON=i_pet_dog
+//RESDISPDNHUE=2
+CAN=MT_WALK|MT_RUN
+DAM=11,17
+Armor=30
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Ice Hound
+
+on=@create
+	NPC=BRAIN_MONSTER
+	Str={70 100}
+	MAXHITS=200
+	Dex={81 105}
+	Int={36 60}
+	Swordsmanship=99.0
+	Fame=3400
+	Karma=-3400
+
+
+[EOF]

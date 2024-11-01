@@ -1,0 +1,80 @@
+//http://uo.stratics.com/content/professions/beggar_archive.shtml
+//http://www.uoguide.com/Begging
+//https://uo.com/wiki/ultima-online-wiki/skills/begging/
+//2:21 AM 3/27/2018
+
+//todo make some npcs give you items instead of money
+
+[defname begging_settings]
+begging_item1		{i_pitchter_water 1 i_bread_french 1}
+begging_item2		{i_lantern 1 i_pizza 1 i_bowl_stew_lg 1 i_cheese_wedge 1 i_fruit_dates 1 i_shirt_plain 1 i_pitcher_liquor 1}
+begging_item3		{i_bedroll 1 i_pitcher_wine 1 i_bottle_wine 1 i_flower_garland 1 i_pan_cookies 1 i_fishing_pole 1 i_fish_cut_cooked 1 i_turnip 1}
+
+[SKILL 6]
+DEFNAME=SKILL_Begging
+KEY=Begging
+TITLE=Beggar
+FLAGS=skf_scripted
+PROMPT_MSG=To whom do you wish to grovel?
+DELAY=2.0
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+STAT_STR=5
+STAT_INT=125
+STAT_DEX=25
+BONUS_STR=0
+BONUS_DEX=50
+BONUS_INT=50
+BONUS_STATS=10
+
+on=@start
+//act = target
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<act.isitem>) 
+  src.sysmessage There is little chance of getting money from that!
+  return 1
+elseif !(<act.ishumanoid>) || (<act.flags>&statf_invul) ||  (<act.isevent.e_player_vendor>)
+  src.sysmessage There is little chance of getting money from that!
+  return 1
+elseif (<src.distance <act>> >= 2)
+  src.sysmessage You are too far away to beg from <act.sex him/her>.
+  return 1
+elseif !(<src.canseelos <act>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif (<act.isplayer>)
+  src.sysmessage Perhaps just asking would be better.
+  return 1
+endif
+if !(<f_skillsucceed begging>) || (<act.gold> < 10)
+  actdiff=65535
+else
+  actdiff=0
+endif
+return 0
+
+
+on=@fail
+src.sysmessage They seem unwilling to give you any money.
+
+on=@abort
+src.sysmessage You fail utterly in your attempt to grovel.
+
+
+on=@success
+//Fixme: certain npcs should give items out instead of gold
+local.gold=<eval <act.gold>/10>
+if (<local.gold> > 10)
+  local.gold=10
+endif
+act.say I feel sorry for thee... here have a gold coin.
+act.gold -= <local.gold>
+//src.newgold <local.gold>
+serv.newitem i_gold,<local.gold>,<src.findlayer.21>
+src.sound 02e4
+
+
+
+[EOF]

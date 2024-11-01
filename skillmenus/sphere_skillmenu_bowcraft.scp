@@ -1,0 +1,61 @@
+
+[SKILLMENU sm_BOWCRAFT]
+// knife on wood
+What do you want to carve the wood into?
+
+ON=i_KINDLING <name> (<resmake>)
+MAKEITEM=i_KINDLING
+
+ON=i_TORCH <name> (<resmake>)
+MAKEITEM=i_TORCH
+
+ON=i_ARROW_SHAFT <name> (<resmake>)
+MAKEITEM=i_ARROW_SHAFT
+
+ON=i_bow <name> (<resmake>)
+MAKEITEM=i_bow
+
+ON=i_CROSSBOW <name> (<resmake>)
+MAKEITEM=i_CROSSBOW
+
+ON=i_crossbow_heavy <name> (<resmake>)
+MAKEITEM=i_crossbow_heavy
+
+ON=i_bow Exceptional Bows
+SKILLMENU=sm_bows_excep
+
+[SKILLMENU sm_bolts]
+// combine shafts with feathers.
+Select arrow type
+
+ON=i_xbolt <name> (<resmake>)
+MAKEITEM=i_xbolt
+
+ON=i_arrow <name> (<resmake>)
+MAKEITEM=i_arrow
+
+[SKILLMENU sm_bows_excep] // Exceptional Bows
+Exceptional Bows
+
+ON=i_BOW_SUP <name> (<resmake>)
+MAKEITEM=i_BOW_SUP
+
+ON=i_XBOW_SUP <name> (<resmake>)
+MAKEITEM=i_XBOW_SUP
+
+ON=i_HXBOW_SUP <name> (<resmake>)
+MAKEITEM=i_HXBOW_SUP
+
+ON=i_BOW_EXCEP <name> (<resmake>)
+MAKEITEM=i_BOW_EXCEP
+
+ON=i_XBOW_EXCEP <name> (<resmake>)
+MAKEITEM=i_XBOW_EXCEP
+
+ON=i_HXBOW_EXCEP <name> (<resmake>)
+MAKEITEM=i_HXBOW_EXCEP
+
+ON=i_bow_elven <name> (<resmake>)
+MAKEITEM=i_bow_elven
+
+[EOF]

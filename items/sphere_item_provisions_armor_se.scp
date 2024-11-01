@@ -1,0 +1,563 @@
+// SPHERE by : Menasoft ©1997-2007
+// www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Thursday, January 19, 2005
+// By Blizzard
+VERSION=0.56b
+
+[ITEMDEF 02774]
+DEFNAME=i_chainmail_hatsuburi
+NAME=chainmail hatsuburi
+TYPE=t_armor
+ARMOR=28
+REQSTR=50
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 30.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+[ITEMDEF 02775]
+DEFNAME=i_platemail_hatsuburi
+NAME=platemail hatsuburi
+TYPE=t_armor
+ARMOR=40
+REQSTR=65
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 45.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Hatsuburi
+
+[ITEMDEF 02776]
+DEFNAME=i_leather_jinsaga
+NAME=leather jinsaga
+TYPE=t_armor
+ARMOR=13
+REQSTR=25
+RESOURCES=4 t_leather
+SKILLMAKE=TAILORING 45.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Jinsaga
+
+[ITEMDEF 02777]
+DEFNAME=i_plate_jinsaga_heavy
+NAME=plate jinsaga
+TYPE=t_armor
+ARMOR=40
+REQSTR=55
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 45.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Helmets
+DESCRIPTION=Heavy Plate Jinsaga
+
+[ITEMDEF 02778]
+DEFNAME=i_platemail_kabuto_decorative
+NAME=decorative platemail kabuto
+TYPE=t_armor
+ARMOR=40
+REQSTR=70
+RESOURCES=25 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 90.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Decorative Platemail Kabuto
+
+[ITEMDEF 02779]
+DEFNAME=i_platemail_mempo
+NAME=plate mempo
+TYPE=t_armor
+ARMOR=40
+REQSTR=50
+RESOURCES=18 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 80.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Mempo
+
+[ITEMDEF 0277a]
+DEFNAME=i_leather_mempo
+NAME=leather mempo
+TYPE=t_armor
+ARMOR=13
+REQSTR=30
+RESOURCES=8 t_leather
+SKILLMAKE=TAILORING 80.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Mempo
+
+[ITEMDEF 0277b]
+DEFNAME=i_leather_do
+NAME=leather do
+TYPE=t_armor
+ARMOR=13
+REQSTR=40
+RESOURCES=12 t_leather
+SKILLMAKE=TAILORING 75.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Do
+
+[ITEMDEF 0277c]
+DEFNAME=i_studded_do
+NAME=studded do
+TYPE=t_armor
+ARMOR=20
+REQSTR=55
+RESOURCES=14 t_leather
+SKILLMAKE=TAILORING 95.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Studded Armor
+DESCRIPTION=Studded Do
+
+[ITEMDEF 0277d]
+DEFNAME=i_platemail_do
+NAME=platemail do
+TYPE=t_armor
+ARMOR=40
+REQSTR=85
+RESOURCES=28 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 87.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Do
+
+[ITEMDEF 0277e]
+DEFNAME=i_leather_hiro_sode
+NAME=leather hiro sode
+TYPE=t_armor
+ARMOR=13
+REQSTR=25
+RESOURCES=5 t_leather
+SKILLMAKE=TAILORING 55.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Hiro Sode
+
+[ITEMDEF 0277f]
+DEFNAME=i_studded_hiro_sode
+NAME=studded hiro sode
+TYPE=t_armor
+ARMOR=20
+REQSTR=30
+RESOURCES=8 t_leather
+SKILLMAKE=TAILORING 85.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Studded Armor
+DESCRIPTION=Studded Hiro Sode
+
+[ITEMDEF 02780]
+DEFNAME=i_platemail_hiro_sode
+NAME=platemail hiro sode
+TYPE=t_armor
+ARMOR=40
+REQSTR=75
+RESOURCES=16 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 80.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Hiro Sode
+
+[ITEMDEF 02781]
+DEFNAME=i_plate_jinsaga_light
+NAME=plate jinsaga
+TYPE=t_armor
+ARMOR=40
+REQSTR=55
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 45.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Helmet
+DESCRIPTION=Light Plate Jinsaga
+
+[ITEMDEF 02784]
+DEFNAME=i_plate_jinsaga_small
+NAME=platemail hatsuburi
+TYPE=t_armor
+ARMOR=40
+REQSTR=55
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 45.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Helmets
+DESCRIPTION=Small Plate Jinsaga 
+
+[ITEMDEF 02785]
+DEFNAME=i_platemail_kabuto_battle
+NAME=olatemail battle kabuto
+TYPE=t_armor
+ARMOR=40
+REQSTR=70
+RESOURCES=25 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 90.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Battle Kabuto
+
+[ITEMDEF 02786]
+DEFNAME=i_leather_suneate
+NAME=platemail hatsuburi
+TYPE=t_armor
+ARMOR=13
+REQSTR=20
+RESOURCES=12 t_leather
+SKILLMAKE=TAILORING 68.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Suneate
+
+[ITEMDEF 02787]
+DEFNAME=i_studded_suneate
+NAME=studded suneate
+TYPE=t_armor
+ARMOR=20
+REQSTR=30
+RESOURCES=14 t_leather
+SKILLMAKE=TAILORING 92.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Studded Armor
+DESCRIPTION=Studded Suneate
+
+[ITEMDEF 02788]
+DEFNAME=i_platemail_suneate
+NAME=platemail suneate
+TYPE=t_armor
+ARMOR=40
+REQSTR=80
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 65.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Suneate
+
+[ITEMDEF 02789]
+DEFNAME=i_platemail_kabuto
+NAME=standard olatemail kabuto
+TYPE=t_armor
+ARMOR=40
+REQSTR=80
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 65.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Kabuto
+
+[ITEMDEF 027d5]
+DEFNAME=i_leather_haidate
+NAME=leather haidate
+TYPE=t_armor
+ARMOR=13
+REQSTR=20
+RESOURCES=12 t_leather
+SKILLMAKE=TAILORING 68.9
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Haidate
+
+[ITEMDEF 027d6]
+DEFNAME=i_studded_haidate
+NAME=studded haidate
+TYPE=t_armor
+ARMOR=20
+REQSTR=30
+RESOURCES=14 t_leather
+SKILLMAKE=TAILORING 92.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Studded Armor
+DESCRIPTION=Studded Haidate
+
+[ITEMDEF 027d8]
+DEFNAME=i_platemail_haidate
+NAME=platemail haidate
+TYPE=t_armor
+ARMOR=40
+REQSTR=80
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=BLACKSMITHING 65.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Platemail Armor
+DESCRIPTION=Platemail Haidate
+
+[ITEMDEF 0278e]
+DEFNAME=i_leather_ninja_hood
+NAME=leather ninja hood
+TYPE=t_armor
+ARMOR=13
+REQSTR=10
+RESOURCES=14 t_leather
+SKILLMAKE=TAILORING 90.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Ninja Hood
+
+[ITEMDEF 02790]
+DEFNAME=i_leather_ninja_belt
+NAME=leather ninja belt
+TYPE=t_ninja_belt
+RESOURCES=5 t_leather
+SKILLMAKE=TAILORING 50.0, t_sewing_kit
+
+CATEGORY=Provisions - Clothes
+SUBSECTION=Miscellaneous
+DESCRIPTION=Leather Ninja Belt
+
+[TYPEDEF t_ninja_belt]
+DEFNAME=t_ninja_belt
+
+ON=@DCLICK
+IF (<TAG0.SHURIKEN>)
+	IF (<SRC.OSTR> >= 10)
+		TARGET=Throw a shuriken at what creature?
+	ELSE
+		SRC.SYSMESSAGE=You are not strong enough to use this.
+	ENDIF
+ELSE
+	SRC.SYSMESSAGE=You are out of shurikens.
+ENDIF
+RETURN 1
+
+ON=@TARGON_CHAR
+IF (<SRC.TARG.CANSEELOs>)
+	IF (<SRC.TARG.DISTANCE> < 7)
+		IF (<TAG0.SHURIKEN>)
+			TAG0.SHURIKEN -= 1
+			SRC.EFFECT=0,i_shuriken,4,4,0
+			SRC.DAMAGE=<EVAL {10,12}> 01 <SRC.UID>
+			SRC.SOUND=snd_WEAPONS_SWORD1
+		ELSE
+			SRC.SYSMESSAGE=You are out of shurikens.
+		ENDIF
+	ELSE
+		SRC.SYSMESSAGE=You are too far away.
+	ENDIF
+ELSE
+	SRC.SYSMESSAGE=You can not see that.
+ENDIF
+RETURN 1
+
+[ITEMDEF 02791]
+DEFNAME=i_leather_ninja_pants
+NAME=leather ninja pants
+TYPE=t_armor
+ARMOR=13
+REQSTR=10
+RESOURCES=13 t_leather
+SKILLMAKE=TAILORING 80.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Ninja Pants
+
+[ITEMDEF 02792]
+DEFNAME=i_leather_ninja_mitts
+NAME=leather ninja mitts
+TYPE=t_armor
+ARMOR=13
+REQSTR=10
+RESOURCES=12 t_leather
+SKILLMAKE=TAILORING 65.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Ninja Mitts
+
+[ITEMDEF 02793]
+DEFNAME=i_leather_ninja_jacket
+NAME=leather ninja jacket
+TYPE=t_armor
+ARMOR=13
+REQSTR=10
+RESOURCES=13 t_leather
+SKILLMAKE=TAILORING 85.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Leather Armor
+DESCRIPTION=Leather Ninja Jacket
+
+[ITEMDEF 0279d]
+DEFNAME=i_studded_mempo
+NAME=studded mempo
+TYPE=t_armor
+ARMOR=20
+REQSTR=30
+RESOURCES=8 t_leather
+SKILLMAKE=TAILORING 80.0
+
+ON=@CREATE
+HITPOINTS={50 60}
+
+CATEGORY=Provisions - Armor
+SUBSECTION=Studded Armor
+DESCRIPTION=Studded Mempo
+
+
+[ITEMDEF 02777]
+DEFNAME=i_plate_jingasa_heavy
+NAME=plate jingasa
+TYPE=t_armor
+FLIP=1
+ARMOR=30
+ReqStr=55
+VALUE=116
+WEIGHT=20.0
+RESOURCES=20 i_ingot_iron
+SKILLMAKE=Blacksmithing 45.0
+CATEGORY=Provisions - Armor
+SUBSECTION=Helmets
+DESCRIPTION=Heavy Plate Jingasa
+DUPELIST=027c2
+
+ON=@Create
+   HITPOINTS={36 48}
+
+
+
+[ITEMDEF 02781]
+DEFNAME=i_plate_jingasa_light
+NAME=light platemail jingasa
+TYPE=t_armor
+FLIP=1
+ARMOR=28
+ReqStr=55
+VALUE=104
+WEIGHT=18.0
+RESOURCES=18 i_ingot_iron
+SKILLMAKE=Blacksmithing 45.0
+CATEGORY=Provisions - Armor
+SUBSECTION=Helmets
+DESCRIPTION=Light Platemail Jingasa
+DUPELIST=027cc
+
+ON=@Create
+   HITPOINTS={36 48}
+
+
+[ITEMDEF 02784]
+DEFNAME=i_plate_jingasa_small
+NAME=small platemail jingasa
+TYPE=t_armor
+FLIP=1
+ARMOR=13
+ReqStr=55
+VALUE=93
+WEIGHT=16.0
+RESOURCES=16 i_ingot_iron
+SKILLMAKE=Blacksmithing 45.0
+CATEGORY=Provisions - Armor
+SUBSECTION=Helmets
+DESCRIPTION=Small Platemail Jingasa
+DUPELIST=027cf
+
+ON=@Create
+   HITPOINTS={36 48}
+
+[EOF]

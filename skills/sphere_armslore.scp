@@ -1,0 +1,283 @@
+//http://uo.stratics.com/content/skills/armslore_archive.shtml
+//4:49 PM 3/27/2018
+
+[SKILL 4]
+DEFNAME=SKILL_ARMSLORE
+KEY=ArmsLore
+TITLE=Weapons Master
+FLAGS=SKF_SCRIPTED
+PROMPT_MSG=What would you like to evaluate?
+DELAY=1.0
+STAT_STR=10
+STAT_INT=125
+STAT_DEX=15
+BONUS_STR=33
+BONUS_DEX=33
+BONUS_INT=34
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@start
+//act = target
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> >= 10)		//usually 2 tiles away for items
+  src.sysmessage That is too far away.
+  return 1
+elseif (<act.ischar>) && (<src.armslore> < 1000)
+  src.sysmessage At your skill level, you can only lore single items.
+  return 1
+elseif (<act.isitem>) && !(<act.isweapon>) && !(<act.isarmor>) 		//can target weapons, armor, and yourself
+  src.sysmessage That is neither a weapon nor armor.
+  return 1
+//elseif !(<src.canseelos <act>>) && (<act.topobj> != <src>) 
+  //src.sysmessage Target cannot be seen.
+  //return 1
+endif
+if !(<src.f_skillsucceed armslore>)  
+  src.actdiff=65535		
+else
+  src.actdiff=0
+endif
+return 0
+
+ON=@Fail
+src.sysmessage You can't think of anything off hand
+
+ON=@Abort
+src.sysmessage You stop trying to appraise the item.
+
+on=@success
+if (<act.ischar>)
+  act.sdialog d_armslore_equipment
+  return 0
+endif
+
+local.durability=<act.f_armslore_get_durability>
+local.properties=<act.f_armslore_get_properties>
+
+src.sysmessage <local.durability>
+src.sysmessage <local.properties>
+
+
+[function f_armslore_get_durability]
+local.durability=<muldiv <hits>,100,<maxhits>>
+local.durability /= 10
+if (<local.durability> > 9)
+  local.durability=9
+endif
+doswitch <local.durability>
+  local.msg=falling apart
+  local.msg=flimsy and not trustworthy
+  local.msg=somewhat badly damaged
+  local.msg=rather battered
+  local.msg=well used
+  local.msg=suffered some wear and tear
+  local.msg=fairly good condition
+  local.msg=barely used, with a few nicks and scrapes
+  local.msg=almost new
+  local.msg=brand new
+enddo
+return It looks <local.msg>.
+
+[function f_armslore_get_properties]
+if (<isarmor>)
+  local.AvgAR=<eval ((<armor.lo>+<armor.hi>)/2)>
+  local.armor=<eval (<local.AvgAr>/5)>
+  if (<local.armor> > 7)
+    local.armor=7
+  endif
+  doswitch <local.armor>
+    local.msg=offers no defense against attackers
+    local.msg=provides almost no protection
+    local.msg=provides very little protection
+    local.msg=offers some protection against blows
+    local.msg=serves as a sturdy protection
+    local.msg=is a superior defense against attack
+    local.msg=offers excellent protection
+    local.msg=is superbly crafted to provide maximum protection
+  enddo
+  return This armor <local.msg>.
+
+elseif (<isweapon>)
+  local.AvgDam=<eval ((<dam.lo>+<dam.hi>)/2)>
+  local.damage=<eval (<local.AvgDam>/5)>
+  if (<local.damage> > 6)
+    local.damage=6
+  endif
+  doswitch <local.damage>
+    local.msg=might scratch your opponent slightly
+    local.msg=would do minimal damage
+    local.msg=would do some damage
+    local.msg=would probably hurt your opponent a fair amount
+    local.msg=would inflict quite a lot of damage and pain
+    local.msg=would be a superior weapon
+    local.msg=would be extraordinarily deadly
+  enddo
+  //serv.log <name>(<uid>) armslore on <name>(<act>)
+  return This weapon <local.msg> when you <f_armslore_attacktype> someone with it <qval <twohands>?two-handed :>at <qval <f_avgvalue <range>><=1?short:long> range.
+endif
+
+[function f_armslore_attacktype]
+if (<type>==t_weapon_bow)
+  return shot
+elseif (<type>==t_weapon_sword)
+  return slashed
+elseif (<type>==t_weapon_mace_smith)
+  return bashed
+elseif (<type>==t_weapon_fence)
+  return stabbed
+else
+  return hit
+endif
+
+[function f_passive_armslore]		//this isnt used anymore, we'll use a dialog, see below
+local.durability=<muldiv <hits>,100,<maxhits>>
+local.durability /= 10
+if (<local.durability> > 9)
+  local.durability=9
+endif
+doswitch <local.durability>
+  local.msg=falling apart
+  local.msg=flimsy
+  local.msg=badly damaged
+  local.msg=rather battered
+  local.msg=well used
+  local.msg=somewhat worn
+  local.msg=good condition
+  local.msg=barely used
+  local.msg=almost new
+  local.msg=brand new
+enddo
+return <local.msg>
+
+[dialog d_armslore_equipment]
+
+120,75
+
+page 0
+
+resizepic 10 10 9200 335 390
+resizepic 20 20 9350 315 370
+
+page 1
+
+resizepic 150 35 3000 55 65	//head
+ref1=<findlayer.6>
+if (<ref1.isvalid>) && (<ref1.isarmor>)
+  tilepichue 155 45 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 145 85 2117 2118 1 0 6
+  dtext 165 83 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%
+endif
+
+resizepic 150 105 3000 55 65	//neck
+ref1=<findlayer.10>
+if (<ref1.isvalid>) && (<ref1.isarmor>)
+  tilepichue 155 125 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 145 155 2117 2118 1 0 10
+  dtext 165 153 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%
+endif
+
+////////////////////////
+
+resizepic 30 175 3000 55 65	//right hand
+ref1=<findlayer.1>
+if (<ref1.isvalid>) && (<ref1.isweapon>)
+  tilepichue 25 185 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 25 225 2117 2118 1 0 1
+  dtext 45 223 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%
+endif
+
+resizepic 90 175 3000 55 65	//gloves
+ref1=<findlayer.7>
+if (<ref1.isvalid>) && (<ref1.isarmor>)
+  tilepichue 95 185 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 85 225 2117 2118 1 0 7
+  dtext 105 223 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%
+endif
+
+resizepic 150 175 3000 55 65	//chest
+ref1=<findlayer.13>
+if (<ref1.isvalid>) && (<ref1.isarmor>)
+  tilepichue 155 185 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 145 225 2117 2118 1 0 13
+  dtext 165 223 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%	
+endif
+
+resizepic 210 175 3000 55 65	//arms
+ref1=<findlayer.19>
+if (<ref1.isvalid>) && (<ref1.isarmor>)
+  tilepichue 215 185 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 205 225 2117 2118 1 0 19	
+  dtext 225 223 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%
+endif
+
+resizepic 270 175 3000 55 65	//left hand
+ref1=<findlayer.2>
+if (<ref1.isvalid>) && ((<ref1.isarmor>) || (<ref1.isweapon>))
+  tilepichue 265 185 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 265 225 2117 2118 1 0 2
+  dtext 285 223 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%
+endif
+
+///////////////////////
+
+resizepic 150 245 3000 55 65	//legs
+ref1=<findlayer.4>
+if (<ref1.isvalid>) && (<ref1.isarmor>)
+  tilepichue 155 255 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>
+  button 145 295 2117 2118 1 0 4
+  dtext 165 293 1000 <muldiv <ref1.hits>,100,<ref1.maxhits>>%	
+endif
+
+//resizepic 140 315 3000 55 65	//feet
+//button 140 285 2117 2118 1 0 11	//feet
+
+button 40 355 4017 4018 1 0 0		//close menu
+dtext 80 355 0 CLOSE
+
+dtext 245 355 0 OKAY		
+button 285 355 4005 4006 1 0 0		//okay (also close)
+
+//dtext 205 355 0 REPAIR ALL		//FIXME: add repair all
+//button 285 355 4005 4006 1 0 1000	//repair all worn armor items
+
+if (<argn1> > 1)	//we're viewing a specific item
+  page <argn1>
+  ref1=<findlayer.<eval (<argn1>-1)>>
+
+  resizepic 50 50 3000 55 65	//white paper background
+  if (<ref1.isvalid>)
+    tilepichue 50 65 <eval id(<ref1.dispid>)> <eval (<ref1.color>)>	//item and item color
+  endif
+  dhtmlgump 125 50 200 80 0 0 <strtoupper <ref1.name>>
+
+  dhtmlgump 50 140 270 20 0 0  Durability : <muldiv <ref1.hits>,100,<ref1.maxhits>>%
+
+  dhtmlgump 50 180 270 40 0 0 <ref1.f_armslore_get_durability>
+
+  dhtmlgump 50 220 270 60 0 0 <ref1.f_armslore_get_properties>
+
+  button 40 355 4014 4015 0 1		//back button
+  dtext 80 355 0 BACK
+
+  //dtext 200 355 0 REPAIR ITEM
+  //button 285 355 4005 4006 1 0 100	//repair all worn armor items
+
+endif
+
+[dialog d_armslore_equipment button]
+
+onbutton=1,20
+ref1=<findlayer.<argn1>>
+sdialog d_armslore_equipment <eval (<argn1>+1)>
+
+onbutton=1000
+sdialog d_armslore_equipment
+
+
+
+
+[EOF]

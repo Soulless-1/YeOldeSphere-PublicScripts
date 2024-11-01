@@ -1,0 +1,815 @@
+//Part of Soulless' function package
+//v1.0
+//11:47 AM 6/23/2021
+
+[comment]
+isyoung				//player is young?
+isinvis
+ishidden
+ishumanoid		
+ishuman
+ismale
+isfemale
+isvendor
+isanimal
+ismonster
+isevil
+isguildmaster
+isinnocent
+iscriminal
+ismurderer
+isguildmember		
+iselemental		
+isliving		
+ismetal
+indungeon			//if a players in the dungeons or not
+in[dungeonname]			//if a players in a certain dungeon
+intown				//checks if a player is in town
+in[townname]
+inlostlands			//if the character is in t2a's lost lands
+incombat			//determines if a character is in combat
+isirritatedby			//they have irritated me
+isaggrievedby			//they aggrieved me
+isaggressor			//this player is the aggressor 
+isharmedby			//they harmed me
+issawcrime			//i saw them cause a crime
+isthievedby			//they stole from me
+istspeech			//finds if a char has a specific speech handler
+iscorpsehuman			//returns if the corpse was from a human
+isorphanednpc			//is the npc not spawned, aimlessly wandering the world
+isarmor_platemail
+isarmor_bone
+isarmor_chainmail
+isarmor_ringmail
+isarmor_studded
+isarmor_leather
+isaxe				//return 1 if item is an axe
+isodd				//if the number is odd return 1
+iseven				//if the number is even return 1
+israredyetub			//if the dye tub is rare colored
+isitemdyetub
+isfurniture			//is the item furniture
+ispolymorphed			//return 1 if they are not they're polymorphed or any variation of that
+isoffline			//returns 1 if char is logged out
+isfood
+ismedable			//you can meditate with this item equipped
+isequipped			//will return 1 if the item is equipped
+isbankopen			//will return 1 if the player's bank is open (standing in the place they opened it)
+islockablecont			//will return 1 if the container is lockable
+ismagicitem			//return 1 if the item is magical
+isfighting			//return 1 if the char is in an active fight
+isrunichammer			//return 1 if item is a runic hammer
+isnearroad			//return 1 if is near a road within area specified
+istoobumpy			//will return how bumpy an area specified is
+isnearhouse			//will return 1 if it detects player housing components in the area specified
+ispetsfriend			//will return 1 if the character is a friend of the pet
+ispotionwait			//will return the UID of the potion wait memory if found
+isundead			//return 1 if the char is undead
+isdragon			//return 1 if the char is a dragon
+isdyeable			//return 1 if the item can be dyed
+isusedplayername		//return 1 if player name is taken
+isgoodhealer			//return 1 if blue healer
+isevilhealer			//return 1 if red healer
+isprofane			//return 1 if the args are on the obscene list
+isguildmate			//return 1 if you are in the same guild (args = char to check)
+
+[function isyoung]
+if (<npc>)
+  if !(<owner>) || (<owner.npc>)
+    return -1
+  else
+    return 1
+  endif
+elseif (<tag0.young>)		
+  return 1
+endif
+return 0
+
+[function isinvis]
+if (<flags>&statf_insubstantial)
+  return 1
+endif
+return 0
+
+[function ishidden]
+if (<flags>&statf_hidden)
+  return 1
+endif
+return 0
+
+[function ishumanoid]
+if (<isplayer>) || (<ishuman>) || (<iself>) || (<isgargoyle>) ||  (strmatch("*troll*", "<id>")) || (strmatch("*cyclops*", "<id>")) || (strmatch("*ophidian*", "<id>")) || (strmatch("*ogre*", "<id>")) || (strmatch("*ettin*", "<id>")) || (strmatch("*orc*", "<id>")) || (strmatch("*harpy*", "<id>")) || (strmatch("*headless*", "<id>")) || (strmatch("*lizardman*", "<id>")) || (strmatch("*ratman*", "<id>"))
+  return 1
+endif
+return 0
+
+[function ishuman] 
+if (<npc> == brain_human) || (<body> == c_man) || (<body> == c_woman)
+  return 1
+endif
+return 0
+
+[function iself]
+if (<body> == c_elf_male) || (<body> == c_elf_female)
+  return 1
+endif
+return 0
+
+[function isgargoyle]
+if (<body> == c_gargoyle_male) || (<body> == c_gargoyle_female)
+  return 1
+endif
+return 0
+
+[function ismale]
+if (<body>==c_man) || (<body>==c_elf_male) || (<body>==c_gargoyle_male)
+  return 1
+endif
+return 0
+
+[function isfemale]
+if (<body>==c_woman) || (<body>==c_elf_female) || (<body>==c_gargoyle_female)
+  return 1
+endif
+return 0
+
+[function isvendor]
+if (<npc>==brain_healer) || (<npc>==brain_banker) || (<npc>==brain_vendor) || (<npc>==brain_animal_trainer) || (<isevent.e_player_vendor>)
+  return 1
+endif
+return 0
+
+[function isnpcvendor]	//like above but only for NPC vendors
+if (<npc>==brain_healer) || (<npc>==brain_banker) || (<npc>==brain_vendor) || (<npc>==brain_animal_trainer)
+  return 1
+endif
+return 0
+
+[function isguildmaster]
+if (<istevent.e_human_guildmaster>)
+  return 1
+endif
+return 0
+
+[function isanimal]
+if (<npc>==brain_animal)
+  return 1
+endif
+return 0
+
+[function ismonster]
+if (<ischar>) && ((<npc>==brain_monster) || (<npc>==brain_dragon))
+  return 1
+endif
+return 0
+
+[function isevil]
+if (<ischar>) 
+  if !(<npc>)
+    if (<kills> > <serv.murdermincount>)		//player with enough kills
+      return 1
+    endif
+  else
+    if (<owner>) 					//pet
+      return <owner.isevil>
+    elseif (<ismonster>) && (<karma> < 0)		//monster with negative karma
+      return 1
+    elseif (<npc>==brain_animal) && (<karma> < -799)	//animal with enough negative karma
+      return 1
+    elseif (<npc>==brain_human) && (<karma> < -2999)	//human npc with enough negative karma
+      return 1
+    endif
+  endif
+endif
+return 0
+
+[function isinnocent]
+if !(<npc>)
+  if !(<flags>&statf_criminal) && (<kills> < <serv.murdermincount>)
+    return 1
+  endif
+elseif (<npc>)
+  if !(<flags>&statf_criminal) && (<karma> >=0)
+    return 1
+  endif
+endif
+return 0
+
+[function iscriminal]
+if (<flags>&statf_criminal) || (<findlayer.43>)
+  return <findlayer.43.timer>
+endif
+return 0
+
+[function ismurderer]
+if !(<npc>) && (<kills> > <serv.murdermincount>)
+  return 1
+endif
+return 0
+
+[function isguildmember]
+if (<memoryfindtype.memory_guild>)
+  return 1
+endif
+return 0
+
+[function iselemental] 
+if (strmatch(c_elem*,<baseid>)) || (strmatch(c_elemental*,<baseid>))
+  return 1
+endif
+return 0
+
+[function isliving]
+if (<hits> > 0)
+  return 1
+endif
+return 0
+
+[function ismetal]
+if (strmatch(*ingot*,<resources.0.key>)
+  return 1
+endif
+return 0
+
+[function inmiscdungeon]
+if (strmatch(a_dungeons*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function infiredungeon]
+if (strmatch(a_fire_dungeon*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function inicedungeon]
+if (strmatch(a_ice_dungeon*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function inshame]
+if (strmatch(a_shame*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function indeceit]
+if (strmatch(a_deceit*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function indespise]
+if (strmatch(a_despise*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function inwrong]
+if (strmatch(a_wrong*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function incovetous]
+if (strmatch(a_covetous*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function indestard]
+if (strmatch(a_destard*,<region.defname>))
+  return 1
+endif
+return 0
+
+[function inhythloth]
+if (strmatch(a_hythloth*,<region.defname>))
+  return 1
+endif
+return 0
+
+
+[function indungeon]
+if (<inmiscdungeon>) || (<infiredungeon>) || (<inicedungeon>) || (<inshame>) || (<indeceit>) || (<indespise>) || (<inwrong>) || (<incovetous>) || (<indestard>) || (<inhythloth>)
+  return 1
+endif
+return 0
+
+[function inbritain]
+if (<region.defname>==a_townbritain)
+  return 1
+endif
+return 0
+
+[function inyew]
+if (<region.defname>==a_townyew)
+  return 1
+endif
+return 0
+
+[function inwind]
+if (<region.defname>==a_townwind)
+  return 1
+endif
+return 0
+
+[function inminoc]
+if (<region.defname>==a_townminoc)
+  return 1
+endif
+return 0
+
+[function incove]
+if (<region.defname>==a_towncove)
+  return 1
+endif
+return 0
+
+[function invesper]
+if (<region.defname>==a_townvesper)
+  return 1
+endif
+return 0
+
+[function innujelm]
+if (<region.defname>==a_townnujelm)
+  return 1
+endif
+return 0
+
+[function inmoonglow]
+if (<region.defname>==a_townmoonglow)
+  return 1
+endif
+return 0
+
+[function inskarabrae]
+if (<region.defname>==a_townskarabrae)
+  return 1
+endif
+return 0
+
+[function inbuccaneersden]
+if (<region.defname>==a_townbucsden)
+  return 1
+endif
+return 0
+
+[function inmagincia]
+if (<region.defname>==a_townmagincia)
+ return 1
+endif
+return 0
+
+[function inocllo]
+if (<region.defname>==a_townocllo)
+  return 1
+endif
+return 0
+
+[function intrinsic]
+if (<region.defname>==a_towntrinsic)
+  return 1
+endif
+return 0
+
+[function inserpentshold]
+if (<region.defname>==a_townsrphold)
+  return 1
+endif
+return 0
+
+[function intown]
+if (<inbritain>) || (<inyew>) || (<inwind>) || (<inminoc>) || (<incove>) || (<invesper>) || (<innujelm>) || (<inmoonglow>) || (<inskarabrae>) || (<inbuccaneersden>) || (<inmagincia>) || (<inocllo>) || (<intrinsic>) || (<inserpentshold>)
+  return 1
+endif
+return 0
+
+[function inlostlands]
+if (<p.x> >= 5120) && (<p.y> >= 2305) && (<p.x> <= 6143) && (<p.y> <= 4095)	//wastelands
+  return 1
+elseif (<region.isvalid>) && (<region.defname>==a_terathan_keep_underground_1) || (<region.defname>==a_entrance_to_below_terathan_keep_1)
+  return 1
+endif
+return 0
+
+[function incombat]
+if (<flags>&statf_war)
+  return 1
+elseif (<action> != -1) && (<action> <= 48) 
+  if (<serv.skill.<action>.flags>&skf_fight)
+    return 1
+  endif
+endif
+return 0
+
+[function isaggrievedby]	//isaggrievedby <uid>
+ref1=<args>
+if (<memoryfind.<ref1>.isvalid>) && (<memoryfind.<ref1>.color>&memory_aggrieved)
+  return <memoryfind.<ref1>.timer>
+endif
+return 0
+
+[function isirritatedby]
+ref1=<args>
+if (<memoryfind.<ref1>.isvalid>) && (<memoryfind.<ref1>.color>&memory_irritatedby)
+  return <memoryfind.<ref1>.timer>
+endif
+return 0
+
+[function isaggressor]
+ref1=<args>
+if (<memoryfind.<ref1>.isvalid>) && (<memoryfind.<ref1>.color>&memory_iaggressor)
+  return <memoryfind.<ref1>.timer>
+endif
+return 0
+
+[function isharmedby]
+ref1=<args>
+if (<memoryfind.<ref1>.isvalid>) && (<memoryfind.<ref1>.color>&memory_harmedby)
+  return <memoryfind.<ref1>.timer>
+endif
+return 0
+
+[function issawcrime]
+ref1=<args>
+if (<memoryfind.<ref1>.isvalid>) && (<memoryfind.<ref1>.color>&memory_sawcrime)
+  return <memoryfind.<ref1>.timer>
+endif
+return 0
+
+[function isthievedby]
+ref1=<args>
+if (<memoryfind.<ref1>.isvalid>) && (<memoryfind.<ref1>.color>&memory_thief)
+  return <memoryfind.<ref1>.timer>
+endif
+return 0
+
+[function isparty]
+if (<party>)
+  return 1
+endif
+return 0
+
+[function istspeech]
+local.speech=<args>
+args=<tspeech>
+for n 0 <eval <argv>-1>
+  if !(strcmpi(<local.speech>,<argv[<dlocal.n>]>))
+    return 1
+  endif
+endfor
+return 0
+
+[function iscorpsehuman]
+if (<serv.chardef.<corpse_chardef>.id>==0190) || (<serv.chardef.<corpse_chardef>.id>==0191)
+  return 1
+endif
+return 0
+
+[function isorphanednpc]
+if (<owner>) || (<spawnitem>) 
+  return 0
+elseif (<flags>&statf_spawned) || (<flags>&statf_invul) || (<flags>&statf_stone)
+  return 0
+elseif (<findid.i_pet_recently_released>) || (<findid.i_waypoint_navigation>)
+  return 0
+elseif (<isevent.e_townsfolk>) || (<isevent.e_monster_camp_npc>) || (<isevent.e_kidnapped_noble>) || (<isevent.e_champion_spawn_monster>) || (<isevent.e_champion_boss>) || (<isevent.e_mondains_horde>)
+  return 0
+elseif (<isoffline>) || (<isplayer>)
+  return 0
+elseif (<action>==111)	
+  return 0
+endif
+return 1
+
+[function isarmor_platemail]
+if (<baseid>==i_platemail_helm) || (<baseid>==i_platemail_gorget) || (<baseid>==i_platemail_chest) || (<baseid>==i_platemail_arms) || (<baseid>==i_platemail_gloves) || (<baseid>==i_platemail_leggings)
+  return 1
+endif
+return 0
+
+[function isarmor_bone]
+if (<baseid>==i_bone_helemt) || (<baseid>==i_bone_chest) || (<baseid>==i_bone_arms) || (<baseid>==i_bone_gloves) || (<baseid>==i_bone_leggings)
+  return 1
+endif
+return 0
+
+[function isarmor_chainmail]
+if (<baseid>==i_chainmail_coif) || (<baseid>==i_chainmail_tunic) || (<baseid>==i_chainmail_leggings) 
+  return 1
+endif
+return 0
+
+[function isarmor_ringmail]
+if (<baseid>==i_ringmail_tunic) || (<baseid>==i_ringmail_sleeves) || (<baseid>==i_ringmail_gloves) || (<baseid>==i_ringmail_leggings)
+  return 1
+endif
+return 0
+
+[function isarmor_studded]
+if (<baseid>==i_studded_gorget) || (<baseid>==i_studded_tunic) || (<baseid>==i_studded_sleeves) || (<baseid>==i_studded_gloves) || (<baseid>==i_studded_leggings)
+  return 1
+endif
+return 0
+
+[function isarmor_leather]
+if (<baseid>==i_leather_cap) || (<baseid>==i_leather_gorget) || (<baseid>==i_leather_gorget) || (<baseid>==i_leather_tunic) || (<baseid>==i_leather_sleeves) || (<baseid>==i_leather_gloves) || (<baseid>==i_leather_leggings) || (<baseid>==i_armor_female_leather)
+  return 1
+endif
+return 0
+
+[function isaxe]
+if (<type>==t_weapon_axe) || (<type>==083)
+  return 1
+elseif (<type>==t_weapon_sword) || (<type>==0d)
+  if (<baseid>==i_hatchet) || (<baseid>==i_axe_exec) || (<baseid>==i_axe_battle) || (<baseid>==i_axe) || (<baseid>==i_axe_double) || (<baseid>==i_axe_war) || (<baseid>==i_axe_battle_large) || (<baseid>==i_axe_two_hand) 
+    return 1
+  endif
+endif
+return 0
+
+[function isodd]
+if (<isnum <argn>>) && (<argn> > 0)
+  return <eval (<argn>-((<argn>/2)*2))>
+endif
+return 0
+
+[function iseven]
+if (<isnum <argn>>) && (<argn> > 0) && !(<isodd <argn>>)
+  return 1
+endif
+return 0
+
+[function israredyetub]
+if (<baseid>==i_dye_tub_rare) || (<baseid>==i_dye_tub_rare2) || (<baseid>==i_dye_tub_rare_original) || (<baseid>==i_dye_bucket)
+  return 1
+endif
+return 0
+
+[function isitemdyetub]
+if (<baseid>==i_dye_tub_armor) || (<baseid>==i_dye_tub_weapon) || (<baseid>==i_dye_tub_animal) || (<baseid>==i_dye_tub_book) || (<baseid>==i_dye_tub_furniture) || (<baseid>==i_dye_tub_jewelry) || (<baseid>==i_dye_tub_ultimate)
+  return 1
+endif
+return 0
+
+[function isfurniture]
+if (<type>==t_container) || (<type>==t_container_locked) || (<type>==t_light_lit) || (<type>==t_light_out) || (<type>==t_clock) || (<type>==t_chair) || (<type>==t_bed) || (<type>==t_table)
+  return 1
+else
+  return 0
+endif
+
+[function ispolymorphed]
+if (<src.findid.i_rune_incognito>)
+  src.sysmessage You cannot use this potion while incognitoed.
+  return 1
+elseif (<src.findid.i_rune_polymorph>)
+  src.sysmessage You cannot use this potion while polymorphed.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_monster_form>)
+  src.sysmessage You cannot use this potion while in monster form.
+  return 1
+elseif (<src.findid.i_rune_beastform>)
+  src.sysmessage You cannot use this potion while in beastform.
+  return 1
+elseif (<src.findid.i_rune_chameleon>)
+  src.sysmessage You cannot use this potion as a chameleon.
+  return 1
+elseif (<src.findid.i_tribal_paint_applied>)
+  src.sysmessage You cannot use this potion while wearing body paint.
+  return 1
+elseif  (<src.findid.i_disguise_kit_incognito>)
+  src.sysmessage You cannot use this potion while disguised.
+  return 1
+endif
+return 0
+
+[function isoffline]
+if !(<isonline>)
+  return 1
+endif
+return 0
+
+[function isfood]
+if (<type>==t_food) || (<type>==t_fruit) || (<type>==t_food_raw) || (<type>==t_meat_raw) 
+  return 1
+endif
+return 0
+
+[function ismedable]
+if (<type>==t_spellbook)
+  return 1
+elseif (<baseid>==i_shield_order) || (<baseid>==i_shield_chaos)
+  return 1
+endif
+return 0
+
+[function isequipped]
+if (<cont.isvalid>) && (<cont.isplayer>) && (<cont.findlayer.<layer>> == <uid>)
+  return 1
+endif
+return 0
+
+[function isbankopen]
+ref1=<findlayer.29>
+if (<ref1.morex><ref1.morey><ref1.morem> == <p.x><p.y><p.m>)
+  return 1
+endif
+return 0
+
+[function islockablecont]
+if (strmatch(i_chest*,<baseid>)) || (strmatch(i_crate*,<baseid>)) || (strmatch(i_box*,<baseid>))
+  return 1
+endif
+return 0
+
+[function ismagicitem]
+if (<isevent.t_magic_armor>) || (<isevent.t_magic_weapon>) || (<isevent.t_unique_magic_item>) 
+  return 1
+elseif (<attr>&attr_magic) || (<attr>&attr_magic_armor) || (<attr>&attr_magic_weapon) || (<attr>&attr_magic_clothing) || (<attr>&attr_magic_wand) || (<attr>&attr_magic_jewelry)
+  return 1
+endif
+return 0
+
+[function isfighting]
+if (<action> != -1) && (<action> <= 48)
+  if (<memoryfindtype.memory_fight>) || (<flags>&statf_war)
+    return 1
+  elseif (<serv.skill.<action>.flags>&skf_fight)
+    return 1
+  endif
+endif
+return 0
+
+[function isrunichammer]
+if (<baseid>==i_hammer_runic_dull_copper) || (<baseid>==i_hammer_runic_shadow) || (<baseid>==i_hammer_runic_copper) || (<baseid>==i_hammer_runic_bronze) || (<baseid>==i_hammer_runic_gold) || (<baseid>==i_hammer_runic_agapite) || (<baseid>==i_hammer_runic_verite) || (<baseid>==i_hammer_runic_valorite)
+  return 1
+endif
+return 0
+
+[function isnearroad]		//isnearroad 5	<-- will find a road within 5 tiles
+for dx -<argn> <argn>
+  for dy -<argn> <argn>
+    float.dist=<floatval sqrt(<eval (<local.dx>@2)+(<local.dy>@2)>)>
+    if (<float.dist> > 0) && (<float.dist> < <floatval (<argn>+0.5)>)
+      local.absx=<eval (<p.x>+<local.dx>)>
+      local.absy=<eval (<p.y>+<local.dy>)>
+      local.p=<dlocal.absx>,<dlocal.absy>      
+      local.terrain=<serv.map(<local.p>).terrain>
+      if (<local.terrain> > 0071) && (<local.terrain> < 0078)
+        return 1
+      endif 
+    endif
+  endfor
+endfor
+return 0
+
+[function istoobumpy]		//istoobumpy  <-- will find return how bumpy the area is within 5 tiles
+local.basez=<p.z>
+for dx -<argn> <argn>
+  for dy -<argn> <argn>
+    float.dist=<floatval sqrt(<eval (<local.dx>@2)+(<local.dy>@2)>)>
+    if (<float.dist> > 0) && (<float.dist> < <floatval (<argn>+0.5)>)
+      local.absx=<eval (<p.x>+<local.dx>)>
+      local.absy=<eval (<p.y>+<local.dy>)>
+      local.p=<dlocal.absx>,<dlocal.absy>      
+      local.z=<serv.map(<local.p>).terrain.z>
+      local.zoff=<eval (<local.basez>-<local.z>)>
+      local.zoff=<qval (<local.zoff> < 0)?<eval (-1*<local.zoff>)>:<local.zoff>>
+      if (<local.zoff> > 2)
+        return <local.zoff>
+      endif
+    endif
+  endfor
+endfor
+return 0
+
+[function isnearhouse]		//isnearhouse 5	<-- will find a house within 5 tiles
+for dx -<argn> <argn>
+  for dy -<argn> <argn>
+    float.dist=<floatval sqrt(<eval (<local.dx>@2)+(<local.dy>@2)>)>
+    if (<float.dist> > 0) && (<float.dist> < <floatval (<argn>+0.5)>)
+      local.absx=<eval (<p.x>+<local.dx>)>
+      local.absy=<eval (<p.y>+<local.dy>)>
+      local.p=<dlocal.absx>,<dlocal.absy>      
+      local.components=<serv.map(<local.p>).components>
+      if (<local.components>)
+        return 1
+      endif
+    endif
+  endfor
+endfor
+return 0
+
+[function ispetsfriend]
+ref1=<args>	//uid checking for friend 
+ref2=<memoryfind.<ref1>>
+if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref2.color>&memory_friend)
+  return 1
+endif
+return 0
+
+[function ispotionwait]
+ref1=<uid>
+local.type=<argv[0]>			//potion type
+if (<ref1.findlayer.50>)		//atleast one potion wait timer
+  forcharlayer 50
+    if !(strcmpi(<local.type>,<more1>))	//one matches ours
+       return <uid>
+    endif
+  endfor
+endif
+return 0
+
+[function inbackpack]
+ref1=<uid>
+if (<ref1.isitem>) && (<ref1.cont>)
+  while (<ref1.cont.isvalid>) && (<ref1.cont.isitem>) && (<ref1> != <ref1.cont>)
+    ref1=<ref1.cont> 
+  endif
+  if (<ref1.type>==t_container)
+    return <ref1>
+  endif
+endif
+return 0
+
+[function inbank]
+ref1=<uid>
+if (<ref1.isitem>) && (<ref1.cont>)
+  while (<ref1.cont.isvalid>) && (<ref1.cont.isitem>) && (<ref1> != <ref1.cont>)
+    ref1=<ref1.cont> 
+  endif
+  if (<ref1.type>==t_eq_bank_box)
+    return <ref1>
+  endif
+endif
+return 0
+
+[function isundead]
+if (<faction> == <def0.faction_undead>)
+  return 1
+endif
+return 0
+
+[function isdragon]
+if (<faction> == <def0.faction_dragon>)
+  return 1
+endif
+return 0
+
+[function isdyeable]
+if (<type>==t_clothing) ||  (<type>==t_cloth) || (<type>==t_cloth_bolt)
+  return 1
+elseif (<baseid>==i_pouch) || (<baseid>==i_bag) || (<baseid>==i_backpack)
+  return 1
+endif
+return 0
+
+[function isusedplayername]
+ref1=<uid>
+for n 0 <eval (<serv.accounts>-1)>
+  if (<serv.account.<dlocal.n>.chars> != 0)
+    for x 0 <eval (<serv.account.<dlocal.n>.chars>-1)>
+      ref2=<serv.account.<dlocal.n>.char.<dlocal.x>>
+      if !(strcmpi(<args>,<ref2.name>)) && (<ref1> != <ref2>)
+        return <ref2>
+      endif
+    endfor
+  endif
+endfor
+return 0
+
+[function isgoodhealer]
+if (<baseid>==c_h_healer) || (<baseid>==c_h_healer_f) || (<baseid>==c_h_heal_wander) || (<baseid>==c_h_heal_wander_f)
+  return 1
+endif
+return 0
+
+[function isevilhealer]
+if (<baseid>==c_h_healer_evil) || (<baseid>==c_h_healer_evil_f)
+  return 1
+endif
+return 0
+
+[function isprofane]
+if (isobscene(<args>))
+  return 1
+endif
+return 0
+
+[function isguildmate]
+ref1=<args>
+if (<guild>) && (<ref1.guild>) && (<guild> == <ref1.guild>)
+  return 1
+endif
+return 0
+
+
+[EOF]

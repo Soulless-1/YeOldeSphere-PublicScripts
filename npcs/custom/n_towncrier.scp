@@ -1,0 +1,158 @@
+[chardef c_h_towncrier] 
+id=c_man
+name=#names_humanmale the Towncrier
+
+can=mt_equip|mt_usehands|mt_walk
+tspeech=jobtowncrier
+tevents=e_Human_Environ 
+category=Civilized
+subsection=Special
+description=Towncrier (human male)
+
+on=@Create 
+serv.newitem i_towncrier_timer
+new.cont=<uid>
+new.update
+//flags=00005 
+color=083ea 
+str={41 55} 
+dex={41 55} 
+int={41 55} 
+//fame=5000 
+//karma=5000 
+npc=brain_human 
+itemnewbie=i_lantern
+itemnewbie=random_male_hair
+color=colors_hair
+itemnewbie=random_facial_hair
+color=match_hair
+itemnewbie=random_hats
+color=colors_all
+itemnewbie=i_spellbook
+attr=04
+color=0482
+name=Newspaper
+itemnewbie=i_doublet
+color=colors_all
+itemnewbie=i_shirt_fancy
+color=colors_all
+itemnewbie=i_pants_long
+color=colors_all
+itemnewbie=i_cape
+color=colors_all
+itemnewbie=random_shoes
+color=colors_neutral
+
+on=@dclick
+if (<src.isgm>)
+  sdialog d_towncrier_message
+endif
+
+[chardef c_h_towncrier_f] 
+name=#names_humanfemale the Towncrier
+id=c_woman
+
+can=mt_equip|mt_usehands|mt_walk
+tspeech=jobtowncrier 
+tevents=e_Human_Environ 
+category=Civilized
+subsection=Special
+description=Towncrier (human female)
+
+on=@Create 
+serv.newitem i_towncrier_timer
+new.cont=<uid>
+new.update
+//flags=00005 
+color=083ea 
+str={41 55} 
+dex={41 55} 
+int={41 55} 
+//fame=5000 
+//karma=5000 
+npc=brain_human 
+itemnewbie=i_lantern
+itemnewbie=random_male_hair
+color=colors_hair
+itemnewbie=random_hats
+color=colors_all
+itemnewbie=i_spellbook
+attr=04
+color=0482
+name=Newspaper
+itemnewbie=i_doublet
+color=colors_all
+itemnewbie=i_shirt_fancy
+color=colors_all
+itemnewbie=i_pants_long
+color=colors_all
+itemnewbie=i_cape
+color=colors_all
+itemnewbie=random_shoes
+color=colors_neutral
+
+on=@dclick
+if (<src.isgm>)
+  sdialog d_towncrier_message
+endif
+
+[speech jobtowncrier] 
+
+on=*hello* 
+on=*hey* 
+on=*hi* 
+on=*hail* 
+on=*g'day* 
+say @0482,3,0,0 Have you heard the news? 
+
+on=*news*
+if (<isempty <var.towncrier_news>>)
+  say @0482,3,0,0 I have no news for thee at this time.
+  return 1
+endif
+
+say @0482,3,0,0 This is the latest news: 
+say @0482,3,0,0 <var.towncrier_news>
+
+////TOWNERCRIER MEMORY ITEM
+[itemdef i_towncrier_timer]
+id=i_memory
+type=t_eq_script
+name=town crier news timer
+
+on=@create
+timer=1
+
+on=@timer
+topobj.speechcoloroverride=
+if !(<isempty <var.towncrier_news>>)
+  topobj.say @0482,3,0,0 This is the latest news: 
+  topobj.say @0482,3,0,0 <var.towncrier_news>
+endif
+timer=900
+return 1
+
+
+[dialog d_towncrier_message] 
+0,0  
+
+resizepic 190 175 5054 335 250 
+resizepic 220 235 3000 270 122 
+ 
+dtext 280 200 1263 Enter the news below.
+
+button 240 375 4006 4007 1 0 0
+dtext 275 375 1000 Cancel 
+
+button 400 375 4006 4007 1 0 1 
+dtext 435 375 1000 Accept 
+
+dtextentry 225 237 253 120 0 0 <var0.towncrier_news> 
+
+[dialog d_towncrier_message button] 
+onbutton=1
+src.sysmessage Towncrier news updated!
+var.towncrier_news=<argtxt[0]> 
+findid.i_towncrier_timer.timer=1
+
+[EOF]

@@ -1,0 +1,358 @@
+//Squad system by Soulless
+//v0.1
+//2:50 PM 12/3/2019
+//the idea is that the squad leader will go to waypoints and bring the squad with him, then stand in formation, and onto the next waypoint
+
+
+
+[defname squad_settings]	//these are not applied yet
+squad_max_size			20	//squad size (typically 4-10 soldiers)
+squad_collision			1	//0=squad members will not collide, 1=squad members can't step on another
+squad_karmaspecific		1	//your karma depends on what squad you can join
+squad_factionspecific		1	//you can only join squads that share your faction
+
+
+[plevel 6]
+squad
+
+[function derparmy]
+ref1=<uid>
+ref1.f_squad_start
+for <argn>
+  serv.newnpc c_h_personal_guard
+  new.p=<ref1.p>
+  new.f_squad_join <ref1>
+endfor
+
+
+[function squad]
+sdialog d_squad_formation
+
+[function f_squad_start]
+ref1=<uid>
+if !(<ref1.findid.i_memory_squad_leader>)
+  serv.newitem i_memory_squad_leader
+  new.morex=3
+  new.timer=1
+  ref1.equip <new>
+  //ref1.tag0.name.prefix "Sergeant "
+  ref1.events=+e_squad
+endif
+
+[function f_squad_join]
+if (!<npc>)
+  return 1	//only npcs can join squads like this
+endif
+ref1=<argn>	//squad leader
+tag0.override.shove=1
+serv.list.squad_<ref1>.add <uid>
+serv.newitem i_memory_squad
+new.link=<ref1>
+new.timer=1
+equip <new>
+events=+e_squad
+if (<npc>==brain_human) && (<ref1.npc>)	//npcs talk to each other
+  dorand 4
+    say Reporting for duty, <ref1.name>.
+    say Ready to serve, <ref1.name>.
+    say At your service, <ref1.name>.
+    say I swear my loyalty <ref1.name>.
+  enddo
+endif
+
+[function f_squad_formup]			//form the squad up with everyone in the correct place
+ref1=<uid>					//the squad leader	
+local.size=<serv.list.squad_<ref1>.count>	//squad size
+local.rowwidth=<argv[0]>			//this is determined by the formation selected
+local.rows=<eval <local.size>/<local.rowwidth>>
+local.squadform=<ref1.findid.i_memory_squad_leader.more1>	//% of squad formed up
+//ref1.say Squadform <dlocal.squadform>%
+for n 0 <eval <local.size>-1>
+  ref2=<serv.list.squad_<ref1>.<dlocal.n>>	//squad member
+  if (<ref2>)
+    ref3=<ref2.findid.i_memory_squad>
+    args=<ref2.f_squad_member_findpos <local.rowwidth>>		//x,y,z,m,list position,my row,position in row,total rows
+    local.p=<argv[0]>,<argv[1]>,<argv[2]>,<argv[3]>
+    if (<ref2.distance <local.p>>)		//we're not in position
+      if (<local.squadform> > 75) && (<eval <argv[4]>+<local.rowwidth>> < <local.size>) //most of the squad is in position but im not and we're not in the last row
+        ref3.more1 += 1				//make sure we dont take too long
+        //ref2.say <ref3.more1>
+        if (<ref3.more1> >= 10) 			//alright, we're taking too long now
+          ref3.more2 += 1			//we should be running, we gotta get in formation immediatly
+          //ref2.say <argv[4]> <argv[5]> <argv[6]> <local.rows>
+          //ref2.say @026 !!!!
+          //we should check here if we within 1 tile of it, and we can move to it, just put me there
+          for x 1 <eval <local.rows>+1>		//go through all the people behind me and move them forward if possible
+            ref4=<serv.list.squad_<ref1>.<eval <argv[4]>+(<local.rowwidth>*<local.x>)>>
+            if (<ref4>)				//make sure there's actually someone in this position
+              //ref4.say @034 ????
+              local.ref4pos=<eval <argv[4]>+(<local.rowwidth>*<local.x>)>
+              serv.list.squad_<ref1>.<eval (<local.ref4pos>-<local.rowwidth>)>=<ref4>
+            endif
+          endfor
+          serv.list.squad_<ref1>.<local.ref4pos>=<ref2>
+          ref3.more1=				//blank out position tracking, we're going to the back
+        endif
+      endif
+      ref2.tag.override.movedelay=50
+      ref2.tag.override.moverate=100
+      ref2.homedist=32767
+      ref2.home=-1,-1
+      if (<ref1.flags>&statf_fly)  // || (<ref3.more2>>=1)	//squad leader is running, we should run, or im out of formation for too long
+        ref2.runto <local.p>
+      else
+        ref2.goto <local.p>			//walk
+      endif
+      
+      if (<ref2.distance <local.p>> > 50) // || !(<ref2.canseelos <ref1>>)		//if we're too far away teleport us there
+        ref2.p=<local.p>
+        ref2.update
+      endif
+    elseif (<ref2.dir> != <ref1.dir>)		//we're in position but we're not facing the right way
+      ref2.dir <ref1.dir>
+      ref2.update
+    elseif ((<ref1.flags>&statf_war) && !(<ref2.flags>&statf_war)) || (!(<ref1.flags>&statf_war) && (<ref2.flags>&statf_war))  //we're in position but we're not facing the right way
+      local.warmode=<qval (<ref1.flags>&statf_war)?1:0>
+      doswitch <local.warmode>
+        ref2.flags &= ~ statf_war
+        ref2.flags |= statf_war
+      enddo
+      if (<ref1.flags>&statf_war)
+        ref2.timerfms <R100,1000>,sound {0140 1 0143 1 0147 1}
+        ref2.timerfms <R100,1000>,sound 1098
+        //ref2.update
+      endif
+    else					//we're in position, we're facing the right way
+      ref3.more1=				//clear formation tracking
+      ref3.more2=				
+      local.formedup += 1			//number of squad members successfully formed up
+      //if (!<R25>)				//look natural
+        //ref2.anim { {5 6} 1 {33 34} 1}
+      //endif
+    endif
+  endif
+endfor
+if (<local.formedup>)
+  ref1.findid.i_memory_squad_leader.more1=<muldiv <local.formedup>,100,<local.size>>	//tag the leaders memory item with % of squad formed up
+endif
+
+[function f_squad_member_findpos]	//find the position we're supposed to stand in
+ref1=<findid.i_memory_squad.link>	//leader
+ref2=<uid>			//me
+local.dir=<ref1.dir>	//leaders direction (so we can find offset for x & y)
+local.listpos=<serv.list.squad_<ref1>.findelem <ref2>>	//my position number	
+local.row=<eval (<local.listpos>/<argv[0]>)+1>		//this determines my row
+local.rowmid=<eval <argv[0]>/2>			//where is the middle of the row?
+local.rowpos=<eval <local.listpos>-((<local.row>-1)*<argv[0]>)>
+//serv.log <ref2.name>= listpos<dlocal.listpos> row<dlocal.row> rowpos=<dlocal.rowpos>  middle=<dlocal.rowmid>
+doswitch <ref1.dir>
+  args=<ref1.p.x>,<eval <ref1.p.y>+<local.row>>
+  args=<eval <ref1.p.x>-<local.row>>,<eval <ref1.p.y>+<local.row>>
+  args=<eval <ref1.p.x>-<local.row>>,<ref1.p.y>
+  args=<eval <ref1.p.x>-<local.row>>,<eval <ref1.p.y>-<local.row>>
+  args=<ref1.p.x>,<eval <ref1.p.y>-<local.row>>
+  args=<eval <ref1.p.x.>+<local.row>>,<eval <ref1.p.y>-<local.row>>
+  args=<eval <ref1.p.x>+<local.row>>,<ref1.p.y>
+  args=<eval <ref1.p.x>+<local.row>>,<eval <ref1.p.y>+<local.row>>
+enddo
+if (<local.rowpos> < <local.rowmid>)	  //to the left
+  local.n=<eval <local.rowmid>-<local.rowpos>>
+  doswitch <ref1.dir>
+    args=<eval <argv[0]>-<local.n>>,<argv[1]>
+    args=<eval <argv[0]>-<local.n>>,<eval <argv[1]>-<local.n>>
+    args=<argv[0]>,<eval <argv[1]>-<local.n>>
+    args=<eval <argv[0]>+<local.n>>,<eval <argv[1]>-<local.n>>
+    args=<eval <argv[0]>+<local.n>>,<argv[1]>
+    args=<eval <argv[0]>+<local.n>>,<eval <argv[1]>+<local.n>>
+    args=<argv[0]>,<eval <argv[1]>+<local.n>>
+    args=<eval <argv[0]>-<local.n>>,<eval <argv[1]>+<local.n>>
+  enddo
+elseif (<local.rowpos> > <local.rowmid>)	//to the right
+  local.n=<eval <local.rowpos>-<local.rowmid>>
+  doswitch <ref1.dir>
+    args=<eval <argv[0]>+<local.n>>,<argv[1]>
+    args=<eval <argv[0]>+<local.n>>,<eval <argv[1]>+<local.n>>
+    args=<argv[0]>,<eval <argv[1]>+<local.n>>
+    args=<eval <argv[0]>-<local.n>>,<eval <argv[1]>+<local.n>>
+    args=<eval <argv[0]>-<local.n>>,<argv[1]>
+    args=<eval <argv[0]>-<local.n>>,<eval <argv[1]>-<local.n>>
+    args=<argv[0]>,<eval <argv[1]>-<local.n>>
+    args=<eval <argv[0]>+<local.n>>,<eval <argv[1]>-<local.n>>
+  enddo
+endif
+//serv.log <truedir <ref1.dir>> <argv[0]>+<local.n>,<argv[1]>-<local.n> = <args>
+return <args>,<ref1.z>,<ref1.p.m>,<local.listpos>,<local.row>,<local.rowpos>	//x,y,z,m,list position, my row, my position in the row
+
+
+[itemdef i_memory_squad]
+id=i_memory
+name=Squad Memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+timer=5
+return 1
+
+on=@unequip
+serv.list.squad_<link>.<serv.list.squad_<link>.findelem <src>>.remove
+
+
+[itemdef i_memory_squad_leader]
+id=i_memory
+name=Squad Leader Memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+topobj.f_squad_formup <morex>		
+timer=1
+return 1
+
+on=@unequip
+serv.list.squad_<src>.clear
+src.tag0.name.prefix=
+
+[events e_squad]
+
+on=@click
+if (<findid.i_memory_squad_leader>)
+  //message @030,1,1 [Squad Leader]
+elseif (<findid.i_memory_squad>)
+  //message @040,1,1 [<uid.<findid.i_memory_squad.link>.name>'s Squad]
+endif
+
+on=@dclick
+if (<findid.i_memory_squad.isvalid>)
+  if (<findid.i_memory_squad.link>==<src>)
+    //sdialog d_squad_member_orders
+  endif
+endif
+
+on=@npclookatchar
+if (<findid.i_memory_squad_leader>) && !(<src.findid.i_memory_squad_leader>) && !(<src.findid.i_memory_squad>) 	//im a squad leader and they are not a squad leader or in a squad
+  if (<src.baseid>==<baseid>)
+    src.f_squad_join <uid>
+  endif
+endif
+
+on=@npcactwander	//only squad leaders wander
+if !(<findid.i_memory_squad_leader>)
+  return 1
+endif
+
+on=@Npcaction
+say action
+
+
+[dialog d_squad_formation]
+
+300,100
+page 0
+ref1=<src>
+resizepic 10 10 9200 250 250
+dtext 120 25 1263 Squad
+if !(<serv.list.squad_<ref1>.count> <= 0)
+  local.size=<eval <serv.list.squad_<ref1>.count>+1>
+  for 0 <eval <local.size>-2>
+    ref2=<serv.list.squad_<ref1>.<dlocal._for>>
+    local.h += <ref2.hits>
+    local.m += <ref2.maxhits>
+  endfor
+  local.health=<muldiv <local.h>,100,<local.m>>
+endif
+dtext 55 55 1000 Squad size: <dlocal.size>
+dtext 55 75 1000 Squad health: <dlocal.health>%
+
+
+for 4
+  if (<src.findid.i_memory_squad_leader.isvalid>) && (<src.findid.i_memory_squad_leader.more2> == <local._for>)
+    local.radioselected=<local._for>
+  endif
+  radio 60 <eval 90+(<local._for>*20)> 2103 2224 <qval (<local.radioselected>==<local._for>)?1:0> <local._for>
+endfor
+dtext 80 105 1000 Block Formation
+dtext 80 125 1000 Square Formation
+dtext 80 145 1000 Line Formation
+dtext 80 165 1000 Column Formation
+
+if !(<src.findid.i_memory_squad_leader>)
+  button 40 200 4006 4007 1 0 1
+  dtext 75 200 1263 START
+else
+  if (<serv.list.squad_<src>.count> >= 0)
+    button 40 200 4006 4007 1 0 1
+    dtext 75 200 1263 REFORM
+  endif
+
+  button 140 200 4006 4007 1 0 2  
+  dtext 175 200 1263 DISBAND 
+endif
+
+[dialog d_squad_formation button]
+onbutton=1
+if !(<findid.i_memory_squad_leader>)
+  tag0.name.prefix "Sergeant "
+  events=+e_squad
+  serv.newitem i_memory_squad_leader
+  new.morex=3
+  new.timer=1
+  equip <new>
+else
+  local.size=<serv.list.squad_<src>.count>
+  if (<local.size> > 0)
+    local.square=<eval (sqrt(<local.size>))+1>
+    local.block=<eval (<local.square>*2)-2>		//block formation
+    src.findid.i_memory_squad_leader.more2=<argchkid>
+    doswitch <eval <argchkid>-1>
+      src.findid.i_memory_squad_leader.morex=<local.block>
+      src.findid.i_memory_squad_leader.morex=<local.square>
+      src.findid.i_memory_squad_leader.morex=<local.size>
+      src.findid.i_memory_squad_leader.morex=1
+    enddo
+  endif
+endif
+src.sdialog d_squad_formation
+
+onbutton=2
+local.size=<serv.list.squad_<src>.count>
+for <eval <local.size>-1> 0 
+  ref2=<serv.list.squad_<src>.<local._for>>
+  if (<ref2>)
+    ref2.remove
+  endif
+endfor
+src.findid.i_memory_squad_leader.remove
+src.sdialog d_squad_formation
+
+[dialog d_squad_member_orders]
+
+300,100
+page 0
+ref1=<src>
+resizepic 10 10 9200 250 250
+dtext 120 25 1263 Squad
+
+
+[dialog d_squad_member_orders button]
+
+
+
+[function f_squad_disband]
+local.size=<serv.list.squad_<uid>.count>
+for <eval <local.size>-1> 0 
+  ref2=<serv.list.squad_<uid>.<local._for>>
+  if (<ref2>)
+    ref2.remove
+  endif
+endfor
+findid.i_memory_squad_leader.remove
+
+[function f_squad_same]
+ref1=<uid>
+ref2=<args>
+if <serv.list.squad_<ref1>.count>
+
+
+
+[EOF]

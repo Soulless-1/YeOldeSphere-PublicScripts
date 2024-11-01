@@ -1,0 +1,123 @@
+
+//Faction items go here
+//10:45 AM 1/12/2020
+
+[itemdef i_faction_stone_signup]
+defname=i_faction_stone_signup
+id=0edc
+name=Faction Signup Stone
+type=t_faction_stone_signup
+
+category=Custom
+subsection=Factions
+description=Faction Signup Stone
+
+[itemdef i_faction_stone]
+defname=i_faction_stone
+id=0edc
+name=Faction Stone
+type=t_faction_stone
+can=can_o_nosleep
+
+category=Custom
+subsection=Factions
+description=Faction Stone
+
+/////////////////////////////////////////
+//  Sigils + Monolith and Townstone
+
+[itemdef i_faction_town_sigil]
+defname=i_faction_town_sigil
+id=01869
+name=Faction Town Sigil
+type=t_faction_town_sigil
+can=can_o_nosleep
+//more1=sigil home town
+//more2l=sigil state
+//more2h=controlling faction
+//sigil states : 0=purified, 1=being corrupted, 2=corrupted, 3=being purified
+
+
+category=Custom
+subsection=Factions
+description=Faction Town Sigil
+
+[itemdef i_faction_town_monolith]
+defname=i_faction_town_monolith
+id=01183
+name=Faction Sigil Monolith
+type=t_script
+
+category=Custom
+subsection=Factions
+description=Faction Town Monolith
+
+[itemdef i_faction_town_stone]
+defname=i_faction_town_stone
+id=0edc
+name=Faction Town Stone
+type=t_faction_town_stone
+
+category=Custom
+subsection=Factions
+description=Faction Town Stone
+
+[itemdef i_faction_silver]	//this isnt used, why did i make it?
+defname=i_faction_silver
+id=i_coin_silver
+name=silver coin
+type=t_faction_silver
+dropsound=036
+
+category=Custom
+subsection=Factions
+description=Faction Silver
+
+[itemdef i_faction_monolith]	//this one goes at the bases
+defname=i_faction_monolith
+id=01183
+name=Faction Sigil Monolith
+type=t_script
+
+[itemdef i_faction_kill_memory]
+defname=i_faction_kill_memory
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+[itemdef i_faction_leaving]
+defname=i_faction_leaving
+id=i_memory
+name=Leaving Faction
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+topobj.f_faction_leave
+remove
+return 1
+
+[itemdef i_faction_payroll]
+defname=i_faction_payroll
+id=i_memory
+name=Faction Payroll
+type=t_eq_script
+layer=layer_special
+
+on=@unequip	//either via death or deserting
+serv.list.faction_<topobj.dtag0.faction>_<link.region.defname>_<topobj.tag0.npc_type>.<serv.list.faction_<topobj.dtag0.faction>_<link.region.defname>_<topobj.tag0.npc_type>.findelem <topobj>>.remove
+var0.faction_<topobj.dtag0.faction>_<link.region.defname>_<tag0.payroll>_upkeep -= <eval <topobj.hiredaywage>/2>
+
+on=@timer
+if (<var0.faction_<topobj.dtag0.faction>_<link.region.defname>_silver> < <eval <topobj.hiredaywage>/2>)
+  serv.log <topobj.name> (<def0.faction_<topobj.dtag0.faction>>) is being dismissed from <link.region.name> due to lack of silver
+  remove
+endif
+var0.faction_<topobj.dtag0.faction>_<link.region.defname>_silver -= <eval <topobj.hiredaywage>/2>
+timer=60*60*24	//1 day till we get paid again
+return 1
+
+
+
+[EOF]
+

@@ -1,0 +1,20 @@
+//Custom char events by Soulless
+//v1.0
+//11:28 AM 3/3/2022
+
+[events e_spell_nocost]		//sets spell difficulty to 0 and skips reagent and mana consumption
+
+on=@spellcast
+argn2=0			//difficulty set to 0
+
+on=@spellselect		//do not consume mana or reagents when using runebook charges
+argn2=0			//mana set to 0
+return 6		//allow cast 
+
+on=@spellfail
+argo.timerf 0,events=-e_spell_nocost
+
+on=@spellsuccess
+argo.timerf 0,events=-e_spell_nocost
+
+[EOF]

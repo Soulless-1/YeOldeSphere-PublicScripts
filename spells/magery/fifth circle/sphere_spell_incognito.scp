@@ -1,0 +1,60 @@
+[SPELL 35]
+// NOTE: This spell is used primarily for roleplaying purposes or for avoiding being killed if red. The longer duration would not unbalance gameplay in any way I could see.
+DEFNAME=s_incognito
+NAME=Incognito
+SOUND=snd_spell_incognito
+RUNES=KIE
+CAST_TIME=1.8
+RESOURCES=i_reag_blood_moss,i_reag_garlic,i_reag_nightshade
+RUNE_ITEM=i_rune_incognito
+SCROLL_ITEM=i_scroll_incognito
+FLAGS=spellflag_playeronly|spellflag_scripted
+EFFECT_ID=i_fx_bless_effect
+EFFECT=0
+LAYER=layer_spell_incognito
+DURATION=5*60.0,8*60.0
+MANAUSE=14
+SKILLREQ=MAGERY 40.0
+INTERRUPT=100.0,100.0
+
+on=@select
+if (<flags>&statf_incognito) && (<findid.<serv.spell.s_incognito.rune_item>>)
+  //findid.<serv.spell.s_incognito.rune_item>.remove
+  //effect 3,<serv.spell.s_dispel.effect_id>,6,15,1
+  //sound <serv.spell.s_dispel.sound>
+  src.sysmessage This spell is already in effect.
+  return 1
+elseif (<findid.i_disguise_kit_incognito>) 
+  src.sysmessage You cannot use incognito while disguised.
+  return 1
+endif
+
+//Incognito temporarily changes your character's name to a random human NPC name.
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.duration=<eval (<src.magery>*12)/100>
+consume <serv.itemdef.<serv.spell.35.rune_item>.baseid>
+serv.newitem <serv.spell.s_incognito.rune_item>
+new.timer=<local.duration>
+new.tag0.name=<name>
+new.tag0.name.prefix=<tag0.name.prefix>
+new.tag0.name.suffix=<tag0.name.suffix>
+new.equip
+if (<ishuman>)
+  name=<sex #names_humanmale/#names_humanfemale>
+  color=colors_skin
+else
+  name=<serv.chardef.<body>.name>
+  color=
+endif
+tag.name.prefix=" "
+tag.name.suffix=" "
+flags |= statf_incognito
+f_addbuff 1032,1075819,1075820,0
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+return 1
+
+[EOF]

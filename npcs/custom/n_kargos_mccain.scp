@@ -1,0 +1,55 @@
+[CHARDEF c_h_kargos_mccain]
+DEFNAME=c_h_kargos_mccain
+ID=C_MAN
+NAME=Kargos McCain
+SOUND=0
+DAM=10,20
+ARMOR=30
+//DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+//ALIGNMENT=EVIL
+TSPEECH=spk_human_prime
+TSPEECH=jobMageEvil
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+CATEGORY=Civilized
+SUBSECTION=Quest NPCs
+DESCRIPTION=Kargos McCain
+
+ON=@Create
+	COLOR=color_o_mytheril
+	STR={400 500}
+	DEX={200 300}
+	INT={140 170}
+	PARRYING={75.0 98.0}
+	SWORDSMANSHIP={80.0 95.0}
+	WRESTLING={67.0 90.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={80.0 98.0}
+	POISONING={90.0 100.0}
+	DETECTINGHIDDEN={90.0 100.0}
+	NPC=brain_monster
+	FAME=9999
+	KARMA=-9999
+	item=i_hair_krisna
+	color=0481
+
+ON=@NPCRestock
+	ITEM=i_platemail_gloves
+ 	COLOR=color_o_mytheril
+	ITEM=i_platemail_arms
+ 	COLOR=color_o_mytheril
+	ITEM=i_platemail_gorget
+ 	COLOR=color_o_mytheril
+	ITEM=i_platemail_chest
+ 	COLOR=color_o_mytheril
+	ITEM=i_platemail_leggings
+ 	COLOR=color_o_mytheril
+	ITEM=i_sword_long
+	ITEMNEWBIE=i_shield_chaos
+	ITEM=i_tunic
+	COLOR=0481
+	ITEM=i_gold,{250 450}
+
+[EOF]

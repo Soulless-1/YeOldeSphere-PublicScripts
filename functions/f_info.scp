@@ -1,0 +1,1557 @@
+// Info Menu with batch updating - Mordaunt
+//
+// I got tired of changing one value at a time so....
+// These are all text entries (where available) change what you need to and click ok 
+// to commit those changes. right click closes without updating.
+// Each "okay" button only commits for the tab it is on, to save too many updates.
+//
+//last update 12:42 PM 2/23/2023
+
+//updated by Soulless 
+//fixed issues with menu not applying attrs/flags properly
+//corrected some minor issues with the dialog for ease of use
+//added memories tab
+//editing memories will take open the info dialog for that memory
+//added missing buttons on some tabs
+//added remove button to every tab
+//added equipment menu to view layers 1-24
+//fixed an issue with the ModSTATs not setting properly when you apply the values
+//expanded the item ATTR section to include all current defs
+//added tevents to the item event page
+//added multiple pages to the memories menu
+//memories menu will now show the name and serial link in the proper noto color
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+[PLEVEL 3]
+infor
+
+[function info]
+infor <args>
+
+[function infor]
+if (<args>)
+  if (<isitem>)
+    try uid.<args>.dialog d_infox_item 
+  else
+    if (<ref1.isplayer>)
+      if (<ref1.account.plevel> > <account.plevel>)
+        sysmessage You lack privilege to do that.
+        return 1
+      endif  
+    endif
+    try uid.<args>.dialog d_infox_char 1
+  endif
+endif
+  
+targetf info_gump
+sysmessage Select the target
+
+[function info_gump]
+ref1=<argo>
+if !(<ref1.isvalid>)
+  return 1
+elseif (<ref1.isitem>)
+  try uid.<ref1>.dialog d_infox_item 
+else
+  if (<ref1.isplayer>)
+    if (<ref1.account.plevel> > <account.plevel>)
+      sysmessage You lack privilege to do that.
+      return 1
+    endif  
+  endif
+  try uid.<ref1>.dialog d_infox_char 1
+endif
+
+[DIALOG d_infox_char]
+50,25
+page 0
+buttontileart 37 4 2030 2030 0 1 1
+resizepic 0 0 5054 102 35 
+resizepic 5 5 3000 95 25
+dtext 37 4 1000 Stats
+
+buttontileart 137 4 2030 2030 0 3 4
+resizepic 102 0 5054 102 35 
+resizepic 107 5 3000 95 25
+dtext 137 4 1000 Flags
+
+buttontileart 237 4 2030 2030 0 4 5
+resizepic 204 0 5054 102 35
+resizepic 209 5 3000 95 25
+dtext 237 4 1000 Skills
+
+buttontileart 337 4 2030 2030 0 5 6
+resizepic 306 0 5054 102 35 
+resizepic 311 5 3000 95 25
+dtext 337 4 1000 Tags
+ 
+buttontileart 437 4 2030 2030 0 6 7
+resizepic 408 0 5054 102 35
+resizepic 414 5 3000 95 25
+dtext 437 4 1000 Events
+
+buttontileart 537 4 2030 2030 0 7 8
+resizepic 510 0 5054 102 35
+resizepic 516 5 3000 95 25
+dtext 537 4 1000 Memories
+
+buttontileart 637 4 2030 2030 0 8 9
+resizepic 612 0 5054 102 35
+resizepic 618 5 3000 95 25
+dtext 637 4 1000 Equipment
+
+////CHECKERTRANS 0 0 515 32
+
+page 1
+dtext 37 4 1263 Stats
+resizepic 0 25 5054 720 450
+resizepic 10 35 3000 700 430
+////CHECKERTRANS 0 25 515 455
+button 450 35 5601 5605 0 2 2
+dtext 20 40 1947 UID
+gumppic 75 40 2440 
+dtext 85 42 992 <uid>
+
+dtext 20 65 1947 Account
+gumppic 75 65 2440
+if (<isplayer>) && (<src.account.plevel> >= 6)
+ dtext 85 67 992 <account>
+else
+  dtext 85 67 992 N/A
+endif
+
+dtext 20 90 1947 Name
+gumppic 75 90 2440 
+dtextentrylimited 85 92 150 15 100 102 20 <name>
+
+dtext 20 115 1947 Title
+gumppic 75 115 2440
+dtextentrylimited 85 117 150 15 100 103 20 <title>
+
+dtext 20 150 1947 Color
+gumppic 75 150 2445 
+dtextentrylimited 85 152 100 15 100 104 20 <color>
+
+dtext 20 175 1947 Oskin
+gumppic 75 175 2445 
+dtextentrylimited 85 177 100 15 100 105 20 <oskin>
+
+dtext 20 210 1947 ID
+gumppic 75 210 2440 
+dtextentrylimited 85 212 150 15 100 106 30 <baseid>
+
+dtext 20 235 1947 Body
+gumppic 75 235 2440 
+dtextentrylimited 85 237 150 15 100 107 30 <body>
+
+dtext 20 260 1947 OBody
+gumppic 75 260 2440 
+dtextentrylimited 85 262 150 15 100 108 30 <obody>
+
+dtext 20 295 1947 Position
+gumppic 75 295 2445 
+dtextentrylimited 85 297 100 15 100 109 20 <p>
+
+dtext 20 320 1947 Home
+gumppic 75 320 2445 
+dtextentrylimited 85 322 100 15 100 110 20 <home>
+
+dtext 20 345 1947 Homedist
+gumppic 75 345 2445 
+dtextentrylimited 85 347 100 15 100 110 20 <homedist>
+
+//dtext 20 355 1947 Action
+//gumppic 75 355 2445 
+//dtextentrylimited 85 357 100 15 100 111 20 <action>
+
+dtext 20 380 1947 Food
+gumppic 75 380 2445 
+dtextentrylimited 85 382 100 15 100 112 20 <food>
+
+dtext 20 405 1947 Npc
+gumppic 75 405 2443 
+dtextentrylimited 85 407 100 15 100 113 20 <npc>
+
+dtext 20 430 1947 Speech
+gumppic 75 430 2445 
+dtextentrylimited 85 432 100 15 100 114 20 <speechcolor>
+
+/////////////////////////
+dtext 260 65 1947 oStr/ModStr
+gumppic 355 65 2443 
+dtextentrylimited 360 67 100 15 100 115 20 <ostr>
+gumppic 435 65 2443
+dtext 422 65 1947 /  
+dtextentrylimited 440 67 100 15 100 121 20 <modstr>
+
+dtext 260 90 1947 oDex/ModDex
+gumppic 355 90 2443 
+dtextentrylimited 360 92 100 15 100 116 20 <odex>
+gumppic 435 90 2443
+dtext 422 90 1947 /
+dtextentrylimited 440 92 100 15 100 122 20 <moddex>
+
+dtext 260 115 1947 oInt/ModInt
+gumppic 355 115 2443 
+dtextentrylimited 360 117 100 15 100 117 20 <oint>
+gumppic 435 115 2443
+dtext 422 115 1947 /
+dtextentrylimited 440 117 100 15 100 123 20 <modint>
+
+dtext 260 145 1947 Hits/MaxHits
+gumppic 355 145 2443 
+dtextentrylimited 360 147 100 15 100 118 20 <hits>
+gumppic 435 145 2443
+dtext 422 145 1947 /
+dtextentrylimited 440 147 100 15 100 148 20 <maxhits>
+
+dtext 260 170 1947 Stam/MaxStam
+gumppic 355 170 2443 
+dtextentrylimited 360 172 100 15 100 119 20 <stam>
+gumppic 435 170 2443
+dtext 422 170 1947 /
+dtextentrylimited 440 172 100 15 100 149 20 <maxstam>
+
+dtext 260 195 1947 Mana/MaxMana
+gumppic 355 195 2443 
+dtextentrylimited 360 197 100 15 100 120 20 <mana>
+gumppic 435 195 2443
+dtext 422 195 1947 /
+dtextentrylimited 440 197 100 15 100 150 20 <maxmana>
+
+dtext 260 225 1947 Level
+gumppic 355 225 2443 
+dtextentrylimited 360 227 100 15 100 153 20 <level>
+
+dtext 260 250 1947 Xp
+gumppic 355 250 2443 
+dtextentrylimited 360 252 100 15 100 154 20 <exp>
+
+dtext 260 285 1947 Karma
+gumppic 355 285 2445 
+dtextentrylimited 360 287 100 15 100 124 20 <karma>
+
+dtext 260 310 1947 Fame
+gumppic 355 310 2445 
+dtextentrylimited 360 312 100 15 100 125 20 <fame>
+
+if (<isplayer>)
+  dtext 260 345 1947 Last Connect
+  gumppic 355 345 2445 
+  dtext 360 347 100 <strarg <serv.account.<account>.lastconnectdate>>
+  if (<memoryfindtype.memory_guild.isvalid>)
+    dtext 260 380 1947 Guild
+    gumppic 335 380 2440
+    dtext 340 382 100 <memoryfindtype.memory_guild.link.name>
+    button 260 415 4007 4006 1 0 11
+    dtext 300 415 1947 Go to GuildStone
+  endif
+elseif (<memoryfindtype.memory_ipet.isvalid>)
+    dtext 200 405 1947 Owner: <memoryfindtype.memory_ipet.link.name>
+    button 350 405 4026 4028 1 0 20
+endif
+
+/////////////////////////
+dtext 560 65 1947 Act
+gumppic 625 65 2443 
+dtextentrylimited 630 67 100 15 100 115 20 <act>
+
+dtext 560 90 1947 Action	//this is already displayed
+gumppic 625 90 2443 
+dtextentrylimited 630 92 100 15 100 116 20 <action>
+
+dtext 560 115 1947 Actprv
+gumppic 625 115 2443 
+dtextentrylimited 630 117 100 15 100 117 20 <actprv>
+
+dtext 560 145 1947 Actarg1
+gumppic 625 145 2443 
+dtextentrylimited 630 147 100 15 100 118 20 <actarg1>
+
+dtext 560 170 1947 Actarg2
+gumppic 625 170 2443 
+dtextentrylimited 630 172 100 15 100 119 20 <actarg2>
+
+dtext 560 195 1947 Actarg3
+gumppic 625 195 2443 
+dtextentrylimited 630 197 100 15 100 120 20 <actarg3>
+
+if (<src.account.plevel> >= 6)
+  button 640 440 2141 2142 1 0 8  //okay
+  button 540 437 2472 2473 1 0 7  //remove
+  dtext 570 440 026 REMOVE
+else
+  button 640 437 2472 2473 1 0 0  //close
+  dtext 670 440 026 EXIT
+endif
+
+page 2
+
+resizepic 0 25 5054 720 450
+resizepic 10 35 3000 700 430
+//CHECKERTRANS 0 25 515 455
+button 20 35 5603 5607 0 1 3
+
+dtext 110 35 1947 Gold
+gumppic 200 35 2440 
+dtextentrylimited 205 37 100 15 100 133 20 <gold>
+
+dtext 20 65 1947 Max Stats
+gumppic 100 65 2445 
+dtext 105 67 992 <skillclass.statsum>
+
+dtext 20 95 1947 Luck
+gumppic 100 95 2445 
+dtextentrylimited 105 97 100 15 100 129 20 <luck>
+
+dtext 20 125 1947 Weight
+gumppic 100 125 2445 
+dtextentrylimited 105 127 100 15 100 130 20 <fval <weight>>
+
+dtext 20 155 1947 ModMax Weight
+gumppic 100 155 2445 
+dtextentrylimited 105 157 100 15 100 151 20 <modmaxweight>
+
+dtext 20 185 1947 Followers
+gumppic 100 185 2445 
+dtextentrylimited 105 187 100 15 100 131 20 <curfollower>
+
+dtext 20 215 1947 Ar
+gumppic 100 215 2445 
+dtext 105 217 100 <ar>
+
+dtext 20 245 1947 ModAr
+gumppic 100 245 2445
+dtextentrylimited 105 247 100 15 100 152 20 <modar>
+
+dtext 20 355 1947 Kills
+gumppic 100 355 2445 
+dtextentrylimited 105 357 100 15 100 126 20 <kills>
+
+dtext 20 380 1947 Deaths
+gumppic 100 380 2445 
+dtextentrylimited 105 382 100 15 100 127 20 <deaths>
+
+dtext 270 75 1947 Physical Resistance
+gumppic 395 75 2445 
+dtextentrylimited 400 77 100 15 100 134 20 <ar>
+
+dtext 270 100 1947 Fire Resistance
+gumppic 395 100 2445 
+dtextentrylimited 400 102 100 15 100 135 20 <resfire>
+
+dtext 270 125 1947 Cold Resistance
+gumppic 395 125 2445 
+dtextentrylimited 400 127 100 15 100 136 20 <rescold>
+
+dtext 270 150 1947 Poison Resistance
+gumppic 395 150 2445 
+dtextentrylimited 400 152 100 15 100 137 20 <respoison>
+
+dtext 270 175 1947 Energy Resistance
+gumppic 395 175 2445 
+dtextentrylimited 400 177 100 15 100 138 20 <resenergy>
+
+//---------------------------------------Not available yet
+
+dtext 250 210 1947 Lower Mana Cost
+gumppic 395 210 2445 
+dtext 400 212 100 N/A //entrylimited 275 227 100 15 100 139 20 
+
+dtext 250 235 1947 Lower Reagent Cost
+gumppic 395 235 2445
+dtext 400 237 100 N/A //entrylimited 275 252 100 15 100 140 20 
+
+dtext 250 260 1947 Spell Damage Increase
+gumppic 395 260 2445 
+dtext 400 262 100 N/A //entrylimited 275 277 100 15 100 141 20 
+
+dtext 250 285 1947 Faster Casting
+gumppic 395 285 2445 
+dtext 400 287 100 N/A //entrylimited 275 302 100 15 100 142 20 
+
+dtext 250 310 1947 Faster Cast Recovery
+gumppic 395 310 2445 
+dtext 400 312 100 N/A //entrylimited 275 327 100 15 100 143 20 
+
+dtext 250 335 1947 Hit Chance Increase
+gumppic 395 335 2445 
+dtext 400 337 100 N/A //entrylimited 275 360 100 15 100 144 20 
+
+dtext 250 360 1947 Defence Chance Increase
+gumppic 395 360 2445 
+dtext 400 362 100 N/A //entrylimited 275 387 100 15 100 145 20 
+
+dtext 250 385 1947 Weapon Damage Increase
+gumppic 395 385 2445 
+dtext 400 387 100 N/A //entrylimited 275 412 100 15 100 146 20 
+
+dtext 250 410 1947 Swing Speed Increase
+gumppic 395 410 2445 
+dtext 400 412 100 N/A //entrylimited 275 437 100 15 100 147 20 
+
+//-------------------------------------------------------------
+
+if (<src.account.plevel> >= 6)
+  button 640 440 2141 2142 1 0 8  //okay
+  button 540 437 2472 2473 1 0 7  //remove
+  dtext 570 440 026 REMOVE
+else
+  button 640 437 2472 2473 1 0 0 //exit
+  dtext 670 440 026 EXIT
+endif
+
+page 3
+dtext 137 4 1263 Flags
+resizepic 0 25 5054 720 450
+resizepic 10 35 3000 700 430
+//CHECKERTRANS 0 25 515 455
+
+dtext 150 50 1947 Flags
+gumppic 200 50 2445
+dtext 210 50 100 <flags>
+
+
+//flags
+//-----col 1
+checkbox 10 90 9721 9723 <qval (<flags>&statf_invul)? 1:0> 0
+dtext 50 90 1947 statf_invul
+
+checkbox 10 120 9721 9723 <qval (<flags>&statf_dead)? 1:0> 1
+dtext 50 120 1947 statf_dead
+
+checkbox 10 150 9721 9723 <qval (<flags>&statf_freeze)? 1:0> 2
+dtext 50 150 1947 statf_freeze
+
+checkbox 10 180 9721 9723 <qval (<flags>&statf_invisible)? 1:0> 3
+dtext 50 180 1947 statf_invisible
+
+checkbox 10 210 9721 9723 <qval (<flags>&statf_sleeping)? 1:0> 4
+dtext 50 210 1947 statf_sleeping
+
+checkbox 10 240 9721 9723 <qval (<flags>&statf_war)? 1:0> 5
+dtext 50 240 1947 statf_war
+
+checkbox 10 270 9721 9723 <qval (<flags>&statf_reactive)? 1:0> 6
+dtext 50 270 1947 statf_reactive
+
+checkbox 10 300 9721 9723 <qval (<flags>&statf_poisoned)? 1:0> 7
+dtext 50 300 1947 statf_poisoned
+
+checkbox 10 330 9721 9723 <qval (<flags>&statf_nightsight)? 1:0> 8
+dtext 50 330 1947 statf_nightsight
+ 
+checkbox 10 360 9721 9723 <qval (<flags>&statf_reflection)? 1:0> 9
+dtext 50 360 1947 statf_reflection
+
+checkbox 10 390 9721 9723 <qval (<flags>&statf_polymorph)? 1:0> 10
+dtext 50 390 1947 statf_polymorph
+
+//-----col 2
+checkbox 180 90 9721 9723 <qval (<flags>&statf_incognito)? 1:0> 11
+dtext 220 90 1947 statf_incognito
+
+checkbox 180 120 9721 9723 <qval (<flags>&statf_spiritspeak)? 1:0> 12
+dtext 220 120 1947 statf_spiritspeak
+
+checkbox 180 150 9721 9723 <qval (<flags>&statf_insubstantial)? 1:0> 13 
+dtext 220 150 1947 statf_insubstantial
+
+checkbox 180 180 9721 9723 <qval (<flags>&statf_emoteaction)? 1:0> 14
+dtext 220 180 1947 statf_emoteaction
+
+checkbox 180 210 9721 9723 <qval (<flags>&statf_commcrystal)? 1:0> 15 
+dtext 220 210 1947 statf_commcrystal
+
+checkbox 180 240 9721 9723 <qval (<flags>&statf_hasshield)? 1:0> 16
+dtext 220 240 1947 statf_hasshield
+
+checkbox 180 270 9721 9723 <qval (<flags>&statf_archercanmove)? 1:0> 17
+dtext 220 270 1947 statf_archercanmove
+
+checkbox 180 300 9721 9723 <qval (<flags>&statf_stone)? 1:0> 18
+dtext 220 300 1947 statf_stone
+
+checkbox 180 330 9721 9723 <qval (<flags>&statf_hovering)? 1:0> 19
+dtext 220 330 1947 statf_hovering
+
+checkbox 180 360 9721 9723 <qval (<flags>&statf_fly)? 1:0> 20
+dtext 220 360 1947 statf_fly
+
+checkbox 180 390 9721 9723 <qval (<flags>&statf_hallucinating)? 1:0> 21 
+dtext 220 390 1947 statf_hallucinating
+//-----col 3
+
+checkbox 350 90 9721 9723 <qval (<flags>&statf_hidden)? 1:0> 22
+dtext 390 90 1947 statf_hidden
+
+checkbox 350 120 9721 9723 <qval (<flags>&statf_indoors)? 1:0> 23 
+dtext 390 120 1947 statf_indoors
+
+checkbox 350 150 9721 9723 <qval (<flags>&statf_criminal)? 1:0> 24 
+dtext 390 150 1947 statf_criminal
+
+checkbox 350 180 9721 9723 <qval (<flags>&statf_conjured)? 1:0> 25  
+dtext 390 180 1947 statf_conjured
+
+checkbox 350 210 9721 9723 <qval (<flags>&statf_pet)? 1:0> 26
+dtext 390 210 1947 statf_pet
+
+checkbox 350 240 9721 9723 <qval (<flags>&statf_spawned)? 1:0> 27
+dtext 390 240 1947 statf_spawned
+
+checkbox 350 270 9721 9723 <qval (<flags>&statf_saveparity)? 1:0> 28
+dtext 390 270 1947 statf_saveparity
+
+checkbox 350 300 9721 9723 <qval (<flags>&statf_ridden)? 1:0> 29
+dtext 390 300 1947 statf_ridden
+
+checkbox 350 330 9721 9723 <qval (<flags>&statf_onhorse)? 1:0> 30
+dtext 390 330 1947 statf_onhorse
+
+checkbox 350 360 9721 9723 <qval (<flags>&statf_underground)? 1:0> 31
+dtext 390 360 1947 statf_underground
+
+if (<src.account.plevel> >= 6)
+  button 640 440 2141 2142 1 0 9  //okay
+  button 540 437 2472 2473 1 0 7  //remove
+  dtext 570 440 026 REMOVE
+else
+  button 640 437 2472 2473 1 0 0  //exit
+  dtext 670 440 026 EXIT
+endif
+
+page 4
+dtext 237 4 1263 Skills
+resizepic 0 25 5054 720 560
+resizepic 10 35 3000 700 540
+//CHECKERTRANS 0 25 725 561
+
+dtext 20 40 1947 SkillTotal
+gumppic 120 40 2445
+dtext 125 42 39 <fval <skilltotal>>
+
+local.maxskillsum=<tag0.override.skillsum>
+if !(<local.maxskillsum>)
+  local.maxskillsum=<serv.skillclass.0.skillsum>
+endif
+
+dtext 250 40 1947 MaxSkillSum
+gumppic 350 40 2445
+dtext 355 42 39 <fval <local.maxskillsum>>
+
+
+dorigin 20 70
+for x 0 49  //usually goes to 57
+  if (<local.x>==20) 
+    dorigin 250 70
+  elseif (<local.x>==40)
+    dorigin 490 70
+  endif
+  dtext +0 *23 1947 <serv.skill.<local.x>.key>
+  doswitch <skilllock.<dlocal.x>>
+    gumppic +95 +2 2435
+    gumppic +95 +2 2437
+    gumppic +95 +2 2092
+  enddo
+  gumppic +110 +0 2445 
+  dtextentrylimited +115 +0 50 15 100 <dlocal.x> 80 <fval <<serv.skill.<dlocal.x>.key>>>
+endfor
+
+if (<src.account.plevel> >= 6)
+  button 640 550 2141 2142 1 0 10  //okay
+  button 540 547 2472 2473 1 0 7  //remove
+  dtext 570 550 026 REMOVE
+else
+  button 640 547 2472 2473 1 0 0  //exit
+  dtext 670 550 026 EXIT
+endif
+
+
+page 5
+dtext 337 4 1263 Tags
+resizepic 0 25 5054 720 450
+resizepic 10 35 3000 700 430
+//CHECKERTRANS 0 25 515 455
+dtext 200 35 1947 Click to remove TAG
+button 360 40 <qval (<src.ctag0.info_menu_overridetags>==1)?211:210> 212 1 0 1991	//toggle override tags
+dtext 385 40 1000 Override TAGs <qval (<src.ctag0.info_menu_overridetags>==1)?enabled:disabled>
+
+dorigin 10 50 
+
+if (<src.account.plevel> >= 6)
+  button 640 440 2141 2142 1 0 0  //okay	//must be at the top, we add pages below perhaps
+  button 540 437 2472 2473 1 0 7  //remove
+  dtext 570 440 026 REMOVE
+else
+  button 640 437 2472 2473 1 0 0  //exit
+  dtext 670 440 026 EXIT
+endif
+
+if (<tagcount>)
+  for x 0 <eval (<tagcount>-1)>
+    if (<local.x> >= 40) && (<eval (<local.x> % 40)> == 0)
+      button 570 40 5601 5605 0 <eval 50+((<local.x> / 40) )>
+      page <eval 50+(<local.x> / 40)>
+      resizepic 0 25 5054 720 450
+      resizepic 10 35 3000 700 430
+      dtext 337 4 1263 Tags
+      //CHECKERTRANS 0 25 515 455
+      dtext 200 35 1947 Click to remove TAG
+      dorigin 10 50 
+      button 25 40 5603 5607 0 <qval (<eval 50+((<local.x> / 40) - 1)> <= 50)?5:<eval 50+((<local.x> / 40) - 1)>>
+      button 640 440 2141 2142 1 0 0  //okay
+      button 540 437 2472 2473 1 0 7  //remove
+      dtext 570 440 026 REMOVE
+    endif
+    if (<local.x>==20) || (<local.x>==60) 
+      dorigin 250 50 
+    endif
+    if !(strmatch(TAG.override.*,TAG.<tagat.<local.x>.key>)) || ((strmatch(TAG.override.*,TAG.<tagat.<local.x>.key>)) && (<src.ctag0.info_menu_overridetags>))
+      dtext +30 *20 1947 TAG.<tagat.<local.x>.key> = <tagat.<local.x>.val>
+      button +10 +3 1209 1210 1 0 <eval <local.x>+1000>
+      serv.log <TAG.<tagat.<local.x>.key>>
+    endif
+  endfor
+else
+  dtext +0 +0 1947 No TAGS present
+endif
+
+page 6
+dtext 437 4 1263 Events
+resizepic 0 25 5054 720 450
+resizepic 10 35 3000 700 430
+//CHECKERTRANS 0 25 515 455
+dtext 200 35 1947 Click to remove EVENT
+dorigin 10 50
+
+dtext +50 *20 1947 EVENTS
+SPLITEVENTS <EVENTS>
+dorigin 300 20
+dtext +50 *20 1947 TEVENTS
+SPLITEVENTS <TEVENTS>
+
+if (<src.account.plevel> >= 6)
+  button 640 440 2141 2142 1 0 0  //okay
+  button 540 437 2472 2473 1 0 7  //remove
+  dtext 570 440 026 REMOVE
+else
+  button 640 437 2472 2473 1 0 0  //exit
+  dtext 670 440 026 EXIT
+endif
+
+page 7
+dtext 537 4 1263 Memories
+resizepic 0 25 5054 720 560
+resizepic 10 35 3000 700 540
+dtext 200 35 1947 Click to edit MEMORY
+dorigin 10 50 
+
+if (<src.account.plevel> >= 6)
+  button 640 550 2141 2142 1 0 0 //okay
+  button 540 547 2472 2473 1 0 7  //remove
+  dtext 570 550 026 REMOVE
+else
+  button 640 547 2472 2473 1 0 0  //exit
+  dtext 670 550 026 EXIT
+endif
+
+src.ctag.infomenu_memories=<f_getmemories>
+args=<src.ctag.infomenu_memories>
+if !(<isempty <args>>)
+dtext +50 *20 1947 MEMORIES
+dtext +300 +0 1947 FLAGS
+  for 0 <eval (<argv>-1)>
+    if (<local.m> > 22)
+      local.m=
+      dorigin 10 50 
+      button 570 40 5601 5605 0 <eval (70+(<local._for>/22))>
+      page <eval (70+(<local._for>/22))>
+      resizepic 0 25 5054 720 560
+      resizepic 10 35 3000 700 540
+      dtext 537 4 1263 Memories
+      dtext +50 *20 1947 MEMORIES
+      dtext +300 +0 1947 FLAGS
+      local.backbutton=<eval (70+((<local._for>/22)-1))>
+      local.backbutton=<qval (<local.backbutton> <= 70)?7:<local.backbutton>>
+      button 25 40 5603 5607 0 <local.backbutton>
+      button 640 550 2141 2142 1 0 0 //okay
+      button 540 547 2472 2473 1 0 7  //remove
+      dtext 570 550 026 REMOVE
+    endif
+    ref1=<argv[<dlocal._for>]>
+    local.flags=<ref1.memorygetflags>
+    button +10 *20 1209 1210 1 0 <eval (<local._for>+2000)>    
+    if (<ref1.link.isvalid>) && (<ref1.link.ischar>)
+      dcroppedtext +30 -3 250 20 <ref1.link.f_noto_gumpcolor <uid>> <ref1.name> (<ref1.link>)
+    else
+      dcroppedtext +30 -3 250 20 1947 <ref1.name> (<ref1.link>)
+    endif
+    dtext +280 -3 1947 <local.flags>
+    local.m += 1
+  endfor
+else
+  dtext +0 +0 1947 No MEMORIES present
+endif
+
+page 8
+dtext 637 4 1263 Equipment
+resizepic 0 25 5054 720 560
+resizepic 10 35 3000 700 540
+dtext 200 35 1947 Click to edit an Equipped item
+dorigin 10 50 
+local.x=
+for i 1 24
+  resizepic <eval (75+<local.x>)> <eval (150+<local.y>)> 3000 55 65	
+  if (<findlayer.<dlocal.i>.isvalid>) 
+    tilepichue <eval (80+<local.x>)> <eval (165+<local.y>)> <eval id(<serv.itemdef.<findlayer.<dlocal.i>.baseid>.dispid>)> <eval (<findlayer.<dlocal.i>.color>)>
+    button <eval (75+<local.x>)> <eval (150+<local.y>)> 2117 2118 1 0 <eval (3000+<local.i>)>
+    dtext <eval (90+<local.x>)> <eval (148+<local.y>)> 1000 <local.i>
+  endif
+  local.x += 75
+  if (<local.x> >= 600)
+    local.x=
+    local.y += 75
+  endif
+endif
+
+if (<src.account.plevel> >= 6)
+  button 640 550 2141 2142 1 0 0 //okay
+  button 540 547 2472 2473 1 0 7  //remove
+  dtext 570 550 026 REMOVE
+else
+  button 640 547 2472 2473 1 0 0  //exit
+  dtext 670 550 026 EXIT
+endif
+
+
+[function f_getmemories]
+for l 30 54
+  forcharlayer <local.l>
+    local.m .=, <uid>
+  endfor
+endfor
+return <streat <local.m>>
+
+[function memorygetflags]
+if (<color>&memory_sawcrime)
+  local.f .=, Sawcrime
+endif
+if (<color>&memory_ipet)  
+  local.f .=, Pet   
+endif
+if (<color>&memory_fight)    
+  local.f .=, Fight
+endif
+if (<color>&memory_iaggressor)  
+  local.f .=, iAgressor
+endif
+if (<color>&memory_harmedby)    
+  local.f .=, HarmedBy
+endif
+if (<color>&memory_irritatedby)  
+  local.f .=, IrriatedBy
+endif
+if (<color>&memory_speak)  
+  local.f .=, Speak
+endif
+if (<color>&memory_aggrieved)  
+  local.f .=, aggrieved
+endif
+if (<color>&memory_guard)      
+  local.f .=, Guarding
+endif
+if (<color>&memory_ispawned)      
+  local.f .=, Spawned
+endif
+if (<color>&memory_guild)    
+  local.f .=, Guild
+endif
+if (<color>&memory_town)       
+  local.f .=, Town
+endif
+if (<color>&memory_follow)    
+  local.f .=, Following
+endif
+if (<color>&memory_war_targ)
+  local.f .=, War Target
+endif
+if (<color>&memory_friend)  
+  local.f .=, Friend
+endif
+if (<color>&memory_thief)  
+  local.f .=, Thief
+endif
+//if (<color>&memory_gumprecord)
+  //local.f .=, Gump Record
+//endif
+//if (<color>&memory_oldmaster)
+  //local.f .=, Old Master
+//endif
+//if (<color>&memory_theft)
+  //local.f .=, Theft
+//endif
+if (<isempty <local.f>>) || (<local.f> <= 0)
+  return N/A
+endif
+return <streat <local.f>>
+
+//Ben's Function
+[FUNCTION SPLITEVENTS]
+IF (!<ARGV>)
+dtext +29 +20 1947 No EVENTS present
+RETURN 1
+ENDIF
+FOR x 0 <EVAL <ARGV>+-1>
+  dtext +30 *20 1947 <ARGV[<dLOCAL.X>]>
+   IF (<ISEVENT.<ARGV[<dLOCAL.X>]>>)
+     button +10 +3 1209 1210 1 0 <EVAL <LOCAL.X>+10000>
+   ENDIF
+ENDFOR
+
+  
+
+[dialog d_infox_char button]
+
+
+on=11 //go to guild
+GO <memoryfindtype.memory_guild.link.P>
+
+on=7
+remove
+
+on=8 //100 125
+//UID <argtxt[100]>
+//account <argtxt[101]>
+name <argtxt[102]>
+title <argtxt[103]>
+color <argtxt[104]>
+oskin <argtxt[105]>
+ID <argtxt[106]>
+body <argtxt[107]>
+obody <argtxt[108]>
+p <argtxt[109]>
+if (<argtxt[110]>)
+  if (<argv[0]> != -1) && (<argv[1]> != -1)
+    home <argtxt[110]>
+  endif
+endif
+//action <argtxt[111]>	//i must of moved this to the right side?
+food <argtxt[112]>
+if !(<isplayer>)
+  npc <argtxt[113]>
+endif
+speechcolor <argtxt[114]>
+ostr <argtxt[115]>	//must use ostr to prevent issues
+odex <argtxt[116]>	//must use odex to prevent issues
+oint <argtxt[117]>	//must use oint to prevent issues
+hits <argtxt[118]>
+stam <argtxt[119]>
+mana <argtxt[120]>
+modstr=<argtxt[121]>
+moddex=<argtxt[122]>
+modint=<argtxt[123]>
+karma <argtxt[124]>
+fame <argtxt[125]>
+kills <argtxt[126]>
+deaths <argtxt[127]>
+//statsum <argtxt[128]>
+luck <argtxt[129]>
+//weight <argtxt[130]>
+curfollower <argtxt[131]>
+//ar <argtxt[132]>
+gold <argtxt[133]>
+modar <argtxt[134]>
+resfire <argtxt[135]>
+rescold <argtxt[136]>
+respoison <argtxt[137]>
+resenergy <argtxt[138]>
+//lower mana cost <argtxt[139]>
+//lower reagent cost <argtxt[140]>
+//spell damage increase <argtxt[141]>
+//fast cast <argtxt[142]>
+//fast cast recovery <argtxt[143]>
+//hit chance increase <argtxt[144]>
+//def chance increase <argtxt[145]>
+//weapon damage increase <argtxt[146]>
+//swing speed increase <argtxt[147]>
+if (<maxhits> != <str>)
+  maxhits <argtxt[148]>
+endif
+if (<maxstam> != <dex>)
+  maxstam <argtxt[149]>
+endif
+if (<maxmana> != <int>) 
+  maxmana <argtxt[150]>
+endif
+modmaxweight <argtxt[151]>
+modar <argtxt[152]>
+level <argtxt[153]>
+exp <argtxt[154]>
+src.sysmessage <name>'s stats updated
+dialog d_infox_char 1
+
+
+onbutton=9
+if (<argchk[0]>) //statf_invul
+  local.flag |= 01
+endif
+if (<argchk[1]>) //statf_dead
+  local.flag |= 02
+endif
+if (<argchk[2]>) //statf_freeze
+  local.flag |= 04
+endif
+if (<argchk[3]>) //statf_invisible
+  local.flag |= 08
+endif
+if (<argchk[4]>) //statf_sleeping 
+  local.flag |= 010
+endif
+if (<argchk[5]>) //statf_war  
+  local.flag |= 020
+endif
+if (<argchk[6]>) //statf_reactive
+  local.flag |= 040
+endif
+if (<argchk[7]>) //statf_poisoned 
+  local.flag |= 080
+endif
+if (<argchk[8]>) //statf_nightsight
+  local.flag |= 0100
+endif
+if (<argchk[9]>) //statf_reflection 
+  local.flag |= 0200
+endif
+if (<argchk[10]>) //statf_polymorph  
+  local.flag |= 0400
+endif
+if (<argchk[11]>) //statf_incognito 
+  local.flag |= 0800
+endif
+if (<argchk[12]>) //statf_spiritspeak
+  local.flag |= 01000
+endif
+if (<argchk[13]>) //statf_insubstantial
+  local.flag |= 02000
+endif
+if (<argchk[14]>) //statf_emoteaction 
+  local.flag |= 04000
+endif
+if (<argchk[15]>) //statf_commcrystal 
+  local.flag |= 08000
+endif
+if (<argchk[16]>) //statf_hasshield   
+  local.flag |= 010000
+endif
+if (<argchk[17]>) //statf_archercanmove   
+  local.flag |= 020000
+endif 
+if (<argchk[18]>) //statf_stone
+  local.flag |= 040000
+endif
+if (<argchk[19]>) //statf_hovering 
+  local.flag |= 080000
+endif
+if (<argchk[20]>) //statf_fly 
+  local.flag |= 0100000
+endif
+if (<argchk[21]>) //statf_hallucinating 
+  local.flag |= 0400000
+endif
+if (<argchk[22]>) //statf_hidden
+  local.flag |= 0800000
+endif
+if (<argchk[23]>) //statf_indoors
+  local.flag |= 01000000
+endif
+if (<argchk[24]>) //statf_criminal 
+  local.flag |= 02000000
+endif
+if (<argchk[25]>) //statf_conjured
+  local.flag |= 04000000
+endif
+if (<argchk[26]>) //statf_pet
+  local.flag |= 08000000
+endif
+if (<argchk[27]>) //statf_spawned 
+  local.flag |= 010000000
+endif
+if (<argchk[28]>) //statf_saveparity 
+  local.flag |= 020000000
+endif
+if (<argchk[29]>) //statf_ridden 
+  local.flag |= 040000000
+endif
+if (<argchk[30]>) //statf_onhorse 
+  local.flag |= 080000000
+endif
+if (<argchk[31]>) //statf_underground
+  local.flag |= 0200000
+endif
+flags = <local.flag>
+dialog d_infox_char 3
+src.sysmessage <name>'s flags updated
+
+on=10
+for 0 49	//57 for later eras?
+  <serv.skill.<dlocal._for>.key> <argtxt[<dlocal._for>]>
+endfor
+dialog d_infox_char 4
+src.sysmessage <name>'s skills updated
+
+on=20
+ref2 <memoryfindtype.memory_ipet.link>
+src.sysmessage Looking up:  <ref2.name>
+if (<ref2.isplayer>)
+  if (<ref2.account.plevel> > <src.account.plevel>)
+    src.sysmessage You lack privilege to do that.
+    return 1
+  endif  
+endif
+try uid.<ref2>.dialog d_infox_char 1
+
+on=1000,1990	//990 tags is more then enough
+  tag.<tagat.<eval (<argn>-1000)>.key>=
+  dialog d_infox_char 5
+  src.sysmessage <name>'s tags updated
+
+onbutton=1991	//switch between viewing normal tags and override tags
+  src.ctag0.info_menu_overridetags=<qval (<src.ctag0.info_menu_overridetags>==1)?0:1>
+  src.sysmessage Override tags <qval (<src.ctag0.info_menu_overridetags>==1)?enabled:disabled>
+  dialog d_infox_char 5
+
+on=2000,2999
+  argn -= 2000
+        local.b=<argn>
+        args=<src.ctag.infomenu_memories>
+        ref1=<argv[<dlocal.b>]>
+        //serv.log <src.name> editing memory <ref1> for <ref1.link.name>(<ref1.link>) on <ref1.topobj.name>(<ref1.topobj>)
+  //src.sysmessage Editing <ref1.name>(<ref1>) on <name>.
+  ref1.dialog d_infox_item
+
+onbutton=3000,3030
+argn1 -= 3000
+ref1=<src.findlayer.<dargn1>.uid>
+ref1.dialog d_infox_item
+
+
+on=10000, 19999
+  events -<GETEVENTS <EVAL <ARGN>+-10000>,<EVENTS>>
+  dialog d_infox_char 6
+  src.sysmessage <ref1.name>'s events updated
+
+[FUNCTION GETEVENTS]
+RETURN <ARGV[<EVAL <ARGV[0]>+1>]>
+
+
+//////////////////////////////////////////////////////////////////////////
+////
+//--------------------------------------------item info
+/
+
+
+[DIALOG d_infox_item]
+150,75
+page 0
+resizepic 0 25 5054 520 450
+resizepic 10 35 3000 500 430
+resizepic 
+//CHECKERTRANS 0 25 505 455
+
+resizepic 0 0 5054 102 33 
+resizepic 102 0 5054 102 33 
+resizepic 204 0 5054 102 33
+resizepic 306 0 5054 102 33 
+
+resizepic 0 0 5054 102 35 
+resizepic 5 5 3000 95 25
+resizepic 102 0 5054 102 35 
+resizepic 107 5 3000 95 25
+resizepic 204 0 5054 102 35
+resizepic 209 5 3000 95 25
+resizepic 306 0 5054 102 35 
+resizepic 311 5 3000 95 25
+
+
+//CHECKERTRANS 0 0 408 30
+
+buttontileart 37 4 2030 2030 0 1 
+resizepic 0 0 5054 102 35 
+resizepic 5 5 3000 95 25
+dtext 37 4 1000 Stats
+
+buttontileart 137 4 2030 2030 0 2
+resizepic 102 0 5054 102 35 
+resizepic 107 5 3000 95 25
+dtext 137 4 1000 Attr
+
+buttontileart 237 4 2030 2030 0 3 
+resizepic 204 0 5054 102 35
+resizepic 209 5 3000 95 25
+dtext 237 4 1000 Tags
+
+buttontileart 337 4 2030 2030 0 5	//why isnt this page 4? maybe used for tag overflow
+resizepic 306 0 5054 102 35 
+resizepic 311 5 3000 95 25
+dtext 337 4 1000 Events
+ 
+PAGE 1
+
+dtext 37 4 1263 Stats
+
+tilepichue 65 50 <id> <eval <color>>
+
+dtext 20 135 1947 UID
+gumppic 75 135 2440 
+dtext 85 137 992 <uid>
+
+dtext 20 160 1947 Name
+gumppic 75 160 2440
+dtextentrylimited 85 162 100 15 100 1 50 <name>
+
+dtext 20 185 1947 Color
+gumppic 75 185 2440
+dtextentrylimited 85 187 100 15 100 2 50 <color>
+
+dtext 20 210 1947 BaseID
+gumppic 75 210 2440 
+dtext 85 212 992 <baseid>
+
+dtext 20 235 1947 DispID
+gumppic 75 235 2440 
+dtextentrylimited 85 237 100 15 100 4 50 <dispid>
+
+dtext 20 260 1947 Type
+gumppic 75 260 2440
+dtextentrylimited 85 262 100 15 100 5 50 <type>
+
+dtext 20 285 1947 Timer
+gumppic 75 285 2440 
+dtextentrylimited 85 287 100 15 100 6 50 <timer>
+
+dtext 20 310 1947 Amount
+gumppic 75 310 2440 
+dtextentrylimited 85 312 100 15 100 7 50 <amount>
+
+dtext 20 335 1947 Position
+gumppic 75 335 2440 
+dtextentrylimited 85 337 100 15 100 8 50 <p>
+
+dtext 20 360 1947 More1
+gumppic 75 360 2440 
+dtextentrylimited 85 362 100 15 100 9 50 <more1>
+
+dtext 20 385 1947 More1L
+gumppic 75 385 2440
+dtextentrylimited 85 387 100 15 100 25 50 <more1l>
+
+dtext 20 410 1947 More1H
+gumppic 75 410 2440
+dtextentrylimited 85 412 100 15 100 26 50 <more1H>
+
+dtext 20 435 1947 More2
+gumppic 75 435 2440
+dtextentrylimited 85 437 100 15 100 10 50 <more2>
+//
+dtext 250 35 1947 More2L
+gumppic 305 35 2440 
+dtextentrylimited 315 37 100 15 100 27 50 <more2L>
+
+dtext 250 60 1947 More2H
+gumppic 305 60 2440 
+dtextentrylimited 315 62 100 15 100 28 50 <More2H>
+
+dtext 250 85 1947 MoreP
+gumppic 305 85 2440
+dtextentrylimited 315 87 100 15 100 11 50 <morep>
+
+dtext 250 110 1947 MoreX
+gumppic 305 110 2440 
+dtextentrylimited 315 112 100 15 100 12 50 <morex>
+
+dtext 250 135 1947 MoreY
+gumppic 305 135 2440 
+dtextentrylimited 315 137 100 15 100 13 50 <morey>
+
+dtext 250 160 1947 MoreZ
+gumppic 305 160 2440
+dtextentrylimited 315 162 100 15 100 14 50 <morez>
+
+dtext 250 185 1947 MoreM
+gumppic 305 185 2440 
+dtextentrylimited 315 187 100 15 100 15 50 <morem>
+
+dtext 250 210 1947 Weight
+gumppic 305 210 2440
+dtextentrylimited 315 212 100 15 100 16 50 <fval <weight>>
+
+dtext 250 235 1947 Layer
+gumppic 305 235 2440 
+dtextentrylimited 315 237 100 15 100 17 50 <layer>
+
+dtext 250 260 1947 Armor
+gumppic 305 260 2440 
+dtext 315 262 100 <modar>
+
+dtext 250 285 1947 Hits
+gumppic 305 285 2440 
+dtextentrylimited 315 287 100 15 100 19 50 <hits>
+
+dtext 250 310 1947 Instance
+gumppic 305 310 2440 
+dtext 315 312 992 <instances>
+
+dtext 250 335 1947 Value
+gumppic 305 335 2440 
+dtext 315 337 992 <value>
+
+dtext 250 360 1947 Weight
+gumppic 305 360 2440 
+dtextentrylimited 315 362 100 15 100 24 50 <weight>
+
+dtext 250 385 1947 Cont
+gumppic 305 385 2440 
+dtextentrylimited 315 387 100 15 100 22 50 <cont>
+
+dtext 250 410 1947 Link
+gumppic 305 410 2440 
+dtextentrylimited 315 412 100 15 100 23 50 <link>
+
+
+if (<src.account.plevel> >= 6)
+  button 440 440 2141 2142 1 0 7   //okay
+  button 340 437 2472 2473 1 0 6  //remove
+  dtext 370 440 026 REMOVE
+else
+  button 440 437 2472 2473 1 0 0  //exit
+  dtext 470 440 026 EXIT
+endif
+
+page 2
+resizepic 0 25 5054 650 470
+resizepic 10 35 3000 630 450
+
+dtext 137 4 1263 Attr
+
+dtext 140 60 1947 ATTR
+gumppic 180 60 2440 
+dtext 185 60 100 <attr>
+
+checkbox 60 120 9721 9723 <qval (<attr>&attr_identified)? 1:0> 0
+dtext 100 120 1947 attr_identified
+checkbox 60 150 9721 9723 <qval (<attr>&attr_decay)? 1:0> 1
+dtext 100 150 1947 attr_decay
+checkbox 60 180 9721 9723 <qval (<attr>&attr_newbie)? 1:0> 2
+dtext 100 180 1947 attr_newbie
+checkbox 60 210 9721 9723 <qval (<attr>&attr_move_always)? 1:0> 3
+dtext 100 210 1947 attr_move_always
+checkbox 60 240 9721 9723 <qval (<attr>&attr_move_never)? 1:0> 4
+dtext 100 240 1947 attr_move_never
+checkbox 60 270 9721 9723 <qval (<attr>&attr_magic)? 1:0> 5
+dtext 100 270 1947 attr_magic
+checkbox 60 300 9721 9723 <qval (<attr>&attr_owned)? 1:0> 6
+dtext 100 300 1947 attr_owned
+checkbox 60 330 9721 9723 <qval (<attr>&attr_invis)? 1:0> 7
+dtext 100 330 1947 attr_invis
+checkbox 60 360 9721 9723 <qval (<attr>&attr_cursed)? 1:0> 8
+dtext 100 360 1947 attr_cursed
+checkbox 60 390 9721 9723 <qval (<attr>&attr_cursed2)? 1:0> 9
+dtext 100 390 1947 attr_cursed2
+checkbox 60 420 9721 9723 <qval (<attr>&attr_blessed)? 1:0> 10
+dtext 100 420 1947 attr_blessed
+checkbox 250 120 9721 9723 <qval (<attr>&attr_blessed2)? 1:0> 11
+dtext 300 120 1947 attr_blessed2
+checkbox 250 150 9721 9723 <qval (<attr>&attr_forsale)? 1:0> 12
+dtext 300 150 1947 attr_forsale
+checkbox 250 180 9721 9723 <qval (<attr>&attr_stolen)? 1:0> 13
+dtext 300 180 1947 attr_stolen
+checkbox 250 210 9721 9723 <qval (<attr>&attr_can_decay)? 1:0> 14
+dtext 300 210 1947 attr_can_decay
+checkbox 250 240 9721 9723 <qval (<attr>&attr_static)? 1:0> 15
+dtext 300 240 1947 attr_static
+checkbox 250 270 9721 9723 <qval (<attr>&attr_exceptional)? 1:0> 16
+dtext 300 270 1947 attr_exceptional 
+checkbox 250 300 9721 9723 <qval (<attr>&attr_enchanted)? 1:0> 17
+dtext 300 300 1947 attr_enchanted  
+checkbox 250 330 9721 9723 <qval (<attr>&attr_imbued)? 1:0> 18
+dtext 300 330 1947 attr_imbued
+checkbox 250 360 9721 9723 <qval (<attr>&attr_questitem)? 1:0> 19
+dtext 300 360 1947 attr_questitem
+checkbox 250 390 9721 9723 <qval (<attr>&attr_insured)? 1:0> 20
+dtext 300 390 1947 attr_insured
+checkbox 250 420 9721 9723 <qval (<attr>&attr_nodrop)? 1:0> 21
+dtext 300 420 1947 attr_nodrop
+
+checkbox 440 120 9721 9723 <qval (<attr>&attr_notrade)? 1:0> 22
+dtext 500 120 1947 attr_notrade
+checkbox 440 150 9721 9723 <qval (<attr>&attr_artifact)? 1:0> 23
+dtext 500 150 1947 attr_artifact
+checkbox 440 180 9721 9723 <qval (<attr>&attr_lockeddown)? 1:0> 24
+dtext 500 180 1947 attr_lockeddown
+checkbox 440 210 9721 9723 <qval (<attr>&attr_secure)? 1:0> 25
+dtext 500 210 1947 attr_secure
+checkbox 440 240 9721 9723 <qval (<attr>&attr_reforged)? 1:0> 26
+dtext 500 240 1947 attr_reforged
+checkbox 440 270 9721 9723 <qval (<attr>&attr_opened)? 1:0> 27
+dtext 500 270 1947 attr_opened
+checkbox 440 300 9721 9723 <qval (<attr>&attr_shardbound)? 1:0> 28
+dtext 500 300 1947 attr_shardbound
+checkbox 440 330 9721 9723 <qval (<attr>&attr_accountbound)? 1:0> 29
+dtext 500 330 1947 attr_accountbound
+checkbox 440 360 9721 9723 <qval (<attr>&attr_characterbound)? 1:0> 30
+dtext 500 360 1947 attr_characterbound
+checkbox 440 390 9721 9723 <qval (<attr>&attr_canuse_paralyzed)? 1:0> 31
+dtext 500 390 1947 attr_canuse_paralyzed
+
+
+
+
+
+//checkbox 60 360 9721 9723 <qval (<attr>&attr_magic_armor)? 1:0> 16
+//dtext 100 360 1947 attr_magic_armor
+//checkbox 60 390 9721 9723 <qval (<attr>&attr_magic_weapon)? 1:0> 17
+//dtext 100 390 1947 attr_magic_weapon
+//checkbox 60 420 9721 9723 <qval (<attr>&attr_magic_clothing)? 1:0> 18
+//dtext 100 420 1947 attr_magic_clothing
+//checkbox 250 360 9721 9723 <qval (<attr>&attr_magic_wand)? 1:0> 19
+//dtext 300 360 1947 attr_magic_wand	
+//checkbox 250 390 9721 9723 <qval (<attr>&attr_magic_jewelry)? 1:0> 20
+//dtext 300 390 1947 attr_magic_jewelry
+//checkbox 250 420 9721 9723 <qval (<attr>&attr_faction)? 1:0> 21
+//dtext 300 420 1947 attr_faction
+
+if (<src.account.plevel> >= 6)
+  button 560 450 2141 2142 1 0 8   //okay
+  button 460 447 2472 2473 1 0 6  //remove
+  dtext 490 450 026 REMOVE
+else
+  button 560 447 2472 2473 1 0 0  //exit
+  dtext 590 450 026 EXIT
+endif
+
+
+page 3
+dtext 237 4 1263 Tags
+dtext 200 35 1947 Click to remove TAG
+dorigin 10 50 
+
+if (<tagcount>)
+  for x 0 <eval (<tagcount>-1>
+
+    if (<local.x> >= 40) && (<eval (<local.x> % 40)> == 0)
+            button 480 35 5601 5605 0 4 5
+            page 4 
+      dtext 337 4 1947 Tags
+      dtext 200 35 1947 Click to remove TAG
+      button 10 35 5603 5607 0 3 6
+      dorigin 10 50 
+          endif
+
+
+    if (<local.x>==20) || (<local.x>==61) 
+      dorigin 250 50 
+    endif
+    dtext +30 *20 1947 TAG.<tagat.<local.x>.key> = <tagat.<local.x>.val>
+    button +10 +3 1209 1210 1 0 <eval <local.x>+1000>
+  endfor
+else
+  dtext +0 +0 1947 No TAGS present
+endif
+
+if (<src.account.plevel> >= 6)
+  button 440 440 2141 2142 1 0 0   //okay
+  button 340 437 2472 2473 1 0 6  //remove
+  dtext 370 440 026 REMOVE
+else
+  button 440 437 2472 2473 1 0 0  //exit
+  dtext 470 440 026 EXIT
+endif
+
+page 5
+dtext 337 4 1263 Events
+dtext 200 35 1947 Click to remove EVENT
+dorigin 10 50 
+SPLITEVENTS <EVENTS>
+dorigin 300 50
+dtext +50 *20 1947 TEVENTS
+SPLITEVENTS <TEVENTS>
+
+if (<src.account.plevel> >= 6)
+  button 440 440 2141 2142 1 0 0   //okay
+  button 340 437 2472 2473 1 0 6  //remove
+  dtext 370 440 026 REMOVE
+else
+  button 440 437 2472 2473 1 0 0  //exit
+  dtext 470 440 026 EXIT
+endif
+
+[dialog d_infox_item button]
+
+on=6
+remove
+
+on=7
+name <argtxt[1]>
+color <argtxt[2]>
+//baseid <argtxt[3]>
+dispid <argtxt[4]>
+type <argtxt[5]>
+timer <argtxt[6]>
+amount <argtxt[7]>
+p <argtxt[8]>
+more1 <argtxt[9]>
+more2 <argtxt[10]>
+morep <argtxt[11]>
+morex <argtxt[12]>
+morey <argtxt[13]>
+morez <argtxt[14]>
+morem <argtxt[15]>
+weight <argtxt[16]>
+layer <argtxt[17]>
+//armor <argtxt[18]>
+hits <argtxt[19]>
+//instance <argtxt[20]>
+//value <argtxt[21]>
+if (<argtxt[22]>!=00)
+  cont <argtxt[22]>
+endif
+link <argtxt[23]>
+weight <argtxt[24]>
+more1l <argtxt[25]>
+more2h <argtxt[26]>
+more2l <argtxt[27]>
+more2h <argtxt[28]>
+dialog d_infox_item
+src.sysmessage <name>'s stats updated
+
+onbutton=8
+if (<argchk[0]>)
+  local.attr |= attr_identified
+endif
+if (<argchk[1]>)
+  local.attr |= attr_decay
+endif
+if (<argchk[2]>)
+  local.attr |= attr_newbie
+endif
+if (<argchk[3]>)
+  local.attr |= attr_move_always
+endif
+if (<argchk[4]>)
+  local.attr |= attr_move_never
+endif
+if (<argchk[5]>)
+  local.attr |= attr_magic
+endif
+if (<argchk[6]>)
+  local.attr |= attr_owned
+endif
+if (<argchk[7]>)
+  local.attr |= attr_invis
+endif
+if (<argchk[8]>)
+  local.attr |= attr_cursed
+endif
+if (<argchk[9]>)
+  local.attr |= attr_cursed2
+endif
+if (<argchk[10]>)
+  local.attr |= attr_blessed
+endif
+if (<argchk[11]>)
+  local.attr |= attr_blessed2
+endif
+if (<argchk[12]>)
+  local.attr |= attr_forsale
+endif
+if (<argchk[13]>)
+  local.attr |= attr_stolen
+endif
+if (<argchk[14]>)
+  local.attr |= attr_can_decay
+endif
+if (<argchk[15]>)
+  local.attr |= attr_static
+endif
+if (<argchk[16]>)
+  local.attr |= attr_exceptional
+endif
+if (<argchk[17]>)
+  local.attr |= attr_enchanted
+endif
+if (<argchk[18]>)
+  local.attr |= attr_imbued 
+endif
+if (<argchk[19]>)
+  local.attr |= attr_questitem
+endif
+if (<argchk[20]>)
+  local.attr |= attr_insured
+endif
+if (<argchk[21]>)
+  local.attr |= attr_nodrop 
+endif
+if (<argchk[22]>)
+  local.attr |= attr_notrade
+endif
+if (<argchk[23]>)
+  local.attr |= attr_artifact
+endif
+if (<argchk[24]>)
+  local.attr |= attr_lockeddown
+endif
+if (<argchk[25]>)
+  local.attr |= attr_secure
+endif
+if (<argchk[26]>)
+  local.attr |= attr_reforged
+endif
+if (<argchk[27]>)
+  local.attr |= attr_opened 
+endif
+if (<argchk[28]>)
+  local.attr |= attr_shardbound
+endif
+if (<argchk[29]>)
+  local.attr |= attr_accountbound
+endif
+if (<argchk[30]>)
+  local.attr |= attr_characterbound
+endif
+if (<argchk[31]>)
+  local.attr |= attr_canuse_paralyzed
+endif
+
+
+
+
+
+attr=<local.attr>
+dialog d_infox_item 2
+src.sysmessage <name>'s attr updated
+
+
+on=1000,1999
+  tag.<tagat.<eval <argn>-1000>.key>=
+  dialog d_infox_item 3
+  src.sysmessage <name>'s tags updated
+
+on=10000, 19999
+  events -<GETEVENTS <EVAL <ARGN>+-10000>,<EVENTS>>
+  dialog d_infox_item 5
+  src.sysmessage <name>'s events updated
+
+
+
+[FUNCTION GETEVENTS]
+RETURN <ARGV[<EVAL <ARGV[0]>+1>]>
+
+[EOF]

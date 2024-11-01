@@ -1,0 +1,656 @@
+//Duel system by Soulless 
+//v0.1
+//12:16 AM 12/11/2019
+
+//make flag in the middle so you know where your duel area is and can judge distance
+//add arenas
+//ues mortal kombat fight zone
+
+
+[defname duel_system_settings]
+dueling_time		10			//default time setting
+dueling_timemax		30			//max time allowed for a duel
+dueling_arenas		0			//can players select arenas?
+dueling_distance	30 			//max distance from the duel location
+dueling_flag		1			//place a flag in the middle between players to mark duel center?
+
+//this is mostly for the dialog and default toggle
+dueling_option0		Potions,01,1		//name,flag,allow?	//these are customary defaults, but can be toggled by players
+dueling_option1		Bandages,02,1		//allow bandages?
+dueling_option2		Mounts,04,1		//etc
+dueling_option4		Polymorph,08,0
+dueling_option3		Summons,010,0	
+dueling_option5		Bad Spells,020,1
+dueling_option6		Good Spells,040,1
+dueling_option8		Field Spells,080,0
+dueling_option7		AOE Spells,0100,0
+dueling_option9		Travel Spells,0200,0
+dueling_option10	Hiding,0400,0
+dueling_option11	Melee,0800,1
+dueling_option12	Ranged,01000,1
+dueling_option13	No Death,02000,1
+dueling_option14	Looting,04000,1
+dueling_option15
+
+//these are our duel flags
+dueling_flag_potions		01
+dueling_flag_bandages		02
+dueling_flag_mounts		04
+dueling_flag_polymorph		08
+dueling_flag_summons		010
+dueling_flag_badspells		020
+dueling_flag_goodspells		040
+dueling_flag_fieldspells	080
+dueling_flag_aoespells		0100
+dueling_flag_travelspells	0200
+dueling_flag_hiding		0400
+dueling_flag_melee		0800
+dueling_flag_ranged		01000
+dueling_flag_nodeath		02000
+dueling_flag_looting		04000
+
+
+//arenas each have 4 sections, setup for 2 players
+dueling_arena0		Gardens		//arena name
+dueling_arena0_0_pos0	6607,344	//player 1 spawn
+dueling_arena0_0_pos1	6620,345	//player 2 spawn
+dueling_arena0_1_pos0	6628,344
+dueling_arena0_1_pos1	6640,344
+dueling_arena0_2_pos0 	6608,364
+dueling_arena0_2_pos1	6622,364
+dueling_arena0_3_pos0	6628,364
+dueling_arena0_3_pos1	6656,346
+
+dueling_arena1		Crypts
+dueling_arena1_0_pos0	6652,337
+dueling_arena1_0_pos1	6666,348
+dueling_arena1_1_pos0	6671,341
+dueling_arena1_1_pos1	6687,342
+dueling_arena1_2_pos0	6652,366
+dueling_arena1_2_pos1	6666,366
+dueling_arena1_3_pos0	6671,364
+dueling_arena1_3_pos1	6687,364
+
+dueling_arena2		Docks
+dueling_arena2_0_pos0	6699 345
+dueling_arena2_0_pos1	6714,345
+dueling_arena2_1_pos0	6720,345
+dueling_arena2_1_pos1	6732,345
+dueling_arena2_2_pos0	6701,362
+dueling_arena2_2_pos1	6711,367
+dueling_arena2_3_pos0	6720,365
+dueling_arena2_3_pos1	6731,365
+	
+dueling_arena3		Sewers
+dueling_arena3_0_pos0	6608,390
+dueling_arena3_0_pos1	6621,391
+dueling_arena3_1_pos0	6626,391
+dueling_arena3_1_pos1	6640,391
+dueling_arena3_2_pos0	6607,410
+dueling_arena3_2_pos1	6621,410
+dueling_arena3_3_pos0	6627,411
+dueling_arena3_3_pos1	6641,410
+
+dueling_arena4		Desert
+dueling_arena4_0_pos0	6653,391
+dueling_arena4_0_pos1	6664,390
+dueling_arena4_1_pos0	6672,391
+dueling_arena4_1_pos1	6685,391
+dueling_arena4_2_pos0	6652,412
+dueling_arena4_2_pos1	6665,410
+dueling_arena4_3_pos0	6672,411
+dueling_arena4_3_pos1	6685,411
+
+dueling_arena5		Swamp
+dueling_arena5_0_pos0	6701,386
+dueling_arena5_0_pos1	6711,396
+dueling_arena5_1_pos0	6720,397
+dueling_arena5_1_pos1	6730,385
+dueling_arena5_2_pos0	6698,417
+dueling_arena5_2_pos1	6712,404
+dueling_arena5_3_pos0	6719,410
+dueling_arena5_3_pos1	6732,410
+
+[plevel 1]
+duel
+
+[function duel]
+if (<tag0.young>)
+  sysmessage Young players cannot use the duel system.
+//elseif (<incombat>)
+  //sysmessage You cannot duel someone right now.
+  //return 1
+elseif (<findid.i_dueling_memory>)
+  sysmessage You are either already challenging someone or in a duel currently.
+  return 1
+endif
+sdialog d_duel_challenge
+
+[dialog d_duel_challenge]
+
+250,25
+nomove
+noclose
+
+page 1
+resizepic 10 10 5054 305 530
+dtext 110 25 1263 Duel Challenge
+dtext 40 45 1263 Regulations:
+dtext 190 45 1263 Allowed:
+
+ref1=<src.findid.i_dueling_memory>
+
+while !(<isempty <def.dueling_option<dlocal.n>>>)
+  args=<def0.dueling_option<dlocal.n>>
+  dtext 40 <eval 62+(<local.x>*18)> 1000 <argv[0]>
+  if !(<ref1.isvalid>) || (<ref1.more1l> < 2)		//fighting or accepting a challenge
+    checkbox 200 <eval 65+(<local.x>*18)> 210 211 <argv[2]> <dlocal.n>
+  else
+    gumppic 200 <eval 65+(<local.x>*18)> <qval (<ref1.tag0.duel_options>&<argv[1]>)?211:210>
+  endif
+  local.x += 1
+  local.n += 1
+endwhile
+
+dtext 125 350 1263 Conditions:
+dtext 45 365 1000 Wager:
+dtext 155 365 1000 Time Limit:    
+if !(<ref1.isvalid>) || (<ref1.more1l> < 2)	
+  dtextentrylimited 90 365 200 20 030 1 7
+  dtextentrylimited 225 365 200 20 1000 2 2 <def0.dueling_time>
+  dtext 250 365 1000 (<def0.dueling_timemax>max)
+else
+  dtext 90 365 030 <ref1.dtag0.duel_wager>
+  dtext 225 365 1000 <ref1.dtag0.duel_time>
+endif
+
+if !(<ref1.isvalid>) || (<ref1.more1l> < 2)		//fighting or accepting a challenge
+  if (<def0.dueling_arenas>)
+    dtext 125 385 1263 Arenas:
+    while !(<isempty <def.dueling_arena<dlocal.a>>>)
+      args=<def0.dueling_arena<dlocal.a>>
+      radio <eval 25+(<local.y>*140)> <eval 405+(<local.xx>*20)> 210 211 0 <eval <local.a>+20>
+      dtext <eval 45+(<local.y>*140)> <eval 405+(<local.xx>*20)> 1000 <argv[0]>
+      local.y += 1
+      if (<local.y> >= 2)
+        local.xx += 1	//go one row down
+        local.y=
+      endif
+      local.a += 1
+    endwhile
+  endif
+else
+  dtext 115 385 1263 Fighting At:
+  dtext 100 405 1000 The place 
+endif
+
+if !(<ref1.isvalid>) || (<ref1.more1l> < 2)
+  button 20 505 4018 4019 1 0 0		//cancel the whole show!
+  dtext 55 505 1000 Cancel Duel
+  button 275 505 4030 4031 1 0 1	//give target cursor and pass args to the function
+  dtext 185 505 1000 Issue Challenge
+else
+  button 20 505 4018 4019 1 0 2		//cancel the whole show!
+  dtext 55 505 1000 Decline
+  button 275 505 4006 4007 1 0 3	//accept the duel
+  dtext 230 505 1000 Accept
+endif
+
+[DIALOG d_duel_challenge button]
+
+onbutton=0	//cancel duel
+src.sysmessage Duel canceled.
+if (<src.findid.i_dueling_memory.isvalid>)
+  src.findid.i_dueling_memory.remove
+endif
+
+onbutton=1		//challenge
+if (!<isempty <argtxt[1]>>) 
+  if !(<argtxt[1]>)
+    src.sysmessage That is not a valid wager entry.
+    return 1
+  elseif (<src.gold> < <argtxt[1]>)
+    src.sysmessage You do not have enough gold to cover that wager.
+    return 1
+  endif
+endif
+serv.newitem i_dueling_memory
+new.more1l=2	//set it to "challenging"
+while !(<isempty <def.dueling_option<dlocal.n>>>)
+  if (<argchk[<dlocal.n>]>==1)
+    args=<def0.dueling_option<dlocal.n>>
+    new.tag0.duel_options |= <argv[1]>		//new.color |= <argv[1]>	//add the flag to the memory item
+  endif
+  local.n += 1
+endwhile
+
+while !(<isempty <def.dueling_arena0<dlocal.x>>>)
+  if (<argchk[<eval <local.x>+20>]>==1)
+    args=<def0.dueling_arena0<eval <local.x>+20>>
+    findid.i_dueling_memory.tag0.dueling_arena=<local.x>	//set the arena number
+    findid.i_dueling_memory.morep=<src.p>			//old coords to take them back
+  endif
+  local.x += 1
+endwhile
+
+new.tag0.duel_wager=<argtxt[1]>
+new.tag0.duel_time=<argtxt[2]>	//gotta tag the time for now
+new.timer=60
+src.equip <new>
+src.sysmessage Who would you like to challenge to a duel?
+src.targetf f_duel_challenge <src>		//give the challenge target, pass our <uid> to them as well
+
+onbutton=2		//refuse duel
+ref1=<src>					//refuser
+ref2=<src.findid.i_dueling_memory.link>		//challenger
+ref1.sysmessage You have refused <ref2.name>'s challenge
+ref2.sysmessage <ref1.name> has refused your challenge for a duel
+ref1.findid.i_dueling_memory.remove
+ref2.findid.i_dueling_memory.remove
+
+onbutton=3		//accept duel
+ref1=<src>					//acceptor
+ref2=<ref1.findid.i_dueling_memory>		//acceptor's duel memory
+ref3=<ref2.link>				//challenger
+ref4=<ref3.findid.i_dueling_memory>		//challenger's memory
+
+if (<ref1.distance <ref3>> > 10)
+  ref1.sysmessage They are too far away.
+  ref2.remove
+  return 1
+elseif (<ref3.isevent.e_dueling>)
+  ref1.sysmessage This duel challenge is no longer valid.
+  ref2.remove
+  return 1
+endif
+
+if (<ref1.gold> < <ref2.tag0.duel_wager>)	//check for sufficient gold if needed
+  ref1.sysmessage You do not have enough gold to cover the wager of <ref2.dtag0.duel_wager>g.
+  ref3.sysmessage <ref1.name> has refused your challenge for a duel
+  ref1.findid.i_dueling_memory.remove
+  ref3.findid.i_dueling_memory.remove
+  return 1
+endif
+ref1.gold -= <ref2.tag0.duel_wager>		//remove the gold from both parties
+
+if (<ref1.mount>) && !(<ref2.tag0.duel_options>&<def0.dueling_flag_mounts>)
+  ref1.dismount
+  ref1.sysmessage Mounts are not allowed in this duel
+endif
+ref1.stone 1
+ref1.events=+e_dueling
+ref2.more1l=3
+ref2.more1h=10
+ref2.timer=1
+ref1.sysmessage You have accepted <ref2.name>'s challenge. The duel will begin in 10 seconds...
+
+ref3.gold -= <ref1.tag0.duel_wager>	//check for sufficient gold if needed		
+if (<ref3.mount>) && !(<ref1.tag0.duel_options>&<def0.dueling_flag_mounts>)
+  ref3.dismount
+  ref3.sysmessage Mounts are not allowed in this duel
+endif
+ref3.stone 1
+ref3.events=+e_dueling	
+ref4.more1l=3
+ref4.more1h=10
+ref4.timer=1	
+ref3.sysmessage <ref1.name> has accepted your challenge for a duel. The duel will begin in 10 seconds...
+ref1.f_dueling_setup_flag <ref3>
+
+[function f_duel_challenge]
+ref1=<args>				//Challenger
+ref2=<ref1.findid.i_dueling_memory>	//Challenger Duel Memory
+ref3=<argo>				//Challengee
+	
+if (<ref1.distance <ref3>> > 10)
+  sysmessage They are too far away.
+  findid.i_dueling_memory.remove
+  return 1
+elseif !(<ref3.isvalid>) || (<ref3.isitem>) || (<ref3> == <ref1>) || (<ref3.npc>) || (<ref3.isevent.e_dueling>) || (<ref3.findid.i_dueling_memory>) || (<ref3.tag0.young>)
+  sysmessage That is not a valid duel target.
+  findid.i_dueling_memory.remove
+  return 1
+endif
+
+//check here for if they hit cancel? just stuck with the memory until it removes? 
+
+serv.newdupe <ref2>
+ref3.equip <new>
+ref2.link=<ref3>		//link challengers duel memory to target
+new.link=<ref1>			//link targets duel memory to challenger
+new.timer=60					//60 seconds to accept
+trysrc <ref3> sdialog d_duel_challenge 		//open the duel challenge menu
+ref1.sysmessage Challenge sent to <ref3.name>, awaiting response
+ref3.sysmessage <ref1.name> has challenged you to a duel...
+
+[function f_dueling_setup_flag]		
+ref1=<uid>				//accepter
+ref2=<ref1.findid.i_dueling_memory>	//dueling memory
+ref3=<args>				//challenger
+ref4=<ref3.findid.i_dueling_memory>
+
+ref1.timerf 15,f_dueling_postfight_cleanup
+ref3.timerf 15,f_dueling_postfight_cleanup
+
+local.halfdist=<eval (<ref1.distance <ref3>>/2)>	//set up the flag, it will take care of keeping track of phases, distance, countdown, etc etc
+serv.newnpc c_man_invisible	//use this char nagivate to the middle
+ref4=<new>
+new.p=<ref1.p>
+for <local.halfdist>
+  ref4.face <ref3>
+  ref4.move <ref4.truedir> 1	
+endfor
+local.p=<ref3.p>
+ref4.remove		//remove invis man
+ref2.p=<local.p>
+ref2.dispid=i_dueling_flag
+ref2.attr &= ~ attr_invis
+ref2.color=026
+ref2.update
+
+
+
+////////////////////////
+// Memory item for duels
+
+[itemdef i_dueling_memory]	//more1l= (1=challenging, 2=challenge accepted), tag0.duel_options= flags, tag0.duel_wager= wager, morep= origin coord, timer= duel time limit
+defname=i_dueling_memory
+id=i_memory	
+name=Dueling
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer=60
+
+//on=@equip
+//morep=<src.p>		//tag with the origin coords	//
+
+on=@timer
+if (<more1l>==1)	//challenging target: 60 seconds to challenge someone. 
+  topobj.sysmessage Duel challenge timer ran out, duel canceled.
+  remove
+  return 1
+
+elseif (<more1l>==2)		//challenge issued: but not yet accepted, 60 seconds. 
+  ref1=<link>	//the challengee
+  topobj.sysmessage Challenge not accepted in time, duel canceled.
+  ref1.sysmessage Challenge not accepted in time, duel canceled.
+  trysrc <ref1> dialogclose d_duel_challenge
+  ref1.consume i_dueling_memory	//remove it from challenger if it exists still
+  remove
+  return 1
+
+elseif (<more1l>==3)	//duel accepted: counting down till the begining of the fight
+  if (<more1h> < 1)
+    more1l=4
+    more1h=<tag0.duel_time>
+    timer=1
+    more1h=<eval (<tag0.duel_time>*60)>
+    trysrc <topobj> topobj.message @026 FIGHT!
+    topobj.f_dueling_prefight_validation
+    topobj.notoupdate
+    topobj.stone=
+    return 1
+  endif
+  trysrc <topobj> topobj.message @026 <dmore1h>
+  more1h -= 1
+  timer=1
+  return 1
+elseif (<more1l>==4)	//active duel currently happening
+  if (<topobj.distance <morep>> >= <def0.dueling_distance>)	
+    link.sysmessage Your opponent has abandoned the dueling area, duel canceled.
+    topobj.sysmessage You have abandoned the dueling area, duel canceled.
+    link.findid.i_dueling_memory.remove
+    remove
+    return 1
+  elseif (<more1h> <= 0)
+    topobj.sysmessage Duel has ended without a winner.
+    link.sysmessage Duel has ended without a winner.
+    if (<tag0.duel_wager>)
+      topobj.sysmessage Wagers have been returned
+      link.sysmessage Wagers have been returned
+      topobj.gold += <tag0.duel_wager>
+      link.gold += <tag0.duel_wager>
+    endif
+    link.findid.i_dueling_memory.remove
+    remove
+    return 1
+  endif
+  more1h -= 1
+  timer=1
+  return 1
+endif
+
+
+[comment]
+on=@unequip
+src.events=-e_dueling			//remove the event
+if (<src.memoryfind.<link>>)
+  src.memoryfind.<link>.remove 	 	//remove entire memory of opponent
+endif
+src.f_dueling_postfight_cleanup		//remove things like poison, update noto, etc
+//src.message @026 Duel finished!
+//src.go <morep>			//back to our old spot	//ONLY IF AT AN ARENA
+
+[itemdef i_dueling_flag]		//we're just basically using this as a visual for the memory item
+defname=i_dueling_flag
+name=dueling flag
+id=i_uobanner_south
+type=t_normal
+
+on=@create
+attr=010
+color=026
+
+
+//////////////////////////
+// Dueling Events
+
+[events e_dueling]	//event for players
+
+//here we need to make specific checks for the various rules	//fixme
+
+on=@click
+if !(<findid.i_dueling_memory.isvalid>) || (<findid.i_dueling_memory.link> != <src>) && (<uid> != <src>)
+  message @035 <name> (dueling)
+  return 1
+endif
+
+on=@notosend		//make them orange to one another
+if (<findid.i_dueling_memory.isvalid>)
+  if (<findid.i_dueling_memory.more1l>==4) && (<findid.i_dueling_memory.link>==<src>)
+    argn1=5
+  endif
+  return 1
+endif
+
+on=@mount
+if (<findid.i_dueling_memory.isvalid>)
+  say valid duel mem
+  if !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_mounts>)
+    say doesnt allow mounts
+    sysmessage Mounts are not allowed in this duel
+    return 1
+  endif
+endif
+
+on=@itemdclick
+if ((<act.type>==t_potion) || (<act.type>==t_potion_custom)) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_potions>)
+  sysmessage Potions not allowed in this duel
+  return 1
+elseif (<act.type>==t_bandage) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_bandages>)	//need to check bandageself command
+  sysmessage Bandages not allowed in this duel
+  return 1
+endif
+
+on=@skillselect
+if ((<argn1>==21) || (<argn1>==47)) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_hiding>)
+  sysmessage Hiding is not allowed in this duel
+  return 1
+endif
+
+on=@spellselect
+if (<argn1>==56) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_polymoprh>)
+  sysmessage Polymorth is not allowed in this duel
+  return 1
+elseif (<serv.spell.<argn1>.flags>&spellflag_summon) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_summons>)
+  sysmessage Summons not allowed in this duel
+  return 1
+elseif (<serv.spell.<argn1>.flags>&spellflag_harm) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_badspells>)
+  sysmessage Bad spells are not allowed in this duel
+  return 1
+elseif (<serv.spell.<argn1>.flags>&spellflag_good) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_goodspells>)
+  sysmessage Good spells are not allowed in this duel
+  return 1
+elseif (<serv.spell.<argn1>.flags>&spellflag_field) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_fieldspells>)
+  sysmessage Field spells are not allowed in this duel
+  return 1
+elseif (<serv.spell.<argn1>.flags>&spellflag_area) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_areaspells>)
+  sysmessage Area spells are not allowed in this duel
+  return 1
+elseif ((<argn1>==22) || (<argn1>==32) || (<argn1>==52)) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_travelspells>)
+  sysmessage Travel spells are not allowed in this duel
+  return 1
+endif
+
+on=@spellcast
+if !(<f_dueling_istarget <act>>)
+  if (<serv.spell.<argn>.flags>&spellflag_harm)
+    sysmessage You cannot perform negative acts on your target. 
+  else
+    sysmessage You cannot perform beneficial acts on your target.
+  endif
+  return 1
+endif
+
+on=@hittry
+if (<distance <src>> <= 2) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_melee>)
+  sysmessage Melee weapons not allowed in this duel
+  action=-1
+  return 1
+elseif (<distance <src>> > 2) && !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_ranged>)
+  sysmessage Ranged weapons not allowed in this duel
+  action=-1
+  return 1
+endif
+
+on=@hit
+if !(<f_dueling_istarget <src>>)
+  sysmessage You cannot perform negative acts on your target. 
+  return 1	//cancel any damage to players that we are not dueling
+  action=-1
+endif
+
+on=@gethit
+if !(<f_dueling_istarget <src>>)
+  src.action =-1
+  src.flags &= ~ statf_war
+  src.sysmessage You cannot perform negative acts on your target. 
+  return 1	//cancel any player damage that is not from our duel target
+endif
+
+on=@spelleffect
+if !(<f_dueling_istarget <src>>)
+  src.sysmessage You cannot perform negative acts on your target. 
+  return 1	//cancel all spell effects from sources other than the duel target
+endif
+
+on=@death				//this is the only situation we need to concern ourselves with settling the duel and its wager
+ref1=<findid.i_dueling_memory.link>	//winner
+ref2=<topobj.uid>			//loser
+ref1.sysmessage You have won your duel against <ref2.name>
+ref2.sysmessage You have lost your duel against <ref1.name>
+local.winnings=<ref1.findid.i_dueling_memory.tag0.duel_wager>
+if (<local.winnings>) && (<ref2.gold> >= <local.winnings>)
+  ref1.sysmessage You have won <eval (<local.winnings>*2)> gold from this duel
+  ref1.newgold <eval (<local.winnings>*2)>
+  ref1.sound {035 037}
+endif
+ref1.f_dueling_report_winner <ref2>
+ref1.findid.i_dueling_memory.remove
+//we need a check here to make sure neither player will get tagged as a criminal or any other bullshit
+if (<ref2.findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_nodeath>)	//no death
+  ref2.hits=<eval (<ref2.hits>/2)>
+  ref2.findid.i_dueling_memory.remove
+  return 1
+endif
+
+on=@deathcorpse
+if !(<findid.i_dueling_memory.tag0.duel_options>&<def0.dueling_flag_looting>)
+  argo.tag0.dueling_noloot=1
+  argo.events=+t_dueling_item
+else
+  argo.link=04fffffff		//make it grey so its not a crime to loot it.
+endif
+findid.i_dueling_memory.remove
+
+[itemdef t_dueling_item]		//event for items
+
+on=@dclick
+if (<tag0.dueling_noloot>) && (<src> != <link>)
+  src.sysmessage You cannot loot this body.
+  return 1
+endif
+
+on=@pickup_self
+if (<tag0.dueling_noloot>) && (<src> != <link>)
+  src.sysmessage You cannot loot this body.
+  return 1
+endif
+
+[function f_dueling_prefight_validation]
+ref1=<findid.i_dueling_memory>
+if !(<ref1.tag0.duel_options>&<def0.dueling_flag_potions>)
+  forcharlayer layer_flag_potion
+    remove
+  endfor
+endif
+if !(<ref1.tag0.duel_options>&<def0.dueling_flag_mounts>)
+  dismount
+endif
+if !(<ref1.tag0.duel_options>&<def0.dueling_flag_polymorph>)
+  consume i_rune_polymorph
+  consume i_rune_monster_form
+  consume i_rune_gender_swap
+  consume i_rune_chameleon
+  consume i_tribal_paint_applied
+  consume i_barracoon_polymorphed_attacker
+endif
+if !(<ref1.tag0.duel_options>&<def0.dueling_flag_hiding>)
+  flags &= ~ statf_invisible
+  flags &= ~ statf_hidden
+endif
+
+[function f_dueling_postfight_cleanup]
+consume i_dueling_memory
+consume i_rune_poison
+stone=0
+events=-e_dueling
+peacemode
+action=-1
+notoupdate
+if (<hits> < <eval (<maxhits>/2)>)
+  hits=<eval (<maxhits>/2)>
+endif
+
+[function f_dueling_istarget]
+ref1=<findid.i_dueling_memory.link>					//the target linked to our duel memory
+ref2=<args>								//the target we're checking 
+if (<ref2> == <ref1>)							//our actual duel target
+  return 1
+elseif (<ref2.npc>) && (<ref2.owner>) && (<ref2.owner> == <ref1>)	//pet owned by our target
+  return 1
+elseif (<ref2.npc>) && (!(<ref2.owner>) || (<ref2.owner.npc>))		//any non owned npc, or pets owned by npcs
+  return 1	
+endif
+return 0
+
+[function f_dueling_report_winner]
+ref1=<args>	//player who was defeated
+local.message <name> has defeated <ref1.name> in a sanctioned duel!
+f_writefile c:/yeoldesphere/scripts/discord/f_pvp_recent.cmd,curl -H "Content-Type: application/json" -d "{\"username\": \"PvP\", \"content\":\"<local.message>\"}" %WEBHOOK_URL%
+f_writefile c:/yeoldesphere/scripts/discord/f_pvp_recent.cmd,start /b "" cmd /c del "%~f0"&exit /b
+f_update_discord_pvp		
+
+[EOF]

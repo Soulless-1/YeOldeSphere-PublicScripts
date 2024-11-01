@@ -1,0 +1,98 @@
+//http://uo.stratics.com/content/skills/anat.shtml
+//http://www.uoguide.com/Anatomy
+//4:32 PM 3/27/2018
+
+[SKILL 1]
+DEFNAME=SKILL_ANATOMY
+KEY=Anatomy
+TITLE=Biologist
+FLAGS=skf_scripted
+PROMPT_MSG=Whom shall I examine?
+DELAY=1.0	//3.0,1.0
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+BONUS_STATS=50
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+STAT_STR=15
+STAT_INT=125
+STAT_DEX=15
+
+on=@start
+//act = target 
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> >= 8)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <act>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(<act.ischar>)
+  src.sysmessage Only living things have anatomies!
+  return 1
+elseif (<act> == <src>)
+  message You know yourself quite well enough already.
+  return 1
+endif
+if !(<src.f_skillsucceed anatomy>)  
+  src.actdiff=65535		//way beyond what anyone would have
+else
+  src.actdiff=0
+endif
+return 0
+
+on=@fail    
+act.message You cannot quite get a sense of their physical characteristics.
+
+ON=@Abort
+src.sysmessage You fail to examine the creature fully.
+
+on=@success
+local.str=<eval (<act.str>/10)>
+if (<local.str> > 10)
+  local.str=10
+endif
+local.dex=<eval (<act.dex>/10)>
+if (<local.dex> > 10)
+  local.dex=10
+endif
+doswitch <local.str>
+  local.msg1=like they would have trouble lifting small objects
+  local.msg1=rather Feeble
+  local.msg1=somewhat weak
+  local.msg1=to be of normal strength
+  local.msg1=somewhat strong
+  local.msg1=very strong
+  local.msg1=extremely strong
+  local.msg1=extraordinarily strong
+  local.msg1=strong as an ox
+  local.msg1=one of the strongest people you have ever seen
+  local.msg1=superhumanly strong
+enddo
+
+doswitch <local.dex>
+  local.msg2=like they barely manage to stay standing.
+  local.msg2=very clumsy.
+  local.msg2=somewhat uncoordinated.
+  local.msg2=moderately dextrous.
+  local.msg2=somewhat agile.
+  local.msg2=very agile.
+  local.msg2=extremely agile.
+  local.msg2=extraordinarily agile.
+  local.msg2=moves like quicksilver.
+  local.msg2=one of the fastest people you have ever seen.
+  local.msg2=superhumanly agile.
+enddo
+
+act.message That looks <local.msg1> and <local.msg2>
+
+if (<src.anatomy> >= 650)
+  act.message This being is at <muldiv <act.hits>,100,<act.maxhits>>% endurance
+endif
+
+
+
+[EOF]

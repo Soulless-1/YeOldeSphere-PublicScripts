@@ -1,0 +1,177 @@
+//Sparring partner by Soulless
+//v1.0
+//Train with a sparring partner for gold
+
+[defname sparring_partner_ini]
+sparring_partner_cost	50	//gold per minute of sparring
+
+[chardef c_sparring_partner]
+id=c_man
+name=Sparring Partner
+can=mt_equip|mt_usehands|mt_nonfatal
+
+CATEGORY=Custom
+SUBSECTION=Training Area
+DESCRIPTION=Combat Training NPC
+
+on=@create
+npc=brain_animal
+color=colors_skin
+str={86 100}
+dex={76 90}
+int={61 75}
+archery={650 850}
+swordsmanship={650 850}
+macefighting={650 850}
+fencing={650 850}
+wrestling={650 850}
+tactics={650 850}
+itemnewbie=random_male_hair
+color=colors_hair
+itemnewbie=random_facial_hair
+color=match_hair
+itemnewbie=i_backpack
+
+
+ON=@NPCRestock
+item=i_bow
+item=random_leg_armor
+item=random_chest_armor
+item=random_arm_armor
+item=random_hand_armor
+item=random_neck_armor
+item=random_head_armor
+item=random_over_armor
+color=colors_all
+item=random_boots
+color=colors_neutral
+item=i_bow
+item=i_arrow,100
+item=i_sword_long
+
+on=@click
+message [<qval <findid.i_busy_sparring>?Occupied for <eval <findid.i_busy_sparring.timer>/60> minutes:Available>]
+
+on=@dclick
+if (<findid.i_busy_sparring>) && (<findid.i_busy_sparring.link> != <src>)
+  say Sorry <src.name>, I'm currently busy sparring with <findid.i_busy_sparring.link.name>.
+  return 1
+endif
+sdialog d_sparring_partner_rental
+return 1
+
+on=@notosend
+argn1=5
+return 1
+
+ON=@hittry
+if !(<findid.i_busy_sparring>) || ((<findid.i_busy_sparring>) && (<findid.i_busy_sparring.link> != <src>))
+  flags &= ~statf_war
+  src.flags &= ~statf_war
+  src.update
+  return 1
+endif
+
+ON=@NpcSeeNewPlayer
+if !(<findid.i_busy_sparring>) 
+  //say Would you like to spar with me in exchange for some of your gold coin, <src.name>?
+endif
+
+ON=@Death
+hits=<maxhits>
+char_repairlayers
+return 1
+
+ON=@GetHit
+if !(<findid.i_busy_sparring>) || ((<findid.i_busy_sparring>) && (<findid.i_busy_sparring.link> != <src>))
+  src.sysmessage You can not practice with this sparring partner without paying him gold for his services.
+  flags &= ~statf_war
+  src.flags &= ~statf_war
+  return 1
+endif
+
+if (<distance <src>> > 1)
+  equip <findid.i_bow>
+else
+  equip <findid.i_sword_long>
+endif
+
+on=@callgauards 
+return 1
+
+on=@npcseecrime
+return 1
+
+[dialog d_sparring_partner_rental]
+100,100
+resizepic 
+resizepic 0 0 9200 260 165
+//resizepic 10 10 3000 240 145
+dtext 45 25 1263 One minute costs <ddef0.sparring_partner_cost> gold 
+dtext 45 40 1263 coins, Soulless. How long 
+dtext 45 55 1263 would you like to spar?
+resizepic 25 75 9350 210 30
+dhtmlgump 30 80 50 30 0 0 Time : 
+dtextentrylimited 85 80 150 15 0 0 15
+
+button 30 120 242 243 1 0 0
+
+button 150 120 248 249 1 0 1
+
+
+[dialog d_sparring_partner_rental button]
+
+onbutton=1
+if !(<isnum <argtxt[0]>>)
+  src.sysmessage You must enter numerical value, not alphabetical characters.
+  dialog d_sparring_partner_rental
+  return 1
+endif
+
+if (<isempty <argtxt[0]>>)
+  src.sysmessage time field can not be empty, enter minutes you'd like to spar for.
+  dialog d_sparring_partner_rental
+  return 1
+endif
+
+if (<src.gold> < <eval <argtxt[0]>*<def0.sparring_partner_cost>>)
+  src.sysmessage You do not have enough gold to cover that much sparring time. (<eval <argtxt[0]>*<def0.sparring_partner_cost>>g)
+  dialog d_sparring_partner_rental
+  return 1
+endif
+
+if (<findid.i_busy_sparring>) && (<findid.i_busy_sparring.link>==<src>)
+  findid.i_busy_sparring.timer += <eval <argtxt[0]>*60>
+  src.gold -= <eval <argtxt[0]>*<def0.sparring_partner_cost>>
+  say That will be <eval <argtxt[0]>*<def0.sparring_partner_cost>> gold. 
+  say I've alloted an additional <argtxt[0]> minutes for our sparring session, <src.name>
+  return 1
+endif
+
+serv.newitem i_busy_sparring
+equip <new>
+new.link=<src>
+new.timer=<eval <argtxt[0]>*60>
+src.gold -= <eval <argtxt[0]>*<def0.sparring_partner_cost>>
+say That will be <eval <argtxt[0]>*<def0.sparring_partner_cost>> gold.
+say Alright let's begin our <argtxt[0]> minute sparring session, <src.name>
+memoryfind.<src>.color |= memory_irritatedby
+
+[itemdef i_busy_sparring]
+name=busy sparring
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+cont.findid.i_arrow.cont=<link.findlayer.21>
+cont.findid.i_xbolt.cont=<link.findlayer.21>
+link.flags &= ~ statf_war
+cont.say Our alloted sparring time has come to an end, <link.name>
+remove
+return 1
+
+
+[EOF]
+
+

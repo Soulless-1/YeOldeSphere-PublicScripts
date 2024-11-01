@@ -1,0 +1,50 @@
+
+[function receive_independence_day_gift]
+serv.newitem i_bag
+new.color=064
+ref1=<new>
+serv.newitem i_fireworks_wand,1,<ref1>
+ref1.cont=<findlayer.21>
+ref1.update
+sysmessage @064 Happy Independence Day <name>! Thanks for playing <serv.servname>, we've dropped a little something in your backpack for you! 
+
+
+
+[itemdef i_fireworks_wand]
+id=i_wand_1
+name=Fireworks Wand
+type=t_normal
+
+on=@click
+message <name> (<dmore2> Charges)
+return 1
+
+on=@create
+attr=attr_newbie
+more2=<R500,1000>
+maxhits=100
+hits=<maxhits>
+
+on=@dclick
+if (<more2> <= 0)
+  src.sysmessage This is out of charges.
+  return 1
+endif
+more2 -= 1
+serv.newitem i_memory
+new.p=<src.p>
+new.nudgeup=<R40,50>
+dorand 5
+  new.move sw <R1,3>
+  new.move w <R1,3>
+  new.move nw <R1,3>
+  new.move n <R1,3>
+  new.move ne <R1,3>
+enddo
+new.effect=0,i_fx_fireball_small,6,15
+new.effect=2,i_fx_bless_effect,6,60,1,<R1,50>,2
+new.sound 011d
+new.remove
+return 1
+
+[EOF]

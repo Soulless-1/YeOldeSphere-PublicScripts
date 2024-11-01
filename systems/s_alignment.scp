@@ -1,0 +1,240 @@
+//Alignment by Soulless
+//v1.0
+//3:43 PM 7/9/2022
+
+[events e_alignment]
+
+//if you attack someone that is blue to you you have aggrieved them and become criminal
+//if you hit somoene who is not in a fight with you, you are the aggressor
+//if you hit someone you have harmed them
+
+on=@gethit
+f_refresh_memory <src>
+src.f_refresh_memory <uid>
+//if !(<iscriminal>) && (<src> != <uid>)
+  //if (<notogetflag <src>> == 1)
+    //src.criminal		//we were innocent to them, make them criminal
+  //elseif ((<notogetflag <src>> == 3) || (<notogetflag <src>> == 6))	//not a criminal but i'm grey to them
+    //f_aggrievedby <src>		//make them grey to me 
+  //endif
+//endif
+
+on=@notosend
+//SPECIAL SITUATIONS
+if (<isevent.e_automated_events>) && (<src.isevent.e_automated_events>) && (<src> != <uid>)	
+  if !(<ctag0.team>) || ((<ctag0.team>) && (<src.ctag0.team> != <ctag0.team>))
+    //AUTOMATED EVENT - ENEMY
+    argn1=5
+  endif
+elseif (<isevent.e_duelist>)
+  //DUELING - ENEMY
+  argn1=5 
+
+elseif !(<npc>)	//THIS IS SPECIFICALLY FOR PLAYER
+  if (<flags>&statf_invul) || (<isgm>) 
+    //INVULNERABLE
+    argn1=7
+  elseif (<karma> <= <serv.PlayerEvil>) ||  (<kills> > <serv.MurderMinCount>) 
+    //EVIL / MURDERER
+    argn1=6
+  elseif (<flags>&statf_criminal)		
+    //CRIMINAL
+    argn1=4
+  elseif !(<src.npc>) && (<guild>) && (<src.guild>) && (<guild.align>) && (<src.guild.align>) && (<guild.align> != <src.guild.align>)	
+    //OPPOSITE ALIGNED GUILD
+    argn1=5
+  elseif !(<src.npc>) && (<guild>) && (<src.guild>) && (<guild.guildfromuid.<src.guild>.isenemy>) && (<src.guild.guildfromuid.<guild>.isenemy>)
+    //AT WAR WITH GUILD
+    argn1=5
+  elseif (<tag0.faction>) && (<src.tag0.faction>) && (<tag0.faction> != <src.tag0.faction>)
+    //ENEMY FACTION MEMBER
+    argn1=5
+  elseif !(<src.npc>) && (<guild>) && (<src.guild>) && (<guild> == <src.guild>) 	
+    //GUILD MEMBER 
+    argn1=2
+  //elseif (<src.isaggrievedby <uid>> >= 1080)		
+    //AGGREIVED - They were the aggressor and it was recent	
+    //argn1=3
+  //elseif (<src.isthievedby <uid>> >= 1080)
+    //THIEF STOLE FROM ME
+    //argn1=3
+  elseif (<region>) && (<uid.<region.uid>.isvalid>) && (<uid.<region.uid>.owner>) && (<uid.<region.uid>.owner>==<src>) && !(<uid.<region.uid>.f_house_isfriend <uid>>) 
+    //UNWELCOME HOUSE GUEST	
+    argn1=3
+  elseif (<karma> <= <serv.PlayerNeutral>) 	
+    //GREY/NEUTRAL
+    argn1=3
+  elseif (<flags>&statf_polymorph)	
+    //POLYMORPHED
+    argn1=3
+  else
+    //INNOCENT PERSON
+    argn1=1
+  endif
+
+else	//THIS IS SPECIFICALLY FOR NPCS
+  if (<flags>&statf_invul) 
+    //INVULNERABLE
+    argn1=7
+  elseif (<npc> >= brain_monster) || (<npc>==brain_berserk)
+    //MONSTER OR BERSERK
+    argn1=6
+  elseif (<owner>)
+    //USE OWNER'S NOTORIETY
+    argn1=<owner.notogetflag <src>>
+  elseif ((<brain> <= brain_animal_trainer) && (<karma> < -2999)) 
+    //EVIL HUMANS
+    argn1=6
+  elseif (<flags>&statf_criminal)		
+    //CRIMINAL
+    argn1=4
+  elseif (<tag0.faction>) && (<src.tag0.faction>) && (<tag0.faction> != <src.tag0.faction>)
+    //ENEMY FACTION MEMBER
+    argn1=5
+  elseif (<npc>==brain_animal) || ((<brain> <= 6) && (<karma> < -1))
+    //MONSTER/ANIMAL or GRAY/NEUTRAL or AGGRIEVED 	
+    argn1=3
+  //elseif (<src.isaggrievedby <uid>> >= 1080)		
+    //AGGREIVED - They were the aggressor and it was recent	
+    //argn1=3
+  elseif (<flags>&statf_polymorph)	
+    //POLYMORPHED
+    argn1=3
+  else
+    //INNOCENT NPC
+    argn1=1
+  endif
+endif
+
+[comment]
+
+on=@gethit
+memoryfind.<src>.timer=1200 		//make sure we refresh the memory timers when getting hit
+if (<notogetflag <src>> == 1)		//i was innocent to them
+  src.criminal 1
+endif 
+if (<notogetflag <src>> != 4)		//i was innocent, criminal, or evil. 
+  f_aggrievedby <src>
+endif
+
+on=@spelleffect
+if (<serv.spell.<argn1>.flags>&spellflag_harm)
+  memoryfind.<src>.timer=1200		//make sure we refresh the memory timers when getting hit
+  if (<notogetflag <src>> == 1)		//i was innocent to them
+    src.criminal 1
+  endif 
+  if (<notogetflag <src>> != 4)		//i was innocent, criminal, or evil. 
+    f_aggrievedby <src>
+  endif
+endif
+
+[function f_notoriety_get_argns]
+
+//SPECIAL SITUATIONS
+if (<src.isevent.e_automated_events>) && (<isevent.e_automated_events>) && (<src> != <uid>)	//automated events and not yourself
+  if !(<ctag0.team>) || ((<ctag0.team>) && (<src.ctag0.team> != <ctag0.team>))
+    return 5
+  endif
+elseif (<isevent.e_duelist>)	//dueling
+  return 5
+endif
+
+ref1=<qval (<src.owner>)?<src.owner>:<src>>		//if we're a pet use the owner for alignment checks
+
+if !(<npc>)	//THIS IS SPECIFICALLY FOR PLAYER
+  if (<flags>&statf_invul) || (<isgm>) 
+    //INVULNERABLE
+    //argn1=7, argn2=<serv.ColorNotoInvul>
+    return 7
+  elseif (<karma> <= <serv.PlayerEvil>) ||  (<kills> > <serv.MurderMinCount>) 
+    //EVIL / MURDERER
+    //argn1=6, argn2=<serv.ColorNotoEvil>
+    return 6
+  elseif (<flags>&statf_criminal)		
+    //CRIMINAL
+    //argn1=4, argn2=<serv.ColorNotoCriminal>
+    return 4
+  elseif !(<ref1.npc>) && (<guild>) && (<ref1.guild>) && (<guild.align>) && (<ref1.guild.align>) && (<guild.align> != <ref1.guild.align>)	
+    //OPPOSITE ALIGNED GUILD
+    //argn1=5, argn2=<serv.ColorNotoGuildWar>
+    return 5
+  elseif !(<ref1.npc>) && (<guild>) && (<ref1.guild>) && (<guild.guildfromuid.<ref1.guild>.isenemy>) && (<ref1.guild.guildfromuid.<guild>.isenemy>)
+    //AT WAR WITH GUILD
+    //argn1=5, argn2=<serv.ColorNotoGuildWar>
+    return 5
+  elseif (<tag0.faction>) && (<ref1.tag0.faction>) && (<tag0.faction> != <ref1.tag0.faction>)
+    //ENEMY FACTION MEMBER
+    //argn1=5, argn2=<serv.ColorNotoGuildWar>
+    return 5
+  elseif !(<ref1.npc>) && (<guild>) && (<ref1.guild>) && (<guild> == <ref1.guild>) 	
+    //GUILD MEMBER 
+    //argn1=2, argn2=<serv.ColorNotoGuildSame>
+    return 2
+  elseif (<ref1.isaggrievedby <uid>> >= 1080)		
+    //AGGREIVED - They were the aggressor and it was recent	
+    //argn1=3, argn2=<serv.ColorNotoNeutral>
+    return 3
+  elseif (<ref1.stolenfrom <uid>>)
+    //THIEF STOLE FROM ME
+    //argn1=3, argn2=<serv.ColorNotoNeutral>
+    return 3
+  elseif (<region>) && (<uid.<region.uid>.isvalid>) && (<uid.<region.uid>.owner>) && (<uid.<region.uid>.owner>==<ref1>) && !(<uid.<region.uid>.f_house_isfriend <uid>>) 
+    //UNWELCOME HOUSE GUEST	
+    //argn1=3, argn2=<serv.ColorNotoNeutral>
+    return 3
+  elseif (<karma> <= <serv.PlayerNeutral>) 	
+    //GREY/NEUTRAL
+    //argn1=3, argn2=<serv.ColorNotoNeutral>
+    return 3
+  elseif (<flags>&statf_polymorph)	
+    //POLYMORPHED
+    //argn1=3, argn2=<serv.ColorNotoNeutral>
+    return 3
+  else
+    //INNOCENT PERSON
+    //argn1=1, argn2=<serv.ColorNotoGood>
+    return 1
+  endif
+
+else	//THIS IS SPECIFICALLY FOR NPCS
+  if (<flags>&statf_invul) 
+    //INVULNERABLE
+    //argn1=7, argn2=<serv.ColorNotoInvul>
+    return 7
+  elseif (<npc> >= brain_monster) || (<npc>==brain_berserk)
+    //MONSTER OR BERSERK
+    //argn1=6, argn2=<serv.ColorNotoEvil>
+    return 6
+  elseif (<owner>)
+    //USE OWNER'S NOTORIETY
+    return <owner.f_notoriety_get_argns>
+  elseif ((<brain> <= brain_animal_trainer) && (<karma> < -2999)) 
+    //EVIL HUMANS
+    //argn1=6, argn2=<serv.ColorNotoEvil>
+    return 6
+  elseif (<flags>&statf_criminal)		
+    //CRIMINAL
+    //argn1=4, argn2=<serv.ColorNotoCriminal>
+    return 4
+  elseif (<tag0.faction>) && (<ref1.tag0.faction>) && (<tag0.faction> != <ref1.tag0.faction>)
+    //ENEMY FACTION MEMBER
+    //argn1=5, argn2=<serv.ColorNotoGuildWar>
+    return 5
+  elseif (<npc>==brain_animal) || ((<brain> <= 6) && (<karma> < -1))  || (<ref1.isaggrievedby <uid>>) 	
+    //MONSTER/ANIMAL or GRAY/NEUTRAL or AGGRIEVED 	
+    //argn1=3, argn2=<serv.ColorNotoNeutral>
+    return 3
+  elseif (<flags>&statf_polymorph)	
+    //POLYMORPHED
+    //argn1=3, argn2=<serv.ColorNotoNeutral>
+    return 3
+  else
+    //INNOCENT NPC
+    //argn1=1, argn2=<serv.ColorNotoGood>
+    return 1
+  endif
+
+endif
+
+
+[EOF]

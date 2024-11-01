@@ -1,0 +1,303 @@
+//Player Page System by Soulless 
+//v1.0
+//1:09 AM 8/7/2018
+
+[defname page_system_options]
+gmpage_delete_after_response	0 	//Delete the page after a GM sends a response to a player? (1 = yes | 0 = no)
+gmpage_delete_after_read		0	//Delete the page after a player reads a GM response?
+
+//NOTE: when the pages are wiped, the server log in console some details
+
+[plevel 2]
+page2
+
+[function page2]
+ctag0.page=
+
+if !(<serv.gmpages>)
+  sysmessage There are no pages
+  return 1
+endif
+
+sdialog d_page
+sysmessage There are <dserv.gmpages> pages in the queue
+
+/////////////////////////
+// Player Page Main Dialog
+
+
+
+[dialog d_player_page]
+200,50
+
+page 0
+
+resizepic 10 10 9200 370 320
+resizepic  20 20 9350 350 60
+
+dtext 150 30 1263 Help Page Menu
+dtext 90 50 0 Please describe your issue below : 
+
+resizepic  20 100 9350 350 150
+dtextentry 30 110 320 256 0 1 
+
+if (!<isempty <account.tag.gmpage>>)
+  dtext 25 260 026 *WARNING this will overwrite your current help page*
+endif
+
+button 50 290 4005 4006 1 0 0 
+dtext 90 290 1263 CLOSE
+
+button 250 290 4005 4006 1 0 1
+dtext 290 290 1263 OKAY
+
+[dialog d_player_page button]
+
+onbutton=1
+gmpage add <argtxt[1]>
+account.tag.gmpage=<argtxt[1]>
+
+
+
+
+//////////////////////
+// Gm Page Main Dialog
+
+[dialog d_page]
+200,50
+
+page 0
+
+resizepic 20 20 9200 370 420
+gumppictiled 30 30 350 400 2624
+checkertrans 31 31 348 398
+
+dhtmlgump 45 33 340 20 0 0 <def.bfont_white><def.center>Page System
+
+//p=page
+//n=gm page
+
+for p 1 <eval ((<serv.gmpages>/4)+1)>
+
+page <local.p>
+
+  for x 0 3	//display gmpages
+    local.n <eval (<local.x>+((<local.p>-1)*4))>
+    if (<local.n> < <serv.gmpages>)
+      ref1=<serv.gmpage.<local.n>.charuid>
+      local.handled=<serv.gmpage.<local.n>.handled>
+      button 40 <eval (50+(<local.x>*90))> 4006 4007 1 0 <eval (<local.n>+1)>
+      dhtmlgump 75 <eval (50+(<local.x>*90))> 300 80 1 1 (<qval (<serv.gmpage.<local.n>.handled>)?<def.bfont_green>handled - <uid.<serv.gmpage.<local.n>.handled>.name>:<def.bfont_red>unhandled>) <def.bfont_blue><def.u><ref1.name> [<ref1>]<def.ue> <f_gmpage_timeformat <eval <serv.gmpage.<dlocal.n>.time>>><def.bfont_black> : <serv.gmpage.<local.n>.reason>
+    endif
+  endfor
+  
+  //navigation buttons
+  if (<local.p> > 1)	//back button
+    button 30 408 4015 4016 0 <eval (<local.p>-1)>	
+  endif
+  
+  if (<serv.gmpages> > <eval (<local.p>*4)>) 	//forward button
+    button 350 408 4006 4007 0 <eval (<local.p>+1)>
+  endif
+
+endfor
+
+Button 150 408 4027 4028 1 0 65530
+dhtmlgump 186 411 200 20 0 0 <def.bfont_white>Wipe Pages
+
+page 65500
+
+dhtmlgump 45 33 340 20 0 0 <def.bfont_white><def.center>Page System
+
+dtext 80 70 1152 Reason: 
+dhtmlgump 130 70 248 100 1 1 <serv.gmpage.<ctag0.page>.reason>
+
+button 50 180 4006 4007 1 0 65531
+dtext 80 180 1152 Delete page
+
+button 50 200 4006 4007 1 0 65532
+dtext 80 200 1152 Go to player's position
+
+button 50 220 4006 4007 1 0 65533
+dtext 80 220 1152 Go to page origin
+
+button 50 270 4006 4007 1 0 65534
+dtext 80 270 1152 Predefind response
+
+gumppictiled 90 290 290 110 3004
+dtextentry 90 290 283 102 0 1 
+
+button 50 408 4012 4013 1 0 65535
+dtext 80 408 1152 Page list
+
+checkbox 350 408 210 211 0 1
+dtext 250 405 1152 Delete on reply
+
+[dialog d_page button]
+
+onbutton=0	//close menu
+ctag0.page=	
+
+onbutton=1,65500	//select page
+ctag0.page=<eval (<argn>-1)>
+serv.gmpage.<eval <argn>-1>.handled=<src>
+dialog d_page 65500
+
+onbutton=65530	//wipe pages
+sdialog d_page
+sdialog d_page_wipe
+
+onbutton=65531	//delete page
+//serv.gmpage.<ctag0.page>.handled=1
+serv.gmpage.<ctag0.page>.delete
+sysmessage Page has been deleted
+ctag0.page=
+
+onbutton=65532	//go to player location
+gouid <serv.gmpage.<ctag0.page>.charuid>
+ctag0.page=
+
+onbutton=65533	//go to page location
+go <serv.gmpage.<ctag0.page>.p>
+ctag0.page=
+
+onbutton=65534	//send message
+try serv.account.<serv.gmpage.<ctag0.page>.account>.tag.gmpage = <serv.gmpage.<ctag0.page>.reason>
+try serv.account.<serv.gmpage.<ctag0.page>.account>.tag.response = <argtxt[1]>
+try serv.account.<serv.gmpage.<ctag0.page>.account>.tag.responder = <name><def.br><def.br><def.bfont_black>Time elapsed: <def.bfont_red><f_gmpage_timeformat <eval <serv.gmpage.<ctag0.page>.time>>>
+ref1=<serv.gmpage.<ctag0.page>.charuid>
+ref1.f_gmpage_receive_response <argv[0]>
+//try gmpage.<ctag0.page>.handled=1
+if (<def0.gmpage_delete_after_response>) || (<argchkid[1]>==1)
+  serv.gmpage.<ctag0.page>.delete	
+  local.page_deleted=1
+endif
+sysmessage Your message was sent <qval (<local.page_deleted>)?and the page was deleted:>.
+ctag0.page=
+
+onbutton=65535	//view page list
+ctag0.page=	
+page2
+
+[dialog d_page_wipe]
+300,250
+
+page 0
+
+resizepic 0 0 9200 275 140
+dhtmlgump 5 10 260 100 1 1 Do you really want to delete all pages? Player pages can not be recovered and the player will not be informed of this action, thus leaving them unaddressed.
+button 140 110 243 242 1 0 0
+button 205 110 239 240 1 0 1
+
+[dialog d_page_wipe button]
+
+onbutton=0 
+ctag0.page=
+page2
+
+onbutton=1 
+serv.log @Page System: <name> deleting ALL pages (<dserv.gmpages> pages deleted : <serv.rtime>)
+for <eval (<serv.gmpages>-1)> 0
+  //serv.gmpage.<local._for>.handled=1
+  serv.gmpage.<local._for>.delete
+endfor
+sysmessage You have deleted all pages
+ctag0.page=
+//resend_dialog d_page	//not really needed to re-open because there are no pages once you wipe them all
+dialogclose d_page
+
+////////////////////////////
+// Various Page Functions
+
+[function f_gmpage_isvalid]	
+if !(<isempty <serv.gmpage.<args>.account>>)	//as long as its associated with an existing account, it's a legitmate page.
+  return 1
+endif
+return 0
+
+[function f_gmpage_receive_response]
+ref1=<uid>
+if !(<ref1.isonline>)	//we need to notify them on login if they are not online now
+  events=+e_gmpage
+else
+  trysrc <uid> sdialog d_gmpage_response_notify
+endif
+
+
+
+
+///////////////////////////////////
+// Player receive page response
+
+[dialog d_gmpage_response_notify]
+10,10
+
+nomove
+page 0
+
+resizepic 10 10 9200 110 95
+gumppictiled 20 20 90 75 2624
+checkertrans 20 20 90 75
+
+dhtmlgump 40 30 75 50 0 0 <def.bfont_white><def.center>GM<def.br>Message
+button 25 25 2002 2002 1 0 1
+
+[dialog d_gmpage_response_notify button]
+
+onbutton=1
+sdialog d_gmpage_response
+
+[dialog d_gmpage_response]
+0,0
+noclose
+
+page 0
+
+resizepic 80 120 9200 600 200
+gumppictiled 90 130 580 180 2624
+checkertrans 90 130 580 180
+dhtmlgump 99 141 571 138 1 1 <def.bfont_red><src.name><def.bfont_black>, <def.dlg_text_your_p> <def.bfont_blue>Your GM Page: "<src.account.tag.gmpage>"<def.bfont_black><def.br> <def.dlg_text_was_as> <def.bfont_red><src.account.tag.response><def.br><def.br><def.bfont_black><def.dlg_text_by_who> <def.bfont_red><src.account.tag.responder>
+button 345 280 247 248 1 0 1
+src.account.tag.response=	//we can clear all this out now that we used it above
+src.account.tag.gmpage=
+src.account.tag.responder=
+
+[dialog d_gmpage_response button]
+
+onbutton=1
+if (<def0.gmpage_delete_after_response>)
+  f_gmpage_delete <src.account>
+  src.sysmessage Page deleted	
+endif
+
+/////////////////////////
+// Login Page Response
+
+[events e_gmpage]
+
+on=@login
+if !(strmatch("<account.tag0.response>","0"))
+  sdialog d_gmpage_response_notify
+endif
+
+[function f_gmpage_delete]
+for 0 <eval (<serv.account.<args>.chars>-1)>
+  local.uid=<serv.account.<args>.char.<eval <local._for>>.uid> 
+  try uid.<local.uid>.events=-e_gmpage
+endfor
+
+[function f_gmpage_timeformat]
+if (<argn1> > 86400)
+  local.t <eval <argn1>/86400>d <eval <eval <argn1>%86400>/3600>h <eval <eval <eval <argn1>%86400>%3600>/60>m <eval <eval <eval <argn1>%86400>%3600>%60>s
+elseif (<argn1> > 3600)
+  local.t <eval <argn1>/3600>h <eval <eval <argn1>%3600>/60>m <eval <eval <argn1>%3600>%60>s
+elseif (<argn1> > 60)
+  local.t <eval <argn1>/60>m <eval <argn1>%60>s
+else
+  local.t <argn1>s
+endif
+return <local.t>
+
+
+
+[EOF]

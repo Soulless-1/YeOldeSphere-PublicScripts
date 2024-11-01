@@ -1,0 +1,16 @@
+
+
+[regiontype r_generic_region_event]
+
+on=@Enter
+ref1=<src>
+if (<ref1.isvalid>) && !(<ref1.npc>)		//add so that it plays generic music for generic regions like swamps, ice areas, deserts, forests, night time music??
+  if !(<isempty <tag.music>>)
+    ref1.midilist <tag.music>	//specific music for a region
+  //else		//no need to play random music, only play music that is specific to areas
+    //ref1.midilist mp3_oldult01,mp3_oldult02,mp3_oldult04,mp3_oldult06	//default music
+  endif
+endif
+
+
+[EOF]

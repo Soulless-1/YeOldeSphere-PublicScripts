@@ -1,0 +1,101 @@
+
+
+///////////////////////////
+// NPCai Combat functions
+
+[function npcwaypoints]
+local.t=<qval (<isempty <args>>)?<qval (<findid.i_waypoint_navigation.timer> <= -1)?0:-1>:<qval (<args> <= 0)?-1:0>>
+serv.log <local.t>
+findid.i_waypoint_navigation.timer=<local.t>	//if the timmer does not trigger, then the system does not work
+
+
+[function remove_waypoint_npcs]
+forchars 9999
+  if (<findid.i_waypoint_navigation>)
+    remove
+  endif
+endfor
+
+[function npcai_isenemy]
+ref1=<args>
+if !(<ref1.isvalid>)
+  return 0
+endif
+
+if (<ref1.flags>&statf_invul)
+  return 0	//invulnerable things can never be a target
+endif
+
+if (<ref1.tag0.faction>) && (<tag0.faction>)
+  if <ref1.tag0.faction> != <tag0.faction>	//faction members are a priority
+    return 1
+  else
+    return 0
+  endif
+endif
+
+if (<isinnocent>)		//reds are enemies of blues, blues are enemies of reds
+  if (<ref1.ismonster>) || (<ref1.iscriminal>) || (<ref1.ismurderer>)
+    return 1
+  else
+    return 0
+  endif
+elseif (<iscriminal>) 
+  if (<ref1.isinnocent>) || (<ref1.ismonster>)
+    return 1
+  else
+    return 0
+  endif
+elseif (<ismurderer>)
+  if (<ref1.isinnocent>) || (<ref1.iscriminal>) || (<ref1.ismonster>) 
+    return 1
+  else
+    return 0
+  endif
+elseif (<ismonster>)
+  if (<ref1.isinnocent>) || (<ref1.iscriminal>) || (<ref1.ismurderer>)
+    return 1
+  else
+    return 0
+  endif
+endif
+
+[function isally]
+ref1=<args>
+if <ref1.flags>&statf_invul
+  return 0	//invulnerable things don't need our help
+endif
+
+if (<ref1.tag0.faction>) && (<tag0.faction>)
+  if <ref1.tag0.faction> == <tag0.faction>	//faction allies take priority
+    return 1
+    else
+    return 0
+  endif
+endif
+
+//blues are allies of blues, reds are allies of reds (sometimes?)
+if (<isinnocent>) && (<ref1.isinnocent>)		
+  return 1
+  else
+  return 0
+elseif (<iscriminal>) && (<ref1.iscriminal>)
+  return 1
+  else
+  return 0
+elseif (<ismurderer>) && (<ref1.ismurderer)
+  return 1
+  else
+  return 0
+endif
+
+[function canhelpself]
+if (<findid.i_bandage>) || (<findid.i_potion_healless>) || (<findid.i_potion_heal>) || (<findid.i_potion_healgreat>)
+  return 1
+elseif (<cancast s_heal>) && (<mana> >= <serv.spell.s_heal.manause>)
+  return 1
+else
+  return 0
+endif
+	
+[EOF]

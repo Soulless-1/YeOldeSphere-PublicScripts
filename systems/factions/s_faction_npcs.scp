@@ -1,0 +1,1460 @@
+
+
+[CHARDEF c_h_faction_guard_henchman]
+DEFNAME=c_h_faction_guard_henchman
+ID=c_man
+NAME=#NAMES_HUMANMALE the Henchman
+DAM=25,30
+ARMOR=40
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Henchman
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(91, 115}
+Dex=(61, 85}
+Int=(81, 95}
+Fencing={80.0, 90.0}
+Wrestling={80.0, 90.0}
+Tactics={80.0, 90.0}
+Magicresistance={80.0, 90.0}
+Healing={80.0, 90.0}
+Anatomy={80.0, 90.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=i_studded_tunic
+ITEM=i_studded_leggings
+ITEM=i_studded_sleeves
+ITEM=i_studded_gloves
+ITEM=i_boots_calf
+ITEM=i_spear_short
+ITEM=random_coin_purse
+
+[CHARDEF c_h_faction_guard_henchman_f]
+DEFNAME=c_h_faction_guard_henchman_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Henchwoman
+DAM=20,30
+ARMOR=35
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Henchman (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(91, 115}
+Dex=(61, 85}
+Int=(81, 95}
+Fencing={80.0, 90.0}
+Wrestling={80.0, 90.0}
+Tactics={80.0, 90.0}
+Magicresistance={80.0, 90.0}
+Healing={80.0, 90.0}
+Anatomy={80.0, 90.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=i_studded_tunic
+ITEM=i_studded_leggings
+ITEM=i_studded_sleeves
+ITEM=i_studded_gloves
+ITEM=i_boots_calf
+ITEM=i_spear_short
+ITEM=random_coin_purse
+
+[CHARDEF c_h_faction_guard_mercenary]
+DEFNAME=c_h_faction_guard_mercenary
+ID=c_man
+NAME=#NAMES_HUMANMALE the Mercenary
+DAM=35,50
+ARMOR=60
+HIREDAYWAGE=6000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Mercenary
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(116, 125}
+Dex=(61, 85}
+Int=(81, 95}
+Fencing={90.0, 100.0}
+Wrestling={90.0, 100.0}
+Tactics={90.0, 100.0}
+Magicresistance={90.0, 100.0}
+Healing={90.0, 100.0}
+Anatomy={90.0, 100.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=i_chainmail_tunic
+ITEM=i_chainmail_coif
+ITEM=i_chainmail_leggings
+ITEM=i_ringmail_sleeves
+ITEM=i_leather_gloves
+ITEM=i_boots_calf
+ITEM=i_spear
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_mercenary_f]
+DEFNAME=c_h_faction_guard_mercenary_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Mercenary
+DAM=25,40
+ARMOR=30
+HIREDAYWAGE=6000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Mercenary (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(116, 125}
+Dex=(61, 85}
+Int=(81, 95}
+Fencing={90.0, 100.0}
+Wrestling={90.0, 100.0}
+Tactics={90.0, 100.0}
+Magicresistance={90.0, 100.0}
+Healing={90.0, 100.0}
+Anatomy={90.0, 100.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=i_chainmail_tunic
+ITEM=i_chainmail_coif
+ITEM=i_chainmail_leggings
+ITEM=i_ringmail_sleeves
+ITEM=i_leather_gloves
+ITEM=i_boots_calf
+ITEM=i_spear
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_berserker]
+DEFNAME=c_h_faction_guard_berserker
+ID=c_man
+NAME=#NAMES_HUMANMALE the Berserker
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Berserker
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(81, 95}
+Swordsmanship={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+COLOR=colors_hair
+ITEM=i_sandals
+COLOR=1645
+ITEM=i_sash
+COLOR=1645
+ITEM=i_kilt
+COLOR=1645
+ITEM=i_axe_double
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_berserker_f]
+DEFNAME=c_h_faction_guard_berserker_f
+ID=c_woman
+NAME=#NAMES_HUMANMALE the Berserker
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Berserker (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(81, 95}
+Swordsmanship={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+COLOR=colors_hair
+ITEM=i_sandals
+COLOR=1645
+ITEM=i_sash
+COLOR=1645
+ITEM=i_kilt
+COLOR=1645
+ITEM=i_axe_double
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_deathknight]
+DEFNAME=c_h_faction_guard_deathknight
+ID=c_man
+NAME=#NAMES_HUMANMALE the Deathknight
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Deathknight
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(81, 95}
+Swordsmanship={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEMNEWBIE=i_hooded_shroud
+COLOR=1109
+ITEM=i_axe_exec
+COLOR=2211
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_deathknight_f]
+DEFNAME=c_h_faction_guard_deathknight_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Deathknight
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Deathknight (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(81, 95}
+Swordsmanship={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEMNEWBIE=i_hooded_shroud
+COLOR=1109
+ITEM=i_axe_exec
+COLOR=2211
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_dragoon]
+DEFNAME=c_h_faction_guard_dragoon
+ID=c_man
+NAME=#NAMES_HUMANMALE the Dragoon
+DAM=35,50
+ARMOR=60
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Dragoon
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(151, 175}
+FLAGS=0
+Macefighting={110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+Magery={110.0, 120.0}
+EvaluatingIntel={110.0, 120.0}
+Meditation={110.0, 120.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=i_cape
+COLOR=1645
+ITEM=i_platemail_leggings
+COLOR=1109
+ITEM=i_platemail_arms
+COLOR=1109
+ITEM=i_platemail_gloves
+COLOR=1109
+ITEM=i_platemail_chest
+COLOR=1645
+ITEM=i_platemail_gorget
+COLOR=1109
+ITEM=i_platemail_helm
+COLOR=1109
+ITEM=i_hammer_war
+ITEM=random_coin_purse
+ITEM=i_mt_horse_gray
+color=1645
+
+[CHARDEF c_h_faction_guard_dragoon_f]
+DEFNAME=c_h_faction_guard_dragoon_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Dragoon
+DAM=25,40
+ARMOR=30
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Dragoon (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(151, 175}
+FLAGS=0
+Macefighting={110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+Magery={110.0, 120.0}
+EvaluatingIntel={110.0, 120.0}
+Meditation={110.0, 120.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+//ITEM=i_mt_horse_tan
+//COLOR=0453
+ITEM=i_cape
+COLOR=1645
+ITEM=i_platemail_leggings
+COLOR=1109
+ITEM=i_platemail_arms
+COLOR=1109
+ITEM=i_platemail_gloves
+COLOR=1109
+ITEM=i_platemail_chest
+COLOR=1645
+ITEM=i_platemail_gorget
+COLOR=1109
+ITEM=i_platemail_helm
+COLOR=1109
+ITEM=i_hammer_war
+ITEM=random_coin_purse
+ITEM=i_mt_horse_gray
+color=1645
+
+[CHARDEF c_h_faction_guard_knight]
+DEFNAME=c_h_faction_guard_knight
+ID=c_man
+NAME=#NAMES_HUMANMALE the Knight
+DAM=35,50
+ARMOR=60
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Knight
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(81, 95}
+FLAGS=0
+Swordsmanship={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=i_chainmail_tunic
+COLOR=2125
+ITEM=i_platemail_leggings
+COLOR=2125
+ITEM=i_chainmail_coif
+COLOR=2125
+ITEM=i_platemail_gorget
+COLOR=2125
+ITEM=i_platemail_arms
+COLOR=2125
+ITEM=i_platemail_gloves
+COLOR=2125
+ITEM=i_sash
+COLOR=1254
+ITEM=i_kilt
+COLOR=1254
+ITEM=i_cape
+COLOR=1254
+ITEM=i_bardiche
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_knight_f]
+DEFNAME=c_h_faction_guard_knight_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Knight
+DAM=25,40
+ARMOR=30
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Knight (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(81, 95}
+FLAGS=0
+Swordsmanship={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=i_chainmail_tunic
+COLOR=2125
+ITEM=i_platemail_leggings
+COLOR=2125
+ITEM=i_chainmail_coif
+COLOR=2125
+ITEM=i_platemail_gorget
+COLOR=2125
+ITEM=i_platemail_arms
+COLOR=2125
+ITEM=i_platemail_gloves
+COLOR=2125
+ITEM=i_sash
+COLOR=1254
+ITEM=i_kilt
+COLOR=1254
+ITEM=i_cape
+COLOR=1254
+ITEM=i_bardiche
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_necromancer]
+DEFNAME=c_h_faction_guard_necromancer
+ID=c_man
+NAME=#NAMES_HUMANMALE the Necromancer
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Necromancer
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(151, 175}
+Macefighting=110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEMNEWBIE=i_hooded_shroud
+COLOR=1109
+ITEM=i_staff_gnarled
+COLOR=2211
+ITEM=random_coin_purse
+ITEM=i_mt_horse_gray
+color=2211
+
+[CHARDEF c_h_faction_guard_necromancer_f]
+DEFNAME=c_h_faction_guard_Necromancer_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Necromancer
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Necromancer (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(151, 175}
+Macefighting=110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEMNEWBIE=i_hooded_shroud
+COLOR=1109
+ITEM=i_staff_gnarled
+COLOR=2211
+ITEM=random_coin_purse
+ITEM=i_mt_horse_gray
+color=2211
+
+[CHARDEF c_h_faction_guard_paladin]
+DEFNAME=c_h_faction_guard_paladin
+ID=c_man
+NAME=#NAMES_HUMANMALE the Paladin
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Paladin
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(81, 95}
+Swordsmanship={110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+Magery={110.0, 120.0}
+EvaluatingIntel={110.0, 120.0}
+Meditation={110.0, 120.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=i_platemail_chest
+COLOR=2125
+ITEM=i_platemail_leggings
+COLOR=2125
+ITEM=i_platemail_helm
+COLOR=2125
+ITEM=i_platemail_gorget
+COLOR=2125
+ITEM=i_platemail_arms
+COLOR=2125
+ITEM=i_platemail_gloves
+COLOR=2125
+ITEM=i_sash
+COLOR=1254
+ITEM=i_cape
+COLOR=1254
+ITEM=i_halberd
+ITEM=random_coin_purse
+ITEM=i_mt_horse_gray
+color=1254
+
+
+[CHARDEF c_h_faction_guard_paladin_f]
+DEFNAME=c_h_faction_guard_paladin_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Paladin
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Paladin (female)
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(81, 95}
+Swordsmanship={110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+Magery={110.0, 120.0}
+EvaluatingIntel={110.0, 120.0}
+Meditation={110.0, 120.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=i_platemail_chest
+COLOR=2125
+ITEM=i_platemail_leggings
+COLOR=2125
+ITEM=i_platemail_helm
+COLOR=2125
+ITEM=i_platemail_gorget
+COLOR=2125
+ITEM=i_platemail_arms
+COLOR=2125
+ITEM=i_platemail_gloves
+COLOR=2125
+ITEM=i_sash
+COLOR=1254
+ITEM=i_cape
+COLOR=1254
+ITEM=i_halberd
+ITEM=random_coin_purse
+ITEM=i_mt_horse_gray
+color=1254
+
+[CHARDEF c_h_faction_guard_sorcerer]
+DEFNAME=c_h_faction_guard_sorcerer
+ID=c_man
+NAME=#NAMES_HUMANMALE the Sorcerer
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Sorcerer
+
+ON=@Create
+NPC=brain_human
+color=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(126, 150}         
+macefighting={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=i_hat_wizards
+COLOR=1325
+ITEM=i_sandals
+COLOR=1325
+ITEM=i_leather_gorget
+COLOR=1325
+ITEM=i_leather_gloves
+COLOR=1325
+ITEM=i_leather_leggings
+COLOR=1325
+ITEM=i_skirt_long
+COLOR=1325
+ITEM=i_leather_tunic
+COLOR=1310
+ITEM=i_staff_quarter
+COLOR=1310
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_sorcerer_f]
+DEFNAME=c_h_faction_guard_sorcerer_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Sorceress
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=7000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Sorcerer (female)
+
+ON=@Create
+NPC=brain_human
+color=colors_skin
+Str=(126, 150}
+Dex=(61, 85}
+Int=(126, 150}         
+macefighting={100.0, 110.0}
+Wrestling={100.0, 110.0}
+Tactics={100.0, 110.0}
+Magicresistance={100.0, 110.0}
+Healing={100.0, 110.0}
+Anatomy={100.0, 110.0}
+Magery={100.0, 110.0}
+EvaluatingIntel={100.0, 110.0}
+Meditation={100.0, 110.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=i_hat_wizards
+COLOR=1325
+ITEM=i_sandals
+COLOR=1325
+ITEM=i_leather_gorget
+COLOR=1325
+ITEM=i_leather_gloves
+COLOR=1325
+ITEM=i_leather_leggings
+COLOR=1325
+ITEM=i_skirt_long
+COLOR=1325
+ITEM=i_armor_female_leather
+COLOR=1310
+ITEM=i_staff_quarter
+COLOR=1310
+ITEM=random_coin_purse
+
+
+[CHARDEF c_h_faction_guard_wizard]
+DEFNAME=c_h_faction_guard_wizard
+ID=c_man
+NAME=#NAMES_HUMANMALE the Wizard
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Wizard
+
+ON=@Create
+NPC=brain_human
+color=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(151, 175}      
+Macefighting={110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+Magery={110.0, 120.0}
+EvaluatingIntel={110.0, 120.0}
+Meditation={110.0, 120.0}
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=i_hat_wizards
+COLOR=1325
+ITEM=i_sandals
+COLOR=1325
+ITEM=i_robe
+COLOR=1325
+ITEM=i_leather_gloves
+COLOR=1325
+ITEM=i_staff_gnarled
+COLOR=1310
+ITEM=random_coin_purse
+item=i_mt_horse_gray
+color=1310
+
+
+[CHARDEF c_h_faction_guard_wizard_f]
+DEFNAME=c_h_faction_guard_wizard_f
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE the Wizard
+DAM=35,45
+ARMOR=40
+HIREDAYWAGE=8000
+CATEGORY=Factions
+SUBSECTION=Guards
+DESCRIPTION=Wizard (female)
+
+ON=@Create
+NPC=brain_human
+color=colors_skin
+Str=(151, 175}
+Dex=(61, 85}
+Int=(151, 175}      
+Macefighting={110.0, 120.0}
+Wrestling={110.0, 120.0}
+Tactics={110.0, 120.0}
+Magicresistance={110.0, 120.0}
+Healing={110.0, 120.0}
+Anatomy={110.0, 120.0}
+Magery={110.0, 120.0}
+EvaluatingIntel={110.0, 120.0}
+Meditation={110.0, 120.0}
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=i_hat_wizards
+COLOR=1325
+ITEM=i_sandals
+COLOR=1325
+ITEM=i_robe
+COLOR=1325
+ITEM=i_leather_gloves
+COLOR=1325
+ITEM=i_staff_gnarled
+COLOR=1310
+ITEM=random_coin_purse
+item=i_mt_horse_gray
+color=1310
+
+/////////////////////////////////
+// Faction Vendors
+
+
+[CHARDEF c_h_faction_vendor_bottle]
+DEFNAME=c_h_faction_vendor_bottle
+NAME=#NAMES_HUMANMALE the Potion Vendor
+ID=c_man
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Potion Vendor
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_robe
+COLOR=colors_all
+ITEM=random_pants
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_staff_quarter
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_bottle_empty,40
+
+[CHARDEF c_h_faction_vendor_bottle_f]
+DEFNAME=c_h_faction_vendor_bottle_f
+NAME=#NAMES_HUMANFEMALE the Potion Vendor
+ID=c_woman
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Potion Vendor (female)
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_robe
+COLOR=colors_all
+ITEM=random_skirt
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_staff_quarter
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_bottle_empty,40
+
+[CHARDEF c_h_faction_vendor_wood]
+DEFNAME=c_h_faction_vendor_wood
+NAME=#NAMES_HUMANMALE the Wood Vendor
+ID=c_man
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=3000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Wood Vendor
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_apron_half
+COLOR=colors_all
+ITEM=random_pants
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_hatchet
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_log,40
+SELL=i_board,40
+
+[CHARDEF c_h_faction_vendor_wood_f]
+DEFNAME=c_h_faction_vendor_wood_f
+NAME=#NAMES_HUMANFEMALE the Wood Vendor
+ID=c_woman
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=3000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Wood Vendor (female)
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_apron_half
+COLOR=colors_all
+ITEM=random_skirt
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_hatchet
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_log,40
+SELL=i_board,40
+
+[CHARDEF c_h_faction_vendor_ore]
+DEFNAME=c_h_faction_vendor_ore
+NAME=#NAMES_HUMANMALE the Ore Vendor
+ID=c_man
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=3000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Ore Vendor
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_apron_half
+COLOR=colors_all
+ITEM=random_pants
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_pickaxe
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_ore_iron,40
+
+[CHARDEF c_h_faction_vendor_ore_f]
+DEFNAME=c_h_faction_vendor_ore_f
+NAME=#NAMES_HUMANFEMALE the Ore Vendor
+ID=c_woman
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=3000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Ore Vendor (female)
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_apron_half
+COLOR=colors_all
+ITEM=random_skirt
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_pickaxe
+
+ON=@NPCRestock
+SELL=i_ore_iron,40
+
+[CHARDEF c_h_faction_vendor_reagent]
+DEFNAME=c_h_faction_vendor_reagent
+NAME=#NAMES_HUMANMALE the Reagent Vendor
+ID=c_man
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Reagent Vendor
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_robe
+COLOR=colors_all
+ITEM=random_pants
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_staff_gnarled
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_reag_black_pearl,{40}
+SELL=i_reag_blood_moss,{40}
+SELL=i_reag_garlic,{40}
+SELL=i_reag_ginseng,{40}
+SELL=i_reag_mandrake_root,{40}
+SELL=i_reag_nightshade,{40}
+SELL=i_reag_sulfur_ash,{40}
+SELL=i_reag_spider_silk,{40}
+
+[CHARDEF c_h_faction_vendor_reagent_f]
+DEFNAME=c_h_faction_vendor_reagent_f
+NAME=#NAMES_HUMANFEMALE the Reagent Vendor
+ID=c_woman
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Reagent Vendor (female)
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=i_robe
+COLOR=colors_all
+ITEM=random_skirt
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_staff_gnarled
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_reag_black_pearl,{40}
+SELL=i_reag_blood_moss,{40}
+SELL=i_reag_garlic,{40}
+SELL=i_reag_ginseng,{40}
+SELL=i_reag_mandrake_root,{40}
+SELL=i_reag_nightshade,{40}
+SELL=i_reag_sulfur_ash,{40}
+SELL=i_reag_spider_silk,{40}
+
+[CHARDEF c_h_faction_vendor_horsebreeder]
+DEFNAME=c_h_faction_vendor_horsebreeder
+NAME=#NAMES_HUMANMALE the Horse Breeder
+ID=c_man
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionHorseBreeder
+//TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Horse Breeder
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=random_pants
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_staff_quarter
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_cheese_wheel,20
+
+[CHARDEF c_h_faction_vendor_horsebreeder_f]
+DEFNAME=c_h_faction_vendor_horsebreeder_f
+NAME=#NAMES_HUMANFEMALE the Horse Breeder
+ID=c_woman
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=JobFactionHorseBreeder
+//TSPEECH=JobFactionVendor
+//TSPEECH=spk_shopkeep
+HIREDAYWAGE=5000
+CATEGORY=Factions
+SUBSECTION=Vendors
+DESCRIPTION=Horse Breeder (female)
+
+ON=@Create
+COLOR=colors_skin
+STR={66 80}
+DEX={66 80}
+INT={71 85}
+ANIMALLORE={45.0 68.0}
+TAMING={55.0 78.0}
+VETERINARY={35.0 58.0}
+WRESTLING={15.0 38.0}
+TACTICS={15.0 35.0}
+NPC=BRAIN_VENDOR
+ITEMNEWBIE=random_female_hair
+COLOR=colors_hair
+ITEM=RANDOM_LIGHT
+ITEM=i_shirt_plain
+COLOR=colors_all
+ITEM=random_skirt
+COLOR=colors_all
+ITEM=random_boots
+ITEM=i_staff_quarter
+ITEM=random_coin_purse
+
+ON=@NPCRestock
+SELL=i_cheese_wheel,20
+
+/////////////////////////////
+// Faction Horses
+
+[CHARDEF c_faction_horse]
+DEFNAME=c_faction_horse
+ID=c_horse_gray
+NAME=Warhorse
+SOUND=0a8
+ICON=i_pet_horse_tan
+ANIM=01fff
+CAN=MT_WALK
+RESOURCES=15 i_ribs_raw, 10 i_hide
+FOODTYPE=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+DAM=5,8
+ARMOR=32
+DESIRES=e_horses,c_man,c_woman
+TEVENTS=e_horses
+TEVENTS=e_faction_warhorse
+//SHELTER=r_stables,e_Human_Greet
+AVERSIONS=e_carnivores3
+DESCRIPTION=Horses
+SUBSECTION=Factions
+CATEGORY=Warhorse
+
+ON=@Create
+NPC=brain_animal
+FAME=300
+KARMA=300
+STR={400}
+MAXHITS={240}
+DEX={125}
+PARRYING={65.0 75.0}
+MAGICRESISTANCE={25.1 30.0}
+TACTICS={29.0 30.0}
+WRESTLING={29.3 44.0}
+
+[events e_faction_warhorse]
+
+on=@dclick
+if !(<src.tag0.faction>)
+  src.sysmessage You cannot mount a faction war horse!
+  return 1
+elseif (<tag0.faction> != <src.tag0.faction>)
+  src.sysmessage You cannot ride an opposing faction's war horse!
+  return 1
+//elseif FACTION RANK < 2
+  //src.sysmessage You must achieve a faction rank of at least two before riding a war horse!
+  //return 1
+endif
+
+[CHARDEF 077]
+DEFNAME=c_faction_horse_council_of_mages
+NAME=Warhorse
+SOUND=0a8
+ICON=i_pet_horse_tan
+ANIM=01fff
+CAN=MT_WALK
+RESOURCES=15 i_ribs_raw, 10 i_hide
+FOODTYPE=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+DAM=5,8
+ARMOR=32
+DESIRES=e_horses,c_man,c_woman
+TEVENTS=e_horses
+TEVENTS=e_faction_warhorse
+//SHELTER=r_stables,e_Human_Greet
+AVERSIONS=e_carnivores3
+DESCRIPTION=Horses
+SUBSECTION=Factions
+CATEGORY=Warhorse
+
+ON=@Create
+NPC=brain_animal
+FAME=300
+KARMA=300
+STR={400}
+MAXHITS={240}
+DEX={125}
+PARRYING={65.0 75.0}
+MAGICRESISTANCE={25.1 30.0}
+TACTICS={29.0 30.0}
+WRESTLING={29.3 44.0}
+
+[CHARDEF 076]
+DEFNAME=c_faction_horse_true_britannians
+NAME=Warhorse
+SOUND=0a8
+ICON=i_pet_horse_tan
+ANIM=01fff
+CAN=MT_WALK
+RESOURCES=15 i_ribs_raw, 10 i_hide
+FOODTYPE=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+DAM=5,8
+ARMOR=32
+DESIRES=e_horses,c_man,c_woman
+TEVENTS=e_horses
+TEVENTS=e_faction_warhorse
+//SHELTER=r_stables,e_Human_Greet
+AVERSIONS=e_carnivores3
+DESCRIPTION=Horses
+SUBSECTION=Factions
+CATEGORY=Warhorse
+
+ON=@Create
+NPC=brain_animal
+FAME=300
+KARMA=300
+STR={400}
+MAXHITS={240}
+DEX={125}
+PARRYING={65.0 75.0}
+MAGICRESISTANCE={25.1 30.0}
+TACTICS={29.0 30.0}
+WRESTLING={29.3 44.0}
+
+[CHARDEF 078]
+DEFNAME=c_faction_horse_minax
+NAME=Warhorse
+SOUND=0a8
+ICON=i_pet_horse_tan
+ANIM=01fff
+CAN=MT_WALK
+RESOURCES=15 i_ribs_raw, 10 i_hide
+FOODTYPE=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+DAM=5,8
+ARMOR=32
+DESIRES=e_horses,c_man,c_woman
+TEVENTS=e_horses
+TEVENTS=e_faction_warhorse
+//SHELTER=r_stables,e_Human_Greet
+AVERSIONS=e_carnivores3
+DESCRIPTION=Horses
+SUBSECTION=Factions
+CATEGORY=Warhorse
+
+ON=@Create
+NPC=brain_animal
+FAME=300
+KARMA=300
+STR={400}
+MAXHITS={240}
+DEX={125}
+PARRYING={65.0 75.0}
+MAGICRESISTANCE={25.1 30.0}
+TACTICS={29.0 30.0}
+WRESTLING={29.3 44.0}
+
+[CHARDEF 079]
+DEFNAME=c_faction_horse_shadowlords
+NAME=Warhorse
+SOUND=0a8
+ICON=i_pet_horse_tan
+ANIM=01fff
+CAN=MT_WALK
+RESOURCES=15 i_ribs_raw, 10 i_hide
+FOODTYPE=55 t_crops,55 t_fruit,55 t_grain, 64 t_grass
+DAM=5,8
+ARMOR=32
+DESIRES=e_horses,c_man,c_woman
+TEVENTS=e_horses
+TEVENTS=e_faction_warhorse
+//SHELTER=r_stables,e_Human_Greet
+AVERSIONS=e_carnivores3
+DESCRIPTION=Horses
+SUBSECTION=Factions
+CATEGORY=Warhorse
+
+ON=@Create
+NPC=brain_animal
+FAME=300
+KARMA=300
+STR={400}
+MAXHITS={240}
+DEX={125}
+PARRYING={65.0 75.0}
+MAGICRESISTANCE={25.1 30.0}
+TACTICS={29.0 30.0}
+WRESTLING={29.3 44.0}
+
+  
+  
+
+
+[EOF]

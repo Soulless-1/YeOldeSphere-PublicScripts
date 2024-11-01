@@ -1,0 +1,164 @@
+//Player vendor system by Soulless
+//v1.0
+//12:41 AM 5/22/2021
+
+[defname player_vendor_system]
+player_vendor_max			5		//The number of vendors a player can own at once
+player_vendor_maxrent			5		//How many vendors can a player rent maximum?
+player_vendor_redeed			0		//Will the vendor be redeeded when released?
+player_vendor_maxitems			125		//maximum amount of items a vendor can hold
+player_vendor_maxweight			0		//Maximum weight a vendor can hold at once, -1 = disabled (3900 is max player weight)	
+player_vendor_onlyhouses		1		//Vendors may only be placed at houses
+player_vendor_onlypublic		1		//Only houses that are public may have a vendor
+player_vendor_market_region		0		//The name of the public region where vendors are allowed, 0 = nowhere
+player_vendor_salary			0		//Vendor charge per UO day, default 20
+player_vendor_salary_plus		9999999		//Raise the salary 1gp per this amount of goods held, default 5000	
+player_vendor_abandon			0		//Will the vendor abandon the shop if he's not paid?
+player_vendor_gameday			2*60*60		//How long in seconds is an in-game day?
+player_vendor_payfrombank		1		//Players are allowed to pay from their bank
+player_vendor_maxprice			100000000	//Maximum price an item can be sold for
+player_vendor_maxdistance		4		//how far away can you interact with a vendor
+
+//dismiss vendor - return contact to player
+
+player_vendor_clothing_0_name Upper Torso
+player_vendor_clothing_0_layers 5,22		
+player_vendor_clothing_0_0 i_shirt_plain
+player_vendor_clothing_0_1 i_shirt_fancy
+player_vendor_clothing_0_2 i_dress_plain
+player_vendor_clothing_0_3 i_dress_full
+player_vendor_clothing_0_4 i_robe
+
+player_vendor_clothing_1_name Over Chest
+player_vendor_clothing_1_layers 12,17
+player_vendor_clothing_1_0 i_doublet
+player_vendor_clothing_1_1 i_tunic
+player_vendor_clothing_1_2 i_jester_suit
+player_vendor_clothing_1_3 i_sash
+player_vendor_clothing_1_4 i_surcoat
+player_vendor_clothing_1_5 i_apron_half
+player_vendor_clothing_1_6 i_apron_full
+
+player_vendor_clothing_2_name Footwear
+player_vendor_clothing_2_layers 3
+player_vendor_clothing_2_0 i_sandals
+player_vendor_clothing_2_1 i_shoes_plain
+player_vendor_clothing_2_2 i_boots_calf
+player_vendor_clothing_2_3 i_boots_thigh
+
+player_vendor_clothing_3_name Hats
+player_vendor_clothing_3_layers 6
+player_vendor_clothing_3_0 i_skull_cap
+player_vendor_clothing_3_1 i_bandana
+player_vendor_clothing_3_2 i_hat_floppy
+player_vendor_clothing_3_3 i_hat_wide_brim
+player_vendor_clothing_3_4 i_cap
+player_vendor_clothing_3_5 i_hat_straw_tall
+player_vendor_clothing_3_6 i_hat_straw
+player_vendor_clothing_3_7 i_hat_wizards
+player_vendor_clothing_3_8 i_bonnet
+player_vendor_clothing_3_9 i_hat_feather
+player_vendor_clothing_3_10 i_hat_tricorne
+player_vendor_clothing_3_11 i_hat_jester
+
+player_vendor_clothing_4_name Lower Torso
+player_vendor_clothing_4_layers 4,23
+player_vendor_clothing_4_0 i_pants_long
+player_vendor_clothing_4_1 i_kilt
+player_vendor_clothing_4_2 i_skirt_long
+
+player_vendor_clothing_5_name Back
+player_vendor_clothing_5_layers 20
+player_vendor_clothing_5_0 i_cape
+
+player_vendor_clothing_6_name Hair
+player_vendor_clothing_6_layers 11
+player_vendor_clothing_6_nopic 1
+player_vendor_clothing_6_0 i_hair_short
+player_vendor_clothing_6_1 i_hair_long
+player_vendor_clothing_6_2 i_hair_ponytail
+player_vendor_clothing_6_3 i_hair_mohawk
+player_vendor_clothing_6_4 i_hair_pageboy
+player_vendor_clothing_6_5 i_hair_krisna
+player_vendor_clothing_6_6 i_hair_afro
+player_vendor_clothing_6_7 i_hair_receding
+player_vendor_clothing_6_8 i_hair_2_pigtails
+
+player_vendor_clothing_7_name Facial Hair
+player_vendor_clothing_7_layers 16
+player_vendor_clothing_7_nopic 1
+player_vendor_clothing_7_0 i_beard_mustache
+player_vendor_clothing_7_1 i_beard_short
+player_vendor_clothing_7_2 i_beard_short_med
+player_vendor_clothing_7_3 i_beard_long
+player_vendor_clothing_7_4 i_beard_long_med
+player_vendor_clothing_7_5 i_beard_goatee
+player_vendor_clothing_7_6 i_beard_vandyke
+
+player_vendor_clothing_8_name Held Items
+player_vendor_clothing_8_layers 1,2
+player_vendor_clothing_8_0 i_fishing_pole
+player_vendor_clothing_8_1 i_pickaxe
+player_vendor_clothing_8_2 i_pitchfork
+player_vendor_clothing_8_3 i_cleaver_meat
+player_vendor_clothing_8_4 i_mace
+player_vendor_clothing_8_5 i_torch
+player_vendor_clothing_8_6 i_hammer_sledge
+player_vendor_clothing_8_7 i_sword_long
+player_vendor_clothing_8_8 i_staff_gnarled
+player_vendor_clothing_8_9 i_crossbow
+player_vendor_clothing_8_10 i_mace_war
+player_vendor_clothing_8_11 i_axe_two_hand
+player_vendor_clothing_8_12 i_spear
+player_vendor_clothing_8_13 i_katana
+player_vendor_clothing_8_14 i_spellbook
+
+player_vendor_shopdetails_category_0_name	Magic Supplies
+player_vendor_shopdetails_category_0_tilepic	013fe	//katana
+player_vendor_shopdetails_category_0_flag	0001
+
+player_vendor_shopdetails_category_1_name	Tailoring Supplies
+player_vendor_shopdetails_category_1_tilepic	00f9d	//sewing kit
+player_vendor_shopdetails_category_1_flag	0002
+
+player_vendor_shopdetails_category_2_name	Blacksmithing Goods
+player_vendor_shopdetails_category_2_tilepic	013e3	//smiths hammer
+player_vendor_shopdetails_category_2_flag	0004
+
+player_vendor_shopdetails_category_3_name	Carpentry Goods
+player_vendor_shopdetails_category_3_tilepic	0102e	//nails
+player_vendor_shopdetails_category_3_flag	0008
+
+player_vendor_shopdetails_category_4_name	Tinkering Goods
+player_vendor_shopdetails_category_4_tilepic	01eb8	//tool kit
+player_vendor_shopdetails_category_4_flag	0010
+
+player_vendor_shopdetails_category_5_name	Inscription Goods
+player_vendor_shopdetails_category_5_tilepic	00e34	//blank scoll
+player_vendor_shopdetails_category_5_flag	0020
+
+player_vendor_shopdetails_category_6_name	Sea Related
+player_vendor_shopdetails_category_6_tilepic	014f3	//ship model
+player_vendor_shopdetails_category_6_flag	0040
+
+player_vendor_shopdetails_category_7_name	Rare Goods
+player_vendor_shopdetails_category_7_tilepic	00f00	//pink bottle
+player_vendor_shopdetails_category_7_flag	0080
+
+player_vendor_shopdetails_category_8_name	Bulks Goods
+player_vendor_shopdetails_category_8_tilepic	01bef	//iron ingot
+player_vendor_shopdetails_category_8_flag	0100
+
+player_vendor_shopdetails_category_9_name 	Alchemy Goods
+player_vendor_shopdetails_category_9_tilepic	00f0b	//red bottle
+player_vendor_shopdetails_category_9_flag	0200
+
+player_vendor_shopdetails_category_10_name	Misc Goods
+player_vendor_shopdetails_category_10_tilepic	00ffa	//water bucket
+player_vendor_shopdetails_category_10_flag	0400
+
+
+
+
+
+[EOF]

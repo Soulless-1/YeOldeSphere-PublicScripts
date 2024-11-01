@@ -1,0 +1,47 @@
+//Huntsman/Mondains Horde System by Soulless
+//v1.0
+//12:29 PM 1/16/2022
+
+[speech spk_huntsman]
+
+on=*mondain*
+on=*horde*
+on=*plague*
+on=*guild*
+say A plague has befallen the Realm, a scourge is upon the land! Mondains Horde must be culled.
+
+on=join
+if (<src.skilltotal> < 3000)
+  say You are not ready to join our huntsman ranks, come back later.
+elseif (<src.findid.i_npc_guild_huntsman>)
+  say You are already a member of our guild.
+else
+  say There is a fee in the gold coins for joining the guild : 1000
+endif
+
+on=quit
+if !(<src.findid.i_npc_guild_huntsman>)
+  say Thou dost not belong to my guild!
+elseif (<src.findid.i_npc_guild_huntsman.timer>)		//if a npc guild memory item has a timer that means they recently joined
+  say You just joined my guild! You must wait a week to resign.
+else
+  say I accept thy resignation.
+  src.f_npc_guild_quit huntsman
+endif
+
+on=*supply*
+on=*supplies*
+say Thou needeth supplies? We hath them
+
+on=*buy*
+Say We doth not have supplies at the moment..
+return 1
+if !(<src.findid.i_npc_guild_huntsman>)
+  say I doth not recognize you from the hunstman guild, I've no business with thee.
+  return 1
+endif
+sdialog d_huntsman_guild_menu
+
+
+
+[EOF]

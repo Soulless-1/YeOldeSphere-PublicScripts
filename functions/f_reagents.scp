@@ -1,0 +1,53 @@
+//Reagents command by Soulless
+//v1.0
+//10:15 PM 5/29/2021
+
+
+[plevel 1]
+reags
+regs
+
+[function regs]
+reags
+
+[function reags]
+sdialog d_player_reagents
+
+[DIALOG d_player_reagents]
+10,10
+page 0
+
+resizepic 10 10 9200 80 225
+tilepic 5 20 3962
+dtext 45 20 0 <rescount i_reag_black_pearl>
+
+tilepic 5 45 3963
+dtext 45 45 0 <rescount i_reag_blood_moss>
+
+tilepic 7 70 3972
+dtext 45 70 0 <rescount i_reag_garlic>
+
+tilepic 0 95 3973
+dtext 45 95 0 <rescount i_reag_ginseng>
+
+tilepic 5 120 3974
+dtext 45 120 0 <rescount i_reag_mandrake_root>
+
+tilepic 5 145 3976
+dtext 45 145 0 <rescount i_reag_nightshade>
+
+tilepic 5 170 3980
+dtext 45 170 0 <rescount i_reag_sulfur_ash>
+
+tilepic 5 195 3981
+dtext 45 195 0 <rescount i_reag_spider_silk>
+
+
+
+
+
+
+[DIALOG d_player_reagents button]
+
+
+[EOF]

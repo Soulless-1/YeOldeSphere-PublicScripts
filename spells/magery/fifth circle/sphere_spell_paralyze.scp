@@ -1,0 +1,27 @@
+[SPELL 38]
+DEFNAME=s_paralyze
+NAME=Paralyze
+SOUND=snd_spell_paralyze
+RUNES=AEP
+CAST_TIME=1.8
+RESOURCES=i_reag_garlic,i_reag_mandrake_root,i_reag_spider_silk
+RUNE_ITEM=i_rune_paralyze
+SCROLL_ITEM=i_scroll_paralyze
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_resist|spellflag_nounparalyze
+EFFECT_ID=i_fx_bless_effect
+EFFECT=0
+LAYER=layer_spell_paralyze
+DURATION=60.0,3*60.0
+MANAUSE=14
+SKILLREQ=MAGERY 40.0
+INTERRUPT=100.0,100.0
+
+//Temporarily paralyzes your target for the duration of the spell. Paralyze is removed if your target takes any damage while paralyzed.
+//Formula: Duration = 1 Second + (Magery * 0.2)
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.duration=<eval (1 + <muldiv 20,(<local.spell_strength>/10),100>)*10>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+
+[EOF]

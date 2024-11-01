@@ -1,0 +1,106 @@
+//Waypoint Functions by Soulless
+//v1.0
+//8:16 PM 3/2/2020
+
+
+[function add_waypoint]
+targetfg f_place_waypoint_targ
+sysmessage where would you like to place the waypoint?
+ctag0.args=<args>
+
+[function f_place_waypoint_targ]
+args=<explode " ",<ctag.args>>
+ctag0.args=
+serv.newitem i_waypoint_marker
+new.p=<targp>
+new.tag0.waypoints_group=<qval !<isempty <argv[0]>>?<argv[0]>:<new.region.defname>>
+if !(<isempty <argv[1]>>)	//inserting into specific spot
+  //serv.b 1
+  serv.list.waypoints_<new.tag0.waypoints_group>.<argv[1]>.insert <new>
+else
+  //serv.b 2
+  serv.list.waypoints_<new.tag0.waypoints_group>.add <new>
+endif
+
+[function remove_waypoint]
+targetfg f_remove_waypoint_targ
+sysmessage Target waypoint to remove
+
+[function f_remove_waypoint_targ]
+ref1=<argo>
+ref1.tag0.remove=1
+ref1.remove
+
+[function remove_all_waypoints]
+forinstances i_waypoint_marker
+  tag0.remove=1
+  remove
+endfor
+
+[function clear_waypoints]
+targetfg f_clear_waypoints
+sysmessage What waypoint group would you like to clear
+sysmessage @026 WARNING THERE IS NO PROMPT TO CONFIRM
+
+[function f_clear_waypoints]
+ref1=<argo>
+for w <eval <serv.list.waypoints_<ref1.tag0.waypoints_group>.count>-1> 0 
+  ref2=<serv.list.waypoints_<ref1.tag0.waypoints_group>.<dlocal.w>>
+  ref1.tag0.remove=1
+  ref2.remove
+endfor
+
+[function hide_waypoints]
+forinstances i_waypoint_marker
+  if !(<tag0.hidden>)
+    serv.log hiding <name>(<uid>) in <region.name> @ <p>
+    tag0.hidden=1
+    z -= 5
+  endif
+endfor
+
+[function show_waypoints]
+forinstances i_waypoint_marker
+  if (<tag0.hidden>)
+    serv.log unhiding <name>(<uid>) in <region.name> @ <p>
+    tag0.hidden=
+    z += 5
+  endif
+endfor
+
+[function f_find_closest_waypoint]
+ref1=<uid>
+forinstances i_waypoint_marker
+  if (<distance <ref1>> < <local.d>) || !(<local.d>)
+    local.d=<distance <ref1>>
+    ref2=<uid>
+  endif
+endfor
+return <ref2>
+
+[function f_setup_waypoint_navigation]
+ref1=<f_find_closest_waypoint>
+findid.i_waypoint_navigation.tag0.waypoint=<ref1.tag0.waypoints_group>
+findid.i_waypoint_navigation.more1l=<serv.list.waypoints_<ref1.tag0.waypoints_group>.findelem <ref1>>
+findid.i_waypoint_navigation.more1h=1
+
+
+[function remove_sids]		//remove this eventually
+forchars 9999
+  if (<baseid>==c_sid6) || (<baseid>==c_sid6_2) || (<baseid>==c_sid6_3) 
+    remove
+  endif
+endfor
+
+[function remove_waypoint_npcs]
+forchars 9999
+  if (<npc>) && (<findid.i_waypoint_navigation>)
+    remove
+  endif
+endfor
+
+
+
+[EOF]
+
+

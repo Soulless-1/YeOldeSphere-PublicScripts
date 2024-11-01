@@ -1,0 +1,393 @@
+//Special Undead NPCs by Soulless
+//v0.5
+//10:30 AM 10/18/2018
+
+///////////////////////////////////
+// Special undead NPC events
+
+// Minions event to spawn minions
+
+[events e_minions]
+
+on=@npcactfight	//Masters get minions to help them in battle
+serv.log <uid>
+ref1=<uid>	//master
+ref2=<src>	//masters target
+for <ref1.tag0.minion_amount>
+  ref3=<uid.<ref1.tag0.<ref1.tag0.minion><local._for>>>
+  if !(<ref3>)
+    serv.newnpc <ref1.tag0.minion>
+    ref1.tag.<ref1.tag0.minion><local._for>=<new>
+    new.flags |= statf_conjured
+    new.movenear <ref1> 5
+    new.attack <ref2>
+    elseif !(<ref3.flags>&statf_war) || (<ref1.distance <ref3>> > 15)
+    ref3.movenear <ref1> 15
+    ref3.attack <ref2>
+  endif
+endfor
+
+on=@death	//all minions die once the master has fallen
+ref1=<src>	//master
+for <ref1.tag0.minion_amount>
+  ref3=<uid.<ref1.tag0.<ref1.tag0.minion><local._for>>>
+  if <ref3>	//<uid.<ref1.tag0.<ref1.tag0.minion><local._for>>>
+    ref3.hits=
+  endif
+endfor
+
+[chardef c_zombie_master]
+id=c_man
+name=Zombie Master
+dam=25,33
+armor=100
+can=mt_walk|mt_run|mt_equip|mt_usehands
+
+category=Monsters
+subsection=Undeads
+description=Zombie Master
+
+on=@create
+	events=+e_minions
+	tag.minion=c_zombie_wretched
+	tag.minion_amount=5
+	npc=brain_monster
+        str={1320 1640}
+	maxhits={3715 4805}
+	dex={3196 4215}
+	int={3765 4855}
+	parrying={55.0 65.0}
+	magicresistance={90.0 100.0}
+	macefighting={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={90.0 100.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+on=@npcrestock
+	item=i_hooded_shroud
+	color=colors_black
+ 	item=i_chainmail_tunic
+	color=colors_green
+	item=i_chainmail_leggings
+	color=colors_green
+	item=i_leather_gloves
+	color=colors_green
+	item=i_sandals
+	color=colors_black
+	item=i_cape
+	color=colors_black
+	item=i_gold,{300 600}
+	item=random_jewel,{5 15}
+	item=random_jewel,{5 15}
+	item=random_scroll
+	item=random_reagent,{3 6}
+	item=random_reagent,{3 6}
+
+on=@npcactfight
+if !(<R20>)
+  dorand 5
+    say @042 I will induce your corpse into my undead army
+    say @042 You will serve me in undeath
+    say @042 There is nothing you can do to stop us
+    say @042 The cities of the living will fall
+    say @042 You will make an excellent mindless slave
+  enddo
+endif
+
+[chardef c_zombie_wretched]
+id=c_zombie
+name=Wretched Zombie
+dam=2,8
+armor=20
+
+on=@create
+	color=colors_green
+	npc=brain_monster
+	str={37 80}
+	dex={196 215}
+	int={65 85}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	poisoning={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+
+[chardef c_skeleton_warlord]
+id=c_man
+name=Skeleton Warlord
+dam=25,33
+armor=100
+can=mt_walk|mt_run|mt_equip|mt_usehands
+sound
+
+category=Monsters
+subsection=Undeads
+description=Skeleton Warlord
+
+on=@create
+	events=+e_minions
+	tag0.minion={ c_skeleton_combusting 1}	// c_skeleton_festering 1 
+	tag0.minion_amount=5
+	npc=brain_monster
+        str={1320 1640}
+	maxhits={3715 4805}
+	dex={3196 4215}
+	int={3765 4855}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+on=@npcrestock
+	item=i_bone_helmet
+	color=colors_white
+	item=i_bone_chest
+	color=colors_white
+	item=i_leather_sleeves
+	color=colors_black
+ 	item=i_bone_gloves
+	color=colors_white
+	item=i_leather_leggings
+	color=colors_black
+	item=i_boots_thigh
+	color=colors_black
+	item=i_cape
+	color=colors_black
+	item=i_gold,{300 600}
+	item=random_jewel,{5 15}
+	item=random_jewel,{5 15}
+	item=random_scroll
+	item=random_reagent,{3 6}
+	item=random_reagent,{3 6}
+
+on=@npcactfight
+if !(<R20>)
+  dorand 5
+    Say @056 Your bones will serve me in the afterlife
+    Say @056 Nothing will stop the undead scourge
+    Say @056 The skeletal armies will destroy the living
+    Say @056 The warmth of life will leave your body
+    Say @056 prepare to become my eternal servant in death
+  enddo
+endif
+
+
+[chardef c_skeleton_combusting]
+id=c_skeleton
+name=Combusting Skeleton
+dam=1,4
+armor=10
+
+on=@create
+	color=colors_red
+	npc=brain_monster
+	str={37 80}
+	dex={196 215}
+	int={65 85}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+	itemnewbie=i_combusting_npc
+
+[itemdef i_combusting_npc]
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@create
+more1=8
+timer=1
+
+on=@timer
+cont.say @027 <dmore1>
+if !(<more1>)
+  for 5
+    topobj.circle_effect,i_fx_explode,<local._for>,0,0,0
+  endfor
+  forchars 5
+    damage 25 dam_fire
+  endfor
+  cont.sound snd_spell_explosion
+  cont.hits 0
+  remove
+endif
+more1 -= 1
+timer=1
+return 1
+
+
+[chardef c_skeleton_festering]
+id=c_skeleton
+name=Viral Skeleton
+dam=3,6
+armor=10
+
+on=@create
+	color=colors_green
+	npc=brain_monster
+	str={37 80}
+	dex={196 215}
+	int={65 85}
+	parrying={55.0 65.0}
+	//magery={90.0 100.0}
+	wrestling={90.0 100.0}
+ 	poisoning={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+
+[chardef c_horrific_abomination]
+id=c_flesh_golem
+name=Horrific Abomination
+dam=25,33
+armor=100
+can=mt_walk|mt_run
+
+on=@create
+	color=066d
+	events=+e_minions
+	tag0.minion=c_twisted_corpse
+	tag0.minion_amount=5
+	npc=brain_monster
+        str={1320 1640}
+	maxhits={3715 4805}
+	dex={3196 4215}
+	int={3765 4855}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+[chardef c_twisted_corpse]
+id=c_gore_fiend
+name=Twisted Corpse
+dam=2,8
+armor=20
+
+on=@create
+	color=colors_red
+	npc=brain_monster
+	str={137 180}
+	dex={296 315}
+	int={165 185}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+
+[chardef c_the_caretaker]
+defname=c_the_caretaker
+id=c_lich
+name=The Caretaker
+dam=33,40
+armor=100
+can=mt_walk|mt_run
+
+on=@create
+	color=0455
+	events=+e_minions
+	tag0.minion=c_death_sphere
+	tag0.minion_amount=5
+	npc=brain_monster
+        str={1320 1640}
+	maxhits={6715 7805}
+	dex={6196 7215}
+	int={6765 7855}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+[chardef c_death_sphere]
+id=c_wisp
+name=Death Sphere
+dam=14,18
+armor=20
+sound=0219
+
+on=@create
+	color=0482
+	npc=brain_monster
+	str={137 180}
+	dex={296 315}
+	int={165 185}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+[chardef c_blob_monster]
+id=c_bog_thing
+name=Blob
+dam=33,40
+armor=100
+can=mt_walk|mt_run
+
+on=@create
+	color=0e2
+	events=+e_minions
+	tag0.minion=c_bloblet
+	tag0.minion_amount=5
+	npc=brain_monster
+        str={1320 1640}
+	maxhits={3715 4805}
+	dex={3196 4215}
+	int={3765 4855}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+[chardef c_bloblet]
+id=c_slime
+name=Bloblet
+dam=14,18
+armor=20
+sound=456
+
+on=@create
+	color=colors_pink
+	npc=brain_monster
+	str={137 180}
+	dex={296 315}
+	int={165 185}
+	parrying={55.0 65.0}
+	wrestling={90.0 100.0}
+	magicresistance={90.0 100.0}
+	tactics={50.0 70.0}
+	wrestling={60.0 80.0}
+	fame={100 2000}
+	karma={-5000 -5999}
+
+[EOF]

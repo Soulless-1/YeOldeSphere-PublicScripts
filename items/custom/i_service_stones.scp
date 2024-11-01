@@ -1,0 +1,530 @@
+//General Service Stones by Soulless
+//v1.0
+//11:24 AM 8/9/2018
+
+
+
+
+
+[itemdef i_power_scroll_exchange_stone]
+defname=i_power_scroll_exchange_stone
+name=Powerscroll Exchange Stone
+id=i_grave_stone
+type=t_normal
+
+on=@create
+attr=010
+color=0481
+
+on=@dclick
+sdialog d_powerscroll_exchange
+return 1
+
+
+[dialog d_powerscroll_exchange]
+250,50
+page 0
+
+resizepic 25 25 9200 450 385
+dtext 140 40 1263 Powerscroll Trade In Stone
+dhtmlgump 40 70 410 65 0 0 <def0.bfont_black>    Select three unwanted powerscrolls to trade them in for a single random powerscroll. Be certain you wish to commit to this, the process is not reversable.
+
+button 60 145 2287 234 1 0 1		//hidden top button
+button 60 215 2287 234 1 0 2		//hidden middle button
+button 60 285 2287 234 1 0 3		//hidden bottom button
+
+resizepic 50 140 9200 65 55
+resizepic 50 210 9200 65 55
+resizepic 50 280 9200 65 55
+
+args=<src.ctag0.exchanging_powerscrolls>
+for n 0 2
+  ref1=<argv[<local.n>]>
+  if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_power_scroll)
+    dtext 58 <eval (150+(<local.n>*70))> 1000 Click to
+    dtext 53 <eval (165+(<local.n>*70))> 1000 add scroll 
+  else
+    tilepichue 55 <eval (150+(<local.n>*70))> <eval (<ref1.id>)> <eval (<ref1.color>)>
+    dhtmlgump 125 <eval (150+(<local.n>*70))> 325 55 0 0 <ref1.name>
+  endif
+endfor
+
+
+button 100 355 241 248 1 0 0		//cancel
+
+button 260 355 247 248 1 0 10		//accept
+
+
+[dialog d_powerscroll_exchange button]
+
+onbutton=0
+src.ctag0.exchanging_powerscrolls=	//clear the powerscrolls they had
+
+onbutton=1,3
+if (<src.distance <uid>> > 2)
+  src.sysmessage You are too far away from the stone
+  sdialog d_powerscroll_exchange
+  return 1
+endif
+local.button=<argn1>		//store the button we selected
+args=<src.ctag0.exchanging_powerscrolls>
+ref1=<argv[<eval (<local.button>-1)>]>
+if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_power_scroll)
+  src.targetf f_powerscroll_exchange_target <local.button>
+  src.sysmessage Select a powerscroll for exchange.
+else
+  doswitch <eval (<local.button>-1)>
+    args=0,<argv[1]>,<argv[2]>
+    args=<argv[0]>,0,<argv[2]>
+    args=<argv[0]>,<argv[1]>,0
+  enddo
+  src.ctag0.exchanging_powerscrolls=<args>
+  sdialog d_powerscroll_exchange
+endif
+
+onbutton=10
+if (<src.distance <uid>> > 2)
+  src.sysmessage You are too far away from the stone.
+  sdialog d_powerscroll_echance
+  return 1
+endif
+args=<src.ctag0.exchanging_powerscrolls>
+for n 0 2
+  ref1=<argv[<local.n>]>
+  if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_power_scroll)
+    sdialog d_powerscroll_exchange
+    src.sysmessage You do not have enough power scrolls inserted.
+    return 1
+  elseif (<ref1.topobj> != <src>)
+    sdialog d_powerscroll_exchange
+    src.sysmessage All powerscrolls must be on your person.
+    return 1
+  endif
+  local.totalpower += <ref1.more1>
+  ref<eval (<local.n>+2)>=<ref1>
+endfor 
+local.power=<f_powerscroll_exchange_average <local.totalpower>>
+serv.log Consuming <ref2.baseid>(<ref2>) <ref3.baseid>(<ref3>) <ref4.baseid>(<ref4>) for new powerscroll.
+ref2.consume
+ref3.consume
+ref4.consume
+if (<local.power> >= 1200)
+  serv.newitem i_power_scroll_legendary
+elseif (<local.power> >= 1150)
+  serv.newitem i_power_scroll_mythical
+elseif (<local.power> >= 1100)
+  serv.newitem i_power_scroll_exalted
+else
+  serv.newitem i_power_scroll_wondrous
+endif
+//serv.newitem {i_power_scroll_wondrous 4 i_power_scroll_exalted 3 i_power_scroll_mythical 2 i_power_scroll_legendary 1}
+//new.more2={{1 6} 5 {9 10} 2 {14 22} 9 {24 33} 10 {35 36} 2 {38 48} 11}		//no crafting power scrolls
+new.more2={0 48}			//you can now get ANY scroll via the exchange stone
+new.name=<new.name> of <serv.skill.<new.more2>.name> (<eval (<new.more1>/10)> skill)
+serv.log <new.name>(<new>) powerscroll given to <src.name>(<src>)
+src.bounce <new>
+src.sysmessage The old power scrolls disappear into the void, and a new scroll drops out.
+effect=3,i_fx_sparkle,6,15,1
+sound 0fb
+sound 04b
+
+[function f_powerscroll_exchange_target]
+ref1=<argo> 
+local.n=<argn>
+if !(<ref1>)
+  return 1
+elseif (<src.distance <uid>> > 2)
+  src.sysmessage You are too far away from the stone.
+  sdialog d_powerscroll_echance
+  return 1
+elseif (<ref1.topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  sdialog d_powerscroll_exchange
+  return 1
+elseif (<ref1.type> != t_power_scroll)
+  src.sysmessage That is not a power scroll.
+  sdialog d_powerscroll_exchange
+  return 1  
+endif
+args=<src.ctag0.exchanging_powerscrolls>
+doswitch <eval (<local.n>-1)>
+  begin
+    if (<ref1>==<dargv[1]>) || (<ref1>==<dargv[2]>)
+      src.sysmessage That power scroll is already inserted.
+    else
+      args=<ref1>,<argv[1]>,<argv[2]>
+    endif
+  end
+  begin
+    if (<ref1>==<dargv[0]>) || (<ref1>==<dargv[2]>) 
+      src.sysmessage That power scroll is already inserted.
+    else
+      args=<argv[0]>,<ref1>,<argv[2]>
+    endif
+  end
+  begin
+    if (<ref1>==<dargv[0]>) || (<ref1>==<dargv[1]>)
+      src.sysmessage That power scroll is already inserted.
+    else
+      args=<argv[0]>,<argv[1]>,<ref1>
+    endif
+  end
+enddo
+src.ctag0.exchanging_powerscrolls=<args>
+sdialog d_powerscroll_exchange
+
+[function f_powerscroll_exchange_average]
+args /= 3
+if (<args> >= 1200)
+  return 1200
+elseif (<args> >= 1150) 
+  return 1150
+elseif (<args> >= 1110)
+  return 1100
+else
+  return 1050
+endif
+
+////////////////////////
+// ATM STONE
+
+
+[itemdef i_atm_stone]
+name=ATM Stone
+id=i_grave_stone
+type=t_normal
+
+on=@create
+color=047
+attr=010
+
+on=@dclick
+src.bankself
+return 1
+
+///////////////////////////
+//resurrection Obelisk
+
+
+[itemdef i_resurrection_obelisk]
+name=Resurrection Obelisk
+id=i_gravestone_18
+type=t_sign_gump
+
+on=@create
+attr=010
+color=0481
+
+on=@dclick
+if (<src.distance <uid>> > 2)
+  src.sysmessage You are too far away.
+  return 1
+elseif !(<src.flags>&statf_dead)
+  src.sysmessage You are already among the living.
+  return 1
+endif
+src.resurrect
+return 1
+
+/////////////////////////////////
+// Repair stone
+
+//add gump dialog to repair stone, options= repair all / repair / close
+//add layout of armor and show the percentage of damage done to each armor/weapon item
+
+
+[defname repair_stone_settings]
+repair_stone_cost	20	//how many gold coins per repair point??
+
+[itemdef i_repair_stone]
+id=i_anvil
+name=Repair Stone 
+type=t_normal
+
+on=@create
+attr=010
+color=0489
+
+on=@dclick
+src.sdialog d_repair_stone
+return 1
+
+[dialog d_repair_stone]
+120,75
+page 0
+
+resizepic 10 10 9200 335 390
+
+tilepic 20 20 4017
+tilepic 35 30 4015
+dtext 90 30 1263 Repair    
+dtext 91 45 1263 Stone 
+
+resizepic 150 35 3000 55 65	//head
+if (<findlayer.6>) && (strmatch(t_armor*,<findlayer.6.type>))
+  tilepic 155 45 <eval id(<serv.itemdef.<findlayer.6.baseid>.dispid>)>
+  button 145 85 2117 2118 1 0 6
+  dtext 165 83 1000 <muldiv <findlayer.6.hits>,100,<findlayer.6.maxhits>>%
+endif
+
+resizepic 150 105 3000 55 65	//neck
+if (<findlayer.10>) && (strmatch(t_armor*,<findlayer.10.type>))
+  tilepic 155 115 <eval id(<serv.itemdef.<findlayer.10.baseid>.dispid>)> 0
+  button 145 155 2117 2118 1 0 10
+  dtext 165 153 1000 <muldiv <findlayer.10.hits>,100,<findlayer.10.maxhits>>%
+endif
+
+////////////////////////
+
+
+resizepic 30 175 3000 55 65	//left hand
+if (<findlayer.1>) && (strmatch(t_weapon*,<findlayer.1.type>))
+  tilepic 25 185 <eval id(<serv.itemdef.<findlayer.1.baseid>.dispid>)>
+  button 25 225 2117 2118 1 0 1
+  dtext 45 223 1000 <muldiv <findlayer.1.hits>,100,<findlayer.1.maxhits>>%
+endif
+
+resizepic 90 175 3000 55 65	//gloves
+if (<findlayer.7>) && (strmatch(t_armor*,<findlayer.7.type>))
+  tilepic 95 185 <eval id(<serv.itemdef.<findlayer.7.baseid>.dispid>)>
+  button 85 225 2117 2118 1 0 7
+  dtext 105 223 1000 <muldiv <findlayer.7.hits>,100,<findlayer.7.maxhits>>%
+endif
+
+resizepic 150 175 3000 55 65	//chest
+if (<findlayer.13>) && (strmatch(t_armor*,<findlayer.13.type>))
+  tilepic 155 185 <eval id(<serv.itemdef.<findlayer.13.baseid>.dispid>)>  
+  button 145 225 2117 2118 1 0 13
+  dtext 165 223 1000 <muldiv <findlayer.13.hits>,100,<findlayer.13.maxhits>>%	
+endif
+
+resizepic 210 175 3000 55 65	//arms
+if (<findlayer.19>) && (strmatch(t_armor*,<findlayer.19.type>))
+  tilepic 215 185 <eval id(<serv.itemdef.<findlayer.19.baseid>.dispid>)>
+  button 205 225 2117 2118 1 0 19	
+  dtext 225 223 1000 <muldiv <findlayer.19.hits>,100,<findlayer.19.maxhits>>%
+endif
+
+resizepic 270 175 3000 55 65	//right hand
+if (<findlayer.2>) && ((<findlayer.2.type>==t_shield) || (strmatch(t_weapon*,<findlayer.2.type>)))
+  tilepic 265 185 <eval id(<serv.itemdef.<findlayer.2.baseid>.dispid>)>
+  button 265 225 2117 2118 1 0 2
+  dtext 285 223 1000 <muldiv <findlayer.2.hits>,100,<findlayer.2.maxhits>>%
+endif
+
+///////////////////////
+
+resizepic 150 245 3000 55 65	//legs
+if (<findlayer.4>) && (strmatch(t_armor*,<findlayer.4.type>))
+  tilepic 155 255 <eval id(<serv.itemdef.<findlayer.4.baseid>.dispid>)>
+  button 145 295 2117 2118 1 0 4
+  dtext 165 293 1000 <muldiv <findlayer.4.hits>,100,<findlayer.4.maxhits>>%	
+endif
+
+
+//resizepic 140 315 3000 55 65	//feet
+//button 140 285 2117 2118 1 0 11	//feet
+
+dtext 125 355 1263 Repair all equipped armor
+button 285 355 4027 4028 1 0 100	//repair all worn armor items
+
+button 40 355 4018 4019 1 0 0		//close menu
+
+
+[dialog d_repair_stone button]
+
+onbutton=1,20
+local.n=<eval (<findlayer.<argn>.maxhits>-<findlayer.<argn>.hits>)*<def0.repair_stone_cost>>
+if !(<findlayer.<argn>>)
+  sysmessage You are not wearing anything in that slot anymore.
+  sdialog d_repair_stone
+  return 1
+endif
+
+if (<findlayer.2.type>==t_shield) && !(strmatch(t_armor*,<findlayer.19.type>)) && !(strmatch(t_weapon*,<findlayer.2.type>))
+  sysmessage You can not repair that item at this stone.
+  sdialog d_repair_stone
+  return 1
+endif
+
+if (<findlayer.<argn>.hits> >= <findlayer.<argn>.maxhits>)
+  sysmessage That item does not require repair.
+  sdialog d_repair_stone
+  return 1
+endif
+
+if (<gold> < <local.n>)
+  sysmessage You can not afford to repair that item.
+  return 1
+endif
+
+ctag0.repair_stone_layer=<argn>
+dialogclose d_repair_stone_confirm
+sdialog d_repair_stone_confirm
+
+
+onbutton=100
+ctag0.repair_stone_layer=100
+sdialog d_repair_stone_confirm
+
+
+[dialog d_repair_stone_confirm]
+150,150
+page 0
+
+resizepic 10 10 9200 335 130
+
+if (<ctag0.repair_stone_layer> < 99)
+  local.n=<eval  (<findlayer.<ctag0.repair_stone_layer>.maxhits>-<findlayer.<ctag0.repair_stone_layer>.hits>) *<def0.repair_stone_cost>>
+else
+  local.n=<eval (<findlayer.6.maxhits>+<findlayer.10.maxhits>+<findlayer.1.maxhits>+<findlayer.7.maxhits>+<findlayer.13.maxhits>+<findlayer.19.maxhits>+<findlayer.2.maxhits>+<findlayer.4.maxhits>>
+  local.x=<eval (<findlayer.6.hits>+<findlayer.10.hits>+<findlayer.1.hits>+<findlayer.7.hits>+<findlayer.13.hits>+<findlayer.19.hits>+<findlayer.2.hits>+<findlayer.4.hits>>
+  local.n=<eval (<local.n>-<local.x>)*<def0.repair_stone_cost>>
+endif
+dtext 125 35 1263 Confirm Repair?
+dtext 85 60 1000 The repair cost is <dlocal.n> gold.
+
+button 40 95 4018 4019 1 0 1
+dtext 75 95 1263 Cancel
+
+dtext 250 95 1263 Okay
+button 285 95 4006 4007 1 0 2
+
+
+
+[dialog d_repair_stone_confirm button]
+
+onbutton=1
+sdialog d_repair_stone
+
+onbutton=2
+if (<ctag0.repair_stone_layer> < 99)
+  local.n=<eval  (<findlayer.<ctag0.repair_stone_layer>.maxhits>-<findlayer.<ctag0.repair_stone_layer>.hits>)*<def0.repair_stone_cost>>
+  if (<src.gold> < <local.n>)
+    sysmessage You cannot afford to repair that item.
+    return 1
+  endif
+  sound 42
+  gold -= <local.n>
+  findlayer.<ctag0.repair_stone_layer>.hits=<findlayer.<ctag0.repair_stone_layer>.maxhits>
+
+  else
+  local.n=<eval (<findlayer.6.maxhits>+<findlayer.10.maxhits>+<findlayer.1.maxhits>+<findlayer.7.maxhits>+<findlayer.13.maxhits>+<findlayer.19.maxhits>+<findlayer.2.maxhits>+<findlayer.4.maxhits>>
+  local.x=<eval (<findlayer.6.hits>+<findlayer.10.hits>+<findlayer.1.hits>+<findlayer.7.hits>+<findlayer.13.hits>+<findlayer.19.hits>+<findlayer.2.hits>+<findlayer.4.hits>>
+  local.n=<eval (<local.n>-<local.x>)*<def0.repair_stone_cost>>
+  if (<src.gold> < <local.n>)
+    sysmessage You cannot afford to repair that item.
+    return 1
+  endif
+  sound 42
+  gold -= <local.n>
+  findlayer.6.hits=<findlayer.6.maxhits>
+  findlayer.10.hits=<findlayer.10.maxhits>
+  findlayer.1.hits=<findlayer.1.maxhits>
+  findlayer.7.hits=<findlayer.7.maxhits>
+  findlayer.13.hits=<findlayer.13.maxhits>
+  findlayer.19.hits=<findlayer.19.maxhits>
+  findlayer.2.hits=<findlayer.2.maxhits>
+  findlayer.4.hits=<findlayer.4.maxhits>
+endif
+sdialog d_repair_stone
+
+
+///////////////////////////
+//Kill Removing Stone
+
+[itemdef i_forgiveness_stone]
+id=i_grave_stone
+name=Stone of Forgiveness
+type=t_normal
+
+on=@create
+attr=010
+color=01a
+
+on=@click
+message 10k gold per kill
+
+on=@dclick
+if !(<src.kills>)
+  src.sysmessage Your conscience is light as a feather, no need for forgiveness.
+  return 1
+endif
+
+if (<src.gold> < 10000)
+  src.sysmessage You lack 10,000 gold coins for your forgiveness  .
+  return 1
+endif 
+
+src.kills -= 1
+src.sound 532
+src.consumegold 10000
+src.sysmessage You feel a great weight lifted from your shoulders
+return 1
+
+//////////////////////////
+// Corpse Retreival Stone
+
+[defname corpse_summoning_settings]
+corpse_summon_cost 	2000
+
+[itemdef i_corpse_summoning_stone]
+id=i_grave_stone
+name=Stone of Corpse Summoning
+type=t_normal
+
+on=@create
+attr=010
+color=02b
+
+on=@dclick
+sdialog d_corpse_summoning_stone
+return 1
+
+[dialog d_corpse_summoning_stone]
+200,100
+
+page 0
+resizepic 10 10 9200 244 290
+dtext 75 25 1263 Corpse Summoning
+dhtmlgump 35 50 205 145 0 0 <def.bfont_white>If you've died and you cannot reach your coprse you are able to summon it from this stone for <ddef0.corpse_summon_cost>g, do you wish to proceed? Your last corpse will be brought here two minutes after you summon it.
+
+button 65 215 4024 248 1 0 1
+dtext 110 215 1000 Summon Corpse
+button 65 245 4021 248 1 0 0
+dtext 110 245 1000 No Thanks
+
+
+[dialog d_corpse_summoning_stone button]
+
+onbutton=0
+src.sysmessage Summoning Canceled
+
+onbutton=1
+ref1=<src.ctag0.lastcorpse>
+if !(<ref1>)
+  src.sysmessage You have no corpse that can be summoned
+  return 1
+endif
+
+if (<src.gold> < <def0.corpse_summon_cost>)
+  src.sysmessage you cannot afford to pay the corpse summoning cost.
+  return 1
+endif
+
+src.gold -= <def0.corpse_summon_cost>
+ref1.timer += 120	//make sure it can will still exist
+timerf 120,f_summon_corpse <ref1>
+src.sysmessage Your last corpse will be summoned to this stone in 60 seconds.
+sound <R035,037>
+return 1
+
+[function f_summon_corpse]
+ref1=<args>
+ref1.p=<p>
+ref1.move e 2
+ref1.update
+ref1.sound 01e2
+
+
+[EOF]

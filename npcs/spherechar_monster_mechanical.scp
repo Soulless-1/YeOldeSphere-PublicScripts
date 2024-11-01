@@ -1,0 +1,286 @@
+
+[chardef 02f4]
+defname=c_exodus_overseer
+name=Exodus Overseer
+soundidle=0fd
+soundnotice=026c
+soundhit=023b
+soundgethit=0140
+sounddie=0211
+ICON=i_pet_exodus_overseer
+dam=13, 19
+armor=50
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Exodus Overseer
+
+ON=@Create
+	NPC=brain_monster
+	str={561, 650}
+	dex={76, 95}
+	int={61, 90}
+	maxhits={331, 390}
+	resphysical={45, 55}
+	resfire={40, 60}
+	rescold={25, 35}
+	respoison={25, 35}
+	resenergy={25, 35}
+	magicresistance={80.2, 98.0}
+	tactics={80.2, 98.0}
+	wrestling={80.2, 98.0}
+	fame=10000
+	karma=-10000
+
+ON=@NpcRestock
+	item=i_gold,{450 650}
+	//item=i_arcane_gem,R10
+	item=i_power_crystal,R10
+	item=i_clockwork_assembly,R10
+
+[chardef 763]
+defname=c_exodus_minionlord
+name=Exodus Minion Lord
+soundidle=0fd
+soundnotice=026c
+soundhit=023b
+soundgethit=0140
+sounddie=0211
+ICON=i_pet_exodus_minion
+dam=26, 38
+armor=50
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Exodus Minion Lord
+
+ON=@Create
+	NPC=brain_monster
+	str={761, 850}
+	dex={276, 295}
+	int={61, 90}
+	maxhits={531, 590}
+	resphysical={45, 55}
+	resfire={40, 60}
+	rescold={25, 35}
+	respoison={25, 35}
+	resenergy={25, 35}
+	magicresistance={80.2, 98.0}
+	tactics={80.2, 98.0}
+	wrestling={80.2, 98.0}
+	fame=10000
+	karma=-10000
+
+ON=@NpcRestock
+	item=i_gold,{450 650}
+	//item=i_arcane_gem,R10
+	item=i_power_crystal,R10
+	item=i_clockwork_assembly,R10
+
+
+[chardef 757]
+defname=c_exodus_minion
+name=Exodus Minion
+soundidle=0218
+soundnotice=026c
+soundhit=0232
+soundgethit=0140
+sounddie=0211
+ICON=i_pet_exodus_minion
+dam=16, 22
+armor=65
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Exodus Minion
+
+ON=@Create
+	NPC=brain_monster
+	str={851, 950}
+	dex={71, 80}
+	int={61, 90}
+	maxhits={511, 570}
+	resphysical={60, 70}
+	resfire={40, 50}
+	rescold={15, 25}
+	respoison={15, 25}
+	resenergy={15, 25}
+	magicresistance={90.1, 100.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=18000
+	karma=-18000
+
+ON=@NpcRestock
+	item=i_gold,{400 500}
+	//item=i_arcane_gem,R10
+	item=i_power_crystal,R10
+	item=i_clockwork_assembly,R10
+
+
+[chardef 752]
+defname=c_iron_golem
+name=Iron Golem
+soundidle=542
+soundnotice=541
+soundhit=562
+soundgethit=320
+sounddie=545
+ICON=i_pet_irongolem
+ARMOR=55
+DAM=31,64
+RESOURCES=1 i_ore_iron
+CAN=MT_WALK|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Iron Golem
+
+ON=@Create
+	tag.controlslots=3
+	NPC=brain_monster
+	FAME={100 3000}
+	KARMA={-5000 -6999}
+	STR={251 350}
+	MAXHITS={151 210}
+	resphysical={35 55}
+	resfire={50 60}
+	rescold={10 30}
+	respoison={10 25}
+	resenergy={30 40}
+	INT={101 150}
+	DEX={76 100}
+	MAGICRESISTANCE={150.0 190.0}
+	TACTICS={60.0 100.0}
+	WRESTLING={60.0 100.0}
+
+ON=@NpcRestock
+	item=i_ingot_iron,{11 25}
+	//item=i_arcane_gem,R10
+	item=i_power_crystal,R10
+	item=i_clockwork_assembly,R10
+
+[chardef 768]
+defname=c_Blackthorn_Juggernaught
+name=Blackthorn Juggernaught
+soundidle=0fd
+soundnotice=026c
+soundhit=023b
+soundgethit=0140
+sounddie=0423
+ICON=i_pet_juggernaught
+dam=12, 19
+armor=70
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Blackthorn Juggernaught
+MOVERATE=120
+
+ON=@Create
+	NPC=brain_monster
+	str={301, 400}
+	dex={51, 70}
+	int={51, 100}
+	maxhits={181, 240}
+	resphysical={65, 75}
+	resfire={35, 45}
+	rescold={35, 45}
+	respoison={15, 25}
+	resenergy={10, 20}
+	anatomy={90.1, 100.0}
+	magicresistance={140.1, 150.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=12000
+	karma=-12000
+
+ON=@NpcRestock
+	item=i_gold,{275 325}
+	item=random_jewel
+	item=i_power_crystal,R10
+	item=i_clockwork_assembly,R10
+
+	
+[chardef 767]
+defname=c_Betrayer
+name=Betrayer
+soundidle=0fd
+soundnotice=026c
+soundhit=023b
+soundgethit=0140
+sounddie=0423
+ICON=i_pet_betrayer
+DAM=37,64
+ARMOR=65
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Betrayer
+MOVERATE=120
+
+ON=@Create
+	NPC=brain_monster
+	FAME={100 3000}
+	KARMA={-5000 -6999}
+	str={401, 500}
+	dex={81, 100}
+	int={151, 200}
+	maxhits={241, 300}
+	resfire={60, 70}
+	rescold={60, 70}
+	respoison={30, 40}
+	resenergy={20, 30}
+	anatomy={90.1, 100.0}
+	evaluatingintel={90.1, 100.0}
+	magery={50.1, 100.0}
+	meditation={90.1, 100.0}
+	magicresistance={120.1, 130.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+
+ON=@NpcRestock
+	item=i_gold,{750 900}
+	item=random_jewel
+	//item=tm_magic_items
+	item=i_power_crystal,R10
+	//item=i_treasure_map5,R99
+	item=i_blackthorns_welcome_book
+
+[EOF]

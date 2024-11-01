@@ -1,0 +1,378 @@
+//Young player protection system by Soulless
+//v2.0
+//11:49 AM 9/4/2022
+
+//v1.0
+//Young players are protected until they reach 350.0 skill points.
+//Players and Young players can not steal from each other.
+//Players and Young players can not cut up one anothers corpses.
+//Players and Young players can not loot each others corpses.
+//Players and Young players can not cast harmfull spells on one another.
+//Pets of players and Young players can not hurt each other.
+
+//v2.0 
+//updated sysmessages and improved the script
+//added prevention of beneficial spells for spellcasting/spelleffect
+
+//v3.0
+//this system now will go on all chars (players + npcs) it will include player's pets and regulate them
+//monsters not attacking young players will be moved to this script
+
+[defname young_player_system_settings]
+young_status_expires      	40*60	 //how many online minutes does the young status last (in minutes)
+young_status_skillmax     	4500    //how much is the max skill a player can have and be young (-1 disables)
+
+[events e_young_system]    //This goes on all characters
+
+on=@login
+if (<tag0.young>)
+  if (<account.totalconnecttime> > <def0.young_status_expires>)
+    timerf 1,sysmessage You are no longer considered a young player on <serv.servname>, and are no longer subject to the limitations and benefits of being in that caste.   
+    tag0.young=
+    tag0.name.suffix=
+  else
+    timerf 1,sysmessage You will enjoy the benefits and relatively safe status of a young player for <eval ((<def0.young_status_expires>-<account.totalconnecttime>)/60)> more hours.
+  endif
+endif
+
+on=@itemtargon_item
+if (<act.type> == t_weapon_sword) || (<act.type> == t_weapon_mace_sharp) || (<act.type> == t_weapon_fence) || (<act.type> == t_weapon_axe)
+  if (<src.targ.type> == t_corpse) && (<src.targ.link.isvalid>) && (<src.targ.link.isplayer>) && (<src.targ.link> != <src.uid>)
+    if (<src.targ.link.tag0.young> == 1) || ((<src.tag0.young> == 1) && (<src.targ.link.tag0.young> >= 0)) 
+      src.sysmessage You cannot perform negative acts on your target.
+      return 1
+    endif
+  endif
+endif
+
+on=@itemdclick
+if (<act.type> == t_corpse) && (<act.link.isvalid>) && (<act.link.isplayer>) && (<act.link> != <uid>) && !(<isgm>)
+  if (<act.link.tag0.young> == 1) || ((<tag0.young> == 1 ) && (<act.link.tag0.young> >= 0))
+    sysmessage You cannot perform negative acts on your target.
+    return 1
+  endif
+endif
+
+on=@itempickup_pack
+if (<act.cont.type>==t_corpse) && (<act.cont.link.isvalid>) && (<act.cont.link.ischar>) && (<act.cont.link>!=<uid>) && !(<isgm>)
+  if (<act.cont.link.tag0.young> == 1) || ((<tag0.young> == 1 ) && (<act.cont.link.tag0.young> >= 0))
+    sysmessage You cannot perform negative acts on your target.
+    return 1
+  endif
+endif
+
+on=@combatadd
+if (<npc>) && !(<owner>) 
+  ref1=<src>								//the target we're trying to add to our combat list
+  if (<src.npc>) && (<src.owner.isvalid>) && (<src.owner.npc>==0)	//it's a player's pet
+    ref1=<src.owner>							//we need to reference their owner	
+  endif
+  ref2=<memoryfind.<ref1>>			//find the memory item of the player or the pet's  owner
+  if !(<ref2.isvalid>) || (!(<ref2.color>&memory_harmedby) && !(<ref2.color>&memory_irritatedby))
+    if (<ref1.tag0.young>) //&& (<ref1.isonline>)	<-- prob dont need this...
+      //if (<eval (<serv.time>-<src.ctag0.young_menace_notif>)> >= 1200)
+      if !(<R25>)
+        //message @0482,3,0,0 *looks at you menacingly but does not attack. You would be under attack now if not for your status as a new citizen of Britannia.*
+        ref1.sysmessage A monster looks at you menacingly but does not attack. You would be under attack now if not for your status as a new citizen of Britannia.
+        //ref1.ctag0.young_menace_notif=<serv.time>
+      endif
+      return 1
+    endif
+  endif
+endif
+
+on=@attack
+if (<npc> == 0)		//im a player
+  if (<src.npc> == 0)	//player attacking player
+    if (<src.tag0.young> == 1) || ((<tag0.young> == 1) && (<src.tag0.young> == 0))
+      sysmessage You cannot perform negative acts on your target. 
+      return 1
+    endif  
+  else			//player attacking npc
+    ref1=<src.owner> 
+    if (<ref1.isvalid>)	&& (<ref1> != <uid>) && (<src.npc> != brain_berserk)	 	//they have an owner and it's not me
+      if (<ref1.tag0.young> == 1) || ((<tag0.young> == 1) && (<ref1.tag0.young> == 0)) 
+        sysmessage You cannot perform negative acts on your target. 
+        return 1
+      endif
+    endif
+  endif
+else			//im an npc
+  ref1=<owner>		//my owner
+  ref2=<src.owner>	//their owner
+  if (<src.npc> == 0)	//npc attacking a player
+    if (<ref1.isvalid>)	&& (<ref1> != <src>) 	//i do have an owner and this isn't them
+      if (<src.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<src.tag0.young> == 0))
+        ref1.sysmessage You cannot perform negative acts on your target. 
+        return 1
+      endif
+    endif
+  else			//npc attacking an npc
+    if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1> != <ref2>) && (<src.npc> != brain_berserk)	//i have an owner and they have an owner and it's not the same
+      if (<ref2.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<ref2.tag0.young> == 0))
+        ref1.sysmessage You cannot perform negative acts on your target. 
+        return 1
+      endif
+    endif
+  endif
+endif
+
+on=@hittry
+if (<npc> == 0)		//im a player
+  if (<src.npc> == 0)	//player attacking player
+    if (<src.tag0.young> == 1) || ((<tag0.young> == 1) && (<src.tag0.young> == 0))
+      sysmessage You cannot perform negative acts on your target. 
+      return 1
+    endif  
+  else			//player attacking npc
+    ref1=<src.owner> 
+    if (<ref1.isvalid>)	&& (<ref1> != <uid>) && (<src.npc> != brain_berserk)	//they have an owner and it's not me
+      if (<ref1.tag0.young> == 1) || ((<tag0.young> == 1) && (<ref1.tag0.young> == 0)) 
+        sysmessage You cannot perform negative acts on your target.  
+        return 1
+      endif
+    endif
+  endif
+else			//im an npc
+  ref1=<owner>		//my owner
+  ref2=<src.owner>	//their owner
+  if (<src.npc> == 0)	//npc attacking a player
+    if (<ref1.isvalid>)	&& (<ref1> != <src>) 	//i do have an owner and it's not them
+      if (<src.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<src.tag0.young> == 0))
+        ref1.sysmessage You cannot perform negative acts on your target.  
+        timerf 0,peacemode
+        return 1
+      endif
+    endif
+  else			//npc attacking an npc
+    if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1> != <ref2>) && (<src.npc> != brain_berserk)	//i have an owner and they have an owner but it's not the same
+      if (<ref2.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<ref2.tag0.young> == 0))
+        ref1.sysmessage You cannot perform negative acts on your target.  
+        timerf 0,peacemode
+        return 1
+      endif
+    endif
+  endif
+endif
+
+on=@hit
+if (<npc> == 0)		//im a player
+  if (<src.npc> == 0)	//player attacking player
+    if (<src.tag0.young> == 1) || ((<tag0.young> == 1) && (<src.tag0.young> == 0))
+      sysmessage You cannot perform negative acts on your target. 
+      return 1
+    endif  
+  else			//player attacking npc
+    ref1=<src.owner> 
+    if (<ref1.isvalid>)	&& (<ref1> != <uid>) 	//they have an owner and it's not me
+      if (<ref1.tag0.young> == 1) || ((<tag0.young> == 1) && (<ref1.tag0.young> == 0)) 
+        sysmessage You cannot perform negative acts on your target. 
+        return 1
+      endif
+    endif
+  endif
+else			//im an npc
+  ref1=<owner>		//my owner
+  ref2=<src.owner>	//their owner
+  if (<src.npc> == 0)	//npc attacking a player
+    if (<ref1.isvalid>)	&& (<ref1> != <src>) 	//i do have an owner and this isnt them.
+      if (<src.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<src.tag0.young> == 0))
+        ref1.sysmessage You cannot perform negative acts on your target. 
+        return 1
+      endif
+    endif
+  else			//npc attacking an npc
+    if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1> != <ref2>)	//i have an owner and they have an owner but it's not the same
+      if (<ref2.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<ref2.tag0.young> == 0))
+        ref1.sysmessage You cannot perform negative acts on your target.  
+        return 1
+      endif
+    endif
+  endif
+endif
+
+on=@gethit
+if (<src> != <uid>) 		//i got hit by somebody else
+  if (<npc> == 0)		//i'm a player
+    if (<src.npc> == 0)		//they are a player attacking a player
+      if (<src.tag0.young> == 1) || ((<tag0.young> == 1) && (<src.tag0.young> == 0))
+        src.sysmessage You cannot perform negative acts on your target. 
+        return 1
+      endif  
+    else			//it's an npc hitting me
+      ref1=<src.owner> 
+      if (<ref1.isvalid>) && (<ref1> != <uid>) && (<src.npc> != brain_berserk)		//they have an owner and it's not me
+        if (<ref1.tag0.young> == 1) || ((<tag0.young> == 1) && (<ref1.tag0.young> == 0)) 
+          src.sysmessage You cannot perform negative acts on your target. 
+          return 1
+        endif
+      endif
+    endif
+  else			//im an npc
+    ref1=<owner>	//my owner
+    ref2=<src.owner>	//their owner
+    if (<src.npc> == 0)	//they are a player attacking an npc
+      if (<ref1.isvalid>) && (<ref1> != <src>) 	//i do have an owner and it's not them
+        if (<src.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<src.tag0.young> == 0))
+          src.sysmessage You cannot perform negative acts on your target. 
+          return 1
+        endif
+      endif
+    else		//npc attacking an npc
+      if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1> != <ref2>) && (<src.npc> != brain_berserk)	//i have an owner and they have an owner and they are not the same
+        if (<ref2.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<ref2.tag0.young> == 0))
+          ref2.sysmessage You cannot perform negative acts on your target. 
+          return 1
+        endif
+      endif
+    endif
+  endif
+endif
+
+on=@spellcast		//FIXME ADD ISCHAR CHECKS TO AVOID CONSOLE ERRORS
+if (<argn1> == 33) || (<argn1> == 58)
+  if (<tag0.young>)
+    sysmessage You cannot perform negative actions.
+    return 1
+  endif
+endif
+if (<serv.spell.<argn1>.flags>&spellflag_harm)	//i cast a harmful spell
+  if (<act.isvalid>) && (<act.ischar>) && (<act> != <uid>) 	//not on myself
+    if (<npc> == 0)				//im a player
+      if (<act.npc> == 0)			//i'm attacking a player
+        if (<act.tag0.young> == 1) || ((<tag0.young> == 1) && (<act.tag0.young> == 0))
+          sysmessage You cannot perform negative acts on your target. 
+          return 1
+        endif  
+      else			//i'm attacking an npc
+        ref1=<act.owner> 
+        if (<ref1.isvalid>) && (<ref1> != <uid>) && (<act.npc> != brain_berserk)	//they have an owner and it's not me
+          if (<ref1.tag0.young> == 1) || ((<tag0.young> == 1) && (<ref1.tag0.young> == 0)) 
+            sysmessage You cannot perform negative acts on your target. 
+            return 1
+          endif
+        endif
+      endif
+    else			//im an npc
+      ref1=<owner>		//my owner
+      ref2=<act.owner>		//their owner
+      if (<act.npc> == 0)	//im attacking a player
+        if (<ref1.isvalid>) && (<ref1> != <src>)	//i do have an owner and it's not them
+          if (<act.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<act.tag0.young> == 0))
+            ref1.sysmessage You cannot perform negative acts on your target. 
+            return 1
+          endif
+        endif
+      else			//im attacking another npc
+        if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1> != <ref2>) && (<act.npc> != brain_berserk)	//i have an owner and they have an owner and they are not the same
+          if (<ref2.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<ref2.tag0.young> == 0))
+            ref1.sysmessage You cannot perform negative acts on your target. 
+            return 1
+          endif
+        endif
+      endif
+    endif
+  endif
+endif
+
+on=@spelleffect
+if (<serv.spell.<argn1>.flags>&spellflag_harm) || (<serv.spell.<argn1>.flags>&spellflag_field) || (<argn1>==48)		//someone cast a bad spell on me
+  if (<src> != <uid>) 			 	//it wasnt myself
+    if (<npc> == 0)				//im a player
+      if (<src.npc> == 0)			//they are a player too
+        if (<src.tag0.young> == 1) || ((<tag0.young> == 1) && (<src.tag0.young> == 0))
+          src.sysmessage You cannot perform negative acts on your target. 
+          return 1
+        endif  
+      else			//they are an npc
+        ref1=<src.owner> 
+        if (<ref1.isvalid>) && (<ref1> != <uid>) && (<src.npc> != brain_berserk)	//they have an owner and it's not me
+          if (<ref1.tag0.young> == 1) || ((<tag0.young> == 1) && (<ref1.tag0.young> == 0)) 
+            src.sysmessage You cannot perform negative acts on your target.  
+            return 1
+          endif
+        endif
+      endif
+    else			//im an npc getting a harmful spell cast on me
+      ref1=<owner>		//my owner
+      ref2=<src.owner>		//their owner
+      if (<src.npc> == 0)	//they are a player
+        if (<ref1.isvalid>) && (<ref1> != <src>)	//i do have an owner and it's not them
+          if (<src.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<src.tag0.young> == 0))
+            ref2.sysmessage You cannot perform negative acts on your target.  
+            return 1
+          endif
+        endif
+      else			//they are an npc too
+        if (<ref1.isvalid>) && (<ref2.isvalid>) && (<ref1> != <ref2>) && (<src.npc> != brain_berserk)	//i have an owner and they have an owner and they are not the same
+          if (<ref2.tag0.young> == 1) || ((<ref1.tag0.young> == 1) && (<ref2.tag0.young> == 0))
+            ref2.sysmessage You cannot perform negative acts on your target.  
+            return 1
+          endif
+        endif
+      endif
+    endif
+  endif
+endif
+
+on=@skillstart
+if (<argn1> == 33) && (<act.topobj.ischar>)
+  if !(<act.topobj.npc>) && (<act.topobj> != <src>)
+    if (<src.targ.topobj.tag0.young> >= 1) || ((<src.tag0.young> >= 1) && (<src.targ.topobj.tag0.young> == 0)) 
+      src.sysmessage You cannot perform negative acts on your target.
+      return 1
+    endif
+  endif
+endif
+
+if (<tag0.young>) && (<def0.young_status_skillmax> != -1) && ((<account.totalconnecttime> > <def0.young_status_expires>) || (<skilltotal> >= <def0.young_status_skillmax>))
+  message You have successfully obtained a respectable skill level, and have outground your status as a young player!
+  timerf 4,message You are no longer considered a young player on <serv.servname>, and are no longer subject to the limitations and benefits of being in that caste.
+  tag0.young=
+  tag.name.suffix=
+  serv.log <name> has lost their young status.
+endif
+
+on=@deathcorpse
+ref1=<uid>
+if (<ref1.tag0.young> >= 1)
+  forcont <argo> 1
+    cont=<ref1.findlayer.21>
+  endfor
+endif
+
+/////////////////////////////////////////////
+// Renouncing Young Player Status Dialog
+
+
+[dialog d_renounce_young_status]  //keep players from renouncing on accident
+
+100, 100
+page 0
+
+resizepic 80 10 2600 450 400
+page 1
+
+dtext 220 30 1263 Renouncing 'Young Player' Status
+dhtmlgump 130 60 360 420 0 0 As a 'Young' player, you are currently under a system of protection that prevents you from being attacked by other players and certain monsters.<def.br><def.br> If you choose to renounce your status as a 'Young' player, you will lose this protection. You will become vulnerable to other players, and many monsters that had only glared at you menacingly before will now attack you on sight!<def.br><def.br>  Select OKAY now if you wish to renounce your status as a 'Young' player, otherwise press CANCEL.
+
+
+button 185 300 4006 4007 1 0 1
+dtext 220 300 1000 OKAY, Renounce my young status.
+
+button 185 330 4006 4007 1 0 2
+dtext 220 330 1000 CANCEL, I'll remain young for now.
+
+[dialog d_renounce_young_status button]
+
+onbutton=1
+sysmessage You are no longer protected by the young player system.
+sysmessage Good luck <name>, fair thee well!
+
+tag0.young=
+tag.name.suffix=
+
+onbutton=2
+sysmessage You choose to stay young for now.
+
+[EOF]

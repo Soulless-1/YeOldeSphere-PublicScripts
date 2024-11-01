@@ -1,0 +1,114 @@
+[defname monster_speech_ini]
+
+monster_speech_orc_color		34
+monster_speech_orc_keywords		meat, gold, kill, killing, slay, sword, axe, spell, magic, spells, swords, axes, mace, maces, monster, monsters, food, run, escape, away, help, dead, die, dying, lose, losing, life, lives, death, ghost, ghosts, british, blackthorn, guild, guilds, dragon, dragons, game, games, ultima, silly, stupid, dumb, idiot, idiots, cheesy, cheezy, crazy, dork, jerk, fool, foolish, ugly, insult, scum
+monster_speech_orc_responses		meat, kill, pound, crush, yum yum, crunch, destroy, murder, eat, munch, massacre, food, monster, evil, run, die, lose, dumb, idiot, fool, crazy, dinner, lunch, breakfast, fight, battle, doomed, rip apart, tear apart, smash, edible?, shred, disembowel, ugly, smelly, stupid, hideous, smell, tasty, invader, attack, raid, plunder, pillage, treasure, loser, lose, scum
+monster_speech_orc_syllables 		bu, du, fu, ju, gu, ulg, gug, gub, gur, oog, gub, log, ru, stu, glu, ug, ud, og, log, ro, flu, bo, duf, fun, nog, dun, bog, dug, gh, ghu, gho, nug, ig, igh, ihg, luh, duh, bug, dug, dru, urd, gurt, grut, grunt, snarf, urgle, igg, glu, glug, foo, bar, baz, ghat, ab, ad, gugh, guk, ag, alm, thu, log, bilge, augh, gha, gig, goth, zug, pig, auh, gan, azh, bag, hig, oth, dagh, gulg, ugh, ba, bid, gug, bug, rug, hat, brui, gagh, buad, buil, buim, bum, hug, hug, buo, ma, buor, ghed, buu, ca, guk, clog, thurg, car, cro, thu, da, cuk, gil 
+monster_speech_orc_syllables2		cur, dak, dar, deak, der, dil, dit, at, ag, dor, gar, dre, tk, dri, gka, rim, eag, egg, ha, rod, eg, lat, eichel, ek, ep, ka, it, ut, ewk, ba, dagh, faugh, foz, fog, fid, fruk, gag, fub, fud, fur, bog, fup, hagh, gaa, kt, rekk, lub, lug, tug, gna, urg, l, gno, gnu, gol, gom, kug, ukk, jak, jek, rukk, jja, akt, nuk, hok, hrol, olm, natz, i, i, o, u, ikk, ign, juk, kh, kgh, ka, hig, ke, ki, klap, klu, knod, kod, knu, thnu, krug, nug, nar, nag, neg, neh, oag, ob, ogh, oh, om, dud, oo,  pa, hrak, qo, quad, quil, ghig, rur, sag, sah
+
+monster_speech_ratman_color		149
+monster_speech_ratman_keywords		meat, gold, kill, killing, slay, sword, axe, spell, magic, spells, swords, axes, mace, maces, monster, monsters, food, run, escape, away, help, dead, die, dying, lose, losing, life, lives, death, ghost, ghosts, british, blackthorn, guild, guilds, dragon, dragons, game, games, ultima, silly, stupid, dumb, idiot, idiots, cheesy, cheezy, crazy, dork, jerk, fool, foolish, ugly, insult, scum
+monster_speech_ratman_responses		meat, kill, pound, crush, yum yum, crunch, destroy, murder, eat, munch, massacre, food, monster, evil, run, die, lose, dumb, idiot, fool, crazy, dinner, lunch, breakfast, fight, battle, doomed, rip apart, tear apart, smash, edible?, shred, disembowel, ugly, smelly, stupid, hideous, smell, tasty, invader, attack, raid, plunder, pillage, treasure, loser, lose, scum
+monster_speech_ratman_syllables		skrit, ch, ch, it, ti, it, ti, ak, ek, ik, ok, uk, yk, ka, ke, ki, ko, ku, ky, at, et, it, ot, ut, yt, cha, che, chi, cho, chu, chy, ach, ech, ich, och, uch, ych, att, ett, itt, ott, utt, ytt, tat, tet, tit, tot, tut, tyt, tta, tte, tti, tto, ttu, tty, tak, tek, tik, tok, tuk, tyk, ack, eck, ick, ock, uck, yck, cka, cke, cki, cko, cku, cky, rak, rek, rik, rok, ruk, ryk, tcha, tche, tchi, tcho, tchu, tchy, rach, rech, rich, roch, ruch, rych, rrap, rrep, rrip, rrop, rrup, rryp, ccka, ccke, ccki, ccko, ccku, ccky
+
+monster_speech_lizardman_color		58
+monster_speech_lizardman_keywords	meat, gold, kill, killing, slay, sword, axe, spell, magic, spells, swords, axes, mace, maces, monster, monsters, food, run, escape, away, help, dead, die, dying, lose, losing, life, lives, death, ghost, ghosts, british, blackthorn, guild, guilds, dragon, dragons, game, games, ultima, silly, stupid, dumb, idiot, idiots, cheesy, cheezy, crazy, dork, jerk, fool, foolish, ugly, insult, scum
+monster_speech_lizardman_responses	meat, kill, pound, crush, yum yum, crunch, destroy, murder, eat, munch, massacre, food, monster, evil, run, die, lose, dumb, idiot, fool, crazy, dinner, lunch, breakfast, fight, battle, doomed, rip apart, tear apart, smash, edible?, shred, disembowel, ugly, smelly, stupid, hideous, smell, tasty, invader, attack, raid, plunder, pillage, treasure, loser, lose, scum
+monster_speech_lizardman_syllables	ss, sth, iss, is, ith, kth, sith, this, its, sit, tis, tsi, ssi, sil, lis, sis, lil, thil, lith, sthi, lish, shi, shash, sal, miss, ra, tha, thes, ses, sas, las, les, sath, sia, ais, isa, asi, asth, stha, sthi, isth, asa, ath, tha, als, sla, thth, ci, ce, cy, yss, ys, yth, syth, thys, yts, syt, tys, tsy, ssy, syl, lys, sys, lyl, thyl, lyth, sthy, lysh, shy, myss, ysa, sthy, ysth
+
+monster_speech_wisp_color		89
+monster_speech_wisp_syllables		b, c, d, f, g, h, i, j, k, l, m, n, p, r, s, t, v, w, x, z, c, c, x, x, x, x, x, y, y, y, y, t, t, k, k, l, l, m, m, m, m, z
+
+
+[events e_monster_speech]
+
+on=@gethit
+if !(<R0,9>)
+  dorand 5
+    local.s=Ouch!
+    local.s=Me not hurt bad!
+    local.s=Thou fight bad.
+    local.s=Thy blows soft!
+    local.s=You bad with weapon!
+  enddo
+  f_monster_speak <local.s>
+endif
+
+
+on=@death
+if !(<R0,9>)
+  dorand 8
+    local.s=Revenge!
+    local.s=NOOooo!
+    local.s=I... I...
+    local.s=Me no die!
+    local.s=Me die!
+    local.s=Must... not die...
+    local.s=Oooh, me hurt...
+    local.s=Me dying?
+  enddo
+  f_monster_speak <local.s>
+endif
+
+[events e_wisp_speech]
+on=@gethit
+if !(<R0,9>)
+  dorand 5
+    local.s=Ouch!
+    local.s=Me not hurt bad!
+    local.s=Thou fight bad.
+    local.s=Thy blows soft!
+    local.s=You bad with weapon!
+  enddo
+  f_wisp_speak <local.s>
+endif
+
+
+on=@death
+if !(<R0,9>)
+  dorand 8
+    local.s=Revenge!
+    local.s=NOOooo!
+    local.s=I... I...
+    local.s=Me no die!
+    local.s=Me die!
+    local.s=Must... not die...
+    local.s=Oooh, me hurt...
+    local.s=Me dying?
+  enddo
+  f_wisp_speak <local.s>
+endif
+
+[function f_monster_speak]
+local.t=<monster_type>
+say @<def0.monster_speech_<local.t>_color> <args>
+args=<explode " ",<args>>
+local.s=<args>
+local.ms=" "
+for n 0 <eval (<argv>-1)>
+  args=<local.s>
+  for x 0 <eval ((strlen(<argv[<dlocal.n>]>)-1)/2)>	//amount of letters in word
+    args=<def0.monster_speech_<local.t>_syllables>
+    local.ms .= <argv[<R<argv>>]>
+  endfor 
+  local.ms .= " "
+endfor
+say @<def0.monster_speech_<local.t>_color> <local.ms>
+bark 1
+
+[function f_wisp_speak]
+args=<explode " ",<args>>
+local.s=<args>
+local.ms=" "
+for n 0 <eval (<argv>-1)>
+  args=<local.s>
+  for x 0 <eval (strlen(<argv[<dlocal.n>]>)-1)>	//amount of letters in word
+    args=<def0.monster_speech_wisp_syllables>
+    local.ms .= <argv[<R<argv>>]>
+  endfor 
+  local.ms .= " "
+endfor
+say @<def0.monster_speech_wisp_color> <local.ms>
+bark 1
+
+[EOF]

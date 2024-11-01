@@ -1,0 +1,278 @@
+////////////////////////////////////
+// Snow Globes
+
+[template random_snow_globe]
+name=random snow globe
+item={ i_snow_globe_britain 1 i_snow_globe_yew 1 i_snow_globe_wind 1 i_snow_globe_cove 1 i_snow_globe_minoc 1 i_snow_globe_vesper 1 i_snow_globe_nujelm 1 i_snow_globe_moonglow 1 i_snow_globe_skara_brae 1 i_snow_globe_buccaneers_den 1 i_snow_globe_magincia 1 i_snow_globe_trinsic 1 i_snow_globe_occlo 1 i_snow_globe_serpents_hold 1 i_snow_globe_jheolm 1}
+
+[itemdef i_snow_globe_britain] 
+name=Britain Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Britain
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Britain
+
+[itemdef i_snow_globe_yew] 
+name=Yew Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Yew
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Yew
+
+
+[itemdef i_snow_globe_wind] 
+name=Wind Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Wind
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Wind
+
+[itemdef i_snow_globe_minoc] 
+name=Minoc Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Minoc
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Minoc
+
+[itemdef i_snow_globe_cove] 
+name=Cove Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Cove
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Cove
+
+[itemdef i_snow_globe_vesper] 
+name=Vesper Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Vesper
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Vesper
+
+
+[itemdef i_snow_globe_nujelm] 
+name=Nujel'm Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Nujelm
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Nujel'm
+
+[itemdef i_snow_globe_moonglow] 
+name=Moonglow Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Moonglow
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Moonglow
+
+[itemdef i_snow_globe_skara_brae] 
+name=Skara Brae Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Skara Brae
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Skara Brae
+
+[itemdef i_snow_globe_buccaneers_den] 
+name=Buccaneer's Den Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=066d
+
+on=@dclick
+src.sysmessage You see a snowy yet bloody... scene of Buccaneer's Den
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Buccaneer's Den
+
+[itemdef i_snow_globe_magincia] 
+name=Magincia Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Magincia
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Magincia
+
+[itemdef i_snow_globe_occlo] 
+name=Occlo Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Occlo
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Occlo
+
+
+[itemdef i_snow_globe_trinsic] 
+name=Trinsic Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Trinsic
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Trinsic
+
+[itemdef i_snow_globe_serpents_hold] 
+name=Serpent's Hold Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Serpent's Hold
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Serpent's Hold
+
+[itemdef i_snow_globe_jheolm] 
+name=Jheolm Snow Globe
+id=i_crystal_ball
+type=86
+resources=i_crystal_ball,i_enchant_weapon
+value=500
+
+on=@create
+color=0481
+
+on=@dclick
+src.sysmessage You see a snowy scene of Jheolm
+return 1
+
+category=Other
+subsection=Rares
+description=Snow Globe Jheolm

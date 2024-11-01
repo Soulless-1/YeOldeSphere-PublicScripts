@@ -1,0 +1,2013 @@
+//Humanoid monsters should all go in this file
+//4:12 AM 4/2/2018
+
+
+[CHARDEF 138]
+DEFNAME=c_orc_lord
+NAME=#NAMES_ORC the Orc Lord
+SOUND=045a
+ICON=i_pet_ORC
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+dam=4, 14
+ARMOR=15
+RESOURCES=1 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+TEVENTS=e_monster_speech
+TEVENTS=e_orcs
+CATEGORY=Monsters
+SUBSECTION=Orcs
+DESCRIPTION=Orc Lord
+
+ON=@Create
+	NPC=brain_monster
+	str={147, 215}
+	dex={91, 115}
+	int={61, 85}
+	maxhits={95, 123}
+	resphysical={25, 35}
+	resfire={30, 40}
+	rescold={20, 30}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={70.1, 85.0}
+	swordsmanship={ 60.1, 85.0}
+	tactics={75.1, 90.0}
+	wrestling={60.1, 85.0}
+	fame=2500
+	karma=-2500
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=i_ringmail_tunic
+	item=i_bola_ball,R25
+	item=i_helm_orc_evil,R50
+	//item=i_treasure_map1,R99
+
+[CHARDEF 17]
+DEFNAME=c_orc
+NAME=#NAMES_ORC the Orc
+SOUND=045a
+ICON=i_pet_ORC
+dam=5, 7
+armor=28
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+RESOURCES=8 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+TEVENTS=e_monster_speech
+TEVENTS=e_orcs
+CATEGORY=Monsters
+SUBSECTION=Orcs
+DESCRIPTION=Orc
+
+ON=@Create
+	NPC=brain_monster
+	str={96, 120}
+	dex={81, 105}
+	int={36, 60}
+	maxhits={58, 72}
+	resphysical={25, 30}
+	resfire={20, 30}
+	rescold={10, 20}
+	respoison={10, 20}
+	resenergy={20, 30}
+	magicresistance={50.1, 75.0}
+	tactics={55.1, 80.0}
+	wrestling={50.1, 70.0}
+	fame=1500
+	karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=random_melee_weapon
+	item=i_bola_ball,R25
+	//item=i_treasure_map1,R99
+
+
+[CHARDEF 029]
+DEFNAME=c_orc_w_club
+NAME=#NAMES_ORC the Orc
+SOUND=snd_MONSTER_ORC1
+ICON=i_pet_ORC
+ANIM=078c7f
+DAM=5,12
+ARMOR=14
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+RESOURCES=8 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+//SHELTER=r_caves,r_dungeon,r_orc_camp
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+TEVENTS=e_monster_speech
+TEVENTS=e_orcs
+CATEGORY=Monsters
+SUBSECTION=Orcs
+DESCRIPTION=Orc (Club)
+
+ON=@Create
+	NPC=brain_monster
+	str={96, 120}
+	dex={81, 105}
+	int={36, 60}
+	maxhits={58, 72}
+	resphysical={25, 30}
+	resfire={20, 30}
+	rescold={10, 20}
+	respoison={10, 20}
+	resenergy={20, 30}
+	magicresistance={50.1, 75.0}
+	tactics={55.1, 80.0}
+	wrestling={50.1, 70.0}
+	fame=1500
+	karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=random_weapon
+	item=i_bola_ball,R25
+	//item=i_treasure_map1,R99
+
+[CHARDEF 7]
+DEFNAME=c_orc_captain
+NAME=Orc Captain
+sound=045a
+dam=5, 15
+armor=34
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+RESOURCES=1 i_ribs_raw 
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+TEVENTS=e_monster_speech
+TEVENTS=e_orcs
+CATEGORY=Monsters
+SUBSECTION=Orcs
+DESCRIPTION=Orc Captain
+
+ON=@Create
+	npc=brain_monster
+	str={111, 145}
+	dex={101, 135}
+	int={86, 110}
+	maxhits={67, 87}
+	resphysical={30, 35}
+	resfire={10, 20}
+	rescold={15, 25}
+	respoison={5, 10}
+	resenergy={5, 10}
+	magicresistance={70.1, 85.0}
+	swordsmanship={70.1, 95.0}
+	tactics={85.1, 100.0}
+	fame=2500
+	karma=-2500
+
+ON=@NPCRestock
+	item=i_gold,{100 150}
+	item=i_axe_two_hand
+	item=i_ringmail_tunic
+	item=i_helm_orc
+	item=i_boots_thigh
+	item=i_bola_ball,R25
+
+
+[CHARDEF 140]
+DEFNAME=c_orc_mage
+NAME=#NAMES_ORC the Orc Mage
+dam=4, 14
+armor=30
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+RESOURCES=8 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold,spk_orc
+TSPEECH=spk_orc
+TEVENTS=e_monster_speech
+TEVENTS=e_orcs
+CATEGORY=Monsters
+SUBSECTION=Orcs
+DESCRIPTION=Orc Mage
+
+ON=@Create
+	npc=brain_monster
+	str={116, 150}
+	dex={91, 115}
+	int={161, 185}
+	maxhits={70, 90}
+	resphysical={25, 35}
+	resfire={30, 40}
+	rescold={20, 30}
+	respoison={30, 40}
+	resenergy={30, 40}
+	evaluatingintel={60.1, 72.5}
+	magery={60.1, 72.5}
+	magicresistance={60.1, 75.0}
+	tactics={50.1, 65.0}
+	wrestling={40.1, 50.0}
+	fame=3000
+	karma=-3000
+	make_spellcaster 3,5
+
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	//item={random_first_circle 1 random_second_circle 1}
+	item=random_reagent,6
+	item=i_mask_orcish_kin,R50
+	item=i_bola_ball,R25
+	//item=i_treasure_map1,R99
+	
+
+[chardef 182]
+defname=c_orc_bomber
+name=orc bomber
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands|mt_equip
+dam=1, 8
+armor=30
+tevents=e_monster_speech
+tevents=e_orcs
+
+on=@create
+	npc=brain_monster
+	str={147, 215}
+	dex={91, 115}
+	int={61, 85}
+	maxhits={95, 123}
+	resphysical={25, 35}
+	resfire={30, 40}
+	rescold={15, 25}
+	respoison={15, 20}
+	resenergy={25, 30}
+	magicresistance={70.1, 85.0}
+	swordsmanship={60.1, 85.0}
+	tactics={75.1, 90.0}
+	wrestling={60.1, 85.0}
+	fame=2500
+	karma=-2500
+
+on=@npcrestock
+	item=i_gold,{175 225}
+	item=i_potion_explosionless
+	item=i_reag_sulfur_ash,{6 10}
+	item=i_reag_black_pearl,{6 10}
+	item=i_reag_mandrake_root,{6 10}
+	item=i_mortar_pestle
+	item=i_bola_ball,R20
+
+
+[chardef 0B5]
+defname=c_orc_scout
+name=orc scout
+sound=045A
+can=mt_walk|mt_run|mt_usehands|mt_equip
+dam=5, 7
+tevents=e_monster_speech
+tevents=e_orcs
+
+on=@create
+	npc=brain_monster
+	str={96, 120}
+	dex={101, 130}
+	int={36, 60}
+	maxhits={58, 72}
+	maxmana={30, 60}
+	resphysical={25, 35}
+	resfire={30, 40}
+	rescold={15, 25}
+	respoison={15, 20}
+	resenergy={25, 30}
+	magicresistance={50.1, 75.0}
+	tactics={55.1, 80.0}
+	fencing={50.1, 70.0}
+	archery={80.1, 120.0}
+	parrying={40.1, 60.0}
+	healing={80.1, 100.0}
+	anatomy={50.1, 90.0}
+	detectinghidden={100.1, 120.0}
+	hiding={100.0, 120.0}
+	stealth={80.1, 120.0}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	item=i_bow
+	item=i_arrow,{60 70}
+	item=i_fruit_apple,{3 5}
+	item=i_bandage,{1 15}
+	item=i_bow_orcish,R50
+	item=i_bola_ball,R25
+
+[CHARDEF 31]
+DEFNAME=c_headless
+NAME=Headless One
+SOUND=039d
+ICON=i_pet_HEADLESS
+dam=5, 10
+armor=18
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK	//|MT_USEHANDS
+FOODTYPE=
+DESIRES=i_gold,c_headless
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Headless
+
+ON=@Create
+NPC=brain_monster
+str={26, 50}
+dex={36, 55}
+int={16, 30}
+maxhits={16, 30}
+resphysical={15, 20}
+magicresistance={15.1, 20.0}
+tactics={25.1, 40.0}
+wrestling={25.1, 40.0}
+fame=450
+karma=-450
+
+ON=@NPCRestock
+	item=i_gold,{5 10}
+
+
+[CHARDEF 021]
+DEFNAME=c_lizardman
+NAME=#NAMES_LIZARDMAN the Lizard Man
+SOUND=417
+ICON=i_pet_LIZMAN
+dam=5, 7
+armor=28
+RESOURCES=1 i_ribs_raw,12 i_hide_spined
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold,c_LIZARDMAN
+AVERSIONS=e_carnivores3
+TEVENTS=e_monster_speech
+CATEGORY=Monsters
+SUBSECTION=Lizardmen
+DESCRIPTION=Lizardman
+
+ON=@Create
+NPC=brain_monster
+str={96, 120}
+dex={86, 105}
+int={36, 60}
+maxhits={58, 72}
+resphysical={25, 30}
+resfire={5, 10}
+rescold={5, 10}
+respoison={10, 20}
+magicresistance={35.1, 60.0}
+tactics={55.1, 80.0}
+wrestling={50.1, 70.0}
+fame=1500
+karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 75}
+	//item=i_treasure_map1,R99
+
+[CHARDEF 023]
+DEFNAME=c_lizardman_spear
+NAME=#NAMES_lizardman the Lizard Man
+SOUND=417
+ICON=i_pet_LIZMAN
+dam=5, 7
+armor=28
+RESOURCES=1 i_ribs_raw,12 i_hide_spined
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold,c_lizardman
+AVERSIONS=e_carnivores3
+TEVENTS=e_monster_speech
+CATEGORY=Monsters
+SUBSECTION=Lizardmen
+DESCRIPTION=Lizardman (Spear)
+
+ON=@Create
+NPC=brain_monster
+str={96, 120}
+dex={86, 105}
+int={36, 60}
+maxhits={58, 72}
+resphysical={25, 30}
+resfire={5, 10}
+rescold={5, 10}
+respoison={10, 20}
+magicresistance={35.1, 60.0}
+tactics={55.1, 80.0}
+wrestling={50.1, 70.0}
+fame=1500
+karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 75}
+	//item=i_treasure_map1,R99
+
+[CHARDEF 024]
+DEFNAME=c_lizardman_mace
+NAME=#NAMES_lizardman the Lizard Man
+SOUND=417
+ICON=i_pet_LIZMAN
+dam=5, 7
+armor=28
+RESOURCES=1 i_ribs_raw,12 i_hide_spined
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS
+FOODTYPE=15 t_meat_raw
+DESIRES=i_gold,c_lizardman
+AVERSIONS=e_carnivores3
+TEVENTS=e_monster_speech
+CATEGORY=Monsters
+SUBSECTION=Lizardmen
+DESCRIPTION=Lizardman (Mace)
+
+ON=@Create
+NPC=brain_monster
+str={96, 120}
+dex={86, 105}
+int={36, 60}
+maxhits={58, 72}
+resphysical={25, 30}
+resfire={5, 10}
+rescold={5, 10}
+respoison={10, 20}
+magicresistance={35.1, 60.0}
+tactics={55.1, 80.0}
+wrestling={50.1, 70.0}
+fame=1500
+karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 75}
+	//item=i_treasure_map1,R99
+
+[CHARDEF 42]
+DEFNAME=c_ratman
+NAME=#NAMES_RATMAN the Rat Man
+SOUND=437
+ICON=i_pet_RATMAN
+dam=4, 5
+armor=28
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+RESOURCES=1 i_ribs_raw, 8 i_hide_spined
+FOODTYPE=15 t_meat_raw,i_cheese_wheel
+DESIRES=c_ratman,c_ratman_w_sword,c_ratman_w_mace
+TEVENTS=e_monster_speech
+CATEGORY=Monsters
+SUBSECTION=Ratmen
+DESCRIPTION=Rat Man
+
+ON=@Create
+NPC=brain_monster
+str={96, 120}
+dex={81, 100}
+int={36, 60}
+maxhits={58, 72}
+resphysical={25, 30}
+resfire={10, 20}
+rescold={10, 20}
+respoison={10, 20}
+resenergy={10, 20}
+magicresistance={35.1, 60.0}
+tactics={50.1, 75.0}
+wrestling={50.1, 75.0}
+fame=1500
+karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	
+
+[CHARDEF 02c]
+DEFNAME=c_ratman_w_mace
+NAME=#NAMES_RATMAN the Rat Man
+SOUND=437
+ICON=i_pet_RATMAN
+dam=4, 5
+armor=28
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+RESOURCES=1 i_ribs_raw, 8 i_hide_spined
+FOODTYPE=15 t_meat_raw,i_cheese_wheel
+DESIRES=c_ratman,c_ratman_w_sword,c_ratman_w_mace
+TEVENTS=e_monster_speech
+CATEGORY=Monsters
+SUBSECTION=Ratmen
+DESCRIPTION=Rat Man
+
+ON=@Create
+NPC=brain_monster
+str={96, 120}
+dex={81, 100}
+int={36, 60}
+maxhits={58, 72}
+resphysical={25, 30}
+resfire={10, 20}
+rescold={10, 20}
+respoison={10, 20}
+resenergy={10, 20}
+magicresistance={35.1, 60.0}
+tactics={50.1, 75.0}
+wrestling={50.1, 75.0}
+fame=1500
+karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=i_club
+
+[CHARDEF 02d]
+DEFNAME=c_ratman_w_sword
+NAME=#NAMES_RATMAN the Rat Man
+SOUND=437
+ICON=i_pet_RATMAN
+dam=4, 5
+armor=28
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+RESOURCES=1 i_ribs_raw, 8 i_hide_spined
+FOODTYPE=15 t_meat_raw,i_cheese_wheel
+DESIRES=c_ratman,c_ratman_w_sword,c_ratman_w_mace
+TEVENTS=e_monster_speech
+CATEGORY=Monsters
+SUBSECTION=Ratmen
+DESCRIPTION=Rat Man (Club)
+
+ON=@Create
+NPC=brain_monster
+str={96, 120}
+dex={81, 100}
+int={36, 60}
+maxhits={58, 72}
+resphysical={25, 30}
+resfire={10, 20}
+rescold={10, 20}
+respoison={10, 20}
+resenergy={10, 20}
+magicresistance={35.1, 60.0}
+tactics={50.1, 75.0}
+wrestling={50.1, 75.0}
+fame=1500
+karma=-1500
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=i_sword
+
+
+[chardef 08e]
+defname=c_Ratman_Archer
+name=ratman archer
+sound=437
+can=mt_walk|mt_run|mt_usehands|mt_equip
+dam=4, 10
+armor=56
+resources=8 i_hide_spined, 1 i_ribs_raw
+TEVENTS=e_monster_speech
+
+on=@create
+	npc=brain_monster
+	str={146, 180}
+	dex={101, 130}
+	int={116, 140}
+	maxhits={88, 108}
+	resphysical={40, 55}
+	resfire={10, 20}
+	rescold={10, 20}
+	respoison={10, 20}
+	resenergy={10, 20}
+	anatomy={60.2, 100.0}
+	archery={80.1, 90.0}
+	magicresistance={65.1, 90.0}
+	tactics={50.1, 75.0}
+	wrestling={50.1, 75.0}
+	fame=6500
+	karma=-6500
+
+on=@npcrestock
+	item=i_gold,{300 350}
+	item=i_bow
+	item=i_arrow,{50 70}
+	
+[chardef 08f]
+defname=c_Ratman_Mage
+name=ratman mage
+sound=437
+can=mt_walk|mt_run	//|mt_usehands|mt_equip
+dam=7, 14
+armor=44
+resources=8 i_hide_spined, 1 i_ribs_raw
+TEVENTS=e_monster_speech
+
+on=@create
+	npc=brain_monster
+	str={146, 180}
+	dex={101, 130}
+	int={186, 210}
+	maxhits={88, 108}
+	resphysical={40, 45}
+	resfire={10, 20}
+	rescold={10, 20}
+	respoison={10, 20}
+	resenergy={10, 20}
+	evaluatingintel={70.1, 80.0}
+	magery={70.1, 80.0}
+	magicresistance={65.1, 90.0}
+	tactics={50.1, 75.0}
+	wrestling={50.1, 75.0}
+	fame=7500
+	karma=-7500
+	make_spellcaster 3,5
+
+on=@npcrestock
+	item=i_gold,{275 325}
+	item=random_reagent,6
+	//item={random_first_circle 1 random_second_circle 1}
+	//item=random_statue
+	//item=i_treasure_map2,R99
+
+
+
+[CHARDEF 770]
+defname=c_meer_mage
+NAME=Meer Mage
+SOUND=snd_human_foomph09
+soundgethit=014d
+soundhit=0314
+sounddie=075
+ICON=i_pet_meermage
+dam=24, 26
+armor=16
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Meer Mage
+
+ON=@Create
+	NPC=brain_monster
+	str={171, 200}
+	dex={126, 145}
+	int={276, 305}
+	maxhits={103, 120}
+	resphysical={45, 55}
+	resfire={15, 25}
+	rescold={50}
+	respoison={25, 35}
+	resenergy={25, 35}
+	evaluatingintel={100.0}
+	magery={70.1, 80.0}
+	meditation={85.1, 95.0}
+	magicresistance={80.1, 100.0}
+	tactics={70.1, 90.0}
+	wrestling={60.1, 80.0}
+	spellweaving={70.1, 80.0}
+	fame=8000
+	karma=8000
+
+ON=@NpcRestock
+	item=i_gold,{500 600}
+	//item={random_fourth_circle 1 random_fifth_circl1 }
+	item=magic_item
+	//item=daemon_bone_armor
+	//item=i_treasure_map3,R99
+
+[chardef 0303]
+defname=c_Meer_Warrior
+name=Meer Warrior
+SOUND=snd_human_foomph09
+soundgethit=0156
+sounddie=015c
+ICON=i_pet_meerwarrior
+dam=12, 19
+armor=22
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Meer Warrior
+
+ON=@Create
+	NPC=brain_monster
+	str={86, 100}
+	dex={186, 200}
+	int={86, 100}
+	maxhits={52, 60}
+	resphysical={35, 45}
+	resfire={5, 15}
+	rescold={30, 40}
+	respoison={25, 35}
+	resenergy={25, 35}
+	magicresistance={91.0, 100.0}
+	tactics={91.0, 100.0}
+	wrestling={91.0, 100.0}
+	fame=2000
+	karma=5000
+
+ON=@NpcRestock
+	ITEM=i_gold,{50 100}
+
+[CHARDEF 772]
+defname=c_meer_eternal
+NAME=Meer Eternal
+SOUND=snd_human_foomph09
+soundgethit=0167
+soundhit=028b
+sounddie=0bc
+ICON=i_pet_meereternal
+dam=11, 13
+armor=34
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Meer Eternal
+
+ON=@Create
+	NPC=brain_monster
+	str={416, 505}
+	dex={146, 165}
+	int={566, 655}
+	maxhits={250, 303}
+	resphysical={45, 55}
+	resfire={15, 25}
+	rescold={45, 55}
+	respoison={30, 40}
+	resenergy={30, 40}
+	evaluatingintel={90.1, 100.0}
+	magery={90.1, 100.0}
+	meditation={90.1, 100.0}
+	magicresistance={150.5, 200.0}
+	tactics={50.1, 70.0}
+	wrestling={60.1, 80.0}
+	spellweaving={90.1, 100.0}
+	fame=18000
+	karma=18000
+
+ON=@NpcRestock
+	ITEM=i_gold,{1000 1200}
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	//item={random_seventh_circle 1 random_eighth_circle 1}
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+[CHARDEF 773]
+defname=c_meer_captain
+NAME=Meer Captain
+SOUND=snd_human_foomph09
+soundgethit=014d
+soundhit=0314
+sounddie=075
+ICON=i_pet_meercaptain
+dam=5, 15
+armor=28
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Meer Captain
+
+ON=@Create
+	NPC=brain_monster
+	str={96, 110}
+	dex={186, 200}
+	int={96, 110}
+	maxhits={58, 66}
+	resphysical={45, 55}
+	resfire={10, 20}
+	rescold={40, 50}
+	respoison={35, 45}
+	resenergy={35, 45}
+	archery={90.1, 100.0}
+	magicresistance={91.0, 100.0}
+	swordsmanship={ 90.1, 100.0}
+	tactics={91.0, 100.0}
+	wrestling={80.9, 89.9}
+	fame=2000
+	karma=5000
+
+ON=@NpcRestock
+	item=i_gold,{50 100}
+	item=i_xbolt,{40 60}
+	item=random_sword
+	item=random_reagent,{10 20}
+
+[CHARDEF 764]
+DEFNAME=c_juka_warrior
+NAME=juka warrior
+soundidle=01ac
+soundnotice=01cd
+soundgethit=01d0
+sounddie=028d
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+dam=7, 9
+armor=22
+DESIRES=i_gold
+AVERSIONS=t_trap,r_civilization,e_carnivores3
+FOODTYPE=t_meat_raw
+MAXFOOD=35
+RESOURCES=1 i_ribs_raw
+TEVENTS=e_carnivores2
+CATEGORY=Monsters
+SUBSECTION=Juka
+DESCRIPTION=Juka Warrior
+
+ON=@Create
+	NPC=brain_monster
+	str={251, 350}
+	dex={61, 80}
+	int={101, 150}
+	maxhits={151, 210}
+	resphysical={40, 50}
+	resfire={30, 40}
+	rescold={25, 35}
+	respoison={10, 20}
+	resenergy={10, 20}
+	anatomy={80.1, 90.0}
+	fencing={80.1, 90.0}
+	macefighting={80.1, 90.0}
+	magicresistance={120.1, 130.0}
+	swordsmanship={80.1, 90.0}
+	tactics={80.1, 90.0}
+	wrestling={80.1, 90.0}
+	fame=10000
+	karma=-10000
+
+ON=@NpcRestock
+	item=i_gold,{175 225}	
+	item=random_jewel
+
+
+[CHARDEF 765]
+DEFNAME=c_juka_mage
+NAME=juka mage
+soundidle=01ac
+soundnotice=01cd
+soundgethit=01d0
+sounddie=028d
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+dam=4, 10
+armor=16
+DESIRES=i_gold
+AVERSIONS=t_trap,e_carnivores3
+FOODTYPE=t_meat_raw
+MAXFOOD=40
+RESOURCES=1 i_ribs_raw
+TEVENTS=e_carnivores2
+CATEGORY=Monsters
+SUBSECTION=Juka
+DESCRIPTION=Juka Mage
+
+ON=@Create
+	NPC=brain_monster
+	str={201, 300}
+	dex={71, 90}
+	int={451, 500}
+	maxhits={121, 180}
+	resphysical={20, 30}
+	resfire={35, 45}
+	rescold={30, 40}
+	respoison={10, 20}
+	resenergy={35, 45}
+	anatomy={80.1, 90.0}
+	evaluatingintel={80.2, 100.0}
+	magery={99.1, 100.0}
+	meditation={80.2, 100.0}
+	magicresistance={140.1, 150.0}
+	tactics={80.1, 90.0}
+	wrestling={80.1, 90.0}
+	fame=15000
+	karma=-15000
+
+ON=@NpcRestock
+	item=i_gold,{250 300}
+	item=random_jewel
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	item=i_reagent_bag_small
+	//item=i_arcane_gem
+	//item=i_treasure_map3,R99
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+
+
+[CHARDEF 766]
+DEFNAME=c_juka_lord
+NAME=Juka Lord
+soundidle=01ac
+soundnotice=01cd
+soundgethit=01d0
+sounddie=028d
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+dam=10, 12
+armor=28
+DESIRES=i_gold
+AVERSIONS=t_trap,r_civilization,e_carnivores3
+FOODTYPE=t_meat_raw
+MAXFOOD=40
+RESOURCES=1 i_ribs_raw
+TEVENTS=e_carnivores2
+CATEGORY=Monsters
+SUBSECTION=Juka
+DESCRIPTION=Juka Lord
+
+ON=@Create
+	NPC=brain_monster
+	str={401, 500}
+	dex={81, 100}
+	int={151, 200}
+	maxhits={241, 300}
+	resphysical={40, 50}
+	resfire={45, 50}
+	rescold={40, 50}
+	respoison={20, 25}
+	resenergy={40, 50}
+	anatomy={90.1, 100.0}
+	archery={95.1, 100.0}
+	healing={80.1, 100.0}
+	magicresistance={120.1, 130.0}
+	swordsmanship={90.1, 100.0}
+	tactics={95.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=15000
+	karma=-15000
+
+ON=@NpcRestock
+	item=i_gold,{400 500}
+	item=random_jewel
+	item=i_bandage,{10 30}
+	item=i_arrow,{50 70}
+	//item=tm_magic_items
+	//item=i_juka_slayer_bow
+	//item=i_arcane_gem
+
+
+[chardef 263]
+defname=c_Minotaur
+name=Minotaur
+soundnotice=0597
+soundidle=0596
+soundhit=0599
+soundgethit=059a
+sounddie=059c
+ICON=i_worldgem_bit
+dam=11, 20
+armor=28
+RESOURCES=15 i_ribs_raw
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Minotaur
+
+ON=@Create
+	NPC=brain_monster
+	str={301, 340}
+	dex={91, 110}
+	int={31, 50}
+	maxhits={301, 340}
+	resphysical={55, 65}
+	resfire={25, 35}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={30, 40}
+	meditation={0}
+	evaluatingintel={0}
+	magery={0}
+	poisoning={0}
+	anatomy={0}
+	magicresistance={56.1, 64.0}
+	tactics={93.3, 97.8}
+	wrestling={90.4, 92.1}
+	fame=5000
+	karma=-5000
+
+ON=@NpcRestock
+	item=i_gold,{423 445}
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[chardef 280]
+name=Minotaur Captain
+defname=c_minotaur_captain
+ICON=i_pet_dragon
+soundnotice=0597
+soundidle=0596
+soundhit=0599
+soundgethit=059a
+sounddie=059c
+dam=11, 20
+ARMOR=28
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN
+FOODTYPE=55 i_ribs_raw
+AVERSIONS=e_carnivores3
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_orc
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Minotaur Captain
+
+
+on=@create
+	npc=brain_monster
+	str={401, 425}
+	dex={91, 110}
+	int={31, 50}
+	maxhits={401, 440}
+	resphysical={65, 75}
+	resfire={35, 45}
+	rescold={40, 50}
+	respoison={40, 50}
+	resenergy={40, 50}
+	meditation={0}
+	evaluatingintel={0}
+	magery={0}
+	poisoning={ 0}
+	anatomy={0, 6.3}
+	magicresistance={66.1, 73.6}
+	tactics={93.0, 109.9}
+	wrestling={92.6, 107.2}
+	fame=7000
+	karma=-7000
+
+on=@npcrestock
+	item=i_gold,{644 644}
+	//item=tm_magic_items
+
+[chardef 281]
+name=Minotaur Scout
+defname=c_minotaur_scout
+soundnotice=0597
+soundidle=0596
+soundhit=0599
+soundgethit=059a
+sounddie=059c
+ICON=i_pet_dragon
+dam=11, 20
+ARMOR=50
+RESOURCES=15 i_ribs_raw,10 i_hide
+CAN=MT_WALK|MT_RUN
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_orc
+FOODTYPE=55 i_ribs_raw
+AVERSIONS=e_carnivores3
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Minotaur Scout
+
+on=@create
+	npc=brain_monster
+	str={353, 375}
+	dex={111, 130}
+	int={34, 50}
+	maxhits={354, 383}
+	resphysical={55, 65}
+	resfire={25, 35}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={30, 40}
+	anatomy={0}
+	magicresistance={60.6, 67.5}
+	tactics={86.9, 103.6}
+	wrestling={85.6, 104.5}
+	fame=5000
+	karma=-5000
+
+ON=@NpcRestock
+	item=i_gold,{455 455}
+	//item=tm_magic_items
+
+[chardef 267]
+defname=c_Troglodyte
+name=Troglodyte
+sound=059f
+ICON=i_worldgem_bit
+dam=11, 14
+armor=28
+RESOURCES=1 i_ribs_raw
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Troglodyte
+
+ON=@Create
+	NPC=brain_monster
+	str={148, 217}
+	dex={91, 120}
+	int={51, 70}
+	maxhits={302, 340}
+	resphysical={30, 35}
+	resfire={20, 30}
+	rescold={35, 40}
+	respoison={30, 40}
+	resenergy={30, 40}
+	anatomy={70.5, 94.8}
+	magicresistance={51.8, 65.0}
+	tactics={80.4, 94.7}
+	wrestling={70.2, 93.5}
+	healing={70.0, 95.0}
+	fame=5000
+	karma=-5000
+
+ON=@NpcRestock
+	item=i_gold,{431 481}
+	//item=tm_magic_items
+	item=i_bandage,{2 5}
+	//item=i_primitive_flesh
+	//item=i_treasure_map2,R99
+
+[chardef 271]
+defname=c_Satyr
+name=Satyr
+sound=0586
+ICON=i_worldgem_bit
+dam=13, 24
+ARMOR=15
+RESOURCES=15 i_ribs_raw
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Satyr
+
+ON=@Create
+	NPC=brain_monster
+	str={177, 195}
+	dex={251, 269}
+	int={153, 170}
+	maxhits={350, 400}
+	resphysical={55, 60}
+	resfire={25, 35}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={55.0, 65.0}
+	tactics={80.0, 100.0}
+	wrestling={80.0, 100.0}
+	musicianship={100}
+	discordange={100}
+	provocation={100}
+	peacemaking={100}
+	fame=5000
+	karma=0
+
+ON=@NpcRestock
+	item=i_gold,{125 250}
+	//ITEM=random_scroll
+
+
+[chardef 245]
+defname=c_Yomotsu_Warrior
+name=Yomotsu Warrior
+SOUND=0452
+ICON=i_pet_yomotsu_warrior
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+dam=8, 10
+ARMOR=15
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS|MT_EQUIP
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=60
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Yomotsu Warrior
+
+ON=@Create
+	NPC=brain_monster
+	str={486, 530}
+	dex={151, 165}
+	int={17, 31}
+	maxhits={486, 530}
+	maxmana={17, 31}
+	resphysical={65, 85}
+	resfire={30, 50}
+	rescold={45, 65}
+	respoison={35, 55}
+	resenergy={25, 50}
+	anatomy={85.1, 95.0}
+	magicresistance={82.6, 90.5}
+	tactics={95.1, 105.0}
+	wrestling={97.6, 107.5}
+	fame=4200	
+	karma=-4200
+
+ON=@NpcRestock
+	item=i_gold,{600 700}
+	//item=tm_magic_items
+	item=random_footwear
+	item=i_axe_exec
+	item=random_pants
+	item=i_gourd
+	item=random_jewel,2
+	//item=i_treasure_map3,R99
+	item=i_seed_bonsai
+
+[chardef 253]
+defname=c_Yomotsu_Priest
+name=Yomotsu Priest
+SOUND=0452
+ICON=i_pet_yomotsu_priest
+dam=8, 10
+ARMOR=18
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=60
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Yomotsu Mage
+
+ON=@Create
+	NPC=brain_monster
+	str={486, 530}
+	dex={101, 115}
+	int={601, 670}
+	maxhits={486, 530}
+	resphysical={65, 85}
+	resfire={30, 50}
+	rescold={45, 65}
+	respoison={35, 55}
+	resenergy={25, 50}
+	evaluatingintel={92.6, 107.5}
+	magery={105.1, 115.0}
+	meditation={100.1, 110.0}
+	magicresistance={112.6, 122.5}
+	tactics={55.1, 105.0}
+	wrestling={47.6, 57.5}
+	fame=9000
+	karma=-9000
+
+ON=@NpcRestock
+	item=i_gold,{700 1000}
+	//item=tm_magic_items
+	item=random_footwear
+	item=i_axe_exec
+	item=random_pants
+	item=i_gourd
+	item=random_jewel,2
+	//item=i_treasure_map3,R99
+	item=i_seed_bonsai
+
+
+[chardef 255]
+defname=c_Yomotsu_Elder
+name=Yomotsu Elder
+SOUND=snd_yomotsu
+ICON=i_pet_yomotsu_elder
+dam=19, 27
+ARMOR=22
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN	//|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=60
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Elder Yomotsu
+
+ON=@Create
+	NPC=brain_monster
+	str={686, 830}
+	dex={251, 365}
+	int={17, 31}
+	maxhits={801, 900}
+	resphysical={65, 85}
+	resfire={30, 50}
+	rescold={45, 65}
+	respoison={35, 55}
+	resenergy={25, 50}
+	anatomy={115.1, 130.0}
+	magicresistance={100.1, 120.0}
+	tactics={115.1, 130.0}
+	wrestling={110.1, 130.0}
+	fame=12000
+	karma=-12000
+
+ON=@NpcRestock
+	item=i_gold,1500 1800}
+	//item=tm_magic_items
+	item=random_footwear
+	item=i_axe_exec
+	item=random_pants
+	item=i_gourd
+	item=random_jewel,2
+	//item=i_treasure_map3,R99
+	item=i_seed_bonsai
+
+
+[chardef 240]
+defname=c_kappa
+name=Kappa
+sound=0508
+ICON=i_pet_kappa
+dam=6, 12
+ARMOR=15
+CAN=MT_WALK|MT_SWING	//|MT_USEHANDS
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Kappa
+
+ON=@Create
+	NPC=brain_monster
+	str={186, 230}
+	dex={51, 75}
+	int={41, 55}
+	maxmana={30}
+	maxhits={151, 180}
+	resphysical={35, 50}
+	resfire={35, 50}
+	rescold={25, 50}
+	respoison={35, 50}
+	resenergy={20, 30}
+	magicresistance={60.1, 70.0}
+	tactics={79.1, 89.0}
+	wrestling={60.1, 70.0}
+	fame=1700
+	karma=-1700
+
+ON=@NpcRestock
+	item=i_gold,{175 225}
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+	//item=i_treasure_map2,R99
+
+[CHARDEF 250]
+Name=Tsuki Wolf
+DEFNAME=c_tsuki_wolf
+ARMOR=35
+CAN=MT_WALK|MT_RUN
+SOUND=snd_tsuki_wolf
+ICON=i_pet_tsukiwolf
+resources=25 i_hide, 4 i_ribs_raw
+dam=14, 18
+//RESDISPDNID=c_dog
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Tsuki Wolf
+
+on=@create
+	NPC=BRAIN_MONSTER
+	str={401, 450}
+	dex={151, 200}
+	int={66, 76}
+	maxhits={376, 450}
+	maxmana={40}
+	resphysical={40, 60}
+	resfire={50, 70}
+	rescold={50, 70}
+	respoison={50, 70}
+	resenergy={50, 70}
+	anatomy={65.1, 72.0}
+	magicresistance={65.1, 70.0}
+	tactics={95.1, 110.0}
+	wrestling={97.6, 107.5}
+	necromancy={20.0}
+	spiritspeak={20.0}
+	anatomy={40.0, 50.0}
+	detectinghidden={100.0}
+	parrying={90.0, 100.0}
+	fame=8500
+	karma=-8500
+
+on=@npcrestock
+	item=i_gold,{900 1200}
+	//item=tm_magic_items
+	item={random_body_parts_1 1 random_body_parts_2 1}
+	item=random_bones
+	item=random_armor
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+	//item=i_treasure_map3,R99
+
+[chardef 724]
+defname=c_Gremlin
+name=gremlin
+sound=05fe
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={106}
+	dex={130}
+	int={36}
+	maxhits={70}
+	resphysical={26}
+	resfire={36}
+	rescold={22}
+	respoison={17}
+	resenergy={30}
+	anatomy={78.5}
+	magicresistance={82.5}
+	tactics={65.3}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{60 200}
+	item=i_arrow,{60 80}
+	item=i_fruit_apple,5
+	
+
+[chardef c_goblin_green_alchemist]
+name=green goblin alchemist
+id=c_goblin_green
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={282, 331}
+	dex={62, 79}
+	int={100, 149}
+	maxhits={163, 197}
+	maxstam={62, 79}
+	maxmana={100, 149}
+	resphysical={40, 50}
+	resfire={45, 55}
+	rescold={30, 40}
+	respoison={35, 45}
+	resenergy={11, 20}
+	magicresistance={120.3, 129.2}
+	tactics={81.9, 87.1}
+	anatomy={0.0, 0.0}
+	wrestling={94.8, 106.9}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{60 60}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_bola_ball,R20
+	item={i_bottle_wine 1}
+	item=i_goblin_blood
+
+
+[chardef 723]
+defname=c_goblin_green
+name=green goblin
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={252, 343}
+	dex={60, 74}
+	int={117, 148}
+	maxhits={162, 208}
+	maxstam={60, 74}
+	maxmana={117, 148}
+	resphysical={40, 50}
+	resfire={30, 39}
+	rescold={27, 35}
+	respoison={11, 20}
+	resenergy={10, 20}
+	magicresistance={120.5, 128.8}
+	tactics={80.9, 89.9}
+	anatomy={83.1, 89.6}
+	wrestling={93.0, 108.3}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{60 60}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_bola_ball,R20
+	item={i_bottle_wine 1}
+	item=i_goblin_blood
+
+
+[chardef c_goblin_green_scout]
+defname=c_goblin_green_scout		
+name=green goblin scout
+id=c_goblin_green
+sound=045A
+dam=5, 7
+
+on=@create
+	npc=brain_monster
+	str={276, 309}
+	dex={65, 79}
+	int={107, 146}
+	maxhits={174, 198}
+	maxmana={107, 146}
+	maxstam={65, 79}
+	resphysical={41, 49}
+	resfire={33, 39}
+	rescold={26, 33}
+	respoison={14, 20}
+	resenergy={11, 20}
+	magicresistance={90.7, 98.8}
+	tactics={80.9, 86.3}
+	wrestling={107.7, 119.5}
+	anatomy={80.3, 88.2}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{60 60}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_bola_ball,R20
+	item={i_bottle_wine 1}
+	item=i_goblin_blood
+
+
+
+[chardef c_goblin_gray]
+defname=c_goblin_gray
+id=c_goblin_green
+name=gray goblin
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	color=1900
+	npc=brain_monster
+	str={258, 327}
+	dex={62, 80}
+	int={103, 150}
+	maxhits={159, 194}
+	maxstam={62, 80}
+	maxmana={103, 150}
+	resphysical={40, 50}
+	resfire={30, 40}
+	rescold={25, 32}
+	respoison={10, 19}
+	resenergy={10, 20}
+	magicresistance={120.9, 129.1}
+	tactics={80.6, 89.4}
+	anatomy={80.3, 89.4}
+	wrestling={96.1, 105.5}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{60 60}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_bola_ball,R20
+	item={i_bottle_wine 1}
+	item=i_goblin_blood
+
+
+[chardef c_goblin_gray_keeper]
+defname=c_goblin_gray_keeper
+name=gray goblin keeper
+id=c_goblin_green
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	color=1900
+	str={326}
+	dex={79}
+	int={114}
+	maxhits={186}
+	maxstam={79}
+	maxmana={114}
+	resphysical={45}
+	resfire={33}
+	rescold={25}
+	respoison={20}
+	resenergy={10}
+	magicresistance={129.9}
+	tactics={86.7}
+	anatomy={86.6}
+	wrestling={103.6}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{60 60}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_bola_ball,R20
+	item={i_bottle_wine 1}
+	item=i_goblin_blood
+
+
+[chardef c_goblin_gray_mage]
+defname=c_goblin_gray_mage
+name=gray goblin mage
+id=c_goblin_green
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	color=1900
+	str={227, 285}
+	dex={70, 88}
+	int={451, 499}
+	maxhits={129, 151}
+	maxstam={70, 88}
+	maxmana={451, 499}
+	resphysical={40, 50}
+	resfire={30, 40}
+	rescold={25, 32}
+	respoison={10, 19}
+	resenergy={10, 20}
+	magicresistance={141.9, 147.1}
+	tactics={80.7, 86.9}
+	anatomy={81.9, 89.4}
+	wrestling={90.5, 104.2}
+	magery={105.5, 119.1}
+	evaluatingintel={94.9, 107.7}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{60 60}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_bola_ball,R20
+	item={i_bottle_wine 1}
+	item=i_goblin_blood
+
+
+
+[chardef 334]
+defname=c_goblin_green_enslaved
+name=Enslaved Green Goblin
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={326, 326}
+	dex={71, 71}
+	int={126, 126}
+	maxhits={184, 184}
+	maxstam={71, 71}
+	maxmana={126, 126}
+	resphysical={40, 40}
+	resfire={38, 39}
+	rescold={31, 32}
+	respoison={12, 12}
+	resenergy={10, 11}
+	magicresistance={121.6, 122.9}
+	tactics={80.0, 81.2}
+	anatomy={82.0, 83.4}
+	wrestling={99.2, 99.4}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{30 40}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_goblin_blood
+	item=i_essence_control
+
+
+[chardef c_goblin_green_alchemist_enslaved]
+defname=c_goblin_green_alchemist_enslaved
+name=Enslaved Green Goblin Alchemist
+id=c_goblin_green
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={289, 289}
+	dex={72, 72}
+	int={113, 113}
+	maxhits={196, 196}
+	maxstam={72, 72}
+	maxmana={113, 113}
+	resphysical={45, 49}
+	resfire={50, 53}
+	rescold={25, 30}
+	respoison={40, 42}
+	resenergy={15, 18}
+	magicresistance={124.1, 126.2}
+	tactics={75.3, 83.6}
+	anatomy={0.0, 0.0}
+	wrestling={90.4, 94.7}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{30 40}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_goblin_blood
+	item=i_essence_control
+
+
+[chardef c_goblin_gray_enslaved]
+defname=c_goblin_gray_enslaved
+name=Enslaved Gray Goblin
+id=c_goblin_green_enslaved
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	color=1900
+	npc=brain_monster
+	str={321, 321}
+	dex={64, 64}
+	int={147, 147}
+	maxhits={179, 179}
+	maxstam={64, 64}
+	maxmana={147, 147}
+	resphysical={50, 50}
+	resfire={38, 38}
+	rescold={32, 32}
+	respoison={12, 12}
+	resenergy={11, 11}
+	magicresistance={121.6, 121.6}
+	tactics={90.0, 90.0}
+	anatomy={82.0, 82.0}
+	wrestling={99.2, 99.2}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{30 40}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_goblin_blood
+	item=i_essence_control
+
+
+[chardef c_goblin_scout_enslaved]
+defname=c_goblin_scout_enslaved
+name=Enslaved Goblin Scout
+id=c_goblin_green_enslaved
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={320, 320}
+	dex={74, 74}
+	int={112, 112}
+	maxhits={182, 182}
+	maxstam={74, 74}
+	maxmana={112, 112}
+	resphysical={42, 42}
+	resfire={33, 33}
+	rescold={30, 30}
+	respoison={14, 14}
+	resenergy={18, 18}
+	magicresistance={95.0, 95.0}
+	tactics={80.0, 86.9}
+	anatomy={82.0, 89.3}
+	wrestling={99.2, 113.7}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{30 40}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_goblin_blood
+	item=i_essence_control
+
+[chardef c_goblin_mage_enslaved]
+defname=c_goblin_mage_enslaved
+name=Enslaved Goblin Mage
+id=c_goblin_green_enslaved
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={297, 297}
+	dex={94, 94}
+	int={510, 510}
+	maxhits={174, 174}
+	maxstam={94, 94}
+	maxmana={510, 510}
+	resphysical={22, 22}
+	resfire={36, 37}
+	rescold={39, 39}
+	respoison={43, 43}
+	resenergy={14, 14}
+	magicresistance={121.6, 149.7}
+	tactics={80.0, 85.2}
+	anatomy={82.0, 86.6}
+	wrestling={99.2, 106.4}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{30 40}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_goblin_blood
+	item=i_essence_control
+
+[chardef c_goblin_keeper_enslaved]
+defname=c_goblin_keeper_enslaved
+name=Enslaved Goblin Keeper
+id=c_goblin_green_enslaved
+sound=045A
+can=mt_walk|mt_run	//|mt_usehands
+dam=5, 7
+armor=28
+resources=1 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={297, 297}
+	dex={80, 80}
+	int={118, 118}
+	maxhits={174, 174}
+	maxstam={80, 80}
+	maxmana={118, 118}
+	resphysical={47, 47}
+	resfire={37, 37}
+	rescold={29, 29}
+	respoison={10, 11}
+	resenergy={19, 19}
+	magicresistance={121.6, 122.2}
+	tactics={80.0, 82.8}
+	anatomy={82.0, 84.8}
+	wrestling={99.2, 100.7}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{30 40}
+	//item=tm_magic_items
+	item=random_jewel
+	item=i_goblin_blood
+	item=i_essence_control
+
+
+[chardef c_Niporailem]
+defname=c_Niporailem
+name=Niporailem
+id=c_undead_guardian
+sound=1606
+can=mt_walk|mt_run	//|mt_usehands|mt_equip
+dam=15, 27
+
+on=@create
+	npc=brain_monster
+	Title = the Thief
+	str={1000, 1200}
+	dex={1200}
+	int={1200}
+	maxhits={10000, 10500}
+	resphysical={34, 46}
+	resfire={0}
+	rescold={31, 49}
+	respoison={100}
+	resenergy={31, 49}
+	magicresistance={87.7, 93.5}
+	tactics={56.1, 65.0}
+	wrestling={68.8, 76.2}
+	evaluatingintel={120.0}
+	magery={120.0}
+	meditation={120.0}
+	necromancy={120.0}
+	spiritspeak={120.0}
+	fame=15000
+	karma=-15000
+
+on=@npcestock
+	item=i_gold,{2000 2000}
+	//item=tm_magic_items
+	item=i_undying_flesh
+	item=i_tattered_scroll
+	item=artifacts
+
+[chardef 0271]
+defname=c_saytr
+name=Saytr
+sound=0586
+can=mt_walk|mt_run	//|mt_usehands|mt_equip
+dam=13,24
+armor=55,60
+
+on=@create
+	npc=brain_monster
+	Str={177, 195}
+	Dex={251, 260}
+        Int={153, 170}
+	Maxhits={350, 400}
+        ResPhysical={55, 60}
+        ResFire={25, 35}
+        ResCold={30, 40}
+        ResPoison={30, 40}
+        ResEnergy={30, 40}
+	MagicResistance={55.0, 65.0}
+	Tactics={80.0, 100.0}
+	Wrestling={80.0, 100.}
+	Musicianship=100.0
+	Discordance=100.0
+	Provocation=100.0
+	Peacemaking=100.0
+	Fame=5000
+
+
+
+
+[EOF]
+
+
+
+
+
+
+
+

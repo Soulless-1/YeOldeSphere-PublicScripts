@@ -1,0 +1,26 @@
+serv.trigger once a day calculate all faction players titles	(make it 10am, also do point atrophy during this time)
+
+Death at the hands of a Faction Enemy
+In order to add more permanence to the results of faction battles, and add meaning to death in combat without inflicting further economic damage upon the deceased, faction
+ players are subject to a temporary skill loss penalty of 33% when slain by a faction opponent. As described in the time-based operations chart, this penalty lasts 20 minutes.
+ This penalty is also applied if a faction character commits "suicide".
+Note: This penalty is not applied when a faction player is killed by a non-faction player, faction mate, or non-enemy faction monster.
+
+Faction players that do damage to an enemy faction player will be added to the list of people that can freely loot the enemies body should he die.
+When a faction player reaches full health, the list of people that can freely loot his body will be cleared.
+Damage done to an enemy faction member by a placed faction trap will add the trapper to list of people that can freely loot the enemies boady.
+
+
+Faction Scrolls: These are Faction Imbued scrolls of heal, greater heal, harm, fireball, and lightning. These scrolls may be used by a pplayer of at least 90 inscribing skill
+ upon a faction-crafted gnarled staff, in order to charge the staff with a number of charges of that spell. The number of charges is equal to 40 divided by the circle of that
+ spell (rounded down). Example: A lightning scroll would provide the staff with 10 charges of lightning, a fireball scroll would provide 13 charges of fireball, and so forth.
+ Staffs (staves) cannot be recharged. A new staff must be created in order to accept a new enchantment.
+
+You and your guild will officially be out of the faction in 7 days.
+
+Atrophy
+Atrophy is a silent distribution of points, taken from inactive players, over a repeating 7 day cycle.
+Any member who has died in faction battle within the past 7 days will be considered active and not lose any points to atrophy. Any player who has killed another faction
+ member in faction battle has a 33% chance of being considered active (and hence, not lose any points). Any player who has not died, nor counted as an active player from
+ killing another is subject to atrophy. Atrophy will take 10% of each inactive player's points. Points taken by atrophy are collected in one 'pool' and then are distributed
+ one at a time randomly, among all active faction players. It does not matter which faction the points are taken from nor which faction the active players belong too.

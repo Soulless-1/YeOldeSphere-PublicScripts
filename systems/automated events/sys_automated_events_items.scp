@@ -1,0 +1,90 @@
+//Automated Event System by Soulless
+//v0.1
+//10:35 AM 7/7/2022
+
+[itemdef i_automated_event_controller]
+defname=i_automated_event_controller
+name=Automated Event Controller
+id=i_crystal_green_big
+type=t_script
+
+on=@create
+color=0480
+
+on=@dclick
+if !(<src.isgm>)
+  src.sysmessage You lack the privledges to use that item.
+  return 1
+endif
+sdialog d_automated_event_controller
+return 1
+
+[itemdef i_automated_event_staging_gate]
+defname=i_automated_event_staging_gate
+id=i_moongate_blue
+name=Event Staging Area
+type=t_telepad
+
+on=@create
+color=0480
+attr=010
+
+on=@step
+if !(<src.isgm>)
+  src.sysmessage In development please be patient...
+  return 1
+endif
+
+[itemdef i_automated_event_signup_board]
+defname=i_automated_event_signup_board
+id=i_bulletin_board
+name=Automated Event Signup Board
+type=t_automated_event_signup_board
+
+on=@create
+color=0480
+attr=010
+
+//////////////////////////////
+// ENTERING Event
+
+[itemdef i_automated_event_entering]
+defname=i_automated_event_entering
+name=Entering Automated Event
+id=i_memory
+type=t_eq_script
+layer=layer_special
+tevents=t_automated_event_countdown
+
+on=@destroy
+topobj.f_automated_event_enter
+
+////////////////////////////////////
+// EXITING Event
+
+[itemdef i_automated_event_exiting]
+defname=i_automated_event_exiting
+name=Exiting Automated Event
+id=i_memory
+type=t_eq_script
+layer=layer_special
+tevents=t_automated_event_countdown
+
+on=@destroy
+topobj.f_automated_event_exit
+
+//This is for event controller items
+
+[itemdef i_automated_event_deathmatch]
+defname=i_automated_event_deathmatch
+name=Automated Event (Deathmatch)
+id=i_shield_chaos
+type=t_automated_event
+
+on=@create
+attr=attr_move_never|attr_invis
+color=026
+more1=0		//event type
+
+
+[EOF]

@@ -1,0 +1,134 @@
+//Trapped Containers by Soulless v1.0
+//v1.0
+//4:55 PM 9/8/2017
+
+[typedef t_trapped_container]
+//only can place traps on lockable boxes. not bags or doors.
+//damage varies on skill of the tinkerer
+//explosion traps do the most damage, grandmaster explosions traps will almost always kill the opener
+//poison traps administer level 5 poison, if not cured quickly the player will die
+//lesser explosion and poison traps are as effective as greater poison and explosion potions
+//telekinesis can be used on player trapped boxes
+
+//MOREX - trap type
+//MOREY - quality
+//LINK - uid of the player who trapped the container
+
+on=@dclick
+if (<type> == t_container_locked) 	//don't fire if the container is locked and doesnt open
+  if (<src.distance <uid>> > 2) && (<src.action>==skill_magery) && (<src.actarg1>==21)	//using telekenisis
+    local.telekinesis=1
+  endif
+  args=<morep>
+  if (<morex>==1)	//dart trap
+    src.damage <qval <local.telekinesis>?0:<morey>> dam_physical <link>
+    src.message A dart imbeds itself in your flesh!
+    src.effect 3,i_xbolt,6,15,1,0	
+    src.sound 0223
+  elseif (<morex>==2)	//poison trap
+    src.damage <qval <local.telekinesis>?0:<morey>> dam_poison <link>
+    src.message You are enveloped in a noxious green cloud!
+    src.effect 3,i_trap_gas,6,25,1,0
+    src.sound 0231
+  elseif (<morex>==3)		//explosion trap
+    src.damage <qval <local.telekinesis>?0:<morey>> dam_fire <link>
+    src.message Your skin blisters from the heat!
+    src.effect 3,i_fx_explode,6,15,1,0
+    src.sound 0307
+  endif
+  src.bark 3
+  message You set off a trap!
+  events=-t_trapped_container
+endif
+
+[function f_trap_container]	//trapcontainer,[type 1-3],[strength],[uid of the person who trapped it]
+//if (!<isevent.t_container_locked>) && (!<isevent.t_container>) && (!<type>==t_container_locked) && (!<type>==t_container)
+  //serv.log cannot trap <uid>, non-container item.		//shouldnt need this here, just do proper checks beforehand.
+  //return 1
+//endif
+events=+t_trapped_container
+morex=<argv[0]>
+morey=<argv[1]>
+if !(<isempty <argv[2]>>)
+  link=<argv[2]>
+endif
+
+///////////////////////////
+// Trap Kits
+
+[itemdef i_trap_kit_dart]
+id=01bfc
+name=Dart Trap
+type=t_trap_kit
+skillmake=tinkering 33.0
+resources=i_ingot_iron 1, i_xbolt 1
+
+on=@create
+more1=1
+more2=30	//300
+dispid=01eb8
+color=05b
+
+[itemdef i_trap_kit_poison]
+id=0113e
+name=Poison Trap
+type=t_trap_kit
+skillmake=tinkering 30.0
+resources=i_ingot_iron 1, i_potion_poison 1
+
+on=@create
+more1=2
+more2=30	//300
+dispid=01eb8
+color=042
+
+[itemdef i_trap_kit_explosion]
+id=036b2
+name=Explosion Trap
+type=t_trap_kit
+skillmake=tinkering 55.0
+resources=i_ingot_iron 1, i_potion_explosion 1
+
+on=@create
+more1=3
+more2=55	//550
+dispid=01eb8
+color=010
+attr |= attr_move_always
+
+[typedef t_trap_kit]
+
+on=@dclick
+target What would you like to set a trap on?
+return 1
+
+on=@targon_item
+if (<src.targ.distance> > 2)
+  src.sysmessage That is too far away.
+  return 1
+elseif (<src.targ.attr>&attr_move_never) || (<src.targ.isevent.ei_house_lockdown>) || (<src.targ.isevent.ei_house_secure>)
+  src.sysmessage You cannot trap this item because it is locked down.
+  return 1
+elseif (<src.targ.topobj.ischar>) && (<src.targ.topobj> != <src>)
+  src.sysmessage That belongs to someone else.
+  return 1
+elseif (<src.targ.type>==t_container_locked) || (<src.targ.isevent.t_container_locked>)
+  src.sysmessage You can only trap an unlocked object.
+  return 1
+elseif !(<src.targ.islockablecont>)
+  src.sysmessage You can only trap lockable chests.
+  return 1
+elseif (<src.targ.type> == t_trapped_container) || (<src.targ.isevent.t_trapped_container>)
+  src.sysmessage You can only place one trap on an object at a time.
+  return 1
+endif
+
+src.targ.f_trap_container <more1>,<more2>,<src>
+consume
+//src.sysmessage You have trapped the <src.targ.name> with your <name>
+src.sysmessage Trap is disabled until you lock the chest.
+src.sound 0241
+return 1
+
+
+[EOF]

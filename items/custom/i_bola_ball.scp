@@ -1,0 +1,184 @@
+//Bola balls by Soulless
+//v1.0
+//2:53 PM 5/13/2021
+
+[itemdef i_bola_ball]
+defname=i_bola_ball
+id=0E73
+name=bola ball
+type=t_normal
+skillmake=45.0 tinkering
+resources=10 i_ingot_iron
+weight=4.0
+
+[itemdef i_bola]
+defname=i_bola
+id=026ac
+name=bola
+type=t_normal
+skillmake=60.0 tinkering
+resources=4 i_bola_ball, 3 i_hides_cut
+weight=4.0
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage The bola must be in your pack to use it.
+  return 1
+elseif (<src.findid.i_memory_bola_throwing>) || (<src.findid.i_memory_bola_cooldown>)
+  src.sysmessage You have to wait a few moments before you can use another bola!
+  return 1
+elseif (<more1>)
+  src.sysmessage This bola is already being used.
+  return 1
+elseif (<src.findlayer.1.isvalid>) || (<src.findlayer.2.isvalid>)
+  src.sysmessage Your hands must be free to use this
+  return 1
+elseif (<src.findlayer.25>) 
+  src.sysmessage You can't use this while on a mount.
+  return 1
+elseif (<src.flags>&statf_polymorph) 
+  src.sysmessage You can't use this while in this form.
+  return 1
+endif
+src.emote begin to menacingly swing the bola...
+target
+return 1
+
+on=@targon_ground
+src.sysmessage You cannot throw a bola at that.
+return 1
+
+on=@targon_item
+src.sysmessage You cannot throw a bola at that.
+return 1
+
+on=@targon_char
+if (<topobj> != <src>)
+  srcsysmessage The bola must be in your pack to use it.
+  return 1
+elseif !(<src.canseelos <src.targ>>) || (<src.distance <src.targ>> > 15)
+  src.sysmessage You cannot see that target!
+  return 1
+elseif (<src.findlayer.25>) 
+  src.sysmessage You can't use this while on a mount.
+  return 1
+elseif (<src.flags>&statf_polymorph) || (<src.body> != <src.obody>)
+  src.sysmessage You can't use this while in this form
+  return 1
+//elseif (<src.targ.baseid>==c_chaos_dragoon) || (<src.targ.baseid>==c_chaos_dragoon_elite)
+  //src.sysmessage You fail to knock the rider from its mount.
+  //return 1
+elseif !(<src.targ.mount>) || (<src.targ.flags>&statf_invul) || (<src.targ.flags>&statf_dead) || (<src.targ> == <src>)
+  src.sysmessage You have no reason to throw a bola at that.
+  return 1
+endif
+serv.newitem i_memory_bola_throwing
+new.link=<src.targ>	//target of bola
+new.more2=<uid>		//uid of the bola throwng
+src.equip <new>
+new.timer=3
+return 1
+
+[itemdef i_memory_bola_throwing]
+defname=i_memory_bola_throwing
+name=Throwing Bola
+id=i_bola
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+ref1=<topobj>	//thrower
+ref2=<link>	//target
+ref3=<more2>	//bola uid
+remove		//get rid of throw throwing bola memory
+if (<ref3.topobj> != <ref1>)
+  ref1.sysmessage The bola must be in your pack to use it.
+  return 1
+elseif !(<ref1.canseelos <ref2>>) || (<ref1.distance <ref2>> > 15)
+  ref1.sysmessage You cannot see that target!
+  return 1
+elseif (<ref1.findlayer.25>) 
+  ref1.sysmessage You can't use this while on a mount.
+  return 1
+elseif (<ref1.flags>&statf_polymorph) || (<ref1.body> != <ref1.obody>)
+  ref1.sysmessage You can't use this while in this form
+  return 1
+//elseif (<ref2.baseid>==c_chaos_dragoon) || (<ref2.baseid>==c_chaos_dragoon_elite)
+  //ref1.sysmessage You fail to knock the rider from its mount.
+  //return 1
+elseif !(<ref2.mount>) || (<ref2.flags>&statf_invul) || (<ref2.flags>&statf_dead) || (<ref2> == <src>)
+  ref1.sysmessage You have no reason to throw a bola at that.
+  return 1
+endif
+serv.newitem i_memory_bola_cooldown	//cooldown for thrower
+new.timer=12
+ref1.equip <new>
+ref1.attack <ref2>		
+ref2.dismount				//knock target off mount
+ref2.effect=3,i_fx_smoke,6,15,1
+ref2.sysmessage You have been knocked off of your mount by <topobj.name>	
+serv.newitem i_memory_bola_dazed	
+new.link=<ref1>
+new.timer=12
+ref2.equip <new>
+ref2.effect=0,<ref3.id>,6,15,0,<ref3.color>,0
+ref3.consume 1
+serv.newitem i_bola		//put the bola on the ground by target
+new.timer=<eval (<serv.decaytimer>*60)>
+new.p=<ref2> 
+return 1
+
+[itemdef i_memory_bola_cooldown]
+id=i_memory
+type=t_eq_script
+name=Bola Cooldown
+
+on=@equip
+src.events=+e_bola_thrown
+
+on=@timer
+topobj.events=-e_bola_thrown
+remove
+return 1
+
+[events e_bola_thrown]
+
+on=@mount
+src.sysmessage You cannot mount while recovering from a bola throw.
+return 1
+
+on=@itemdclick
+if (<act.type>==t_ethereal_statuette)
+  sysmessage You cannot mount while recovering from a bola throw.
+  return 1
+endif
+
+[itemdef i_memory_bola_dazed]
+id=i_memory
+type=t_eq_script
+name=Dazed by Bola
+
+on=@equip
+src.events=+e_bola_dazed
+
+on=@timer
+topobj.events=-e_bola_dazed
+remove
+return 1
+
+[events e_bola_dazed]
+
+on=@mount
+sysmessage You are still too dazed from being knocked off your mount to ride!
+return 1
+
+on=@itemdclick
+if (<act.type>==t_ethereal_statuette)
+  sysmessage You are still too dazed from being knocked off your mount to ride!
+  return 1
+endif
+
+
+
+
+[EOF]

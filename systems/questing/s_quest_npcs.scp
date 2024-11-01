@@ -1,0 +1,3272 @@
+//Quest NPCS by Soulless
+//v1.0
+//7:41 PM 11/4/2019
+//I referenced CloudBR's quest locations for all of these. They may not be OSI accurate
+
+
+[chardef c_escort_male]
+name=#names_humanmale
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=General Quests
+Description=Escort (male)
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+dorand 3
+  name .= " the noble"
+  name .= " the adventurer"
+  name .= " the traveler"
+enddo
+//flags=01000001
+f_quest_set_escortlocation
+itemnewbie=random_male_hair
+color=colors_hair
+itemnewbie=random_facial_hair
+color=match_hair
+
+on=@npcrestock
+item=random_light
+item=i_shirt_fancy
+color=colors_all
+item=i_pants_long
+color=colors_all
+color=colors_neutral
+item=i_cape
+color=colors_all
+item=i_sash
+color=colors_all
+item=random_boots
+item=i_sword_long
+item=backpack_loaded
+
+[chardef c_escort_female]
+name=#names_humanfemale
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=General Quests
+Description=Escort (female)
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+dorand 3
+  name .= " the noble"
+  name .= " the adventurer"
+  name .= " the traveler"
+enddo
+//flags=01000001
+tag0.quests=1
+f_quest_set_escortlocation
+itemnewbie=random_female_hair
+color=colors_hair
+
+on=@npcrestock
+item=random_light
+item=i_dress_full
+color=colors_neutral
+item=i_cape
+color=colors_all
+item=i_sash
+color=colors_all
+item=random_boots
+item=i_sword_long
+item=backpack_loaded
+
+
+//////////////////////////////
+//start of specific quest npcs
+
+[chardef c_Tiana_the_Guard]
+name=Tiana the Guard
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Tiana the Guard
+
+on=@create
+npc=2
+color=081e8
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=09
+tag0.quest1=037
+tag0.quest2=0ab
+tag0.quest3=066
+tag0.quest4=0ac
+tag0.quest5=03a
+tag0.quest6=026
+tag0.quest7=068
+tag0.quest8=067
+tag0.quest9=0ad
+itemnewbie=i_hair_elven_ml
+color=044e
+
+on=@npcrestock
+item=i_elven_boots
+item=i_elven_leaf_tunic
+item=i_elven_leaf_gloves
+item=i_elven_leaf_gorget
+item=i_elven_leaf_arms
+item=i_elven_leaf_tonlet
+item=i_elven_machete
+
+
+[chardef c_Canir_the_Thaumaturgist]
+name=Canir the Thaumaturgist
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Canir the Thaumaturgist
+
+on=@create
+npc=2
+color=0830a
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=02
+tag0.quest1=02c
+tag0.quest2=025
+itemnewbie=i_hair_elven_spike
+color=045b
+
+on=@npcrestock
+item=i_elven_robe
+item=i_staff_gnarled
+
+
+[chardef c_Lenley_the_Snitch]
+name=Lenley the Snitch
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lenley the Snitch
+
+on=@create
+npc=2
+color=08297
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=01
+tag0.quest1=0aa
+itemnewbie=i_hair_elven_flower
+color=0452
+
+on=@npcrestock
+item=i_hat_jester
+item=i_sash
+item=i_elven_shirt
+item=i_elven_pants
+item=i_elven_boots
+
+
+[chardef c_Boric_The_Vagabond]
+name=Boric The Vagabond
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Boric The Vagabond
+
+on=@create
+npc=2
+color=0405
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=01
+tag0.quest1=07e
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_shirt_plain
+color=015c
+item=i_pants_long
+color=022e
+item=i_boots_calf
+color=022e
+item=i_mask_bear
+color=0120
+
+
+[chardef c_Maul_the_Bear]
+name=Maul the Bear
+id=c_bear_brown
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Maul the Bear
+
+on=@create
+npc=1
+color=08fd
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=09a
+
+[chardef c_Unoelil_The_Bark_Weaver]
+name=Unoelil The Bark Weaver
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Unoelil The Bark Weaver
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=03
+tag0.quest1=010
+tag0.quest2=011
+tag0.quest3=012
+itemnewbie=i_hair_short1
+color=058
+
+on=@npcrestock
+item=i_elven_boots
+item=i_elven_leaf_gorget
+item=i_elven_leaf_tonlet
+color=058
+item=i_elven_leaf_arms
+color=058
+item=i_elven_woodland_chest
+color=037
+item=i_elven_leaf_gloves
+color=058
+
+
+[chardef c_Salaenih_The_Expeditionist]
+name=Salaenih The Expeditionist
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Salaenih The Expeditionist
+
+on=@create
+npc=2
+color=0bc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=010001
+tag0.quests=0a
+tag0.quest1=035
+tag0.quest2=034
+tag0.quest3=03d
+tag0.quest4=036
+tag0.quest5=013
+tag0.quest6=039
+tag0.quest7=04c
+tag0.quest8=04d
+tag0.quest9=04e
+tag0.quest10=04f
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_leather_cap
+item=i_shield_wood
+item=i_cape
+item=i_sword_long
+item=i_shirt_fancy
+item=i_elven_boots
+item=i_sash
+item=i_elven_pants
+
+
+[chardef c_Lorekeeper_Sierra_The_Keeper_Of_Tradition]
+name=Lorekeeper Sierra The Keeper Of Tradition
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lorekeeper Sierra The Keeper Of Tradition
+
+on=@create
+npc=2
+color=08297
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=04b
+itemnewbie=i_hair_elven_flower
+color=0bc
+
+on=@npcrestock
+item=i_cape
+color=02fc
+item=i_staff_black
+item=i_shoes_plain
+color=02fc
+item=i_elven_pants
+color=04ed
+item=i_elven_shirt_gray
+color=04ec
+
+
+[chardef c_Elder_Alejaha_The_Wise]
+name=Elder Alejaha The Wise
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Elder Alejaha The Wise
+
+on=@create
+npc=2
+color=0bc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=03b
+itemnewbie=i_hair_lf
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_woodland_gauntlets
+item=i_elven_specs
+item=i_elven_boots
+item=i_elven_pants
+item=i_elven_robe
+item=i_elven_shirt
+
+
+[chardef c_Anollythe_Bark_Weaver]
+name=Anollythe Bark Weaver
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Anollythe Bark Weaver
+
+on=@create
+npc=2
+color=0bc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=03
+tag0.quest1=010
+tag0.quest2=011
+tag0.quest3=012
+itemnewbie=i_hair_elven_flower
+color=037
+
+on=@npcrestock
+item=i_elven_robe
+item=i_elven_boots
+item=i_elven_specs
+item=i_staff_black
+
+
+[chardef c_Sleen_The_Trinket_Weaver]
+name=Sleen The Trinket Weaver
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Sleen The Trinket Weaver
+
+on=@create
+npc=2
+color=0835f
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=07
+tag0.quest1=07
+tag0.quest2=010
+tag0.quest3=012
+tag0.quest4=0c
+tag0.quest5=060
+tag0.quest6=061
+tag0.quest7=062
+itemnewbie=i_hair_elven_ml
+color=058
+
+on=@npcrestock
+item=i_elven_shirt_gray
+item=i_elven_boots
+item=i_elven_leaf_tunic_female
+item=i_elven_leaf_arms
+item=i_elven_leaf_tonlet
+
+
+[chardef c_Waelian_The_Trinket_Weaver]
+name=Waelian The Trinket Weaver
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Waelian The Trinket Weaver
+
+on=@create
+npc=2
+color=08251
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=06
+tag0.quest1=060
+tag0.quest2=012
+tag0.quest3=0c
+tag0.quest4=062
+tag0.quest5=07
+tag0.quest6=010
+itemnewbie=i_hair_elven_ml
+color=016
+
+on=@npcrestock
+item=i_elven_leaf_gloves
+item=i_elven_leaf_tonlet
+item=i_elven_shirt
+
+
+[chardef c_Cillitha_The_Bowcrafter]
+name=Cillitha The Bowcrafter
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Cillitha The Bowcrafter
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=06
+tag0.quest1=010
+tag0.quest2=02e
+tag0.quest3=02f
+tag0.quest4=030
+tag0.quest5=031
+tag0.quest6=032
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_elven_leaf_tonlet
+item=i_elven_leaf_gloves
+item=i_elven_leaf_gorget
+item=i_elven_leaf_arms
+item=i_elven_leaf_tunic_female
+item=i_elven_helm_raven
+item=i_elven_shirt_gray
+item=i_elven_boots
+item=i_dagger
+
+
+[chardef c_Vilo_The_Guard]
+name=Vilo The Guard
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Vilo The Guard
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=0b
+tag0.quest1=024
+tag0.quest2=026
+tag0.quest3=034
+tag0.quest4=019
+tag0.quest5=028
+tag0.quest6=029
+tag0.quest7=02d
+tag0.quest8=023
+tag0.quest9=02a
+tag0.quest10=066
+tag0.quest11=067
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_elven_quiver
+color=037
+item=i_elven_leaf_arms
+color=04a
+item=i_elven_leaf_gloves
+item=i_elven_leaf_tunic
+color=04a
+item=i_elven_leaf_tonlet
+color=04a
+item=i_elven_leaf_gorget
+item=i_elven_helm_winged
+item=i_elven_boots
+item=i_magical_shortbow
+color=04ac
+
+
+[chardef c_Braen_The_Thaumaturgist]
+name=Braen The Thaumaturgist
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Braen The Thaumaturgist
+
+on=@create
+npc=3
+color=08ab
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=02
+tag0.quest1=05e
+tag0.quest2=05f
+itemnewbie=i_hair_elven_mullet
+color=0474
+
+on=@npcrestock
+item=i_sandals
+item=i_robe
+color=014d
+
+
+[chardef c_Jusae_The_Bowcrafter]
+name=Jusae The Bowcrafter
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Jusae The Bowcrafter
+
+on=@create
+npc=2
+color=081ed
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=06
+tag0.quest1=02e
+tag0.quest2=02f
+tag0.quest3=030
+tag0.quest4=031
+tag0.quest5=032
+tag0.quest6=010
+itemnewbie=i_hair_elven_ml
+color=037
+
+on=@npcrestock
+item=i_radiant_scimitar
+item=i_elven_boots
+item=i_elven_pants
+color=02b0
+item=i_elven_shirt_gray
+color=02fb
+item=i_elven_woodland_gauntlets
+
+
+[chardef c_Aniel_The_Arborist]
+name=Aniel The Arborist
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Aniel The Arborist
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=0c
+tag0.quest2=0d
+tag0.quest3=0e
+tag0.quest4=0f
+itemnewbie=i_hair_elven_ml
+color=021
+
+on=@npcrestock
+item=i_male_kimono
+item=i_flower_garland
+item=i_staff_gnarled
+
+
+[chardef c_Tillanil_The_Wine_Tender]
+name=Tillanil The Wine Tender
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Tillanil The Wine Tender
+
+on=@create
+npc=2
+color=0824c
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=03
+tag0.quest1=063
+tag0.quest2=064
+tag0.quest3=065
+itemnewbie=i_hair_elven_long2
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_shirt_gray
+color=080
+item=i_elven_pants
+color=0210
+item=i_elven_boots
+color=0251
+
+
+[chardef c_Ben_The_Apprentice_Necromancer]
+name=Ben The Apprentice Necromancer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Ben The Apprentice Necromancer
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=01
+tag0.quest1=06c
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_elven_shirt
+item=i_elven_pants
+item=i_spellbook
+item=i_elven_boots
+item=i_elven_robe
+
+
+[chardef c_Lorekeeper_Broolol_The_Keeper_Of_Tradition]
+name=Lorekeeper Broolol The Keeper Of Tradition
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lorekeeper Broolol The Keeper Of Tradition
+
+on=@create
+npc=2
+color=083c6
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=02
+tag0.quest1=05c
+tag0.quest2=05d
+itemnewbie=i_hair_elven_flower
+color=037
+
+on=@npcrestock
+item=i_elven_boots
+item=i_elven_robe
+color=02fb
+item=i_elven_pants
+item=i_elven_shirt_gray
+item=i_mace_wildstaff
+
+
+[chardef c_Thallary_The_Cloth_Weaver]
+name=Thallary The Cloth Weaver
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Thallary The Cloth Weaver
+
+on=@create
+npc=2
+color=0830a
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=05
+tag0.quest1=06
+tag0.quest2=07
+tag0.quest3=08
+tag0.quest4=09
+tag0.quest5=0a
+itemnewbie=i_hair_elven_flower
+color=0159
+
+on=@npcrestock
+item=i_elven_leaf_gloves
+item=i_elven_boots
+item=i_elven_leaf_tunic_female
+item=i_elven_leaf_tonlet
+item=i_elven_shirt
+
+
+[chardef c_Lorekeeper_Ryal_The_Keeper_Of_Tradition]
+name=Lorekeeper Ryal The Keeper Of Tradition
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lorekeeper Ryal The Keeper Of Tradition
+
+on=@create
+npc=2
+color=0830f
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=0d
+tag0.quest2=048
+tag0.quest3=049
+tag0.quest4=04a
+itemnewbie=i_hair_elven_ml
+color=colors_hair
+
+on=@npcrestock
+item=i_ring_gold
+item=i_bracelet_gold
+item=i_cape
+color=02fc
+item=i_spellbook
+item=i_elven_specs
+item=i_elven_robe
+item=i_elven_shirt_gray
+item=i_elven_pants
+item=i_elven_boots
+
+
+[chardef c_Lorekeeper_Nillaen_The_Keeper_Of_Tradition]
+name=Lorekeeper Nillaen The Keeper Of Tradition
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lorekeeper Nillaen The Keeper Of Tradition
+
+on=@create
+npc=2
+color=082b0
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=06
+tag0.quest1=042
+tag0.quest2=043
+tag0.quest3=044
+tag0.quest4=045
+tag0.quest5=046
+tag0.quest6=047
+itemnewbie=i_hair_lf
+color=colors_hair
+
+on=@npcrestock
+item=i_flower_garland
+item=i_elven_boots
+item=i_elven_pants
+item=i_elven_shirt
+item=i_mace_wildstaff
+
+
+[chardef c_Brinnae_The_Wise]
+name=Brinnae The Wise
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Brinnae The Wise
+
+on=@create
+npc=2
+color=083c8
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=0b
+tag0.quest1=0e
+tag0.quest2=019
+tag0.quest3=01a
+tag0.quest4=01b
+tag0.quest5=01c
+tag0.quest6=01d
+tag0.quest7=01e
+tag0.quest8=01f
+tag0.quest9=020
+tag0.quest10=021
+tag0.quest11=022
+itemnewbie=i_hair_elven_spike
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_robe
+item=i_mace_wildstaff
+color=02fc
+
+
+[chardef c_Ahie_The_Cloth_Weaver]
+name=Ahie The Cloth Weaver
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Ahie The Cloth Weaver
+
+on=@create
+npc=2
+color=0bc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=05
+tag0.quest1=06
+tag0.quest2=07
+tag0.quest3=08
+tag0.quest4=09
+tag0.quest5=0a
+itemnewbie=i_hair_lf
+color=037
+
+on=@npcrestock
+item=i_mace_wildstaff
+color=021
+item=i_elven_boots
+item=i_elven_pants
+color=0184
+item=i_elven_shirt_gray
+color=011b
+
+
+[chardef c_Cailla_The_Guard]
+name=Cailla The Guard
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Cailla The Guard
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=0c
+tag0.quest1=019
+tag0.quest2=023
+tag0.quest3=024
+tag0.quest4=025
+tag0.quest5=026
+tag0.quest6=027
+tag0.quest7=028
+tag0.quest8=029
+tag0.quest9=02a
+tag0.quest10=02b
+tag0.quest11=02c
+tag0.quest12=02d
+itemnewbie=i_hair_short1
+color=037
+
+on=@npcrestock
+item=i_platemail_chest
+color=02fc
+item=i_platemail_arms
+color=02fc
+item=i_sprinter_legs
+color=02fc
+item=i_radiant_scimitar
+item=i_elven_woodland_gorget
+color=02fc
+item=i_elven_woodland_gauntlets
+item=i_elven_boots
+color=02fc
+item=i_cape
+color=02fc
+
+
+[chardef c_Clehin_The_Soil_Nurturer]
+name=Clehin The Soil Nurturer
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Clehin The Soil Nurturer
+
+on=@create
+npc=2
+color=08378
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=01f
+tag0.quest2=017
+tag0.quest3=033
+tag0.quest4=034
+itemnewbie=i_hair_elven_mullet
+color=021
+
+on=@npcrestock
+item=i_elven_shirt
+color=01c5
+item=i_elven_pants
+item=i_elven_boots
+item=i_mace_wildstaff
+
+
+[chardef c_Cloorne_The_Expeditionist]
+name=Cloorne The Expeditionist
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Cloorne The Expeditionist
+
+on=@create
+npc=2
+color=0409
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=07
+tag0.quest1=017
+tag0.quest2=035
+tag0.quest3=036
+tag0.quest4=037
+tag0.quest5=038
+tag0.quest6=039
+tag0.quest7=03a
+itemnewbie=i_hair_short
+color=colors_hair
+
+on=@npcrestock
+item=i_shirt_fancy
+item=i_elven_pants
+item=i_hat_feather
+item=i_elven_boots
+item=i_leather_gloves
+
+
+[chardef c_Lorekeeper_Calendor_The_Keeper_Of_Tradition]
+name=Lorekeeper Calendor The Keeper Of Tradition
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lorekeeper Calendor The Keeper Of Tradition
+
+on=@create
+npc=2
+color=0bc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=041
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_elven_robe
+color=02fc
+item=i_cape
+color=02fc
+item=i_elven_pants
+item=i_mace_wildstaff
+color=04ec
+
+
+[chardef c_Tholef_The_Grape_Tender]
+name=Tholef The Grape Tender
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Tholef The Grape Tender
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=03
+tag0.quest1=063
+tag0.quest2=064
+tag0.quest3=065
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_elven_specs
+item=i_elven_boots
+item=i_elven_pants
+color=021
+item=i_elven_shirt_gray
+color=037
+
+
+[chardef c_Mielan_The_Arcanist]
+name=Mielan The Arcanist
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Mielan The Arcanist
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=0e
+itemnewbie=i_hair_elven_ml
+color=037
+
+on=@npcrestock
+item=i_mace_wildstaff
+item=i_elven_woodland_gauntlets
+item=i_elven_shirt
+item=i_elven_pants
+item=i_elven_boots
+
+
+[chardef c_Olla_The_Metal_Weaver]
+name=Olla The Metal Weaver
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Olla The Metal Weaver
+
+on=@create
+npc=2
+color=0824c
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=03e
+tag0.quest2=011
+tag0.quest3=03f
+tag0.quest4=040
+itemnewbie=i_hair_short1
+color=0bc
+
+on=@npcrestock
+item=i_hammer_smith
+item=i_elven_shirt
+color=0210
+item=i_elven_boots
+color=0da
+item=i_elven_pants
+color=0b2
+
+
+[chardef c_Lohn_The_Metal_Weaver]
+name=Lohn The Metal Weaver
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lohn The Metal Weaver
+
+on=@create
+npc=2
+color=08300
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=03e
+tag0.quest2=011
+tag0.quest3=03f
+tag0.quest4=040
+itemnewbie=i_hair_elven_spike
+color=colors_hair
+
+on=@npcrestock
+item=i_hammer_smith
+item=i_elven_shirt
+item=i_cape_humilty
+item=i_elven_boots
+item=i_elven_woodland_chest
+color=0224
+item=i_elven_woodland_arms
+color=0224
+item=i_elven_woodland_leggings
+color=0224
+item=i_elven_woodland_gauntlets
+item=i_elven_woodland_gorget
+color=0224
+item=i_dragon_helm
+
+
+[chardef c_Landy_The_Soil_Nurturer]
+name=Landy The Soil Nurturer
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Landy The Soil Nurturer
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=033
+tag0.quest2=01f
+tag0.quest3=034
+tag0.quest4=017
+itemnewbie=i_hair_elven_flower
+color=058
+
+on=@npcrestock
+item=i_magical_shortbow
+item=i_elven_quiver
+item=i_elven_pants
+item=i_elven_shirt_gray
+item=i_elven_boots
+
+
+[chardef c_Ciala_The_Arborist]
+name=Ciala The Arborist
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Ciala The Arborist
+
+on=@create
+npc=2
+color=0bc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=0d
+tag0.quest2=0e
+tag0.quest3=0f
+tag0.quest4=0c
+itemnewbie=i_hair_elven_long2
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_robe
+item=i_elven_boots
+item=i_elven_pants
+item=i_elven_shirt
+
+
+[chardef c_Aulan_The_Expeditionist]
+name=Aulan The Expeditionist
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Aulan The Expeditionist
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=06
+tag0.quest1=013
+tag0.quest2=014
+tag0.quest3=015
+tag0.quest4=016
+tag0.quest5=017
+tag0.quest6=018
+itemnewbie=i_hair_elven_mullet
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_woodland_chest
+item=i_elven_woodland_arms
+item=i_elven_woodland_leggings
+item=i_elven_boots
+item=i_elven_woodland_gorget
+//item=i_helm_insight	//fixme
+itemnewbie=i_platemail_helm
+color=052d
+itemnewbie=i_cloak_humilty	//fixme
+//item=i_overseer_sundered_blade	//fixme
+itemnewbie=i_radiant_scimitar
+color=04ec
+
+
+[chardef c_Elder_Caelas_The_Wise]
+name=Elder Caelas The Wise
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Elder Caelas The Wise
+
+on=@create
+npc=2
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=03
+tag0.quest1=03b
+tag0.quest2=03c
+tag0.quest3=03d
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_staff_gnarled
+item=i_elven_robe
+
+
+[chardef c_Saril_The_Guard]
+name=Saril The Guard
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Saril The Guard
+
+on=@create
+npc=2
+color=058
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=0c
+tag0.quest1=027
+tag0.quest2=033
+tag0.quest3=026
+tag0.quest4=037
+tag0.quest5=03a
+tag0.quest6=050
+tag0.quest7=051
+tag0.quest8=052
+tag0.quest9=053
+tag0.quest10=054
+tag0.quest11=055
+tag0.quest12=05b
+itemnewbie=i_hair_elven_ml
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_helm_winged
+item=i_elven_leaf_tonlet
+item=i_elven_leaf_arms
+item=i_elven_leaf_gorget
+item=i_elven_leaf_gloves
+item=i_elven_leaf_tunic
+item=i_sword_warcleaver
+item=i_elven_boots
+item=i_cape
+color=04ec
+
+
+[chardef c_Mugg_The_Miner]
+name=Mugg The Miner
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Mugg The Miner
+
+on=@create
+npc=2
+color=0401
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=075
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_pickaxe
+item=i_pants_short
+item=i_bandana
+item=i_apron_full
+
+
+[chardef c_Huntsman]
+name=Huntsman
+id=c_centaur
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Huntsman
+
+on=@create
+npc=10
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=098
+itemnewbie=0
+color=0
+
+on=@npcrestock
+
+
+[chardef c_Petricus_the_Trader]
+name=Petricus the Trader
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Petricus the Trader
+
+on=@create
+npc=2
+color=0410
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=084
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_cap
+item=i_pants_long
+color=01c5
+item=i_cape
+color=0229
+item=i_tunic
+color=01c0
+
+
+[chardef c_Frederic_The_Ghost]
+name=Frederic The Ghost
+id=c_grim_reaper
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Frederic The Ghost
+
+on=@create
+npc=2
+color=03b2
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=05
+tag0.quests=01
+tag0.quest1=06d
+itemnewbie=0
+color=0
+
+on=@npcrestock
+
+
+[chardef c_Leon_The_Alchemist]
+name=Leon The Alchemist
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Leon The Alchemist
+
+on=@create
+npc=6
+color=02fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000005
+tag0.quests=01
+tag0.quest1=06e
+itemnewbie=i_hair_elven_long2
+color=045d
+
+on=@npcrestock
+item=i_sandals
+color=0714
+item=i_robe
+color=065f
+item=i_pants_short
+color=04b3
+item=i_shirt_plain
+color=05f0
+
+
+[chardef c_The_Frightened_Dryad]
+name=The Frightened Dryad
+id=c_dryad
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=The Frightened Dryad
+
+on=@create
+npc=10
+color=0
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000000
+tag0.quests=01
+tag0.quest1=04
+itemnewbie=0
+color=0
+
+on=@npcrestock
+
+
+[chardef c_Darius_the_Wise]
+name=Darius the Wise
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Darius the Wise
+
+on=@create
+npc=2
+color=08367
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=094
+itemnewbie=i_hair_elven_ml
+color=01c5
+
+on=@npcrestock
+item=i_mace_wildstaff
+item=i_sandals
+item=i_tunic
+color=0102
+
+
+[chardef c_Enigma]
+name=Enigma
+id=c_sphynx
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Enigma
+
+on=@create
+npc=10
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=099
+itemnewbie=0
+color=0
+
+[chardef c_Fabrizio_The_Master_Weaponsmith]
+name=Fabrizio The Master Weaponsmith
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Fabrizio The Master Weaponsmith
+
+on=@create
+npc=2
+color=03ec
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=07d
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_pants_long
+color=058
+item=i_apron_half
+color=058
+item=i_skull_cap
+color=050
+item=i_boots_calf
+
+
+[chardef c_Bildor_The_Wanderer]
+name=Bildor The Wanderer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Bildor The Wanderer
+
+on=@create
+npc=2
+color=041f
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=02
+tag0.quest1=02d
+tag0.quest2=034
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_robe
+color=04d
+item=i_staff_gnarled
+
+
+[chardef c_Lefty_The_Ticket_Seller]
+name=Lefty The Ticket Seller
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lefty The Ticket Seller
+
+on=@create
+npc=2
+color=0408
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=06b
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_boots_calf
+item=i_hat_feather
+color=099
+item=i_leather_gloves
+color=099
+item=i_shirt_fancy
+color=0ee
+item=i_cape
+color=03
+item=i_pants_long
+color=08a
+item=i_sash
+
+
+[chardef c_Council_Member_Torondor]
+name=Council Member Torondor
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Council Member Torondor
+
+on=@create
+npc=2
+color=03fc
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=05
+tag0.quests=01
+tag0.quest1=03e9
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_robe
+item=i_shoes_plain
+item=i_ring_gold
+
+
+[chardef c_Thalia_The_Bride]
+name=Thalia The Bride
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Thalia The Bride
+
+on=@create
+npc=2
+color=0412
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=00
+tag0.quests=01
+tag0.quest1=05a
+itemnewbie=i_hair_long
+color=037
+
+on=@npcrestock
+item=i_dress_plain
+color=0481
+item=i_boots_calf
+color=0481
+
+
+[chardef c_Balulah_the_Scorned]
+name=Balulah the Scorned
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Balulah the Scorned
+
+on=@create
+npc=2
+color=03f4
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=085
+itemnewbie=i_hair_long
+color=01ba
+
+on=@npcrestock
+item=i_boots_calf
+item=i_pants_long
+item=i_shirt_fancy
+
+
+[chardef c_Gervis_The_Blacksmith_Trainer]
+name=Gervis The Blacksmith Trainer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Gervis The Blacksmith Trainer
+
+on=@create
+npc=2
+color=0402
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=071
+itemnewbie=i_hair_short
+color=colors_hair
+
+on=@npcrestock
+item=i_ringmail_gloves
+item=i_ringmail_leggings
+item=i_leather_sleeves
+item=i_leather_tunic
+item=i_hammer_smith
+item=i_shoes_plain
+
+
+[chardef c_Lyle_The_Mage]
+name=Lyle The Mage
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lyle The Mage
+
+on=@create
+npc=2
+color=058
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=074
+itemnewbie=i_hair_elven_braid
+color=colors_hair
+
+on=@npcrestock
+item=i_elven_robe
+item=i_elven_shirt
+item=i_elven_boots
+item=i_elven_pants
+
+
+[chardef c_Andric_The_Archer_Trainer]
+name=Andric The Archer Trainer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Andric The Archer Trainer
+
+on=@create
+npc=2
+color=041b
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=06f
+itemnewbie=i_hair_short
+color=0379
+
+on=@npcrestock
+item=i_sandals
+item=i_leather_ninja_pants
+item=i_leather_ninja_mitts
+item=i_leather_ninja_jacket
+item=i_leather_sleeves
+
+
+[chardef c_Treebeard]
+name=Treebeard
+id=c_treefellow
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Treebeard
+
+on=@create
+npc=10
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=00
+tag0.quests=03
+tag0.quest1=0e
+tag0.quest2=080
+tag0.quest3=081
+itemnewbie=0
+color=0
+
+on=@npcrestock
+
+
+[chardef c_Investigator_John]
+name=Investigator John
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Investigator John
+
+on=@create
+npc=2
+color=041e
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=02
+tag0.quest1=03eb
+tag0.quest2=03ec
+itemnewbie=i_hair_long
+color=0157
+
+on=@npcrestock
+item=i_ringmail_gloves
+item=i_boots_thigh
+item=i_pants_long
+item=i_elven_specs
+item=i_shirt_fancy
+
+
+[chardef c_Regina_The_Noble]
+name=Regina The Noble
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Regina The Noble
+
+on=@create
+npc=2
+color=0412
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000004
+tag0.quests=01
+tag0.quest1=057
+itemnewbie=i_hair_buns
+color=0468
+
+on=@npcrestock
+item=i_dress_full
+color=0751
+item=i_cape
+color=065f
+item=i_sash
+color=0519
+item=i_boots_thigh
+item=i_sword_long
+
+
+[chardef c_Galzan_The_Adventurer]
+name=Galzan The Adventurer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Galzan The Adventurer
+
+on=@create
+npc=2
+color=040b
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=010001
+tag0.quests=03
+tag0.quest1=026
+tag0.quest2=027
+tag0.quest3=028
+itemnewbie=random_male_hair 
+color=colors_hair
+
+on=@npcrestock
+item=i_platemail_chest
+item=i_platemail_gorget
+item=i_platemail_helm
+item=i_platemail_arms
+item=i_platemail_leggings
+item=i_leather_gloves
+item=i_sword_long
+item=i_shield_wood
+
+
+[chardef c_Embassy_Member_Tiristar]
+name=Embassy Member Tiristar
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Embassy Member Tiristar
+
+on=@create
+npc=2
+color=03f4
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=010005
+tag0.quests=04
+tag0.quest1=03e8
+tag0.quest2=03ea
+tag0.quest3=03ed
+tag0.quest4=03ee
+itemnewbie=i_hair_short
+color=colors_hair
+
+on=@npcrestock
+item=i_robe
+color=0189
+item=i_sword_long
+item=i_shield_order
+item=i_cape
+color=0482
+
+
+[chardef c_Clairesse_The_Servant]
+name=Clairesse The Servant
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Clairesse The Servant
+
+on=@create
+npc=2
+color=040e
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=070
+itemnewbie=i_hair_long
+color=037
+
+on=@npcrestock
+item=i_dress_plain
+color=01c0
+item=i_ring_silver
+item=i_necklace_silver
+item=i_sandals
+
+
+[chardef c_Kashiel_The_Archer]
+name=Kashiel The Archer
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Kashiel The Archer
+
+on=@create
+npc=2
+color=0410
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=073
+itemnewbie=i_hair_lf
+color=04d
+
+on=@npcrestock
+item=i_armor_female_skirt
+item=i_armor_female_studded
+item=i_plate_jinsaga_heavy
+item=i_bow
+item=i_elven_quiver
+item=i_shoes_plain
+
+
+[chardef c_Emilio_The_Tortured_Artist]
+name=Emilio The Tortured Artist
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Emilio The Tortured Artist
+
+on=@create
+npc=2
+color=0419
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=02
+tag0.quest1=058
+tag0.quest2=059
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_pants_long
+item=i_shirt_fancy
+item=i_cap
+
+
+[chardef c_Arya_The_Enchanter]
+name=Arya The Enchanter
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Arya The Enchanter
+
+on=@create
+npc=2
+color=08308
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=05
+tag0.quest1=0f
+tag0.quest2=010
+tag0.quest3=016
+tag0.quest4=017
+tag0.quest5=02b
+itemnewbie=i_hair_lf
+color=037
+
+on=@npcrestock
+item=i_elven_shirt_gray
+item=i_elven_pants
+item=i_elven_woodland_gauntlets
+item=i_elven_boots
+item=i_elven_quiver
+item=i_elven_composite_longbow
+
+
+[chardef c_Evan_The_Beggar]
+name=Evan The Beggar
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Evan The Beggar
+
+on=@create
+npc=2
+color=03ee
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=056
+itemnewbie=i_hair_long
+color=colors_hair
+itemnewbie=i_beard_long
+color=match_hair
+
+on=@npcrestock
+item=i_pants_short
+color=04b1
+item=i_shirt_plain
+color=04d9
+item=i_sandals
+
+
+[chardef c_Sadrah_The_Courier]
+name=Sadrah The Courier
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Sadrah The Courier
+
+on=@create
+npc=2
+color=0402
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=010001
+tag0.quests=01
+tag0.quest1=076
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_shoes_plain
+item=i_chainmail_leggings
+item=i_chainmail_tunic
+item=i_helm_open
+item=i_shield_buckler
+item=i_sword_long
+item=i_shirt_plain
+
+
+[chardef c_Anathiel_the_Great_Forest_Spirit]
+name=Anathiel the Great Forest Spirit
+id=c_Ethereal_Warrior
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Anathiel the Great Forest Spirit
+
+on=@create
+npc=10
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=082
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_axe_war
+
+
+[chardef c_Strongroot]
+name=Strongroot
+id=c_treefellow
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Strongroot
+
+on=@create
+npc=10
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=097
+
+
+[chardef c_Hargrove_The_Lumberjack]
+name=Hargrove The Lumberjack
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Hargrove The Lumberjack
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=072
+
+on=@npcrestock
+item=i_boots_thigh
+item=i_pants_long
+item=i_axe
+
+
+[chardef c_Natalie_the_Lady]
+name=Natalie the Lady
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Natalie the Lady
+
+on=@create
+npc=2
+color=03f9
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=09c
+itemnewbie=i_hair_long
+color=037
+
+on=@npcrestock
+item=i_necklace_gold
+item=i_leather_gloves
+item=i_elven_boots
+item=i_tunic
+color=015c
+item=i_skirt_long
+color=015c
+
+
+[chardef c_Sledge_The_Versatile]
+name=Sledge The Versatile
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Sledge The Versatile
+
+on=@create
+npc=2
+color=03ed
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=02
+tag0.quest1=05
+tag0.quest2=0b
+itemnewbie=i_hair_long
+color=037
+
+on=@npcrestock
+item=i_platemail_gloves
+item=i_platemail_arms
+item=i_platemail_leggings
+item=i_platemail_chest
+item=i_bone_harvester
+
+
+[chardef c_Bravehorn]
+name=Bravehorn
+id=c_stag
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Bravehorn
+
+on=@create
+npc=1
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=096
+
+[chardef c_Nandor_the_Outcast]
+name=Nandor the Outcast
+id=c_dragon_small_red
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Nandor the Outcast
+
+on=@create
+npc=13
+color=03af
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=04
+tag0.quest1=0ae
+tag0.quest2=0af
+tag0.quest3=0b0
+tag0.quest4=0b1
+
+[chardef c_Derek_the_Merchant]
+name=Derek the Merchant
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Derek the Merchant
+
+on=@create
+npc=2
+color=0406
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=02
+tag0.quest1=0a7
+tag0.quest2=0a8
+itemnewbie=i_hair_short
+color=colors_hair
+
+on=@npcrestock
+item=i_shirt_fancy
+item=i_leather_gloves
+item=i_pants_long
+item=i_shoes_plain
+item=i_sash
+item=i_cape
+
+
+[chardef c_Kane_Master_of_Arms]
+name=Kane Master of Arms
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Kane Master of Arms
+
+on=@create
+npc=2
+color=040a
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=03
+tag0.quest1=0a4
+tag0.quest2=0a5
+tag0.quest3=0a6
+itemnewbie=random_male_hair
+color=colors_hair
+
+on=@npcrestock
+item=i_studded_haidate
+item=i_ringmail_sleeves
+item=i_pike
+item=i_platemail_do
+item=i_platemail_hatsuburi
+item=i_boots_calf
+item=i_leather_gorget
+item=i_leather_gloves
+
+
+[chardef c_Jack_The_Loan_Shark]
+name=Jack The Loan Shark
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Jack The Loan Shark
+
+on=@create
+npc=2
+color=0401
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=0a9
+itemnewbie=i_hair_2_pigtails
+color=0476
+itemnewbie=i_beard_mustache
+color=0476
+
+on=@npcrestock
+item=i_shirt_fancy
+color=0583
+item=i_pants_long
+color=05a3
+item=i_cape
+color=0579
+item=i_sash
+color=06b1
+item=i_boots_calf
+item=i_sword_long
+
+
+[chardef c_Lucius_the_Adventurer]
+name=Lucius the Adventurer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lucius the Adventurer
+
+on=@create
+npc=2
+color=03f3
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=010001
+tag0.quests=01
+tag0.quest1=0b6
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_shoes_plain
+item=i_ringmail_tunic
+item=i_ringmail_leggings
+item=i_ringmail_gloves
+item=i_shield_buckler
+item=i_kryss
+item=i_hat_feather
+
+
+[chardef c_Nedrick_the_Iron_Worker]
+name=Nedrick the Iron Worker
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Nedrick the Iron Worker
+
+on=@create
+npc=2
+color=0415
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=083
+itemnewbie=i_hair_long
+color=0fd
+
+on=@npcrestock
+item=i_pants_long
+item=i_boots_thigh
+item=i_doublet
+item=i_shirt_fancy
+
+
+[chardef c_Skeleton_Of_Szandor]
+name=Skeleton Of Szandor
+id=c_liche
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Skeleton Of Szandor
+
+on=@create
+npc=2
+color=03ec
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=06a
+
+on=@npcrestock
+item=i_spellbook
+
+
+[chardef c_Aurelia_The_Architects_Daughter]
+name=Aurelia The Architects Daughter
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Aurelia The Architects Daughter
+
+on=@create
+npc=2
+color=0401
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=01
+tag0.quest1=069
+itemnewbie=i_hair_long
+color=037
+
+on=@npcrestock
+item=i_skirt_long
+color=01c5
+item=i_bonnet
+color=012
+item=i_boots_calf
+item=i_doublet
+color=0157
+item=i_shirt_fancy
+color=0157
+item=i_bracelet_gold
+item=i_necklace_metal_beads
+item=i_earrings_gold
+
+
+[chardef c_Tutorial_Quester]
+name=Tutorial Quester
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Tutorial Quester
+
+on=@create
+npc=2
+color=0409
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=0b4
+itemnewbie=random_male_hair
+color=colors_hair
+
+on=@npcrestock
+item=i_robe
+color=01e3
+item=i_katana
+
+
+[chardef c_Tutorial_Quester_f]
+name=Tutorial Quester
+id=c_elf_female
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Tutorial Quester
+
+on=@create
+npc=2
+color=0824f
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=0b5
+itemnewbie=i_hair_elven_long2
+color=0473
+
+on=@npcrestock
+item=i_elven_boots
+item=i_elven_shirt_gray
+item=i_elven_specs
+item=i_elven_pants
+item=i_pitchfork
+
+
+[chardef c_Yorus_The_Tinker]
+name=Yorus The Tinker
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Yorus The Tinker
+
+on=@create
+npc=2
+color=03ee
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=0b
+tag0.quest1=077
+tag0.quest2=050
+tag0.quest3=027
+tag0.quest4=054
+tag0.quest5=05b
+tag0.quest6=033
+tag0.quest7=055
+tag0.quest8=053
+tag0.quest9=051
+tag0.quest10=078
+tag0.quest11=079
+itemnewbie=i_hair_mohawk
+color=colors_hair
+
+on=@npcrestock
+item=i_boots_calf
+color=0aa
+item=i_shirt_plain
+color=0ad
+item=i_pants_short
+color=0ac
+item=i_mask_bear
+
+
+[chardef c_Petrus_the_Beekeeper]
+name=Petrus the Beekeeper
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Petrus the Beekeeper
+
+on=@create
+npc=2
+color=041e
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=03
+tag0.quest1=07a
+tag0.quest2=07b
+tag0.quest3=07c
+itemnewbie=i_hair_short
+color=colors_hair
+
+on=@npcrestock
+item=i_robe
+color=01ba
+
+
+[chardef c_Lissbet_the_Flower_Girl]
+name=Lissbet the Flower Girl
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Lissbet the Flower Girl
+
+on=@create
+npc=2
+color=0400
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=086
+itemnewbie=i_hair_long
+color=0fd
+
+on=@npcrestock
+item=i_kilt
+color=015c
+item=i_sandals
+item=i_shirt_fancy
+color=021f
+
+
+[chardef c_Jelrice_the_Trader]
+name=Jelrice the Trader
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Jelrice the Trader
+
+on=@create
+npc=2
+color=08242
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=03
+tag0.quest1=07b
+tag0.quest2=07a
+tag0.quest3=07c
+//itemnewbie=0
+//color=0
+
+on=@npcrestock
+item=i_mace_wildstaff
+item=i_robe
+color=01ca
+
+
+[chardef c_Arielle]
+name=Arielle
+id=c_pixie
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Arielle
+
+on=@create
+npc=10
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=095
+
+on=@npcrestock
+item=i_spellbook
+
+
+[chardef c_Anathor]
+name=Anathor
+id=c_elf_male
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Anathor
+
+on=@create
+npc=2
+color=08245
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=0b2
+itemnewbie=i_hair_elven_long2
+color=0477
+
+on=@npcrestock
+item=i_breastplate_justice
+item=i_arms_compassion
+item=i_gauntlets_valor
+item=i_gorget_truth
+item=i_helm_spirituality
+item=i_legs_honor
+item=i_quiver_infinity
+item=i_solaretes_sacrifice
+item=i_dragons_end
+color=03dc
+
+
+[chardef c_Victoria_The_Sorceress]
+name=Victoria The Sorceress
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Victoria The Sorceress
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=01
+tag0.quest1=07f
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_robe
+color=01
+
+
+[chardef c_Gorrow_The_Mayor]
+name=Gorrow The Mayor
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Gorrow The Mayor
+
+on=@create
+npc=2
+color=03eb
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=05
+tag0.quest1=022
+tag0.quest2=05
+tag0.quest3=068
+tag0.quest4=09e
+tag0.quest5=09f
+itemnewbie=i_hair_elven_ml
+color=colors_hair
+
+on=@npcrestock
+item=i_hat_feather
+color=044
+item=i_bracelet_silver
+item=i_sash
+color=04ac
+item=i_pants_long
+color=033
+item=i_shirt_fancy
+color=044
+item=i_cape
+color=033
+item=i_boots_calf
+
+
+[chardef c_Gabriel_the_Redeemer]
+name=Gabriel the Redeemer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Gabriel the Redeemer
+
+on=@create
+npc=2
+color=081e3
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=010005
+tag0.quests=01
+tag0.quest1=09b
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_shield_order
+color=0481
+item=i_paladin_sword
+color=0481
+item=i_hooded_shroud
+color=0481
+
+
+[chardef c_Aernya_Mistress_of_Admissions]
+name=Aernya Mistress of Admissions
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Aernya Mistress of Admissions
+
+on=@create
+npc=2
+color=040e
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=02
+tag0.quest1=09d
+tag0.quest2=0a0
+itemnewbie=i_hair_ponytail
+color=colors_hair
+
+on=@npcrestock
+item=i_skirt_short
+color=021a
+item=i_shirt_fancy
+item=i_hat_feather
+color=0297
+item=i_cape_arcane
+color=021a
+item=i_boots_thigh_arcane
+
+
+[chardef c_Drithen_the_Fierce]
+name=Drithen the Fierce
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Drithen the Fierce
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01
+tag0.quests=02
+tag0.quest1=024
+tag0.quest2=05
+itemnewbie=i_hair_short
+color=colors_hair
+
+on=@npcrestock
+item=i_platemail_chest
+color=03aa
+item=i_platemail_leggings
+color=03aa
+item=i_platemail_arms
+color=03aa
+item=i_platemail_gloves
+color=03aa
+item=i_platemail_gorget
+color=03aa
+item=i_bone_helmet
+item=i_sword_long
+
+
+[chardef c_Master_Gnosos_the_Necromancer]
+name=Master Gnosos the Necromancer
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Master Gnosos the Necromancer
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=03
+tag0.quest1=0a1
+tag0.quest2=0a2
+tag0.quest3=0a3
+itemnewbie=i_hair_pageboy
+color=colors_hair
+itemnewbie=i_beard_mustache
+color=match_hair
+
+on=@npcrestock
+item=i_pixie_swatter
+color=021
+item=i_robe
+color=0170
+
+
+[chardef c_Emerillo_the_Cook]
+name=Emerillo the Cook
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Emerillo the Cook
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=01
+tag0.quest1=01
+itemnewbie=0
+color=0
+
+on=@npcrestock
+item=i_hooded_shroud
+color=058
+
+
+[chardef c_Kia_the_Student]
+name=Kia the Student
+id=c_woman
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Kia the Student
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=01
+tag0.quest1=02
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_hooded_shroud
+color=037
+
+
+[chardef c_Master_Cohenn_The_Librarian]
+name=Master Cohenn The Librarian
+id=c_man
+can=mt_equip|mt_usehands|mt_walk|mt_run
+tevents=e_quest_npc
+category=Quests (CloudBR)
+subsection=Specific Quests
+Description=Master Cohenn The Librarian
+
+on=@create
+npc=2
+color=colors_skin
+str={75 100}
+dex={75 100}
+int={75 100}
+//flags=01000001
+tag0.quests=01
+tag0.quest1=03
+itemnewbie=i_hair_long
+color=colors_hair
+
+on=@npcrestock
+item=i_robe
+color=021
+item=i_mace_wildstaff
+
+
+///////////////////////////////////
+// These are special npcs for the quests
+
+[CHARDEF c_mallyx]
+ID=c_dragon_green
+NAME=Mallyx the Uniyelding
+SOUND=snd_MONSTER_DRAGON1
+ICON=i_pet_DRAGON
+ANIM=03f9c7f
+CAN=MT_WALK|MT_FLY
+DAM=31,37
+ARMOR=80
+RESOURCES=50 i_ribs_raw,8 i_reag_dragon_blood, 20 i_hide_dragon_green
+FOODTYPE=80 t_meat_raw,t_gem
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+TEVENTS=e_carnivores3
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Mallyx
+
+ON=@Create
+NPC=brain_dragon
+FAME=10000
+KARMA=-10000
+COLOR=0591
+STR=950
+MAXHITS=4050
+DEX={285 300}
+INT={335 475}
+PARRYING=780
+MAGICRESISTANCE=1150
+TACTICS=1200
+ANATOMY=80.0
+WRESTLING=1200
+
+ON=@NPCRestock
+ITEM=loot_DRAGON
+ITEM=i_moonstone,1,R10
+
+[CHARDEF c_gregorio_the_brigand]
+NAME=Gregorio the Brigand
+ID=C_MAN
+DAM=17,33
+ARMOR=30
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobBrigand
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+
+ON=@Create
+COLOR=colors_skin
+STR={96 110}
+DEX={81 95}
+INT={61 75}
+FAME=1500
+KARMA=-3000
+CAMPING={45.0 68.0}
+POISONING={35.0 58.0}
+SNOOPING={35.0 58.0}
+LockPicking={35.0 58.0}
+STEALING={45.0 68.0}
+FENCING={45.0 68.0}
+PARRYING={55.0 78.0}
+SWORDSMANSHIP={35.0 58.0}
+WRESTLING={35.0 58.0}
+MACEFIGHTING={25.0 48.0}
+TACTICS={55.0 78.0}
+NPC=brain_thief
+ITEMNEWBIE=random_male_hair
+COLOR=colors_hair
+ITEMNEWBIE=random_facial_hair
+COLOR=match_hair
+
+ON=@NPCRestock
+ITEM=RANDOM_LIGHT
+ITEM=I_SHIRT_PLAIN
+COLOR=colors_all
+ITEM=random_pants
+COLOR=colors_all
+ITEM=random_shoes
+COLOR=colors_neutral
+ITEM=random_weapon
+ITEM=random_coin_purse
+
+ON=@DeathCorpse
+DORAND 2
+NEWLOOT=i_servered_elf_ears
+NEWLOOT=i_servered_human_ears
+ENDDO
+
+[CHARDEF c_deldrimor]
+ID=C_SPIDER_LORD
+NAME=Deldrimor, Spirit of Desease
+ARMOR=70
+DAM=21,26
+
+ON=@Create
+NPC=brain_monster
+STR=500
+DEX=1000
+INT=900
+MAXHITS=5250
+WRESTLING=110.0
+TACTICS=110.0
+ANATOMY=110.0
+MAGICRESISTANCE=100.0
+EVALUATINGINTEL=120.0
+MAGERY=105.0
+KARMA=-10000
+FAME=9000
+
+ON=@Hit
+IF (<FLOATVAL 0.05> <RANDOMDOUBLE>)
+SRC.SPELLEFFECT S_POISON,90.0,<UID>
+ENDIF
+
+ON=@GetHit
+IF (<FLOATVAL 0.0875> > <RANDOMDOUBLE>)
+LOCAL.OLDNEW=<NEW>
+SERV.NEWNPC C_DREAD_SPIDER
+NEW.REMOVETIMER=60*10
+NEW=<LOCAL.OLDNEW>
+ENDIF
+
+ON=@Death
+IF (<ATTACKER>)
+LOCAL.OLDNEW=<NEW>
+REF1=<ATTACKER.MAX>
+	IF (<REF1>)
+	SERV.NEWITEM i_staff_gnarled
+	NEW.NAME=Deldrimor's Leg
+	NEW.TAG.MAGICDAMINCREASE=15
+	NEW.TAG.HITCHANCEDECREASE=10
+	NEW.GIVEITEMEVENT T_PROPRIEDADES
+	NEW.GIVEITEMEVENT t_status_bonus
+	NEW.TAG.MANAREGENERATION=3
+	NEW.TAG.SPELLCHANNELING=1
+	NEW.TAG.LOWERREAGENTCOST=8
+	NEW.SETSLAYER
+	NEW.TAG.SLAYERGROUP=Spider
+		IF (<REF1.FLAGS>&STATF_PET)
+		REF1=<REF1.OWNER>
+		ENDIF
+	REF1.BOUNCE <NEW>
+	SERV.NEWITEM i_osi_treasure_map
+	REF1.BOUNCE <NEW>
+	SERV.NEWITEM i_osi_treasure_map
+	REF1.BOUNCE <NEW>
+	ENDIF
+	FOR y 0 <EVAL <ATTACKER>-1>
+		IF (<ATTACKER.<dLOCAL.Y>>)
+		REF402=<ATTACKER.<dLOCAL.Y>>
+			IF (<REF402.FLAGS>&STATF_PET)
+			REF402=<REF402.MEMORYFINDTYPE.memory_ipet.LINK>
+			ENDIF
+		REF402.NEWGOLD 7500
+		REF402.GO Help Room
+		ENDIF
+	ENDFOR
+NEW=<LOCAL.OLDNEW>
+ENDIF
+
+[EOF]
+

@@ -1,0 +1,208 @@
+//house placement tool by ??
+//v1.0?
+//12:32 pm 1/31/2019
+
+[itemdef i_house_placement_tool]
+id=014f6
+name=house placement tool
+value={2400 2500}
+dupelist=014f5
+type=t_normal
+
+on=@dclick
+src.consume i_house_placement_tool_deed		//remove any deeds created from a prior house tool placement usage
+sdialog d_house_placement_tool
+return 1
+
+[dialog d_house_placement_tool]
+150,100
+
+page 0
+if !(<src.isgm>) && (<def0.placement_waiting_period>) && (<src.tag0.house.placementdelay> > <serv.time>)
+  local.x=330
+  local.y=220
+else
+  local.x=250
+  local.y=125
+endif
+
+resizepic 0 0 5054 <eval <local.x>+20> <eval <local.y>+20>
+gumppictiled 10 10 <dlocal.x> <dlocal.y> 2624
+checkertrans 10 10 <dlocal.x> <dlocal.y>
+dhtmlgump 10 10 <local.x> 20 0 0 <def0.bfont_white><def0.center>house placement tool<def0.centere>
+button 10 40 4005 4007 1 0 1
+dtext 45 40 1152 classic houses
+button 10 60 4005 4007 1 0 2
+dtext 45 60 1152 2-story customizable houses
+button 10 80 4005 4007 1 0 3
+dtext 45 80 1152 3-story customizable houses
+if !(<src.isgm>) && (<def0.placement_waiting_period>) && (<src.tag0.house.placementdelay> > <serv.time>)
+  dhtmlgump 10 105 330 90 0 0 <def0.bfont_yellow>you are currently unable to place a new house or receive a house in trade because you have become the owner of a house within the last <ddef0.placement_waiting_period> days.  you can test for house placement right now, but you cannot currently create a permanent house.
+  local.y=205
+else
+  local.y=110
+endif
+button 10 <local.y> 4017 4019 1 0 0
+dtext 45 <local.y> 1152 close
+
+[dialog d_house_placement_tool button]
+
+onbutton=1
+sdialog d_house_placement_tool_classic
+
+onbutton=2
+sdialog d_house_placement_tool_custom_2story
+
+onbutton=3
+sdialog d_house_placement_tool_custom_3story
+
+[function renderplacementtooldialogbackground]
+resizepic 0 0 5054 520 420
+gumppictiled 10 10 500 20 2624
+checkertrans 10 10 500 20
+dhtmlgump 10 10 500 20 0 0 <def0.bfont_white><def0.center>house placement tool<def0.centere>
+gumppictiled 10 40 500 20 2624
+checkertrans 10 40 500 20
+dtext 50 40 1152 house description
+dtext 275 40 1152 storage
+dtext 350 40 1152 lockdowns
+dtext 425 40 1152 cost
+gumppictiled 10 70 500 280 2624
+checkertrans 10 70 500 280
+gumppictiled 10 360 500 20 2624
+checkertrans 10 360 500 20
+dtext 10 360 1152 bank balance:
+dtext 250 360 1152 <src.bankbalance>
+gumppictiled 10 390 500 20 2624
+checkertrans 10 390 500 20
+button 10 390 4017 4019 1 0 0
+dtext 50 390 1152 close
+
+[function renderplacementtooldialogpage]
+if (<local.y> > 340)
+  button 450 390 4005 4007 0 <eval <local.page>+1> 0
+  dtext 400 390 1152 next
+  local.page ++
+  page <local.page>
+  button 200 390 4014 4016 0 <eval <local.page>-1> 0
+  dtext 250 390 1152 previous
+  local.y=70
+endif
+
+[dialog d_house_placement_tool_classic]
+50,50
+
+page 0
+renderplacementtooldialogbackground
+
+page 1
+local.page=1
+local.y=70
+for 1 20
+  if (<serv.itemdef.<def0.house_classic_<dlocal._for>>>)
+    local.storage=<serv.itemdef.<def0.house_classic_<dlocal._for>>.basestorage>
+    button 10 <local.y> 4005 4007 1 0 <local._for>
+    dtext 50 <local.y> 1152 <serv.itemdef.<def0.house_classic_<dlocal._for>>.name>
+    dtext 275 <local.y> 1152 <dlocal.storage>
+    dtext 350 <local.y> 1152 <eval <local.storage>/2>
+    local.v=<serv.itemdef.<def0.house_classic_<dlocal._for>>.value>
+    local.v += <muldiv <serv.VendorMarkup>,<local.v>,100>
+    dtext 425 <local.y> 1152 <local.v>
+    local.y += 20
+    call renderplacementtooldialogpage
+  endif
+endfor
+
+[dialog d_house_placement_tool_classic button]
+onbutton=0
+sdialog d_house_placement_tool
+
+onbutton=1 20
+house_placement_tool <def0.house_classic_<argn>>
+
+
+
+[dialog d_house_placement_tool_custom_2story]
+50,50
+
+page 0
+renderplacementtooldialogbackground
+
+page 1
+local.page=1
+local.y=70
+for 1 47
+  if (<serv.itemdef.<def0.house_custom_2story_<dlocal._for>>>)
+    local.storage=<serv.itemdef.<def0.house_custom_2story_<dlocal._for>>.basestorage>
+    button 10 <local.y> 4005 4007 1 0 <local._for>
+    dtext 50 <local.y> 1152 <serv.itemdef.<def0.house_custom_2story_<dlocal._for>>.name>
+    dtext 275 <local.y> 1152 <dlocal.storage>
+    dtext 350 <local.y> 1152 <eval <local.storage>/2>
+    local.v=<serv.itemdef.<def0.house_custom_2story_<dlocal._for>>.value>
+    local.v += <muldiv <serv.VendorMarkup>,<local.v>,100>
+    dtext 425 <local.y> 1152 <local.v>
+    local.y += 20
+    call renderplacementtooldialogpage
+  endif
+endfor
+
+[dialog d_house_placement_tool_custom_2story button]
+onbutton=0
+sdialog d_house_placement_tool
+
+onbutton=1 47
+house_placement_tool <def0.house_custom_2story_<argn>>
+
+
+
+[dialog d_house_placement_tool_custom_3story]
+50,50
+
+page 0
+renderplacementtooldialogbackground
+
+page 1
+local.page=1
+local.y=70
+for 1 55
+  if (<serv.itemdef.<def0.house_custom_3story_<dlocal._for>>>)
+    local.storage=<serv.itemdef.<def0.house_custom_3story_<dlocal._for>>.basestorage>
+    button 10 <local.y> 4005 4007 1 0 <local._for>
+    dtext 50 <local.y> 1152 <serv.itemdef.<def0.house_custom_3story_<dlocal._for>>.name>
+    dtext 275 <local.y> 1152 <dlocal.storage>
+    dtext 350 <local.y> 1152 <eval <local.storage>/2>
+    local.v=<serv.itemdef.<def0.house_custom_3story_<dlocal._for>>.value>
+    local.v += <muldiv <serv.VendorMarkup>,<local.v>,100>
+    dtext 425 <local.y> 1152 <local.v> 	//<serv.itemdef.<def0.house_custom_3story_<dlocal._for>>.value>
+    local.y += 20
+    call renderplacementtooldialogpage
+  endif
+endfor
+
+[dialog d_house_placement_tool_custom_3story button]
+onbutton=0
+sdialog d_house_placement_tool
+
+onbutton=1 55
+f_house_placement_tool <def0.house_custom_3story_<argn>>
+
+[function f_house_placement_tool]
+//src.ctag0.using_house_placement_tool=1
+serv.newitem i_house_placement_tool_deed
+new.more=<args>
+new.cont=<src.findlayer.21>
+new.update
+new.removefromview
+new.use
+
+[itemdef i_house_placement_tool_deed]
+defname=i_house_placement_tool_deed
+id=i_deed
+name=house placement tool deed
+type=t_deed
+
+
+
+
+[EOF]
+

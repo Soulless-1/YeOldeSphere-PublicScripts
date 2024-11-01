@@ -1,0 +1,30 @@
+[SPELL 31]
+DEFNAME=s_mana_drain
+NAME=Mana Drain
+SOUND=snd_spell_mana_drain
+RUNES=OR
+CAST_TIME=1.5
+RESOURCES=i_reag_black_pearl,i_reag_mandrake_root,i_reag_spider_silk
+RUNE_ITEM=i_rune_mana_drain
+SCROLL_ITEM=i_scroll_mana_drain
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_resist
+EFFECT_ID=i_fx_vortex
+EFFECT=0
+LAYER=layer_spell_stats
+DURATION=5.0
+MANAUSE=11
+SKILLREQ=MAGERY 30.0
+INTERRUPT=100.0,100.0
+
+//Mana Drain can be used to drain your target's Mana.
+//Decreases mana level by (40 + caster Eval Int – target Resist Magic) points. After 4 seconds mana level is restored back to normal. Decent spell for both PvM and PvP. Mana drain a poison elemental then cast energy vortex, or throw out a few mana drains in a heated battle with a mage. Lethal as its almost assured to drain some mana
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval 40 + ((<src.evaluatingintel>-<magicresistance>)/10)>
+local.effect=<qval (<local.effect> <= 0)?0:<qval ( 160 < <local.effect>)?160:<local.effect>>>
+local.effect=<qval (<mana> < <local.effect>)?<mana>:<local.effect>>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+local.duration=60
+
+[EOF]

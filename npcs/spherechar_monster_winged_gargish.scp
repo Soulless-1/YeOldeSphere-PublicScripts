@@ -1,0 +1,711 @@
+
+[CHARDEF 04]
+DEFNAME=c_gargoyle
+NAME=Gargoyle
+SOUND=372
+ICON=i_pet_GARG
+ANIM=03fbc7f
+CAN=MT_WALK|MT_FLY|MT_USEHANDS
+dam=7, 14
+armor=32
+RESOURCES=1 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=c_GARGOYLE
+AVERSIONS=t_TRAP,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Daemons & Gargoyles
+DESCRIPTION=Gargoyle
+
+ON=@Create
+	NPC=brain_monster
+	str={146, 175}
+	dex={76, 95}
+	int={81, 105}
+	maxhits={88, 105}
+	//resphysical={30, 35}
+	resfire={25, 35}
+	rescold={5, 10}
+	respoison={15, 25}
+	evaluatingintel={70.1, 85.0}
+	magery={70.1, 85.0}
+	magicresistance={70.1, 85.0}
+	tactics={50.1, 70.0}
+	wrestling={40.1, 80.0}
+	fame=3500
+	karma=-3500
+	make_spellcaster 4,8
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	//item=i_pickaxe_gargoyle,R50
+	//item=i_treasure_map1,R99
+
+
+[CHARDEF 30]
+DEFNAME=c_harpy
+NAME=Harpy
+SOUND=402
+ICON=i_pet_HARPY
+ANIM=03f8c7f
+dam=5, 7
+armor=28
+CAN=MT_WALK|MT_FLY|MT_FEMALE|MT_USEHANDS
+RESOURCES=i_feather 50,i_bird_raw 4
+FOODTYPE=5 t_meat_raw
+DESIRES=i_gold, c_harpy
+//SHELTER=r_forests,r_mountains
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Harpy
+
+ON=@Create
+	NPC=brain_monster
+	str={96, 120}
+	dex={86, 110}
+	int={51, 75}
+	maxhits={58, 72}
+	//resphysical={25, 30}
+	resfire={10, 20}
+	rescold={10, 30}
+	respoison={20, 30}
+	resenergy={10, 20}
+	magicresistance={50.1, 65.0}
+	tactics={70.1, 100.0}
+	wrestling={60.1, 90.0}
+	fame=2500
+	karma=-2500
+
+ON=@NPCRestock
+	item=i_gold,{125 150}
+	item=random_reagent
+
+
+
+[CHARDEF 39]
+DEFNAME=c_mongbat
+NAME=Subterranean Mongbat
+SOUND=422
+ICON=i_pet_mongbat
+dam=1, 2
+armor=10
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK|MT_FLY
+FOODTYPE=9 t_meat_raw
+DESIRES=C_MONGBAT
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Subterranean Mongbat (strong)
+
+ON=@Create
+	NPC=brain_monster
+	str={6, 10}
+	dex={26, 38}
+	int={6, 14}
+	maxhits={4, 6}
+	maxmana={0}
+	//resphysical={5, 10}
+	magicresistance={5.1, 14.0}
+	tactics={5.1, 10.0}
+	wrestling={5.1, 10.0}
+	taming=189
+	fame=150
+	karma=-150
+
+ON=@NPCRestock
+	item=i_gold,{25 50}
+
+
+
+[CHARDEF 01020]
+DEFNAME=c_harpy_stone
+NAME=Stone Harpy
+ID=c_harpy
+SOUND=402
+ICON=i_pet_HARPY
+CAN=MT_FLY|MT_WALK|MT_FEMALE
+dam=8, 16
+armor=50
+RESOURCES=50 i_feather
+FOODTYPE=5 t_meat_raw, 5 t_arock
+DESIRES=i_gold, t_arock, c_harpy
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Stone Harpy
+
+ON=@Create
+	NPC=brain_monster
+	COLOR=color_rock
+	str={296, 320}
+	dex={86, 110}
+	int={51, 75}
+	maxhits={178, 192}
+	maxmana={0}
+	//resphysical={45, 55}
+	resfire={20, 30}
+	rescold={10, 20}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={50.1, 65.0}
+	tactics={70.1, 100.0}
+	wrestling={70.1, 100.0}
+	fame=4500
+	karma=-4500
+
+ON=@NPCRestock
+	item=i_gold,{290 325}
+	item=i_ribs_raw
+	item=random_jewel,2
+
+
+[CHARDEF 01021]
+DEFNAME=c_mongbat_arboreal
+DEFNAME2=c_mongbat_greater
+NAME=Arboreal Mongbat
+ID=C_MONGBAT
+SOUND=422
+ICON=i_pet_mongbat
+dam=5, 7
+armor=10
+RESOURCES=i_hide 6, 1 i_ribs_raw
+CAN=MT_WALK|MT_FLY
+FOODTYPE=5 t_meat_raw
+DESIRES=i_gold
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Arboreal Mongbat (weak)
+ 
+ON=@Create
+	npc=brain_monster
+	str={56, 80}
+	dex={61, 80}
+	int={26, 50}
+	maxhits={34, 48}
+	maxstam={61, 80}
+	maxmana={26, 50}
+	//resphysical={15, 25}
+	magicresistance={15.1, 30.0}
+	tactics={35.1, 50.0}
+	wrestling={20.1, 35.0}
+	fame=450
+	karma=-450
+
+ON=@NPCRestock
+	item=i_gold,{25 50}
+	//item=i_treasure_map1,R99
+
+
+[CHARDEF 67]
+DEFNAME=c_gargoyle_stone
+NAME=Stone Gargoyle
+ID=c_GARGOYLE
+SOUND=0174
+ICON=i_pet_GARG
+CAN=MT_WALK|MT_FLY
+dam=11, 17
+armor=50
+RESOURCES=1 i_ribs_raw
+FOODTYPE=2 t_arock, 2 t_meat_raw
+DESIRES=c_gargoyle_stone,c_GARGOYLE,t_bone,i_gold,t_wand
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Daemons & Gargoyles
+DESCRIPTION=Stone Gargoyle
+
+ON=@Create
+	COLOR=0482
+	str={246, 275}
+	dex={76, 95}
+	int={81, 105}
+	maxhits={148, 165}
+	//resphysical={45, 55}
+	resfire={20, 30}
+	rescold={10, 20}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={85.1, 100.0}
+	tactics={80.1, 100.0}
+	wrestling={60.1, 100.0}
+	taming=711
+	fame=4000
+	karma=-4000
+	make_spellcaster 3,6
+
+ON=@NPCRestock
+	item=i_gold,{250 325}
+	//item=i_pickaxe_gargoyle,R50
+	//item=i_treasure_map2,R99
+
+
+
+[chardef 130]
+defname=c_fire_gargoyle
+name=Fire Gargoyle
+SOUND=0174
+ICON=i_pet_garg
+dam=7, 14
+armor=32
+CAN=MT_WALK|MT_USEHANDS|MT_FLY
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_gargoyle
+//RESLEVEL=2
+//RESDISPDNHUE=36
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Fire Gargoyle
+MOVERATE=60
+
+ON=@Create
+	NPC=brain_monster
+	str={351, 400}
+	dex={126, 145}
+	int={226, 250}
+	maxhits={211, 240}
+	//resphysical={30, 35}
+	resfire={50, 60}
+	respoison={20, 30}
+	resenergy={20, 30}
+	anatomy={75.1, 85.0}
+	evaluatingintel={90.1, 105.0}
+	magery={90.1, 105.0}
+	meditation={90.1, 105.0}
+	magicresistance={90.1, 105.0}
+	tactics={80.1, 100.0}
+	wrestling={40.1, 80.0}
+	fame=3500
+	karma=-3500
+
+ON=@NpcRestock
+	item=i_gold,{275 325}
+	//item=i_pickaxe_gargoyle,R50
+	//item=i_treasure_map1,R99
+
+[CHARDEF 01042]
+DEFNAME=c_phoenix
+NAME=Phoenix
+ID=5
+SOUND=08f
+ICON=i_pet_EAGLE
+CAN=MT_FLY|MT_WALK//|MT_FIRE_IMMUNE
+dam=25
+armor=60
+RESOURCES=i_feather 60, i_bird_raw
+FOODTYPE=5 t_meat_raw
+CATEGORY=Monsters
+SUBSECTION=Miscellaneous
+DESCRIPTION=Phoenix
+
+ON=@Create
+	npc=brain_monster
+	COLOR=0674
+	str={504, 700}
+	dex={202, 300}
+	int={504, 700}
+	maxhits={340, 383}
+	//resphysical={45, 55}
+	resfire={60, 70}
+	respoison={25, 35}
+	resenergy={40, 50}
+	evaluatingintel={90.2, 100.0}
+	magery={90.2, 100.0}
+	meditation={75.1, 100.0}
+	magicresistance={86.0, 135.0}
+	tactics={80.1, 90.0}
+	wrestling={90.1, 100.0}
+	detectinghidden={70.0, 80.0}
+	taming=1020
+	fame=15000
+	karma=0
+    make_spellcaster 4,7
+
+ON=@NPCRestock
+	item=i_gold,{808,1006}
+
+
+[chardef 128]
+defname=c_pixie
+name=Pixie
+SOUND=0467
+ICON=i_pet_pixie
+dam=9, 15
+armor=100
+RESOURCES=i_hide_spined 5, i_ribs_raw
+CAN=MT_WALK|MT_USEHANDS|MT_FLY|MT_RUN
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+MOVERATE=5
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Pixie
+
+ON=@Create
+	NPC=brain_monster
+	str={21, 30}
+	dex={301, 400}
+	int={201, 250}
+	maxhits={13, 18}
+	//resphysical={80, 90}
+	resfire={40, 50}
+	rescold={40, 50}
+	respoison={40, 50}
+	resenergy={40, 50}
+	evaluatingintel={90.1, 100.0}
+	magery={90.1, 100.0}
+	meditation={90.1, 100.0}
+	magicresistance={100.5, 150.0}
+	tactics={10.1, 20.0}
+	wrestling={10.1, 12.5}
+	fame=7000
+	karma=7000
+
+ON=@NpcRestock
+	item=random_lower_scroll
+	item=random_jewel,2
+	item=random_small_statue,R99
+
+[chardef 02f3]
+defname=c_gargoyle_destroyer
+name=Destroyer Gargoyle
+id=02f3
+SOUND=0174
+ICON=i_pet_GARG
+armor=50
+dam=7, 14
+CAN=MT_WALK|MT_USEHANDS|MT_EQUIP|MT_FLY
+resources=i_ribs_raw
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Destroyer Gargoyle
+MOVERATE=30
+
+ON=@Create
+	NPC=brain_monster
+	str={760, 850}
+	dex={102, 150}
+	int={152, 200}
+	maxhits={482, 485}
+	//resphysical={40, 60}
+	resfire={60, 70}
+	rescold={15, 25}
+	respoison={15, 25}
+	resenergy={15, 25}
+	wrestling={90.1, 100.0}
+	tactics={90.1, 100.0}
+	magicresistance={120.4, 160.0}
+	anatomy={50.5, 100.0}
+	swordsmanship={90.1, 100.0}
+	macefighting={90.1, 100.0}
+	fencing={90.1, 100.0}
+	magery={90.1, 100.0}
+	evaluatingintel={90.1, 100.0}
+	meditation={90.1, 100.0}
+	fame=10000
+	karma=-10000
+
+ON=@NpcRestock
+	item=i_gold,{750 950}
+	//item=i_pickaxe_gargoyle,R50
+
+
+[chardef 123]
+defname=c_Ethereal_Warrior
+name=Ethereal Warrior
+soundnotice=02f8
+soundidle=02f8
+soundhit=02f5
+soundgethit=02f9
+sounddie=02f7
+ICON=i_pet_forestlord
+dam=13, 19
+armor=120
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+RESOURCES=100 i_feather
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Ethereal Warrior
+
+ON=@Create
+	NPC=brain_monster
+	str={586, 785}
+	dex={177, 255}
+	int={351, 450}
+	maxhits={352, 471}
+	//resphysical={80, 90}
+	resfire={40, 50}
+	rescold={40, 50}
+	respoison={40, 50}
+	resenergy={40, 50}
+	anatomy={50.1, 75.0}
+	evaluatingintel={90.1, 100.0}
+	magery={99.1, 100.0}
+	meditation={90.1, 100.0}
+	magicresistance={90.1, 100.0}
+	tactics={90.1, 100.0}
+	wrestling={97.6, 100.0}
+	fame=7000
+	karma=7000
+
+ON=@NpcRestock
+	item=i_gold,{900 1200}
+	//item=i_treasure_map5,R99
+
+
+ON=@Hit
+	HITS += <EVAL <ARGN1>/6>
+	IF (<HITS> > <MAXHITS>)
+		HITS=<MAXHITS>
+	endif
+	STAM += <EVAL <ARGN1>/12>
+	IF (<STAM> > <MAXSTAM>)
+		STAM=<MAXSTAM>
+	endif
+	SRC.STAM -= <EVAL <ARGN1>/12>
+	IF (<SRC.STAM> < 0)
+		SRC.STAM=0
+	endif
+	MANA += <EVAL <ARGN1>/9>
+	IF (<MANA> > <MAXMANA>)
+		MANA=<MAXMANA>
+	endif
+	SRC.MANA -= <EVAL <ARGN1>/9>
+	IF (<SRC.MANA> < 0)
+		SRC.MANA=0
+	endif
+
+
+[chardef 317]
+defname=c_vampire_bat
+NAME=Vampire Bat
+SOUND=0270
+ICON=i_pet_vampirebat
+dam=7, 9
+//RESDISPDNID=c_slime
+//RESLEVEL=3
+//RESDISPDNHUE=01
+armor=14
+CAN=MT_WALK|MT_FLY
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+CATEGORY=New Monsters
+SUBSECTION=AOS
+DESCRIPTION=Vampire Bat
+
+ON=@Create
+	NPC=brain_monster
+	str={91, 110}
+	dex={91, 115}
+	int={26, 50}
+	maxhits={55, 66}
+	//resphysical={35, 45}
+	resfire={15, 25}
+	rescold={15, 25}
+	respoison={60, 70}
+	resenergy={40, 50}
+	magicresistance={70.1, 95.0}
+	tactics={55.1, 80.0}
+	wrestling={30.1, 55.0}
+	fame=1000
+	karma=-1000
+
+
+ON=@NpcRestock
+	ITEM=i_gold,{25 50}
+
+ON=@Hit
+	HITS += <EVAL (<ARGN1>/3)*2>
+	IF (<HITS> > <MAXHITS>)
+		HITS=<MAXHITS>
+	endif
+
+
+//[chardef 269]
+//defname=c_Thorn_bat
+//name=Thorn bat
+//SOUND=snd_monster_daemon1
+//ICON=i_worldgem_bit
+////RESLEVEL=5
+////RESDISPDNHUE=33
+////RESDISPDNID=c_man
+//DAM=4,10
+//armor=15
+//RESOURCES=15 i_ribs_raw
+//CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+//CATEGORY=New Monsters
+//SUBSECTION=ML
+//DESCRIPTION=Thorn bat
+//ON=@Create
+//NPC=brain_monster
+//FAME={100 3000}
+//KARMA={-5000 -6999}
+//STR={70 90}
+//MAXHITS=150
+//INT={100 200}
+//DEX={100 200}
+//PARRYING={60.0 95.0}
+//MAGICRESISTANCE={50.0 70.0}
+//MAGERY={60.0 75.0}
+//TACTICS={60.0 90.0}
+//WRESTLING={60.0 90.0}
+//ON=@NpcRestock
+item=random_jewel,{1 4}
+item=i_gold,{80 130}
+
+
+[chardef c_crystal_lattice_seeker]
+defname=c_crystal_lattice_seeker
+name=Crystal Lattice Seeker
+id=c_Ethereal_Warrior
+sound=02f6
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=13, 19
+armor=80,90
+
+
+on=@create
+	color=047E
+	npc=brain_monster
+	str={550, 850}
+	dex={190, 250}
+	int={350, 450}
+	maxhits={350, 550}
+	resfire={40, 50}
+	rescold={40, 50}
+	respoison={40, 50}
+	resenergy={40, 50}
+	anatomy={50.0, 75.0}
+	evaluatingintel={90.0, 100.0}
+	magery={100.0, 100.0}
+	meditation={90.0, 100.0}
+	magicresistance={90.0, 100.0}
+	tactics={90.0, 100.0}
+	wrestling={90.0, 100.0}
+	fame=17000
+	karma=-17000
+
+on=@npcrestock
+	//item=i_crystal_pieces
+	//item=i_crystal_fragments
+	item=i_gold,{1040 1200}
+	item=random_jewel,2
+
+
+[chardef 02F1]
+defname=c_gargoyle_enslaved
+name=Enslaved Gargoyle
+sound=0174
+can=mt_walk|mt_run|mt_equip|mt_usehands
+resources=i_ribs_raw
+dam=7, 14
+armor=35
+
+on=@create
+	npc=brain_monster
+	str={302, 360}
+	dex={76, 95}
+	int={81, 105}
+	maxhits={186, 212}
+	//resphysical={30, 40}
+	resfire={50, 70}
+	rescold={15, 25}
+	respoison={25, 30}
+	resenergy={25, 30}
+	magicresistance={70.1, 85.0}
+	tactics={50.1, 70.0}
+	wrestling={40.1, 80.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{250 300}
+	//item=i_pickaxe_gargoyle,R50
+	//item=i_treasure_map1,R99
+
+
+[chardef 02F2]
+defname=c_Gargoyle_Enforcer
+name=Gargoyle Enforcer
+sound=0174
+resources=i_ribs_raw
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=7, 14
+armor=50
+
+on=@create
+	npc=brain_monster
+	str={760, 850}
+	dex={102, 150}
+	int={152, 200}
+	maxhits={482, 485}
+	//resphysical={40, 60}
+	resfire={50, 60}
+	rescold={20, 30}
+	respoison={25, 35}
+	resenergy={15, 25}
+	magicresistance={120.1, 130.0}
+	tactics={70.1, 80.0}
+	wrestling={80.1, 90.0}
+	swordsmanship={80.1, 90.0}
+	anatomy={70.1, 80.0}
+	magery={80.1, 90.0}
+	evaluatingintel={70.3, 100.0}
+	meditation={70.3, 100.0}
+	fame=5000
+	karma=-5000
+
+on=@npcrestock
+	item=i_gold,{275 325}
+	//item=i_pickaxe_gargoyle,R50
+
+
+[chardef c_Gargoyle_Shade]
+defname=c_Gargoyle_Shade
+name=gargoyle shade
+id=c_gargoyle
+resources=i_ribs_raw 1
+sound=0482
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=7, 14
+armor=28
+
+on=@create
+	npc=brain_monster
+	color=16385
+	str={76, 78}
+	dex={76, 81}
+	int={36, 48}
+	maxhits={60, 64}
+	maxstam={80, 81}
+	maxmana={75, 78}
+	//resphysical={35, 60}
+	resfire={40, 50}
+	rescold={10, 20}
+	respoison={20, 35}
+	evaluatingintel={57.1, 65.5}
+	magery={60.6, 70.1}
+	magicresistance={52.6, 70.0}
+	tactics={52.7, 60.0}
+	wrestling={47.7, 55.0}
+	detectinghidden={30.0, 40.0}
+	fame=4000
+	karma=-4000
+
+on=@npcrestock
+	item=i_gold,{127 159}
+
+[EOF]
+

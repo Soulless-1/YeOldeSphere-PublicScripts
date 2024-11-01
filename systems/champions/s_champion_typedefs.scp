@@ -1,0 +1,195 @@
+//Champion Spawn System by Soulless
+//v1.0
+//1:35 PM 1/8/2022
+
+[typedef t_champion_idol]	//more1= 0 not active, 1 active, 1 active + spawning
+
+on=@click
+message (<def0.champion_spawn<dmorem>>) Spawn [<qval (<more1> <= 0)?Inactive:Active>]
+if (<src.isgm>)
+  message Level/Spawned/Kills:
+  message <dmore2>,<dmorex>,<dmorey>
+endif
+
+on=@dclick
+if (<src.isgm>) 
+  if !(<more1>)
+    f_champion_spawn_activate
+  else
+    f_champion_spawn_deactivate
+  endif
+  src.sysmessage Champion Altar toggled <qval <more1>?on:off>.
+  return 1
+endif
+
+on=@timer
+ref1=<uid>
+
+if (<ref1.tag0.red_candles> <= 16) && (<ref1.more2> <= 3)	//less than 16 red candles and champion not summonable
+  if (<muldiv <ref1.morey>,100,<def0.champion_spawn_level<ref1.dmore2>_kills>> >= <eval (<ref1.tag0.white_candles>+1)*20>)
+    ref1.f_champion_white_candle_add
+  endif
+endif
+
+
+if !(<ref1.more1>)
+  serv.log timer but no more1 on <ref1.uid>
+
+elseif (<ref1.more2> >= 4)	//this means the champion has spawned
+  src.log <ref1.name> has spawned the Champion but still has a timer. Stopping timer.
+  return 1
+
+elseif (<ref1.more1>) && (<ref1.morex> < <def0.champion_spawn_level<ref1.dmore2>_kills>) && (<ref1.more2> <= 3)		//spawn a minion
+  serv.newnpc <def0.champion_spawn<ref1.morem>_monsters<ref1.dmore2>>
+  ref2=<new>
+  ref2.npc=brain_monster
+  ref2.karma=-2500
+  ref2.events=+e_champion_spawn_monster
+  ref2.flags |= statf_invisible
+  ref2.p=<ref1.p>
+  ref2.home=<ref1.p>
+  ref2.homedist=<def0.champion_spawn_maxdist>
+  //ref2.p=<ref1.p>
+  serv.newitem i_memory_champion_spawn
+  new.link=<ref1>
+  ref2.equip <new>
+  ref1.morex += 1
+  ref2.flags &= ~ statf_invisible
+  if (<tag0.override.spawndist>)
+    ref2.movenear <ref1> <tag0.override.spawndist>
+  else
+    ref2.movenear <ref1> <def0.champion_spawn_maxdist>
+  endif
+  if (<tag0.blacklist_neartypes>)
+    args=<tag0.blacklist_neartypes>
+    for n 0 <eval (<argv>-1)>
+      //serv.log champion minion <name>(<uid>) checking for <argv[<dlocal.n>]> types within 6 tiles
+      if (<ref2.isneartype <argv[<dlocal.n>]> 5>)
+        serv.log WARNING: champion minion <name>(<uid>) is near <argv[<dlocal.n>]>, move it the champion altar
+        ref2.p=<ref1.p>
+      endif
+    endfor
+  endif
+  ref2.flags &= ~ statf_invisible
+  //serv.b level <dmore2>, monsters :<ref1.dmorex>/<ddef0.champion_spawn_level<ref1.dmore2>_kills>, kills: <ref1.dmorey>
+endif
+
+ref1.timer=1	//how fast should this be? 
+
+if (<def0.champion_spawn<dmorem>_nodeactivate> != 1) 
+  if (<tag0.lastcandle>) && (<eval (<serv.time>-<tag0.lastcandle>)/10> >= <def0.champion_level_expires>)
+    if (<tag0.white_candles> >= 1)
+      morey=		//reset kills
+      f_champion_white_candle_remove
+      tag0.lastcandle=<serv.time>
+      serv.log Championspawn <uid> @<region.name> removing white candle
+
+    elseif (<tag0.red_candles> >= 1)
+      morey=		//reset kills
+      f_champion_red_candle_remove
+      tag0.lastcandle=<serv.time>
+      for 4 
+        f_champion_white_candle_add	
+      endif
+      serv.log Championspawn <uid> @<region.name> removing red candle
+    else
+      f_champion_spawn_deactivate
+      serv.log Championspawn <uid> @<region.name> deactivating
+    endif
+  endif
+endif
+
+resendtooltip
+return 1
+
+on=@destroy
+ref1=<uid>
+foritems 3
+  if (<link>==<ref1>)
+    remove
+  endif
+endfor
+
+[typedef t_champion_skull]
+
+[typedef t_champion_skull_pedestal]
+
+on=@dclick
+if (<src.distance <uid>> >= 6)
+  src.sysmessage That is too far away.
+  return 1
+endif
+target What would you like to sacrifice?
+return 1
+
+on=@targon_item
+if (<src.targ.topobj> != <src>) || (<src.targ.distance <uid>> >= 6)
+  src.sysmessage You can't reach that.
+  return 1
+elseif (<src.targ.type> != t_champion_skull) || (<morem> != <src.targ.morem>)
+  message That is not my champions awakening skull!
+  return 1
+elseif (<uid.<var0.champion_skull_pedestal<dmorem>>.isvalid>)
+  message There is already a skull on the pedestal!
+  return 1
+elseif (<uid.<var0.harrower>.isvalid>) && (<uid.<var0.harrower>.isharrower>)
+  message The Harrower has already been summoned!
+  return 1
+endif
+var0.champion_skull_pedestal<dmorem>=<src.targ>
+more2=<src.targ>
+src.targ.attr |= attr_move_never
+src.targ.p=<p>
+src.targ.z += 1
+for n 0 5
+  if (<var0.champion_skull_pedestal<dlocal.n>>)
+    local.skulls += 1
+  endif
+endfor
+if (<local.skulls> >= 6)
+  f_champion_skull_pedestals_clear
+  f_champion_spawn_add_harrower
+endif
+return 1
+
+[typedef t_harrower_gate]
+
+on=@dclick
+if (<src.distance <uid>> >= 6)
+  src.sysmessage That is too far away.
+  return 1
+endif
+src.go <morep>
+return 1
+
+[typedef t_virtue_jewelry]
+
+on=@click
+doswitch <more2>
+  local.virtue=honesty
+  local.virtue=compassion
+  local.virtue=valor
+  local.virtue=justice
+  local.virtue=sacrafice
+  local.virtue=honor
+  local.virtue=spirituality
+  local.virtue=humility
+enddo
+message <name> of <local.virtue>
+return 1
+
+[typedef t_champion_gold]
+
+on=@PickUp_Ground
+if (<link> != 04fffffff) && (<link> != <src>) && !(<src.canlootcorpse <link>>)
+  src.sysmessage You do not have rights to loot that gold.
+  return 1
+endif
+link=04fffffff
+events=-t_champion_gold
+return 0
+
+
+
+
+[EOF]

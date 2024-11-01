@@ -1,0 +1,2719 @@
+//Quest System by Soulless
+//v1.0
+//4:37 AM 8/17/2018
+//Compatibile with world gen system (spawn_quest_npcs_[facet])
+//These defs were imported from Cloud_BR's script pack, rest in peace
+
+//make finished quest logs wipe every sunday at 12am
+//find a calculation for experience to be awarded
+
+[defname questsystem_settings]
+quests_maxlog		12	//max amount of quests a player can have at once	//expand this to unlimited at some point.
+quests_repeat		0	//how many days does it take to repeat a quest?
+quests_exp		1	//award the user some exp based upon the required objectives	//run some quick math while calculating the % complete
+quest_objective_type0	Classic		//this isnt even required really, classic quests do not use this quest engine
+quest_objective_type1	Obtain	
+quest_objective_type2	Kill		//Slay
+quest_objective_type3	Deliver
+quest_objective_type4	Escort
+
+////////////////////////////
+
+
+quest1_namelocalized 	1074755 //Culinary Crisis		//quest name
+quest1_textlocalized 	1074756 //Quest history			//quest basic text displayed when offering
+quest1_textcompletelocalized 	1074759				//quest finishing text when coming back to talk to a npc
+quest1_textuncompletelocalized 	1074758				//quest text when you come back to talk to the npc during the quest
+quest1_textrefuselocalized 	1074757				//quest text when you refuse a quest
+quest1_objectiveamount 2					//amount of objectives the player must complete
+quest1_objective1_type 1					//1=obtain, 2=kill, 3=deliver, 4=escort
+quest1_objective1 20 i_fruit_dates				//amount, itemdef/chardef
+quest1_objective2_type 1					
+quest1_objective2 5 i_cheese_wheel
+quest1_prizes 1							//amount of prizes rewarded
+quest1_prizetype1 1 //item					//1=item, 2=nothing, 3=function
+quest1_prizeid1 tm_questbagtreasure A bag of treasure.		//itemdef, name displayed on dialog
+
+////////////////////////////
+		
+quest2_namelocalized 	1074750 //Momento!
+quest2_textlocalized 	1074751 //Quest history
+quest2_textcompletelocalized 	1074754
+quest2_textuncompletelocalized 	1074753
+quest2_textrefuselocalized 	1074752
+quest2_objectiveamount 1
+quest2_objective1_type 1
+quest2_objective1 1 i_resolves_bridle
+quest2_prizes 1
+quest2_prizetype1 1 //item
+quest2_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest3_namelocalized 	1074444 //Wonders of the Natural World
+quest3_textlocalized 	1074439 //Quest history
+quest3_textcompletelocalized 	1074443
+quest3_textuncompletelocalized 	1074442
+quest3_textrefuselocalized 	1074441
+quest3_objectiveamount 1
+quest3_objective1_type 1
+quest3_objective1 5 i_thesis_notes
+quest3_prizes 1
+quest3_prizetype1 1 //item
+quest3_prizeid1 i_librarian_key Librarian's Key.
+
+////////////////////////////
+
+quest4_namelocalized 	1074433 //Bound to the Land
+quest4_textlocalized 	1074434 //Quest history
+quest4_textcompletelocalized 	1074437
+quest4_textuncompletelocalized 	1074435
+quest4_textrefuselocalized 	1074436
+quest4_objectiveamount 2
+quest4_objective1_type 2
+quest4_objective1 12 c_dryad
+quest4_objective2_type 2
+quest4_objective2 1 c_saliva
+quest4_prizes 1
+quest4_prizetype1 1 //item
+quest4_prizeid1 i_dryads_blessing Dryad's Blessing.
+
+////////////////////////////
+
+quest5_namelocalized 	1074640 //Pointy Ears
+quest5_textlocalized 	1074641 //Quest history
+quest5_textcompletelocalized 	1074644
+quest5_textuncompletelocalized 	1074643
+quest5_textrefuselocalized 	1074642
+quest5_objectiveamount 1
+quest5_objective1_type 1
+quest5_objective1 20 i_servered_elf_ears
+quest5_prizes 1
+quest5_prizetype1 1 //item
+quest5_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest6_namelocalized 	1074711 //Scale Armor
+quest6_textlocalized 	1074712 //Quest history
+quest6_textcompletelocalized 	1074725
+quest6_textuncompletelocalized 	1074724
+quest6_textrefuselocalized 	1074728
+quest6_objectiveamount 2
+quest6_objective1_type 1
+quest6_objective1 1 i_thrashers_tail
+quest6_objective2_type 1
+quest6_objective2 10 i_hydra_scale
+quest6_prizes 1
+quest6_prizetype1 1 //item
+quest6_prizeid1 tm_strongbox A strongbox.
+
+////////////////////////////
+
+quest7_namelocalized 	1073905 //From the Gaultier Collection
+quest7_textlocalized 	1074095 //Quest history
+quest7_textcompletelocalized 	1074180 //1074172
+quest7_textuncompletelocalized 	1074171
+quest7_textrefuselocalized 	1074172
+quest7_objectiveamount 1
+quest7_objective1_type 1
+quest7_objective1 10 i_armor_female_bustier_studded
+quest7_prizes 1
+quest7_prizetype1 1 //item
+quest7_prizeid1 tm_questtailorcraftsatchel Craftman's Satchel - Tailoring.
+
+////////////////////////////
+
+quest8_namelocalized 	1073903 //The Puffy Shirt
+quest8_textlocalized 	1074093 //Quest history
+quest8_textcompletelocalized 	1074180
+quest8_textuncompletelocalized 	1074223
+quest8_textrefuselocalized 	1074172
+quest8_objectiveamount 1
+quest8_objective1_type 1
+quest8_objective1 10 i_shirt_fancy
+quest8_prizes 1
+quest8_prizetype1 1 //item
+quest8_prizeid1 tm_questtailorcraftsatchel Craftman's Satchel - Tailoring.
+
+////////////////////////////
+
+quest9_namelocalized 	1073901 //Hâute Couture
+quest9_textlocalized 	1074091 //Quest history
+quest9_textcompletelocalized 	1074180
+quest9_textuncompletelocalized 	1073947
+quest9_textrefuselocalized 	1074137
+quest9_objectiveamount 1
+quest9_objective1_type 1
+quest9_objective1 10 i_flower_garland
+quest9_prizes 1
+quest9_prizetype1 1 //item
+quest9_prizeid1 tm_questtailorcraftsatchel Craftman's Satchel - Tailoring.
+
+////////////////////////////
+
+quest10_namelocalized 	1073902 //The King of Clothing
+quest10_textlocalized 	1074092 //Quest history
+quest10_textcompletelocalized 	1074226
+quest10_textuncompletelocalized 	1074223
+quest10_textrefuselocalized 	1074172
+quest10_objectiveamount 1
+quest10_objective1_type 1
+quest10_objective1 10 i_kilt
+quest10_prizes 1
+quest10_prizetype1 1 //item
+quest10_prizeid1 tm_questtailorcraftsatchel Craftman's Satchel - Tailoring.
+
+////////////////////////////
+
+quest11_namelocalized 	1074350 //Ingenuity
+quest11_textlocalized 	1074406 //Quest history
+quest11_textcompletelocalized 	1074226
+quest11_textuncompletelocalized 	1074509
+quest11_textrefuselocalized 	1074508
+quest11_objectiveamount 1
+quest11_objective1_type 1
+quest11_objective1 10 i_power_crystal
+quest11_prizes 1
+quest11_prizetype1 1 //item
+quest11_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest12_namelocalized 	1073882 //Arch Support
+quest12_textlocalized 	1074118 //Quest history
+quest12_textcompletelocalized 	1073969
+quest12_textuncompletelocalized 	1073928
+quest12_textrefuselocalized 	1074287
+quest12_objectiveamount 1
+quest12_objective1_type 1
+quest12_objective1 10 i_chair_stool
+quest12_prizes 1
+quest12_prizetype1 1 //item
+quest12_prizeid1 tm_questcarpentercraftsatchel Craftman's Satchel - Carpentry.
+
+////////////////////////////
+
+quest13_namelocalized 	1073055 //Glassy Foe
+quest13_textlocalized 	1074669 //Quest history
+quest13_textcompletelocalized 	1074673
+quest13_textuncompletelocalized 	1074672
+quest13_textrefuselocalized 	1074671
+quest13_objectiveamount 1
+quest13_objective1_type 2
+quest13_objective1 5 c_crystal_lattice_seeker
+quest13_objective1_LOCATION Prism of Light
+quest13_prizes 1
+quest13_prizetype1 1 //item
+quest13_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest14_namelocalized 	1073656 //Circle of Life
+quest14_textlocalized 	1073695 //Quest history
+quest14_textcompletelocalized 	1073777
+quest14_textuncompletelocalized 	1073736
+quest14_textrefuselocalized 	1073734
+quest14_objectiveamount 1
+quest14_objective1_type 2
+quest14_objective1 8 c_bog_thing
+quest14_prizes 1
+quest14_prizetype1 1 //item
+quest14_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest15_namelocalized 	1073074 //Dust to Dust
+quest15_textlocalized 	1073564 //Quest history
+quest15_textcompletelocalized 	1073604
+quest15_textuncompletelocalized 	1073584
+quest15_textrefuselocalized 	1073580
+quest15_objectiveamount 1
+quest15_objective1_type 2
+quest15_objective1 12 c_elem_earth
+quest15_prizes 1
+quest15_prizetype1 1 //item
+quest15_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest16_namelocalized 	1073881 //Stop Harping on Me
+quest16_textlocalized 	1074071 //Quest history
+quest16_textcompletelocalized 	1073980
+quest16_textuncompletelocalized 	1073927
+quest16_textrefuselocalized 	1074172
+quest16_objectiveamount 1
+quest16_objective1_type 1
+quest16_objective1 20 i_lyre
+quest16_prizes 1
+quest16_prizetype1 1 //item
+quest16_prizeid1 tm_questcarpentercraftsatchel Craftman's Satchel - Carpentry.
+
+////////////////////////////
+
+quest17_namelocalized 	1073911 //Nothing Fancy
+quest17_textlocalized 	1074101 //Quest history
+quest17_textcompletelocalized 	1073975
+quest17_textuncompletelocalized 	1073957
+quest17_textrefuselocalized 	1073921
+quest17_objectiveamount 1
+quest17_objective1_type 1
+quest17_objective1 15 i_bascinet
+quest17_prizes 1
+quest17_prizetype1 1 //item
+quest17_prizeid1 tm_questblacksmithcraftsatchel Craftman's Satchel - Blacksmithing.
+
+////////////////////////////
+
+quest18_namelocalized 	1073908 //The Far Eye
+quest18_textlocalized 	1074098 //Quest history
+quest18_textcompletelocalized 	1073979
+quest18_textuncompletelocalized 	1073954
+quest18_textrefuselocalized 	1073921
+quest18_objectiveamount 1
+quest18_objective1_type 1
+quest18_objective1 20 i_spyglass
+quest18_prizes 1
+quest18_prizetype1 1 //item
+quest18_prizeid1 tm_questtinkercraftsatchel Craftman's Satchel - Tinkering.
+
+////////////////////////////
+
+quest19_namelocalized 	1073001 //Voracious Plants
+quest19_textlocalized 	1073024 //Quest history
+quest19_textcompletelocalized 	1074179
+quest19_textuncompletelocalized 	1074201
+quest19_textrefuselocalized 	1073019
+quest19_objectiveamount 2
+quest19_objective1_type 2
+quest19_objective1 8 c_corpser
+quest19_objective2_type 2
+quest19_objective2 2 c_swamp_tentacles
+quest19_prizes 1
+quest19_prizetype1 1 //item
+quest19_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest20_namelocalized 	1072989 //Molten Reptiles
+quest20_textlocalized 	1073018 //Quest history
+quest20_textcompletelocalized 	1074179
+quest20_textuncompletelocalized 	1074201
+quest20_textrefuselocalized 	1073019
+quest20_objectiveamount 1
+quest20_objective1_type 2
+quest20_objective1 10 c_lava_lizard
+quest20_prizes 1
+quest20_prizetype1 1 //item
+quest20_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest21_namelocalized 	1073000 //Frightmares
+quest21_textlocalized 	1073036 //Quest history
+quest21_textcompletelocalized 	1074179
+quest21_textuncompletelocalized 	1074201
+quest21_textrefuselocalized 	1073019
+quest21_objectiveamount 1
+quest21_objective1_type 2
+quest21_objective1 10 c_plague_spawn
+quest21_prizes 1
+quest21_prizetype1 1 //item
+quest21_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest22_namelocalized 	1073007 //Birds of a Feather
+quest22_textlocalized 	1073022 //Quest history
+quest22_textcompletelocalized 	1074179
+quest22_textuncompletelocalized 	1074201
+quest22_textrefuselocalized 	1073019
+quest22_objectiveamount 1
+quest22_objective1_type 2
+quest22_objective1 10 c_harpy
+quest22_prizes 1
+quest22_prizetype1 1 //item
+quest22_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest23_namelocalized 	1072987 //Creepy Crawlies
+quest23_textlocalized 	1073016 //Quest history
+quest23_textcompletelocalized 	1074179
+quest23_textuncompletelocalized 	1074201
+quest23_textrefuselocalized 	1073019
+quest23_objectiveamount 1
+quest23_objective1_type 2
+quest23_objective1 12 c_spider_giant
+quest23_prizes 1
+quest23_prizetype1 1 //item
+quest23_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest24_namelocalized 	1072997 //Blood Suckers
+quest24_textlocalized 	1073025 //Quest history
+quest24_textcompletelocalized 	1074179
+quest24_textuncompletelocalized 	1074201
+quest24_textrefuselocalized 	1073019
+quest24_objectiveamount 1
+quest24_objective1_type 2
+quest24_objective1 10 c_vampire_bat
+quest24_prizes 1
+quest24_prizetype1 1 //item
+quest24_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest25_namelocalized 	1073662 //Friendly Neighborhood Spider-killer
+quest25_textlocalized 	1073701 //Quest history
+quest25_textcompletelocalized 	1073783
+quest25_textuncompletelocalized 	1073742
+quest25_textrefuselocalized 	1073733
+quest25_objectiveamount 1
+quest25_objective1_type 2
+quest25_objective1 8 c_dread_spider
+quest25_prizes 1
+quest25_prizetype1 1 //item
+quest25_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest26_namelocalized 	1073658 //Gargoyle's Wrath
+quest26_textlocalized 	1073697 //Quest history
+quest26_textcompletelocalized 	1073779
+quest26_textuncompletelocalized 	1073738
+quest26_textrefuselocalized 	1073733
+quest26_objectiveamount 1
+quest26_objective1_type 2
+quest26_objective1 6 c_enforcer_gargoyle
+quest26_prizes 1
+quest26_prizetype1 1 //item
+quest26_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest27_namelocalized 	1073073 //The Afterlife
+quest27_textlocalized 	1073563 //Quest history
+quest27_textcompletelocalized 	1073603
+quest27_textuncompletelocalized 	1073583
+quest27_textrefuselocalized 	1073580
+quest27_objectiveamount 1
+quest27_objective1_type 2
+quest27_objective1 15 c_mummy
+quest27_prizes 1
+quest27_prizetype1 1 //item
+quest27_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest28_namelocalized 	1073087 //Stirring the Nest
+quest28_textlocalized 	1073577 //Quest history
+quest28_textcompletelocalized 	1073617
+quest28_textuncompletelocalized 	1073597
+quest28_textrefuselocalized 	1073580
+quest28_objectiveamount 1
+quest28_objective1_type 2
+quest28_objective1 3 c_fire_ant_queen
+quest28_prizes 1
+quest28_prizetype1 1 //item
+quest28_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest29_namelocalized 	1073080 //Undead Mages
+quest29_textlocalized 	1073570 //Quest history
+quest29_textcompletelocalized 	1073610
+quest29_textuncompletelocalized 	1073590
+quest29_textrefuselocalized 	1073580
+quest29_objectiveamount 1
+quest29_objective1_type 2
+quest29_objective1 10 c_skeleton_mage
+quest29_prizes 1
+quest29_prizetype1 1 //item
+quest29_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest30_namelocalized 	1073077 //Impish Delights
+quest30_textlocalized 	1073567 //Quest history
+quest30_textcompletelocalized 	1073607
+quest30_textuncompletelocalized 	1073587
+quest30_textrefuselocalized 	1073580
+quest30_objectiveamount 1
+quest30_objective1_type 2
+quest30_objective1 12 c_imp
+quest30_prizes 1
+quest30_prizetype1 1 //item
+quest30_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest31_namelocalized 	1073003 //Mongbat Menace!
+quest31_textlocalized 	1073033 //Quest history
+quest31_textcompletelocalized 	1073607
+quest31_textuncompletelocalized 	1075383
+quest31_textrefuselocalized 	1073580
+quest31_objectiveamount 2
+quest31_objective1_type 2
+quest31_objective1 10 c_mongbat_arboreal
+quest31_objective2_type 2
+quest31_objective2 4 c_mongbat
+quest31_prizes 1
+quest31_prizetype1 1 //item
+quest31_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest32_namelocalized 	1073660 //Three Wishes
+quest32_textlocalized 	1073699 //Quest history
+quest32_textcompletelocalized 	1073781
+quest32_textuncompletelocalized 	1073740
+quest32_textrefuselocalized 	1073734
+quest32_objectiveamount 1
+quest32_objective1_type 2
+quest32_objective1 8 c_efreet
+quest32_prizes 1
+quest32_prizetype1 1 //item
+quest32_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest33_namelocalized 	1073084 //Evil Eye
+quest33_textlocalized 	1073574 //Quest history
+quest33_textcompletelocalized 	1073614
+quest33_textuncompletelocalized 	1073589
+quest33_textrefuselocalized 	1073580
+quest33_objectiveamount 1
+quest33_objective1_type 2
+quest33_objective1 12 c_gazer
+quest33_prizes 1
+quest33_prizetype1 1 //item
+quest33_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest34_namelocalized 	1073655 //Forked Tongue
+quest34_textlocalized 	1073694 //Quest history
+quest34_textcompletelocalized 	1073776
+quest34_textuncompletelocalized 	1073735
+quest34_textrefuselocalized 	1073733
+quest34_objectiveamount 1
+quest34_objective1_type 2
+quest34_objective1 10 c_ophidian_knight
+quest34_prizes 1
+quest34_prizetype1 1 //item
+quest34_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest35_namelocalized 	1074738 //A Feather in Yer Cap
+quest35_textlocalized 	1074737 //Quest history
+quest35_textcompletelocalized 	1074734
+quest35_textuncompletelocalized 	1074735
+quest35_textrefuselocalized 	1074736
+quest35_objectiveamount 1
+quest35_objective1_type 1
+quest35_objective1 1 i_salivas_feather
+quest35_prizes 2
+quest35_prizetype1 1 //item
+quest35_prizeid1 i_salivas_cap Saliva's Cap.
+quest35_prizetype2 1 //item
+quest35_prizeid2 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest36_namelocalized 	1074726 //A Tale of Tail
+quest36_textlocalized 	1074727 //Quest history
+quest36_textcompletelocalized 	1074730
+quest36_textuncompletelocalized 	1074729
+quest36_textrefuselocalized 	1074728
+quest36_objectiveamount 1
+quest36_objective1_type 1
+quest36_objective1 1 i_abscess_tail
+quest36_prizes 1
+quest36_prizetype1 1 //item
+quest36_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest37_namelocalized 	1074681 //A Trog and His Dog
+quest37_textlocalized 	1074680 //Quest history
+quest37_textcompletelocalized 	1074683
+quest37_textuncompletelocalized 	1074682
+quest37_textrefuselocalized 	1074690
+quest37_objectiveamount 2
+quest37_objective1_type 2
+quest37_objective1 1 c_lurg
+quest37_objective2_type 2
+quest37_objective2 1 c_grobu
+quest37_prizes 1
+quest37_prizetype1 1 //item
+quest37_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+quest37_chainprev 44,
+
+////////////////////////////
+
+quest38_namelocalized 	1072983 //Dead Man Walking
+quest38_textlocalized 	1073009 //Quest history
+quest38_textcompletelocalized 	1073605
+quest38_textuncompletelocalized 	1073019
+quest38_textrefuselocalized 	1073019
+quest38_objectiveamount 2
+quest38_objective1_type 2
+quest38_objective1 5 c_zombie
+quest38_objective2_type 2
+quest38_objective2 5 c_skeleton
+quest38_prizes 1
+quest38_prizetype1 1 //item
+quest38_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest39_namelocalized 	1072250 //Forced Migration
+quest39_textlocalized 	1072264 //Quest history
+quest39_textcompletelocalized 	1072272
+quest39_textuncompletelocalized 	1072271
+quest39_textrefuselocalized 	1072270
+quest39_objectiveamount 1
+quest39_objective1_type 2
+quest39_objective1 10 c_bird
+quest39_prizes 1
+quest39_prizetype1 1 //item
+quest39_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+quest40_namelocalized 	1073008 //It's a Ghastly Job
+quest40_textlocalized 	1073012 //Quest history
+quest40_textcompletelocalized 	1073605
+quest40_textuncompletelocalized 	1073019
+quest40_textrefuselocalized 	1073019
+quest40_objectiveamount 1
+quest40_objective1_type 2
+quest40_objective1 12 c_ghoul
+quest40_prizes 1
+quest40_prizetype1 1 //item
+quest40_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest41_namelocalized 	1072996 //King of Bears
+quest41_textlocalized 	1073030 //Quest history
+quest41_textcompletelocalized 	1073619
+quest41_textuncompletelocalized 	1073019
+quest41_textrefuselocalized 	1072979
+quest41_objectiveamount 1
+quest41_objective1_type 2
+quest41_objective1 10 c_bear_grizzly
+quest41_prizes 1
+quest41_prizetype1 1 //item
+quest41_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest42_namelocalized 	1073002 //Roll the Bones
+quest42_textlocalized 	1073011 //Quest history
+quest42_textcompletelocalized 	1073605
+quest42_textuncompletelocalized 	1073019
+quest42_textrefuselocalized 	1073019
+quest42_objectiveamount 1
+quest42_objective1_type 2
+quest42_objective1 8 c_patchwork_skeleton
+quest42_prizes 1
+quest42_prizetype1 1 //item
+quest42_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest43_namelocalized 	1073076 //Spirits
+quest43_textlocalized 	1073566 //Quest history
+quest43_textcompletelocalized 	1073606
+quest43_textuncompletelocalized 	1073586
+quest43_textrefuselocalized 	1073580
+quest43_objectiveamount 1
+quest43_objective1_type 2
+quest43_objective1 15 c_spectre
+quest43_prizes 1
+quest43_prizetype1 1 //item
+quest43_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest44_namelocalized 	1074688 //Troglodytes!
+quest44_textlocalized 	1074689 //Quest history
+quest44_textcompletelocalized 	1074683
+quest44_textuncompletelocalized 	1074691
+quest44_textrefuselocalized 	1074690
+quest44_objectiveamount 1
+quest44_objective1_type 2
+quest44_objective1 12 c_troglodyte
+quest44_prizes 1
+quest44_prizetype1 1 //item
+quest44_prizeid1 tm_questbagtrinkets A bag of trinkets.
+quest44_chainnext 37
+
+////////////////////////////
+
+quest45_namelocalized 	1073075 //Unholy Knights
+quest45_textlocalized 	1073565 //Quest history
+quest45_textcompletelocalized 	1073605
+quest45_textuncompletelocalized 	1073585
+quest45_textrefuselocalized 	1073580
+quest45_objectiveamount 1
+quest45_objective1_type 2
+quest45_objective1 16 c_skeleton_knight
+quest45_prizes 1
+quest45_prizetype1 1 //item
+quest45_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest46_namelocalized 	1073877 //A Simple Bow
+quest46_textlocalized 	1074113 //Quest history
+quest46_textcompletelocalized 	1073968
+quest46_textuncompletelocalized 	1073923
+quest46_textrefuselocalized 	1073921
+quest46_objectiveamount 1
+quest46_objective1_type 1
+quest46_objective1 25 i_bow
+quest46_prizes 1
+quest46_prizetype1 1 //item
+quest46_prizeid1 tm_questbowcraftcraftsatchel Craftman's Satchel - Bowcrafting.
+
+////////////////////////////
+
+quest47_namelocalized 	1073878 //Ingenious Archery, Part I
+quest47_textlocalized 	1074114 //Quest history
+quest47_textcompletelocalized 	1073968
+quest47_textuncompletelocalized 	1073924
+quest47_textrefuselocalized 	1073921
+quest47_objectiveamount 1
+quest47_objective1_type 1
+quest47_objective1 25 i_crossbow
+quest47_prizes 1
+quest47_prizetype1 1 //item
+quest47_prizeid1 tm_questbowcraftcraftsatchel Craftman's Satchel - Bowcrafting.
+
+////////////////////////////
+
+quest48_namelocalized 	1073879 //Ingenious Archery, Part II
+quest48_textlocalized 	1074115 //Quest history
+quest48_textcompletelocalized 	1073968
+quest48_textuncompletelocalized 	1073925
+quest48_textrefuselocalized 	1073921
+quest48_objectiveamount 1
+quest48_objective1_type 1
+quest48_objective1 15 i_crossbow_heavy
+quest48_prizes 1
+quest48_prizetype1 1 //item
+quest48_prizeid1 tm_questbowcraftcraftsatchel Craftman's Satchel - Bowcrafting.
+
+////////////////////////////
+
+quest49_namelocalized 	1073880 //Ingenious Archery, Part III
+quest49_textlocalized 	1074116 //Quest history
+quest49_textcompletelocalized 	1073968
+quest49_textuncompletelocalized 	1073926
+quest49_textrefuselocalized 	1073921
+quest49_objectiveamount 1
+quest49_objective1_type 1
+quest49_objective1 16 i_repeating_crossbow
+quest49_prizes 1
+quest49_prizetype1 1 //item
+quest49_prizeid1 tm_questbowcraftcraftsatchel Craftman's Satchel - Bowcrafting.
+
+////////////////////////////
+
+quest50_namelocalized 	1073876 //Lethal Darts
+quest50_textlocalized 	1074112 //Quest history
+quest50_textcompletelocalized 	1073973
+quest50_textuncompletelocalized 	1073922
+quest50_textrefuselocalized 	1073921
+quest50_objectiveamount 1
+quest50_objective1_type 1
+quest50_objective1 80 i_xbolt
+quest50_prizes 1
+quest50_prizetype1 1 //item
+quest50_prizeid1 tm_questbowcraftcraftsatchel Craftman's Satchel - Bowcrafting.
+
+////////////////////////////
+
+quest51_namelocalized 	1072249 //Thinning the Herd
+quest51_textlocalized 	1072263 //Quest history
+quest51_textcompletelocalized 	1072272
+quest51_textuncompletelocalized 	1072271
+quest51_textrefuselocalized 	1072270
+quest51_objectiveamount 1
+quest51_objective1_type 2
+quest51_objective1 10 c_goat
+quest51_prizes 1
+quest51_prizetype1 1 //item
+quest51_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+quest52_namelocalized 	1072999 //Specimens
+quest52_textlocalized 	1073032 //Quest history
+quest52_textcompletelocalized 	1073613
+quest52_textuncompletelocalized 	1073589
+quest52_textrefuselocalized 	1073580
+quest52_objectiveamount 1
+quest52_objective1_type 2
+quest52_objective1 12 c_fire_ant_worker
+quest52_prizes 1
+quest52_prizetype1 1 //item
+quest52_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest53_namelocalized 	1072998 //Squishy
+quest53_textlocalized 	1073031 //Quest history
+quest53_textcompletelocalized 	1073603
+quest53_textuncompletelocalized 	1073019
+quest53_textrefuselocalized 	1073734
+quest53_objectiveamount 1
+quest53_objective1_type 2
+quest53_objective1 12 c_slime
+quest53_prizes 1
+quest53_prizetype1 1 //item
+quest53_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest54_namelocalized 	1072988 //A Big Job
+quest54_textlocalized 	1073017 //Quest history
+quest54_textcompletelocalized 	1073621
+quest54_textuncompletelocalized 	1073019
+quest54_textrefuselocalized 	1072979
+quest54_objectiveamount 2
+quest54_objective1_type 2
+quest54_objective1 5 c_ogre
+quest54_objective2_type 2
+quest54_objective2 5 c_ettin
+quest54_prizes 1
+quest54_prizetype1 1 //item
+quest54_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest55_namelocalized 	1072985 //Trolling for Trolls
+quest55_textlocalized 	1073014 //Quest history
+quest55_textcompletelocalized 	1046132
+quest55_textuncompletelocalized 	1073019
+quest55_textrefuselocalized 	1072973
+quest55_objectiveamount 1
+quest55_objective1_type 2
+quest55_objective1 10 c_troll
+quest55_prizes 1
+quest55_prizetype1 1 //item
+quest55_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest56_namelocalized 	1072986 //Orc Slaying
+quest56_textlocalized 	1073015 //Quest history
+quest56_textcompletelocalized 	1073611
+quest56_textuncompletelocalized 	1072668
+quest56_textrefuselocalized 	1072979
+quest56_objectiveamount 2
+quest56_objective1_type 2
+quest56_objective1 8 c_orc
+quest56_objective2_type 2
+quest56_objective2 4 c_orc_scout
+quest56_prizes 1
+quest56_prizetype1 1 //item
+quest56_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest57_namelocalized 	1073673 //Cold Hearted
+quest57_textlocalized 	1073027 //Quest history
+quest57_textcompletelocalized 	1046132
+quest57_textuncompletelocalized 	1072770
+quest57_textrefuselocalized 	1072973
+quest57_objectiveamount 2
+quest57_objective1_type 2
+quest57_objective1 6 c_ice_serpent
+quest57_objective2_type 2
+quest57_objective2 6 c_frostspider
+quest57_prizes 1
+quest57_prizetype1 1 //item
+quest57_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest58_namelocalized 	1072984 //Forked Tongues
+quest58_textlocalized 	1073013 //Quest history
+quest58_textcompletelocalized 	1073601
+quest58_textuncompletelocalized 	1072770
+quest58_textrefuselocalized 	1072667
+quest58_objectiveamount 1
+quest58_objective1_type 2
+quest58_objective1 10 c_lizardman
+quest58_prizes 1
+quest58_prizetype1 1 //item
+quest58_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest59_namelocalized 	1073089 //It's Elemental
+quest59_textlocalized 	1073579 //Quest history
+quest59_textcompletelocalized 	1073619
+quest59_textuncompletelocalized 	1073599
+quest59_textrefuselocalized 	1073580
+quest59_objectiveamount 3
+quest59_objective1_type 2
+quest59_objective1 4 c_elem_fire
+quest59_objective2_type 2
+quest59_objective2 4 c_elem_water
+quest59_objective3_type 2
+quest59_objective3 4 c_elem_earth
+quest59_prizes 1
+quest59_prizetype1 1 //item
+quest59_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest60_namelocalized 	1073081 //Orcish Elite
+quest60_textlocalized 	1073571 //Quest history
+quest60_textcompletelocalized 	1073611
+quest60_textuncompletelocalized 	1073591
+quest60_textrefuselocalized 	1073580
+quest60_objectiveamount 2
+quest60_objective1_type 2
+quest60_objective1 6 c_orc_bomber
+quest60_objective2_type 2
+quest60_objective2 4 c_orc_captain
+quest60_prizes 1
+quest60_prizetype1 1 //item
+quest60_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest61_namelocalized 	1073078 //Warrior Caste
+quest61_textlocalized 	1073568 //Quest history
+quest61_textcompletelocalized 	1073608
+quest61_textuncompletelocalized 	1073588
+quest61_textrefuselocalized 	1073580
+quest61_objectiveamount 1
+quest61_objective1_type 2
+quest61_objective1 10 c_terathan_warrior
+quest61_prizes 1
+quest61_prizetype1 1 //item
+quest61_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest62_namelocalized 	1073915 //Dragon Protection
+quest62_textlocalized 	1074105 //Quest history
+quest62_textcompletelocalized 	1073982
+quest62_textuncompletelocalized 	1073961
+quest62_textrefuselocalized 	1073921
+quest62_objectiveamount 1
+quest62_objective1_type 1
+quest62_objective1 10 i_dragon_helm
+quest62_prizes 1
+quest62_prizetype1 1 //item
+quest62_prizeid1 tm_questblacksmithcraftsatchel Craftman's Satchel - Blacksmithing.
+
+////////////////////////////
+
+quest63_namelocalized 	1073913 //Cuts Both Ways
+quest63_textlocalized 	1074103 //Quest history
+quest63_textcompletelocalized 	1073981
+quest63_textuncompletelocalized 	1073959
+quest63_textrefuselocalized 	1073921
+quest63_objectiveamount 1
+quest63_objective1_type 1
+quest63_objective1 10 i_sword_broad
+quest63_prizes 1
+quest63_prizetype1 1 //item
+quest63_prizeid1 tm_questblacksmithcraftsatchel Craftman's Satchel - Blacksmithing.
+
+////////////////////////////
+
+quest64_namelocalized 	1073912 //The Bulwark
+quest64_textlocalized 	1074102 //Quest history
+quest64_textcompletelocalized 	1073979
+quest64_textuncompletelocalized 	1073958
+quest64_textrefuselocalized 	1073921
+quest64_objectiveamount 1
+quest64_objective1_type 1
+quest64_objective1 10 i_shield_heater
+quest64_prizes 1
+quest64_prizetype1 1 //item
+quest64_prizeid1 tm_questblacksmithcraftsatchel Craftman's Satchel - Blacksmithing.
+
+////////////////////////////
+
+quest65_namelocalized 	1074645 //Dreadhorn
+quest65_textlocalized 	1074646 //Quest history
+quest65_textcompletelocalized 	1074649
+quest65_textuncompletelocalized 	1074648
+quest65_textrefuselocalized 	1074647
+quest65_objectiveamount 1
+quest65_objective1_type 2
+quest65_objective1 1 c_peerless_dreadhorn
+quest65_prizes 2
+quest65_prizetype1 1 //item
+quest65_prizeid1 tm_queststrongbox A Strongbox.
+quest65_prizetype2 1 //item
+quest65_prizeid2 i_quest48_prize A Festive Cactus.
+
+////////////////////////////
+
+quest66_namelocalized 	1073061 //Plague Lord
+quest66_textlocalized 	1074692 //Quest history
+quest66_textcompletelocalized 	1074749
+quest66_textuncompletelocalized 	1074746
+quest66_textrefuselocalized 	1074745
+quest66_objectiveamount 3
+quest66_objective1_type 2
+quest66_objective1_LOCATION Palace of Paroxysmus
+quest66_objective1 10 c_plague_spawn
+quest66_objective2_type 2
+quest66_objective2_LOCATION Palace of Paroxysmus
+quest66_objective2 3 c_plague_beast
+quest66_objective3_type 2
+quest66_objective3_LOCATION Palace of Paroxysmus
+quest66_objective3 1 c_plague_beast_lord
+quest66_prizes 1
+quest66_prizetype1 1 //item
+quest66_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest67_namelocalized 	1073069 //Paroxysmus' Daemons
+quest67_textlocalized 	1074694 //Quest history
+quest67_textcompletelocalized 	1074749
+quest67_textuncompletelocalized 	1074746
+quest67_textrefuselocalized 	1074745
+quest67_objectiveamount 1
+quest67_objective1_type 2
+quest67_objective1_LOCATION Palace of Paroxysmus
+quest67_objective1 10 c_daemon
+quest67_prizes 1
+quest67_prizetype1 1 //item
+quest67_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest68_namelocalized 	1073068 //Paroxysmus' Moloch
+quest68_textlocalized 	1074695 //Quest history
+quest68_textcompletelocalized 	1074749
+quest68_textuncompletelocalized 	1074746
+quest68_textrefuselocalized 	1074745
+quest68_objectiveamount 1
+quest68_objective1_type 2
+quest68_objective1_LOCATION Palace of Paroxysmus
+quest68_objective1 3 c_fourarmed_daemon
+quest68_prizes 1
+quest68_prizetype1 1 //item
+quest68_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest69_namelocalized 	1073062 //Caustic Combo
+quest69_textlocalized 	1074693 //Quest history
+quest69_textcompletelocalized 	1074749
+quest69_textuncompletelocalized 	1074746
+quest69_textrefuselocalized 	1074745
+quest69_objectiveamount 2
+quest69_objective1_type 2
+quest69_objective1_LOCATION Palace of Paroxysmus
+quest69_objective1 3 c_elem_poison
+quest69_objective2_type 2
+quest69_objective2_LOCATION Palace of Paroxysmus
+quest69_objective2 6 c_acid_elemental
+quest69_prizes 1
+quest69_prizetype1 1 //item
+quest69_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest70_namelocalized 	1073067 //Paroxysmus' Succubi
+quest70_textlocalized 	1074696 //Quest history
+quest70_textcompletelocalized 	1074749
+quest70_textuncompletelocalized 	1074746
+quest70_textrefuselocalized 	1074745
+quest70_objectiveamount 1
+quest70_objective1_type 2
+quest70_objective1_LOCATION Palace of Paroxysmus
+quest70_objective1 3 c_succubus
+quest70_prizes 1
+quest70_prizetype1 1 //item
+quest70_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest71_namelocalized 	1073070 //Paroxysmus' Arcane Daemons
+quest71_textlocalized 	1074697 //Quest history
+quest71_textcompletelocalized 	1074749
+quest71_textuncompletelocalized 	1074746
+quest71_textrefuselocalized 	1074745
+quest71_objectiveamount 1
+quest71_objective1_type 2
+quest71_objective1_LOCATION Palace of Paroxysmus
+quest71_objective1 10 c_arcane_daemon
+quest71_prizes 1
+quest71_prizetype1 1 //item
+quest71_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest72_namelocalized 	1073057 //Hailstorm
+quest72_textlocalized 	1074670 //Quest history
+quest72_textcompletelocalized 	1074673
+quest72_textuncompletelocalized 	1074672
+quest72_textrefuselocalized 	1074671
+quest72_objectiveamount 1
+quest72_objective1_type 2
+quest72_objective1_LOCATION Prism of Light
+quest72_objective1 8 c_crystal_vortice
+quest72_prizes 1
+quest72_prizetype1 1 //item
+quest72_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest73_namelocalized 	1073050 //How Many Heads?
+quest73_textlocalized 	1074674 //Quest history
+quest73_textcompletelocalized 	1074673
+quest73_textuncompletelocalized 	1074672
+quest73_textrefuselocalized 	1074671
+quest73_objectiveamount 1
+quest73_objective1_type 2
+quest73_objective1_LOCATION Prism of Light
+quest73_objective1 3 c_crystal_hydra
+quest73_prizes 1
+quest73_prizetype1 1 //item
+quest73_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest74_namelocalized 	1073053 //Daemonic Prism
+quest74_textlocalized 	1074668 //Quest history
+quest74_textcompletelocalized 	1074673
+quest74_textuncompletelocalized 	1074672
+quest74_textrefuselocalized 	1074671
+quest74_objectiveamount 1
+quest74_objective1_type 2
+quest74_objective1_LOCATION Prism of Light
+quest74_objective1 3 c_crystal_daemon
+quest74_prizes 1
+quest74_prizetype1 1 //item
+quest74_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest75_namelocalized 	1073048 //All That Glitters is Not Good
+quest75_textlocalized 	1074654 //Quest history
+quest75_textcompletelocalized 	1074657
+quest75_textuncompletelocalized 	1074656
+quest75_textrefuselocalized 	1074655
+quest75_objectiveamount 1
+quest75_objective1_type 2
+quest75_objective1_LOCATION Prism of Light
+quest75_objective1 1 c_peerless_shimmering_effusion
+quest75_prizes 1
+quest75_prizetype1 1 //item
+quest75_prizeid1 tm_queststrongbox A Strongbox.
+
+////////////////////////////
+
+quest76_namelocalized 	1073083 //Shaking Things Up
+quest76_textlocalized 	1073573 //Quest history
+quest76_textcompletelocalized 	1073613
+quest76_textuncompletelocalized 	1073593
+quest76_textrefuselocalized 	1073580
+quest76_objectiveamount 1
+quest76_objective1_type 2
+quest76_objective1 10 c_fire_ant_warrior
+quest76_prizes 1
+quest76_prizetype1 1 //item
+quest76_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest77_namelocalized 	1072990 //Animated Monstrosity
+quest77_textlocalized 	1073020 //Quest history
+quest77_textcompletelocalized 	1074179
+quest77_textuncompletelocalized 	1074201
+quest77_textrefuselocalized 	1073019
+quest77_objectiveamount 1
+quest77_objective1_type 2
+quest77_objective1 12 c_flesh_golem
+quest77_prizes 1
+quest77_prizetype1 1 //item
+quest77_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+
+quest78_namelocalized 	1073079 //Arachnophobia
+quest78_textlocalized 	1073016 //Quest history
+quest78_textcompletelocalized 	1074179
+quest78_textuncompletelocalized 	1074201
+quest78_textrefuselocalized 	1073019
+quest78_objectiveamount 1
+quest78_objective1_type 2
+quest78_objective1 12 c_spider_lord
+quest78_prizes 1
+quest78_prizetype1 1 //item
+quest78_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest79_namelocalized 	1073072 //Mini Swamp Thing
+quest79_textlocalized 	1073562 //Quest history
+quest79_textcompletelocalized 	1073602
+quest79_textuncompletelocalized 	1073582
+quest79_textrefuselocalized 	1073580
+quest79_objectiveamount 1
+quest79_objective1_type 2
+quest79_objective1 20 c_bogling
+quest79_prizes 1
+quest79_prizetype1 1 //item
+quest79_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+////////////////////////////
+
+quest80_namelocalized 	1072247 //Bullfighting ... Sort Of
+quest80_textlocalized 	1072254 //Quest history
+quest80_textcompletelocalized 	1072272
+quest80_textuncompletelocalized 	1072271
+quest80_textrefuselocalized 	1072270
+quest80_objectiveamount 1
+quest80_objective1_type 2
+quest80_objective1 10 c_bull_brown_dk
+quest80_prizes 1
+quest80_prizetype1 1 //item
+quest80_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+quest81_namelocalized 	1072245 //Wild Boar Cull
+quest81_textlocalized 	1072260 //Quest history
+quest81_textcompletelocalized 	1072272
+quest81_textuncompletelocalized 	1072271
+quest81_textrefuselocalized 	1072270
+quest81_objectiveamount 1
+quest81_objective1_type 2
+quest81_objective1 10 c_pig_big
+quest81_prizes 1
+quest81_prizetype1 1 //item
+quest81_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+quest82_namelocalized 	1072242 //Filthy Pests!
+quest82_textlocalized 	1072253 //Quest history
+quest82_textcompletelocalized 	1072272
+quest82_textuncompletelocalized 	1072271
+quest82_textrefuselocalized 	1072270
+quest82_objectiveamount 1
+quest82_objective1_type 2
+quest82_objective1 10 c_a_rat_sewer
+quest82_prizes 1
+quest82_prizetype1 1 //item
+quest82_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+quest83_namelocalized 	1072251 //No Good, Fish Stealing ...
+quest83_textlocalized 	1072265 //Quest history
+quest83_textcompletelocalized 	1072272
+quest83_textuncompletelocalized 	1072271
+quest83_textrefuselocalized 	1072270
+quest83_objectiveamount 1
+quest83_objective1_type 2
+quest83_objective1 10 c_walrus
+quest83_prizes 1
+quest83_prizetype1 1 //item
+quest83_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+quest84_namelocalized 	1072243 //A Fine Feast.
+quest84_textlocalized 	1072261 //Quest history
+quest84_textcompletelocalized 	1072272
+quest84_textuncompletelocalized 	1072271
+quest84_textrefuselocalized 	1072270
+quest84_objectiveamount 1
+quest84_objective1_type 2
+quest84_objective1 10 c_sheep_woolly
+quest84_prizes 1
+quest84_prizetype1 1 //item
+quest84_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+quest85_namelocalized 	1072248 //They'll Eat Anything
+quest85_textlocalized 	1072262 //Quest history
+quest85_textcompletelocalized 	1072272
+quest85_textuncompletelocalized 	1072271
+quest85_textrefuselocalized 	1072270
+quest85_objectiveamount 1
+quest85_objective1_type 2
+quest85_objective1 10 c_pig
+quest85_prizes 1
+quest85_prizetype1 1 //item
+quest85_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+////////////////////////////
+
+///Chain
+quest86_namelocalized 	1075392 //Honest Beggar
+quest86_textlocalized 	1075393 //Quest history
+quest86_textcompletelocalized 	1075397
+quest86_textuncompletelocalized 	1075396
+quest86_textrefuselocalized 	1075395
+quest86_objectiveamount 1
+quest86_objective1_type 3
+quest86_objective1 1 i_ring_quest86
+quest86_objective1_receiver c_Regina_The_Noble
+quest86_prizes 1
+quest86_prizetype1 2 //nothing
+quest86_prizeid1 0 Regina's Letter.
+quest86_chainnext 87
+
+////////////////////////////
+
+quest87_namelocalized 	1075398 //Regina’s Thanks
+quest87_textlocalized 	1075399 //Quest history
+quest87_textcompletelocalized 	1075403
+quest87_textuncompletelocalized 	1075402
+quest87_textrefuselocalized 	1075401
+quest87_objectiveamount 1
+quest87_objective1_type 3
+quest87_objective1 1 i_packet_quest87
+quest87_objective1_receiver c_Evan_The_Beggar
+quest87_prizes 1
+quest87_prizetype1 1 //nothing
+quest87_prizeid1 i_transparent_heart Transparent Heart.
+quest87_chainprev 86,
+//End Chain
+
+////////////////////////////
+
+///Chain
+quest88_namelocalized 	1075355 //Unfading Memories
+quest88_textlocalized 	1075356 //Quest history
+quest88_textcompletelocalized 	1075360
+quest88_textuncompletelocalized 	1075359
+quest88_textrefuselocalized 	1075358
+quest88_objectiveamount 1
+quest88_objective1_type 1
+quest88_objective1 1 i_prismatic_amber
+quest88_prizes 1
+quest88_prizetype1 2 //nothing
+quest88_prizeid1 0 Portrait of the Bride.
+quest88_chainnext 89
+
+quest89_namelocalized 	1075367 //Unfading Memories
+quest89_textlocalized 	1075368 //Quest history
+quest89_textcompletelocalized 	1075372
+quest89_textuncompletelocalized 	1075371
+quest89_textrefuselocalized 	1075370
+quest89_objectiveamount 1
+quest89_objective1_type 3
+quest89_objective1 1 i_portrait_of_the_bride_quest89
+quest89_objective1_receiver c_Thalia_The_Bride
+quest89_prizes 1
+quest89_prizetype1 2 //nothing
+quest89_prizeid1 0 The Artist’s gratitude.
+quest89_chainnext 90
+quest89_chainprev 88,
+
+quest90_namelocalized 	1075373 //Unfading Memories
+quest90_textlocalized 	1075374 //Quest history
+quest90_textcompletelocalized 	1075378
+quest90_textuncompletelocalized 	1075377
+quest90_textrefuselocalized 	1075376
+quest90_objectiveamount 1
+quest90_objective1_type 3
+quest90_objective1 1 i_emilio_letter_quest90
+quest90_objective1_receiver c_Emilio_The_Tortured_Artist
+quest90_prizes 1
+quest90_prizetype1 1 //item
+quest90_prizeid1 i_bleach Bleach.
+quest90_chainprev 88,89,
+//End Chain
+
+quest91_namelocalized 	1072252 //Overpopulation
+quest91_textlocalized 	1072267 //Quest history
+quest91_textcompletelocalized 	1072272
+quest91_textuncompletelocalized 	1072271
+quest91_textrefuselocalized 	1072270
+quest91_objectiveamount 1
+quest91_objective1_type 2
+quest91_objective1 10 c_doe
+quest91_prizes 1
+quest91_prizetype1 1 //item
+quest91_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+///Chain
+quest92_namelocalized 	1074534 //The Ancient World
+quest92_textlocalized 	1074535 //Quest history
+quest92_textcompletelocalized 	1074542
+quest92_textuncompletelocalized 	1074539
+quest92_textrefuselocalized 	1074538
+quest92_objectiveamount 1
+quest92_objective1_type 1
+quest92_objective1 1 i_map_fragment
+quest92_prizes 1
+quest92_prizetype1 2 //nothing
+quest92_prizeid1 0 Knowledge of the Legenday Minotaur.
+quest92_chainnext 93
+
+quest93_namelocalized 	1074543 //The Golden Horn
+quest93_textlocalized 	1074545 //Quest history
+quest93_textcompletelocalized 	1074549
+quest93_textuncompletelocalized 	1074547
+quest93_textrefuselocalized 	1074538
+quest93_objectiveamount 1
+quest93_objective1_type 3
+quest93_objective1 1 i_map_fragment
+quest93_objective1_receiver c_Braen_The_Thaumaturgist
+quest93_prizes 1
+quest93_prizetype1 2 //nothing
+quest93_prizeid1 0 Knowledge of the Legenday Minotaur.
+quest93_chainnext 94
+quest93_chainprev 92,
+
+quest94_namelocalized 	1074550 //Bullish
+quest94_textlocalized 	1074553 //Quest history
+quest94_textcompletelocalized 	1074556
+quest94_textuncompletelocalized 	1074555
+quest94_textrefuselocalized 	1074554
+quest94_objectiveamount 1
+quest94_objective1_type 1
+quest94_objective1 20 i_gaman_horns
+quest94_prizes 1
+quest94_prizetype1 2 //nothing
+quest94_prizeid1 0 Knowledge of the Legenday Minotaur.
+quest94_chainnext 95
+quest94_chainprev 92,93,
+
+quest95_namelocalized 	1074823 //Lost Civilization
+quest95_textlocalized 	1074825 //Quest history
+quest95_textcompletelocalized 	1074829
+quest95_textuncompletelocalized 	1074828
+quest95_textrefuselocalized 	1074827
+quest95_objectiveamount 1
+quest95_objective1_type 1
+quest95_objective1 3 i_minotaur_vase
+quest95_prizes 2
+quest95_prizetype1 1 //item
+quest95_prizeid1 tm_questlargebagtreasure A Large bag of Treasure.
+quest95_prizetype2 3 //function
+quest95_prizeid2 TAG.ALLOWEDINLABYRINTH=1 Entrance allowed at any time in Labyrinth.
+quest95_chainprev 92,93,94,
+
+///End of chain
+////////////////////////////
+
+quest96_namelocalized 	1073907 //Tick Tock
+quest96_textlocalized 	1074097 //Quest history
+quest96_textcompletelocalized 	1073984
+quest96_textuncompletelocalized 	1073953
+quest96_textrefuselocalized 	1073921
+quest96_objectiveamount 1
+quest96_objective1_type 1
+quest96_objective1 10 i_clock
+quest96_prizes 1
+quest96_prizetype1 1 //item
+quest96_prizeid1 tm_questtinkercraftsatchel Craftman's Satchel - Tinkering.
+
+////////////////////////////
+
+quest97_namelocalized 	1074280 //Reptilian Dentist
+quest97_textlocalized 	1074710 //Quest history
+quest97_textcompletelocalized 	1074721
+quest97_textuncompletelocalized 	1074722
+quest97_textrefuselocalized 	1074723
+quest97_objectiveamount 1
+quest97_objective1_type 1
+quest97_objective1 1 i_coil_fang
+quest97_prizes 2
+quest97_prizetype1 1 //item
+quest97_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+quest97_prizetype2 1 //item
+quest97_prizeid2 i_dragon_tunic A dragon tunic.
+
+////////////////////////////
+
+quest98_namelocalized 	1073906 //Necessity's Mother
+quest98_textlocalized 	1074096 //Quest history
+quest98_textcompletelocalized 	1073973
+quest98_textuncompletelocalized 	1073952
+quest98_textrefuselocalized 	1073921
+quest98_objectiveamount 1
+quest98_objective1_type 1
+quest98_objective1 10 i_tinker_tools
+quest98_prizes 1
+quest98_prizetype1 1 //item
+quest98_prizeid1 tm_questtinkercraftsatchel Craftman's Satchel - Tinkering.
+
+////////////////////////////
+
+quest99_namelocalized 	1073894 //Message in a bottle
+quest99_textlocalized 	1074084 //Quest history
+quest99_textcompletelocalized 	1073973
+quest99_textuncompletelocalized 	1073940
+quest99_textrefuselocalized 	1073921
+quest99_objectiveamount 1
+quest99_objective1_type 1
+quest99_objective1 50 i_bottle_empty
+quest99_prizes 1
+quest99_prizetype1 1 //item
+quest99_prizeid1 tm_questtinkercraftsatchel Craftman's Satchel - Tinkering.
+
+////////////////////////////
+
+quest100_namelocalized 	1073910 //The Song of the Wind
+quest100_textlocalized 	1074100 //Quest history
+quest100_textcompletelocalized 	1073974
+quest100_textuncompletelocalized 	1073956
+quest100_textrefuselocalized 	1073921
+quest100_objectiveamount 1
+quest100_objective1_type 1
+quest100_objective1 10 02832
+quest100_prizes 1
+quest100_prizetype1 1 //item
+quest100_prizeid1 tm_questtinkercraftsatchel Craftman's Satchel - Carpentry.
+
+////////////////////////////
+
+quest101_namelocalized 	1073895 //Beer Goggles
+quest101_textlocalized 	1074131 //Quest history
+quest101_textcompletelocalized 	1073976
+quest101_textuncompletelocalized 	1073941
+quest101_textrefuselocalized 	1073921
+quest101_objectiveamount 1
+quest101_objective1_type 1
+quest101_objective1 25 i_barrel_tap
+quest101_prizes 1
+quest101_prizetype1 1 //item
+quest101_prizeid1 tm_questtinkercraftsatchel Craftman's Satchel - Tinkering.
+
+////////////////////////////
+
+quest102_namelocalized 	1073665 //Industrious as an Ant Lion
+quest102_textlocalized 	1073704 //Quest history
+quest102_textcompletelocalized 	1073786
+quest102_textuncompletelocalized 	1073745
+quest102_textrefuselocalized 	1073734
+quest102_objectiveamount 1
+quest102_objective1_type 2
+quest102_objective1 12 c_ant_lion
+quest102_prizes 1
+quest102_prizetype1 1 //item
+quest102_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest103_namelocalized 	1073663 //A Chill in the Air
+quest103_textlocalized 	1073702 //Quest history
+quest103_textcompletelocalized 	1073784
+quest103_textuncompletelocalized 	1073743
+quest103_textrefuselocalized 	1073733
+quest103_objectiveamount 1
+quest103_objective1_type 2
+quest103_objective1 15 c_elem_ice
+quest103_prizes 1
+quest103_prizetype1 1 //item
+quest103_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+////////////////////////////
+
+quest104_namelocalized 	1073082 //Common Brigands
+quest104_textlocalized 	1073572 //Quest history
+quest104_textcompletelocalized 	1073612
+quest104_textuncompletelocalized 	1073592
+quest104_textrefuselocalized 	1073580
+quest104_objectiveamount 1
+quest104_objective1_type 2
+quest104_objective1 20 c_h_brigand
+quest104_objective1_LOCATION Malas
+quest104_prizes 1
+quest104_prizetype1 1 //item
+quest104_prizeid1 tm_questbagtreasure A bag of treasure.
+
+////////////////////////////
+/////////////
+quest105_namelocalized 	1075321 //Aemaeth
+quest105_textlocalized 	1075322 //Quest history
+quest105_textcompletelocalized 	1075326
+quest105_textuncompletelocalized 	1075325
+quest105_textrefuselocalized 	1075324
+quest105_objectiveamount 1
+quest105_objective1_type 3
+quest105_objective1 1 i_mirror_purification
+quest105_objective1_receiver c_Skeleton_Of_Szandor
+quest105_prizes 1
+quest105_prizetype1 2 //nothing
+quest105_prizeid1 0 Aurelia's gratitude.
+quest105_chainnext 106
+
+quest106_namelocalized 	1075327 //Aemaeth
+quest106_textlocalized 	1075328 //Quest history
+quest106_textcompletelocalized 	1075332
+quest106_textuncompletelocalized 	1075331
+quest106_textrefuselocalized 	1075330
+quest106_objectiveamount 1
+quest106_objective1_type 3
+quest106_objective1 1 i_mirror_purification
+quest106_objective1_receiver c_Aurelia_The_Architects_Daughter
+quest106_prizes 1
+quest106_prizetype1 1 //item
+quest106_prizeid1 i_mirror_purification_blessed Mirror of Purification.
+quest106_chainprev 105,
+////End of chain
+
+quest107_namelocalized 	1074444 //Wonders of the Natural World
+quest107_textlocalized 	1074445 //Quest history
+quest107_textcompletelocalized 	1074448
+quest107_textuncompletelocalized 	1074447
+quest107_textrefuselocalized 	1074446
+quest107_objectiveamount 1
+quest107_objective1_type 1
+quest107_objective1 10000 i_gold
+quest107_prizes 1
+quest107_prizetype1 3 //function
+quest107_prizeid1 startprismticketcountdown Prism of Light admission ticket.
+
+////////////////////////////
+////////////
+quest108_namelocalized 	1075287 //A Ghost of Covetous
+quest108_textlocalized 	1075286 //Quest history
+quest108_textcompletelocalized 	1075291
+quest108_textuncompletelocalized 	1075290
+quest108_textrefuselocalized 	1075288
+quest108_objectiveamount 1
+quest108_objective1_type 3
+quest108_objective1 1 i_spirit_bottle
+quest108_objective1_receiver c_Frederic_The_Ghost
+quest108_prizes 1
+quest108_prizetype1 2 //nothing
+quest108_prizeid1 0 A reward.
+quest108_chainnext 109
+
+quest109_namelocalized 	1075337 //Save His Dad
+quest109_textlocalized 	1075338 //Quest history
+quest109_textcompletelocalized 	1075342
+quest109_textuncompletelocalized 	1075341
+quest109_textrefuselocalized 	1075340
+quest109_objectiveamount 1
+quest109_objective1_type 3
+quest109_objective1 1 i_silk_of_dread_spider
+quest109_objective1_receiver c_Leon_the_Alchemist
+quest109_objective1_TIME 7200
+quest109_prizes 1
+quest109_prizetype1 2 //nothing
+quest109_prizeid1 0 Frederics Gratitude.
+quest109_chainnext 110
+quest109_chainprev 108,
+
+quest110_namelocalized 	1075337 //Save His Dad
+quest110_textlocalized 	1075344 //Quest history
+quest110_textcompletelocalized 	1075348
+quest110_textuncompletelocalized 	1075347
+quest110_textrefuselocalized 	1075346
+quest110_objectiveamount 1
+quest110_objective1_type 3
+quest110_objective1 1 i_leon_special_bandage
+quest110_objective1_receiver c_Andros_The_Blacksmith
+quest110_prizes 1
+quest110_prizetype1 1 //item
+quest110_prizeid1 i_father_gratitude Andros Gratitude.
+quest110_chainprev 108,109,
+//////End of chain
+///////////////////////////////
+
+quest111_namelocalized 	1075506 //Split Ends
+quest111_textlocalized 	1075507 //Quest history
+quest111_textcompletelocalized 	1075485
+quest111_textuncompletelocalized 	1075509
+quest111_textrefuselocalized 	1075508
+quest111_objectiveamount 1
+quest111_objective1_type 1
+quest111_objective1 200 i_arrow
+quest111_prizes 1
+quest111_prizetype1 1 //item
+quest111_prizeid1 tm_questbowcraftcraftsatchel Craftsman's Satchel - Bowcrafting.
+
+///////////////////////////////
+
+quest112_namelocalized 	1075523 //A Stitch in Time
+quest112_textlocalized 	1075522 //Quest history
+quest112_textcompletelocalized 	1075528
+quest112_textuncompletelocalized 	1075527
+quest112_textrefuselocalized 	1075526
+quest112_objectiveamount 1
+quest112_objective1_type 1
+quest112_objective1 1 i_dress_full
+quest112_prizes 2
+quest112_prizetype1 1 //item
+quest112_prizeid1 i_old_ring An old ring.
+quest112_prizetype2 1 //item
+quest112_prizeid2 i_old_necklace An old necklace.
+
+///////////////////////////////
+
+quest113_namelocalized 	1075511 //Battered Bucklers
+quest113_textlocalized 	1075512 //Quest history
+quest113_textcompletelocalized 	1075516
+quest113_textuncompletelocalized 	1075515
+quest113_textrefuselocalized 	1075514
+quest113_objectiveamount 1
+quest113_objective1_type 1
+quest113_objective1 10 i_shield_buckler
+quest113_prizes 1
+quest113_prizetype1 1 //item
+quest113_prizeid1 tm_questblacksmithcraftsatchel Craftsman's Satchel - Blacksmithing.
+
+///////////////////////////////
+
+quest114_namelocalized 	1075537 //Chop Chop, On The Double!
+quest114_textlocalized 	1075538 //Quest history
+quest114_textcompletelocalized 	1075485
+quest114_textuncompletelocalized 	1075538
+quest114_textrefuselocalized 	1075539
+quest114_objectiveamount 1
+quest114_objective1_type 1
+quest114_objective1 60 i_log
+quest114_prizes 1
+quest114_prizetype1 1 //item
+quest114_prizeid1 tm_questcarpentercraftsatchel Craftsman's Satchel - Carpentry.
+
+///////////////////////////////
+
+quest115_namelocalized 	1075486 //I Shot an Arrow Into the Air...
+quest115_textlocalized 	1075482 //Quest history
+quest115_textcompletelocalized 	1075485
+quest115_textuncompletelocalized 	1075484
+quest115_textrefuselocalized 	1075483
+quest115_objectiveamount 1
+quest115_objective1_type 2
+quest115_objective1 10 c_sheep_woolly
+quest115_prizes 1
+quest115_prizetype1 1 //item
+quest115_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+///////////////////////////////
+
+quest116_namelocalized 	1075542 //The Pen is Mightier
+quest116_textlocalized 	1075543 //Quest history
+quest116_textcompletelocalized 	1075548
+quest116_textuncompletelocalized 	1075547
+quest116_textrefuselocalized 	1075546
+quest116_objectiveamount 1
+quest116_objective1_type 1
+quest116_objective1 5 i_scroll_recall
+quest116_prizes 1
+quest116_prizetype1 1 //item
+quest116_prizeid1 i_book_bound_red_leather A Book Bound in Red Leather.
+
+///////////////////////////////
+
+quest117_namelocalized 	1075530 //More Ore Please
+quest117_textlocalized 	1075529 //Quest history
+quest117_textcompletelocalized 	1075533
+quest117_textuncompletelocalized 	1075532
+quest117_textrefuselocalized 	1075531
+quest117_objectiveamount 1
+quest117_objective1_type 1
+quest117_objective1 50 i_ore_iron
+quest117_prizes 1
+quest117_prizetype1 1 //item
+quest117_prizeid1 tm_questminingcraftsatchel Craftsman's Satchel - Mining.
+
+///////////////////////////////
+
+quest118_namelocalized 	1075487 //Flee and Fatigue
+quest118_textlocalized 	1075488 //Quest history
+quest118_textcompletelocalized 	1075491
+quest118_textuncompletelocalized 	1075490
+quest118_textrefuselocalized 	1075489
+quest118_objectiveamount 1
+quest118_objective1_type 1
+quest118_objective1 10 i_potion_refresh
+quest118_prizes 1
+quest118_prizetype1 1 //item
+quest118_prizeid1 tm_questalchemycraftsatchel Craftsman's Satchel - Alchemy.
+
+///////////////////////////////
+
+quest119_namelocalized 	1074739 //Guile, Irk and Spite
+quest119_textlocalized 	1074740 //Quest history
+quest119_textcompletelocalized 	1074747
+quest119_textuncompletelocalized 	1074746
+quest119_textrefuselocalized 	1074745
+quest119_objectiveamount 3
+quest119_objective1_type 2
+quest119_objective1 1 c_guile
+quest119_objective2_type 2
+quest119_objective2 1 c_irk
+quest119_objective3_type 2
+quest119_objective3 1 c_spite
+quest119_prizes 1
+quest119_prizetype1 1 //item
+quest119_prizeid1 tm_queststrongbox A strongbox.
+
+///////////////////////////////
+
+quest120_namelocalized 	1072246 //A Hero in the Making
+quest120_textlocalized 	1072257 //Quest history
+quest120_textcompletelocalized 	1072272
+quest120_textuncompletelocalized 	1072271
+quest120_textrefuselocalized 	1072270
+quest120_objectiveamount 1
+quest120_objective1_type 2
+quest120_objective1 10 c_mongbat
+quest120_prizes 1
+quest120_prizetype1 1 //item
+quest120_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+///////////////////////////////
+
+quest121_namelocalized 	1072244 //They're Breeding Like Rabbits
+quest121_textlocalized 	1072259 //Quest history
+quest121_textcompletelocalized 	1072272
+quest121_textuncompletelocalized 	1072271
+quest121_textrefuselocalized 	1072270
+quest121_objectiveamount 1
+quest121_objective1_type 2
+quest121_objective1 10 c_rabbit
+quest121_prizes 1
+quest121_prizetype1 1 //item
+quest121_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+///////////////////////////////
+
+quest122_namelocalized 	1073071 //Something to Wail About
+quest122_textlocalized 	1073561 //Quest history
+quest122_textcompletelocalized 	1073601
+quest122_textuncompletelocalized 	1073581
+quest122_textrefuselocalized 	1073580
+quest122_objectiveamount 1
+quest122_objective1_type 2
+quest122_objective1 12 c_wailing_banshee
+quest122_prizes 1
+quest122_prizetype1 1 //item
+quest122_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+///////////////////////////////
+
+quest123_namelocalized 	1072993 //Runaways!
+quest123_textlocalized 	1073026 //Quest history
+quest123_textcompletelocalized 	1075485
+quest123_textuncompletelocalized 	1072271
+quest123_textrefuselocalized 	1072270
+quest123_objectiveamount 1
+quest123_objective1_type 2
+quest123_objective1 12 c_ostard_zostrich
+quest123_prizes 1
+quest123_prizetype1 1 //item
+quest123_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+///////////////////////////////
+
+quest124_namelocalized 	1072994 //Vicious Predator
+quest124_textlocalized 	1073028 //Quest history
+quest124_textcompletelocalized 	1075485
+quest124_textuncompletelocalized 	1072271
+quest124_textrefuselocalized 	1072270
+quest124_objectiveamount 1
+quest124_objective1_type 2
+quest124_objective1 10 c_a_direwolf
+quest124_prizes 1
+quest124_prizetype1 1 //item
+quest124_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+///////////////////////////////
+
+quest125_namelocalized 	1075361 //Gentle Blade
+quest125_textlocalized 	1075362 //Quest history
+quest125_textcompletelocalized 	1075366
+quest125_textuncompletelocalized 	1075365
+quest125_textrefuselocalized 	1075364
+quest125_ITEMTOGIVE 1
+quest125_ITEMTOGIVE1 i_wolf_slayer_dagger
+quest125_objectiveamount 1
+quest125_objective1_type 2
+quest125_objective1 1 c_werewolf_bride
+quest125_prizes 2
+quest125_prizetype1 3 //function
+quest125_prizeid1 quest125setwolfslayerdagger Misericord.
+quest125_prizetype2 1 //item
+quest125_prizeid2 tm_questbagtreasure A bag of treasure.
+
+///////////////////////////////
+
+quest126_namelocalized 	1073049 //In the Belly of the Beast
+quest126_textlocalized 	1074658 //Quest history
+quest126_textcompletelocalized 	1074661
+quest126_textuncompletelocalized 	1074660
+quest126_textrefuselocalized 	1074659
+quest126_objectiveamount 1
+quest126_objective1_type 1
+quest126_objective1 1 i_lucky_dagger
+quest126_prizes 1
+quest126_prizetype1 1 //item
+quest126_prizeid1 tm_questbagtrinketssmall A small bag of trinkets.
+
+///////////////////////////////
+
+quest127_namelocalized 	1050025 //The Summoning
+quest127_textlocalized 	1050020 //Quest history
+quest127_textcompletelocalized 	1050029
+quest127_textuncompletelocalized 	1050027
+quest127_textrefuselocalized 	1074642
+quest127_objectiveamount 1
+quest127_objective1_type 1
+quest127_objective1 1000 i_reag_daemon_bone
+quest127_prizes 1
+quest127_prizetype1 3 //function
+quest127_prizeid1 DOOMSUMMONBONEDAEMON Summoning of the devourer.
+
+//////////////Begin Chain/////////////////
+
+quest128_namelocalized 	Cleasing the Corruption //Cleasing the Corruption
+quest128_textlocalized 	Hello young one! For centuries I have been living in these Woods, but now some fould Corruption is taking place here, trees are dieing and I can't help them. Please young child, bring me some vials of these Corrupted Waters, so we can try and find the source of this! //Quest history
+quest128_textcompletelocalized 	Well done child, let me have those vials...
+quest128_textuncompletelocalized 	Please, be swift, the Woods haven't got much time!
+quest128_textrefuselocalized 	No one cares about the Woods these days...
+quest128_objectiveamount 1
+quest128_objective1_type 1
+quest128_objective1 2 i_corrupted_water
+quest128_prizes 1
+quest128_prizetype1 2 //nothing
+quest128_prizeid1 0 Treefolks thanks.
+quest128_chainnext 129
+
+quest129_namelocalized 	Understanding the Corruption //Cleasing the Corruption
+quest129_textlocalized 	Young One, I've checked these Corrupted Water vials you brought me and I can't believe what I have found out, but before I tell you, I must send these vials to a Great Ancient friend of the Woods, for only she might know the truth for certain!
+quest129_textcompletelocalized 	What is this, why do you bother me mortal?
+quest129_textuncompletelocalized 	Go now, she awaits you southeast of here.
+quest129_textrefuselocalized 	Oh no, don't give up on the trees now...
+quest129_objectiveamount 1
+quest129_objective1_type 3
+quest129_objective1 1 i_corrupted_water_check
+quest129_objective1_receiver c_Anathiel_the_Great_Forest_Spirit
+quest129_prizes 1
+quest129_prizetype1 2 //nothing
+quest129_prizeid1 0 Treefolks thanks.
+quest129_chainprev 128,
+quest129_chainnext 130
+
+quest130_namelocalized 	Spirits of Old //Cleasing the Corruption
+quest130_textlocalized 	Ohhh... I haven't sensed this kind of magic in mileniums! This kind of desease can only be the work of Deldrimor, Spirit of Desease. You are indeed living in dark times mortal, he could only have been summoned by the same forces who opened the gateway to The Heartwood, go now and speak with Treebeard, he'll tell you what to do now.
+quest130_textcompletelocalized 	I must ask your halp for one last task young one...
+quest130_textuncompletelocalized 	He lies northwest of here, in the entrance to the Blighted Grove.
+quest130_textrefuselocalized 	I knew some weakling mortal like yourself would never help the great spirits of Old!
+quest130_objectiveamount 1
+quest130_objective1_type 3
+quest130_objective1 1 i_corrupted_water_check
+quest130_objective1_receiver c_Treebeard
+quest130_prizes 1
+quest130_prizetype1 3 //function
+quest130_prizeid1 f_fightdeldrimor Fight Deldrimor.
+quest130_chainprev 128,129
+
+////////End Chain///////////
+
+///////////////////////////////
+
+quest131_namelocalized 	1074349 //Embracing Humanity
+quest131_textlocalized 	1074405 //Quest history
+quest131_textcompletelocalized 	1074410
+quest131_textuncompletelocalized 	Seek Sledge the Versatile and learn about human ingenuity and creativity.  Seek Patricus and demonstrate your integrity and strength. Seek out a human in need and prove your worth as a defender of humanity.  Seek Belulah in Nu'Jelm and heartily challenge the elements in a display of toughness to rival any human.
+quest131_textrefuselocalized 	1074411
+quest131_objectiveamount 3
+quest131_objective1_type 1
+quest131_objective1 1 i_proof_strength
+quest131_objective2_type 1
+quest131_objective2 1 i_proof_humanity
+quest131_objective3_type 1
+quest131_objective3 1 i_proof_toughness
+quest131_prizes 1
+quest131_prizetype1 3 //function
+quest131_prizeid1 F_HERITAGE_HUMAN Human transformation.
+
+///////////////////////////////
+
+quest132_namelocalized 	1074351 //Heave Ho!
+quest132_textlocalized 	1074519 //Quest history
+quest132_textcompletelocalized 	1074523
+quest132_textuncompletelocalized 	1074522
+quest132_textrefuselocalized 	1074521
+quest132_objectiveamount 1
+quest132_objective1_type 3
+quest132_objective1 1 i_crate_small_sledge
+quest132_objective1_TIME 3600
+quest132_objective1_receiver c_Sledge_the_Versatile
+quest132_prizes 1
+quest132_prizetype1 3 //function
+quest132_prizeid1 F_HERITAGE_HUMAN_STRENGTH Proof of Strength.
+
+///////////////////////////////
+
+quest133_namelocalized 	1074353 //All Season Adventurer
+quest133_textlocalized 	1074527 //Quest history
+quest133_textcompletelocalized 	1074530
+quest133_textuncompletelocalized 	1074529
+quest133_textrefuselocalized 	1074528
+quest133_objectiveamount 2
+quest133_objective1_type 2
+quest133_objective1 5 c_efreet
+quest133_objective1_LOCATION Fire Dungeon Level 1
+quest133_objective2_type 2
+quest133_objective2 5 c_icefiend
+quest133_objective2_LOCATION Ice Dungeon Level 1
+quest133_prizes 1
+quest133_prizetype1 3 //function
+quest133_prizeid1 F_HERITAGE_HUMAN_TOUGHNESS Proof of Toughness.
+
+///////////////////////////////
+
+quest134_namelocalized 	1074352 //Responsibility
+quest134_textlocalized 	1074524 //Quest history
+quest134_textcompletelocalized 	1074525
+quest134_textuncompletelocalized 	1074526
+quest134_textrefuselocalized 	1074525
+quest134_objectiveamount 1
+quest134_objective1_type 4
+quest134_objective1 Sheep Farm
+quest134_prizes 1
+quest134_prizetype1 3 //function
+quest134_prizeid1 F_HERITAGE_HUMAN_HUMANITY Proof of Humanity.
+
+///////////////////////////////
+
+quest135_namelocalized 	1072275 //An escort to Yew
+quest135_textlocalized 	1072287 //Quest history
+quest135_textcompletelocalized 	1072272
+quest135_textuncompletelocalized 	1072289
+quest135_textrefuselocalized 	1072288
+quest135_objectiveamount 1
+quest135_objective1_type 4
+quest135_objective1 Yew
+quest135_prizes 1
+quest135_prizetype1 3 //function
+quest135_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest136_namelocalized 	1072276 //An escort to Vesper
+quest136_textlocalized 	1072287 //Quest history
+quest136_textcompletelocalized 	1072272
+quest136_textuncompletelocalized 	1072290
+quest136_textrefuselocalized 	1072288
+quest136_objectiveamount 1
+quest136_objective1_type 4
+quest136_objective1 Vesper
+quest136_prizes 1
+quest136_prizetype1 3 //function
+quest136_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest137_namelocalized 	1072277 //An escort to Trinsic
+quest137_textlocalized 	1072287 //Quest history
+quest137_textcompletelocalized 	1072272
+quest137_textuncompletelocalized 	1072291
+quest137_textrefuselocalized 	1072288
+quest137_objectiveamount 1
+quest137_objective1_type 4
+quest137_objective1 Trinsic
+quest137_prizes 1
+quest137_prizetype1 3 //function
+quest137_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest138_namelocalized 	1072278 //An escort to Skara Brae
+quest138_textlocalized 	1072287 //Quest history
+quest138_textcompletelocalized 	1072272
+quest138_textuncompletelocalized 	1072292
+quest138_textrefuselocalized 	1072288
+quest138_objectiveamount 1
+quest138_objective1_type 4
+quest138_objective1 Skara Brae
+quest138_prizes 1
+quest138_prizetype1 3 //function
+quest138_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest139_namelocalized 	1072279 //An escort to Serpent's Hold
+quest139_textlocalized 	1072287 //Quest history
+quest139_textcompletelocalized 	1072272
+quest139_textuncompletelocalized 	1072293
+quest139_textrefuselocalized 	1072288
+quest139_objectiveamount 1
+quest139_objective1_type 4
+quest139_objective1 Serpent's Hold
+quest139_prizes 1
+quest139_prizetype1 3 //function
+quest139_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest140_namelocalized 	1072280 //An escort to Nujel'm
+quest140_textlocalized 	1072287 //Quest history
+quest140_textcompletelocalized 	1072272
+quest140_textuncompletelocalized 	1072294
+quest140_textrefuselocalized 	1072288
+quest140_objectiveamount 1
+quest140_objective1_type 4
+quest140_objective1 Nujel'm
+quest140_prizes 1
+quest140_prizetype1 3 //function
+quest140_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest141_namelocalized 	1072281 //An escort to Moonglow
+quest141_textlocalized 	1072287 //Quest history
+quest141_textcompletelocalized 	1072272
+quest141_textuncompletelocalized 	1072295
+quest141_textrefuselocalized 	1072288
+quest141_objectiveamount 1
+quest141_objective1_type 4
+quest141_objective1 Moonglow
+quest141_prizes 1
+quest141_prizetype1 3 //function
+quest141_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest142_namelocalized 	1072282 //An escort to Minoc
+quest142_textlocalized 	1072287 //Quest history
+quest142_textcompletelocalized 	1072272
+quest142_textuncompletelocalized 	1072296
+quest142_textrefuselocalized 	1072288
+quest142_objectiveamount 1
+quest142_objective1_type 4
+quest142_objective1 Minoc
+quest142_prizes 1
+quest142_prizetype1 3 //function
+quest142_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest143_namelocalized 	1072283 //An escort to Magincia
+quest143_textlocalized 	1072287 //Quest history
+quest143_textcompletelocalized 	1072272
+quest143_textuncompletelocalized 	1072297
+quest143_textrefuselocalized 	1072288
+quest143_objectiveamount 1
+quest143_objective1_type 4
+quest143_objective1 Magincia
+quest143_prizes 1
+quest143_prizetype1 3 //function
+quest143_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest144_namelocalized 	1072284 //An escort to Jhelom
+quest144_textlocalized 	1072287 //Quest history
+quest144_textcompletelocalized 	1072272
+quest144_textuncompletelocalized 	1072298
+quest144_textrefuselocalized 	1072288
+quest144_objectiveamount 1
+quest144_objective1_type 4
+quest144_objective1 Jhelom
+quest144_prizes 1
+quest144_prizetype1 3 //function
+quest144_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest145_namelocalized 	1072285 //An escort to Cove
+quest145_textlocalized 	1072287 //Quest history
+quest145_textcompletelocalized 	1072272
+quest145_textuncompletelocalized 	1072299
+quest145_textrefuselocalized 	1072288
+quest145_objectiveamount 1
+quest145_objective1_type 4
+quest145_objective1 Cove
+quest145_prizes 1
+quest145_prizetype1 3 //function
+quest145_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest146_namelocalized 	1072286 //An escort to Britain
+quest146_textlocalized 	1072287 //Quest history
+quest146_textcompletelocalized 	1072272
+quest146_textuncompletelocalized 	1072300
+quest146_textrefuselocalized 	1072288
+quest146_objectiveamount 1
+quest146_objective1_type 4
+quest146_objective1 Britain
+quest146_prizes 1
+quest146_prizetype1 3 //function
+quest146_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest147_namelocalized 	1072312 //An escort to Ocllo
+quest147_textlocalized 	1072287 //Quest history
+quest147_textcompletelocalized 	1072272
+quest147_textuncompletelocalized 	1072313
+quest147_textrefuselocalized 	1072288
+quest147_objectiveamount 1
+quest147_objective1_type 4
+quest147_objective1 Ocllo
+quest147_prizes 1
+quest147_prizetype1 3 //function
+quest147_prizeid1 F_QUESTSYS_RANDOMGOLD Gold
+
+///////////////////////////////
+
+quest148_namelocalized 	1072781 //Elven Heritage - Sanctuary
+quest148_textlocalized 	1073999 //Quest history
+quest148_textcompletelocalized 	1074410
+quest148_textuncompletelocalized 	Seek Maul, the great bear, who understands the seasons. Seek Strongroot, the great treefellow, whose roots reach to the heart of the world. Seek Enigma, whose wisdom can only be conveyed in riddles and rhymes. Seek Bravehorn, the great hart, who exemplifies the fierce dedication of a protector of his people. Seek the Huntsman, the centuar tasked with maintaining the balance. And lastly seek Arielle, the pixie, who has perhaps the most important lesson -- not to take yourself too seriously.
+quest148_textrefuselocalized 	1074400
+quest148_objectiveamount 6
+quest148_objective1_type 1
+quest148_objective1 1 i_boon_arielle
+quest148_objective2_type 1
+quest148_objective2 1 i_boon_bravehorn
+quest148_objective3_type 1
+quest148_objective3 1 i_boon_strongroot
+quest148_objective4_type 1
+quest148_objective4 1 i_boon_maul
+quest148_objective5_type 1
+quest148_objective5 1 i_boon_huntsman
+quest148_objective6_type 1
+quest148_objective6 1 i_boon_enigma
+quest148_prizes 1
+quest148_prizetype1 3 //function
+quest148_prizeid1 F_HERITAGE_ELF Elven Transformation.
+
+///////////////////////////////
+
+quest149_namelocalized 	1072787 //The Joys of Life
+quest149_textlocalized 	1072832 //Quest history
+quest149_textcompletelocalized 	1074944
+quest149_textuncompletelocalized 	1072834
+quest149_textrefuselocalized 	1072833
+quest149_objectiveamount 1
+quest149_objective1_type 1
+quest149_objective1 3 i_arielles_bauble
+quest149_prizes 1
+quest149_prizetype1 3 //function
+quest149_prizeid1 F_HERITAGE_ELF_ARIELLE the Boon of Arielle.
+
+///////////////////////////////
+
+quest150_namelocalized 	1072785 //Defending the Herd
+quest150_textlocalized 	1072825 //Quest history
+quest150_textcompletelocalized 	1074942
+quest150_textuncompletelocalized 	1072827
+quest150_textrefuselocalized 	1072826
+quest150_objectiveamount 1
+quest150_objective1_type 4
+quest150_objective1 Drinking Pond
+quest150_prizes 1
+quest150_prizetype1 3 //function
+quest150_prizeid1 F_HERITAGE_ELF_BRAVEHORN the Boon of Bravehorn.
+
+///////////////////////////////
+
+quest151_namelocalized 	1072783 //Caretaker of the Land
+quest151_textlocalized 	1072812 //Quest history
+quest151_textcompletelocalized 	1074941
+quest151_textuncompletelocalized 	1072814
+quest151_textrefuselocalized 	1072813
+quest151_objectiveamount 1
+quest151_objective1_type 1
+quest151_objective1 1 i_sap_sosaria
+quest151_prizes 1
+quest151_prizetype1 3 //function
+quest151_prizeid1 F_HERITAGE_ELF_STRONGROOT the Boon of Strongroot.
+
+///////////////////////////////
+
+quest152_namelocalized 	1072786 //The Balance of Nature
+quest152_textlocalized 	1072829 //Quest history
+quest152_textcompletelocalized 	1074943
+quest152_textuncompletelocalized 	1072831
+quest152_textrefuselocalized 	1072830
+quest152_objectiveamount 1
+quest152_objective1_type 2
+quest152_objective1 15 c_wolf
+quest152_prizes 1
+quest152_prizetype1 3 //function
+quest152_prizeid1 F_HERITAGE_ELF_HUNTSMAN the Boon of the Huntsman.
+
+///////////////////////////////
+
+quest153_namelocalized 	1072784 //Wisdom of the Sphynx
+quest153_textlocalized 	1072822 //Quest history
+quest153_textcompletelocalized 	1074945
+quest153_textuncompletelocalized 	1072824
+quest153_textrefuselocalized 	1072823
+quest153_RIDDLE 1
+quest153_objectiveamount 1
+quest153_objective1_type 1
+quest153_objective1 1 i_pitcher_water
+quest153_prizes 1
+quest153_prizetype1 3 //function
+quest153_prizeid1 F_HERITAGE_ELF_ENIGMA the Boon of Enigma.
+
+///////////////////////////////
+
+quest154_namelocalized 	1072782 //Seasons
+quest154_textlocalized 	1072802 //Quest history
+quest154_textcompletelocalized 	1074940
+quest154_textuncompletelocalized 	1072811
+quest154_textrefuselocalized 	1072810
+quest154_objectiveamount 1
+quest154_objective1_type 1
+quest154_objective1 20 i_fish_cut_raw
+quest154_prizes 1
+quest154_prizetype1 3 //function
+quest154_prizeid1 F_HERITAGE_ELF_MAUL the Boon of Maul.
+
+///////////////////////////////
+
+quest155_namelocalized 	Redemption //Redemption
+quest155_textlocalized 	Hello human, I am Gabriel the Redeemer. For centuries I have been helping humans in finding their way to redemption and thus granting them passage to Heaven. If you wish to redeem yourself of your seems accept the tasks which I give thee. In order to cleanse your soul of sins you must free imprisoned souls that have stayed trapped in this world after their death and thus being corrupted by sorrow. //Quest history
+quest155_textcompletelocalized 	Well done mortal, your soul shall be cleasened.
+quest155_textuncompletelocalized 	You can often find Lost Souls near graveyards, near where their torment place is. And be warned human, after you free the souls, the power of their torment will manifest in an ethereal corpse known as the Black Wisp.
+quest155_textrefuselocalized 	I see. Not all mortals are willing to help others in order to find redemption.
+quest155_objectiveamount 2
+quest155_objective1_type 2
+quest155_objective1 1 c_alma_penada
+quest155_objective2_type 2
+quest155_objective2 1 c_wisp_black
+quest155_prizes 1
+quest155_prizetype1 3 //function
+quest155_prizeid1 F_REDEEM Redemption.
+
+///////////////////////////////
+
+quest156_namelocalized 	1075311 //Guilty
+quest156_textlocalized 	1075312 //Quest history
+quest156_textcompletelocalized 	1075316
+quest156_textuncompletelocalized 	1075315
+quest156_textrefuselocalized 	1075314
+quest156_objectiveamount 1
+quest156_objective1_type 2
+quest156_objective1 1 c_gregorio_the_brigand
+quest156_prizes 1
+quest156_prizetype1 1 //item
+quest156_prizeid1 i_amulet_righteousness Amulet of Righteousness.
+
+//////Chain///////////////
+
+quest157_namelocalized 	1074573 //Mistaken Identity
+quest157_textlocalized 	1074574 //Quest history
+quest157_textcompletelocalized 	1074607
+quest157_textuncompletelocalized 	1074605
+quest157_textrefuselocalized 	1074606
+quest157_objectiveamount 1
+quest157_objective1_type 3
+quest157_objective1 1 i_tuition_reimbursement
+quest157_objective1_receiver c_Gorrow_the_Mayor
+quest157_prizes 1
+quest157_prizetype1 2 //nothing
+quest157_prizeid1 0 Tuition Reimbursement.
+quest157_chainnext 158
+
+quest158_namelocalized 	1074608 //You Scratch My Back
+quest158_textlocalized 	1074609 //Quest history
+quest158_textcompletelocalized 	1074617
+quest158_textuncompletelocalized 	1074616
+quest158_textrefuselocalized 	1074615
+quest158_objectiveamount 3
+quest158_objective1_type 1
+quest158_objective1 1 i_unicorn_ribs
+quest158_objective2_type 1
+quest158_objective2 2 i_kirin_brain
+quest158_objective3_type 1
+quest158_objective3 5 i_pixie_leg
+quest158_prizes 1
+quest158_prizetype1 2 //nothing
+quest158_prizeid1 0 Signed Tuition Reimbursement Form.
+quest158_chainnext 159
+quest158_chainprev 157,
+
+quest159_namelocalized 	1074618 //Fooling Aernya
+quest159_textlocalized 	1074619 //Quest history
+quest159_textcompletelocalized 	1074622
+quest159_textuncompletelocalized 	1074621
+quest159_textrefuselocalized 	1074620
+quest159_objectiveamount 1
+quest159_objective1_type 3
+quest159_objective1 1 i_signed_tuition_reimbursement
+quest159_objective1_receiver c_Aernya_Mistress_of_Admissions
+quest159_prizes 1
+quest159_prizetype1 2 //nothing
+quest159_prizeid1 0 Completed Tuition Reimbursement Form.
+quest159_chainnext 160
+quest159_chainprev 157,158
+
+quest160_namelocalized 	1074623 //Not Quite That Easy
+quest160_textlocalized 	1074624 //Quest history
+quest160_textcompletelocalized 	1074628
+quest160_textuncompletelocalized 	1074627
+quest160_textrefuselocalized 	1074626
+quest160_objectiveamount 1
+quest160_objective1_type 3
+quest160_objective1 1 i_signed_tuition_reimbursement
+quest160_objective1_receiver c_Master_Gnosos_the_Necromancer
+quest160_prizes 1
+quest160_prizetype1 2 //nothing
+quest160_prizeid1 0 Tuition Reimbursement.
+quest160_chainnext 161
+quest160_chainprev 157,158,159
+
+quest161_namelocalized 	1074629 //Convince Me
+quest161_textlocalized 	1074630 //Quest history
+quest161_textcompletelocalized 	1074633
+quest161_textuncompletelocalized 	1074632
+quest161_textrefuselocalized 	1074631
+quest161_objectiveamount 3
+quest161_objective1_type 2
+quest161_objective1 1 c_red_death
+quest161_objective1_LOCATION Bedlam
+quest161_objective2_type 2
+quest161_objective2 8 c_gore_fiend
+quest161_objective2_LOCATION Bedlam
+quest161_objective3_type 2
+quest161_objective3 8 c_rotting_corpse
+quest161_objective3_LOCATION Bedlam
+quest161_prizes 1
+quest161_prizetype1 2 //nothing
+quest161_prizeid1 0 Signed Tuition Reimbursement Form.
+quest161_chainnext 162
+quest161_chainprev 157,158,159,160
+
+quest162_namelocalized 	1074634 //Tuition Reimbursement
+quest162_textlocalized 	1074635 //Quest history
+quest162_textcompletelocalized 	1074638
+quest162_textuncompletelocalized 	1074637
+quest162_textrefuselocalized 	1074636
+quest162_objectiveamount 1
+quest162_objective1_type 3
+quest162_objective1 1 i_signed_tuition_reimbursement
+quest162_objective1_receiver c_Aernya_Mistress_of_Admissions
+quest162_prizes 2
+quest162_prizetype1 1 //item
+quest162_prizeid1 tm_queststrongbox Strongbox.
+quest162_prizetype2 3 //function
+quest162_prizeid2 TAG.ALLOWEDINBEDLAM=1 Entrance to Bedlam granted.
+quest162_chainprev 157,158,159,160,161
+
+//////////End Chain///////////////
+
+quest163_namelocalized 	1074855 //Gone Native
+quest163_textlocalized 	1074856 //Quest history
+quest163_textcompletelocalized 	1074859
+quest163_textuncompletelocalized 	1074858
+quest163_textrefuselocalized 	1074857
+quest163_objectiveamount 1
+quest163_objective1_type 2
+quest163_objective1 1 c_master_theophilus
+quest163_prizes 1
+quest163_prizetype1 1 //item
+quest163_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+///////////Begin Chain////////////
+
+quest164_namelocalized 	1075379 //Doughty Warriors
+quest164_textlocalized 	1075380 //Quest history
+quest164_textcompletelocalized 	1075384
+quest164_textuncompletelocalized 	1075383
+quest164_textrefuselocalized 	1075382
+quest164_objectiveamount 1
+quest164_objective1_type 2
+quest164_objective1 10 c_mongbat_arboreal
+quest164_prizes 1
+quest164_prizetype1 2 //nothing
+quest164_prizeid1 0 Trainees work harder.
+quest164_chainnext 165
+
+quest165_namelocalized 	1075404 //Doughty Warriors
+quest165_textlocalized 	1075405 //Quest history
+quest165_textcompletelocalized 	1075409
+quest165_textuncompletelocalized 	1075408
+quest165_textrefuselocalized 	1075407
+quest165_objectiveamount 1
+quest165_objective1_type 2
+quest165_objective1 10 c_imp
+quest165_prizes 1
+quest165_prizetype1 2 //nothing
+quest165_prizeid1 0 Trainees work even harder.
+quest165_chainnext 166
+quest165_chainprev 164,
+
+quest166_namelocalized 	1075410//Doughty Warriors
+quest166_textlocalized 	1075411 //Quest history
+quest166_textcompletelocalized 	1075415
+quest166_textuncompletelocalized 	1075414
+quest166_textrefuselocalized 	1075413
+quest166_objectiveamount 1
+quest166_objective1_type 2
+quest166_objective1 10 c_daemon
+quest166_prizes 1
+quest166_prizetype1 1 //item
+quest166_prizeid1 i_questsash_might Sash of Might.
+quest166_chainprev 164,165,
+
+////////////End Chain///////////////////////
+
+///////////Begin Chain////////////
+
+quest167_namelocalized 	1075416 //The Honor of the De Boors
+quest167_textlocalized 	1075417 //Quest history
+quest167_textcompletelocalized 	1075421
+quest167_textuncompletelocalized 	1075420
+quest167_textrefuselocalized 	1075419
+quest167_objectiveamount 3
+quest167_objective1_type 1
+quest167_objective1 10 i_gem_diamond
+quest167_objective2_type 1
+quest167_objective2 10 i_gem_ruby
+quest167_objective3_type 1
+quest167_objective3 10 i_gem_emerald
+quest167_prizes 1
+quest167_prizetype1 2 //nothing
+quest167_prizeid1 0 Help retrieve the De Boor shield.
+quest167_chainnext 168
+
+quest168_namelocalized 	1075422 //Jack the Villain
+quest168_textlocalized 	1075423 //Quest history
+quest168_textcompletelocalized 	1075427
+quest168_textuncompletelocalized 	1075426
+quest168_textrefuselocalized 	1075425
+quest168_objectiveamount 1
+quest168_objective1_type 3
+quest168_objective1 1 i_questbag_jewels
+quest168_objective1_receiver c_Jack_The_Loan_Shark
+quest168_prizes 1
+quest168_prizetype1 2 //nothing
+quest168_prizeid1 0 De Boor shield.
+quest168_chainnext 169
+quest168_chainprev 167,	//this is the quest you must have completed before hand for it to show up
+
+quest169_namelocalized 	1075428 //Saved Honor
+quest169_textlocalized 	1075429 //Quest history
+quest169_textcompletelocalized 	1075433
+quest169_textuncompletelocalized 	1075432
+quest169_textrefuselocalized 	1075431
+quest169_objectiveamount 1
+quest169_objective1_type 3
+quest169_objective1 1 i_de_boor_shield
+quest169_objective1_receiver c_Derek_the_Merchant
+quest169_prizes 2
+quest169_prizetype1 1 //item
+quest169_prizeid1 i_goblet_celebration Goblet of Celebration.
+quest169_prizetype2 1 //item
+quest169_prizeid2 i_ornate_elven_chairs An Ornate Elven Chair.
+quest169_chainprev 167,168,
+
+////////////End Chain///////////////////////
+
+quest170_namelocalized 	1072367 //Freedom!
+quest170_textlocalized 	1072552 //Quest history
+quest170_textcompletelocalized 	1072556
+quest170_textuncompletelocalized 	1072554
+quest170_textrefuselocalized 	1072553
+quest170_objectiveamount 1
+quest170_objective1_type 4
+quest170_objective1 Sanctuary Entrance
+quest170_prizes 1
+quest170_prizetype1 3 //function
+quest170_prizeid1 RANDMAGICITEM Lenley's Favorite Sparkly.
+
+quest171_namelocalized 	1073085 //Arch Enemies
+quest171_textlocalized 	1073575 //Quest history
+quest171_textcompletelocalized 	1073615
+quest171_textuncompletelocalized 	1073595
+quest171_textrefuselocalized 	1072553
+quest171_objectiveamount 1
+quest171_objective1_type 2
+quest171_objective1 10 c_archer_ratman
+quest171_prizes 1
+quest171_prizetype1 1 //item
+quest171_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+quest172_namelocalized 	1073666 //Unholy Construct
+quest172_textlocalized 	1073705 //Quest history
+quest172_textcompletelocalized 	1073797
+quest172_textuncompletelocalized 	1073746
+quest172_textrefuselocalized 	1073746
+quest172_objectiveamount 1
+quest172_objective1_type 2
+quest172_objective1 10 c_iron_golem
+quest172_prizes 1
+quest172_prizetype1 1 //item
+quest172_prizeid1 tm_questlargebagtreasure A large bag of treasure.
+
+quest173_namelocalized 	1072995 //Vermin
+quest173_textlocalized 	1073029 //Quest history
+quest173_textcompletelocalized 	1073615
+quest173_textuncompletelocalized 	1073595
+quest173_textrefuselocalized 	1072553
+quest173_objectiveamount 1
+quest173_objective1_type 2
+quest173_objective1 10 c_ratman
+quest173_prizes 1
+quest173_prizetype1 1 //item
+quest173_prizeid1 tm_questbagtrinkets A bag of trinkets.
+
+//////////////Quest Chain//////////////////
+
+quest174_namelocalized 	Fiery Vengence //Fiery Vengence
+quest174_textlocalized 	GRAAAARRRR!!!... Who they think they are, they can't ban me, not ME, the great Nandor, the one who helped the great Dragon Lord Rikktor in conquering this dungeon for our people! I was once Nandor the Great, now I'm the Outcast. Are you willing to help me weakling? //Quest history
+quest174_textcompletelocalized 	You seem a little down, you think that was hard? Hear the next part of the plan.
+quest174_textuncompletelocalized 	Hurry, you must weak their defenses first.
+quest174_textrefuselocalized 	I didn't think so, you being from such a pity race.
+quest174_objectiveamount 1
+quest174_objective1_type 2
+quest174_objective1 5 c_drake_red
+quest174_objective1_LOCATION Destard
+quest174_prizes 1
+quest174_prizetype1 2 //nothing
+quest174_prizeid1 0 Hear more about the vengence plan.
+quest174_chainnext 175
+
+quest175_namelocalized 	Fiery Vengence, Part 2 //Fiery Vengence
+quest175_textlocalized 	Now we must strike their biggest soldiers, Drakes are useless slaves, but these will be tougher. You must go kill some of the dragons that lurk in Destard. //Quest history
+quest175_textcompletelocalized 	Now we must strike really hard weakling.
+quest175_textuncompletelocalized 	Go and watch yourself, don't want anyone killing you before I do if you take much longer!
+quest175_textrefuselocalized 	You useless coward, run before I eat your head off!
+quest175_objectiveamount 1
+quest175_objective1_type 2
+quest175_objective1 4 c_dragon_red
+quest175_objective1_LOCATION Destard
+quest175_prizes 1
+quest175_prizetype1 2 //nothing
+quest175_prizeid1 0 Hear more about the vengence plan.
+quest175_chainprev 174,
+quest175_chainnext 176
+
+quest176_namelocalized 	Fiery Vengence, Part 3 //Fiery Vengence
+quest176_textlocalized 	You must kill the head of the gang, the Ancient Wyrms, they are powerful old elders of my people, it hurts me to do this, but all shall pay for what happened to me! //Quest history
+quest176_textcompletelocalized 	Finally, all their defenses are down, we can now kill the Lord of this place, the one who threw me out and casted me this bloody title!
+quest176_textuncompletelocalized 	There are two of them here, so come back only when you've slayed them both!
+quest176_textrefuselocalized 	Does the power of the elders seem to much for you? Go away, I'll finish this on my own!
+quest176_objectiveamount 1
+quest176_objective1_type 2
+quest176_objective1 2 c_ancient_wyrm
+quest176_objective1_LOCATION Destard
+quest176_prizes 1
+quest176_prizetype1 2 //nothing
+quest176_prizeid1 0 Kill Mallyx the Unyielding.
+quest176_chainprev 174,175,
+quest176_chainnext 177
+
+quest177_namelocalized 	Fiery Vengence, Part 4 //Fiery Vengence
+quest177_textlocalized 	I don't dare to enter his realm, but I shall give you the powers to do so, come back with the head of that bastard and I shall reward you with untold riches! //Quest history
+quest177_textcompletelocalized 	Good... my vengence is complete! I shall now become the new lord of this place! Don't think for a moment that we shall be friends with your people, but I will let you live now, the word of a Dragon values gold.
+quest177_textuncompletelocalized 	The portal to his realm can be found at the last level of the dungeon, where you fought one of the Ancient Wyrms.
+quest177_textrefuselocalized 	You dare to run now mortal? I will hunt you forever!
+quest177_objectiveamount 1
+quest177_objective1_type 2
+quest177_objective1 1 c_mallyx
+quest177_prizes 2
+quest177_prizetype1 3 //function
+quest177_prizeid1 f_quest177_givefierysword Fiery Dragon Sword.
+quest177_prizetype2 2 //nothing
+quest177_prizeid2 0 Conqueror of Destard Title.
+quest177_chainprev 174,175,176,
+
+////////////End of quest chain///////////////////
+
+quest178_namelocalized 	Main Key - Dread Horn //Main Key - Dread Horn
+quest178_textlocalized 	The Twisted Weald has been overrun by monstrous forces, commanded by the corrupted Unicorn, Dread Horn, you must gather 4 keys in order to fight him. //Quest history
+quest178_textcompletelocalized 	Well done, here's the master key to summon Dread Horn!
+quest178_textuncompletelocalized 	The keys are Gnaw's Fang, Irk's Brain, Lissith's Silk, and Sabrix's Eye, which you can find in the loot of Named Monsters inside Twisted Weald.
+quest178_textrefuselocalized 	Hope you change your mind.
+quest178_objectiveamount 4
+quest178_objective1_type 1
+quest178_objective1 1 i_gnaws_fang
+quest178_objective2_type 1
+quest178_objective2 1 i_sabrix_eye
+quest178_objective3_type 1
+quest178_objective3 1 i_lilisith_silk
+quest178_objective4_type 1
+quest178_objective4 1 i_irk_brain
+quest178_prizes 1
+quest178_prizetype1 1 //item
+quest178_prizeid1 i_dreadhorn_key Essence of Wind.
+
+///////////////////////////////////////////////////
+
+quest179_namelocalized 	Main Key - Shimmering Effusion
+quest179_textlocalized 	A beautiful and bright creature has awkaned in the Prism of Light, the Shimmering Effusion, it has occupied the place with it's army of crystal creatures! //Quest history
+quest179_textcompletelocalized 	Well done, here's the master key to summon the Shimmering Effusion!
+quest179_textuncompletelocalized 	The keys are different crystals found all across the dungeon with some monsters.
+quest179_textrefuselocalized 	You must cleanse the diggings of this threat!
+quest179_objectiveamount 6
+quest179_objective1_type 1
+quest179_objective1 1 i_broken_crystal
+quest179_objective2_type 1
+quest179_objective2 1 i_crushed_crystal
+quest179_objective3_type 1
+quest179_objective3 1 i_pieces_crystal
+quest179_objective4_type 1
+quest179_objective4 1 i_scattered_crystal
+quest179_objective5_type 1
+quest179_objective5 1 i_jagged_crystal
+quest179_objective6_type 1
+quest179_objective6 1 i_shattered_crystal
+quest179_prizes 1
+quest179_prizetype1 1 //item
+quest179_prizeid1 i_shimmering_key Shimmering Effusion Key.
+
+////////////////////////////////////////////////////
+
+quest180_namelocalized 	Tutorial Quest 1
+quest180_textlocalized 	Hello adventurer! To allow you to go to the next tutorial phase I need you to kill a Tutorial Zombie. Remember to enter WARMODE and should you die go near the Healer or double click the Ankh nearby. //Quest history
+quest180_textcompletelocalized 	Well done, now get your reward and move to the next phase!
+quest180_textuncompletelocalized 	Go on, enter WARMODE and kill them.
+quest180_textrefuselocalized 	You cannot leave until you complete this task!
+quest180_objectiveamount 1
+quest180_objective1_type 2
+quest180_objective1 1 c_tutorial_zombie
+quest180_prizes 1
+quest180_prizetype1 3 //function
+quest180_prizeid1 F_TUTORIAL_questREWARD Go to next step.
+
+quest181_namelocalized 	Tutorial Quest 2
+quest181_textlocalized 	Hello there, I guess you know the basics of trading, right? Then go near that vendor and get me a nightshade and a garlic. //Quest history
+quest181_textcompletelocalized 	Well done! Welcome to Exodus and in behalf of the Staff and all players we hope you have a pleasent gaming here! Any questions or doubts just visit our <DEF.HTMLLINK_FORUM> and our <DEF.HTMLLINK_SITE>. You'll now be teleported to Britain and can beging your training there! Before starting to train a skill, go to a NPC and check if he can train the desired skill up to 30.0 so you can get started more easily!<DEF.BR>Again, welcome and good, no, great gaming!
+quest181_textuncompletelocalized 	C'mon, what are you waiting for?
+quest181_textrefuselocalized 	You cannot leave until you complete this task!
+quest181_objectiveamount 2
+quest181_objective1_type 1
+quest181_objective1 1 i_reag_nightshade
+quest181_objective2_type 1
+quest181_objective2 1 i_reag_garlic
+quest181_prizes 1
+quest181_prizetype1 3 //function
+quest181_prizeid1 F_TUTORIAL_QUEST2_REWARD End tutorial.
+
+////////////////////////////////////////////////////
+quest182_namelocalized 	1074454	// Watch Your Step
+quest182_textlocalized 	1074455
+quest182_textcompletelocalized 	1074458
+quest182_textuncompletelocalized 	1074457
+quest182_textrefuselocalized 	1074456
+quest182_objectiveamount 1
+quest182_objective1_type 1 //item
+quest182_objective1 5000 i_gold
+quest182_prizes 1
+quest182_prizetype1 1 //item
+quest182_prizeid1 i_acid_proof_rope Acid Proof Rope.
+
+
+[EOF]

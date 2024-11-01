@@ -1,0 +1,183 @@
+//Virtue System by Soulless
+//v1.0
+//11:52 AM 3/28/2022
+
+[function f_virtue_gain]
+sysmessage You have gained some <def0.virtue<dargn>_name>
+
+[function f_virtue_lose]
+sysmessage You have lost some <def0.virtue<dargn>_name>
+
+[function f_virtue_get_progress_dots]
+local.virtue=<def0.virtue<dargn>_name>
+local.value=<tag0.virtue_<local.virtue>>
+if (<local.value> < 4000)
+  return <eval (<local.value>/400)>
+elseif (<local.value> < 10000)
+  return <eval ((<local.value>-4000)/600)>
+elseif (<local.value> < 21000)
+  return  <eval (<local.value>-1000)/ ((21000-10000)/10)>
+else 
+  return 10
+endif
+
+[function f_virtue_get_progress_text]
+local.virtue=<def0.virtue<dargn>_name>
+local.value=<tag0.virtue_<local.virtue>>
+local.dots=<f_virtue_get_progress_dots <dargn>>
+if (<local.value> < 1)
+  return You have not started on the path of this Virtue.
+elseif (<local.value> < 400)
+  return You have barely begun your journey through the path of this Virtue.
+elseif (<local.value> < 2000)
+  return You have progressed in this Virtue, but still have much to do.
+elseif (<local.value> < 3600)
+  return Your journey through the path of this Virtue is going well.
+elseif (<local.value> < 4000) 
+  return You feel very close to achieving your next path in this Virtue.
+elseif (<local.dots> < 1)
+  return You have achieved a path in this Virtue.
+elseif (<local.dots> < 9)
+  return Your journey through the path of this Virtue is going well.
+elseif (<local.dots> < 10)
+  return You feel very close to achieving your next path in this Virtue.
+else
+  return You have achieved the highest path in this Virtue.
+endif
+
+[function f_virtue_valor_power]
+targetf f_virtue_valor_power_targ
+sysmessage Target the Champion Idol of the Champion you wish to challenge!
+
+[function f_virtue_valor_power_targ]
+ref1=<argo>
+if !(<ref1.isvalid>) || !(<ref1.isitem>) || (<ref1.type> != t_champion_idol)
+  sysmessage You must target a Champion Idol to challenge the Champion's spawn!
+  return 1
+elseif (<def0.champion_spawn<ref1.dmorem>_nochallenge>)
+  sysmessage You cannot issue a challenge to that champion!
+  return 1
+elseif (<flags>&statf_hidden) || (<flags>&statf_invisible)
+  sysmessage You cannot do that while hidden.
+  return 1
+elseif (<ref1.more1> >= 4)
+  sysmessage The champion of this region has already been summoned!
+  return 1
+elseif (<ref1.tag0.spawn_advanced> >= 1)
+  sysmessage The Champion of this region has already been challenged!
+  return 1
+endif
+if (<ref1.more1> >= 1)		//spawn is active
+  local.champion_level=<ref1.dmore2>
+  doswitch <local.champion_level>
+    begin
+      local.valor_needed=2500
+      local.valor_consumed=2500
+    end
+    begin
+      local.valor_needed=5000
+      local.valor_consumed=5000
+    end
+    begin
+      local.valor_needed=10000
+      local.valor_consumed=7500
+    end
+    begin
+      local.valor_needed=20000
+      local.valor_consumed=10000
+    end
+  enddo
+  if (<tag0.virtue_valor> < <local.valor_needed>)
+    sysmessage The Champion of this region ignores your challenge. You must further prove your valor.
+    return 1
+  else
+    ref1.f_virtue_advance_champion_spawn
+    tag0.virtue_valor -= <local.valor_consumed>
+    sysmessage  Your challenge is heard by the Champion of this region! Beware its wrath!
+  endif
+else
+  if (<tag0.virtue_valor> < 11000)
+    Sysmessage The Champion of this region ignores your challenge. You must further prove your valor.
+    return 1
+  else
+    ref1.f_virtue_activate_champion_spawn
+    tag.virtue_valor -= 11000
+    sysmessage Your challenge is heard by the Champion of this region! Beware its wrath!
+  endif
+endif
+
+[function f_virtue_advance_champion_spawn]
+f_champion_clear_white_candles
+f_champion_red_candle_add
+tag0.spawn_advanced += 1
+
+[function f_virtue_activate_champion_spawn]
+f_champion_spawn_activate
+f_champion_red_candle_add
+tag0.spawn_advanced += 1
+
+
+
+// Honor
+[function f_virtue_honor_power]
+sysmessage Honor not yet implemented
+
+// Compassion
+[function f_virtue_compassion_power]
+sysmessage Compassion not yet implemented
+
+// Justice
+[function f_virtue_justice_power]
+sysmessage Justice not yet implemented
+
+// Honesty
+[function f_virtue_honesty_power]
+sysmessage Honesty not yet implemented
+
+// Spirituality
+[function f_virtue_spirituality_power]
+sysmessage Spirituality not yet implemented
+
+// Sacrifice
+[function f_virtue_sacrifice_power]
+sysmessage Sacrifice not yet implemented
+
+// Humility
+[function f_virtue_humility_power]
+sysmessage Humility not yet implemented
+
+[function f_virtue_get_phase]
+local.virtue=<def0.virtue<dargn>_name>
+if (<tag0.virtue_<local.virtue>> < 1)
+  return 0
+elseif (<tag0.virtue_<local.virtue>> < 4000)
+  return 1
+elseif (<tag0.virtue_<local.virtue>> < 10000)
+  return 2
+else	//if (<tag0.virtue_<local.virtue>> < 21000)
+  return 3
+//else
+  //return 4	//this is the max	//i don't think we need this value
+endif
+
+[function f_virtue_get_symbol_color]
+local.virtue=<dargn>
+local.phase=<f_virtue_get_phase <dlocal.virtue>>
+args=0,<def0.virtue<dlocal.virtue>_symbol_hues>
+return <argv[<dlocal.phase>]>
+
+[function f_virtue_get_title]
+local.virtue=<dargn>
+local.phase=<f_virtue_get_phase <dlocal.virtue>>	
+doswitch <local.phase>
+  return none		//has NOT started
+  local.title=Seeker	//started
+  local.title=Follower	//second phase
+  local.title=Knight	//third phase
+  local.title=Knight	//maxed out	//this isnt really used
+enddo
+local.title=<local.title> of <def0.virtue<dlocal.virtue>_name>
+return <local.title>
+
+
+[EOF]

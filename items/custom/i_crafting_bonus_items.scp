@@ -1,0 +1,162 @@
+//Crafting Skill Bonus Items by Soulless
+//v1.0
+//12:13 AM 8/28/2022
+
+[itemdef i_apron_blacksmiths]
+defname=i_apron_blacksmiths
+name=blacksmith's apron
+id=i_apron_half
+type=t_clothing
+tevents=t_skill_increase
+skillmake=tailoring 31.8, t_sewing_kit
+resources=10 i_clock
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=blacksmithing,50
+
+[itemdef i_cloak_tailors]
+defname=i_cloak_tailors
+name=tailors's cloak
+id=i_cloak
+type=t_clothing
+tevents=t_skill_increase
+skillmake tailoring 45.4, t_sewing_kit
+resources=14 i_cloth
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=tailoring,50
+
+[itemdef i_robe_alchemists]
+defname=i_robe_alchemists
+name=alchemist's robe
+id=i_robe
+type=t_clothing
+tevents=t_skill_increase
+skillmake=tailoring 59.0, t_sewing_kit
+resource=16 i_cloth
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=alchemy,50
+
+[itemdef i_hat_scribes]
+defname=i_hat_scribes
+name=scribe's hat
+id=i_hat_wizards
+type=t_clothing
+tevents=t_skill_increase
+skillmake=tailoring 16.8, t_sewing_kit
+resource=15 i_cloth
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=inscription,50
+
+[itemdef i_gloves_carpenters]
+defname=i_gloves_carpenters
+name=carpenter's gloves
+id=i_leather_gloves
+type=t_clothing
+tevents=t_skill_increase
+resources=3 i_hides_cut
+skillmake=tailoring 51.8, t_sewing_kit
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=carpentry,50
+
+[itemdef i_sash_bowyers]
+defname=i_sash_bowyers
+name=bowyer's sash
+id=i_sash
+type=t_clothing
+tevents=t_skill_increase
+resources=4 i_cloth
+skillmake=tailoring 4.5, t_sewing_kit
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=bowcraft,50
+
+[itemdef i_boots_cartographers]
+defname=i_boots_cartographers
+name=cartographer's boots
+id=i_boots_calf
+type=t_clothing
+tevents=t_skill_increase
+skillmake=tailoring 36.3, t_sewing_kit
+resources=8 i_hides_cut
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=cartography,50
+
+[itemdef i_pants_tinkerers]
+defname=i_pants_tinkerers
+name=tinkerer's pants
+id=i_pants_short
+type=t_clothing
+tevents=t_skill_increase
+skillmake=tailoring 6.8, t_sewing_kit
+resources=6 i_cloth
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=tinkering,50
+
+[itemdef i_shirt_cooks]
+defname=i_shirt_cooks
+name=cook's shirt
+id=i_shirt_plain
+type=t_clothing
+tevents=t_skill_increase
+skillmake=tailoring 22.7, t_sewing_kit
+resources=8 i_cloth
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=cooking,50
+
+[itemdef i_gloves_miners]
+defname=i_gloves_miners
+name=Miner's Gloves
+id=i_leather_gloves
+type=t_armor_leather
+tevents=t_skill_increase
+resources=3 i_hides_cut
+skillmake=tailoring 51.8, t_sewing_kit
+
+on=@create
+color=colors_all
+hitpoints={50 60}
+tag0.skillbonus=mining,50
+
+[itemdef i_hammer_smith_sturdy]
+defname=i_hammer_smith_sturdy
+name=Sturdy Smiths Hammer
+id=i_hammer_smith
+type=t_weapon_mace_smith
+skillmake=tinkering 40.0
+resources=4 i_ingot_iron
+
+on=@create
+color=0482
+hitpoints={150 200}
+
+[eof]
+
+
+
+
+

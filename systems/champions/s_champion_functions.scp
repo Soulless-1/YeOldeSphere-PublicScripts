@@ -1,0 +1,741 @@
+//Champion Spawn System by Soulless
+//v1.0
+//1:35 PM 1/8/2022
+
+[function setup_champion_spawns]
+remove_champion_spawns
+ref1=<uid>
+for n 0 5
+  serv.newitem i_champion_altar
+  new.removeallcomps
+  new.morem=<local.n>
+  new.p=<def0.champion_spawn<dlocal.n>_location>
+  new.GenerateBaseComponents
+  new.region.events=+r_champion_spawn
+endfor
+serv.newitem i_star_chamber_altar
+new.removeallcomps
+new.p=5140,1761,1
+new.GenerateBaseComponents
+for n 0 5
+  serv.newitem i_champion_skull_pedestal
+  var0.champion_altar<dlocal.n>=<new>
+  new.p=5140,1761,1
+  new.z += 6
+  doswitch <local.n>
+    begin
+      new.name=Altar of Neira the Necromancer
+      new.morem=3
+      new.move s
+    end
+    begin
+      new.name=Altar of Barracoon the Piper
+      new.morem=0
+      new.move sw
+    end
+    begin
+      new.name=Altar of Mephitis
+      new.morem=2
+      new.move w
+    end
+    begin
+      new.name=Altar of Rikktor
+      new.morem=1
+      new.move n
+    end
+    begin
+      new.name Altar of Lord Oaks
+      new.morem=5
+      new.move ne
+    end
+    begin
+      new.name=Altar of Semidar
+      new.morem=4
+      new.move e
+    end
+  enddo
+endfor
+
+[function remove_champion_spawns]
+forinstances i_champion_altar
+  remove
+endfor
+forinstances i_champion_idol
+  remove
+endfor
+forinstances i_star_chamber_altar
+  remove
+endfor
+forinstances i_champion_skull_pedestal
+  remove
+endfor
+
+[function move_champion_altar]
+ref1=<uid>
+foritems 3
+  local.z=<z>
+  if (<ref1.distance <uid>> <=0 )
+    timerf 0,p=<args>,<local.z>
+  else
+    local.x=<eval <p.x>-<ref1.p.x>> 
+    local.y=<eval <p.y>-<ref1.p.y>>
+    timerf 0,p=<eval <argv[0]>+<local.x>>,<eval <argv[1]>+<local.y>>,<local.z>
+    timerf 0,update
+  endif
+endfor
+
+[function f_champion_setup_altar]
+ref1=<uid>
+foritems 3
+  if (<baseid>==i_stairs_stone)
+    color=0455
+  endif
+  if (<baseid>==i_pentagram)
+    color=0452
+  endif
+endfor
+serv.newitem i_champion_idol
+new.morem=<ref1.morem>
+var0.felucca_champion_spawn<new.dmorem>=<new>
+new.p=<p>
+new.z += 5
+
+
+[function f_champion_pentagram_color]
+foritems 3
+  if (<baseid>==i_pentagram)
+    color=<args>
+  endif
+endfor
+
+[function f_champion_white_candle_add]
+serv.newitem i_skull_candle
+new.attr |= attr_move_never
+new.type=t_normal
+new.color=0481
+new.p=<p>
+new.f_champion_white_candle_pos <tag0.white_candles>
+new.fix
+new.nudgeup 1
+new.link=<uid>
+tag0.white_candle_<dtag0.white_candles>=<new>
+tag0.white_candles += 1
+tag0.lastcandle=<serv.time>
+if (<tag0.white_candles> > 4)
+  f_champion_red_candle_add
+  f_champion_clear_white_candles
+endif
+
+[function f_champion_white_candle_pos]
+doswitch <dargn>
+  move nw
+  move ne
+  move se
+  move sw
+enddo
+
+[function f_champion_white_candle_remove]
+local.n=<eval <tag0.white_candles>-1>
+try uid.<tag0.white_candle_<dlocal.n>>.remove
+tag0.white_candle_<dlocal.n>=
+tag0.white_candles -= 1
+
+[function f_champion_clear_white_candles]
+for <tag0.white_candles>
+  f_champion_white_candle_remove
+endfor
+tag0.white_candles=
+
+//////////////////////////
+// Red Candles
+
+[function f_champion_red_candle_add]
+ref1=<uid>
+serv.newitem i_skull_candle
+new.attr |= attr_move_never
+new.type=t_normal
+tag0.red_candle_<dtag0.red_candles>=<new>
+new.color=026
+new.p=<p>
+new.f_champion_red_candle_pos <tag0.red_candles>
+new.fix
+new.nudgeup 1
+new.link=<uid>
+tag0.red_candles += 1
+tag0.lastcandle=<serv.time>
+//morey -= <def0.champion_spawn_level<ref1.dmore2>_kills>
+morey=
+local.next_level=<eval (<tag0.red_candles>-1)/4>
+if (<more2> < <local.next_level>)	//going into next level
+  more2 += 1
+endif
+tag0.stage_started=<serv.rticks>
+
+if (<tag0.red_candles> > 16)	//the 17th candle would be for the champion
+  f_champion_spawn_boss_summon
+  return 1
+endif
+
+[function f_champion_red_candle_pos]
+doswitch <dargn>
+  move nw 2
+  begin
+    move n 2
+    move w
+  end
+  move n 2
+  begin
+    move n 2
+    move e
+  end
+  move ne 2
+  begin
+    move e 2
+    move n
+  end
+  move e 2
+  begin
+    move e 2
+    move s
+  end
+  move se 2 
+  begin
+    move s 2
+    move e
+  end
+  move s 2
+  begin
+    move s 2
+    move w
+  end
+  move sw 2
+  begin
+    move s
+    move w 2
+  end
+  move w 2
+  begin
+    move n
+    move w 2
+  end
+enddO
+
+[function f_champion_red_candle_remove]
+local.n=<eval <tag0.red_candles>-1>
+try uid.<tag0.red_candle_<dlocal.n>>.remove
+tag0.red_candle_<dlocal.n>=
+tag0.red_candles -= 1
+local.last_level=<eval (<tag0.red_candles>-1)/4>
+if (<local.last_level> < <more2>)	//going into next level
+  more2 -= 1
+  serv.log back one level
+endif
+
+[function f_champion_clear_red_candles]
+for <tag0.red_candles>
+  f_champion_red_candle_remove
+endfor
+tag0.red_candles=
+f_champion_clear_white_candles
+
+[function f_champion_spawn_boss_summon]
+f_champion_pentagram_color 026
+f_champion_clear_red_candles
+f_champion_clear_white_candles
+more2=4		//4th level is champ spawn (technically the 5th, 0 is counted)
+timer=-1
+serv.newnpc <def0.champion_spawn<morem>_boss>
+tag0.champion_spawned=<new>
+new.tag0.champion_idol=<uid>
+new.events=+e_champion_boss
+new.events=+e_auto_cure
+new.events=+e_auto_dispel
+new.tag0.unbardable=1
+new.p=<p>
+new.home=<p>
+new.homedist=<def0.champion_spawn_maxdist>
+
+[function f_champion_gold_explosion] 
+ref1=<uid>
+for n 10
+  for dX -<dlocal.n> <dlocal.n>
+    for dY -<dlocal.n> <dlocal.n>
+      float.dist=<floatval sqrt(<eval (<local.dX>@2)+(<local.dY>@2)>)>
+      if (<float.dist> > <floatval <qval <argv[2]>?0:<dlocal.n>-0.5>>) && (<float.dist> < <floatval <dlocal.n>+0.5>)
+        local.absX=<eval (<p.x>+<local.dx>)>
+        local.absY=<eval (<p.y>+<local.dy>)>
+        local.t=<R1,30>
+        serv.newitem i_gold,<R125,250>
+        ref2=<new>
+        ref2.p=<dlocal.absX>,<dlocal.absy>,<ref1.p.z>
+        if !(<ref2.f_champion_gold_validated>)
+          if !(<ref3.isvalid>)
+            local.unplaced_gold += <ref2.amount>
+            ref2.remove
+          else
+            //ref2.movenear <ref3> 1	//place within 1 tile of the last placed valid gold pile
+            //ref2.p=<ref3.p>
+            ref2.movenear <ref1> 3
+            ref2.z=<serv.map(<ref2.p.x>,<ref2.p.y>).terrain.z>
+          endif
+        else
+          ref2.amount += <local.gold_unplaced>	//add any unplaced gold to this pile
+          local.gold_unplaced=
+          ref2.z=<serv.map(<ref2.p.x>,<ref2.p.y>).terrain.z>
+          ref2.z += 2
+          ref3=<ref2>	//last good placed gold pile
+        endif
+        ref2.attr |= attr_decay|attr_move_never|attr_invis
+        ref2.timer=<eval (<serv.DecayTimer>*60)>
+        ref2.timerf <dlocal.t>,f_champion_gold_explosion_appear
+        ref2.events=+t_champion_gold		
+        ref2.link=<ref1>			//link to the corpse (for looting rights)
+      endif
+    endfor
+  endfor
+endfor
+ref2.remove
+//serv.log Unplaceable Champion Gold : <local.gold_unplaced>
+
+[function f_champion_gold_validated]
+if (<serv.tiledata.terrain(<serv.map(<p.x>,<p.y>).terrain>).flags>&01) || (<serv.tiledata.terrain(<serv.map(<p.x>,<p.y>).terrain>).flags>&040)   //on a background, impassible tile
+  return 0
+elseif (<isneartype t_water 0>) 	//on a water tile
+  return 0
+endif
+serv.newnpc c_man_invisible
+ref5=<new>
+ref5.p=<p>
+local.canmove=<ref5.canmove>
+ref5.remove
+if !(<local.canmove>)
+  return 0
+endif
+return 1				//valid
+
+[function f_champion_gold_explosion_appear]
+attr &= ~ attr_move_never
+attr &= ~ attr_invis
+timer=<eval (<serv.DecayTimer>*60)*2>
+fixheight 
+effectLocation <p.x>,<p.y>,<p.z>,2,i_fx_explode_ball,1,32,0,0,0
+effectLocation <p.x>,<p.y>,<p.z>,2,{i_fx_explode 1 i_fire_column 1 i_fx_explode 1 i_fx_smoke 1},1,32,0,0,0
+sound {032 037}
+sound {011b 011e}   
+
+[function f_champion_spawn_pickup_gold]
+ref1=<uid>
+foritems 25
+  if (<type>==t_gold)
+    local.gold += <amount>
+    remove
+  endif
+endfor
+ref1.newgold <local.gold>
+
+[function f_champion_spawn_collect_gold]
+ref1=<uid>
+foritems 25
+  if (<type>==t_gold)
+    movenear <ref1> 3
+  endif
+endfor
+
+[function f_champion_spawn_reset]	//this will reset a champion spawn but not deactivate/activate it
+ref1=<tag0.champion_spawned>
+if (<ref1.isvalid>)
+  ref1.remove	//remove champion if spawned
+endif
+f_champion_remove_monsters				
+f_champion_clear_red_candles
+morey=
+morex=
+more2=
+tag0.white_candles=
+tag0.redcandles=
+tag0.lastcandle=
+tag0.spawn_advanced=
+resendtooltip
+
+[function f_champion_spawn_activate]
+ref1=<uid>
+ref1.f_champion_spawn_reset
+ref1.f_champion_pentagram_color 0
+ref1.more1=1
+ref1.timer=1
+ref1.goawake
+region.tag0.champactive=1
+foritems <eval (<def0.champion_spawn_maxdist>+15)>
+  if (<type>==t_spawn_char) 
+    if !(strmatch(c_h_heal*,<more1>))	//healer spwans always stay active
+      stop
+    endif
+  endif
+endfor
+
+[function f_champion_spawn_deactivate]
+ref1=<uid>
+ref1.f_champion_spawn_reset
+ref1.f_champion_pentagram_color 0452
+ref1.more1=0
+ref1.timer=-1
+ref1.gosleep
+region.tag0.champactive=
+foritems <eval (<def0.champion_spawn_maxdist>+15)>
+  if (<type>==t_spawn_char)
+    timer=<eval {(<morex>*60),(<morey>*60)}>		//set to random timer in range
+  endif
+endfor
+
+[function f_champion_remove_monsters]
+ref1=<uid>
+forchars 128
+  if (<findid.i_memory_champion_spawn.isvalid>) && (<findid.i_memory_champion_spawn.link>==<ref1>) && !(<isevent.e_champion_boss>)
+    remove
+  endif
+endfor
+
+[function f_champion_consolidate_monsters]
+ref1=<uid>
+forchars 128
+  if (<findid.i_memory_champion_spawn.isvalid>) && (<findid.i_memory_champion_spawn.link>==<ref1>) && !(<isevent.e_champion_boss>)
+    p=<ref1.p>
+  endif
+endfor
+
+[function f_champion_spawn_npc_count]
+ref1=<uid>
+forchars 128
+  if (<findid.i_memory_champion_spawn.isvalid>) && (<findid.i_memory_champion_spawn.link>==<ref1>)
+    local.n += 1
+  endif
+endfor
+return <dlocal.n>
+
+[function f_champion_spawn_nearby_players]
+forclients 15
+  local.n += 1
+endfor
+return <local.n>
+
+[function f_champion_corpse_additem]	//command usage : itemid,amount,odds,rolls,function
+for <argv[3]>
+  if (<argv[2]> <= 0) || !(<R<argv[2]>>) 
+    serv.newitem <argv[0]>,<argv[1]>,<uid>
+    if !(<isempty <argv[4]>>)	//function
+      new.<argv[4]>
+    endif
+  endif
+endfor
+
+[function f_champions_alternate_active_altar]
+ref1=<var0.felucca_champion_spawn_active_uid>	//store old champion spawn idol uid
+if (<ref1.isvalid>) && (<ref1.type>==t_champion_idol)	//deactive old champ spawn  
+  if (<ref1.more1> >= 1) 
+    serv.log <ref1.name>(<ref1>) active, cancel
+    return 1		//if the old champion spawn is active do NOT reset it or pick a new one
+  endif
+  ref1.f_champion_spawn_deactivate
+  serv.log <def0.champion_spawn<ref1.dmorem>> champion spawn deactivated (<ref1>).
+endif
+local.n=<R0,5>	//select new champion spawn number
+ref1=<var0.felucca_champion_spawn<dlocal.n>>
+if (<ref1.type> != t_champion_idol)
+  serv.log ERROR: incorrect var for champion spawn #<dlocal.n>
+endif
+var0.felucca_champion_spawn_active_uid=<ref1>
+ref1.f_champion_spawn_activate
+serv.log <def0.champion_spawn<ref1.dmorem>> champion spawn activated (<ref1>).
+
+[function f_champion_remove_npc_attackers]		//i dont think we need to do this... just scroll through the attackers as they are
+showattackers	//print out attackers on the console
+serv.log Filtering out NPCs on <name>(<uid>)'s attacker list. They had <attacker> attackers. 
+if (<attacker> >= 1)
+  for n <eval (<attacker>-1)> 0
+    ref1=<attacker.<dlocal.n>>
+    if !(<ref1.isvalid>) 			//doesnt exist, remove
+      serv.log Removing: invalid attacker <qval (<ref1.isvalid>)?<ref1.name>(<ref1>):noname> 
+      attacker.<attacker.id <ref1>>.delete 		
+      local.x += 1
+    elseif (<ref1.npc>)
+      serv.log Removing: npc attacker <qval (<ref1.isvalid>)?<ref1.name>(<ref1>):noname> 
+      attacker.<attacker.id <ref1>>.delete 		
+      local.x += 1
+    else
+      serv.log Keeping: player attacker <ref1.name>(<ref1>) valid attacker of <name>(<uid>)
+    endif
+  endfor
+endif
+serv.log Removed <dlocal.x> NPCs, <attacker> attackers remain
+serv.log -------------------------------------------------------------
+
+[function f_champion_top_attackers]
+ref1=<uid>
+serv.list.champion_attackers.clear
+for n 0 <eval (<ref1.attacker>-1)>
+  ref2=<ref1.attacker.<dlocal.n>>
+  if !(<ref2.npc>) && (<serv.list.champion_attackers.findelem <ref2>> == -1)
+    local.damage=<ref1.attacker.<ref1.attacker.id <ref2>>.damage>
+    if (<local.damage> < <ref1.tag0.damage<ref2>>)
+      serv.log Attacker damage for <ref2.name>(<ref2>) was lower than the tag.damage<ref2> tag: <local.damage> < <ref1.tag0.damage<ref2>>. setting it to the tag value
+      local.damage=<ref1.tag0.damage<ref2>>
+    endif
+    //local.damage=<qval (<local.damage> < <ref1.tag0.damage<ref2>)?<ref1.tag0.damage.ref2>:<local.damage>>
+    serv.list.champion_attackers.add <local.damage>,<ref2>
+    ref2.sysmessage You did <dlocal.damage> to <ref1.name>, you may qualify for an award!
+    serv.log <ref2.name>(<ref2>) added to the champion attacker list for <ref1.name>(<ref1>) with <local.damage> damage.
+  endif
+endfor
+if (<serv.list.champion_attackers.count> >= 1)
+  serv.list.champion_attackers.sort desc
+  for x 0 <eval (<serv.list.champion_attackers.count>-1)>
+    args=<serv.list.champion_attackers.<dlocal.x>>
+    if (<argv[0]> >= 500)		//must have done at least 500 damage
+      local.topattackers .= ,<argv[1]>
+    endif
+  endfor
+  serv.log <ref1.name>(<ref1>) top attackers = <local.topattackers>
+  return <streat <local.topattackers>>
+endif
+return 0
+
+[function f_champion_give_rewards]
+serv.log <name>(<uid>) rewarding champion power scrolls at <p>
+ref1=<uid>					//champion UID
+ref2=<tag0.champion_idol>			//champion idol UID
+args=<ref1.f_champion_top_attackers>
+local.receive_skull=<eval {0 (<argv>-1)}>	//which player receives the skull, pick randomly
+for n 0 5
+  ref3=<argv[<dlocal.n>]>
+  local.damage=<ref1.tag0.damage<ref3>>	
+  if (<ref3.isvalid>) 
+    serv.log <ref3.name> is being rewarded for being in the top 6 damager dealers: <local.damage>dmg.
+    for <R1,3>		//award 1 to 3 power scrolls 100% of the time
+      ref3.f_champion_get_powerscroll
+    endfor
+    if !(<R3>)
+      ref3.f_champion_get_skillsumscroll
+    endif
+    if (<ref1.f_champion_has_skull>) && (<local.n> == <local.receive_skull>)
+      ref3.f_champion_award_skull <ref1.tag0.champion_idol>
+    endif
+    if (<ref1.isharrower>)	//should just be added to the harrower? he's the only one that drops this stuff
+      serv.newitem { i_power_scroll_stat_wondrous 5 i_power_scroll_stat_exalted 4 i_power_scroll_stat_mythical 3 i_power_scroll_stat_legendary 2 i_power_scroll_stat_ultimate 1 }
+      new.cont=<ref3.findlayer.21>    
+      ref3.sysmessage You have received a scroll of power!
+      serv.log <ref3.name>(<ref3>) awarded <new.name> as #<eval (<local.n>+1)> damage dealer 
+      if !(<R3>)		//award a skill increase deed		//these drop on the harrower
+        serv.newitem i_deed_skill_increase
+        new.cont=<ref3.findlayer.21>    
+        ref3.sysmessage You have received a scroll of power!
+        serv.log <ref3.name>(<ref3>) awarded <new.name> as #<eval (<local.n>+1)> damage dealer 
+      endif
+    endif
+
+  endif
+endfor
+
+[function f_champion_get_powerscroll]
+serv.newitem { i_power_scroll_exalted 3 i_power_scroll_mythical 2 i_power_scroll_legendary 1 }
+new.more2={0 48}
+new.name=<new.name> of <serv.skill.<new.more2>.name> (<eval (<new.more1>/10)> skill)
+new.cont=<findlayer.21>    
+sysmessage You have received a scroll of power!
+serv.log <name>(<uid>) has received <new.name>(<new>)
+
+[function f_champion_get_skillsumscroll]
+serv.newitem i_deed_skillsum_increase
+new.cont=<findlayer.21>    
+sysmessage You have received a scroll of power!
+serv.log <name>(<uid>) has received <new.name>(<new>)
+
+[function f_champion_award_skull]
+local.argn=<argn>
+if (<local.argn> < 0) || (<local.argn> > 5)
+  serv.log tried to call f_champion_award_skull with invalid arguments.
+  return 1
+endif
+serv.newitem i_champion_skull					//give it to one of the top 6 attackers
+args=<def0.champion_spawn<args>_skull>
+new.name=Skull of <argv[0]>
+new.color=<argv[1]>
+new.morem=<local.argn>
+new.cont=<findlayer.21>
+sysmessage You have received a skull of power!
+serv.log <name>(<uid>) has received <new.name>(<new>)
+endif
+
+[function f_champion_award_uniques]
+if (5 < <R1,100>)			//check to see if the player gets a unique, decorative, or shared artifact
+  ref3.f_champion_award_artifact <def0.champion_spawn<ref2.dmore2>_artifact_unique>
+elseif (10 < <R1,100>)	
+  ref3.f_champion_award_artifact <def0.champion_spawn<ref2.dmore2>_artifact_decoration>
+elseif (15 < <R1,100>)
+  ref3.f_champion_award_artifact <def0.champion_spawn<ref2.dmore2>_artifact_shared>
+endif	
+
+[function f_champion_award_artifact]
+local.cont=<findlayer.21>
+if (<findlayer.21.count> > 125) || (<weight> > <maxweight>)
+  local.cont=<findlayer.29>
+endif
+local.item=<argv[<R0,<eval (<argv>-1)>>]>
+serv.log award <name>(<uid>) an artifact item: <local.item> 
+//sysmessage For your valor in combating the fallen beast, a special artifact has been bestowed on you.
+
+[function f_champion_spawn_collect_monsters]
+forchars <eval (<def0.champion_spawn_maxdist>*2)>
+  if (<isevent.e_champion_spawn_monster>) && (<findid.i_memory_champion_spawn.isvalid>)
+    ref1=<findid.i_memory_champion_spawn.link>
+    movenear <ref1> 3
+  endif
+endfor
+
+[function f_champion_skull_pedestals_clear]
+for n 0 5
+  ref1=<var0.champion_skull_pedestal<dlocal.n>>
+  if (<ref1.isvalid>)
+    ref1.remove
+  endif
+  var0.champion_skull_pedestal<dlocal.n>=
+endfor
+foritems 1
+  if (<type>==t_champion_skull_pedestal)
+    more2=
+  endif
+endfor
+
+[function f_champion_spawn_add_harrower]
+serv.newnpc c_harrower
+ref1=<new>
+serv.newitem i_harrower_gate
+ref2=<new>
+ref2.name=dark moongate
+ref2.type=t_harrower_gate
+ref2.attr=013
+ref2.timer=<eval (<serv.Decaytimer>*60)>
+ref2.p=5140,1761,4
+var0.harrower=<ref1>	//store UID of harrower
+dorand 15
+  begin
+    ref1.go 5242, 945, -40	//destard	//this is the harrower
+    ref2.morep=1176, 2638, 0	//this is the black moongate that takes you to the dungeon
+  end
+  begin
+    ref1.go 5225, 798, 0	//destard	
+    ref2.morep=1176, 2638, 0
+  end
+  begin
+    ref1.go 5556, 886, 30	//despise
+    ref2.morep=1298, 1080, 0
+  end
+  begin
+    ref1.go 5187, 615, 0	//deceit
+    ref2.morep=4111, 432, 5
+  end
+  begin
+    ref1.go 5319, 583, 0	//deceit
+    ref2.morep=4111, 432, 5
+  end
+  begin 
+    ref1.go 5713, 1334, -1	//fire
+    ref2.morep=2923, 3407, 8
+  end
+  begin
+    ref1.go 5860, 1460, -2	//fire
+    ref2.morep=2923, 3407, 8
+  end
+  begin
+    ref1.go 5328, 1620, 0	//terathan keep
+    ref2.morep=5451, 3143, -60
+  end
+  begin
+    ref1.go 5690, 538, 0	//wrong
+    ref2.morep=2042, 224, 14
+  end
+  begin
+    ref1.go 5609, 195, 0	//shame
+    ref2.morep=514, 1561, 0
+  end
+  begin
+    ref1.go 5475, 187, 0	//shame
+    ref2.more=514, 1561, 0
+  end
+  begin
+    ref1.go 6085, 179, 0 	//hythloth
+    ref2.morep=4721, 3822, 0
+  end
+  begin
+    ref1.go 6084, 66, 0		//hythloth
+    ref2.morep=4721, 3822, 0
+  end
+  begin
+    ref1.go 5499, 2003, 0	//covetous
+    ref2.more=2499, 919, 0
+  end
+  begin
+    ref1.go 5579, 1858, 0	//covetous
+    ref2.more=2499, 919, 0
+  end
+enddo
+ref1.home=<ref1.p>
+ref1.homedist=60
+
+[function isharrower]
+if (<baseid>==c_harrower) || (<baseid>==c_harrower_true_form)
+  return 1
+endif
+return 0
+
+[function f_champion_has_skull]
+if (<baseid>==c_barracoon) || (<baseid>==c_rikktor) || (<baseid>==c_mephitis) || (<baseid>==c_neira) || (<baseid>==c_semidar) || (<baseid>==c_lord_oaks)
+  return 1
+endif
+return 0
+
+[function f_champion_bonus_loot]
+if (<baseid>==c_krampus) ||  (<baseid>==c_headless_horseman)
+  serv.log Placing bonus loot on holiday champion : <name>(<uid>) @<p>
+  return 1
+endif
+return 0
+
+[function add_champion_spawn]
+if !(<argn>)
+  sysmessage Specify the number of the champion spawn you wish to add
+  return 1
+endif
+serv.newitem i_champion_altar
+new.removeallcomps
+new.morem=<argn>
+new.p=<def0.champion_spawn<dargn>_location>
+new.GenerateBaseComponents
+new.region.events=+r_champion_spawn
+
+[plevel 1]
+activechapm
+champs
+
+[function activechamp]
+champs
+
+[function champs]
+sdialog d_champs
+
+[dialog d_champs]
+250,250
+
+resizepic 10 10 9200 350 200
+dtext 125 25 1263 Champion Spawns
+
+while !(<isempty <def.champion_spawn<dlocal.n>>>)
+  ref1=<var0.felucca_champion_spawn<dlocal.n>>
+  gumppic 50 <eval (65+(<local.n>*17))> <qval (<ref1.more1> != 1)?2360:2361>
+  dtext 75 <eval (60+(<local.n>*17))> <qval (<ref1.more1> != 1)?997:1000> <def0.champion_spawn<dlocal.n>> champion spawn
+  dtext 275 <eval (60+(<local.n>*17))> <qval (<ref1.more1> != 1)?997:1000> <qval (<ref1.more1> != 1)?inactive:active>
+  local.n += 1 	
+endfor
+
+[EOF]
+
+

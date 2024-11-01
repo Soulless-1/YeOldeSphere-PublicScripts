@@ -1,0 +1,145 @@
+//Bulk Order Deed System by Soulless
+//v0.5
+//1:28 AM 8/21/2022
+
+[function f_bulk_order_craftskill]
+if !(strcmpi(blacksmith,<job>))
+  return 7	//blacksmithing
+elseif !(strcmpi(tailor,<job>))
+  return 34	//tailoring
+endif
+return 0
+
+[function f_bulk_order_output_craftables]
+if (<isempty <args>>) || !(<def0.bulk_orders_<args>>)
+  serv.log Error: "<args>" is an invalid argument for the bulk order cratftable output command.
+  return 1
+endif
+local.filename=bulk_order_<args>_craftables
+f_deletefile <local.filename>.txt
+while !(<isempty <def.crafting_<args>_<dlocal.n>_name>>)
+  while !(<isempty <def.crafting_<args>_<dlocal.n>_<dlocal.x>>>)
+    f_writefile <local.filename>.txt,bulk_orders_<args>_craftable<dlocal.y>			<def0.crafting_<args>_<dlocal.n>_<dlocal.x>>
+    serv.log Adding <def0.crafting_<args>_<dlocal.n>_<dlocal.x>> to the <args> bulk order craftable def list.
+    local.x += 1  
+    local.y += 1
+  endwhile
+  local.n += 1
+  local.x=
+endwhile
+
+[function f_bulk_order_output_materials]	
+if (<isempty <args>>) || !(<def0.bulk_orders_<args>>)	
+  serv.log <args> is an invalid argument for the bulk order material output command.
+  return 1
+elseif (<isempty <def.crafting_<args>_resource0>>)
+  serv.log <args> does not have orverride materials.
+  return 1
+endif
+local.filename=bulk_order_<args>_materials
+f_deletefile <local.filename>.txt
+while !(<isempty <def.crafting_<args>_resource<dlocal.n>>>)
+  while !(<isempty <def.crafting_<args>_resource<dlocal.n>_<dlocal.x>>>)
+    f_writefile <local.filename>.txt,bulk_orders_<args>_material<dlocal.y>			<def0.crafting_<args>_resource<dlocal.n>_<dlocal.x>>
+    serv.log Adding <def0.crafting_<args>_<dlocal.n>_<dlocal.x>> to the <args> bulk order material def list.
+    local.x += 1  
+    local.y += 1
+  endwhile
+  local.n += 1
+  local.x=
+endwhile
+
+[function f_bulk_order_select_item]
+local.craftname=<args>
+local.craftables=<def.bulk_orders_<args>_craftables>
+if !(<local.craftables>)
+  serv.log <local.craftname> does not have a valid craftables def list
+  return 0
+endif
+while !(<local.itemfound>)
+  //serv.b Trying to find item
+  local.item=<def0.bulk_orders_<args>_craftable<R0,<local.craftables>>>
+  if (<src.f_crafting_exceptional_chance <local.item>> >= 50)
+    local.itemfound=1
+    //serv.b Item found
+  endif
+endwhile
+return <local.item>
+    
+
+
+[function f_bulk_order_select_material]
+local.craftname=<argv[0]>
+local.item=<argv[1]>
+local.defaultmaterial=<def0.bulk_orders_<local.craftname>_material>
+if !(<def0.bulk_orders_<local.craftname>_material0>)
+  serv.log No bulk crafting material list for : <local.craftname>
+  return 0
+endif
+for n 1 <serv.itemdef.<local.item>.resources.count>		//check each resource needed to make the item
+  local.resource=<serv.itemdef.<local.item>.resources.<dlocal.n>.key>	//check the resource against the first resource in the bulk order material list
+  if (<serv.itemdef.<local.item>.resources.<dlocal.n>.key> == <local.defaultmaterial>) 	//check if we can replace it
+    local.canreplace=1
+  endif
+endfor
+if (<local.canreplace> == 1)
+  while !(<isempty <def.bulk_orders_<local.craftname>_material<dlocal.n>>>)	//we need to use the resource deflist 
+    args=<def.bulk_orders_<local.craftname>_material<dlocal.n>>
+    if (<R1,1000> <= <argv[2]>) && (<src.<local.craftname>> >= <argv[1]>) 	//if by chance you get the resource and have the skill
+      return <argv[0]>,<local.n>		//selected material and position
+    endif
+    local.n += 1
+  endwhile
+endif
+return 0,0
+
+[function f_bulk_order_select_reward]
+ref1=<argv[1]>	//uid of the bod, if any 
+if (<isempty <argv[0]>>) || !(<def0.bulk_orders_<argv[0]>_reward0>)
+  serv.log Error: "<argv[0]>" is an invalid craftname argument for the bulk order reward command.
+  return 1
+elseif !(<ref1.isvalid>) || (<ref1.type> != t_bulk_order_deed)
+  serv.log Error: "<argv[1]>" is an invalid UID for a completed bulk order reward.
+  return 1
+endif
+local.craft=<argv[0]>		
+local.bodvalue=<ref1.tag0.bodvalue>	//all bods should have a value tagged on them
+//add in bonus rolls for higher difficulty bods
+local.chance=<R1,1000>
+local.chance -= <ref1.tag0.matlevel>
+while !(<isempty <def.bulk_orders_<local.craft>_reward<dlocal.n>>>)
+  args=<def0.bulk_orders_<local.craft>_reward<dlocal.n>>
+  if (<local.chance> <= <argv[2]>)  	//if by chance you get it
+    return <argv[0]>,<qval (<argv[0]>==i_gold)?<local.bodvalue>:<argv[1]>>
+  endif
+  local.n += 1
+endfor
+//serv.b <argv[0]>,<qval (<argv[0]>==i_gold)?<local.bodvalue>:<argv[1]>>	
+return <argv[0]>,<qval (<argv[0]>==i_gold)?<local.bodvalue>:<argv[1]>>		
+
+[function f_bulk_order_reset_accounts]
+for a 0 <eval (<serv.accounts>-1)>
+  serv.account.<serv.account.<dlocal.a>.name>.tag0.bulk_orders_blacksmithing_received=
+  serv.account.<serv.account.<dlocal.a>.name>.tag0.bulk_orders_tailoring_received=
+endfor
+
+
+[EOF]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+

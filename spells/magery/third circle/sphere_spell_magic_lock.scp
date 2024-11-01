@@ -1,0 +1,23 @@
+[SPELL 19]
+DEFNAME=s_magic_lock
+NAME=Magic Lock
+SOUND=snd_spell_magic_lock
+RUNES=AP
+CAST_TIME=1.3
+RESOURCES=i_reag_blood_moss,i_reag_garlic,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_magic_lock
+SCROLL_ITEM=i_scroll_magic_lock
+FLAGS=spellflag_dir_anim|spellflag_targ_item|spellflag_playeronly
+EFFECT_ID=0
+EFFECT=0
+DURATION=0.0
+MANAUSE=9
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+//Magic Lock can be used to lock containers. These containers can still be Unlocked by Magery or picked with Lockpicking skill(??)
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+
+[EOF]

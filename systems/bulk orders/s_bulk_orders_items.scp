@@ -1,0 +1,206 @@
+//Bulk Order Deed System by Soulless
+//v0.5
+//1:28 AM 8/21/2022
+
+[itemdef i_bulk_order_offer]
+defname=i_bulk_order_offer
+name=bulk order offer
+id=i_deed
+type=t_eq_script
+layer=layer_special
+
+on=@dclick
+sdialog d_bulk_order_offer
+return 1
+
+on=@timer
+remove
+return 1
+
+on=@destroy
+if (<link.isvalid>)
+  trysrc <link> dialogclose d_bulk_order_offer
+endif
+
+[itemdef i_bulk_order_deed]
+defname=i_bulk_order_deed
+name=bulk order deed
+id=i_deed
+type=t_bulk_order_deed
+
+[itemdef i_bulk_order_deed_large]
+defname=i_bulk_order_deed_large
+name=large bulk order deed
+id=i_deed
+type=t_bulk_order_deed_large
+
+[itemdef i_bulk_order_reward_coupon]
+defname=i_bulk_order_reward_coupon
+name=bulk order reward coupon
+id=i_deed
+
+on=@create
+color=01a
+attr |= attr_newbie
+
+
+on=@dclick
+serv.newitem i_gold,<R1000,2000>
+src.bounce <new>
+consume
+return 1
+
+///////////////////
+// Rewards
+
+	
+[itemdef i_supply_bag_ore]
+defname=i_supply_bag_ore
+defname2=i_supply_bag_ingot
+name=Ore Supply Bag
+id=i_backpack
+type=t_container
+
+on=@create
+tag0.craft=mining		//uses mining resources
+for 0 4
+  local.ore=<f_supply_bag_select_ore <src>>
+  serv.newitem <local.ore>,<R10,20>,<uid>
+endfor
+
+[function f_supply_bag_select_ore]
+ref1=<args>	//player the bag is being awarded to
+while !(<isempty <def.gathering_mining_resource<dlocal.n>>>)		//select the mining resource
+  args=<def0.gathering_mining_resource<dlocal.n>>
+  local.chance=<R1,1000>
+  if (<ref1.mining> >= <argv[1]>) && (<local.chance> <= <argv[5]>) 	//if you have the skill and it's there by chance
+    return <argv[0]>
+  endif
+  local.n += 1
+endwhile
+return <argv[0]>	//we're at the end of the resources, use the last one
+
+[itemdef i_pickaxe_sturdy]
+defname=i_pickaxe_sturdy
+name=sturdy pickaxe
+id=i_pickaxe
+type=t_weapon_mace_pick
+
+on=@create
+hitpoints={100 200}
+usesmax={100 200}
+
+[itemdef i_pickaxe_gargoyle]
+defname=i_pickaxe_gargoyle
+name=gargoyle's pickaxe
+id=i_pickaxe
+type=t_weapon_mace_pick
+
+on=@create
+color=0482
+hitpoints={100 200}
+usesmax={100 200}
+
+[itemdef i_portable_forge]
+defname=i_portable_forge
+name=portable forge
+id=i_lantern
+type=t_portable_crafting_station
+skillmake=110.0 blacksmithing, 110.0 carpentry
+resources=200 i_ingot_iron,200 i_log
+
+on=@create
+color=0981	//color of deployment item, and the deployed item
+more1=50	//charges
+more2=i_forge	//baseid
+morex=02b	//sound
+
+[itemdef i_portable_anvil]
+defname=i_portable_anvil
+name=portable anvil
+id=i_lantern
+type=t_portable_crafting_station
+skillmake=110.0 blacksmithing, 110.0 carpentry
+resources=200 i_ingot_iron,200 i_log
+
+on=@create
+color=0999
+more1=50		
+more2=i_anvil
+morex=02a	
+
+[itemdef i_portable_spinning_wheel]
+defname=i_portable_spinning_wheel
+name=portable spinning wheel
+id=i_lantern
+type=t_portable_crafting_station
+skillmake=110.0 tailoring, 110.0 carpentry
+resources=200 i_cloth,200 i_log
+
+on=@create
+color=09ad
+more1=50	
+more2=i_spinning_wheel
+
+[itemdef i_portable_loom]
+defname=i_portable_loom
+name=portable loom
+id=i_lantern
+type=t_portable_crafting_station
+skillmake=110.0 tailoring, 110.0 carpentry
+resources=200 i_cloth,200 i_log
+
+on=@create
+color=09ae
+more1=50	
+more2=i_loom_upright
+
+[typedef t_portable_crafting_station]
+
+on=@click
+message <name> (<dmore1> charges)
+return 1
+
+on=@dclick
+ref1=<link>
+if (<ref1.isvalid>)
+  src.sysmessage This is already deployed.
+  return 1
+elseif (<timer> > 0)
+  src.sysmessage You can only summon this portable <serv.itemdef.<more2>.name> every 15 minutes.
+  return 1
+elseif (<more1> <= 0)
+  src.sysmessage this <name> is out of charges.
+  return 1
+endif
+more1 -= 1
+timer=15*60
+serv.newitem <more2>
+link=<new>
+new.link=<uid>
+new.attr=013
+new.events=+t_portable_crafting_station_deployed
+new.timer=5*60		//deployed for 5 minutes
+new.color=<color>
+new.p=<src.p.x>,<eval (<src.p.y>+1)>,<src.p.z>,<src.p.m>
+src.emote deploy a portable <serv.itemdef.<more2>.name>
+sound <morex>
+return 1
+
+on=@timer
+return 1
+
+[typedef t_portable_crafting_station_deployed]
+
+on=@dclick
+remove
+return 1
+
+on=@destroy
+effect=2,i_fx_smoke,6,15,0
+sound <link.morex>
+link.link=04fffffff
+
+
+
+[EOF]

@@ -1,0 +1,334 @@
+
+[typedef t_faction_stone_signup]
+
+on=@create
+attr=010
+
+on=@click
+message The Faction Signup Stone for the <def0.faction_<dmore1>>
+return 1
+
+on=@dclick
+if (<src.tag0.faction>) 
+  if (<src.tag0.faction> != <more1>)
+    if (<src.findid.i_faction_leaving>)
+      src.sysmessage You cannot use the faction stone until you have finished quitting your current faction.
+    else
+      src.sysmessage You must leave your current faction before signing up.
+    endif
+    return 1
+  else
+    src.sysmessage You are already a member of this faction.
+    return 1
+  endif
+
+else
+  sdialog d_faction_signup
+endif
+return 1
+
+[typedef t_faction_stone]
+
+on=@create
+attr=010
+
+on=@click
+message The Faction Stone of the <def0.faction_<dmore1>>
+return 1
+
+on=@dclick
+if (<src.tag0.faction> != <more1>)
+  src.sysmessage This is not your faction stone and you cannot use it
+elseif (<src.findid.i_faction_leaving>)
+  src.sysmessage You cannot use this faction stone while in the process of leaving the faction.
+  return 1
+else
+  sdialog d_faction_main
+endif
+return 1
+
+on=@timer	//this is used for the election campaign process
+if (<more2>==0)	//election campaign is pending
+  timer=60*60*24
+  more2=1
+elseif (<more2>==1) // people can sign up to campaign
+  timer=60*60*24
+  more2=2
+elseif (<more2>==2)	//voting process is ending, elect the winner
+  timer=60*60*24*5
+  more2=0
+  for 0 10
+    ref1=<serv.list.faction_<dmore1>_nominee>
+    if (<ref1.isvalid>)
+      if ((<ref2.isvalid>) && (<ref1.tag0.faction_votes> > <ref2.tag0.faction_votes>)) || !(<ref2>)
+        ref2=<ref1>
+      endif
+      ref1.tag0.faction_votes=
+    endif
+  endfor
+  var0.faction_<dmore1>_leader=<ref2>
+  if (<ref2.isvalid>) 
+    ref2.sysmessage You have been elected to lead your faction.
+    if !(<isempty <ref2.tag.faction_officer>>)	//if they are an officer we must clear their current rank
+      args=<ref2.tag0.faction_officer>
+      ref3=<argv[0]> 	//townstown where we hold our office
+      var0.faction_<ref2.dtag0.faction>_<ref3.region.defname>_<argv[1]>=
+      ref2.tag0.faction_officer=
+    endif
+  endif
+  serv.list.faction_<dmore1>_nominee.clear	
+  serv.list.faction_<dmore1>_voted.clear
+endif
+return 1
+
+[typedef ei_faction_item]		//remove me someday
+
+on=@equiptest
+events=-ei_faction_item
+events=+t_faction_item
+return 1
+
+[typedef t_faction_item]
+
+on=@dclick
+if !(<src.tag0.faction>)
+  src.sysmessage You cannot use a faction item
+  return 1
+elseif (<src.tag0.faction> != <tag0.faction>)
+  src.sysmessage You cannot equip use opposing faction's item!
+  return 1
+endif
+
+on=@equiptest
+if !(<src.tag0.faction>)
+  src.sysmessage You cannot equip a faction item
+  return 1
+elseif (<src.tag0.faction> != <tag0.faction>)
+  src.sysmessage You cannot equip an opposing faction's item!
+  return 1
+endif
+
+[typedef t_faction_imbue_prompt]
+
+on=@dclick
+return 1
+
+on=@equiptest
+return 1
+
+on=@equip
+return 1
+
+on=@pickup_pack
+return 1
+
+on=@pickup_ground
+return 1
+
+[typedef t_faction_town_sigil]
+
+on=@click 
+message <name>
+if (!<more2l>)		//purified
+  message This sigil is not corrupted.
+  message This sigil is not in the process of being corrupted.
+  return 1
+
+elseif (<more2l>==1) 	//being corrupted
+  message This sigil is not corrupted.
+  if (<timer> != -1)
+    message This sigil is in the process of being corrupted.
+  else
+    message This sigil is not in the process of being corrupted.
+  endif
+
+elseif (<more2l>==2)	//corrupted
+  message This sigil has been corrupted by the <def0.faction_<dmore2h>>.
+  message This sigil is not in the process of being corrupted.
+
+elseif (<more2l>==3)	//being purified
+  message This sigil is not corrupted.
+  message This sigil has been recently corrupted, and is undergoing purification.
+endif
+return 1
+
+on=@dclick
+if (<topobj> == <src>)
+  target Click on a sigil monolith or player
+  return 1
+endif
+
+on=@PickUp_Ground
+src.sysmessage You must use the stealing skill to pick up the sigil
+return 1
+
+on=@PickUp_Pack
+if (<topobj> == <src>)
+  src.sysmessage You must use the stealing skill to pick up the sigil
+  return 1
+endif
+
+on=@targon_char
+if (<src.targ.npc>) || !(<src.targ.isonline>)
+  src.sysmessage You cannot give the sigil to them.
+  return 1
+elseif !(<src.targ.tag0.faction>)
+  src.sysmessage You cannot give the sigil to someone not in a faction.
+  return 1
+elseif (<src.targ.tag0.faction> != <src.tag0.faction>)
+  src.sysmessage You cannot give the sigil to someone not in your faction.
+  return 1
+elseif (<src.targ.findid.i_faction_town_sigil>)
+  src.sysmessage You cannot give the sigil to someone who already has a sigil.
+  return 1
+elseif (<src.targ.flags>&statf_dead)
+  src.sysmessage You cannot give the sigil to a dead person.
+  return 1
+elseif (<src.distance <src.targ>> > 3)
+  src.sysmessage That is too far away.
+  return 1
+endif
+src.events=-e_factions_carrying_sigil
+src.f_faction_sigil_highlight 0
+cont=<src.targ.findlayer.21>
+update
+src.targ.events=+e_factions_carrying_sigil
+src.targ.f_faction_sigil_highlight 1
+src.sysmessage You have given the sigil to <src.targ.name>.
+src.targ.sysmessage <src.name> has given you a sigil.
+return 1
+
+on=@targon_item
+if (<src.targ.baseid> == i_faction_monolith) 
+  if (<src.targ.more2> != <src.tag0.faction>)
+    src.sysmessage You can't place that on an enemy monolith.
+    return 1
+  elseif (<src.targ.more1> != <more1>)
+    src.sysmessage That is not the correct faction monolith.
+    return 1
+  elseif (<more2l>==2) && (<more2h>==<src.tag0.faction>)
+    src.sysmessage Your faction corrupted tihs sigil. Take it to the town monolith.
+    return 1
+  endif
+  src.events=-e_factions_carrying_sigil
+  src.f_faction_sigil_highlight 0
+  more2l=1		//this means we're starting to corrupt
+  if (<src.targ.tag0.gracetimer>)	//are we returning it after it was stolen from us? use the grace timer if we have it
+    timer=<src.targ.tag0.gracetimer>
+    src.targ.timer=
+  else 
+    timer=12*60*60		//12 hours corrupt time
+  endif
+  link=<src.targ>		//link it to the faction stone
+  p=<src.targ.p>
+  z += 18
+  morep=<p>
+
+elseif (<src.targ.baseid> == i_faction_town_monolith)
+  if (<src.targ.more1> != <more1>)
+    src.sysmessage This is not the correct town sigil monolith
+    return 1
+  elseif (<more2h> != <src.tag0.faction>) 
+    Your faction did not corrupt this sigil.  Take it to your stronghold.
+    return 1
+  endif
+  args=<def0.faction_controlled_town_<dmore1>>
+  local.f=<var0.faction_control_<src.targ.region.defname>>
+  ref1=<var0.faction_<dlocal.f>_<region.defname>_sheriff>
+  ref2=<var0.faction_<dlocal.f>_<region.defname>_finance_minister>
+  for 1 2	//remove the old sheriff and finance minister if the office is taken
+    if (<ref<dlocal._for>>)
+      ref<dlocal._for>.tag0.faction_officer=
+      var0.faction_<dlocal.f>_<region.defname>_sheriff=		
+      serv.list.faction_<dlocal.f>_officer.<serv.list.faction_<dlocal.f>_officer.findelem <ref<dlocal._for>>>.remove	
+    endif
+  endfor
+  f_faction_remove_guards <local.f>	//remove old factions guards
+  f_faction_remove_vendors <local.f>	//remove old factions vendors
+  local.f=<src.tag0.faction>		//new faction
+  src.events=-e_factions_carrying_sigil
+  src.f_faction_sigil_highlight 0
+  more2l=3	//purification phase
+  var0.faction_control_<argv[0]>=<local.f>
+  var0.faction_<dlocal.f>_silver += 10000		//10,000 silver awarded
+  serv.newitem i_coin_silver,400,<src.findlayer.21>
+  src.targ.more2=<more2h>
+  src.targ.color=<def0.faction_<dlocal.f>_colors>
+  timer=3*24*60*60	//3 days being purified
+  link=<src.targ>		//link it to the faction stone
+  p=<src.targ.p>
+  z += 18
+  morep=<p>
+  f_faction_announcement The <def0.faction_<dlocal.f>> have taken control of <argv[1]>
+else
+  src.sysmessage You can't use the sigil on that.
+endif
+return 1
+
+on=@timer	//timer is expiring what should we do
+if (<more2l>==0)	//hasn't been placed on a stronghold monolith
+  if (<topobj.isplayer>)
+     ref1=<topobj>
+    ref1.events=-e_faction_carrying_sigil
+    ref1.f_faction_sigil_highlight 0
+    p=<morep>
+  endif	
+elseif (<more2l>==1)	//means it was placed on a stronghold monolith
+  more2l=2		//mark it as corrupted
+  more2h=<link.more2>	//mark it with the faction who corrupted it
+  timer=1*60*60		//1 hour to get it back to its town monolith
+elseif (<more2l>==2)	//expired while it was corrupted, does it start corrupting again???
+  if (<topobj.isplayer>)	
+    ref1=<topobj>
+    ref1.events=-e_faction_carrying_sigil
+    ref1.f_faction_sigil_highlight 0
+    p=<morep>
+  endif
+elseif (<more2l>==3)	//it's being purified
+  more2l=0	
+endif
+return 1
+
+
+[typedef t_faction_town_monolith]
+
+on=@create
+attr=010
+
+[typedef t_faction_town_stone]
+
+on=@create
+attr=010
+
+on=@dclick
+if (<var0.faction_control_<src.region.defname>> != <src.tag0.faction>) 
+  src.sysmessage Your faction does not control this town
+  return 1
+elseif (<var0.faction_<src.dtag0.faction>_leader> == <src>) 
+  sdialog d_faction_town_stone_leader
+  return 1
+elseif (<var0.faction_<src.dtag0.faction>_<region.defname>_sheriff> == <src>)
+  sdialog d_faction_town_stone_sheriff
+  return 1
+elseif (<var0.faction_<src.dtag0.faction>_<region.defname>_finance_minister> == <src>) 
+  sdialog d_faction_town_stone_finance_minister
+  return 1
+else
+  src.sysmessage Only faction Leaders can use townstones
+  return 1
+endif
+
+
+[typedef t_faction_monolith]
+
+on=@timer
+tag0.gracetimer=	//remove the timer from the grace period
+return 1
+
+[typedef t_faction_leader_board]
+
+[typedef t_faction_silver]
+
+
+
+[EOF]

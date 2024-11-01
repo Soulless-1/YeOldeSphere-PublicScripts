@@ -1,0 +1,59 @@
+//Cooldowns by Soulless
+//v1.0
+//5:39 AM 3/7/2022
+
+[plevel 1]
+cooldowns
+
+[function cooldowns]
+sdialog d_cooldowns
+consume i_cooldown_dialog_refresh
+serv.newitem i_cooldown_dialog_refresh
+link=<uid>
+new.equip
+new.timerms=500	
+
+[dialog d_cooldowns]
+10,10
+page 0
+
+resizepic 10 10 9200 400 0
+dtext 10 10 1000 <serv.time> <src.name>
+args=<src.f_get_cooldowns>
+if (<argv>)
+  for n 0 <eval <argv>-1>
+    ref1=<argv[<dlocal.n>]>
+    if (<ref1.isvalid>)
+      local.dispid=<ref1.f_cooldown_get_gumppic>
+      gumppic <eval (10+<local.x>)> <eval (10+<local.y>)> <eval <local.dispid>>
+      dtext <eval (25+<local.x>)> <eval (25+<local.y>)> 1000 <ref1.name> <ref1.timer>
+      local.y += 50
+    endif
+  endfor
+endfor
+
+[function f_get_cooldowns]
+forcharlayer 50
+  local.cooldowns .= ,<uid>
+endfor
+return <streat <local.cooldowns>>
+
+[itemdef i_cooldown_dialog_refresh]
+defname=i_colldown_dialog_refresh
+id=i_memory
+name=Cooldown Dialog Refresh
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+trysrc <topobj> dialogclose d_cooldowns
+trysrc <topobj> dialog d_cooldowns
+timerms=500
+return 1 
+
+[function f_cooldown_get_gumppic]
+if (<layer>==50)
+  return 0f0c
+endif
+
+[EOF]

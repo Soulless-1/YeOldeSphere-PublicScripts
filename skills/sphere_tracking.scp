@@ -1,0 +1,242 @@
+//https://uo.stratics.com/content/skills/tracking.php
+//https://www.uoguide.com/Tracking
+
+//success change? chance = (tracking + detect hidden + random 1-20) / (hiding + stealth) * 50
+
+[SKILL 38]
+DEFNAME=Skill_Tracking
+KEY=Tracking
+TITLE=Ranger
+PROMPT_MSG=What do you wish to track?
+FLAGS=	//skf_scripted
+DELAY=4.0
+STAT_STR=25
+STAT_INT=125
+STAT_DEX=50
+BONUS_STR=0
+BONUS_DEX=50
+BONUS_INT=50
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@select	
+//serv.log <src.name>(<src>) @select tracking
+src.sdialog d_tracking_menu_main
+src.sysmessage What do you wish to track?
+return 1
+
+on=@start
+local.chance=<src.f_tracking_success_chance <act>>
+if (<local.chance> < <R1,1000>) && !(<src.isgm>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+local.distance=<src.ctag0.tracking_distance>
+local.effect=<local.distance>
+
+on=@stroke
+local.chance=<src.f_tracking_success_chance <act>>
+local.distance=<src.ctag0.tracking_distance>
+src.ctag0.trackingStroke += 1
+if (!(<src.npc>) && (<local.chance> < <R1,1000>)) || (<src.distance <act>> > <local.distance>)
+  src.action =- 1
+  src.arrowquest 0,0,<def0.arrowquest_tracking>
+  return 1
+endif
+src.f_arrowquest_object <act>,<def0.arrowquest_tracking>
+if (<src.ctag0.trackingStroke> <= 1)	//only gain on the first stroke
+  src.skillgain tracking
+endif
+//serv.log <src.name>(<src>) @stroke tracking
+
+ON=@Fail
+//serv.log <src.name>(<src>) @fail tracking
+src.ctag0.trackingStroke=
+src.arrowquest 0,0,<def0.arrowquest_tracking>
+src.message You have lost your quarry.		//Tracking failed.		
+
+ON=@Abort
+src.ctag0.trackingStroke=
+//serv.log <src.name>(<src>) @abort tracking
+src.arrowquest 0,0,<def0.arrowquest_tracking>
+src.message You have lost your quarry.		//You stop tracking.
+
+//on=@success	//this doesnt fire for tracking for some reason?
+
+[dialog d_tracking_menu_main]
+
+0,0
+page 0
+
+resizepic 10 10 9200 440 140
+resizepic 20 20 2620 420 80
+resizepic 20 100 3000 420 25
+
+page 1
+	
+tilepic 35 40 8480		//horse
+tilepic 135 30 8436		//gazer
+tilepic 235 30 8454		//human male
+tilepic 335 30 8455		//human female
+//tilepichue 435 30 8402 181 	//corpser (green)
+
+dtext 30 105 0 Animals
+dtext 130 105 0 Monsters
+dtext 230 105 0 NPCs
+dtext 330 105 0 Player
+//dtext 430 105 0 Sea Monsters
+
+button 30 125 4007 4008 1 0 1
+button 130 125 4007 4008 1 0 2
+button 230 125 4007 4008 1 0 3
+button 330 125 4007 4008 1 0 4
+//button 430 125 4007 4008 1 0 5
+
+[dialog d_tracking_menu_main button]
+
+onbutton=1,4
+ref1=<findid.i_memory_tracking_cache>
+if !(<ref1.isvalid>) || (<src.isgm>)
+  src.consume i_memory_tracking_cache	//remove any old cache
+  serv.newitem i_memory_tracking_cache	//add a new memory cache
+  src.equip <new> 			
+  new.timer=4 				//keep the memory for about 
+  new.f_tracking_get_targets		//get the current tracking targets in the area
+endif
+doswitch <eval (<argn1>-1)> 		//get the list we're working with for tracking (tagged on the memory tracking cache)
+  local.TrackingType=animal		//animals
+  local.TrackingType=monster		//monsters
+  local.TrackingType=npc		//npcs
+  local.TrackingType=player		//player
+enddo
+ref1=<src.findid.i_memory_tracking_cache>
+local.Targets=<streat <ref1.tag0.TargetList<local.TrackingType>>>
+if !(<local.Targets>)
+  src.sysmessage You see no sign of those in the area.	//fixme correct this message, what is it supposed to say?
+  return 1
+endif
+sdialog d_tracking_menu_targets <argn1>	//go to the proper target menu
+
+[dialog d_tracking_menu_targets]
+0,0
+
+page 0
+resizepic 10 10 9200 440 140
+resizepic 20 20 2620 420 80
+resizepic 20 100 3000 420 25
+
+page <argn>
+
+doswitch <eval (<argn>-1)> 		//get the list we're working with for tracking (tagged on the memory tracking cache)
+  local.TrackingType=animal		//animals
+  local.TrackingType=monster		//monsters
+  local.TrackingType=npc		//npcs
+  local.TrackingType=player		//player
+enddo
+
+ref1=<src>					//tracker
+ref2=<src.findid.i_memory_tracking_cache>	//tracking cache
+args=<streat <ref2.tag0.TargetList<local.TrackingType>>>
+
+for n 0 <eval (<argv>-1)> 
+  ref3=<argv[<dlocal.n>]>			//this is the tracking target we're working with
+  if (<ref3.isvalid>) && (<ref3.ischar>)   	//validate the target
+    tilepic <eval (35+<local.x>)> <eval (40+<local.y>)> <ref3.icon> 	
+    dtext <eval (30+<local.x>)> <eval (105+<local.y>)> 0 <ref3.name>
+    button <eval (30+<local.x>)> <eval (125+<local.y>)> 4007 4008 1 0 <ref3>	//<eval (5+<local.n>)>	//use their UID as the button number
+    local.x += 100
+    if (<local.x> >= 400) && (<local.y> < 300) && (<eval (<local.n>+1)> != <argv>)	
+      local.x=
+      local.y += 150
+      resizepic 10 <eval (10+<local.y>)> 9200 440 140
+      resizepic 20 <eval (20+<local.y>)> 2620 420 80
+      resizepic 20 <eval (100+<local.y>)> 3000 420 25
+    endif
+    local.targets += 1
+    if (<local.targets> >= 12)
+      break		//we only show 12 total tracking targets in the area
+    endif
+  endif
+endfor
+
+[dialog d_tracking_menu_targets button]
+
+onbutton=1,999999	//wide range to accomdate all serial UIDs
+ref1=<argn1>	//this is the UID of our tracking target
+src.act=<ref1>
+src.actarg2=<ref1>
+src.action=tracking
+
+[itemdef i_memory_tracking_cache]
+defname=i_memory_tracking_cache
+name=Tracking Memory Cache
+id=i_memory
+type=t_eq_script
+layer=layer_special 
+
+on=@timer
+remove
+return 1
+
+[function f_tracking_brain_type]
+if (<ischar>) && (<uid> != <src>) && !(<isgm>)
+  if (<npc>==0) && !(<flags>&statf_dead)
+    return Player
+  elseif (<npc>==1)
+    return Animal
+  elseif (<npc> >= 2) && (<npc> <= 7) 
+    return NPC
+  elseif (<npc> >= 8)
+    return Monster
+  endif
+endif
+return -1
+
+[function f_tracking_get_targets]
+ref1=<uid>		//the memory cache
+ref2=<topobj>		//player using the tracking
+local.distance=<eval ((<ref2.tracking>/10)/2)>
+local.distance=<qval (100 <= <local.distance>)?100:<qval (<local.distance> < 5)?5:<local.distance>>>
+ref2.ctag0.tracking_distance=<local.distance>
+forchars <local.distance>
+  ref1.tag0.TargetList<f_tracking_brain_type> .= ,<uid>		//add this npc to the tracking list
+endfor
+ref1.tag0.TargetList<f_tracking_brain_type>=<streat <ref1.tag0.TargetList<f_tracking_brain_type>>>
+
+[function f_tracking_get_quarry_distance]
+ref1=<argv[0]>
+local.distance=<distance <ref1>>
+local.direction=<f_tracking_get_direction <ref1>>.
+if (<local.distance> <= 0)
+  return <ref1.name> is here. 
+elseif (<loca.distance> < 16)
+  return <ref1.name> is near to the <local.direction>.
+elseif (<local.distance> < 32)
+  return <ref1.name> is to the <local.direction>.
+elseif (<local.distance> < 100)
+  return <ref1.name> is far to the <local.direction>.
+else
+  return <ref1.name> is very far to the <local.direction>.
+endif
+
+[function f_tracking_get_direction]
+ref1=<argv[0]>
+doswitch <dir <ref1>>
+  return north
+  return north east
+  return east
+  return south east
+  return south
+  return south west
+  return west
+  return north west
+enddo
+
+[function f_tracking_success_chance]
+ref1=<args>		//tracking target
+float.chance=<floatval (((<src.tracking>+<src.detectinghidden>+<R1,20>)/(<ref1.hiding>+<ref1.stealth>+1))*500)>
+return <feval <float.chance>>
+
+
+[EOF]

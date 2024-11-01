@@ -1,0 +1,69 @@
+//https://www.uoguide.com/Taste_Identification
+
+[SKILL 36]
+DEFNAME=skill_tasteid
+KEY=TasteID
+TITLE=Food Taster
+FLAGS=skf_scripted
+PROMPT_MSG=What would you like to taste?
+DELAY=1.0
+STAT_STR=25
+STAT_INT=125
+STAT_DEX=15
+BONUS_STR=20
+BONUS_DEX=0
+BONUS_INT=80
+BONUS_STATS=50
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+
+on=@start
+//act = target
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> > 3)
+  src.sysmessage You are too far away to taste that.
+  return 1
+elseif !(<src.canseelos <argo>>) && (<act.topobj> != <src>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(<act.isitem>) 
+  src.sysmessage You fell that sucn an action would be inappropriate.
+  return 1
+elseif (<act.type> != t_drink) && (<act.type> != t_food) && (<act.type> != t_potion) && (<act.baseid> != i_keg_potion)
+  src.sysmessage That's not something you can taste.
+  return 1
+endif
+if !(<src.f_skillsucceed tasteid>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+return 0
+ 
+ON=@Fail
+src.sysmessage You cannot discern anything about this substance.
+
+ON=@Abort
+src.sysmessage You decide against tasting anything.
+
+on=@success
+if (<act.type>==t_potion)
+  if (<act.attr>&attr_identified)
+    src.sysmessage You already know what kind of potion that is.
+  endif
+  act.message <act.name>
+elseif (<act.baseid>==i_keg_potion)
+  if (<act.attr>&attr_identified)
+    src.sysmessage You are already familiar with this keg's contents.
+  endif
+  act.message <act.name>
+elseif (<act.type>==t_food) || (<act.type>==t_food) && (<act.ispoisoned>)
+  src.sysmessage It appears to have poison smeared on it.
+else
+src.sysmessage You detect nothing unusual about this substance
+endif
+
+[EOF]

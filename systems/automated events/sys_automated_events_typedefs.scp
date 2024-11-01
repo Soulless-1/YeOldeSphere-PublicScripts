@@ -1,0 +1,66 @@
+//Automated Event System by Soulless
+//v0.1
+//10:35 AM 7/7/2022
+
+[typedef t_automated_event]			//this item controls the event's phases and is available for tags
+
+on=@timer		
+local.event=<var0.automated_event_active>
+say <def0.automated_event_<dlocal.event>_name> (duration of <dmore2> minutes)
+more2 += 1	//keep track of the minutes
+timer=60
+return 1
+
+[typedef t_automated_event_signup_board]		//board that players use to signup for the event
+
+on=@click
+local.event=<var0.automated_event_active>
+local.eventname=<def0.automated_event_<dvar0.automated_event_active>_name>
+message <name>
+if (<local.event> == -1)
+  message No Event
+elseif (<timer> > 0) 
+  message <local.eventname> Signup Period (<qval (60 < <timer>)?<eval (<timer>/60)> minutes:<timer> seconds>)
+elseif (<timer> == -1) && (<local.event> != -1)
+  message <local.eventname> Event In Progress 
+endif
+return 1
+  
+on=@dclick
+sdialog d_automated_event_signup_board
+return 1
+
+on=@timer	//more2: 0=signup window, 1=event countdown, 2=inprogress
+local.event=<var0.automated_event_active>
+local.eventname=<def0.automated_event_<dvar0.automated_event_active>_name>
+if (<more2> <= 1) 	//countdown to start		
+  f_automated_event_notify <local.eventname> starting in 15 seconds...		//notification before players begin to enter
+  timer=<def0.automated_event_<dlocal.event>_expires>
+  more2=2	//set event in progress
+  morex -= 1
+  timer=15	
+else
+  f_automated_event_begin	//place countdown memory item on char and enter event
+endif
+return 1
+
+[typedef t_automated_event_countdown]
+
+on=@equip
+more1=10
+timer=1
+src.stone 1
+
+on=@timer
+if !(<more1>)
+  remove
+  return 1
+endif
+topobj.message @<def0.automated_event_message_color> <dmore1>
+more1 -= 1
+timer 1
+return 1
+
+
+
+[EOF]

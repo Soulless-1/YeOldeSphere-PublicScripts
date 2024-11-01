@@ -1,0 +1,202 @@
+//Champion Spawn System by Soulless
+//v1.0
+//1:35 PM 1/8/2022
+
+// champ spawn locs http://www.uoguide.com/Champion_Spawn_Altars
+
+[defname champion_system_settings]
+champion_spawn_level0_kills	128	//how many npcs killed at this level to progress
+champion_spawn_level1_kills	64	
+champion_spawn_level2_kills	32	
+champion_spawn_level3_kills	16	
+champion_spawn_maxdist		45	//how far max for monsters to spawn/wander
+champion_level_expires 		10*60	//how long in seconds do you have to progress to the next level before you lose a red candle
+champion_boss_expires 		60*60*3	//how long will the champion remain active after being spawned
+champion_goldprize 		75000	//how much gold gets spawned when killing the champion
+champion_harrower_reward 	{}
+champion_young_players		2	//additional settings for young player system, 0=no change, 1=cannot enter, 2=can enter unprotected
+
+//////////////////////////////
+// Felucca Champ Spawns
+
+champion_spawn0				VerminHorde
+champion_spawn0_location		5557,824,45,0
+champion_spawn0_monsters0		{c_rat_giant 1 c_slime 1}
+champion_spawn0_monsters1		{c_direwolf 1 c_ratman 1}
+champion_spawn0_monsters2		{c_hellhound 1 c_ratman_mage 1}
+champion_spawn0_monsters3		{c_ratman_archer 1 c_silver_serpent 1}
+champion_spawn0_boss			c_barracoon
+champion_spawn0_artifact_unique		//i_fang_ractus	
+champion_spawn0_artifact_decoration	i_tile_swamp,i_statue_slime
+champion_spawn0_artifact_shared		i_embroidered_oak_leaf_cloak,i_djinnis_ring,i_detective_boots
+champion_spawn0_title			Adversary of the Vermin Horde,Subjugator of the Vermin Horde,Eradicator of the Vermin Horde
+champion_spawn0_skull			Greed,01ee
+
+champion_spawn1 			ColdBlood
+champion_spawn1_location		5259,837,41,0
+champion_spawn1_monsters0		{c_lizardman 1 c_snake 1}
+champion_spawn1_monsters1		{c_lava_lizard 1 c_ophidian_warrior 1 c_ophidian_enforcer 1}
+champion_spawn1_monsters2		{c_dragon_small_red 1 c_ophidian_mage 1 c_ophidian_archmage 1}
+champion_spawn1_monsters3		{c_dragon_red 1 c_ophidian_avenger 1 c_ophidian_knight 1}
+champion_spawn1_boss			c_rikktor	
+champion_spawn1_artifact_unique		//i_crown_talkeesh
+champion_spawn1_artifact_decoration	i_tile_lava,i_statue_ophidian_mage,i_statue_ophidian_warrior
+champion_spawn1_artifact_shared		i_most_knowledge_person,i_brave_knight_britannia,i_lieutenant_britannian_royal_guard
+champion_spawn1_title			Blight of the Cold Blood,Slayer of the Cold Blood,Destroyer of the Cold Blood
+champion_spawn1_skull			Power,0159
+
+champion_spawn2				Arachnid
+champion_spawn2_location		5190,1605,0,0
+champion_spawn2_monsters0		{c_scorpion_giant 1 c_spider_giant 1}
+champion_spawn2_monsters1		{c_terathan_drone 1 c_terathan_warrior 1}
+champion_spawn2_monsters2		{c_dread_spider 1 c_terathan_matriarch 1}
+champion_spawn2_monsters3		{c_elem_poison 1 c_terathan_avenger 1}
+champion_spawn2_boss 			c_mephitis
+champion_spawn2_artifact_unique		//i_calm
+champion_spawn2_artifact_decoration	i_web,i_web2,i_statue_spider_giant
+champion_spawn2_artifact_shared		i_oblivians_needle,i_necromancer_shroud
+champion_spawn2_title			Foe of the Abyss,Assassin of the Abyss,Conquerer of the Abyss
+champion_spawn2_skull			Venom,0172
+
+champion_spawn3				UnholyTerror
+champion_spawn3_location		5178,707,0,0
+champion_spawn3_monsters0		{c_bogle 1 c_ghoul 1 c_shade 1 c_spectre 1 c_wraith 1}
+champion_spawn3_monsters1		{c_bone_magi 1 c_mummy 1 c_skeleton_mage 1}
+champion_spawn3_monsters2		{c_bone_knight 1 c_skeleton_knight 1 c_liche 1}
+champion_spawn3_monsters3		{c_liche_lord 1 c_rotting_corpse 1 }
+champion_spawn3_boss			c_neira
+champion_spawn3_artifact_unique		//i_shroud_deceit
+champion_spawn3_artifact_decoration	i_blood_splash,i_ancient_mummy_wrappings
+champion_spawn3_artifact_shared		i_necromancer_shroud,i_detective_boots,i_captain_johns_hat
+champion_spawn3_title			Scourge of the Unholy Terror,Punisher of the Unholy Terror,Nemisis of the Unholy Terror
+champion_spawn3_skull			Death,0025
+
+champion_spawn4				Abyss
+champion_spawn4_location		5815,1351,-18,0
+champion_spawn4_monsters0		{c_mongbat_arboreal 1 c_imp 1}
+champion_spawn4_monsters1		{c_gargoyle 1 c_harpy 1}
+champion_spawn4_monsters2		{c_gargoyle_stone 1 c_fire_gargoyle 1}
+champion_spawn4_monsters3		{c_succubus 1 c_daemon 1}
+champion_spawn4_boss 			c_semidar
+champion_spawn4_artifact_unique		//i_gladiators_collar
+champion_spawn4_artifact_decoration	i_lava_tile,i_demon_skull
+champion_spawn4_artifact_shared		i_lieutenant_britannian_royal_guard,i_royal_guard_survival_knife,i_most_knowledge_person
+champion_spawn4_title			Foe of the Abyss,Assassin of the Abyss,Conquerer of the Abyss
+champion_spawn4_skull			Pain,0035
+
+champion_spawn5				ForestLord
+champion_spawn5_location		5560,3756,1,0
+champion_spawn5_monsters0		{c_pixie 1 c_wisp_shadow 1}
+champion_spawn5_monsters1		{c_kirin 1 c_wisp 1}
+champion_spawn5_monsters2		{c_centaur 1 c_unicorn 1}
+champion_spawn5_monsters3		{c_ethereal_warrior 1 c_dragon_serpentine 1}
+champion_spawn5_boss			c_lord_oaks
+champion_spawn5_artifact_unique		//i_orc_chieftan_helm
+champion_spawn5_artifact_decoration	i_tile_water,i_wind_spirit,i_pier
+champion_spawn5_artifact_shared		i_royal_guard_survival_knife,i_dijinnis_ring,i_liuetenant_britannian_royal_guard,i_samaritan_robe,i_detective_boots,i_most_knowledge_person
+champion_spawn5_title			Enemy of the Forest Lord,Curse of the Forest Lord,Slaughterer of the Forest Lord
+champion_spawn5_skull			Enlightenment,0
+
+/////////////////////////
+// Holiday Champions 
+
+
+champion_spawn12			SleepyHallow
+champion_spawn12_location		891,1005,0,0
+champion_spawn12_monsters0		{c_skeleton 1 c_zombie 1 c_skeleton_w_axe 1}
+champion_spawn12_monsters1		{c_spectre 1 c_skeleton_knight 1 c_ghoul 1}
+champion_spawn12_monsters2		{c_liche 1 c_skeleton_mage 1 c_wraith 1}
+champion_spawn12_monsters3		{c_liche_lord 1 c_liche 1 c_mummy 1}
+champion_spawn12_boss			c_headless_horseman
+champion_spawn12_reward
+champion_spawn12_title
+champion_spawn12_nochallenge		1		//can not be started with valor
+champion_spawn12_nodeactivate		1		//will not deactivate if the last candle is removed
+
+champion_spawn13			Krampus
+champion_spawn13_location		1748,262,22,0
+champion_spawn13_monsters0		{c_mongbat 1 c_corpser 1 c_gargoyle 1}
+champion_spawn13_monsters1		{c_bone_magi 1 c_gargoyle_stone 1 c_iron_golem 1}
+champion_spawn13_monsters2		{c_liche 1 c_drake_red 1 c_hellhound 1}
+champion_spawn13_monsters3		{c_daemon 1 c_dragon_red 1 c_liche_lord 1}
+champion_spawn13_boss			c_krampus
+champion_spawn13_reward
+champion_spawn13_title
+champion_spawn13_nochallenge		1		//can not be started with valor
+champion_spawn13_nodeactivate		1		//will not deactivate if the last candle is removed
+
+
+
+
+
+
+
+
+
+// These are newer spawns? We can look into this later
+[comment newer spawns]
+
+champion_spawn6				TwistedGlade
+champion_spawn6_location		1417,1497,0,2
+champion_spawn6_monsters0		{C_pixie 1 c_wisp_shadow 1}
+champion_spawn6_monsters1		{c_centaur 1 c_dryad 1}
+champion_spawn6_monsters2		{c_saytr 1 c_cu_sidhe 1}
+champion_spawn6_monsters3		{c_treefellow_feral 1 c_bear_grizzly 1}
+champion_spawn6_boss			c_twaulo
+champion_spawn6_reward	
+champion_spawn6_title			Banisher of the Glade,Enforcer of the Glade,Eradicator of the Glade
+
+champion_spawn7				Minotaur
+champion_spawn7_location		382,1933,0,3
+champion_spawn7_monsters0		c_minotaur
+champion_spawn7_monsters1		c_minotaur
+champion_spawn7_monsters2		c_minotaur
+champion_spawn7_monsters3		c_minotaur
+champion_spawn7_boss			c_meraktus
+champion_spawn7_reward
+champion_spawn7_title			//none?
+
+champion_spawn8				Pestilance
+champion_spawn8_location		174,1629,0,3
+champion_spawn8_monsters0		{c_plague_spawn 1 c_bogling 1}
+champion_spawn8_monsters1		{c_plague_beast 1 c_bog_thing 1}
+champion_spawn8_monsters2		{c_plague_beast_lord 1 c_interred_grizzle 1}
+champion_spawn8_monsters3		{c_fetid_essence 1 c_pestilent_bandage 1}
+champion_spawn8_boss			c_ilhenir
+champion_spawn8_reward
+champion_spawn8_title			Cleanser of the Corrupt,Expunger of the Corrupt,Depurator of the Corrupt
+
+champion_spawn9				SleepingDragon
+champion_spawn9_location		948,432,5,4
+champion_spawn9_monsters0		{c_deathwatch_beetle_hatchling 1 c_lizardman 1}
+champion_spawn9_monsters1		{c_deathwatch_beetle 1 c_kappa 1}
+champion_spawn9_monsters2		{c_hiryu_lesser 1 c_revenant_lion 1}
+champion_spawn9_monsters3		{c_hiryu 1 c_oni 1}
+champion_spawn9_boss			c_serado
+champion_spawn9_reward	
+champion_spawn9_title			Rival of the Sleeping Dragon,Challenger of the Sleeping Dragon,Antagonist of the Sleeping Dragon
+
+champion_spawn10			AbyssalInfernal
+champion_spawn10_location		6995,733,56,0
+champion_spawn10_monsters0		{c_horde_minion 1 c_chaos_daemon 1}
+champion_spawn10_monsters1		{c_harpy_stone 1 c_arcane_daemon 1}
+champion_spawn10_monsters2		{c_pit_fiend 1 c_moloch 1}
+champion_spawn10_monsters3		{c_arch_daemon 1 c_abyssal_abomination 1}
+champion_spawn10_boss			c_abyssal_infernal
+champion_spawn10_reward
+champion_spawn10_title		
+
+champion_spawn11			PrimevalLiche
+champion_spawn11_location		7000,1008,-15,0
+champion_spawn11_monsters0		{c_gore_fiend 1 c_vampire_bat 1}
+champion_spawn11_monsters1		{c_flesh_golem 1 c_wisp_dark 1}
+champion_spawn11_monsters2		{c_gargoyle_undead 1 c_wight 1}
+champion_spawn11_monsters3		{c_skeletal_drake 1 c_dream_wraith 1}
+champion_spawn11_boss			c_primeval_liche
+champion_spawn11_reward
+champion_spawn11_title
+
+
+
+
+[EOF]

@@ -1,0 +1,396 @@
+//client list with private chat by Soulless
+//v1.0
+//8:45 PM 8/8/2018
+//private messaging added
+//add so that you can ignore people (Spartacus)
+
+
+
+[defname online_menu_settings]
+online_private_messages		1	//allow private messages to be sent
+online_notoriety_colors		1	//show names of players as they are displayed overhead (blue, gray, red, etc)
+online_show_maxclients		0	//show the max number of clients logged in at once
+online_display_staff		1	//do staff show up?
+online_display_staff_invis	0	//what about when staff are invis?
+online_message_staff		0	//allow players to msg people with higher plevels
+online_autodelete_msg		1	//automatically delete messages after replying? (gm messages are always deleted after replying if messaging higher plvels is disabled
+
+online_menu_flag0		0001	//all
+online_menu_flag1		0002	//guild
+online_menu_flag2		0004	//faction
+online_menu_flag3		0008	//ememy
+online_menu_flag4		0010	//innocent
+online_menu_flag5		0020	//criminal
+online_menu_flag6		0040	//murderer
+
+online_menu_flag10		0100	//allow PMS
+online_menu_flag11		0200	//private
+
+
+[plevel 1]
+online
+messages
+
+[function messages]
+if (<def0.online_private_messages>==0)
+  sysmessage Private messages are disabled
+  return 1
+endif
+src.sdialog d_private_message_list
+
+[function online]
+src.sdialog d_online
+
+[dialog d_online]
+200,100
+
+page 0
+resizepic 10 10 5054 400 450
+dtext 130 20 1263 <serv.servname> Online List
+//dtext 165 35 1000 <dserv.clients> Players
+
+button 25 55 210 211 1 0 65530
+gumppic 25 55 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag0>)?211:210>
+dtext 45 55 1000 All
+
+button 70 55 210 211 1 0 65531
+gumppic 70 55 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag1>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag0>)?211:210>>
+dtext 90 55 1000 Guild
+
+button 125 55 210 211 1 0 65532
+gumppic 125 55 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag2>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag0>)?211:210>>
+dtext 145 55 1000 Faction
+
+button 195 55 210 211 1 0 65533
+gumppic 195 55 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag3>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag0>)?211:210>>
+dtext 215 55 1000 Enemy
+
+button 255 55 210 211 1 0 65534
+gumppic 255 55 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag4>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag0>)?211:210>>
+dtext 275 55 1000 Blue
+
+button 305 55 210 211 1 0 65535
+gumppic 305 55 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag5>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag0>)?211:210>>
+dtext 325 55 1000 Grey
+
+button 355 55 210 211 1 0 65536
+gumppic 355 55 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag6>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag0>)?211:210>>
+dtext 375 55 1000 Red
+
+button 25 80 210 211 1 0 65540
+gumppic 25 80 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag10>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag10>)?211:210>>
+dtext 45 80 1263 PM
+
+button 70 80 210 211 1 0 65541
+gumppic 70 80 <qval (<tag0.online_menu_flags>&<def0.online_menu_flag11>)?211:<qval (<tag0.online_menu_flags>&<def0.online_menu_flag11>)?211:210>>
+dtext 90 80 1263 Private
+
+ref1=<uid>
+page <argn>
+local.client=<eval (<argn>*40)>
+for 40
+  if (<local.client> < <serv.clients>)
+    if (<serv.client.<dlocal.client>>)	//1 is in game, 0 is not logged in
+      ref2=<serv.client.<dlocal.client>.uid> 
+      if (<ref2.isonline>) 
+        if (<ref1.f_online_menu_show_client <ref2>>) && !(<ref2.f_online_menu_hide_client>)
+          if (<ref2.tag0.online_menu_flags>&<def0.online_menu_flag11>)
+            dtext <eval (65+<local.x>)> <eval (105+<local.y>)> 992 (private)
+          else
+            if (<def0.online_private_messages>!= 0) && (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag10>) && (<ref2.tag0.online_menu_flags>&<def0.online_menu_flag10>)
+              button <eval (45+<local.x>)> <eval (105+<local.y>)>  1209 1210 1 0 <eval (<local.client>+1)>
+            endif
+            dtext <eval (65+<local.x>)> <eval (105+<local.y>)> <qval <def0.online_notoriety_colors>!=0?<ref2.f_noto_gumpcolor <ref1>>:1000> <ref2.name>
+          endif
+          local.y += 15
+          if (<local.y> >= 300)
+            local.x=200
+            local.y=
+          endif
+        endif
+        //local.ingame += 1
+      endif
+    endif
+    local.client += 1
+  endif  
+endfor
+
+dtext 165 35 1000 <serv.clients> Players	//<local.ingame> Players
+
+if (<local.client> < <serv.clients>)
+  button 340 400 4006 4007 1 0 <eval (<argn>+1)+2000>
+endif
+
+if (<argn1> >= 1)
+  button 40 400 4015 4016 1 0 <eval (<argn>-1)+2000>
+endif
+
+if (<def0.online_show_maxclients>)
+  dtext 110 380 044 Record Clients Connected: <dvar0.maxclients>
+endif
+
+dtext 165 425 1263 Page <eval (<argn>+1)> of <eval ((<serv.clients> / 41)+1) >
+
+
+[dialog d_online button]
+
+onbutton=1,1999
+argn1 -= 1
+ref1=<serv.client.<dargn1>.uid>
+
+if (<ref1>==<uid>) && !(<isgm>) 
+  sysmessage You cannot private message with yourself.
+  sdialog d_online
+  Return 1
+endif
+
+if !(<def0.online_message_staff>)
+  if (<account.plevel> < <ref1.account.plevel>)
+    sysmessage you do not have the required privledges to send direct messages to them.
+    return 1
+  endif
+endif
+
+if (<isdialogopen d_private_message_compose>)
+  sysmessage You are already composing a message to <uid.<ctag0.private_message_compose>.name>
+  sdialog d_online
+  return 1
+endif
+
+sdialog d_online
+ctag0.private_message_compose=<ref1>
+sdialog d_private_message_compose
+
+onbutton=2000,3999
+argn -= 2000
+sdialog d_online <argn>
+
+onbutton=65530,65536
+argn1 -= 65530
+if (<argn1>==0)
+  if !(<tag0.online_menu_flags>&<def0.online_menu_flag0>)
+    for 0 6
+      tag0.online_menu_flags |= <def0.online_menu_flag<dlocal._for>>
+    endfor
+  else
+    for 0 6
+      tag0.online_menu_flags &= ~ <def0.online_menu_flag<dlocal._for>>
+    endfor
+  endif
+elseif (<tag0.online_menu_flags>&<def0.online_menu_flag<dargn1>>) && (<argn1> != 0)
+  tag0.online_menu_flags &=~ <def0.online_menu_flag<dargn1>>
+  tag0.online_menu_flags &=~ <def0.online_menu_flag0>
+else
+  tag0.online_menu_flags |= <def0.online_menu_flag<dargn1>>
+endif
+sdialog d_online
+
+onbutton=65540
+if (<tag0.online_menu_flags>&<def0.online_menu_flag10>)
+  tag0.online_menu_flags &=~ <def0.online_menu_flag10>
+else
+  tag0.online_menu_flags |= <def0.online_menu_flag10>
+endif
+sdialog d_online
+
+onbutton=65541
+if (<tag0.online_menu_flags>&<def0.online_menu_flag11>)
+  tag0.online_menu_flags &=~ <def0.online_menu_flag11>
+else
+  if (<kills> > <serv.murdermincount>)
+    sysmessage Murderers cannot go private.
+  else
+    tag0.online_menu_flags |= <def0.online_menu_flag11>
+  endif
+endif
+sdialog d_online
+
+[function f_online_menu_show_client]
+ref1=<uid>
+ref2=<args>
+if (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag0>) 
+  return 1
+elseif (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag1>) && (<ref1.guild>) && (<ref1.guild>==<ref2.guild>)
+  return 1 
+elseif (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag2>) && (<ref1.tag0.faction>) && (<ref1.tag0.faction>==<ref2.tag0.faction>)
+  return 1
+elseif (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag3>) && (<ref2.notogetflag <ref1>>==5)
+  return 1
+elseif (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag4>) && (<ref2.notogetflag <ref1>>==1)
+  return 1
+elseif (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag5>) && (<ref2.notogetflag <ref1>>==4)
+  return 1
+elseif (<ref1.tag0.online_menu_flags>&<def0.online_menu_flag6>) && (<ref2.notogetflag <ref1>>==6)
+  return 1
+elseif (<ref2.notogetflag <ref1>> >= 7)	//there is no filter for this one
+  return 1
+endif
+return 0
+
+[function f_online_menu_hide_client]
+ref1=<uid>
+if (<ref1.account.plevel> >= 2)
+  if (<def0.online_display_staff> == 0)
+    return 1
+  elseif (<def0.online_display_staff_invis> == 0) && (<ref1.flags>&statf_insubstantial)
+    return 1
+  endif
+endif
+return 0
+  
+
+
+
+
+/////////////////////////////////
+//COMPOSE PRIVATE MESSAGE
+
+[dialog d_private_message_compose]
+150,0
+
+page 0
+resizepic 10 10 5054 400 200
+resizepic 40 50 3000 340 100
+dtext 100 30 1263 Composing message for <uid.<ctag0.private_message_compose>.name>
+
+dtextentrylimited 40 50 350 145 0 1 256
+
+button 50 160 0f2 0f3 1 0 0
+
+button 310 160 0f8 0f9 1 0 1
+
+[dialog d_private_message_compose button]
+
+onbutton=0
+ctag0.private_message_compose=
+
+onbutton=1
+ref1=<uid>
+ref2=<ctag0.private_message_compose>
+ctag0.private_message_compose=
+serv.list.<ref2>_private_messages.add <ref1>,<serv.rtime>,<argtxt[1]>
+//serv.log PM From <name>(<ref1>) to <ref2.name>(<ref2>) @<serv.rtime>: <argtxt[1]> 
+f_writefile logs/player_speech<serv.rtime.format %Y-%m-%d>.log,<serv.rtime.format %H:%M>[PM] <ref1.name>(<ref1>) --> <ref2.name>(<ref2>): <argtxt[1]> 
+
+trysrc <ref2> sdialog d_private_message_notification
+trysrc <ref2> soundp 04a
+sysmessage Message Sent.
+
+
+////////////////////////////////
+//RECEIVE PRIVATE MESSAGE
+
+[dialog d_private_message_notification]
+60,10
+
+page 0
+
+resizepic 10 10 5054 85 85
+gumppictiled 15 15 75 75 2624
+checkertrans 15 15 75 75
+
+dtext 25 20 1263 New Msg
+button 35 40 0fc4 0fc5 1 0 1
+
+[dialog d_private_message_notification button]
+
+onbutton=1
+src.dialogclose d_private_message_list
+src.sdialog d_private_message_list
+src.soundp 059
+
+
+////////////////////////////////
+//PRIVATE MESSAGE LIST
+
+[dialog d_private_message_list]
+150,50
+
+page 0
+resizepic 10 10 5054 300 500
+//resizepic 20 20 3000 280 480
+dtext 100 20 1263 Private Messages
+
+
+if !<serv.list.<uid>_private_messages.count>
+  dtext 75 65 1000 No messages
+endif
+
+button 25 470 0fb2 0fb3 1 0 0
+
+
+
+local.p=1
+for 0 <serv.list.<uid>_private_messages.count>
+  ref1=<strarg <serv.list.<uid>_private_messages.<dlocal._for>>>
+  local.t=<strarg <streat <streat <serv.list.<uid>_private_messages.<dlocal._for>>>>>
+  local.msg <streat <streat <streat <serv.list.<uid>_private_messages.<dlocal._for>>>>>
+  if (<ref1>)
+    button 20 <eval 45+(<local.y>*85)> 0fa6 0fa7 1 0 <eval <local._for>+1>
+    button 20 <eval 85+(<local.y>*85)> 0fb2 0fb3 1 0 <eval 100+<local._for>>
+    dhtmlgump 50 <eval 40+(<local.y>*85)> 245 85 1 1 [<local.t>] from <ref1.name>: <local.msg>
+    local.y += 1
+    if (<local.y> >= 5)
+      local.p += 1
+      local.y=
+      button 260 470 0fa6 0fa7 0 <local.p>
+      page <local.p>
+      dtext 220 20 1263 Page <dlocal.p>
+      button 75 470 0faf 0fb0 0 <eval <local.p>-1>
+    endif
+  endif
+endfor
+
+[dialog d_private_message_list button]
+
+onbutton=1,99
+argn -= 1
+ctag0.private_message_reading=<argn>
+sdialog d_private_message_list
+sdialog d_private_message_read
+
+onbutton=100,199
+argn -= 100
+serv.list.<uid>_private_messages.<dargn>.remove
+sysmessage Message deleted
+sdialog d_private_message_list
+
+
+//////////////////////////////
+//READING PRIVATE MESSAGE
+
+
+[dialog d_private_message_read]
+150,50
+
+page 0
+resizepic 10 10 5054 400 220 
+ref1=<strarg <serv.list.<uid>_private_messages.<dctag0.private_message_reading>>>
+local.t=<strarg <streat <streat <serv.list.<uid>_private_messages.<dctag0.private_message_reading>>>>>
+local.msg <streat <streat <streat <serv.list.<uid>_private_messages.<dctag0.private_message_reading>>>>>
+dtext 100 30 1263 Reading message from <ref1.name>
+dhtmlgump 40 50 345 120 0 1 <def.bfont_black>[<local.t>] from <ref1.name>: <local.msg>
+
+
+button 50 175 0fb2 0fb3 1 0 0
+dtext 85 175 1263 Close
+
+button 180 175 0fbe 0fbf 1 0 1
+dtext 215 175 1263 Reply
+
+button 340 175 0fb8 0fb9 1 0 0
+
+
+[dialog d_private_message_read button]
+
+onbutton=1
+ref1=<strarg <serv.list.<uid>_private_messages.<dctag0.private_message_reading>>>
+ctag0.private_message_compose=<ref1>
+sysmessage What would you like to send <ref1.name>?
+sdialog d_private_message_compose
+
+
+
+[EOF]
+
+

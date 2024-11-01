@@ -1,0 +1,68 @@
+//Alchemy in scripts/custom/systems/crafting/
+//10:53 PM 3/26/2018
+
+
+[SKILL 0]
+DEFNAME=SKILL_ALCHEMY
+KEY=Alchemy
+TITLE=Alchemist
+FLAGS=skf_craft
+DELAY=1.0		//6.0
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+VALUES=1,20,100
+BONUS_STATS=10
+BONUS_STR=0
+BONUS_DEX=20
+BONUS_INT=100
+STAT_STR=5
+STAT_INT=125
+STAT_DEX=40
+
+ON=@Start
+local.CraftStrokeCnt=5		//how many strokes alchemy takes to complete
+actioneffect=50			//how much resources are lost if we fail 
+local.successchance=<f_crafting_success_chance <actarg2.baseid>>
+if (<R0,1000> > <local.successchance>) && !(<isgm>)	//failed to craft the item
+  actdiff=65535
+else
+  actdiff=0
+endif
+
+ON=@Stroke		
+ref1=<actprv>		//tool
+local.anim=33
+if !(<ref1.isvalid>) || (<ref1.topobj> != <src>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=The tool must be on your person to use.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu <src.ctag0.crafting_lastpage>	
+  return 1
+endif
+
+
+ON=@Abort
+src.ctag0.<src.ctag0.crafting_skill>_notice=You fail to complete the potion.
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+src.sdialog d_crafting_menu
+
+ON=@Fail
+//if (<serv.itemdef.<actarg2.baseid>.type>==t_potion)
+  //src.findid.i_bottle_empty.amount += 1		//you shouldn't lose the bottle when you fail making potions
+  serv.newitem i_bottle_empty,1,<src.findlayer.21>
+//endif
+src.ctag0.<src.ctag0.crafting_skill>_notice=You toss the failed mixture from the mortar, unable to create a potion from it.
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+if !(<isempty <def.crafting_alchemy_emote_fail>>)
+  src.emote <def0.crafting_alchemy_emote_fail>
+endfor
+src.sdialog d_crafting_menu
+
+ON=@Success		//if you succeed @makeitem was called, we're going to use that for stuff instead for more control
+//src.ctag0.<src.ctag0.crafting_skill>_notice=You successfully craft the item.
+//src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+if !(<isempty <def.crafting_alchemy_emote_success>>)
+  src.emote <def0.crafting_alchemy_emote_success>
+endif
+//src.sdialog d_crafting_menu
+
+
+[EOF]

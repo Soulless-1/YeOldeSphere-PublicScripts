@@ -1,0 +1,121 @@
+//Monty Python Monks by Soulless
+//v1.0
+//1:39 AM 1/26/2022
+
+
+
+[CHARDEF C_H_MONTY_PYTHON_MONK_LEADER]
+DEFNAME=C_H_MONTY_PYTHON_MONK_LEADER
+ID=C_MAN
+NAME=#NAMES_HUMANMALE the Monk
+CAN=mt_walk|mt_usehands|mt_equip
+DAM=15,20
+ARMOR=20
+TEVENTS=e_monty_python_monk
+CATEGORY=Civilized
+SUBSECTION=Misc
+DESCRIPTION=Monty Python Monk Leader
+
+ON=@Create
+	speechcolor=0482
+	f_squad_start	
+        findid.i_memory_squad_leader.morex=2
+	timerf 0,f_monty_python_monks_squad_initiate
+	npc=brain_human
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	MAGERY={90.0 100.0}
+	SPIRITSPEAK={90.0 100.0}
+
+ON=@NPCRestock
+	ITEMNEWBIE=i_hooded_shroud
+	COLOR=color_o_rusty
+	ITEMNEWBIE=i_spellbook
+	COLOR=color_o_rusty
+	ITEMNEWBIE=i_sandals
+	itemnewbie=i_waypoint_navigation
+	itemnewbie=i_monty_python_monk_chant
+
+ON=@Destroy
+	f_squad_disband
+
+[CHARDEF C_H_MONTY_PYTHON_MONK_FOLLOWER]
+DEFNAME=C_H_MONTY_PYTHON_MONK_FOLLWOER
+ID=C_MAN
+NAME=#NAMES_HUMANMALE the Monk
+CAN=mt_walk|mt_usehands|mt_equip
+DAM=15,20
+ARMOR=20
+TEVENTS=e_monty_python_monk
+CATEGORY=Civilized
+SUBSECTION=Misc
+DESCRIPTION=Monty Python Monk Follower
+
+ON=@Create        
+	tag.override.movedelay=450
+	npc=brain_human
+	speechcolor=0482
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	MAGERY={90.0 100.0}
+	SPIRITSPEAK={90.0 100.0}
+
+ON=@NPCRestock
+	ITEMNEWBIE=i_hooded_shroud
+	COLOR=color_o_rusty
+	ITEMNEWBIE=i_spellbook
+	COLOR=color_o_rusty
+	ITEMNEWBIE=i_sandals
+	itemnewbie=i_monty_python_monk_chant
+
+
+[itemdef i_monty_python_monk_chant]
+defname=i_monty_python_monk_chant
+id=i_memory
+name=Monty Python Monk Chant
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer=30
+
+on=@timer
+topobj.tag.nomovetill=<eval <serv.time>+10>
+topobj.say <qval (!<more1>)?Pie Jesu Domine...:Dona Eis Requiem...>
+topobj.anim 34
+topobj.sound {03a2 03b7}
+more1=<qval (!<more1>)?1:0>s
+timer=30
+return 1
+
+[function f_monty_python_monks_squad_initiate]
+ref1=<uid>
+for 6
+  serv.newnpc c_h_monty_python_monk_follower
+  ref2=<new>
+  ref2.tag.override.movedelay=100
+  ref2.events=+e_townsfolk
+  ref2.p=<p>
+  ref2.speechcoloroverride=<ref1.speechcoloroverride>
+  ref2.f_squad_join <ref1>
+endfor
+
+[events e_monty_python_monk]
+
+ON=@NPCRefuseItem
+return 1
+
+[function remove_monty_python_monks]
+forchars 9999
+  if (strmatch(c_h_monty_python*,<baseid>))
+    remove
+  endif
+endif
+
+[EOF]

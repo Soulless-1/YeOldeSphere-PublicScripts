@@ -1,0 +1,30 @@
+//NPC Guilds by Soulless
+//v1.0
+//6:22 PM 1/4/2022
+
+[function f_npc_guild_join]
+if (<resourcetype i_npc_guild_<args>> != <def.res_itemdef>)
+  serv.log <name>(<uid>) tried to join an invalid guild "<args>", please resolve this error.
+else
+  consume i_npc_guild_<args>
+  serv.newitem i_npc_guild_<args>
+  new.equip
+  new.timer=60*60*24*7
+  sysmessage You've joined the <args> guild!
+endif
+return 1
+
+[function f_npc_guild_quit]
+if (<resourcetype i_npc_guild_<args>> != <def.res_itemdef>)
+  serv.log <name>(<uid>) tried to quit an invalid guild "<args>", please resolve this error.
+else
+  consume i_npc_guild_<args>
+  sysmessage You've resigned from the <args> guild!
+endif
+return 1
+
+
+
+
+
+[EOF]

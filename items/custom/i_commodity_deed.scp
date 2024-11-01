@@ -1,0 +1,101 @@
+//Commodity Deed by Soulless
+//v1.0
+//9:02 PM 1/5/2022
+
+[itemdef i_commodity_deed]
+defname=i_commodity_deed
+id=i_deed
+name=Commodity Deed
+type=t_commodity_deed
+can=can_i_forcedc
+value=450
+
+on=@create
+color=047
+
+[typedef t_commodity_deed]
+
+on=@click
+if (<more1>)
+  message a Filled Commodity Deed <serv.itemdef.<more1>.name>: <dmore2>
+  return 1
+endif
+
+on=@dclick
+if (<src.distance <uid>> >= 3)
+  src.sysmessage You can't reach that.
+  return 1
+endif
+if !(<more1>) 
+  if (<cont> != <src.findlayer.29>) && (<cont.baseid> != i_commodity_box) && !(<src.isgm>) 
+    src.sysmessage That must be in your bank box or commodity deed box to use it.
+    return 1
+  endif
+  Target Target the commodity to fill this deed with.
+else
+  if !(<cont.isvalid>) || ((<cont> != <src.findlayer.29>) && (<cont.baseid> != i_commodity_box))
+    src.sysmessage To claim the resources represented by this deed, double-click it in your bank box or commodity deed box.
+    return 1
+  endif
+  serv.newitem <more1>,<more2>,<cont>
+  remove
+  src.sysmessage The commodity has been redeemed.
+endif
+return 1
+
+on=@targon_char
+src.sysmessage That is not a commodity the bankers will fill a commodity deed with.
+return 1
+
+on=@targon_item
+if (<src.targ.cont> != <src.findlayer.29>) && (<src.targ.cont.baseid> != i_commodity_box) && !(<src.isgm>) 
+  src.sysmessage That must be in your bank box or commodity deed box to use it.
+  return 1
+elseif !(<src.targ.iscommodable>)
+  src.sysmessage That is not a commodity the bankers will fill a commodity deed with.
+  return 1
+endif
+more1=<src.targ.baseid>
+more2=<src.targ.amount>
+src.targ.remove
+color=0592
+src.sysmessage The commodity has been filled.
+return 1
+
+[function iscommodable]
+if (<type>==t_commodity_deed) || (<type>==t_container) || (<type>==t_gold) || (<type>==t_coin) || (<attr>&attr_newbie) || (<attr>&attr_move_never) || (<attr>&attr_static) || (<amount> <= 1)
+  return 0
+endif
+return 1
+
+[itemdef i_commodity_box]
+defname=i_commodity_box
+id=i_box_brass
+name=Commodity Box
+type=t_container
+value=450
+tevents=t_commodity_box
+
+on=@create
+color=047
+
+[typedef t_commodity_box]
+
+on=@dclick
+if !(<isevent.ei_house_secure>)
+  src.sysmessage The commodity deed box must be secured before you can use it.
+  return 1
+endif
+
+on=@dropon_self
+if !(<isevent.ei_house_secure>)
+  src.sysmessage The commodity deed box must be secured before you can use it.
+  return 1
+endif
+
+
+
+
+
+
+[EOF]

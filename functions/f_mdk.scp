@@ -1,0 +1,71 @@
+[defname mdk_body_parts]
+human_parts
+human_viscera
+human_blood
+
+[function mdk]
+targetf f_mdk_targ
+say @026,3,0,0 *Eyes glow red*
+sysmessage who would you like to murder death kill?
+
+[function f_mdk_targ]
+ref1=<argo>
+if !(<ref1.isvalid>) || (<ref1.isitem>) 
+  src.sysmessage This power would be wasted on such a trivial thing...
+  return 1
+elseif (<ref1.isplayer>)	//perhaps should make a confirm menu for this, incase a player needs to die.
+  src.sysmessage This is only for NPCs, tsk... tsk...
+  return 1
+elseif (<ref1.flags>&statf_invul)
+  src.sysmessage Are you certain you wish to kill this being? They are protected...
+  return 1
+endif
+ref1.f_ultra_lightning
+ref1.f_mdk_explosion
+//sector.allclients sysmessage @0482,3,0,0 You see <ref1.name> erupt in a sponteneous and violent explosion, leaving piles of broiled flesh and sizzling blood distributed everywhere...
+
+[function f_mdk_explosion]
+ref1=<uid>
+ref1.bark 4
+ref1.effect=2,i_fx_explode,6,15,45,0,0
+local.z=<eval (<ref1.p.z>+10)>
+if (<ref1.ishuman>)
+  sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d9f 01da4}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>-{3 6})> W<eval (<p.y>+{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d9f 01da4}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>-{3 6})> W<eval (<p.y>-{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d9f 01da4}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>+{3 6})> W<eval (<p.y>-{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d9f 01da4}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>+{3 6})> W<eval (<p.y>+{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d9f 01da4}> W<p.x> W<p.y> B<local.z> W<p.x> W<p.y> B<eval (<p.z>+{10})> B3 B13 00 00 00 B0 D0 D0
+else
+  sector.allclients sendpacket 0c0 00 D0 D0 W01d06 W<p.x> W<p.y> B<local.z> W<eval (<p.x>-{3 6})> W<eval (<p.y>+{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W01d08 W<p.x> W<p.y> B<local.z> W<eval (<p.x>-{3 6})> W<eval (<p.y>-{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W01d10 W<p.x> W<p.y> B<local.z> W<eval (<p.x>+{3 6})> W<eval (<p.y>-{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W01d11 W<p.x> W<p.y> B<local.z> W<eval (<p.x>+{3 6})> W<eval (<p.y>+{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+  sector.allclients sendpacket 0c0 00 D0 D0 W01d12 W<p.x> W<p.y> B<local.z> W<p.x> W<p.y> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+endif
+sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d92 01d96}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>-{3 6})> W<eval (<p.y>+{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d92 01d96}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>-{3 6})> W<eval (<p.y>-{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d92 01d96}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>+{3 6})> W<eval (<p.y>-{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d92 01d96}> W<p.x> W<p.y> B<local.z> W<eval (<p.x>+{3 6})> W<eval (<p.y>+{3 6})> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0
+sector.allclients sendpacket 0c0 00 D0 D0 W<eval {01d92 01d96}> W<p.x> W<p.y> B<local.z> W<p.x> W<p.y> B<eval (<p.z>+{3 6})> B3 B13 00 00 00 B0 D0 D0	
+for 3
+  timerfms 500,effectLocation <eval (<ref1.p.x>-{1 3})>,<eval (<ref1.p.y>+{1 3})>,<local.z>,2,<eval {{01d92 01d96} 1 {0122a 0122f} 1}>,6,60,0,0,0
+  timerfms 500,effectLocation <eval (<ref1.p.x>-{1 3})>,<eval (<ref1.p.y>-{1 3})>,<Local.z>,2,<eval {{01d92 01d96} 1 {0122a 0122f} 1}>,6,60,0,0,0
+  timerfms 500,effectLocation <eval (<ref1.p.x>+{1 3})>,<eval (<ref1.p.y>-{1 3})>,<Local.z>,2,<eval {{01d92 01d96} 1 {0122a 0122f} 1}>,6,60,0,0,0
+  timerfms 500,effectLocation <eval (<ref1.p.x>+{1 3})>,<eval (<ref1.p.y>+{1 3})>,<Local.z>,2,<eval {{01d92 01d96} 1 {0122a 0122f} 1}>,6,60,0,0,0
+endfor
+ref1.damage 10000 dam_god
+ref1.sound snd_spell_explosion
+
+[function massmdk]
+say @026,3,0,0 *Eyes glow red*
+local.distance=<qval (<argn>)?<argn>:20>
+forchars <local.distance>
+  if (<npc>) && !(<owner>) && !(<flags>&statf_invul)
+    f_ultra_lightning
+    f_mdk_explosion
+  endif
+endfor
+sector.allclients sysmessage @0482,3,0,0 All around you bodies erupt in a sponteneous and violent explosion, leaving piles of broiled flesh and sizzling blood distributed everywhere...
+
+
+[eof]

@@ -1,0 +1,124 @@
+//Player Vendors by Soulless
+//v1.0
+//2:47 PM 5/21/2021
+
+
+[itemdef i_deed_vendor]
+defname=i_deed_vendor
+id=i_deed
+name=contract of employment
+type=t_normal		//change to t_player_vendor_deed  - add the below stuff to the typedefs file
+value=1200
+
+on=@dclick
+ref1=<src.region.uid>
+if (<topobj> != <src>)
+  src.sysmessage You cannot use that where it is.
+  return 1
+endif
+if (<def.player_vendor_max>) && (<src.tag0.vendors> >= <def.player_vendor_max>)
+  src.sysmessage You have reached the maximum limit of vendors you may own.
+  return 1
+endif
+if !(<src.isgm>)
+  if !(<isempty <def.player_vendor_market_region>>)
+    if (strcmpi("<src.region.region.name>","<def.player_vendor_market_region>")) 
+      if !(<ref1.isvalid>) || (<ref1.owner> != <src>)
+        src.sysmessage Vendors are unable to be created here.
+        return 1
+      endif
+    endif
+  endif
+  if (<def.player_vendor_onlyhouses>)
+    if (<ref1.isvalid>) && !(strmatch("t_multi*","<ref1.type>"))
+      src.sysmessage vendors can only be placed in houses.
+      return 1
+    elesif (<ref1.owner> != <src>) && !(<ref1.getcoownerpos <src>> >= 0) 
+      src.sysmessage only the house owner can directly place vendors.  please ask the house owner to offer you a vendor contract so that you may place a vendor in this house.
+      return 1
+    elseif (<def.player_vendor_onlypublic>) && !(<ref1.housetype>==house_public)
+      src.sysmessage you cannot place this vendor or barkeep.  make sure the house is public and has sufficient storage available.
+      return 1
+    endif
+  endif
+
+  forobjs 1
+   if (<baseid>==i_deed_vendor_rental)
+      src.sysmessage you cannot place a vendor or barkeep on top of a rental contract!
+      return 1
+    elseif (<isevent.e_player_vendor>)
+      src.sysmessage you cannot place a vendor or barkeep at this location.
+      return 1
+    endif
+  endfor
+endif
+serv.newnpc c_player_vendor
+new.p=<src.p>
+new.f_player_vendor_setup
+remove
+return 1
+
+[itemdef i_player_vendor_payroll]
+defname=i_player_vendor_payroll
+id=i_memory
+name=Player Vendor Payroll
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+//topobj.say Payday!
+timer=<def0.player_vendor_gameday>
+local.gold=<topobj.findlayer.29.rescount i_gold>
+local.salary=<topobj.f_player_vendor_gameday_charge>
+local.payment=<qval (<local.gold> < <local.salary>)?<local.gold>:<local.salary>>
+local.underpayment=<eval <local.salary>-<local.gold>>
+ref1=<topobj.findlayer.29>
+//serv.log Vendor payroll for <topobj.name>(<topobj>) owned by <topobj.owner.name>(<topobj.owner>) : <ref1.name>(<ref1>) being used to pay <local.payment>g for vendor services
+forcont <ref1> 1
+  if (<local.payment> <= 0)
+    return 1
+  endif
+  //serv.log forcont loop on <ref1.name>(<ref1>)
+  if (<type>==t_gold)
+    //serv.log <topobj.gold>g found to pay <local.payment>g, <qval (0 < <local.underpayment>)?not enough to cover the total:<eval <topobj.gold>-<local.payment>>g left>.
+    if (<amount> > <local.payment>)
+       consume <local.payment>
+       local.payment=0
+     else
+       local.payment -= <amount>
+       consume <amount>
+    endif
+  endif
+endfor
+if (<local.underpayment> > 0)
+  //serv.log <topobj.name>(<topobj>) taking <local.underpayment>g from <topobj.owner.name>'s available funds of <topobj.tag0.owners_gold>g, <eval <topobj.tag0.owners_gold>-<local.underpayment>>g left.
+  topobj.tag0.owners_gold -= <local.underpayment>
+  if (<topobj.tag0.owners_gold> <= 0) && (<def0.player_vendor_abandon> >= 1)
+    serv.log <topobj.name>(<topobj>) owned by <topobj.owner.name>(<topobj.owner>) is being dismissed due to lack of payment
+    topobj.f_player_vendor_dismiss
+  endif
+endif
+return 1
+
+
+[itemdef i_deed_vendor_rental]
+defname=i_deed_vendor_rental
+id=i_deed
+name=Vendor Rental Contract
+type=t_normal
+value=1650
+
+on=@create
+color=1650
+
+[itemdef i_player_vendor_backpack]
+defname=i_player_vendor_backpack
+name=Player Vendor Backpack
+id=i_backpack
+type=t_container
+can=can_i_dcignorelos|can_i_dcignoredist
+
+
+
+  
+[EOF]

@@ -1,0 +1,40 @@
+
+[SPELL 40]
+DEFNAME=s_summon_creature
+NAME=Summon Creature
+SOUND=snd_spell_summon_creature
+RUNES=KX
+CAST_TIME=4.0
+RESOURCES=i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk
+RUNE_ITEM=i_rune_summon_creature
+SCROLL_ITEM=i_scroll_summon_creature
+FLAGS=spellflag_dir_anim|spellflag_summon|spellflag_playeronly
+EFFECT_ID=0
+EFFECT=0
+LAYER=layer_spell_summon
+DURATION=3*60.0,5*60.0
+MANAUSE=18
+SKILLREQ=MAGERY 40.0
+INTERRUPT=100.0,100.0
+
+//Summons a random animal which you can control. Summoned creatures can be dispelled.  (this seems incorrect, as its not random. you pick the creature)
+
+on=@start
+if (<eval (<src.curfollower>+1)> > <src.maxfollower>) && !(<src.isgm>)
+  src.sysmessage You have too many followers to summon that creature.
+  return 1
+endif
+
+on=@success
+timerf 0,f_summon_creature_success	//ACT is not available until after the create is created and placed by the player it seems..
+
+[function f_summon_creature_success]
+ref1=<uid>	//player that cast it
+ref2=<act>	//should be the npc we just summoned
+if (<ref2.isvalid>) && (<ref2.ischar>)
+  ref2.setowner=<ref1>
+endif
+
+
+
+[EOF]

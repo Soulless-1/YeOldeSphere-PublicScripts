@@ -1,0 +1,30 @@
+[SPELL 8]
+DEFNAME=s_weaken
+NAME=Weaken
+SOUND=snd_spell_weaken
+RUNES=DM
+CAST_TIME=0.8
+RESOURCES=i_reag_garlic,i_reag_nightshade
+RUNE_ITEM=i_rune_weaken
+SCROLL_ITEM=i_scroll_weaken
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|spellflag_curse|spellflag_resist
+EFFECT_ID=i_fx_sparkle_2
+EFFECT=5,10
+LAYER=layer_spell_stats
+DURATION=2*60.0,3*60.0
+MANAUSE=4
+SKILLREQ=MAGERY 0.0
+INTERRUPT=100.0,100.0
+
+//Des Mani temporarily reduces the strength of the target creature. If this creature possesses great skill or stamina, it may be able to resist the spell. The effectiveness of this spell is based on the casters Magery
+//Formula: [Magery/10, rounded down = # of stat points lost] (ie: at 85 magery, your Weaken spell would remove 8 Strength for the duration of the spell)
+on=@effect
+consume i_rune_weaken
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval (<local.spell_strength>/10)/10>
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+
+[EOF]

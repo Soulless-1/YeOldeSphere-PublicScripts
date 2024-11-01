@@ -1,0 +1,402 @@
+//Automated Event System by Soulless
+//v0.1
+//10:35 AM 7/7/2022
+
+[plevel 1]
+eventscore
+
+[function f_automated_event_open]
+if (<isempty <def.automated_event_<argn>_name>>)
+  sysmessage That event does not exist.
+  return 1
+elseif (<var0.automated_event_active> != -1)
+  sysmessage There is already a <def0.automated_event_<argn>_name> event going on, please end the automated event first. 'f_automated_event_shutdown'
+  return 1
+endif
+serv.b @<def0.automated_event_message_color> A <def0.automated_event_<argn>_name> event is beginning, signup to participate.
+var0.automated_event_active=<argn>
+f_automated_event_add_gates
+forinstances i_automated_event_signup_board	//all signup boards should be set to allow players to join
+  more2=0		//set to signup phase which is 0
+  morex=15		//15 second countdown once the signup period is done
+  timer=<def0.automated_event_signup_period> 
+endfor
+serv.allclients sound <def0.automated_event_sound_begin>
+
+[function f_automated_event_add_gates]
+forinstances i_automated_event_staging_gate	
+  remove
+endfor
+while !(<isempty <def.automated_event_staging_gate_location<dlocal.n>>>)
+  serv.newitem i_automated_event_staging_gate	//put event gate at britain
+  new.morep=<def0.automated_event_staging_area>
+  new.p=<def0.automated_event_staging_gate_location<dlocal.n>>
+  local.n += 1
+endwhile
+serv.b @<def0.automated_event_message_color> Event gates have been placed at all major city banks and graveyards.
+
+[function f_automated_event_remove_gates]
+forinstances i_automated_event_staging_gate	
+  remove
+endfor
+
+[function f_automated_event_join]
+local.event=<var0.automated_event_active>
+local.eventname=<def0.automated_event_<var0.automated_event_active>_name>
+if (<local.event> == -1) 
+  serv.log ERROR: <name> tried to join an event but there are non active.
+  return 1
+elseif (<tag0.young>)
+  sysmessage You cannot join this event due to your young status.
+  return 1
+endif
+
+//if !(<def0.automated_event_<dlocal.event>_mounts>)
+  //dismount
+//endif
+
+local.teams=<def0.automated_event_<dlocal.event>_teams>
+
+if !(<local.teams>)
+  if (<serv.list.automated_event_<dlocal.event>_participants.findelem <uid>> != -1)
+    sysmessage You have already joined this <Local.eventname> event, wait for it to start.
+    return 1
+  else
+    ctag0.automated_event_team=0	//anyone with no team should be an enemy to everyone
+    serv.list.automated_event_<dlocal.event>_participants.add <uid>
+    sysmessage You have joined the <local.eventname> event
+  endif
+
+elseif (<local.teams> >= 1)	//team event, need to place them on one of these teams
+  for n 1 <local.teams>
+    //TODO : load balance teams for however many exist
+  endfor
+endif
+
+
+
+f_automated_event_notify <name> has joined the <def0.automated_event_<dlocal.event>_name> event.
+
+//add supplies here if needed
+//add equipment here if needed
+
+[function f_automated_event_resign]
+local.event=<var0.automated_event_active>
+local.eventname=<def0.automated_event_<var0.automated_event_active>_name>
+if (<local.event> == -1) 
+  serv.log ERROR: <name> tried to leave an event but there are non active.
+  return 1
+endif
+serv.list.automated_event_<dlocal.event>_participants.<serv.list.automated_event_<dlocal.event>_participants.findelem <uid>>.remove
+ctag0.team=
+sysmessage You have resigned from the <local.eventname> event.
+
+[function f_automated_event_begin]		//event actually begins and players are put in position
+local.event=<var0.automated_event_active>
+local.eventname=<def0.automated_event_<var0.automated_event_active>_name>
+local.participants=<serv.list.automated_event_<dlocal.event>_participants.count>
+
+if (<local.participants> < <def0.automated_event_<dlocal.event>_minplayers>)	//event canceled not enough players
+  var0.automated_event_active=-1
+  f_automated_event_remove_gates
+  serv.b @<def0.automated_event_message_color> There was not enough participants (<qval (<local.participants>==-1)?0:<dlocal.participants>>/<def0.automated_event_<dlocal.event>_minplayers>) to start the <def0.automated_event_<argn>_name>, event canceled.
+  serv.list.automated_event_<dlocal.event>_participants.clear
+  serv.allclients sound <def0.automated_event_sound_fail>
+  return 1
+endif
+
+for n 0 <eval (<local.participants>-1)>		//event can proceed
+  ref1=<serv.list.automated_event_<dlocal.event>_participants.<dlocal.n>>
+  if (<ref1.isvalid>) 
+    ref1.consume i_automated_event_entering
+    serv.newitem i_automated_event_entering
+    ref1.equip <new>
+  endif
+endfor
+
+[function f_automated_event_enter]
+local.event=<var0.automated_event_active>
+events=+e_automated_events
+f_automated_event_clear_spell_effects
+flags &= ~statf_war
+if !(<def0.automated_event_<dlocal.event>_mounts>)
+  dismount
+endif
+go <def0.automated_event_<dlocal.event>_location>
+stone 0
+
+[function f_automated_event_notify]
+serv.allclients f_automated_event_receive_notification <args>
+
+[function f_automated_event_receive_notification]
+if (<ineventarena>)
+  sysmessage @<def0.automated_event_message_color> <args>
+endif
+
+[function f_automated_event_point_gain]
+local.event=<dvar0.automated_event_active>
+//argv[0]> = char / object you scored the points on
+tag0.automated_event_points += <args>
+if (<tag0.automated_event_points> >= <def0.automated_event_<dlocal.event>_victorypoints>)
+  f_automated_event_notify <name> won the <def0.automated_event_<dlocal.event>_name>
+  f_automated_event_end
+endif
+
+[function f_automated_event_refresh_player]
+ref1=<uid>
+hits=<maxhits>
+mana=<maxmana>
+stam=<maxstam>
+for n 32 50			//remove all spell effects and other conditions
+  forcharlayer <local.n>
+    remove
+  endfor
+endfor
+
+[function f_automated_event_restock_supplies]	//this should loop through the defs for the event and check items
+consume i_reagent_bag		//remove old reagent bag and give new one
+serv.newitem i_reagent_bag,1,<findlayer.21>
+if !(<findid.i_bandage>)		
+  serv.newitem i_bandage,100,<findlayer.21>
+endif
+findid.i_bandage.amount 100
+if !(<findid.i_xbolt>)		
+  serv.newitem i_xbolt,100,<findlayer.21>
+endif
+findid.i_xbolt.amount 100
+
+[function f_automated_event_end]		//event ends and players are moved back to the staging area
+local.event=<var0.automated_event_active>
+for n 0 <eval (<serv.list.automated_event_<dlocal.event>_participants.count>-1)>
+  ref1=<serv.list.automated_event_<dlocal.event>_participants.<dlocal.n>>
+  if (<ref1.isvalid>) 
+    ref1.consume i_automated_event_exiting
+    serv.newitem i_automated_event_exiting
+    ref1.equip <new>
+  endif
+endfor
+serv.list.automated_event_<dlocal.event>_participants.clear
+f_automated_event_close
+
+[function f_automated_event_exit]
+//TODO: prior to this award event tokens
+events=-e_automated_events
+ctag0.team=
+tag0.automated_event_points
+f_automated_event_clear_spell_effects
+flags &= ~statf_war
+go <def0.automated_event_exit_location>
+stone 0
+
+[function f_automated_event_close]
+local.event=<var0.automated_event_active>
+if (<var0.automated_event_active> == -1)
+  sysmessage There is no active automated event currently.
+  return 1
+endif
+f_automated_event_remove_gates
+var0.automated_event_active=-1
+serv.b @<def0.automated_event_message_color> The <def0.automated_event_<dlocal.event>_name> event is now over.
+serv.allclients sound <def0.automated_event_sound_finish>
+
+[function ineventarena]
+if !(strcmpi(event staging area,<region.name>)) || !(strcmpi(large event arena,<region.name>)) 
+  return 1
+endif
+return 0
+
+[function inautomatedevent]
+if (<isevent.e_automated_events>)
+  return 1
+endif
+
+[function eventactive]
+if (<var0.automated_event_active> == -1)
+  sysmessage There is no event currently active.
+  return 1
+endif
+sysmessage The <def0.automated_event_<dvar0.automated_event_active>_name> event is currently active.
+
+[function eventscore]
+if (<var0.automated_event_active> == -1) 
+  sysmessage @<def0.automated_event_message_color> There is currently no event going on.
+  return 1
+endif
+sdialog d_automated_event_scoreboard
+
+[function f_automated_event_clear_spell_effects]
+topobj.consume i_rune_clumsy
+topobj.consume i_rune_feeblemind
+topobj.consume i_rune_reactive_armor
+topobj.consume i_rune_weaken
+topobj.consume i_rune_agility
+topobj.consume i_rune_cunning
+topobj.consume i_rune_protection
+topobj.consume i_rune_strength
+topobj.consume i_rune_bless
+topobj.consume i_rune_poison
+topobj.consume i_rune_archprotection
+topobj.consume i_rune_curse
+topobj.consume i_rune_incognito
+topobj.consume i_rune_magic_reflection
+topobj.consume i_rune_paralyze
+topobj.consume i_rune_mass_curse
+topobj.consume i_rune_polymorph
+//topobj.consume i_explosion_spell_delayed
+
+[function add_duel_observer]
+targetf f_add_duel_observer_targ
+sysmessage select observer to add to the event
+
+[function f_add_duel_observer_targ]
+ref1=<argo>
+ref1.events=+e_duel_observer
+ref1.go 1319 1807 0
+ref1.sysmessage You have been added as a duel observer
+sysmessage <ref1.name> added to the duel observer role
+
+[events e_duel_observer]	//observer cannot attack or get hurt
+
+on=@gethit	
+return 1
+
+on=@spelleffect
+return 1
+
+on=@skillstart
+return 1
+
+on=@attack
+return 1
+
+on=@hit
+return 1
+
+on=@spellcast
+return 1
+
+
+[function add_duelist]
+targetf f_add_duelist_targ
+sysmessage select player to add to the dueling arena
+
+[function f_add_duelist_targ]
+ref1=<argo>
+ref1.events=-e_duel_observer
+ref1.events=+e_duelist
+ref1.strip
+ref1.disamount
+serv.newitem i_duel_balancing
+ref1.equip <new>
+ref1.f_duelist_refresh_supplies
+ref1.go 1319 1824 0
+ref1.movenear <ref1> 5
+ref1.stone
+ref1.sysmessage You have been added to the dueling arena
+
+[function f_duelist_refresh_supplies]
+consume 1000 i_potion_manaless
+consume 1000 i_potion_mana
+consume 1000 i_potion_managreat
+consume 1000 i_potion_manatotal
+consume 1000 i_bandage
+consume 100 i_reagent_bag
+consume 1000 i_reag_blood_moss
+consume 1000 i_reag_black_pearl
+consume 1000 i_reag_garlic
+consume 1000 i_reag_mandrake_root
+consume 1000 i_reag_ginseng
+consume 1000 i_reag_sulfur_ash
+consume 1000 i_reag_nightshade
+consume 1000 i_reag_spider_silk
+serv.newitem i_potion_managreat,30
+new.cont=<findlayer.21>
+serv.newitem i_reagent_bag
+new.cont=<findlayer.21>
+serv.newitem i_bandage,30
+new.cont=<findlayer.21>
+
+
+[events e_duelist]
+
+on=@mount
+return 1
+
+on=@spellcast
+if (<serv.spell.<argn1>.flags>&spellflag_field) || (<serv.spell.<argn1>.flags>&spellflag_summon)
+  sysmessage forbidden currently
+  return 1
+endif
+
+on=@death
+ref1=<attacker.max>
+sector.allclients sysmessage @044 <name> was defeated by <ref1.name> in the duel.
+events=-e_duelist
+events=+e_duel_observer
+strip
+consume i_duel_balancing
+hits=<maxhits>
+go 1319 1806
+ref1.events=-e_duelist
+ref1.events=+e_duel_observer
+ref1.strip
+ref1.consume i_duel_balancing
+ref1.hits=<ref1.maxhits>
+ref1.go 1319 1806
+return 1
+
+[itemdef i_moving_duel_wall]
+defname=i_moving_duel_wall
+id=i_wall_stone_8
+
+on=@create
+attr=010
+timer=1
+
+on=@timer
+if (<more1> == 1)	//moving up
+  if (<p.z> <= -30)
+    more1=
+  else
+    z -= 1
+  endif
+else
+  z += 1
+  if (<p.z> >= -5)
+    more1=1
+  endif
+endif
+timerd=2
+return 1
+
+[itemdef i_duel_balancing]
+defname=i_duel_balancing
+name=duel balancing memory
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@create
+timer=3600
+
+on=@equip
+src.criminal 1
+for n 0 48
+  tag0.<serv.skill.<dlocal.n>.key>=<src.<serv.skill.<dlocal.n>.key>>	//store old sill
+  src.<serv.skill.<dlocal.n>.key>=1000	//give them GM skill
+endfor
+src.sysmessage Your skills have temporarily been set to 100.0 each.
+
+on=@unequip
+src.criminal 0
+for n 0 48
+  src.<serv.skill.<dlocal.n>.key>=<tag0.<serv.skill.<dlocal.n>.key>>
+  tag0.<serv.skill.<dlocal.n>.key>=
+endfor
+src.sysmessage Your skills have been set back to their old values.
+
+on=@timer
+remove
+
+
+[EOF]

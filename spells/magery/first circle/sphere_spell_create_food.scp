@@ -1,0 +1,23 @@
+[SPELL 2]
+DEFNAME=s_create_food
+NAME=Create Food
+SOUND=snd_spell_create_food
+RUNES=IMY
+CAST_TIME=0.8
+RESOURCES=i_reag_garlic,i_reag_ginseng,i_reag_mandrake_root
+RUNE_ITEM=i_rune_create_food
+SCROLL_ITEM=i_scroll_create_food
+FLAGS=spellflag_playeronly
+EFFECT_ID=0
+EFFECT=0
+DURATION=0.0
+MANAUSE=4
+SKILLREQ=MAGERY 0.0
+INTERRUPT=100.0,100.0
+
+//Create food creates a random piece of food in the caster's backpack
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+
+[EOF]

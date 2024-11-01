@@ -1,0 +1,2883 @@
+//****************************************************************************
+// SPHERE by : Menasoft ©1997-2009
+// www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: 7:17 AM 8/19/2021
+// - Changed region flags by babidi with defnames region_flags for clearer read and editing (14-Jun-2011)
+// - Regions checked for accuracy by Soulless, split into seperate files to easier manage roomdefs and areadefs (7:17 AM 8/19/2021)
+
+VERSION=X
+
+[AREADEF a_facet_felucca]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Felucca
+GROUP=ALLMAP
+P=1323,1624,55,0
+RECT=0,0,7168,4096,0
+TAG.MUSIC=mp3_oldult01,mp3_oldult02,mp3_oldult04,mp3_plainsa
+
+// === AREAS
+
+[AREADEF a_cave_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=cave
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=2367,942,0,0
+RECT=2373,900,2395,928,0
+RECT=2395,903,2409,919,0
+RECT=2373,928,2383,937,0
+RECT=2359,927,2373,945,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_dungeon_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=6091,1313,15,0
+RECT=6057,1285,6137,1327,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5477,1410,0,0
+RECT=5377,1284,5624,1507,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_3]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5248,1462,0,0
+RECT=5125,1409,5372,1516,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_orc_dungeon_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Orc Cave Level 2
+GROUP=Other Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5354,1307,0,0
+RECT=5284,1284,5371,1388,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_5]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5132,1324,0,0
+RECT=5124,1284,5230,1390,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_6]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5296,1905,0,0
+RECT=5259,1873,5333,1937,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_7]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5230,1963,0,0
+RECT=5194,1942,5266,1984,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_orc_dungeon_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Orc Cave Level 3
+GROUP=Other Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5304,2012,0,0
+RECT=5265,1987,5363,2045,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_9]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5217,2024,0,0
+RECT=5185,2006,5249,2042,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_orc_cave_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Orc Cave Level 1
+GROUP=Other Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5144,1982,0,0
+RECT=5131,1945,5162,2021,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_11]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5185,1940,0,0
+RECT=5172,1876,5222,1919,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_12]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5144,1879,0,0
+RECT=5126,1863,5171,1917,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_13]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5305,1857,0,0
+RECT=5297,1805,5345,1863,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_14]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5221,1862,0,0
+RECT=5200,1813,5271,1865,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_15]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5164,1829,0,0
+RECT=5130,1810,5169,1847,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_16]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5268,1755,0,0
+RECT=5244,1748,5276,1780,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_17]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5212,1748,0,0
+RECT=5197,1725,5227,1763,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_18]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5187,1777,0,0
+RECT=5179,1765,5228,1788,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_19]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5954,318,0,0
+RECT=5902,263,6007,374,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_20]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5951,447,22,0
+RECT=5895,392,6008,502,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_21]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=6079,447,0,0
+RECT=6027,391,6132,504,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_22]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=6078,317,0,0
+RECT=6020,260,6137,374,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_23]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5505,446,0,0
+RECT=5380,384,5631,509,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_dungeon_24]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeon
+GROUP=Other Dungeons
+P=5504,322,0,0
+RECT=5381,262,5628,382,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_xroom_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=XRoom
+GROUP=Cove
+P=2582,1118,0,0
+RECT=2581,1117,2584,1120,0
+
+[AREADEF a_cave_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cave
+GROUP=Mines & Caves
+P=1903,365,0,0
+RECT=1887,354,1920,377,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_cave_3]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cave
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=1934,316,0,0
+RECT=1925,307,1943,325,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEFF a_cave_4]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cave
+GROUP=Mines & Caves
+P=2345,830,0,0
+RECT=2323,809,2368,851,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_exit_from_temple_edelucia_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from Temple E of Delucia
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5906,4071,26,0
+RECT=5905,4068,5908,4071,0
+
+[AREADEF a_exit_from_swdelucia_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from SW of Delucia
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5151,4062,37,0
+RECT=5147,4060,5153,4068,0
+
+[AREADEF a_hythloth_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hythloth Entrance
+GROUP=Hythloth
+FLAGS=REGION_FLAG_NOBUILDING
+P=4722,3815,0,0
+RECT=4717,3814,4727,3816,0
+
+[AREADEF a_exit_from_s_sepapua_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from S-SE of Papua
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=6087,3676,17,0
+RECT=6083,3672,6088,3680,0
+
+[AREADEF a_exit_from_Cemetery_spapua_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from Cemetery S of Papua
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5696,3660,0,0
+RECT=5697,3658,5700,3663,0
+
+[AREADEF a_exit_from_city_of_the_dead_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from W of City of the Dead
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5138,3665,31,0
+RECT=5134,3659,5140,3668,0
+
+[AREADEF a_entrance_from_serpents_hold_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from Serpent's Hold
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=2923,3406,8,0
+RECT=2921,3402,2925,3408,0
+
+[AREADEF a_exit_from_papua_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from E of Papua
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=6075,3333,5,0
+RECT=6073,3328,6077,3333,0
+
+[AREADEF a_entrance_from_s_swtrinsic_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from S-SW of Trinsic
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=1628,3321,0,0
+RECT=1626,3316,1632,3321,0
+
+[AREADEF a_entrance_serpents_pillar_w_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance - Serpent's Pillar W
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=424,3286,-5,0
+RECT=411,3271,436,3296,0
+
+[AREADEF a_exit_from_papua_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from Papua
+GROUP=T2A Entrances & Exits
+P=5735,3195,10,0
+RECT=5734,3194,5739,3199,0
+
+[AREADEF a_exit_from_terathan_keep_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from W of Terathan Keep
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5127,3143,98,0
+RECT=5124,3140,5128,3146,0
+
+[AREADEF a_exit_from_lighthouse_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from Lighthouse
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5672,2390,60,0
+RECT=5667,2387,5672,2392,0
+
+[AREADEF a_field_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Field
+GROUP=Skara Brae
+P=814,2164,0,0
+RECT=796,2152,832,2176,0
+
+[AREADEF a_field_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Field
+GROUP=Yew
+P=375,1191,0,0
+RECT=368,1175,383,1208,0
+
+[AREADEF a_fire_dungeon_exit_1]	
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fire Dungeon Exit
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5687,1422,0,0
+RECT=5682,1419,5692,1425,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_nujelm_chessboard_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Nujel'm Chessboard
+GROUP=Nujel'm
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_NOBUILDING
+P=3722,1352,4,0
+RECT=3719,1352,3739,1371,0
+
+[AREADEF a_yew_south_guardtower_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew South Guardtower
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING	//|REGION_FLAG_GUARDED
+P=755,1317,10,0
+RECT=745,1290,756,1323,0
+EVENTS=r_guard_tower
+TAG.GUARDOWNER=the wilderness
+
+[AREADEF a_nujelm_market_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Nujel'm Market
+GROUP=Nujel'm
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_NOBUILDING
+P=3554,1186,0,0
+RECT=3551,1167,3560,1208,0
+RECT=3543,1175,3552,1200,0
+
+[AREADEF a_brit_mine2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Brit Mine2
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=1629,1189,0,0
+RECT=1611,1175,1662,1204,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_moonglow_telescope_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Moonglow Telescope
+GROUP=Moonglow
+FLAGS=REGION_FLAG_NOBUILDING
+P=4707,1123,0,0
+RECT=4702,1110,4715,1123,0
+
+[AREADEF a_moonglow_teleporters_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Moonglow Teleporters
+GROUP=Moonglow
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=4452,1124,0,0
+RECT=4431,1103,4456,1144,0
+RECT=4658,1138,4675,1129,0
+RECT=4483,1479,4500,1471,0
+RECT=4536,902,4543,886,0
+[AREADEF a_entrance_from_vesper_Cemetery_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from Vesper Cemetery
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=2777,894,-23,0
+RECT=2771,890,2781,895,0
+
+[AREADEF a_entrance_from_yew_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from Yew
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=309,785,0,0
+RECT=307,783,316,792,0
+
+[AREADEF a_entrance_from_Minoc_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from N of Minoc
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=2400,200,0,0
+RECT=2394,192,2409,219,0
+RECT=5710,412,5770,470,0
+
+[AREADEF a_minoc_cave1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Minoc Cave1
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=2426,177,0,0
+RECT=2406,168,2428,184,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_entrance_wrong_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance N of Wrong
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=1998,81,7,0
+RECT=1993,78,1999,85,0
+
+[AREADEF a_kendall_island_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Kendall Island
+GROUP=Minoc
+P=2607,387,0,0
+RECT=2600,372,2617,403,0
+
+[AREADEF a_great_southern_bog_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=The Fens of the Dead
+GROUP=Misc
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=1864,2323,0,0
+RECT=1805,2244,1910,2402,0
+RECT=1910,2280,2123,2361,0
+RECT=1910,2361,1940,2389,0
+RECT=1841,2402,1899,2455,0
+EVENTS=r_swamp
+
+[AREADEF a_north_swamp_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=North Swamp
+GROUP=Misc
+FLAGS=REGION_FLAG_NOBUILDING
+P=2032,1007,0,0
+RECT=2000,928,2065,1075,0
+RECT=1975,953,2001,1065,0
+RECT=2064,966,2095,1074,0
+RECT=2036,1074,2065,1105,0
+EVENTS=r_swamp
+
+[AREADEFF a_hunting_camp_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hunting Camp
+GROUP=Misc
+P=1589,2157,0,0
+RECT=1585,2152,1593,2162,0
+
+[AREADEFF a_burn_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=The Burn
+GROUP=Misc
+P=1847,3203,0,0
+RECT=1838,3194,1857,3212,0
+
+[AREADEF a_white_house_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=White House
+GROUP=Misc
+P=1904,2088,0,0
+RECT=1895,2079,1914,2098,0
+
+[AREADEF a_delucia_orc_fort_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Delucia Orc Fort
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5211,3629,-2,0
+RECT=5199,3606,5230,3630,0
+
+[AREADEF a_ruins_the_weeds_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ruins in the Weeds
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5388,3233,-5,0
+RECT=5380,3227,5395,3239,0
+
+[AREADEF a_trinsic_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Trinsic Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=1828,2948,-20,0
+RECT=1825,2945,1832,2952,0
+
+[AREADEF a_hidden_valley_temple_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hidden Valley Temple
+GROUP=Hidden Valley
+FLAGS=REGION_FLAG_GLOBALNAME
+P=1686,2985,0,0
+RECT=1670,2980,1682,2991,0
+
+[AREADEFF a_secret_cave_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Secret Cave
+GROUP=Hidden Valley
+P=1653,2967,0,0
+RECT=1648,2957,1658,2977,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEFF a_secret_passage_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Secret Passage
+GROUP=Hidden Valley
+P=1648,2915,0,0
+RECT=1644,2892,1652,2938,0
+RECT=1652,2918,1664,2938,0
+
+[AREADEFF a_hidden_valley_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hidden Valley
+GROUP=Hidden Valley
+P=1671,2971,0,0
+RECT=1658,2937,1685,3006,0
+RECT=1685,2960,1698,3006,0
+
+[AREADEF a_ancient_ruins_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ancient Ruins
+GROUP=Misc
+FLAGS=REGION_FLAG_GLOBALNAME
+P=1822,2414,0,0
+RECT=1805,2402,1827,2417,0
+RECT=1819,2410,1839,2428,0
+
+[AREADEF a_ice_dungeon_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Dungeon Entrance
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5208,2322,32,0
+RECT=5203,2320,5209,2325,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_magincia_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Magincia Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=3564,2140,34,0
+RECT=3561,2137,3568,2143,0
+
+[AREADEF a_skara_brae_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Skara Brae Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=643,2067,5,0
+RECT=640,2064,648,2071,0
+
+[AREADEF a_britain_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=1336,1997,5,0
+RECT=1333,1995,1340,2001,0
+
+[AREADEF a_moonglow_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Moonglow Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=4467,1283,5,0
+RECT=4464,1280,4471,1287,0
+
+[AREADEF a_crossroads_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Crossroads
+GROUP=Misc
+FLAGS=REGION_FLAG_GLOBALNAME
+P=2070,803,0,0
+RECT=2064,786,2078,822,0
+RECT=2057,793,2064,817,0
+RECT=2039,802,2058,815,0
+
+[AREADEF a_minoc_vesper_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Minoc-Vesper Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=2702,692,5,0
+RECT=2697,688,2706,697,0
+
+[AREADEF a_great_waterfall_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Great Waterfall
+GROUP=Misc
+FLAGS=REGION_FLAG_GLOBALNAME
+P=1319,541,-15,0
+RECT=1316,527,1324,543,0
+
+[AREADEF a_fishermans_hut_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fisherman's Hut
+GROUP=Trinsic
+FLAGS=REGION_FLAG_NOBUILDING
+P=2380,3488,3,0
+RECT=2375,3482,2385,3492,0
+
+[AREADEF a_destard_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Destard Entrance
+GROUP=Destard
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=1176,2636,0,0
+RECT=1173,2633,1181,2638,0
+
+[AREADEF a_yew_brigand_fort_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Brigand Fort
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=877,1683,0,0
+RECT=834,1670,872,1704,0
+RECT=871,1678,880,1688,0
+
+[AREADEFF a_yew_orcfort_outpost_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Orcfort Outpost
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING	//|REGION_FLAG_GUARDED
+P=720,1485,0,0
+RECT=709,1478,722,1490,0
+RECT=717,1475,739,1481,0
+EVENTS=r_guard_tower
+TAG.GUARDOWNER=the wilderness
+
+
+[AREADEF a_jail_cells]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME|REGION_ANTIMAGIC_ALL|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5295,1187,0,0
+RECT=5269,1157,5314,1194,0
+TAG.GUARDOWNER=SPHERE Jailors
+
+[ROOMDEF jail1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 1
+GROUP=Jails
+FLAGS=REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5276,1164,0,0
+RECT=5272,1160,5281,1169,0
+
+[ROOMDEF jail2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 2
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5286,1164,0,0
+RECT=5282,1160,5291,1169,0
+
+[ROOMDEF jail3]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 3
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5296,1164,0,0
+RECT=5292,1160,5301,1169,0
+
+[ROOMDEF jail4]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 4
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5306,1164,0,0
+RECT=5302,1160,5311,1169,0
+
+[ROOMDEF jail5]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 5
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5276,1174,0,0
+RECT=5272,1170,5281,1179,0
+
+[ROOMDEF jail6]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 6
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5286,1174,0,0
+RECT=5282,1170,5291,1179,0
+
+[ROOMDEF jail7]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 7
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5296,1174,0,0
+RECT=5292,1170,5301,1179,0
+
+[ROOMDEF jail8]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 8
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5306,1174,0,0
+RECT=5302,1170,5311,1179,0
+
+[ROOMDEF jail9]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 9
+GROUP=Jails
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5283,1184,0,0
+RECT=5272,1180,5291,1191,0
+
+[ROOMDEF jail10]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jail Cell 10
+GROUP=Jails
+FLAGS=REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5304,1184,0,0
+RECT=5292,1180,5311,1191,0
+
+[AREADEF a_yew_graveyard_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Graveyard
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=724,1134,0,0
+RECT=711,1103,736,1136,0
+
+[AREADEF a_despise_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Despise Entrance
+GROUP=Despise
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=1297,1081,0,0
+RECT=1294,1078,1299,1084,0
+
+[AREADEF a_deceit_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Deceit Entrance
+GROUP=Deceit
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=4111,432,5,0
+RECT=4108,428,4116,432,0
+
+[AREADEF a_wrong_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wrong Entrance
+GROUP=Wrong
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=2041,217,14,0
+RECT=2038,213,2047,221,0
+RECT=2030,221,2055,234,0
+
+[AREADEF a_yew_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=771,751,5,0
+RECT=765,746,778,758,0
+
+[AREADEF a_avatar_isle_cave_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Avatar Isle Cave
+GROUP=Mines & Caves
+P=4605,3815,0,0
+RECT=4594,3807,4617,3824,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_ice_isle_cave_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Isle Cave 2
+GROUP=Mines & Caves
+P=4024,329,0,0
+RECT=4002,310,4045,351,0
+RECT=4005,298,4027,310,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_jhelom_moongate_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jhelom Moongate
+GROUP=Moongates
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=1498,3772,5,0
+RECT=1496,3770,1502,3776,0
+
+[AREADEF a_daemon_temple_compound_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fire Temple
+GROUP=Hythloth
+P=4588,3567,0,0
+RECT=4561,3548,4616,3586,0
+RECT=4576,3586,4615,3625,0
+RECT=4616,3548,4636,3580,0
+
+[AREADEF a_hedge_maze_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hedge Maze Entrance
+GROUP=Misc
+P=1256,2302,0,0
+RECT=1252,2299,1258,2304,0
+RECT=1254,2159,1258,2163,0
+RECT=1032,2159,1036,2163,0
+RECT=1032,2299,1036,2304,0
+
+[AREADEF a_hedge_maze_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hedge Maze
+GROUP=Misc
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING|REGION_ANTIMAGIC_TELEPORT
+P=1152,2228,16,0
+RECT=1032,2159,1258,2304,0
+
+[AREADEF a_cove_graveyard_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cove Graveyard
+GROUP=Cove
+FLAGS=REGION_FLAG_GLOBALNAME
+P=2442,1117,8,0
+RECT=2423,1098,2455,1120,0
+RECT=2431,1080,2455,1099,0
+
+[AREADEF a_passage_from_sbritain_isle_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Passage from SBritain Isle
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5828,463,2,0
+RECT=5807,414,5864,475,0
+
+[AREADEF a_passage_from_vesper_Cemetery_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Passage from Vesper Cemetery
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5683,387,1,0
+RECT=5645,374,5699,440,0
+
+[AREADEF a_passage_from_brit_sewers_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Passage from Brit Sewers
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=6138,1406,6,0
+RECT=6118,1387,6143,1417,0
+
+[AREADEF a_passage_from_n_minoc_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Passage from N Minoc
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5753,435,77,0
+RECT=5706,408,5776,473,0
+
+[AREADEF a_ice_dungeon_orc_fort_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Dungeon Orc Fort
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5833,328,19,0
+RECT=5799,316,5870,381,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_ice_dungeon_lair_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Dungeon Lair
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5702,305,0,0
+RECT=5649,294,5713,350,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_ice_dungeon_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Dungeon Level 1
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5774,149,20,0
+RECT=5663,130,5891,274,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_passage_from_yew_to_lighthouse_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Passage from Yew to Lighthouse
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5749,359,2,0
+RECT=5732,316,5776,372,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_fire_dungeon_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fire Dungeon Level 2
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5702,1315,1,0
+RECT=5630,1284,5763,1401,0
+RECT=5630,1397,5662,1456,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_fire_dungeon_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fire Dungeon Level 1
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5790,1416,-40,0
+RECT=5663,1402,5884,1488,0
+RECT=5727,1480,5884,1519,0
+RECT=5764,1284,5884,1408,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_trinsic_passage_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Trinsic Passage Level 2
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5967,1409,45,0
+RECT=5938,1370,6025,1411,0
+RECT=5890,1285,6035,1370,0
+RECT=6035,1300,6048,1323,0
+
+[AREADEF a_trinsic_passage_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Trinsic Passage Level 1
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5900,1408,43,0
+RECT=5891,1371,5937,1414,0
+
+[AREADEF a_wrong_level_4_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wrong Level 4
+GROUP=Wrong
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5734,869,0,0
+RECT=5665,785,5873,1017,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_wrong_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wrong Level 3
+GROUP=Wrong
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5703,639,0,0
+RECT=5685,623,5722,668,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_wrong_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wrong Level 2
+GROUP=Wrong
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5690,568,25,0
+RECT=5641,516,5742,586,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_wrong_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wrong Level 1
+GROUP=Wrong
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5825,630,0,0
+RECT=5773,513,5884,636,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_shame_level_4_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Shame Level 4
+GROUP=Shame
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5876,22,-10,0
+RECT=5638,2,5889,122,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_shame_level_4_entryway_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Shame Level 4 Entryway
+GROUP=Shame
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5506,180,0,0
+RECT=5495,157,5520,194,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_shame_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Shame Level 3
+GROUP=Shame
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5516,142,25,0
+RECT=5379,133,5626,261,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_shame_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Shame Level 2
+GROUP=Shame
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5515,15,5,0
+RECT=5507,3,5632,126,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_shame_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Shame Level 1
+GROUP=Shame
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5395,126,0,0
+RECT=5379,5,5498,131,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_hythloth_level_4_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hythloth Level 4
+GROUP=Hythloth
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=6059,92,22,0
+RECT=6047,28,6122,107,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_hythloth_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hythloth Level 3
+GROUP=Hythloth
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=6083,148,-22,0
+RECT=6021,141,6130,235,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_hythloth_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hythloth Level 2
+GROUP=Hythloth
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5978,171,0,0
+RECT=5911,143,6002,243,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_hythloth_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hythloth Level 1
+GROUP=Hythloth
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5906,22,44,0
+RECT=5902,15,6001,114,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_destard_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Destard Level 3
+GROUP=Destard
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5136,985,10,0
+RECT=5125,954,5154,1020,0
+RECT=5153,982,5198,1020,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_destard_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Destard Level 2
+GROUP=Destard
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5144,802,5,0
+RECT=5123,794,5186,885,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_destard_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Destard Level 1
+GROUP=Destard
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5243,1004,0,0
+RECT=5121,771,5366,1025,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_despise_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Despise Level 1
+GROUP=Despise
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5501,570,59,0
+RECT=5378,517,5515,637,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_despise_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Despise Level 2
+GROUP=Despise
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5583,632,30,0
+RECT=5566,622,5591,643,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_despise_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Despise Level 3
+GROUP=Despise
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5518,673,20,0
+RECT=5378,644,5530,767,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_despise_level_4_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Despise Level 4
+GROUP=Despise
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5405,860,45,0
+RECT=5381,774,5627,1020,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_deceit_level_4_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Deceit Level 4
+GROUP=Deceit
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5307,655,0,0
+RECT=5252,644,5339,765,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_deceit_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Deceit Level 3
+GROUP=Deceit
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5138,653,0,0
+RECT=5124,644,5234,769,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_deceit_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Deceit Level 2
+GROUP=Deceit
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5307,536,0,0
+RECT=5275,525,5355,634,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_deceit_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Deceit Level 1
+GROUP=Deceit
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5187,635,0,0
+RECT=5135,526,5235,642,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_covetous_level_1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Level 1
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5456,1862,0,0
+RECT=5380,1848,5421,1963,0
+RECT=5421,1848,5510,1943,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_covetous_level_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Level 2
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5613,1998,0,0
+RECT=5425,1948,5624,2044,0
+RECT=5384,1964,5425,2030,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_covetous_level_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Level 3
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5579,1925,0,0
+RECT=5532,1821,5630,1930,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_covetous_level_4_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Level 4
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5539,1808,0,0
+RECT=5498,1797,5565,1821,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_covetous_level_5_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Level 5
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5467,1809,0,0
+RECT=5400,1794,5489,1834,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEFF a_covetous_passage_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Passage
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=2395,856,0,0
+RECT=2379,828,2412,885,0
+RECT=2349,885,2408,899,0
+RECT=2349,899,2370,917,0
+RECT=2396,883,2428,903,0
+TAG.MUSIC=mp3_mountaina
+
+[AREADEF a_vesper_docks_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Vesper Docks
+GROUP=Vesper
+FLAGS=REGION_FLAG_NOBUILDING
+P=3009,828,-3,0
+RECT=3008,815,3048,841,0
+RECT=3007,785,3021,798,0
+
+[AREADEF a_trinsic_garden_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Trinsic Garden
+GROUP=Trinsic
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_NOBUILDING
+P=1893,2772,0,0
+RECT=1874,2741,1911,2775,0
+
+[AREADEF a_training_grounds_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Training Grounds
+GROUP=Trinsic
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_NOBUILDING
+P=1975,2700,0,0
+RECT=1969,2690,2009,2705,0
+RECT=1960,2696,1969,2705,0
+
+[AREADEF a_skara_brae_ferry_dock_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Skara Brae Ferry Dock
+GROUP=Skara Brae
+FLAGS=REGION_FLAG_NOBUILDING
+P=726,2236,-3,0
+RECT=711,2232,730,2241,
+
+[AREADEF a_nujelm_palace_garden_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Nujel'm Palace Garden
+GROUP=Nujel'm
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_ALL|REGION_FLAG_NOBUILDING|REGION_ANTIMAGIC_TELEPORT|REGION_FLAG_GUARDED
+P=3651,1304,0,0
+RECT=3634,1297,3667,1316,0
+RECT=3638,1316,3667,1328,0
+RECT=3645,1328,3667,1336,0
+
+[AREADEF a_minoc_mine_1_1]
+NAME=Minoc Mine 1
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=2558,499,0,0
+RECT=2556,501,2562,504,0
+RECT=2556,474,2582,501,0
+EVENTS=r_default_rock
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_entrance_from_ntrinsic_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from N of Trinsic
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=1988,2064,-40,0
+RECT=1951,2063,1996,2072,0
+
+[AREADEF a_entrance_to_below_terathan_keep_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance to below Terathan Keep
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5342,1601,0,0
+RECT=5339,1597,5346,1605,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_exit_from_seaarmony_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from Sea of Harmony
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5973,2700,-5,0
+RECT=5964,2687,5984,2708,0
+
+[AREADEF a_entrance_into_britain_sewers_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance Into Britain Sewers
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=1490,1641,24,0
+RECT=1490,1635,1498,1648,0
+
+[ROOMDEF a_brit_sewers_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain Sewers Level 1
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GUARDED
+P=6032,1499,37,0
+RECT=6130,1450,6275,1515
+RECT=6150,1425,6275,1450
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[ROOMDEF a_brit_sewers_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain Sewers Level 2
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GUARDED
+P=6032,1499,37,0
+RECT=6025,1423,6143,1528,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_ophidian_lair_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ophidian Lair
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING
+P=5767,2633,46,0
+RECT=5750,2607,5785,2625,0
+RECT=5756,2624,5779,2635,0
+RECT=5752,2635,5771,2646,0
+
+[AREADEF a_cyclops_valley_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cyclops Valley
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING
+P=5142,2904,51,0
+RECT=5121,2826,5219,3072,0
+
+[AREADEF a_city_the_dead_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=City of the Dead
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING
+P=5220,3665,-3,0
+RECT=5194,3644,5247,3686,0
+
+[AREADEF a_orcish_lands_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Orcish Lands
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING
+P=6003,3254,-4,0
+RECT=5889,3188,6135,3326,0
+
+[AREADEF a_hoppers_bog_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hopper's Bog
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING
+P=6006,3464,6,0
+RECT=5890,3328,6134,3574,0
+EVENTS=r_swamp
+
+[AREADEF a_delucia_passage]
+EVENTS=r_default,r_default_water,r_default_tree,r_default_grass,r_default_rock
+NAME=Delucia Passage
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5955,1352,0,0
+RECT=5889,1283,6037,1415,0
+RECT=6037,1298,6050,1325,0
+
+[AREADEF a_terathan_keep_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Terathan Keep
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5451,3140,-60,0
+RECT=5124,1532,5371,1725,0
+RECT=5251,1725,5371,1748,0
+RECT=5276,1747,5371,1792,0
+RECT=5397,3083,5496,3176,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_terathan_keep_underground_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Terathan Keep Underground
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5341,1599,0,0
+RECT=5124,1536,5372,1717,0
+RECT=5276,1717,5371,1787,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_ice_dungeon_5]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Dungeon
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5876,148,25,0
+RECT=5638,128,5896,310,0
+RECT=5638,288,5724,372,0
+RECT=5784,287,5896,387,0
+EVENTS=r_dungeon
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_fire_dungeon_4]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fire Dungeon Level 1
+GROUP=T2A
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5790,1416,40,0
+RECT=5627,1282,5887,1491,0
+RECT=5726,1489,5887,1521,0
+EVENTS=r_dungeon
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_papua_4]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Papua
+GROUP=Papua
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_NOBUILDING
+P=5729,3209,-1,0
+RECT=5633,3088,5743,3329,0
+RECT=5743,3088,5840,3332,0
+
+[AREADEF a_delucia_5]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Delucia
+GROUP=Delucia
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=5272,3995,37,0
+RECT=5178,3945,5303,4060,0
+RECT=5303,3928,5314,4048,0
+RECT=5235,3930,5303,3945,0
+RECT=5226,3938,5235,3945,0
+RECT=5127,3945,5178,4083,0
+RECT=5178,4060,5270,4083,0
+
+[AREADEF a_fire_dungeon_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fire Dungeon Entrance
+GROUP=T2A Dungeons
+FLAGS=REGION_FLAG_NOBUILDING
+P=5758,2908,15,0
+RECT=5756,2906,5760,2911,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_exit_from_desert_w_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Exit from Desert W
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=5266,2761,-5,0
+RECT=5257,2748,5276,2767,0
+
+[AREADEF a_entrance_serpents_pillar_e_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance - Serpent's Pillar E
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=2984,2893,-5,0
+RECT=2974,2879,2996,2901,0
+
+[AREADEF a_entrance_from_temple_isle_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from Temple Isle
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_FLAG_NOBUILDING
+P=2494,3581,5,0
+RECT=2490,3572,2499,3581,0
+
+[AREADEF a_temple_isle_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Temple Isle
+GROUP=Trinsic
+FLAGS=REGION_FLAG_NOBUILDING
+P=2493,3604,0,0
+RECT=2431,3528,2562,3672,0
+TAG.ANNOUNCEMENT="You feel as though you are in a holy place."
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_entrance_from_moonglow_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Entrance from Moonglow
+GROUP=T2A Entrances & Exits
+FLAGS=REGION_ANTIMAGIC_TELEPORT|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED	//|REGION_FLAG_NODECAY
+P=4545,852,30,0
+RECT=4542,848,4550,852,0
+TAG.ANNOUNCEMENT="You feel the magic aura of this place."
+
+[AREADEF a_minoc_cave2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Minoc Cave2
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=2440,94,0,0
+RECT=2418,81,2442,113,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_north_territory_cave1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=North Territory Cave1
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=1984,262,8,0
+RECT=1973,251,1994,274,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_road_to_honesty_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Road to Honesty
+GROUP=Passages
+FLAGS=REGION_FLAG_NOBUILDING
+P=4225,519,5,0
+RECT=4208,516,4227,551,0
+RECT=4201,592,4214,611,0
+
+[AREADEF a_road_to_deceit_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Road to Deceit
+GROUP=Passages
+FLAGS=REGION_FLAG_NOBUILDING
+P=4059,485,0,0
+RECT=4067,426,4126,458,0
+RECT=4041,471,4083,493,0
+RECT=4067,458,4084,471,0
+
+[AREADEF a_ice_isle_cave_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Isle Cave
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=4054,440,3,0
+RECT=4018,421,4067,470,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_northern_valley_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Northern Valley
+GROUP=Minoc
+P=2629,48,38,0
+RECT=2605,35,2647,64,0
+
+[AREADEF a_minoc_cave3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Minoc Cave3
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=2471,64,0,0
+RECT=2447,39,2489,67,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_Humility]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Humility
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=4273,3702,0,0
+RECT=4268,3690,4280,3703,0
+
+[AREADEF a_chaos_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Chaos
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=1460,844,0,0
+RECT=1456,846,1459,841,0
+
+[AREADEF a_honesty_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Honesty
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=4215,563,41,0
+RECT=4207,560,4215,568,0
+
+[AREADEF a_sacrifice_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Sacrifice
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=3354,299,9,0
+RECT=3349,283,3361,299,0
+
+[AREADEF a_valor_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Valor
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=2491,3930,0,0
+RECT=2487,3926,2496,3936,0
+
+[AREADEF a_spirituality_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Spirituality
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=1601,2489,9,0
+RECT=1588,2484,1603,2497,0
+
+[AREADEF a_justice_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Justice
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=1301,639,16,0
+RECT=1295,626,1307,640,0
+
+[AREADEF a_honor_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Honor
+GROUP=Shrines
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GLOBALNAME|
+P=1729,3528,3,0
+RECT=1721,3524,1729,3531,0
+
+[AREADEF a_helpdesk]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Help Desk of Hell
+GROUP=Jails
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_ALL|REGION_FLAG_NOBUILDING|REGION_ANTIMAGIC_TELEPORT|REGION_FLAG_UNDERGROUND|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_GUARDED|
+P=5691,1501,0,0
+RECT=5682,1496,5708,1522,0
+TAG.GUARDOWNER=Hell\'s Helpers
+
+[AREADEF a_star_chamber_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Star Chamber
+GROUP=Green Acres
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=5150,1760,0,0
+RECT=5123,1743,5171,1792,0
+
+[AREADEF a_green_acres_3_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Green Acres 3
+GROUP=Green Acres
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_UNDERGROUND	//|REGION_FLAG_GUARDED
+P=5932,1945,0,0
+RECT=5121,2049,6143,2303,0
+RECT=5375,1535,5424,1792,0
+RECT=5423,1536,6143,1791,0
+RECT=5633,1777,6143,2049,0
+EVENTS=r_plains
+TAG.GUARDOWNER=GM
+
+[AREADEF a_green_acres_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Green Acres 2
+GROUP=Green Acres
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_UNDERGROUND	//|REGION_FLAG_GUARDED
+P=5250,392,15,0
+RECT=5120,256,5376,516,0
+EVENTS=r_plains
+TAG.GUARDOWNER=GM
+
+[AREADEF a_green_acres_3]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Green Acres
+GROUP=Green Acres
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING|REGION_FLAG_INSTA_LOGOUT|REGION_FLAG_UNDERGROUND	//|REGION_FLAG_GUARDED
+P=5454,1103,0,0
+RECT=5374,1079,5631,1280,0
+RECT=5630,1023,6143,1279,0
+RECT=5887,511,6143,1024,0
+EVENTS=r_plains
+TAG.GUARDOWNER=GM
+
+[AREADEF a_yew_cave1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Cave1
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=773,1684,45,0
+RECT=766,1683,778,1697,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_north_territory_mine2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=North Territory Mine2
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=1638,974,0,0
+RECT=1604,958,1650,1009,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_north_territory_mine1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=North Territory Mine1
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=1723,1065,0,0
+RECT=1713,1055,1753,1080,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_brit_mine1_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Brit Mine1
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=1443,1228,0,0
+RECT=1436,1215,1465,1252,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_yew_passage_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Passage
+GROUP=Passages
+FLAGS=REGION_FLAG_NOBUILDING
+P=367,1465,2,0
+RECT=305,1409,470,1498,0
+
+[AREADEF a_brit_passage2_n_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Brit Passage2 N
+GROUP=Passages
+FLAGS=REGION_FLAG_NOBUILDING
+P=1367,1175,0,0
+RECT=1346,1133,1395,1232,0
+
+[AREADEF a_north_territory_to_despise_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=North Territory to Despise
+GROUP=Passages
+FLAGS=REGION_FLAG_NOBUILDING
+P=1358,1088,0,0
+RECT=1351,1061,1377,1118,0
+
+[AREADEF a_brit_passage_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Brit Passage
+GROUP=Passages
+FLAGS=REGION_FLAG_NOBUILDING
+P=1122,1904,0,0
+RECT=1095,1863,1154,1935,0
+
+[AREADEF a_wrong_6]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wrong
+GROUP=Wrong
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5825,599,0,0
+RECT=5633,511,5886,1021,0
+
+[AREADEF a_shame_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Shame Entrance
+GROUP=Shame
+FLAGS=REGION_FLAG_NOBUILDING
+P=513,1561,0,0
+RECT=510,1557,517,1562,0
+
+[AREADEF a_shame_7]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Shame
+GROUP=Shame
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5395,126,0,0
+RECT=5377,2,5634,262,0
+RECT=5635,2,5895,126,0
+
+[AREADEF a_hythloth_6]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Hythloth
+GROUP=Hythloth
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5905,22,44,0
+RECT=5898,2,6136,246,0
+
+[AREADEF a_fire_island_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Fire Island
+GROUP=ALLMAP
+FLAGS=REGION_FLAG_GLOBALNAME
+P=4593,3507,20,0
+RECT=4094,3000,4917,4025,0
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_destard_5]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Destard
+GROUP=Destard
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5243,1004,0,0
+RECT=5120,770,5371,1028,0
+
+[AREADEF a_despise_6]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Despise
+GROUP=Despise
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5501,570,59,0
+RECT=5377,516,5631,1022,0
+
+[AREADEF a_deceit_6]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Deceit
+GROUP=Deceit
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5187,635,0,0
+RECT=5122,518,5370,770,0
+
+[AREADEF a_ice_isle_3]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ice Isle
+GROUP=Misc
+FLAGS=REGION_FLAG_GLOBALNAME
+P=4038,529,0,0
+RECT=3839,167,4309,773,0
+
+[AREADEF a_covetous_entrance_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Entrance
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING
+P=2499,918,0,0
+RECT=2495,914,2503,919,0
+
+[COMMENT AREADEF a_covetous_7]	//why does this exist? 
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous
+GROUP=Covetous
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GLOBALNAME
+P=5456,1862,0,0
+RECT=5376,1793,5577,2048,0
+RECT=5576,1791,5633,2048,0
+
+[AREADEF a_wind_courtyard_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wind Courtyard
+GROUP=Wind
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5247,24,15,0
+RECT=5201,8,5286,58,0
+RECT=5213,56,5278,99,0
+TAG.GUARDOWNER=the town
+
+[AREADEF a_wind_tunnels_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wind Tunnels
+GROUP=Wind
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5176,185,25,0
+RECT=5122,124,5199,162,0
+RECT=5122,160,5196,252,0
+RECT=5195,201,5268,249,0
+RECT=5253,189,5301,201,0
+RECT=5261,177,5300,189,0
+RECT=5284,151,5313,177,0
+RECT=5291,138,5316,156,0
+
+[AREADEF a_townWind]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wind
+GROUP=Wind
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND|REGION_FLAG_GUARDED|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_GATE
+P=5223,201,5,0
+RECT=5121,4,5373,255,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_wind
+
+[AREADEF a_outside_wind_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Outside Wind
+GROUP=Wind
+FLAGS=REGION_FLAG_NOBUILDING
+P=1465,989,0,0
+RECT=1347,881,1456,1010,0
+RECT=1375,847,1431,881,0
+RECT=1456,979,1466,1000,0
+
+[AREADEF a_sunspot_beach_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Sunspot Beach
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING
+P=139,1472,0,0
+RECT=108,1451,164,1492,0
+
+[AREADEF a_orc_valley_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Orc Valley
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING
+P=1049,1383,0,0
+RECT=919,1284,1102,1373,0
+RECT=977,1370,1091,1483,0
+
+[AREADEF a_monster_valley_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Monster Valley
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING
+P=1324,944,0,0
+RECT=1288,884,1343,1007,0
+
+[AREADEF a_great_northern_lake_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Great Northern Lake
+GROUP=Yew
+FLAGS=		//REGION_FLAG_NOBUILDING	//you should be able to place a house here
+P=1271,528,30,0
+RECT=1209,468,1351,599,0
+
+[AREADEF a_yew_crypts_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Crypts
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING
+P=971,766,0,0
+RECT=941,721,1025,838,0
+
+[AREADEF a_yew_orc_fort_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Orc Fort
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING
+P=633,1490,0,0
+RECT=622,1477,648,1498,0
+RECT=630,1475,639,1479,0
+
+[AREADEF a_townYew]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew
+GROUP=Yew
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=546,992,0,0
+RECT=306,1144,393,1264,0
+RECT=393,799,680,1264,0
+RECT=680,867,756,1031,0
+RECT=229,929,396,1095,0
+RECT=312,835,393,929,0
+RECT=190,704,395,859,0
+RECT=394,760,621,800,0
+RECT=678,1160,697,1229,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_yew
+
+[AREADEF a_vesper_Cemetery_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Vesper Cemetery
+GROUP=Vesper
+FLAGS=REGION_FLAG_NOBUILDING
+P=2781,867,0,0
+RECT=2727,839,2785,896,0
+
+[AREADEF a_townVesper]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Vesper
+GROUP=Vesper
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=2899,676,0,0
+RECT=2730,948,2826,999,0
+RECT=2820,773,2953,1011,0
+RECT=2844,608,2915,773,0
+RECT=2915,608,2983,657,0
+RECT=2983,623,3008,657,0
+RECT=2915,657,2963,773,0
+RECT=2953,738,3042,868,0
+RECT=2963,687,2993,738,0
+RECT=3042,808,3057,849,0
+RECT=2953,868,2992,962,0
+RECT=2828,692,2846,772,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_vesper
+
+[AREADEF a_townTrinsic]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Trinsic
+GROUP=Trinsic
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=1867,2780,0,0
+RECT=1791,2691,2066,2768,0
+RECT=1971,2875,2068,2924,0
+RECT=1811,2659,1983,2691,0
+RECT=1850,2631,1928,2659,0
+RECT=1831,2766,2072,2800,0
+RECT=1795,2792,2070,2875,0
+RECT=1811,2874,1939,2890,0
+RECT=1858,2890,1939,2899,0
+RECT=2055,2846,2089,2865,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_trinsic
+
+[AREADEF a_townSkaraBrae]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Skara Brae
+GROUP=Skara Brae
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=632,2233,0,0
+RECT=541,2108,645,2227,0
+RECT=645,2128,682,2220,0
+RECT=632,2220,714,2259,0
+RECT=560,2222,633,2264,0
+RECT=571,2258,627,2300,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_skarabra
+
+[AREADEF a_skarabrae_fields]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Skara Brae Fields
+GROUP=Skara Brae
+FLAGS=REGION_FLAG_GLOBALNAME	//REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=739,2236,0,0
+RECT=767,2150,837,2305,0
+RECT=873,2372,913,2429,0
+RECT=868,2304,885,2388,0
+RECT=714,2132,767,2366,0
+RECT=803,2305,868,2371,0	//these are fields outside skara brae
+RECT=767,2305,804,2327,0
+
+[AREADEF a_townSerphold]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Serpent's Hold
+GROUP=Serpent's Hold
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME	//|REGION_FLAG_GUARDED
+P=3010,3371,15,0
+RECT=2930,3337,3068,3485,0
+RECT=3051,3331,3074,3357,0
+RECT=2867,3388,2931,3524,0
+RECT=2931,3485,3028,3542,0
+RECT=2891,3524,2916,3534,0
+TAG.MUSIC=mp3_serpents
+
+[AREADEF a_townOcllo]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ocllo
+GROUP=Ocllo
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=3650,2519,0,0
+RECT=3588,2460,3707,2685,0
+RECT=3695,2558,3760,2705,0
+RECT=3707,2529,3730,2495,0
+TAG.MUSIC=mp3_ocllo
+
+[AREADEF a_nujelm_palace_2]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Nujel'm Palace
+GROUP=Nujel'm
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_ALL|REGION_FLAG_NOBUILDING|REGION_ANTIMAGIC_TELEPORT|REGION_FLAG_GUARDED
+P=3701,1279,20,0
+RECT=3667,1215,3696,1336,0
+RECT=3667,1336,3687,1341,0
+RECT=3696,1245,3712,1335,0
+RECT=3708,1245,3715,1314,0
+RECT=3714,1260,3722,1298,0
+RECT=3696,1225,3704,1245,0
+
+[AREADEF a_nujelm_Cemetery_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Nujel'm Cemetery
+GROUP=Nujel'm
+FLAGS=REGION_FLAG_NOBUILDING
+P=3536,1151,20,0
+RECT=3502,1139,3532,1163,0
+RECT=3530,1142,3553,1152,0
+RECT=3530,1127,3543,1143,0
+RECT=3517,1121,3540,1140,0
+
+[AREADEF a_townNujelm]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Nujel'm
+GROUP=Nujel'm
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=3732,1279,0,0
+RECT=3644,1178,3718,1346,0
+RECT=3644,1092,3718,1178,0
+RECT=3652,1050,3698,1092,0
+RECT=3605,1199,3644,1274,0
+RECT=3588,1177,3606,1246,0
+RECT=3534,1157,3588,1222,0
+RECT=3630,1293,3644,1346,0
+RECT=3696,1346,3770,1424,0
+RECT=3718,1175,3798,1347,0
+RECT=3758,1116,3798,1175,0
+RECT=3797,1240,3822,1310,0
+TAG.MUSIC=mp3_nujelm
+
+[AREADEF a_lycaeum_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Lycaeum
+GROUP=Moonglow
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=4310,1009,0,0
+RECT=4285,947,4336,1012,0
+
+[AREADEF a_moonglow_Cemetery_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Moonglow Cemetery
+GROUP=Moonglow
+FLAGS=REGION_FLAG_NOBUILDING
+P=4546,1333,8,0
+RECT=4527,1313,4558,1336,0
+RECT=4535,1296,4558,1313,0
+
+[AREADEF a_townZoo]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Moonglow Zoo
+GROUP=Moonglow
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_ANTIMAGIC_ALL|REGION_FLAG_NOBUILDING|REGION_ANTIMAGIC_TELEPORT||REGION_FLAG_GLOBALNAME
+P=4540,1378,20,0
+RECT=4479,1375,4525,1400,0
+RECT=4487,1353,4537,1375,0
+RECT=4525,1375,4537,1393,0
+TAG.ANNOUNCEMENT=Welcome to the Zoo!
+
+[AREADEF a_minoc_mining_camp_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Minoc Mining Camp
+GROUP=Minoc
+FLAGS=REGION_FLAG_NOBUILDING
+P=2583,529,15,0
+RECT=2559,515,2602,543,0
+
+[AREADEF a_townMagincia]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Magincia
+GROUP=Magincia
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=3714,2220,20,0
+RECT=3654,2094,3746,2263,0
+RECT=3746,2094,3783,2128,0
+RECT=3677,2016,3752,2094,0
+RECT=3746,2207,3814,2281,0
+RECT=3653,2263,3696,2300,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_magincia
+
+[AREADEF a_south_jhelom_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=South Jhelom
+GROUP=Jhelom
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=1438,3999,0,0
+RECT=1396,3954,1477,4045,0
+RECT=1376,3993,1396,4045,0
+RECT=1477,3964,1528,4019,0
+
+[AREADEF a_townJhelom]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jhelom
+GROUP=Jhelom
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=1383,3815,0,0
+RECT=1302,3685,1467,3790,0
+RECT=1317,3669,1339,3685,0
+RECT=1467,3667,1518,3723,0
+RECT=1337,3790,1467,3898,0
+RECT=1467,3843,1491,3882,0
+RECT=1360,3898,1385,3919,0
+TAG.MUSIC=mp3_jhelom
+
+[AREADEF a_orc_camp_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cove Orc Camp
+GROUP=Cove
+FLAGS=REGION_FLAG_NOBUILDING
+P=2171,1318,0,0
+RECT=2151,1343,2193,1374,0
+RECT=2159,1374,2193,1384,0
+RECT=2167,1384,2193,1392,0
+RECT=2175,1391,2200,1400,0
+RECT=2193,1358,2208,1384,0
+RECT=2183,1400,2192,1426,0
+RECT=2159,1319,2184,1343,0
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_townCove]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cove
+GROUP=Cove
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=2275,1210,0,0
+RECT=2203,1166,2256,1245,0
+RECT=2284,1219,2293,1235,0
+RECT=2256,1181,2284,1245,0
+RECT=2256,1166,2260,1181,0
+RECT=2203,1108,2243,1166,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_cove
+
+[AREADEF a_townBucsden]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Buccaneer's Den
+GROUP=Buccaneer's Den
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=2706,2163,0,0
+RECT=2621,2068,2661,2113,0
+RECT=2646,2179,2661,2213,0
+RECT=2661,2107,2763,2267,0
+RECT=2763,2124,2786,2143,0
+RECT=2661,2068,2735,2107,0
+EVENTS=r_bucs_den
+TAG.MUSIC=mp3_bucsden
+
+[AREADEF a_lord_blackthornes_castle_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Lord Blackthorne's Castle
+GROUP=Britain
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=1523,1449,15,0
+RECT=1500,1405,1550,1478,0
+RECT=1520,1478,1527,1494,0
+EVENTS=r_black_castle
+TAG.GUARDOWNER=Lord Blackthorne's Personal
+TAG.MUSIC=mp3_btcastle
+
+[AREADEF a_lord_britishs_castle_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+EVENTS=r_faction_area
+NAME=Lord British's Castle
+GROUP=Britain
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=1392,1625,30,0
+RECT=1294,1679,1411,1697,0
+RECT=1295,1559,1313,1577,0
+RECT=1392,1559,1410,1577,0
+RECT=1302,1577,1400,1680,0
+RECT=1313,1563,1392,1577,0
+RECT=1398,1623,1409,1629,0
+RECT=1407,1613,1416,1638,0
+EVENTS=r_brit_castle
+TAG.GUARDOWNER=Lord British's Personal
+TAG.MUSIC=mp3_lbcastle
+
+[AREADEF a_britain_graveyard_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain Graveyard
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1384,1492,10,0
+RECT=1336,1443,1391,1494,0
+RECT=1336,1494,1376,1511,0
+
+[AREADEF a_britain_west_guardtower_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain West Guardtower
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=962,1763,15,0
+RECT=952,1759,961,1769,0
+RECT=961,1761,971,1766,0
+EVENTS=r_guard_tower
+TAG.GUARDOWNER=the wilderness
+
+[AREADEF a_townBritain]
+EVENTS=r_brit,r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=1495,1629,10,0
+RECT=1408,1517,1691,1778,0
+RECT=1436,1494,1670,1517,0
+RECT=1522,1778,1641,1798,0
+RECT=1691,1532,1721,1595,0
+RECT=1388,1697,1410,1766,0
+TAG.GUARDOWNER=the city
+TAG.MUSIC=mp3_britain1,mp3_britain2
+
+[AREADEF a_yew_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Territory
+GROUP=ALLMAP
+P=823,1060
+RECT=47,21,918,2001,0
+RECT=917,260,1143,1493,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_northern_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Northern Territory
+GROUP=Northern Territory
+FLAGS=REGION_FLAG_GLOBALNAME
+P=1738,597,16,0
+RECT=1143,11,2260,1030,0
+RECT=1395,1083,2100,1166,0
+RECT=1143,1082,1402,1133,0
+RECT=1082,11,1144,246,0
+RECT=1143,1030,2112,1083,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_vesper_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Vesper Territory
+GROUP=Vesper
+P=3172,607,8,0
+RECT=2724,575,3595,1019,0
+RECT=2814,5,3593,577,0
+RECT=2725,1015,2839,1144,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_trinsic_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Trinsic Territory
+GROUP=ALLMAP
+P=1559,2647,0,0
+RECT=1495,2929,2267,3348,0
+RECT=1550,3344,2606,3692,0
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_skara_ter]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Skara Brae Territory
+GROUP=ALLMAP
+P=608,2092,0,0
+RECT=429,2008,924,2454,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_serpents_hold_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Serpent's Hold Territory
+GROUP=Serpent's Hold
+P=2863,3518,8,0
+RECT=2717,3243,3196,3678,0
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_Ocllo_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ocllo Island
+GROUP=Ocllo
+P=3544,2518,16,0
+RECT=3287,2332,3874,2963,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_nujelm_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Nujel'm Territory
+GROUP=Nujel'm
+P=3730,1279,0,0
+RECT=3429,1023,4060,1537,0
+TAG.MUSIC=mp3_plainsa
+
+[AREADEF a_moonglow_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Moonglow Territory
+GROUP=Moonglow
+P=4456,1235,0,0
+RECT=4104,774,5112,1582,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_townMoonglow]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Moonglow
+GROUP=Moonglow
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=4442,1172,0,0
+RECT=4379,1045,4439,1176,0
+RECT=4383,1021,4430,1045,0
+RECT=4439,1048,4497,1142,0
+RECT=4379,1176,4399,1181,0
+RECT=4439,1142,4489,1176,0
+RECT=4459,1176,4485,1184,0
+TAG.GUARDOWNER=the town
+TAG.MUSIC=mp3_moonglow
+
+[AREADEF a_minoc_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Minoc Territory
+GROUP=Minoc
+P=2623,466,14,0
+RECT=2389,2,2723,628,0
+RECT=2464,628,2723,708,0
+RECT=2280,1,2389,232,0
+RECT=2723,2,2809,572,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_mt_kendall_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Mt Kendall
+GROUP=Mines & Caves
+FLAGS=REGION_FLAG_NOBUILDING
+P=2593,477,60,0
+RECT=2552,448,2623,507,0
+RECT=2547,380,2590,448,0
+RECT=2590,413,2623,448,0
+RECT=2540,498,2554,514,0
+TAG.MUSIC=mp3_mountaina
+
+[AREADEF a_townMinoc]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Minoc
+GROUP=Minoc
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_GUARDED
+P=2466,544,0,0
+RECT=2460,559,2559,627,0
+RECT=2607,611,2628,628,0
+RECT=2413,465,2460,573,0
+RECT=2422,393,2460,465,0
+RECT=2460,538,2550,559,0
+RECT=2460,370,2541,538,0
+RECT=2582,570,2607,648,0
+RECT=2559,573,2582,628,0
+TAG.GUARDOWNER=the town
+EVENTS=r_default_rock,r_default_water,r_default_tree
+TAG.MUSIC=mp3_minoc
+
+[AREADEF a_magincia_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Magincia Territory
+GROUP=ALLMAP
+P=3647,2145,33,0
+RECT=3502,1988,3865,2322,0
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_jhelom_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Jhelom Territory
+GROUP=ALLMAP
+P=1414,3824,0,0
+RECT=987,3353,1545,4076,0
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_cove_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cove Territory
+GROUP=ALLMAP
+P=2360,1184,10,0
+RECT=2133,1031,2301,1434,0
+RECT=2264,710,2720,1094,0
+RECT=2299,1073,2720,1279,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_buccaneers_den_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Buccaneer's Den Territory
+GROUP=ALLMAP
+P=2706,2163,0,0
+RECT=2562,1918,3008,2380,0
+EVENTS=r_bucs_den
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_britain_territory_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain Territory
+GROUP=ALLMAP
+P=1261,1666,0,0
+RECT=1157,1391,1790,2048,0
+RECT=925,1503,1158,2047,0
+RECT=1152,1170,2126,1397,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_wastelands_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=WasteLands
+GROUP=ALLMAP
+FLAGS=REGION_FLAG_GLOBALNAME
+P=5632,3195,14,0
+RECT=5120,2305,6143,4095,0
+EVENTS=r_plains
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_dungeons]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Dungeons
+GROUP=ALLMAP
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_UNDERGROUND
+P=5554,887,30,0
+RECT=5120,1,6144,2303,0
+RECT=5170,1917,5190,1944,0
+RECT=5290,1955,5328,1987,0
+RECT=5197,1984,5210,1997,0
+RECT=6039,1327,6129,1385,0
+RECT=6039,1385,6081,1411,0
+EVENTS=r_dungeon,r_default_rock,r_default_water,r_default_tree,r_default_grass
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_guard_island_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Guard Island
+GROUP=Guard Towers
+P=1254,869,16,0
+RECT=1244,851,1264,887,0
+
+[AREADEF a_guard_post_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Guard Post
+GROUP=Guard Towers
+P=1681,2676,10,0
+RECT=1677,2672,1686,2681,0
+
+[AREADEFF a_guard_tower_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Guard Tower
+GROUP=Guard Towers
+P=2060,803,40,0
+RECT=2064,785,2077,798,0
+RECT=2065,809,2078,821,0
+RECT=2039,802,2052,814,0
+RECT=2058,793,2064,817,0
+RECT=2052,801,2058,809,0
+
+[AREADEFF a_guard_tower_2_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Guard Tower 2
+GROUP=Guard Towers
+P=1819,722,0,0
+RECT=1815,717,1824,728,0
+
+[AREADEF a_covetous_mine_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Covetous Mine
+GROUP=Mines & Caves
+P=2438,888,0,0
+RECT=2429,866,2448,911,0
+RECT=2448,879,2475,907,0
+RECT=2456,907,2475,941,0
+TAG.MUSIC=mp3_cave01
+
+[AREADEF a_beach_house_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Beach House
+GROUP=Misc
+P=1606,3531,0,0
+RECT=1602,3526,1611,3537,0
+
+[AREADEF a_ruins_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ruins
+GROUP=Moongates
+P=1609,3372,0,0
+RECT=1603,3366,1616,3379,0
+
+[AREADEF a_pontao]
+NAME=Pontao
+FLAGS=REGION_ANTIMAGIC_ALL|REGION_ANTIMAGIC_GATE|REGION_FLAG_NOBUILDING
+RECT=5232,1736,5263,1749,0
+RECT=5232,1748,5275,1779,0
+P=5264,1763,0,0
+GROUP=POD Areas
+
+[AREADEF a_mercado]
+NAME=Mercado
+FLAGS=REGION_ANTIMAGIC_ALL|REGION_ANTIMAGIC_GATE|REGION_FLAG_NOBUILDING
+RECT=5940,1937,5978,1981,0
+P=5941,1938
+GROUP=POD Areas
+
+[AREADEF a_Britain_Fields]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Britain Fields
+GROUP=Britain
+FLAGS=REGION_FLAG_GLOBALNAME|REGION_FLAG_NOBUILDING	//REGION_FLAG_GUARDED
+P=1366,1756,10,0
+RECT=1376,1743,1245,1833,0
+RECT=1379,1766,1428,1833,0
+RECT=1376,1743,1142,1702,0
+RECT=1376,1741,1388,1756,0
+TAG.GUARDOWNER=the city
+TAG.MUSIC=mp3_britain1,mp3_britain2
+
+[AREADEF a_farmland3_w_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland3 W
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1152,1576,0,0
+RECT=1136,1560,1168,1591,0
+
+[AREADEF a_farmland4_w_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland4 W
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1224,1604,0,0
+RECT=1208,1592,1239,1615,0
+
+[AREADEF a_farmland3_sw_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland3 SW
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1136,1792,0,0
+RECT=1120,1776,1151,1807,0
+
+[AREADEF a_farmland1_sw_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland1 SW
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1224,1724,0,0
+RECT=1208,1712,1240,1736,0
+
+[AREADEF a_farmland_4]	//this area is inside Ocllo 
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland
+GROUP=Cove
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=2224,1152,0,0
+RECT=2216,1144,2232,1160,0
+
+[AREADEF a_farmland1_w_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland1 W
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1232,1888,0,0
+RECT=1216,1872,1248,1904,0
+
+[AREADEF a_farmland4_sw_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland4 SW
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1320,1815,0,0
+RECT=1311,1798,1329,1833,0
+
+[AREADEF a_farmland2_sw_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland2 SW
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1200,1824,0,0
+RECT=1184,1808,1215,1839,0
+
+[AREADEF a_farmland2_w_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland2 W
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1192,1684,0,0
+RECT=1176,1672,1208,1695,0
+
+[AREADEF a_farmland5_w_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Farmland5 W
+GROUP=Britain
+FLAGS=REGION_FLAG_NOBUILDING
+P=1120,1624,0,0
+RECT=1104,1608,1135,1639,0
+
+[AREADEF a_Sak_teb]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Sak Teb
+GROUP=ALLMAP
+FLAGS=REGION_FLAG_GLOBALNAME
+P=5766,2920,37,0
+RECT=5644,2824,5864,3030,0
+EVENTS=r_plains
+
+[AREADEF a_desert_1]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Desert of Compassion
+GROUP=Shrines
+FLAGS=0//(NONE)
+P=1858,876,-1,0
+RECT=1801,805,2036,871,0
+RECT=2036,870,1814,902,0
+RECT=1814,901,1959,962,0
+RECT=1942,860,2020,915,0
+RECT=1919,895,2012,928,0
+TAG.MUSIC=mp3_plainsa
+
+[AREADEF a_bog_desolation]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Bog of Desolation
+GROUP=ALLMAP
+FLAGS=REGION_FLAG_NOBUILDING
+P=2047,999,0,0
+RECT=1956,934,2098,1099,0
+TAG.MUSIC=mp3_swampa
+
+[AREADEF a_swamp_destard]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Destard Swamps
+GROUP=ALLMAP
+FLAGS=REGION_FLAG_NOBUILDING
+P=1162,2870,0,0
+RECT=1088,2735,1268,3026,0
+TAG.MUSIC=mp3_swampa
+
+[AREADEF a_Rock_Ridge]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Rock Ridge
+GROUP=ALLMAP
+FLAGS=REGION_FLAG_GLOBALNAME
+P=4652,3656,100,0
+RECT=4638,3637,4674,3681,0
+RECT=4639,3636,4621,3669,0
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_Windemere_Woods]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Windemere Woods
+GROUP=ALLMAP
+P=3212,348,9,0
+RECT=3204,84,3520,848,0
+RECT=3236,116,3104,808,0
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_Wisp_Circle]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Wisp Circle
+GROUP=ALLMAP
+P=608,1702,0,0
+RECT=625,1691,609,1713
+TAG.MUSIC=mp3_foresta
+
+[AREADEF a_Yew_Lich_Ruin]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Yew Lich Ruin
+GROUP=ALLMAP
+P=758,1403,0,0
+RECT=740,1406,778,1400,0
+
+[AREADEF a_dungeon_solen]
+NAME=Solen hive
+FLAGS=region_antimagic_gate|region_flag_nobuilding|region_flag_underground
+RECT=5640,1777,5935,2039,0
+P=5803,1920,0,0
+GROUP=Other Dungeons
+TAG.MUSIC=mp3_dungeon2,mp3_dungeon9
+
+[AREADEF a_Minax_Stronghold]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+EVENTS=r_faction_area
+NAME=Minax Stronghold
+GROUP=ALLMAP
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING
+P=1212,2574,0,0
+RECT=1103,2615,1213,2579.0
+
+[AREADEF a_shadowlords_stronghold]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+EVENTS=r_faction_area
+NAME=Shadowlord's Stronghold
+GROUP=ALLMAP
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING
+RECT=943,719,959,696,0
+RECT=959,696,967,687,0
+
+[AREADEF a_councilofmages_stronghold]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+EVENTS=r_faction_area
+NAME=Parliament
+GROUP=Magincia
+FLAGS=REGION_ANTIMAGIC_GATE|REGION_ANTIMAGIC_RECALL_OUT|REGION_ANTIMAGIC_RECALL_IN|REGION_FLAG_NOBUILDING|REGION_FLAG_GUARDED
+P=3779,2259,20,0
+RECT=3778,2239,3810,2276,0
+RECT=3761,2239,3788,2232,0
+RECT=3744,2263,3778,2255,0
+RECT=3756,2280,3778,2263,0
+RECT=3788,2239,3811,2222,0
+
+[AREADEF a_Valor_Island]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Valor Island
+GROUP=ALLMAP
+P=2460,3927,0
+RECT=2391,3873,2545,3962
+RECT=2434,3962,2545,4047
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_Amoeba_Island]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Amoeba Island
+GROUP=ALLMAP
+P=2144,3954,3
+RECT=2144,3884,2190,3904
+RECT=2106,3904,2190,3962
+RECT=2107,3962,2207,4014
+TAG.MUSIC=mp3_junglea
+
+[AREADEF a_Ocllo_Moongate]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ocllo Moongate
+GROUP=Ocllo
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_GLOBALNAME
+P=3650,2519,0,0
+RECT=3721,2501,3730,2495,0
+
+[AREADEF a_ocllo_training_area]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ocllo Training Area
+GROUP=Ocllo
+FLAGS=REGION_FLAG_GUARDED|REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=3724,2466,36
+RECT=3707,2495,3739,2452,0
+
+[AREADEF a_ocllo_underound_tunnels]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Ocllo Underground Tunnels
+GROUP=Ocllo
+FLAGS=REGION_FLAG_UNDERGROUND|REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=6805,066,0,0
+RECT=6795,20,6930,205
+RECT=6770,205,6880,305
+
+[AREADEF a_ocllo_cannibal_island]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Cannibal Island
+GROUP=Ocllo
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=3544,2676,7,0
+RECT=3522,2642,3575,2697
+
+[AREADEF a_event_arena_large]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Large Event Arena
+GROUP=Event Arenas
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME
+P=6644,469,20,0
+RECT=6601,508,6691,425,0
+
+[AREADEF a_event_staging_area]
+EVENTS=r_default,r_default_rock,r_default_water,r_default_tree,r_default_grass
+NAME=Event Staging Area
+GROUP=Event Arenas
+FLAGS=REGION_FLAG_NOBUILDING|REGION_FLAG_GLOBALNAME|REGION_FLAG_SAFE
+P=6623,295,0,0
+RECT=6603,275,6646,318
+
+
+
+
+[EOF]

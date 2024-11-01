@@ -1,0 +1,88 @@
+//extra items needed
+
+[ITEMDEF i_addon_trash_barrel]
+ID=i_barrel_open
+NAME=trash barrel
+
+ON=@Create
+	COLOR=946
+	ATTR=010
+
+ON=@Timer
+if !(<ATTR> & attr_decay)
+	if (<COUNT>)
+		MESSAGE @,,1 Emptying the trashcan!
+		EMPTY
+	endif
+	return 1
+endif
+
+ON=@DropOn_Self
+if (<RESCOUNT> >= 50)
+	TOPOBJ.MESSAGE @,,1 The trash is full!  Emptying!
+	EMPTY
+else
+	TOPOBJ.MESSAGE @,,1 The item will be deleted in three minutes.
+	timer=180
+endif
+
+[itemdef 044CA]
+defname=i_small_soul_forge
+name=small sould forge
+RESOURCES=4 i_stone_marble
+CATEGORY=Decoration - High Seas
+SUBSECTION=Forge
+DESCRIPTION=small sould forge
+
+[itemdef 01185]
+defname=memorialgwenn
+name=Memorial to Gween
+RESOURCES=4 i_stone_marble
+WEIGHT=20
+CATEGORY=Decoration - Dungeons and The Dead
+SUBSECTION=Graves & Gravestones
+DESCRIPTION=Gween Memorial
+DUPELIST=01186,01187,01188,01189
+[ITEMDEF 01186]
+//Gween Memorial
+DUPEITEM=01185
+[ITEMDEF 01187]
+//Gween Memorial
+DUPEITEM=01185
+[ITEMDEF 01188]
+//Gween Memorial
+DUPEITEM=01185
+[ITEMDEF 01189]
+//Gween Memorial
+DUPEITEM=01185
+
+
+[itemdef 02674]
+defname=i_haramaki_do
+name=haramaki-do
+CATEGORY=Decoration - Samurai Empire
+SUBSECTION=Decorative Armor
+DESCRIPTION=haramaki-do
+
+[itemdef 03c9]
+defname=Stone_Wall_And_Vine_Addon
+name=magic vines
+//DEFNAME=i_door_secret_stone_1
+RESOURCES=100 i_rock_plain
+CATEGORY=Buildings - Doors
+SUBSECTION=Secret Door (dungeon)
+DESCRIPTION=@ (secret door)
+TYPE=T_DOOR
+
+on=@dclick
+src.sysmessage You try to examine the strange wall but the vines get in your way.
+//return 1
+
+[itemdef 03660]
+defname=i_globe_of_sosaria
+name=Globe of Sosaria
+CATEGORY=Decoration - HS
+SUBSECTION=Items HS
+DESCRIPTION=Globe of Sosaria
+
+[EOF]

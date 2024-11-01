@@ -1,0 +1,331 @@
+[chardef c_h_the_stranger]
+id=c_man
+name=The Stranger
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=The Stranger
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=
+	color=083ea
+	str=65535
+	dex=65535
+	int=65535
+	swordsmanship=65535
+	tactics=65535
+	itemnewbie=i_hair_short
+	color=096d
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	item=i_chainmail_tunic
+	item=i_tunic
+	color=colors_white
+	item=i_leather_gloves
+	color=colors_brown
+	item=i_chainmail_leggings
+	item=i_boots_calf
+	color=colors_brown
+	item=i_sword_long
+
+[chardef c_h_lord_british]
+id=c_man
+name=Lord British
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Lord British
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Ruler of Britannia
+	color=083ea
+	str=65535
+	dex=65535
+	int=65535
+	swordsmanship=65535
+	tactics=65535
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	itemnewbie=i_person_lord_british
+
+
+[chardef c_h_blackthorne]
+id=c_man
+name=Lord Blackthorne
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Blackthorne
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=Lord British's Advisor
+	color=083ea
+	str=65535
+	dex=65535
+	int=65535
+	swordsmanship=65535
+	tactics=65535
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	itemnewbie=i_person_black_thorne
+
+
+[chardef c_h_dupre]
+id=c_man
+name=Sir Dupre
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Dupre
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Paladin
+	color=083ea
+	str=65535
+	dex=65535
+	int=65535
+	swordsmanship=65535
+	tactics=65535
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	itemnewbie=02050
+
+[chardef c_h_lolo]
+id=c_man
+name=Lolo
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Lolo
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Bard
+	color=083ea
+	str=65535
+	dex=65535
+	int=65535
+	swordsmanship=65535
+	tactics=65535
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	itemnewbie=i_surcoat
+	color=colors_green
+	itemnewbie=i_leather_sleeves
+	itemnewbie=i_leather_leggings
+	itemnewbie=i_shoes_plain
+	color=colors_brown
+	
+
+[chardef c_h_chuckles]
+id=c_man
+name=Chuckles
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Chuckles
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Court Jester
+	color=083ea
+	str=100
+	dex=100
+	dex=100
+	item=i_hair_short
+	color=colors_hair
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	item=i_hat_jester
+	color=colors_all
+	item=i_jester_suit
+	color=colors_all
+	item=i_pants_short
+	color=colors_all
+	item=i_boots_calf
+
+[chardef c_h_mondain]
+id=c_man
+name=Mondain
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Mondian
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Wizard
+	color=083ea
+	str=32767
+	dex=32767
+	int=32767
+	title=the Wizard
+	itemnewbie=i_beard_goatee
+	color=colors_black
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	item=i_doublet
+	color=0d
+	item=i_skirt_long
+	color=colors_green
+	item=i_sandals
+	color=colors_black
+	item=i_ring_gold
+	item=i_necklace_gold
+
+[chardef c_h_minax]
+id=c_woman
+name=Lady Minax
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Minax
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Dark Mistress
+	color=083ea
+	str=32767
+	dex=32767
+	int=32767
+	itemnewbie=i_hair_long
+	color=0455
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	itemnewbie=i_armor_female_studded
+ 	color=0455
+	itemnewbie=i_cape
+	color=066d
+	itemnewbie=i_leather_gloves
+	color=066d
+	itemnewbie=i_sandals
+	color=0455
+	itemnewbie=i_necklace_gold
+	color=038a
+
+
+[chardef c_sherry_the_mouse]
+id=c_rat
+name=Sherry the Mouse
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Sherry the Mouse
+
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	str=32767
+	dex=32767
+	int=32767
+
+
+[chardef c_h_geoffrey]
+id=c_man
+name=Geoffrey
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Sir Geoffrey
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Captain of the Royal Guard
+	color=083ea
+	str=100
+	dex=100
+	dex=100
+	item=i_hair_short
+	color=colors_hair
+	itemnewbie=i_backpack
+	item=i_beard_mustache
+	color=066e
+
+on=@npcrestock
+	item=i_chainmail_coif
+	item=i_platemail_chest
+	item=i_platemail_arms
+	item=i_tunic
+	color=0238
+	item=i_pants_short
+	color=021a
+	item=i_shoes_plain
+	color=021a
+	item=i_halberd
+
+
+[chardef c_h_nystul]
+id=c_man
+name=Nystul
+can=mt_nonmover|mt_usehands|mt_equip
+
+CATEGORY=Custom
+SUBSECTION=Special
+DESCRIPTION=Nystul
+
+on=@create
+	npc=brain_human
+	flags |= statf_invul
+	title=the Royal Magincian
+	color=083ea
+	str=100
+	dex=100
+	dex=100
+	item=i_hair_short
+	color=096a
+	item=i_beard_short_med
+	color=096a
+	itemnewbie=i_backpack
+
+on=@npcrestock
+	item=i_hooded_shroud
+	color=0456
+	item=i_pants_short
+	color=021a
+	item=i_sandals
+	color=021a
+	item=i_spellbook
+
+
+//mariah mage
+//jaana the tinkner
+//shamino the ranger
+//katrina the shepherdess
+
+
+
+
+[EOF]
+	

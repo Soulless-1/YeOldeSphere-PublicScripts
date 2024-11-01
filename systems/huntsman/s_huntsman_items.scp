@@ -1,0 +1,97 @@
+//Huntsman/Mondains Horde System by Soulless
+//v1.0
+//12:29 PM 1/16/2022
+
+
+[itemdef i_huntsman_contract]
+defname=i_huntsman_contract
+id=i_scroll_x_red
+name=huntsman contract
+type=t_script
+weight=0
+
+on=@create
+color=color_o_dull_copper
+
+on=@dclick
+ref1=<more2>	
+if (<topobj> != <src>) && !(<src.isgm>) 
+  src.sysmessage You cannot use this where it is.
+  return 1
+elseif !(<src.findid.i_npc_guild_huntsman>)
+  src.sysmessage You are unable to read the markings on this scroll.
+  return 1
+elseif !(<ref1.isvalid>) || !(<ref1.ischar>) || !(<ref1.isevent.e_mondains_horde>) 
+  src.sysmessage This contract has lost it's enchantment, the target must be gone.
+  return 1
+elseif (<link> != <src>) && !(<src.isgm>) 
+  src.sysmessage this contract is not bound to you and you cannot use it.
+  return 1
+endif
+sdialog d_huntsman_contract
+src.consume i_huntsman_gump_arrow
+serv.newitem i_huntsman_gump_arrow
+new.link=<more2>
+new.equip
+new.timer=0
+return 1
+
+on=@destroy
+ref1=<more2>
+if (<ref1.isvalid>) && (<ref1.ischar>) && (<ref1.isevent.e_mondains_horde>)
+  ref1.remove		//if this contract is removed, remove the npc the contract is for
+endif
+
+[itemdef i_horde_monster_memory]
+defname=i_horde_monster_memory
+id=i_memory
+name=Horde Monster Memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+ref1=<more2>	//uid of the contract for this monster
+if (<ref1.isvalid>) 
+  ref2=<ref1.topobj>	//holder of the contract
+  if (<ref2.isvalid>) 
+    ref1.topobj.sysmessage Your contract for <topobj.name> has expired.	
+  endif
+  ref1.remove	//delete contract
+endif
+topobj.remove	//delete monster
+return 1
+
+[itemdef i_mondains_horde_cache]	//this will be modified on monster to monster basis
+defname=i_mondains_horde_cache
+id=0e80		//brass box
+name=Mondain's Horde Cache
+type=t_container
+
+on=@create
+events=+t_mondains_horde_cache
+
+[itemdef i_huntsman_gump_arrow]
+defname=i_huntsman_gump_arrow
+id=i_memory
+name=Huntsman Gump Arrow
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+if !(<link.isvalid>) || !(<topobj.isdialogopen d_huntsman_contract>)
+  topobj.f_arrowquest_object 0,<def0.arrowquest_huntsman>
+  remove
+elseif (<topobj.region.defname> != <link.region.defname>) 
+  topobj.f_arrowquest_object 0,<def0.arrowquest_huntsman>
+else 
+  topobj.f_arrowquest_object <link>,<def0.arrowquest_huntsman>
+  trysrc <topobj> src.message <topobj.f_tracking_get_quarry_distance <link>>
+endif
+timer=4
+return 1
+
+on=@unequip
+src.f_arrowquest_object 0,<def0.arrowquest_huntsman>
+
+
+[EOF]

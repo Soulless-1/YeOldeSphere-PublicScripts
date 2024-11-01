@@ -1,0 +1,37 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2007
+//www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: 14-March-2007
+VERSION=0.56b
+
+[itemdef i_sphere_townstone_blank_entry]
+id=i_gravestone
+type=t_normal
+
+[ITEMDEF i_deed_townstone]
+ID=i_deed
+NAME=Deed to a Townstone
+VALUE=25000
+CATEGORY=Provisions - Deeds
+SUBSECTION=Guild and Town Stones
+DESCRIPTION=Townstone
+
+ON=@Create
+   MORE=i_townstone
+
+
+[ITEMDEF i_townstone]
+DEFNAME=i_townstone
+ID=0edd
+NAME=Townstone
+TYPE=T_STONE_TOWN
+VALUE=15000
+
+
+[EOF]

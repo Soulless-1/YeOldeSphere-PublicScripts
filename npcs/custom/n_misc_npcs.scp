@@ -1,0 +1,112 @@
+
+
+[CHARDEF c_h_stripper_f]
+NAME=#NAMES_HUMANFEMALE the Entertainer //Exotic Dancer
+ID=C_WOMAN
+CAN=mt_usehands|mt_equip|mt_walk	//|mt_nonmover
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CATEGORY=Custom
+SUBSECTION=Casino
+DESCRIPTION=Stripper
+
+ON=@Create
+NPC=brain_human
+COLOR=colors_skin
+STR={50 100}
+DEX={121 129}
+INT={1 25}
+WRESTLING=1000
+ITEMNEWBIE=i_hair_long
+COLOR=colors_hair
+ITEMNEWBIE=i_stripper_timer
+
+
+ON=@NPCRestock
+itemnewbie=i_boots_thigh
+color={0490 0495}
+itemnewbie=i_armor_female_shorts_spiked
+color={0490 0495}
+itemnewbie=i_dress_plain
+color={0490 0495}
+itemnewbie=i_leather_gloves
+color={0490 0495}
+itemnewbie=i_bracelet_gold
+color={0490 0495}
+itemnewbie=i_earrings_gold
+color={0490 0495}
+itemnewbie=i_ring_gold
+color={0490 0495}
+
+
+[itemdef i_stripper_timer]
+defname=i_stripper_timer
+name=stripper timer
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@create
+more1=24
+timer=1
+
+on=@timer
+if (<more1>)
+  more1 -=1
+  if (<topobj.findlayer.<eval <more1>>>) && (<more1>!=11) && (<more1>!=21)
+    topobj.bounce <topobj.findlayer.<eval <more1>>.uid>
+  endif
+  if !(<R4>)
+    dorand 2
+      topobj.f_stripper_speak
+      topobj.f_stripper_emote
+    enddo
+  endif
+  topobj.nomove 2
+  topobj.anim {16 17}
+  timer=10
+  return 1
+else
+  more1=24
+  timer=60
+  forcont <topobj.findlayer.21.uid> 1
+    if (<type>==t_clothing) || (<type>==t_armor) || (<type>==t_jewelry)
+      color={0490 0495}
+      topobj.equip <uid>
+    endif
+  endfor
+  topobj.nomove 2
+  topobj.bow
+  return 1
+endif
+
+[function f_stripper_speak]
+dorand 10
+  say Hark! A jig for all ye merry!
+  say Raise a tankard and tap those toes!
+  say A toast to the revelers! 
+  say Gentlemen, brandish your handkerchiefs with glee!
+  say Hoist a flagon high!
+  say Tonight, we celebrate life with the music!
+  say Let cares be cast aside on this joyous night!
+  say A plague on shyness! 
+  say Are your hearts filled with revelry, good people? 
+  say A mighty cheer for the tireless dancers who grace this hall!
+  say May your journeys be filled with song and laughter!
+enddo
+
+[function f_stripper_emote]
+dorand 7
+  emote wave
+  emote dance
+  emote twirl
+  emote wink slyly
+  emote blow a kiss
+  emote spin elegantly
+  emote smily devilishly
+enddo
+
+
+
+
+[EOF]

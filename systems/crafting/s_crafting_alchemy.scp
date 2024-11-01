@@ -1,0 +1,108 @@
+
+[defname crafting_alchemy]
+crafting_alchemy_flags 		0		//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool 080=emote
+crafting_alchemy_anim 		33		//crafing anim
+crafting_alchemy_sound		0242,0		//crafting sound
+crafting_alchemy_tool		t_tool_alchemy	//event associated with crafting item
+
+crafting_alchemy_emote_success		//pour the completed potion into a bottle
+crafting_alchemy_emote_fail		//toss the failed mixture from the mortar
+
+crafting_alchemy_0_name LAST TEN		//this will be generated as people craft
+
+crafting_alchemy_1_name ENCHANCEMENT
+crafting_alchemy_1_0 i_potion_AgilityLess
+crafting_alchemy_1_1 i_potion_Agility
+crafting_alchemy_1_2 i_potion_AgilityGreat
+crafting_alchemy_1_3 i_potion_Nightsight
+crafting_alchemy_1_4 i_potion_StrengthLess
+crafting_alchemy_1_5 i_potion_Strength
+crafting_alchemy_1_6 i_potion_StrengthGreat
+crafting_alchemy_1_7 i_potion_CleverLess
+crafting_alchemy_1_8 i_potion_Clever
+crafting_alchemy_1_9 i_potion_CleverGreat
+crafting_alchemy_1_10 i_potion_StoneskinLess
+crafting_alchemy_1_11 i_potion_Stoneskin
+crafting_alchemy_1_12 i_potion_StoneskinGreat
+crafting_alchemy_1_13 i_potion_Steelskin
+crafting_alchemy_1_14 //i_potion_Trance
+crafting_alchemy_1_15 //i_potion_TranceGreat
+crafting_alchemy_1_16
+
+crafting_alchemy_2_name RESTORATIVE
+crafting_alchemy_2_0 i_potion_HealLess
+crafting_alchemy_2_1 i_potion_Heal
+crafting_alchemy_2_2 i_potion_HealGreat
+crafting_alchemy_2_3 i_potion_Refresh
+crafting_alchemy_2_4 i_potion_RefreshTotal
+crafting_alchemy_2_5 i_potion_CureLess
+crafting_alchemy_2_6 i_potion_Cure
+crafting_alchemy_2_7 i_potion_CureGreat
+crafting_alchemy_2_8 i_potion_ManaLess
+crafting_alchemy_2_9 i_potion_Mana
+crafting_alchemy_2_10 i_potion_ManaGreat
+crafting_alchemy_2_11 i_potion_ManaTotal
+crafting_alchemy_2_12 i_potion_RestoreLess
+crafting_alchemy_2_13 i_potion_Restore
+crafting_alchemy_2_14 i_potion_RestoreGreat
+crafting_alchemy_2_15 i_potion_Sustenance
+crafting_alchemy_2_16 i_potion_Freedom
+
+crafting_alchemy_3_name OFFENSIVE
+crafting_alchemy_3_0 i_potion_ExplosionLess
+crafting_alchemy_3_1 i_potion_Explosion
+crafting_alchemy_3_2 i_potion_ExplosionGreat
+crafting_alchemy_3_3 i_potion_PoisonLess
+crafting_alchemy_3_4 i_potion_Poison
+crafting_alchemy_3_5 i_potion_PoisonGreat
+crafting_alchemy_3_6 i_potion_PoisonDeadly
+
+crafting_alchemy_4_name MISC
+crafting_alchemy_4_0 i_potion_Shrink
+crafting_alchemy_4_1 i_potion_Invisibility
+crafting_alchemy_4_2 i_potion_Incognito
+crafting_alchemy_4_3 i_potion_Gender
+crafting_alchemy_4_4 //i_potion_BeastformLess
+crafting_alchemy_4_5 //i_potion_Beastform
+crafting_alchemy_4_6 //i_potion_BeastformGreat
+crafting_alchemy_4_7 //i_potion_MonsterLess
+crafting_alchemy_4_8 //i_potion_Monster
+crafting_alchemy_4_9 //i_potion_MonsterGreat
+crafting_alchemy_4_10 //i_potion_Chameleon
+
+crafting_alchemy_5_name //DEGNERATIVE
+crafting_alchemy_5_0 //i_potion_Clumsiness	
+crafting_alchemy_5_1 //i_potion_Confusion
+crafting_alchemy_5_2 //i_potion_ForgetLess
+crafting_alchemy_5_3 //i_potion_Forget
+crafting_alchemy_5_4 //i_potion_ForgetGreat
+crafting_alchemy_5_5 //i_potion_Weakness
+
+
+///////////////////////////////
+// Alchemy Post Craft
+
+[function f_alchemy_prerequisite]
+return 1	//always allowed to do alchemy
+
+[function f_alchemy_pre_craft]
+
+[function f_alchemy_post_craft]
+ref1=<args>
+if (<tag0.race> == 4)	//gnomes get +5% to potion potency
+  ref1.more2 += <eval ( <ref1.more2> *5) /100>
+  ref1.events=+t_gnomish
+endif
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+
+
+
+
+
+
+[EOF]

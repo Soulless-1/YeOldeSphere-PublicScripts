@@ -1,0 +1,1431 @@
+//****************************************************************************
+//SPHERE by : Menasoft ©1997-2004
+//www.sphereserver.com
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Monday, January 17th, 2005
+// VERSION=0.56a
+
+
+
+//cant get clear list to work, look at it again		//wrong keyword?
+//make sell dialog and able to list it with red sign
+//add house decorate menu and denames for it	//maybe... maybe not
+
+
+[DIALOG d_house_menu]
+200,50
+
+page 0	
+				
+resizepic 10 10 5054 400 455
+gumppictiled 160 20 240 100 2624					
+checkertrans 160 20 240 100    						
+gumppictiled 20 130 383 267 2624				
+checkertrans 20 130 383 267							
+gumppictiled 20 415 383 40 2624						
+checkertrans 20 415 383 40						
+gumppic 20 20 100							
+dhtmlgump 35 40 100 60 0 0 <def.center><name> 		
+button 160 20 4005 4007 0 1 1
+dtext 205 20 1000 INFORMATION
+button 160 40 4005 4007 0 2 2
+dtext 206 40 1000 SECURITY
+button 160 60 4005 4007 0 3 3
+dtext 205 60 1000 STORAGE
+button 160 80 4005 4007 0 4 4
+dtext 205 80 1000 CUSTOMIZE
+button 160 100 4005 4007 0 5 5
+dtext 205 100 1000 OWNERSHIP
+
+if (<f_house_isowner <src>>) || (<GetCoownerPos <src>> >= 0) || (<GetFriendPos <src>> >= 0) || (<src.isgm>)
+  button 20 415 4005 4007 1 0 1
+  dtext 60 415 1000 <qval (<housetype>==house_private)?Grant Access:Banish>
+  button 20 435 4005 4007 1 0 2
+  dtext 60 435 1000 <qval (<housetype>==house_private)?Revoke Access:Lift a Ban>
+else
+  dtext 70 415 1263 <qval (<housetype>==house_private)?Grant Access:Banish>
+  dtext 70 435 1263 <qval (<housetype>==house_private)?Revoke Access:Lift a Ban>
+endif
+
+button 260 435 4005 4007 1 0 3
+dtext 300 435 1000 Eject Person
+
+
+page 1	
+				//main menu
+button 160 20 4006 4006 0 1
+dtext 205 20 1263 INFORMATION
+dtext 30 140 1000 Owned By:
+dtext 230 140 1000 <owner.name> 
+
+dtext 30 170 <qval (<tag0.demolish>)?32 This house is improperly placed.:1263 This house is properly placed.>
+dtext 30 190 1263 This house is of modern design.
+dtext 30 210 1263 This house is of <qval (<type>==t_multi_custom)?custom-built:prebuilt> design.
+if (<housetype>==house_public)
+  dtext 30 230 1263 This house is open to the public.
+elseif (<housetype>==house_private)
+  dtext 30 230 1263 This house is private.
+elseif (<housetype>==house_guild)
+  dtext 30 230 1263 This house is for guild members only.
+endif
+
+if (<tag0.forsale>)
+  dtext 30 260 26 This house is currently for sale for 
+  dtext 300 260 26 <dtag0.price> gp
+endif
+
+
+local.v=<f_house_value>
+local.t=<muldiv <local.v>,<ddef0.house_property_tax>,100>
+
+if (<tag0.demolish>)
+  dtext 30 250 1263 This house will be demolished in <qval (<eval <timer>/86400> < 1)? <eval (<timer>%86400)/3600> hours and <eval ((<timer>%86400)%3600)/60> minutes.:<eval <timer>/86400> days and <eval (<timer>%86400)/3600> hours>
+elseif (<def0.house_can_decay>)
+  if (<tag0.house_nodecay>)
+    dtext 30 250 1263 This house has been made exempt from decay.
+  elseif (<def0.house_property_tax>)
+    dtext 30 250 1263 Propery Tax covered for <qval (<eval <timer>/86400> < 1)? <eval (<timer>%86400)/3600> hours and <eval ((<timer>%86400)%3600)/60> minutes.:<eval <timer>/86400> days>
+    dtext 30 270 1263 Property Tax for this house <dlocal.t>gp every <def0.house_can_decay> days
+  else
+    dtext 30 280 1263 This house will decay in <qval (<eval <timer>/86400> < 1)? <eval (<timer>%86400)/3600> hours and <eval ((<timer>%86400)%3600)/60> minutes.:<eval <timer>/86400> days and <eval (<timer>%86400)/3600> hours>
+  endif
+else
+  dtext 30 250 1263 This house is automatically refreshed.
+endif
+
+if (<housetype>==house_guild)		//checkme
+  dtext 30 270 1263 This house is designated as the [<uid.<tag0.guildstone>.abbrev>] guild house.
+endif
+
+dtext 30 310 1263 Built On:
+dtext 30 330 1263 Last Traded:
+dtext 30 350 1263 House Value
+
+dtext 250 310 1000 <tag0.builton>
+dtext 250 330 1000 <tag.lasttraded>
+dtext 250 350 1000 <dlocal.v> gp
+dtext 30 380 1263 Number of visits this house has had:
+dtext 315 380 1000 <dtag0.visitors>
+
+
+page 2				//security
+
+button 160 40 4006 4006 0 2
+dtext 205 40 1263 SECURITY
+if (<f_house_isowner <src>>) || (<src.isgm>)
+  button 20 150 4005 4007 1 0 4
+  dtext 60 150 1000 View Co-Owner List
+  button 20 170 4005 4007 1 0 5
+  dtext 60 170 1000 Add a Co-Owner
+  button 20 190 4005 4007 1 0 6
+  dtext 60 190 1000 Remove a Co-Owner
+  button 20 210 4005 4007 1 0 7
+  dtext 60 210 1000 Clear Co-Owner List
+  else
+    if (<GetCoownerPos <src>> >= 0) 
+      button 20 150 4005 4007 1 0 4
+      dtext 60 150 1000 View Co-Owner List
+    else
+      dtext 60 150 992 View Co-Owner List
+    endif
+  dtext 60 170 992 Add a Co-Owner
+  dtext 60 190 992 Remove a Co-Owner
+  dtext 60 210 992 Clear Co-Owner List
+endif
+
+if (<f_house_isowner <src>>) || (<GetCoownerPos <src>> >= 0) || (<src.isgm>)
+  button 20 250 4005 4007 1 0 8
+  dtext 60 250 1000 View Friends List
+  button 20 270 4005 4007 1 0 9
+  dtext 60 270 1000 Add a Friend 
+  button 20 290 4005 4007 1 0 10
+  dtext 60 290 1000 Remove a Friend
+  button 20 310 4005 4007 1 0 11
+  dtext 60 310 1000 Clear Friends List
+  else
+    if (<GetCoownerPos <src>> >= 0) || (<GetFriendPos <src>> >= 0)
+      button 20 250 4005 4007 1 0 8
+      dtext 60 250 1000 View Friends List
+    else
+      dtext 60 250 992 View Friends List
+    endif
+  dtext 60 270 992 Add a Friend 
+  dtext 60 290 992 Remove a Friend
+  dtext 60 310 992 Clear Friends List
+endif
+
+if (<housetype>==house_private)
+  button 20 350 4005 4007 1 0 12
+  dtext 60 350 1000 View Access List
+  if (<f_house_isowner <src>>) || (<GetCoownerPos <src>> >= 0) || (<src.isgm>)
+    button 20 370 4005 4007 1 0 13
+    dtext 60 370 1000 Clear Access List
+  else	
+    dtext 60 370 992 Clear Access List
+  endif
+else
+  button 20 350 4005 4007 1 0 12
+  dtext 60 350 1000 View Ban List
+  if (<f_house_isowner <src>>) || (<GetCoownerPos <src>> >= 0) || (<src.isgm>)
+    button 20 370 4005 4007 1 0 13
+    dtext 60 370 1000 Clear Ban List
+  else
+    dtext 60 370 992 Clear Ban List
+  endif
+endif
+
+if ((<f_house_isowner <src>>) || (<src.isgm>)) && (<def0.house_private_public>)
+
+  if (<housetype> != house_guild)					//not a guild house
+    button 210 <qval (<housetype> == house_private)?150:170> 4005 4007 1 0 14  //private-public toggle
+    dtext 250 150 <qval (<housetype>==house_public)?1263:1000> <qval (<housetype>==house_public)?House is Public:Change to Public> 	
+    dtext 250 170 <qval (<housetype>==house_private)?1263:1000> <qval (<housetype>==house_private)?House is Private:Change to Private> 
+  else								//its a guild house
+    dtext 250 150 992 Change to Public					//options not available till guildhouse declaration removed
+    dtext 250 170 946 Change to Private	
+  endif
+  button 210 190 4005 4007 1 0 15
+  dtext 250 190 1000 <qval (<housetype>==house_guild)? Remove Guild Declaration:Declare Guildhouse>
+
+  button 210 210 4005 4007 1 0 16
+  dtext 250 210 1000 <qval <def0.house_keyless_doors>?Recode Doors&Telepads:Change the House Locks>
+else
+  dtext 260 150 992  Change to <qval (<housetype> == house_private)? Public:Private>
+  dtext 260 170 992 <qval <def0.house_keyless_doors>?Recode Doors&Telepads:Change the House Locks>
+  dtext 260 190 992 <qval (<housetype>==house_guild)? Remove Guild Declaration:Declare Guildhouse>
+endif
+
+
+page 3				//storage
+
+button 160 60 4006 4006 0 3
+dtext 205 60 1263 STORAGE
+dtext 120 135 1000 HOUSE STORAGE SUMMARY
+
+if (<def0.house_storage_expansion>) && (<def0.house_lock_secure_limit>)
+  if (<f_house_isowner <src>>) || (<src.isgm>)
+    dtext 20 160 1000 Increased Storage
+    dtext 210 160 1000 <IncreasedStorage>%
+    if (<increasedstorage> < <def0.house_storage_expansion>)
+      button 250 160 4005 4007 1 0 17
+      dtext 290 160 1000 Buy Storage
+    endif
+  else
+    dtext 20 160 1263 Increased Storage
+    dtext 210 160 1263 <IncreasedStorage>%
+    if (<IncreasedStorage> < 100)
+      dtext 290 160 1263 Buy Storage
+    endif
+  endif
+endif
+
+
+if !(<def0.house_storage_limit>)
+  dtext 20 180 1000 Maximum Secure Storage
+  dtext 210 180 1000 Unlimited
+  dtext 20 200 1000 Used by Moving Crate
+  dtext 210 200 1000 Unlimited
+  dtext 20 220 1000 Used by Lockdowns
+  dtext 210 220 1000 Unlimited
+  dtext 20 240 1000 Used by Secure Storage
+  dtext 210 240 1000 Unlimited
+  dtext 20 260 1000 Available Storage
+  dtext 210 260 1000 Unlimited
+  dtext 20 290 1000 Maximum Lockdowns
+  dtext 210 290 1000 Unlimited
+  dtext 20 310 1000 Available Lockdowns
+  dtext 210 310 1000 Unlimited
+else
+  dtext 20 180 1000 Maximum Secure Storage
+  dtext 210 180 1000 <qval (<def0.house_lock_secure_limit>)?<maxstorage>:Unlimited>
+  dtext 20 200 1000 Used by Moving Crate
+  dtext 210 200 1000 <qval (<def0.house_lock_secure_limit>)?<qval (<movingcrate>)?<uid.<movingcrate>.count>:0>:Unlimited>
+  dtext 20 220 1000 Used by Lockdowns
+  dtext 210 220 1000 <qval (<def0.house_lock_secure_limit>)?<f_house_lockdowns_used>:Unlimited>
+  dtext 20 240 1000 Used by Secure Storage
+  dtext 210 240 1000 <qval (<def0.house_lock_secure_limit>)?<f_house_secures_used>:Unlimited>
+  dtext 20 260 1000 Available Storage
+  //dtext 210 260 1000 <qval (<def0.house_lock_secure_limit>)?<eval (<maxstorage>-(<lockdowns>+<getsecureditems>))>:Unlimited>
+  dtext 210 260 1000 <qval (<def0.house_lock_secure_limit>)?<eval (<maxstorage>-<f_house_storage_used>>:Unlimited>
+  dtext 20 290 1000 Maximum Lockdowns
+  dtext 210 290 1000 <qval (<def0.house_lock_secure_limit>)?<maxlockdowns>:Unlimited>
+  dtext 20 310 1000 Available Lockdowns
+  dtext 210 310 1000 <qval (<def0.house_lock_secure_limit>)?<eval (<maxlockdowns>-<f_house_lockdowns_used>)>:Unlimited>
+endif
+
+  dtext 20 360 1000 Vendor Count
+  dtext 210 360 1000 <vendors>/<maxvendors>
+
+page 4			//customization
+
+button 160 80 4006 4006 0 4 4
+dtext 205 80 1263 CUSTOMIZE
+if (<f_house_isowner <src>>) || (<src.isgm>)
+  if (<type>==t_multi_custom)
+    dtext 60 150 1263 Convert Into Customizable House
+    button 20 170 4005 4007 1 0 19
+    dtext 60 170 1000 Customize This House
+  else
+    if (<baseid>==m_small_stone_keep) || (<baseid>==m_castle) || (<baseid>==m_two_story_wood_and_plaster_house) || (<baseid>=m_two_story_stone_and_plaster_house)
+      dtext 60 150 992 Convert Into Customizable House
+      dtext 60 170 992 Customize This House
+    else
+      if (<def0.house_allow_custom>)
+        button 20 150 4005 4007 1 0 18
+        dtext 60 150 1000 Convert Into Customizable House
+      else
+        dtext 60 150 992 Convert Into Customizable House
+      endif
+    dtext 60 170 992 Customize This House	
+    endif
+  endif
+
+  if (<MovingCrate>)
+  ref1=<movingcrate>
+    if (<ref1.count>) && (<f_house_isowner <src>>) || (<src.isgm>)
+      button 20 190 4005 4007 1 0 57
+      dtext 60 190 1000 Relocate Moving Crate
+      else
+      dtext 60 190 1263 Relocate Moving Crate
+    endif
+  endif
+
+  button 20 230 4005 4007 0 7
+  dtext 60 230 1000 Change House Sign
+
+  if (<type>==t_multi_custom)
+    button 20 250 4005 4007 0 9
+    button 20 270 4005 4007 0 10
+  endif
+  dtext 60 250 <qval (<type>==t_multi_custom)?1000 Change House Sign Hanger:992 Change House Sign Hanger>
+  dtext 60 270 <qval (<type>==t_multi_custom)?1000 Change Signpost:992 Change Signpost>
+
+  dtext 60 310 992 Change Foundation Style
+
+else		//not owner
+  dtext 60 150 992 Convert Into Customizable House
+  dtext 60 170 992 Customize This House
+  dtext 60 190 992 Relocate Moving Crate
+
+  dtext 60 230 992 Change House Sign
+  dtext 60 250 992 Change House Sign Hanger
+  dtext 60 270 992 Change Signpost
+  dtext 60 310 992 Change Foundation Style
+  dtext 60 370 992 Rename House
+endif
+
+if (<f_house_isowner <src>>) || (<GetCoownerPos <src>> >= 0) || (<src.isgm>)	//can be done by co-owner also
+  button 20 370 4005 4007 1 0 24
+  dtext 60 370 1000 Rename House
+endif
+
+page 5
+
+button 160 100 4006 4006 0 5
+dtext 205 100 1263 OWNERSHIP
+
+if (<f_house_isowner <src>>) || (<src.isgm>)
+  button 20 150 4005 4007 1 0 25
+  dtext 60 150 1000 Demolish House
+  button 20 170 4005 4007 1 0 26
+  dtext 60 170 1000 Trade House
+  if (<def0.house_sell>)
+    button 20 190 4005 4007 0 10 30
+    dtext 60 190 1000 <qval (<region.tag0.forsale>)? Take this house off the market:Put this house up for sale>
+  else
+    dtext 60 190 992 Put this house up for sale
+  endif
+  if (<def0.house_can_decay>) && (<def0.house_property_tax>)
+    button 20 210 4005 4007 00 11
+    dtext 60 210 1000 Pay Property Tax
+  endif
+else
+  dtext 60 150 992 Demolish House
+  dtext 60 170 992 Trade House
+  dtext 60 190 992 Put this house up for sale
+endif
+
+if (<def0.can_decay>) && (<def0.property_tax>)
+  if (<f_house_isowner <src>>) || (<GetCoownerPos <src>> >= 0) || (<GetFriendPos <src>> >= 0) || (<src.isgm>)
+    button 20 230 4005 4007 0 16 84
+    dtext 60 230 1000 Pay Property Tax
+  endif
+endif
+
+if (<src.isgm>)
+  dtext 150 250 1263 Administrative Options
+  button 20 280 4005 4007 1 0 27
+  dtext 60 280 1000 <qval <eval <tag0.house_nodecay>==1>? Allow decay on this property:Make this property exempt from decay>
+  button 20 300 4005 4007 1 0 28
+  dtext 60 300 1000 Reset this property's decay timer to <def0.house_can_decay>
+
+  if !(<tag0.demolish>)
+    dtext 110 320 1000 Schedule this property for demolition
+    dtext 60 340 1000 Number of days until demolition (between 7 & 30)
+    gumppic 220 360 2444
+    dtextentrylimited 240 360 40 20 100 1 2
+    dtext 300 360 1000 days
+  endif
+  dtext 60 360 1000 <qval (<tag0.demolish>)? Cancel scheduled demolition:Demolish this propery in> 
+  button 20 360 4023 4025 1 0 29
+endif
+
+page 6			//veiwing list
+f_render_list <src.ctag0.house_list>
+
+page 7			//change house sign
+local.x=20
+local.y=140
+local.s=2979
+while <local.s> < 3140
+  if (<local.y> > 380)
+    local.y=140
+    local.x += 60
+  endif
+  //buttontileart <local.x> <local.y> 07588 07588 1 0 <eval <local.s>+15000> <local.s> 0 -10 -5
+  local.s += 1
+  buttontileart <eval <local.x>+40> <local.y> 07588 07588 1 0 <eval <local.s>+15000> <Local.s> 0 -10 -5
+  local.y += 25
+  local.s += 1
+  if (<local.s>==3087)
+    local.s=3139
+  endif
+endwhile
+
+if (<def0.house_colored_signs>)
+  dtext 340 330 1000 Color 
+  button 370 330 4005 4007 0 8
+  dtext 340 370 1000 Back
+  button 370 370 4014 4015 0 4
+endif
+
+page 8			//change house sign color
+dtext 120 140 1263 Choose the color for your sign
+button 300 230 4014 4015 0 7
+dtext 340 230 1000 Back
+button 300 270 4017 4019 1 0 24999
+dtext 340 270 1000 Reset
+local.x=40
+local.y=190
+for 1 30
+  if (<local.y> > 351)
+    local.y 190
+    local.x += 50
+  endif
+  buttontileart <dlocal.x> <dlocal.y> 07588 07588 1 0 <eval <local._for>+20000> <hval <link.dispid>> <def.house_sign_color_<dlocal._for>> -10 -5
+  local.y += 30
+endfor
+
+page 9			//change house sign hanger
+local.n=<link.dispid>
+if (<eval <fval (<local.n>/2>)*2>==<local.n>)
+  local.n=0
+  else
+  local.n=1
+endif
+button 40 190 4005 4007 1 0 <eval (12968-<local.n>)+12033>
+tilepic 80 190 2968
+button 160 190 4005 4007 1 0 <eval (12970-<local.n>)+12033>
+tilepic 200 190 2970
+button 290 190 4005 4007 1 0 <eval (12972-<local.n>)+12033>
+tilepic 330 190 2972
+button 40 290 4005 4007 1 0 <eval (12974-<local.n>)+12033>
+tilepic 80 290 2974
+button 160 290 4005 4007 1 0 <eval (12976-<local.n>)+12033>
+tilepic 200 290 2976
+button 290 290 4005 4007 1 0 <eval (12978-<local.n>)+12033>
+tilepic 330 290 2978
+
+dtext 340 370 1000 Back
+button 370 370 4014 4015 0 4
+
+page 10			//change sign post
+local.x=50
+local.y=135
+for 1 28
+  button <eval <local.x>-20> <local.y> 4005 4007 1 0 <eval <local._for>+30000>
+  tilepic <local.x> <local.y> <def0.house_signpost_<dlocal._for>>
+  if (<local.x> > 340)
+    local.x=0
+    local.y += 50
+  endif
+  local.x += 50
+endfor
+
+dtext 340 375 1000 Back
+button 370 375 4014 4015 0 4
+
+Page 11	 	//Property tax
+ref1=<uid>
+if (<def0.house_can_decay>) && (<def0.house_property_tax>)
+  if (<ref1.tag0.house_nodecay>)
+    dtext 20 180 90 This property has been made exempt from decay
+    dtext 20 200 90 As such you have no Property Tax to pay.
+    dtext 20 220 90 This exemption is reflected on the main page of this menu
+    dtext 20 260 90 If this house is put for sale or moved the exemption will be lost.
+
+  else
+    local.d=<eval ((<ref1.timer>/24)/60)/60>		//days left
+    local.a=<eval <def0.house_can_decay>-<local.d>>	//days to add
+    local.m=<eval <local.t>/<def0.house_can_decay>>	//maint
+    local.p=<eval <dlocal.m>*<dlocal.a>>			//pay
+
+    dtext 70 160 1263 Reset your house's decay timer to <def0.house_can_decay> days
+    dtext 60 180 1000 Property tax may be paid whenever any is due.
+    dtext 60 200 1000 The price of your property tax per <def0.house_can_decay> days 
+    dtext 60 220 1000 is <def0.house_property_tax> % of your house value (<dlocal.v>g)
+			
+    if (<local.dl> < <eval <def.house_can_decay>-1>)
+      button 90 260 4005 4007 1 0 30
+      dtext 140 260 1263 Pay <dlocal.p>gp to add <dlocal.a> days
+    else
+      dtext 80 260 1263 No Property Tax is due on this building.
+    endif
+  endif
+endif
+
+dtext 340 375 1000 Back
+button 370 375 4014 4015 0 5
+
+
+[dialog d_house_menu button]
+
+onbutton=1	//grant access - banish
+src.sysmessage Target the individual to ban from this house.
+src.targetf f_house_add_list <qval (<housetype>==house_private)?3:4>
+
+onbutton=2	//revoke access - lift ban
+src.targetf f_house_remove_list <qval (<housetype>==house_private)?3:4>
+	
+onbutton=3	//eject
+src.sysmessage Target the individual to eject from this house.
+targetf f_house_eject
+
+onbutton=4	//view coowner list
+src.ctag0.house_list=coowners,coowner,0		//list name, obj, 0=view,1=remove
+sdialog d_house_menu 6
+
+onbutton=5	//add coowner
+src.sysmessage Target the person you wish to name a co-owner of your household.
+src.targetf f_house_add_list 1
+
+onbutton=6	//remove coowner
+src.ctag0.house_list=coowners,coowner,1
+sdialog d_house_menu 6
+	
+onbutton=7	//clear coowners
+src.ctag0.house_list=coowner
+sdialog d_house_clear_list_confirm
+
+onbutton=8	//view fiends list
+src.ctag0.house_list=friends,friend,0
+sdialog d_house_menu 6
+
+onbutton=9	//add friend
+src.sysmessage Target the person you wish to name a friend of your household.
+src.targetf f_house_add_list 2
+
+onbutton=10	//remove friend
+src.ctag0.house_list=friends,friend,1
+sdialog d_house_menu 6
+
+onbutton=11 	//clear friends list
+src.ctag0.house_list=friend
+sdialog d_house_clear_list_confirm
+
+onbutton=12	//view access/ban list
+src.ctag0.house_list=<qval (<housetype>==house_private)?accesses:bans>,<qval (<housetype>==house_private)?accesses:ban>,0
+sdialog d_house_menu 6
+
+onbutton=13
+src.ctag0.house_list=<qval (<housetype>==house_private)?access:ban>
+sdialog d_house_clear_list_confirm
+
+onbutton=14	//toggle between private and public
+housetype=<qval (<housetype>==house_private)?house_public:house_private>
+if (<housetype>==house_private)
+  src.ctag0.house_notice=2,This propery is now private & may only be accessed by co-owners/friends & those on the access list.
+else
+  src.ctag0.house_notice=2,This property is now public The owner may now place vendors and vendor rental contracts. Only those on the banned list may not enter; you should recode any doors that are not for public access.
+endif
+link.resendtooltip
+sdialog d_house_notice
+
+onbutton=15	//declare guild - undeclare guild
+if (<housetype> != house_guild)
+  src.ctag0.guildhouse=<uid>
+  src.targetf f_house_declare_guild
+  src.sysmessage Target your guildstone.
+else
+  housetype=0
+  //ref1=<tag0.guildstone>	//player needs to move the guildstone on their own
+  //ref1.p=<link.p>
+  //ref1.move s 1
+  //tag0.guildstone=		//this is needed to check and see if the guildstone isnt deleted on demolishing the house
+  src.sysmessage This building is not longer a guild house.
+endif
+
+onbutton=16	//change locks or recode door security
+sdialog d_house_entry_recode_confirm
+
+onbutton=17	//buy storage
+sdialog d_house_buy_storage_confirm
+
+onbutton=18	//convert into customizable house
+if (<tag0.demolition>)
+  src.sysmessage This house is scheduled for demolition and cannot be converted.
+  return 1
+endif
+f_house_convert
+
+onbutton=19	//customize house
+if (<tag0.demolition>)
+  src.sysmessage This house is scheduled for demolition and cannot be customized.
+  return 1
+endif
+if (<src.region.uid> != <region.uid>)
+  return 2
+elseif (<src.housedesign>)
+  src.sysmessage You are already designing <QVAL (<src.housedesign.uid> == <link.uid>)? this:another> building.
+  return 1
+  elseif !(<src.isevent.e_house_customize>)
+  src.events=+e_house_customize
+endif
+customize <src>
+return 1 
+
+onbutton=23	//change foundation
+
+onbutton=24	//rename house
+src.ctag0.f_house_rename=<uid>
+promptconsole f_house_rename
+src.sysmessage What dost thou wish the sign to say?
+
+onbutton=25
+if (<more2>)	//there's a guildstone inside
+  src.sysmessage You cannot redded the house with a guildstine inside.
+  return 1
+endif
+sdialog d_house_demolish
+src.sysmessage Selecting Demolish will destroy any items left in your house.
+if !(<def0.house_redeed_crate>)
+  src.sysmessage Selecting Redeed will drop all items on the ground and redeed the house.
+else
+  src.sysmessage Selecting Redeed to send items in your house to your bank.
+  src.sysmessage Person specific chests will be returned to their owner regardless.
+endif
+
+onbutton=26	//trade house
+if (<tag0.demolish>)
+  src.sysmessage this house is scheduled for demolition and can not be traded.
+  return 1
+endif
+src.sysmessage Target the person to whom you wish to give this house.
+targetf f_house_trade <uid>
+
+onbutton=27	//make ageless/allow decay
+tag0.house_nodecay=<qval <tag0.house_nodecay>==1?0:1>
+timer=<qval <tag0.house_nodecay>==1?-1:<def0.house_can_decay>*24*60*60>
+src.sysmessage This house is now <qval <eval <tag0.house_nodecay>==1>?Ageless:set to decay>
+link.resendtooltip
+
+onbutton=28		//reset timer
+timer=<def0.house_can_decay>*24*60*60
+src.sysmessage House decay timer set to <def0.house_can_decay> days.
+
+onbutton=29		//house demolition
+ref1=<uid>
+if !(<tag0.demolish>)
+  if (<argtxt[1]> < 7)
+    src.sysmessage You may not schedule a house for demolition earlier than 7 days.
+    sdialog d_house_menu 5
+    return 1
+  elseif (<argtxt[1]> > 30)
+    src.sysmessage You may not schedule a house for demolition longer than 30 days.
+    sdialog d_house_menu 5
+    return 1
+  endif
+  tag0.demolish=1
+  timer=<argtxt[1]>*24*60*60
+  src.sysmessage <ref1.name> owned by <ref1.owner.name> has been scheduled for demolition in <argtxt[1]> days.
+  ref1.owner.sysmessage Your house <name> (coords: <p>) has been scheduled for dmeolition in <argtxt[1]> days.
+else
+  tag0.demolish=
+  timer=(((<def0.house_can_decay>*24)*60)*60)>
+  src.sysmessage The demolision for <ref1.name> owned by <ref1.owner.name> has been canceled.
+  ref1.owner.sysmessage Your house <name> (coords: <p>) demolition has been canceled.
+endif
+ref1.link.resendtooltip
+
+onbutton=30	//pay property taxes
+ref1=<uid>
+local.v=<ref1.f_house_value>
+local.t=<muldiv <local.v>,<def0.house_property_tax>,100>
+local.d=<eval (((<ref1.timer>/24)/60)/60)>		//days left
+local.a=<eval (<def0.house_can_decay>-<local.d>)>		//days to add
+local.m=<eval (<local.t>/<def0.house_can_decay>)>		//maint
+local.p=<eval (<dlocal.m>*<dlocal.a>)>			//pay
+if (<src.gold> < <local.p>) 
+  src.sysmessage You cannot afford to pay your propety taxes.
+  dialog d_house_menu 11
+  return 1
+endif
+src.gold -= <local.p>
+ref1.timer=<eval (((<def0.house_can_decay>*24)*60)*60)>
+src.sysmessage You have successfully paid <dlocal.p>g in property taxes and your houses decay timer has been set to <def0.house_can_decay> days. 
+src.sound 037
+
+
+onbutton=10000,14999	//remove player from a list
+argn -= 10000
+args=<src.ctag0.house_list>,<argn>
+del<argv[1]> <<argv[1]>.<argv[3]>>
+sdialog d_house_menu 6
+
+onbutton=15000,19999	//select house sign
+argn -= 15000
+link.dispid=<argn>
+link.update
+sdialog d_house_menu 7
+
+onbutton=20000,24999	//select house sign color
+if (<argn>==24999)
+  link.color=
+  sdialog d_house_menu 8
+endif
+argn -= 20000
+link.color=<def0.house_sign_color_<dargn>>
+sdialog d_house_menu 8
+
+onbutton=25000,29999	//select house sign hanger
+argn -= 22032
+link.f_house_change_sign_hanger <argn>
+sdialog d_house_menu 9
+
+onbutton=30000,34999
+argn -= 30000
+link.f_house_change_sign_post <argn>
+sdialog d_house_menu 10
+
+
+
+
+/////////////////////////
+// Clear List Confirm
+
+
+[dialog d_house_clear_list_confirm]
+110,100
+noclose
+
+page 0 
+
+resizepic 10 10 5054 420 280
+gumppictiled 20 20 400 20 2624
+checkertrans 20 20 400 20
+dhtmlgump 10 20 410 20 0 0 <def.l1>basefont color="#f70000"<def.r1><def.center>WARNING
+gumppictiled 20 50 400 200 2624
+checkertrans 20 50 400 200
+dhtmlgump 30 50 390 200 0 1 <def.l1>basefont color="#ffc600"<def.r1>You are about to remove ALL <src.ctag0.house_list>s from your house. Are you certain you wish to clear the <src.ctag0.house_list> list?
+gumppictiled 20 260 400 20 2624
+checkertrans 20 260 400 20
+
+button 20 260 4005 4007 1 0 1
+dtext 50 260 1152 OKAY
+button 220 260 4005 4007 1 0 0
+dtext 250 260 1152 CANCEL
+
+[dialog d_house_clear_list_confirm button]
+
+onbutton=0
+sdialog d_house_menu 2
+src.sysmessage Action canceled.
+
+onbutton=1
+args=<src.ctag0.house_list>
+del<argv[0]>=-1
+sdialog d_house_menu 2
+src.sysmessage The <argv[0]> list has been cleared.
+
+
+///////////////////////////////
+// House Notice
+
+
+[dialog d_house_notice]
+150,125
+noclose
+
+page 0 
+
+resizepic 10 10 5054 320 180
+gumppictiled 20 20 300 20 2624
+checkertrans 20 20 300 20
+dhtmlgump 10 20 310 20 0 0 <def.l1>basefont color="#f70000"<def.r1><def.center>NOTICE
+gumppictiled 20 50 300 100 2624
+checkertrans 20 50 300 100
+dhtmlgump 30 50 290 100 0 1 <def.l1>basefont color="#ffc600"<def.r1><streat <src.ctag0.house_notice>>
+gumppictiled 20 160 300 20 2624
+checkertrans 20 160 300 20
+
+button 20 160 4005 4007 1 0 1
+dtext 50 160 1152 OKAY
+
+
+[dialog d_house_notice button]
+
+
+onbutton=1
+args=<src.ctag0.house_notice>
+sdialog d_house_menu <argv[0]>
+
+
+///////////////////////////////
+// Demolish House Options
+
+[dialog d_house_demolish]
+150,125
+
+page 0
+
+resizepic 10 10 5054 240 220 
+gumppictiled 20 20 220 200 2624
+checkertrans 20 20 220 200
+dtext 80 20 32 !!! WARNING !!!
+dtext 40 40 1263  You are about to demolish
+dtext 40 60 1263 this property.
+dtext 40 80 1263 Do you wish to proceed?
+button 20 110 4017 4018 1 0 0
+dtext 60 110 1000 Abort
+button 20 140 4005 4007 1 0 1
+dtext 60 140 1000 Demolish & Destroy Contents
+dtext 60 170 1000 Redeed & Bank Contents	
+button 20 170 4005 4007 1 0 2
+
+if (<def0.house_redeed_fee>)
+  local.v=<f_house_value>
+  local.f=<muldiv <local.v>,<def0.house_redeed_fee>,100>
+  dtext 60 190 32 <dlocal.f>gp Charge
+endif
+
+[dialog d_house_demolish button]
+
+on=0	//abort
+src.sysmessage Aborted
+
+
+onbutton=1 // demolish and destroy all contents
+ref1=<owner>
+ref2=<uid>	
+ref3=<tag0.guildstone>
+ref4=<movingcrate>
+
+if (<housetype>==house_guild)
+  src.sysmessage This house is a guild house.
+  src.sysmessage You must remove the guild declaration and move the guildstone before you can demolish the building
+  return 1
+endif
+
+if (<ref3.isvalid>) && (<ref3.region.uid>==<ref2>)
+  src.sysmessage You must move the guildstone before you can demolish the building
+  return 1
+endif
+
+local.v=<f_house_value>
+ref1.gold += <local.v>
+src.sysmessage  You have been refunded <dlocal.v>gp for this property.
+src.sysmessage The number of houses you own is now <eval (<ref1.houses>-1)>.
+movealltocrate 01
+movingcrate.remove
+src.delhouse <uid>
+
+local.dist=<f_max <ref2.multiregion>>
+forchars <local.dist>
+  if (<region.uid>==<ref2>)
+    if (<baseid>==c_player_vendor) | (<baseid>==c_player_vendor_f)
+      endif
+    endif
+  endif
+endif
+
+serv.log <src.name>(<src>) has demolished and destroyed all contents of <name>(<uid>) @ <p> on <serv.rtime>
+remove
+
+onbutton=2 // redeed and send contents to bank account
+ref1=<owner>
+ref2=<uid>	
+ref3=<tag0.guildstone>
+ref4=<movingcrate>
+
+if (<housetype>==house_guild)
+  src.sysmessage This house is a guild house.
+  src.sysmessage You must remove the guild declaration and move the guildstone before you can redeed the building
+  return 1
+endif
+
+local.v=<f_house_value>
+local.b=<eval <value>+<muldiv <value>,<serv.VendorMarkup>,100>>		//basevalue 
+local.u=<eval <local.v>-<local.b>>	//upgrades is <eval [currentvalue]-[basevalue]>
+
+if (<local.u>)
+  src.sysmessage You spent <dlocal.u>gp for upgrades on this property
+endif
+if (<def0.house_redeed_fee>)		//subract redeed fee if present
+  local.f=<muldiv <local.v>,<def0.house_redeed_fee>,100>
+  if (<src.gold> < <local.f>) && (<local.u> < <local.f>)	//they can't afford the fee
+    src.sysmessage You cannot afford the <dlocal.f>gp fee to redeed this property.
+    return 1
+  elseif (<local.u> > <local.f>)	//see if we can pay it from the balance
+    local.u -= <local.f>
+    src.sysmessage Your redeed fee of <dlocal.f> was paid from the balance.
+  elseif (<src.gold> > <local.f>)	// see if we have the proper amount of gold 
+    src.gold -= <local.f>
+    src.sysmessage Your redeed fee of <dlocal.f> was deducted from your bank. 
+  endif
+endif
+if (<local.u>)
+  src.gold += <local.u>	//pay out any leftover upgrade refund
+  src.sysmessage You have been refunded <dlocal.u>gp for your upgrades.
+endif
+src.sysmessage The number of houses you own is now <eval <src.houses>-1>.
+movealltocrate 01
+movingcrate.link=04fffffff
+movingcrate.cont=<src.findlayer.29>
+movingcrate.update
+movingcrate=
+
+local.dist=<f_max <ref2.multiregion>>
+serv.b <local.dist>
+forchars <local.dist>
+  say derf
+  if (<region.uid>==<ref2>)
+    if (<baseid>==c_player_vendor) | (<baseid>==c_player_vendor_f)
+      endif
+    endif
+  endif
+endif
+
+serv.log <src.name>(<src>) has redeeded and banked all contents of <name>(<uid>) @ <p> on <serv.rtime>
+redeed 
+
+
+//////////////////////////////////
+// Demolish House Confirmation		
+
+[dialog d_house_demolish_confirm]
+
+150,100
+noclose
+
+page 0 
+
+resizepic 10 10 5054 420 280
+gumppictiled 20 20 400 20 2624
+checkertrans 20 20 400 20
+dhtmlgump 10 20 410 20 0 0 <def.l1>basefont color="#f70000"<def.r1><def.center>WARNING
+gumppictiled 20 50 400 200 2624
+checkertrans 20 50 400 200
+dhtmlgump 30 50 390 200 0 1 <def.l1>basefont color="#ffc600"<def.r1>You are about to demolish your house.  You will be refunded the house's value directly to your bank box.  All items in the house will remain behind and can be freely picked up by anyone.<def.br>  Once the house is demolished, anyone can attempt to place a new house on the vacant land.. This action will not un-condemn any other houses on your account, nor will it end your 7-day waiting period (if it applies to you)  Are you sure you wish to continue? 
+gumppictiled 20 260 400 20 2624
+checkertrans 20 260 400 20
+
+button 20 260 4005 4007 1 0 1
+dtext 50 260 1152 OKAY
+button 220 260 4005 4007 1 0 0
+dtext 250 260 1152 CANCEL
+
+
+[dialog d_house_demolish_confirm button]
+on=0
+sdialog d_house_menu 5
+
+ON=1 // demolish
+src.sysmessage disabled, please be patient (11:57 PM 8/19/2018)
+return 1
+DeleteAllComps
+remove
+
+[dialog d_house_visitor]
+150,100
+gumppic  27 27 100 
+dhtmlgump 50 50 100 100 0 0 <def.center><name>
+if (<housetype>==house_guild)
+  dtext 85 25 90 [<owner.guild.abbrev>]
+endif
+
+
+
+////////////////////////
+// House Commands
+
+[dialog d_house_commands]
+100,50
+
+page 0
+
+resizepic 30 70 5054 450 390
+gumppictiled 40 80 430 370 2624
+checkertrans 40 80 430 370
+button 440 80 4017 4018 1 0 0
+dtext 60 80 1263 COMMAND:
+dtext 60 110 1000 Move This North
+dtext 60 130 1000 Move This South
+dtext 60 150 1000 Move This East
+dtext 60 170 1000 Move This West
+dtext 60 190 1000 Move This Up
+dtext 60 210 1000 Move This Down
+dtext 60 230 1000 Flip This 
+
+dtext 60 250 1000 Lock This Down
+dtext 60 270 1000 Release This
+dtext 60 290 1000 Secure This
+
+dtext 60 310 1000 Remove Thyself
+dtext 60 330 1000 I ban Thee
+dtext 60 350 1000 Place Trash Barrel
+dtext 60 370 1000 Remove Trash Barrel
+dtext 60 390 1000 Exit
+
+dtext 200 80 1263 DESCRIPTION:
+dtext 200 110 1000 Moves targeted item up
+dtext 200 130 1000 Moves targeted item down
+dtext 200 150 1000 Moves targeted item north
+dtext 200 170 1000 Moves targeted item south
+dtext 200 190 1000 Moves targeted item east
+dtext 200 210 1000 Moves targeted item west
+dtext 200 230 1000 Flips targeted item.
+
+dtext 200 250 1000 Locks an item down
+dtext 200 270 1000 Releases an item
+dtext 200 290 1000 Adds security to containers
+
+dtext 200 310 1000 Removes a player from your house
+dtext 200 330 1000 Bans a player from your house
+dtext 200 350 1000 Places a trashcan where you're standing
+dtext 200 370 1000 Removes a trashcan
+dtext 200 390 1000 Teleports your player outside the house
+
+if (<def0.house_can_bank>)
+  dtext 60 410 1000 Bank
+  dtext 200 410 1000 Opens your bank box
+endif
+
+//////////////////////////////
+// Dialog Buy Storage Confirm
+
+[dialog d_house_buy_storage_confirm]
+150,125
+noclose
+
+page 0 
+
+resizepic 10 10 5054 320 180
+gumppictiled 20 20 300 20 2624
+checkertrans 20 20 300 20
+dhtmlgump 10 20 310 20 0 0 <def.l1>basefont color="#f70000"<def.r1><def.center>NOTICE
+gumppictiled 20 50 300 100 2624
+checkertrans 20 50 300 100
+dhtmlgump 30 50 290 100 0 1 <def.l1>basefont color="#ffc600"<def.r1>You are about to increase your house's storage. This upgrade will cost you <muldiv <increasedstorage>+20,<f_house_value>,100>gp.
+gumppictiled 20 160 300 20 2624
+checkertrans 20 160 300 20
+
+button 20 160 4005 4007 1 0 1
+dtext 50 160 1152 OKAY
+button 220 160 4005 4007 1 0 0
+dtext 250 160 1152 CANCEL
+
+[dialog d_house_buy_storage_confirm button]
+
+onbutton=0
+sdialog d_house_menu 3
+
+onbutton=1
+local.s=<eval <increasedstorage>+20>
+if (<src.gold> < <muldiv <local.s>,<f_house_value>,100>)
+  src.sysmessage You cannot afford this storage upgrade.
+  sdialog d_house_menu 3
+  return 1
+endif
+src.gold -= <muldiv <local.s>,<f_house_value>,100>
+increasedstorage += 20
+src.sysmessage You have increased this house's storage to <dincreasedstorage>%.
+src.sound 036
+sdialog d_house_menu 3
+
+////////////////////////////
+// secure - recode dialog
+
+
+[dialog d_house_secure_recode]
+150,100
+ref1=<region.uid>
+resizepic 10 10 5054 250 180
+gumppictiled 20 20 230 25 2624
+checkertrans 20 20 230 25
+dtext 90 20 1000 SET ACCESS
+
+
+gumppictiled 20 50 230 25 2624
+checkertrans 20 50 230 25
+dtext 20 50 1000 Owner:       <ref1.owner.name>
+
+gumppictiled 20 80 230 100 2624
+checkertrans 20 80 230 100
+
+if (<tag0.house_access> != house_access_owner)
+  if (<ref1.f_house_isowner <src>>)
+    button 20 80 4005 4007 1 0 1
+  endif
+  dtext 60 80 <qval (<ref1.f_house_isowner <src>>)?1000:992> Owner Only
+else
+  button 20 80 4006 4007 1 0 1
+  dtext 60 80 1263 Owner Only
+endif
+
+if (<tag0.house_access> != house_access_coowner)
+  if (<ref1.f_house_iscoowner <src>>)
+    button 20 100 4005 4007 1 0 2
+  endif
+  dtext 60 100 <qval (<ref1.f_house_iscoowner <src>>)?1000:992> Co-owners
+else
+  button 20 100 4006 4007 1 0 2
+  dtext 60 100 1263 Co-owners
+endif
+
+if (<tag0.house_access> != house_access_friend)
+  if (<ref1.f_house_isfriend <src>>)
+    button 20 120 4005 4007 1 0 3
+  endif
+  dtext 60 120 <qval (<ref1.f_house_isfriend <src>>)?1000:992> Friends
+else
+  button 20 120 4006 4007 1 0 3
+  dtext 60 120 1263 Friends
+endif
+
+if (<tag0.house_access> != house_access_guild)
+  if (<src.guild>) 
+    button 20 140 4005 4007 1 0 4
+  endif
+  dtext 60 140 <qval (<src.guild>)?1000 Guild Members:992 Guild Members>
+else
+  button 20 140 4006 4007 1 0 4
+  dtext 60 140 1263 Guild Members
+endif
+
+if (<tag0.house_access> != house_access_all)
+  button 20 160 4005 4007 1 0 5
+  dtext 60 160 1000 Anyone
+else
+  button 20 160 4006 4007 1 0 5
+  dtext 60 160 1263 Anyone
+endif
+
+[dialog d_house_secure_recode button]
+onbutton=1
+tag0.house_access=house_access_owner
+src.sysmessage Access level set for owners.
+resendtooltip
+
+onbutton=2
+tag0.house_access=house_access_coowner
+src.sysmessage Access level set for co-owners.
+resendtooltip
+
+onbutton=3
+tag0.house_access=house_access_friend
+src.sysmessage Access level set for friends.
+resendtooltip
+
+onbutton=4
+tag0.house_access=house_access_guild
+src.sysmessage Access level set for guild members.
+resendtooltip
+
+onbutton=5
+tag0.house_access=house_access_all
+src.sysmessage Access level set for everyone.
+resendtooltip
+
+
+
+//////////////////////////
+// House Entry Recoding
+
+[dialog d_house_entry_recode_confirm]
+150,125
+noclose
+
+page 0 
+
+resizepic 10 10 5054 320 180
+gumppictiled 20 20 300 20 2624
+checkertrans 20 20 300 20
+dhtmlgump 10 20 310 20 0 0 <def.l1>basefont color="#f70000"<def.r1><def.center>NOTICE
+gumppictiled 20 50 300 100 2624
+checkertrans 20 50 300 100
+if (<def0.house_keyless_doors>)
+  dhtmlgump 30 50 290 100 0 1 <def.l1>basefont color="#ffc600"<def.r1>You are about to recode all the doors and telepads in your house, All doors and telepads will be coded to owner access. Do you wish to continue?
+else
+  dhtmlgump 30 50 290 100 0 1 <def.l1>basefont color="#ffc600"<def.r1>You are about to change all the door locks in your house, Do you wish to continue?
+endif
+gumppictiled 20 160 300 20 2624
+checkertrans 20 160 300 20
+
+button 20 160 4005 4007 1 0 1
+dtext 50 160 1152 OKAY
+button 220 160 4005 4007 1 0 0
+dtext 250 160 1152 CANCEL
+
+[dialog d_house_entry_recode_confirm button]
+
+onbutton=0
+src.sysmessage Aborted
+
+onbutton=1
+if (strmatch(*tent*,<baseid>))		//tents dont have doors
+  src.sysmessage This house has no doors.
+  return 1
+endif
+
+if (<def0.house_keyless_doors>)
+  f_house_recode_doors_telepads
+  src.sysmessage All doors and telepads have been recoded to owner access.
+else
+  f_house_remove_keys <src>,1
+  f_house_add_key <src>,1
+  sound 01f4
+endif
+
+
+[dialog d_house_forsale]
+0,0 
+page 0
+//gumppic 150 180 2110
+gumppic 100 105 1140
+//dtext 305 360 46 Sale Status
+
+page 1
+dtext 300 160 105 Owned by:
+dtext 300 220 105 House Name:
+dcroppedtext 300 180 200 20 46 <owner.NAME>
+dcroppedtext 300 240 200 20 46 <NAME>
+if (<tag0.forsale>)
+  dtext 145 310 31 For Sale !
+  dtext 375 310 31 For Sale !
+  dtext 250 288 46 Place an Offer
+  button 280 308 2151 2152 0 2
+endif
+
+page 2
+dtext 155 145 105 House Name:
+dcroppedtext 255 145 170 20 46 <NAME>
+dtext 170 170 46 Price:
+dtext 210 170 46 <dtag0.forsale>
+dtext 170 190 46 Best Offer: 
+dtext 250 190 46 <dtag0.bestoffer>g
+gumppic 160 213 1143 
+dtext 170 215 46 My Offer:
+//dtextentry 240 215 250 20 995 1 <eval qval(<tag0.forsale>,<tag0.bestoffer>,<eval <tag0.bestoffer>+100>,<eval <tag0.bestoffer>+100>,<dtag0.forsale>)>
+dtextentry 240 215 250 20 995 1 <qval (<tag0.bestoffer>)?<eval <tag0.bestoffer>+100>:<dtag0.forsale>>
+button 200 240 1147 1148 1 0 1
+button 320 240 1144 1145 0 1
+
+[dialog d_house_forsale button]
+
+onbutton=1
+if (<src.gold> < <argtxt[1]>)
+  src.sysmessage You do not have sufficient funds to place that offer.
+  return 1
+endif
+if (<tag0.bestoffer>) && (<argtxt[1]> < <eval <tag0.bestoffer>+100>)
+  src.sysmessage You must offer atleast 100 gold more than the current best offer
+  return 1
+endif
+tag0.bestofferer=<src>
+tag0.bestoffer=<argtxt[1]>
+sound <R035,037>
+src.sysmessage You have placed an offer of <dargtxt[1]> gold on <name> owned by <owner.name>
+owner.sysmessage <src.name> has placed an offer of <dargtxt[1]> on your house <name> in <region.name>
+
+[dialog d_house_placement_confirm]
+
+110,100
+noclose
+nomove
+page 0 
+ref1=<owner>
+resizepic 10 10 5054 420 280
+gumppictiled 20 20 400 20 2624
+checkertrans 20 20 400 20
+dhtmlgump 10 20 410 20 0 0 <def.l1>basefont color="#f70000"<def.r1><def.center>WARNING
+gumppictiled 20 50 400 200 2624
+checkertrans 20 50 400 200
+local.v=<link.value>
+local.v += <muldiv (<serv.VendorMarkup>,<local.v>,100)>
+local.placement_cooldown=<qval (<def0.house_placement_time> <= 1440)?<eval (<def0.house_placement_time>/60)> hours:<eval ((<def0.house_placement_time>/60)/24)> days>
+dhtmlgump 30 50 390 200 0 1 <def.l1>basefont color="#ffc600"<def.r1><ref1.name> You are about to place a new house. Placing this house will bring your total houses up to <ref1.houses>, out of the <serv.MaxHousesPlayer> maximum allowed. <qval (<ref1.ctag0.using_house_placement_tool>)?<ref1.findid.i_house_placement_confirm.link.value>g will be deducted from your bank.:><def.br><def.br>In addition, you will not be able to place another house or have on transferred to you for <local.placement_cooldown>.	//one (1) real-life week.
+gumppictiled 20 260 400 20 2624
+checkertrans 20 260 400 20
+
+button 20 260 4005 4007 1 0 1
+dtext 50 260 1152 OKAY
+
+button 220 260 4005 4007 1 0 0
+dtext 250 260 1152 CANCEL
+
+[dialog d_house_placement_confirm button]
+
+onbutton=0
+ref1=<owner>
+if (<ref1.isvalid>)
+  if (<ref1.ctag0.using_house_placement_tool>)
+    ref1.findid.i_house_placement_confirm.link.remove
+    //link.remove
+    //topobj.findid.i_house_placement_confirm.link.remove
+    ref1.ctag0.using_house_placement_tool=
+  else
+    //link.redeed
+    ref1.findid.i_house_placement_confirm.link.redeed
+    //topobj.findid.i_house_placement_confirm.link.redeed
+  endif
+  ref1.findid.i_house_placement_confirm.remove
+endif
+
+onbutton=1
+ref1=<owner>
+if (<ref1.isvalid>) && (<ref1.ctag0.using_house_placement_tool>)
+  local.v=<link.value>
+  local.v += <muldiv <serv.VendorMarkup>,<local.v>,100>
+  if (<ref1.gold> < <local.v>)
+    link.remove
+    ref1.sysmessage You do not have the funds available in your bank box to purcahse this house. Try placing a smaller house, or adding gold to your bank box.
+    ref1.ctag0.using_house_placement_tool=
+    return 1
+  endif
+  ref1.gold -= <local.v>
+  sound 037
+  ref1.ctag0.using_house_placement_tool=
+endif
+ref1.account.tag0.house_last_added=<serv.time>
+ref1.findid.i_house_placement_confirm.remove
+//ref1.go <link.p>
+
+
+
+[dialog d_house_list]
+
+250,200
+resizepic 0 0 9200 540 300
+dtext 180 15 1263 Your Current Houses
+
+dtext 60 40 1263 Name
+dtext 265 40 1263 Coordinates
+dtext 420 40 1263 Owner
+
+ref1=<src>
+ref1.ctag0.house_list=
+for c 0 <eval (<ref1.account.chars>-1)>
+  ref2=<serv.account.<ref1.account>.char.<dlocal.c>>
+  if (<ref2.houses> >= 1)
+    for n <eval (<ref2.houses>-1)> 0
+      ref3=<ref2.house.<dlocal.n>>
+      ref1.ctag0.house_list .= <ref3>,
+      if !(<ref3.isvalid>) || !(<ref3.isitem>) || ((<ref3.owner> != <ref2>) && (strcmpi("<ref2.account>","<ref1.account>)))
+        serv.log <ref2.name>(<ref2>) viewing house (house.<dlocal.n> <ref3>) in their house list, removing it from their house list.
+        ref2.delhouse <ref3>
+      else
+        local.b += 1
+        radio 40 <eval (60+(<local.y>))> 210 211 0 <local.b>
+        dcroppedtext 65 <eval (60+(<local.y>))> 200 25 1000 <ref3.name>
+        dtext 270 <eval (60+(<local.y>))> 1000 <ref3.p>
+        dtext 420 <eval (60+(<local.y>))> <qval (<ref1>==<ref2>)?044:1000> <qval (<ref1>==<ref2>)?You:<ref3.owner.name>>
+        local.y += 17
+      endif
+    endfor
+  endif
+endif
+
+button 20 270 4006 4007 1 0 1
+dtext 50 270 1000 Recall (250gp)
+
+button 170 270 4006 4007 1 0 2
+dtext 200 270 1000 Gate (500gp)
+
+button 450 270 4018 4019 1 0 0
+
+[dialog d_house_list button]
+
+onbutton=0
+src.ctag0.house_list=
+
+onbutton=1
+args=<src.ctag0.house_list>
+src.ctag0.house_list=
+ref1=<argv[<eval (<argchkid>-1)>]>
+if (<argchkid> == -1)
+  src.sysmessage You must select a house for this service.
+  return 1
+elseif (<src.gold> < 250) && !(<src.isgm>)
+  src.sysmessage You cannot afford that service.
+  return 1
+elseif (<flags>&statf_stone) || (<isjailed>)
+  sysmessage You cannot use this service in your current state
+  return 1
+endif
+src.gold -= 250
+src.sound {036 037}
+events=+e_spell_nocost
+serv.newitem i_rune_marker 
+new.morep=<ref1.link.p.x>,<ref1.link.p.y>,<ref1.p.z>
+serv.log <src.name>(<src>) teleporting to <ref1.name>(<ref1>)
+new.type=t_eq_script
+new.layer=layer_special
+new.equip
+new.type=t_rune
+new.events=+t_remove_ontimer
+new.timer=<eval (<serv.spell.52.cast_time>+10)/10>
+src.actarg1=32	//recall spell
+src.act=<new>	//set act to newly created rune marker
+src.actprv=<src>
+src.action=25		//set action to magery
+
+onbutton=2
+args=<src.ctag0.house_list>
+src.ctag0.house_list=
+ref1=<argv[<eval (<argchkid>-1)>]>
+if (<argchkid> == -1)
+  src.sysmessage You must select a house for this service.
+  return 1
+elseif (<src.gold> < 500)
+  src.sysmessage You cannot afford that service.
+  return 1
+elseif (<flags>&statf_stone) || (<isjailed>)
+  sysmessage You cannot use this service in your current state
+  return 1
+endif
+src.gold -= 500
+src.sound {036 037}
+events=+e_spell_nocost
+serv.newitem i_rune_marker 
+new.morep=<ref1.link.p.x>,<ref1.link.p.y>,<ref1.p.z>
+serv.log <src.name>(<src>) gating to <ref1.name>(<ref1>)
+new.type=t_eq_script
+new.layer=layer_special
+new.equip
+new.type=t_rune
+new.events=+t_remove_ontimer
+new.timer=<eval (<serv.spell.52.cast_time>+10)/10>
+src.actarg1=52	
+src.act=<new>	//set act to newly created rune marker
+src.actprv=<src>
+src.action=25		//set action to magery
+
+
+
+
+[EOF]

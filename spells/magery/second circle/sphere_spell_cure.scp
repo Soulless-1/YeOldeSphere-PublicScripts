@@ -1,0 +1,101 @@
+[SPELL 11]
+DEFNAME=s_cure
+NAME=Cure
+SOUND=snd_SPELL_CURE
+RUNES=AN
+CAST_TIME=1.0
+RESOURCES=i_reag_garlic,i_reag_ginseng
+RUNE_ITEM=i_rune_cure
+SCROLL_ITEM=i_scroll_cure
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+EFFECT_ID=i_fx_bless_effect
+EFFECT=0
+DURATION=0.0
+MANAUSE=6
+SKILLREQ=MAGERY 10.0
+INTERRUPT=100.0,100.0
+
+//Cure Poison from your target with this spell. Magery increases its effectiveness to cure higher poison levels.
+//Formula: Chance to Cure = (10000 + Magery * 75) - (Poison Level + 1 * 1750) / 100
+//below is from servuo
+//int chanceToCure = <eval (10000 + ((<local.spell_strength>/10) * 75)) - ((p.RealLevel + 1) * (p.RealLevel < 4 ? 3300 : 3100));
+//chanceToCure /= 100;
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+ref2=<findid.i_rune_poison>
+if (<ref2.isvalid>)
+  args=<ref2.morep>
+  if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<ref1.more1>==s_cure)
+    local.curechance=<f_potion_cure_chance <ref1>>
+  else
+    local.curechance = <eval ((10000 + ((<local.spell_strength>/10) * 75)) - ((<poisonstrength <uid>>+1) * 1750))/100>
+  endif
+  local.random=<R1,100>
+  if (<local.curechance> < <local.random>)
+     src.sysmessage You have failed to cure your target!
+     doswitch <eval (<poisonstrength>-1)>
+       local.strength=Lesser
+       local.strength=Normal
+       local.strength=Greater
+       local.strength=Deadly
+       local.strength=Lethal
+     enddo
+     //src.sysmessage Chance to cure <local.strength> poison: <local.curechance>%
+  else
+    if (<uid> != <src>)
+      src.sysmessage You have cured the target of all poisons!
+    endif
+    sysmessage You have been cured of all poisons.
+    consume i_rune_poison
+  endif
+endif
+effect=3,<serv.spell.11.effect_id>,6,15
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+return 1
+
+
+[function f_potion_cure_chance]
+ref1=<args>			//potion
+ref2=<findid.i_rune_poison>	//poison rune
+if !(<ref2>)
+  return 0	//no chance to cure poison that doesnt exist
+elseif (<ref1.baseid>==i_potion_cureless)
+  if (<ref2.morey> >= 1000)		//lethal
+    return 5
+  elseif (<ref2.morey> >= 800)		//deadly
+    return 10
+  elseif (<ref2.morey> >= 400) 		//greater
+    return 15
+  elseif (<ref2.morey> >= 200)		//normal
+    return 35
+  else					//lesser
+    return 100
+  endif
+elseif (<ref1.baseid>==i_potion_cure)
+  if (<ref2.morey> >= 1000)		//lethal
+    return 15
+  elseif (<ref2.morey> >= 800)		//deadly
+    return 25
+  elseif (<ref2.morey> >= 400) 		//greater
+    return 45
+  elseif (<ref2.morey> >= 200)		//normal
+    return 95
+  else					//lesser
+    return 100
+  endif
+elseif (<ref1.baseid>==i_potion_curegreat)
+  if (<ref2.morey> >= 1000)		//lethal
+    return 25
+  elseif (<ref2.morey> >= 800)		//deadly
+    return 45
+  elseif (<ref2.morey> >= 400) 		//greater
+    return 75
+  else					//normal and lesser
+    return 100
+  endif
+endif
+
+[EOF]

@@ -1,0 +1,2074 @@
+//Insectoid and reptialian monsters should go in here
+
+
+[CHARDEF 015]
+defname=c_serpent_giant
+DEFNAME2=c_snake_giant
+NAME=Giant Serpent
+SOUND=219
+ICON=i_pet_SNAKE_GIANT
+dam=7, 17
+armor=32
+RESOURCES=15 i_hide_spined, 4 i_ribs_raw
+CAN=MT_WALK|MT_SWIM
+FOODTYPE=6 t_meat_raw
+AVERSIONS=r_civilization
+DESCRIPTION=Giant Serpent
+SUBSECTION=Giant Insects and Reptiles
+CATEGORY=Monsters
+
+ON=@Create
+	NPC=brain_monster
+	str={186, 215}
+	dex={56, 80}
+	int={66, 85}
+	maxhits={112, 129}
+	maxmana=0
+	resphysical={30, 35}
+	resfire={5, 10}
+	rescold={10, 20}
+	respoison={70, 90}
+	resenergy={10, 20}
+	poisoning={70.1, 100.0}
+	magicresistance={25.1, 40.0}
+	tactics={65.1, 70.0}
+	wrestling={60.1, 80.0}
+	fame=2500
+	karma=-2500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	item={random_body_parts_1 1 random_body_parts_2 1}
+	item=random_bones
+
+
+[CHARDEF 28]
+DEFNAME=c_spider_giant
+NAME=Giant Spider
+SOUND=0388
+ICON=i_pet_SPIDER_GIANT
+dam=5, 13
+armor=16
+RESOURCES=2 i_reag_spider_silk, 1 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+CATEGORY=Monsters
+SUBSECTION=Giant Insects and Reptiles
+DESCRIPTION=Giant Spider
+
+ON=@Create
+	NPC=brain_monster
+	str={76, 100}
+	dex={76, 95}
+	int={36, 60}
+	maxhits={46, 60}
+	maxmana={0}
+	resphysical={15, 20}
+	respoison={25, 35}
+	poisoning={60.1, 80.0}
+	magicresistance={25.1, 40.0}
+	tactics={35.1, 50.0}
+	wrestling={50.1, 65.0}
+	fame=600
+	karma=-600
+
+ON=@NPCRestock
+	item=i_gold,{25 50}
+	item=i_reag_spider_silk,5
+
+ON=@NPCSpecialAction
+	serv.newitem {0ee3 0ee6}  //small spiderwebs
+	new.type=t_web
+        new.attr=013 
+        new.more2=<uid>
+	new.canmask |= can_o_nosleep
+        new.timer=<R20,30>
+	new.p=<p>
+ 	return 1
+
+[CHARDEF 48]
+DEFNAME=c_scorpion_giant
+NAME=Giant Scorpion
+SOUND=397
+ICON=i_pet_SCORP
+CAN=MT_WALK
+dam=5, 10
+armor=28
+RESOURCES=1 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+AVERSIONS=r_civilization
+DESCRIPTION=Giant Scorpion
+SUBSECTION=Giant Insects and Reptiles
+CATEGORY=Monsters
+
+ON=@Create
+	NPC=brain_monster
+	str={73, 115}
+	dex={76, 95}
+	int={16, 30}
+	maxhits={50, 63}
+	maxmana={0}
+	resphysical={20, 25}
+	resfire={10, 15}
+	rescold={20, 25}
+	respoison={40, 50}
+	resenergy={10, 15}
+	poisoning={80.1, 100.0}
+	magicresistance={30.1, 35.0}
+	tactics={60.3, 75.0}
+	wrestling={50.3, 65.0}
+	fame=2000
+	karma=-2000
+
+on=@npcrestock
+	item=i_gold,{50 100}
+	item=i_potion_poisonless
+
+
+[CHARDEF 70]
+DEFNAME=c_terathan_warrior
+NAME=Terathan Warrior
+SOUND=589
+ICON=i_pet_terathan_war
+CAN=MT_WALK|MT_USEHANDS
+dam=7, 17
+armor=30
+RESOURCES=4 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+AVERSIONS=r_civilization
+DESIRES=e_TERATHAN
+TEVENTS=e_TERATHAN
+//RESLEVEL=1
+//RESDISPDNID=c_snake_giant
+//RESDISPDNHUE=0100
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Terathan Warrior
+
+ON=@Create
+	NPC=brain_monster
+	str={166, 215}
+	dex={96, 145}
+	int={41, 65}
+	maxhits={100, 129}
+	maxmana={0}
+	resphysical={30, 35}
+	resfire={20, 30}
+	rescold={25, 35}
+	respoison={30, 40}
+	resenergy={25, 35}
+	poisoning={ 60.1, 80.0}
+	magicresistance={60.1, 75.0}
+	tactics={80.1, 100.0}
+	wrestling={80.1, 90.0}
+	fame=4000
+	karma=-4000
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	//item=i_treasure_map1,R99
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+
+[CHARDEF 71]
+DEFNAME=c_terathan_drone
+NAME=Terathan Drone
+SOUND=594
+ICON=i_pet_terathan_drone
+dam=6, 12
+armor=24
+RESOURCES=4 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+AVERSIONS=r_civilization
+DESIRES=e_TERATHAN
+TEVENTS=e_TERATHAN
+//RESLEVEL=1
+//RESDISPDNID=c_snake_giant
+//RESDISPDNHUE=0100
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Terathan Drone
+
+ON=@Create
+	NPC=brain_monster
+	str={36, 65}
+	dex={96, 145}
+	int={21, 45}
+	maxhits={22, 39}
+	maxmana={0}
+	resphysical={20, 25}
+	resfire={10, 20}
+	rescold={15, 25}
+	respoison={30, 40}
+	resenergy={15, 25}
+	poisoning={ 40.1, 60.0}
+	magicresistance={30.1, 45.0}
+	tactics={30.1, 50.0}
+	wrestling={40.1, 50.0}
+	fame=2000
+	karma=-2000
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item=i_reag_spider_silk,2
+
+[CHARDEF 152]
+DEFNAME=c_terathan_avenger
+NAME=Terathan Avenger
+SOUND=024d
+ICON=i_pet_terathan_war
+dam=18, 22
+armor=50
+RESOURCES=10 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Terathan Avenger
+
+ON=@Create
+	npc=brain_monster
+	str={467, 645}
+	dex={77, 95}
+	int={126, 150}
+	maxhits={296, 372}
+	maxmana={46, 70}
+	resphysical={40, 50}
+	resfire={30, 40}
+	rescold={35, 45}
+	respoison={90, 100}
+	resenergy={35, 45}
+	evaluatingintel={70.3, 100.0}
+	magery={70.3, 100.0}
+	poisoning={ 60.1, 80.0}
+	magicresistance={65.1, 80.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=15000
+	karma=-15000
+
+
+ON=@NPCRestock
+	item=i_gold,{550 650}
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[CHARDEF 72]
+DEFNAME=c_terathan_matriarch
+NAME=Terathan Matriarch
+SOUND=599
+ICON=i_pet_terathan_queen
+dam=11, 14
+ARMOR=25
+CAN=MT_WALK|MT_USEHANDS
+AVERSIONS=r_civilization
+DESIRES=e_TERATHAN
+TEVENTS=e_TERATHAN
+//RESLEVEL=1
+//RESDISPDNID=c_snake_giant
+//RESDISPDNHUE=0100
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Terathan Matriarch
+
+ON=@Create
+	NPC=brain_monster
+	str={316, 405}
+	dex={96, 115}
+	int={366, 455}
+	maxhits={190, 243}
+	resphysical={45, 55}
+	resfire={30, 40}
+	rescold={35, 45}
+	respoison={40, 50}
+	resenergy={35, 45}
+	evaluatingintel={90.1, 100.0}
+	magery={90.1, 100.0}
+	magicresistance={90.1, 100.0}
+	tactics={50.1, 70.0}
+	wrestling={60.1, 80.0}
+	fame=10000
+	karma=-10000
+    make_spellcaster 5,8
+	
+ON=@NPCRestock
+	item=i_gold,{550 650}
+	//item=random_second_circle,2
+	item=i_reag_spider_silk,5
+	item=random_potion
+	item=random_reagent_necro,{4 10}
+	//item=i_treasure_map4,R99
+	
+[CHARDEF 85]
+DEFNAME=c_ophidian_mage
+NAME=Ophidian Mage
+SOUND=639
+ICON=i_pet_ophid_mage
+CAN=MT_WALK|MT_USEHANDS
+dam=5, 10
+armor=30
+RESOURCES=1 i_ribs_raw
+FOODTYPE=5 t_meat_raw, 5 t_food
+DESIRES=i_gold,t_reagent,t_web,i_reag_spider_silk,e_Ophidian
+TEVENTS=e_Ophidian
+//RESLEVEL=1
+//RESDISPDNID=c_spider_giant
+//RESDISPDNHUE=0153
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Ophidian Mage
+
+ON=@Create
+	NPC=brain_monster
+	str={181, 205}
+	dex={191, 215}
+	int={96, 120}
+	maxhits={109, 123}
+	resphysical={25, 35}
+	resfire={30, 40}
+	rescold={35, 45}
+	respoison={40, 50}
+	resenergy={35, 45}
+	evaluatingintel={85.1, 100.0}
+	magery={85.1, 100.0}
+	magicresistance={75.0, 97.5}
+	tactics={65.0, 87.5}
+	wrestling={20.2, 60.0}
+	fame=4000
+	karma=-4000
+	make_spellcaster 4,7
+
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	//item={random_first_circle 1 random_second_circle 1}
+	//item={random_third_circle 1 random_fifth_circle 1}
+	item=random_reagents,5
+	item=random_reagents,5
+	//item=i_treasure_map2,R99
+
+[CHARDEF 86]
+DEFNAME=c_ophidian_warrior
+NAME=Ophidian Warrior
+SOUND=634
+ICON=i_pet_ophid_war
+CAN=MT_WALK|MT_USEHANDS
+dam=5, 11
+armor=36
+RESOURCES=1 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=e_Ophidian
+TEVENTS=e_Ophidian
+//RESLEVEL=1
+//RESDISPDNID=c_spider_giant
+//RESDISPDNHUE=0153
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Ophidian Warrior
+
+ON=@Create
+	NPC=brain_monster
+	str={150, 320}
+	dex={94, 190}
+	int={64, 160}
+	maxhits={128, 155}
+	maxmana={0}
+	resphysical={35, 40}
+	resfire={20, 30}
+	rescold={25, 35}
+	respoison={30, 40}
+	resenergy={25, 35}
+	magicresistance={70.1, 85.0}
+	swordsmanship={60.1, 85.0}
+	tactics={75.1, 90.0}
+	fame=4500
+	karma=-4500
+
+ON=@NPCRestock
+	item=i_gold,{175 225}	
+	//item=i_treasure_map1,R99
+
+[CHARDEF c_ophidian_enforcer]	//pretty much the same thing as an ophidian warrior
+DEFNAME=c_ophidian_enforcer
+ID=c_ophidian_warrior
+NAME=Ophidian Enforcer
+SOUND=634
+ICON=i_pet_ophid_war
+CAN=MT_WALK|MT_USEHANDS
+dam=5, 11
+armor=36
+RESOURCES=1 i_ribs_raw
+FOODTYPE=15 t_meat_raw
+DESIRES=e_Ophidian
+TEVENTS=e_Ophidian
+//RESLEVEL=1
+//RESDISPDNID=c_spider_giant
+//RESDISPDNHUE=0153
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Ophidian Enforcer
+
+ON=@Create
+	NPC=brain_monster
+	str={150, 320}
+	dex={94, 190}
+	int={64, 160}
+	maxhits={128, 155}
+	maxmana={0}
+	resphysical={35, 40}
+	resfire={20, 30}
+	rescold={25, 35}
+	respoison={30, 40}
+	resenergy={25, 35}
+	magicresistance={70.1, 85.0}
+	swordsmanship={60.1, 85.0}
+	tactics={75.1, 90.0}
+	fame=4500
+	karma=-4500
+
+ON=@NPCRestock
+	item=i_gold,{175 225}	
+	//item=i_treasure_map1,R99
+
+[CHARDEF c_ophidian_archmage]
+DEFNAME=c_ophidian_archmage
+NAME=Ophidian Archmage
+ID=c_OPHIDIAN_MAGE
+dam=5, 10
+armor=44
+RESOURCES=8 i_ribs_raw
+FOODTYPE=5 t_meat_raw, 5 t_food
+DESIRES=i_gold,t_magic,i_reag_spider_silk
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Ophidian Archmage
+
+ON=@Create
+	NPC=brain_monster
+	str={281, 305}
+	dex={191, 215}
+	int={226, 250}
+	maxhits={169, 183}
+	maxstam={36, 45}
+	resphysical={40, 45}
+	resfire={20, 30}
+	rescold={25, 35}
+	respoison={35, 40}
+	resenergy={25, 35}
+	evaluatingintel={95.1, 100.0}
+	magery={95.1, 100.0}
+	magicresistance={75.0, 97.5}
+	tactics={65.0, 87.5}
+	wrestling={20.2, 60.0}
+	fame=11500
+	karma=-11500
+    make_spellcaster 4,7
+	
+ON=@NPCRestock
+	item=i_gold,{125 175}
+	//item={random_first_circle 1 random_second_circle 1}
+	//item={random_third_circle 1 random_fifth_circle 1}
+	item=random_reagents,5
+	item=random_reagents,5
+	//item=i_treasure_map2,R99
+
+
+[CHARDEF c_ophidian_knight]
+defname=c_ophidian_knight
+NAME=Ophidian Knight
+ID=c_OPHIDIAN_WARRIOR
+SOUND=snd_MONSTER_OPHIDIAN_WARRIOR1
+ICON=i_pet_ophid_war
+dam=16, 19
+armor=40
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Ophidian Knight
+
+ON=@Create
+	str={417, 595}
+	dex={166, 175}
+	int={46, 70}
+	maxhits={266, 342}
+	maxmana={0}
+	resphysical={35, 40}
+	resfire={30, 40}
+	rescold={35, 45}
+	respoison={90, 100}
+	resenergy={35, 45}
+	poisoning={ 60.1, 80.0}
+	magicresistance={65.1, 80.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=10000
+	karma=-10000
+
+
+ON=@NPCRestock
+	item=i_gold,{550 650}
+	item=i_potion_poisonless
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+[CHARDEF c_ophidian_avenger]
+defname=c_ophidian_avenger
+NAME=Ophidian Avenger
+ID=c_OPHIDIAN_WARRIOR
+SOUND=snd_MONSTER_OPHIDIAN_WARRIOR1
+ICON=i_pet_ophid_war
+dam=16, 19
+armor=40
+RESOURCES=2 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Ophidian Avenger
+
+ON=@Create
+	str={417, 595}
+	dex={166, 175}
+	int={46, 70}
+	maxhits={266, 342}
+	maxmana={0}
+	resphysical={35, 40}
+	resfire={30, 40}
+	rescold={35, 45}
+	respoison={90, 100}
+	resenergy={35, 45}
+	poisoning={ 60.1, 80.0}
+	magicresistance={65.1, 80.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 100.0}
+	fame=10000
+	karma=-10000
+
+
+ON=@NPCRestock
+	item=i_gold,{550 650}
+	item=i_potion_poisonless
+	//item=tm_magic_items
+	//item=i_treasure_map3,R99
+
+
+[CHARDEF 87]
+defname=c_ophidian_matriarch
+defname2=c_ophidian_queen
+NAME=Ophidian Matriarch
+SOUND=644
+ICON=i_pet_ophid_queen
+CAN=MT_WALK|MT_USEHANDS
+dam=11, 13
+armor=50
+RESOURCES=
+FOODTYPE=15 t_meat_raw, 5 t_food
+DESIRES=i_gold,e_Ophidian
+TEVENTS=e_Ophidian
+//RESLEVEL=1
+//RESDISPDNID=c_spider_giant
+//RESDISPDNHUE=0153
+CATEGORY=Monsters
+SUBSECTION=T2A Monsters
+DESCRIPTION=Ophidian Queen
+
+ON=@Create
+	NPC=brain_monster
+	str={416, 505}
+	dex={96, 115}
+	int={366, 455}
+	maxhits={250, 303}
+	resphysical={45, 55}
+	resfire={30, 40}
+	rescold={35, 45}
+	respoison={40, 50}
+	resenergy={35, 45}
+	evaluatingintel={90.1, 100.0}
+	magery={90.1, 100.0}
+	meditation={5.4, 25.0}
+	magicresistance={90.1, 100.0}
+	tactics={50.1, 70.0}
+	wrestling={60.1, 80.0}
+	fame=16000
+	karma=-16000
+	make_spellcaster 5,8
+
+ON=@NPCRestock
+	item=i_gold,{550 650}
+	item=random_potion
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	//item=i_treasure_map4,R99
+
+
+[CHARDEF 0CE]
+DEFNAME=c_lava_lizard
+NAME=Lava Lizard
+SOUND=05a
+ICON=i_pet_croc
+dam=6, 24
+armor=40
+RESOURCES=1 i_ribs_raw, 12 i_hide_spined
+CAN=MT_WALK//|MT_FIRE_IMMUNE
+FOODTYPE=5 t_meat_raw
+AVERSIONS=r_civilization
+//RESLEVEL=2
+//RESDISPDNID=c_alligator
+//RESDISPDNHUE=1616
+DESCRIPTION=Lava Lizard
+SUBSECTION=Giant Insects and Reptiles
+CATEGORY=Monsters
+
+ON=@Create
+	npc=brain_monster
+	COLOR=1616
+	str={126, 150}
+	dex={56, 75}
+	int={11, 20}
+	maxhits={76, 90}
+	maxmana={0}
+	resphysical={35, 45}
+	resfire={30, 45}
+	respoison={25, 35}
+	resenergy={25, 35}
+	magicresistance={55.1, 70.0}
+	tactics={60.1, 80.0}
+	wrestling={60.1, 80.0}
+	taming=80.7
+	fame=3000
+	karma=-3000
+
+on=@npcrestock
+	item=i_gold,{50 100}
+	item=i_reag_sulfur_ash,{5 15}
+
+
+[CHARDEF c_ice_snake]
+NAME=Ice Snake
+ID=c_SNAKE
+SOUND=0db
+dam=4, 12
+armor=30
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK
+DESIRES=i_gold
+CATEGORY=Animals
+SUBSECTION=Land (Wild)
+DESCRIPTION=Ice Snake
+
+ON=@Create
+	NPC=brain_monster
+	COLOR=color_ice
+	str={42, 54}
+	dex={36, 45}
+	int={26, 30}
+	maxmana={0}
+	resphysical={20, 25}
+	rescold={80, 90}
+	respoison={60, 70}
+	resenergy={30, 40}
+	magicresistance={15.1, 20.0}
+	tactics={39.3, 54.0}
+	wrestling={39.3, 54.0}
+	fame=900
+	karma=-900
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	
+
+[CHARDEF c_lava_snake]
+DEFNAME=c_lava_snake
+NAME=Lava Snake
+ID=c_SNAKE
+SOUND=0xb
+dam=1, 8
+armor=24
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK//|MT_FIRE_IMMUNE
+DESIRES=i_gold
+DESCRIPTION=Lava Snake
+SUBSECTION=Land (Wild)
+CATEGORY=Animals
+
+ON=@Create
+NPC=brain_monster
+str={43, 55}
+dex={16, 25}
+int={6, 10}
+maxhits={28, 32}
+maxmana={0}
+resphysical={20, 25}
+resfire={30, 40}
+respoison={20, 30}
+resenergy={10, 20}
+magicresistance={15.1, 20.0}
+tactics={19.3, 34.0}
+wrestling={19.3, 34.0}
+fame=600
+karma=-600
+
+on=@npcrestock
+	item=i_gold,{25 50}
+	item=i_reag_sulfur_ash
+
+
+[CHARDEF 92]
+DEFNAME=c_silver_serpent
+NAME=Silver Serpent
+SOUND=219
+ICON=i_pet_SNAKE
+dam=5, 21
+armor=40
+RESOURCES=1 i_ribs_raw
+CAN=MT_WALK
+CATEGORY=Monsters
+SUBSECTION=Giant Insects and Reptiles
+DESCRIPTION=Silver Serpent
+
+ON=@Create
+   	events=+e_faction_aligned
+   	tag0.AlignedFaction=1
+	npc=brain_monster
+	//color=0482
+	str={161, 360}
+	dex={151, 300}
+	int={21, 40}
+	maxhits={97, 216}
+	resphysical={35, 45}
+	resfire={5, 10}
+	rescold={5, 10}
+	respoison={100}
+	resenergy={5, 10}
+	poisoning=110.0		//{ 90.1, 100.0}		//<-- should always do lethal
+	magicresistance={95.1, 100.0}
+	tactics={80.1, 95.0}
+	wrestling={85.1, 100.0}
+	detectinghidden={50.0, 55.0}
+	fame=7000
+	karma=-7000
+
+ON=@NPCRestock
+	item=i_gold,{250 300}
+	item=random_jewel,2
+	//item=tm_magic_items,{2 5}
+	//item=i_silver_serpent_venom
+	item=i_silver_snake_skin
+
+ON=@NPCActFight
+	tag0.override.moverate=10
+	tag0.override.movedelay=200
+
+[CHARDEF 89]
+DEFNAME=c_ice_serpent
+NAME=Ice Serpent
+SOUND=219
+ICON=i_pet_SNAKE_GIANT
+dam=7, 17
+armor=32
+RESOURCES=15 i_hide_spined, 3 i_ribs_raw
+CAN=MT_WALK
+FOODTYPE=6 t_meat_raw
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Giant Insects and Reptiles
+DESCRIPTION=Ice Serpent
+
+ON=@Create
+	npc=brain_monster
+	COLOR=color_ice
+	str={216, 245}
+	dex={26, 50}
+	int={66, 85}
+	maxhits={130, 147}
+	maxmana={0}
+	resphysical={30, 35}
+	rescold={80, 90}
+	respoison={15, 25}
+	resenergy={10, 20}
+	anatomy={27.5, 50.0}
+	magicresistance={25.1, 40.0}
+	tactics={75.1, 80.0}
+	wrestling={60.1, 80.0}
+	fame=3500
+	karma=-3500
+
+ON=@NPCRestock
+	item=i_gold,{50 100}
+	item={ random_armor 1 random_weapon 1}
+	//item=i_staff_glacial
+
+[CHARDEF 90]
+DEFNAME=c_lava_serpent
+NAME=Lava Serpent
+CAN=MT_WALK//|MT_FIRE_IMMUNE
+sound=219
+dam=10, 22
+armor=40
+FOODTYPE=6 t_meat_raw
+RESOURCES=4 i_ribs_raw, 15 i_hide_spined
+AVERSIONS=r_civilization
+CATEGORY=Monsters
+SUBSECTION=Giant Insects and Reptiles
+DESCRIPTION=Lava Serpent
+
+ON=@Create
+	npc=brain_monster
+	color=065a
+	str={386, 415}
+	dex={56, 80}
+	int={66, 85}
+	maxhits={232, 249}
+	maxmana={0}
+	resphysical={35, 45}
+	resfire={70, 80}
+	respoison={30, 40}
+	resenergy={10, 20}
+	magicresistance={25.3, 70.0}
+	tactics={65.1, 70.0}
+	wrestling={60.1, 80.0}
+	fame=4500
+	karma=-4500
+
+ON=@NPCRestock
+	item=i_gold,{200 250}
+	item=i_reag_sulfur_ash,3
+	item=random_bones
+	item={random_body_parts_1 1 random_body_parts_2 1}
+	item=random_armor
+
+
+[CHARDEF 20]
+defname=c_frost_spider
+DEFNAME2=c_frostspider
+NAME=Frost Spider
+SOUND=0388
+ICON=i_pet_SPIDER_GIANT
+dam=6, 16
+armor=28 
+RESOURCES=8 i_reag_spider_silk, 5 t_eerie_stuff
+CAN=MT_WALK
+FOODTYPE=15 t_meat_raw
+CATEGORY=Monsters
+SUBSECTION=Giant Insects and Reptiles
+DESCRIPTION=Frost Spider
+
+ON=@Create
+	npc=brain_monster
+	color=0480
+	str={76, 100}
+	dex={126, 145}
+	int={36, 60}
+	maxhits={46, 60}
+	maxmana={0}
+	resphysical={25, 30}
+	resfire={5, 10}
+	rescold={40, 50}
+	respoison={20, 30}
+	resenergy={10, 20}
+	magicresistance={25.1, 40.0}
+	tactics={35.1, 50.0}
+	wrestling={50.1, 65.0}
+	taming=74.7
+	fame=775
+	karma=-775
+
+on=@npcrestock
+	item=i_gold,{75 125}
+	item=i_reag_spider_silk,7
+
+
+[chardef 787]
+defname=c_ant_lion
+NAME=Ant Lion
+SOUND=1006
+ICON=i_worldgem_bit
+dam=7, 21
+armor=45
+CAN=MT_WALK
+MOVERATE=30
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=55
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Ant Lion
+
+ON=@Create
+	NPC=brain_monster
+	str={296, 320}
+	dex={81, 105}
+	int={36, 60}
+	maxhits={151, 162}
+	resphysical={45, 60}
+	resfire={25, 35}
+	rescold={30, 40}
+	respoison={40, 50}
+	resenergy={30, 35}
+	magicresistance={70.0}
+	tactics={90.0}
+	wrestling={90.0}
+	fame=4500
+	karma=-4500
+
+ON=@NpcRestock
+	item=i_gold,{250 300}
+	item={i_ore_iron 1 i_ore_copper 1 i_ore_silver 1 i_ore_gold 1},{1-10}
+	item=i_reag_fertile_dirt,{1 5}
+	item=random_bones
+	//item=i_adventurers_skeleton
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+
+
+[chardef 11]
+defname=c_dread_spider
+name=Dread Spider
+SOUND=1170
+ICON=i_pet_dreadspider
+dam=5, 17
+armor=36
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+MOVERATE=40
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Dread Spider
+
+ON=@Create
+	NPC=brain_monster
+	str={196, 220}
+	dex={126, 145}
+	int={286, 310}
+	maxhits={118, 132}
+	resphysical={40, 50}
+	resfire={20, 30}
+	rescold={20, 30}
+	respoison={100}
+	resenergy={20, 30}
+	evaluatingintel={65.1, 80.0}
+	magery={65.1, 80.0}
+	magicresistance={45.1, 60.0}
+	tactics={55.1, 70.0}
+	wrestling={60.1, 75.0}
+	poisoning={80.0}
+	detectinghidden={50.0, 60.0}
+	necromancy={20.0}
+	spiritspeak={20.0}
+	fame=5000
+	karma=-5000
+
+
+ON=@NpcRestock
+	ITEM=i_gold,{450 650}
+	ITEM=i_reag_spider_silk,8
+	//item=tm_magic_items
+
+
+[chardef 783]
+defname=c_solen_queen_red
+name=Red Solen Queen
+SOUND=959
+ICON=i_pet_fireant_queen
+dam=10, 15
+armor=45
+CAN=MT_WALK|MT_USEHANDS|MT_RUN
+MOVERATE=75
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Red Solen Queen
+
+ON=@Create
+	NPC=brain_monster
+	str={296, 320}
+	dex={121, 145}
+	int={76, 100}
+	maxhits={151, 162}
+	resphysical={30, 40}
+	resfire={30, 35}
+	rescold={25, 35}
+	respoison={35, 40}
+	resenergy={25, 30}
+	magicresistance={70.0}
+	tactics={90.0}
+	wrestling={90.0}
+	fame=4500
+	karma=-4500
+
+ON=@NpcRestock
+	item=i_gold,{400 500}
+	item=i_zoogi_fungus,{5 25}
+	//item=i_crystal_ball_pet_summoning
+	//item=i_picnic_basket
+
+ON=@GetHit
+IF !(<R10>)
+	SERV.NEWNPC C_FIRE_ANT_WORKER
+	NEW.P=<P>
+	NEW.HOME=<NEW.P>
+	NEW.HOMEDIST=7
+	NEW.REMOVETIMER 120
+endif
+
+[chardef 781]
+defname=c_solen_worker_red
+name=Red Solen Worker
+SOUND=959
+ICON=i_pet_fireant_worker
+dam=5, 7
+armor=28
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Red Solen Worker
+
+ON=@Create
+	NPC=brain_monster
+	str={96, 120}
+	dex={81, 105}
+	int={36, 60}
+	maxhits={58, 72}
+	resphysical={25, 30}
+	resfire={20, 30}
+	rescold={10, 20}
+	respoison={10, 20}
+	resenergy={20, 30}
+	magicresistance={60.0}
+	tactics={65.0}
+	wrestling={60.0}
+	fame=1500
+	karma=-1500
+
+ON=@NpcRestock
+	item=i_gold,{125 175}
+	item=i_zoogi_fungus,{1 6}
+	//item=i_picnic_basket
+
+[chardef 782]
+defname=c_solen_warrior_red
+name=Red Solen Warrior
+SOUND=959
+ICON=i_pet_fireant_warrior
+dam=5, 15
+armor=35
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+FOODTYPE=1 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=0ad
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Red Solen Warrior
+
+ON=@Create
+	NPC=brain_monster
+	str={196, 220}
+	dex={101, 125}
+	int={36, 60}
+	maxhits={96, 107}
+	resphysical={20, 35}
+	resfire={20, 35}
+	rescold={10, 25}
+	respoison={20, 35}
+	resenergy={10, 25}
+	magicresistance={60.0}
+	tactics={80.0}
+	wrestling={80.0}
+	fame=3000
+	karma=-3000
+
+ON=@NpcRestock
+	ITEM=i_gold,{250 350}
+	item=random_jewel,{1 4}
+	item=i_zoogi_fungus,{3 13}
+	//item=i_picnic_basket
+	//item=i_bracelet_binding
+
+
+[chardef 244]
+defname=c_rune_beetle
+name=Rune Beetle
+SOUND=04e5
+ICON=i_pet_runebeetle
+dam=15, 22
+RESOURCES=15 i_ribs_raw
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=40
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Rune Beetle
+
+ON=@Create
+    tag.controlslots=4
+	NPC=brain_monster
+	str={401, 460}
+	dex={121, 170}
+	int={376, 450}
+	maxhits={301, 360}
+	resphysical={40, 65}
+	resfire={35, 50}
+	rescold={35, 50}
+	respoison={75, 95}
+	resenergy={40, 60}
+	evaluatingintel={100.1, 125.0}
+	magery={100.1, 110.0}
+	poisoning={120.1, 140.0}
+	magicresistance={95.1, 110.0}
+	tactics={78.1, 93.0}
+	wrestling={70.1, 77.5}
+	fame=15000
+	karma=-15000
+	
+ON=@NpcRestock
+	item=i_gold,{1000 1200}
+	//item=tm_magic_items
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+	item={random_body_parts_1 1 random_body_parts_2 1}
+	item=random_bones
+	item=random_reagent,{5 14}
+
+
+[chardef 242]
+defname=c_deathwatch_beetle
+name=deathwatch beetle
+SOUND=04f0
+ICON=i_pet_deathwatch_beetle
+dam=5, 10
+ARMOR=20
+RESOURCES=8 i_hide
+CAN=MT_WALK|MT_RUN|MT_USEHANDS|MT_EQUIP
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=55
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Worm
+
+ON=@Create
+	NPC=brain_monster
+	str={136, 160}
+	dex={41, 52}
+	int={31, 40}
+	maxhits={121, 145}
+	maxmana={20}
+	resphysical={35, 40}
+	resfire={15, 30}
+	rescold={15, 30}
+	respoison={50, 80}
+	resenergy={20, 35}
+	magicresistance={50.1, 58.0}
+	tactics={67.1, 77.0}
+	wrestling={50.1, 60.0}
+	anatomy={30.1, 34.0}
+	fame=1400
+	karma=-1400
+
+ON=@Hit
+IF !(<SRC.FLAGS>&statf_poisoned)
+	SRC.SPELLEFFECT S_POISON,1000,<UID>
+endif
+
+ON=@NpcRestock
+	item=random_potion
+	//item={random_first_circle 1 random_second_circle 1}
+	item=random_armor
+	item=i_seed_bonsai
+
+
+[CHARDEF 249]
+Name=Yamandon
+DEFNAME=c_yamandon
+ICON=i_pet_yamandon
+dam=19, 35
+SOUND=1260
+CAN=MT_WALK|MT_RUN
+RESOURCES=20 i_hide
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=SE
+DESCRIPTION=Yamandon
+
+on=@create
+	NPC=BRAIN_MONSTER
+	str={786, 930}
+	dex={251, 365}
+	int={101, 115}
+	maxhits={1601, 1800}
+	resphysical={65, 85}
+	resfire={70, 90}
+	rescold={50, 70}
+	respoison={50, 70}
+	resenergy={50, 70}
+	anatomy={115.1, 130.0}
+	magicresistance={117.6, 132.5}
+	poisoning={120.1, 140.0}
+	tactics={117.1, 132.0}
+	wrestling={112.6, 132.5}
+	fame=22000
+	karma=-22000
+
+on=@npcrestock
+	item=i_gold,{2000 2500}
+	//item=tm_magic_items
+	item=random_jewel,6
+	item=i_eggs_fresh,2
+	//item=i_treasure_map5,R99	
+	item=i_seed_bonsai
+
+[chardef 807]
+defname=c_solen_queen_black
+name=black solen queen
+sound=959
+can=mt_walk|mt_run
+dam=10, 15
+armor=30, 40
+//RESDISPDNID=c_man
+//RESLEVEL=3
+//RESDISPDNHUE=33
+
+on=@create
+	npc=brain_monster
+	color=0453
+	str={296, 320}
+	dex={121, 145}
+	int={76, 100}
+	maxhits={151, 162}
+	resphysical={30, 40}
+	resfire={30, 35}
+	rescold={25, 35}
+	respoison={35, 40}
+	resenergy={25, 30}
+	magicresistance={70.0}
+	tactics={90.0}
+	wrestling={90.0}
+	fame=4500
+	karma=-4500
+
+on=@npcrestock
+	item=i_gold,{400 500}
+	item=i_zoogi_fungus,{5 25}
+	//item=i_crystal_ball_pet_summoning
+	//item=i_picnic_basket
+
+[chardef 806]
+defname=c_solen_warrior_black
+name=black solen warrior
+sound=959
+can=mt_walk|mt_run|
+dam=5, 15
+armor=35
+
+on=@create
+	npc=brain_monster
+	color=0453
+	str={196, 220}
+	dex={101, 125}
+	int={36, 60}
+	maxhits={96, 107}
+	resphysical={20, 35}
+	resfire={20, 35}
+	rescold={10, 25}
+	respoison={20, 35}
+	resenergy={10, 25}
+	magicresistance={60.0}
+	tactics={80.0}
+	wrestling={80.0}
+	fame=3000
+	karma=-3000
+
+on=@npcrestock
+	item=i_gold,{250 350}
+	item=random_jewel,{1 4}
+	item=i_zoogi_fungus,{3 13}
+	//item=i_picnic_basket
+	//item=i_bracelet_binding
+
+[chardef 805]
+defname=c_solen_worker_black
+name=black solen worker
+sound=959
+can=mt_walk|mt_run
+dam=5, 7
+armor=28
+
+on=@create
+	npc=brain_monster
+	color=0453
+	str={96, 120}
+	dex={81, 105}
+	int={36, 60}
+	maxhits={58, 72}
+	resphysical={25, 30}
+	resfire={20, 30}
+	rescold={10, 20}
+	respoison={10, 20}
+	resenergy={20, 30}
+	magicresistance={60.0}
+	tactics={65.0}
+	wrestling={60.0}
+	fame=1500
+	karma=-1500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	item=i_zoogi_fungus,{1 6}
+	//item=i_picnic_basket
+
+
+[chardef c_solen_infiltrator_queen_black]
+defname=c_solen_infiltrator_queen_black
+id=c_solen_queen_black
+name=black solen infiltrator queen
+sound=959
+can=mt_walk|mt_run
+armor=50
+
+on=@create
+	npc=brain_monster
+	color=0453
+	str={326, 350}
+	dex={141, 165}
+	int={96, 120}
+	maxhits={151, 162}
+	resphysical={30, 40}
+	resfire={30, 35}
+	rescold={25, 35}
+	respoison={35, 40}
+	resenergy={25, 30}
+	magicresistance={90.0}
+	tactics={90.0}
+	wrestling={90.0}
+	fame=6500
+	karma=-6500
+
+on=@npcrestock
+	item=i_gold,{250 300}
+	item=i_zoogi_fungus,{4 116}
+	//item=i_picnic_basket
+
+[chardef c_solen_infiltrator_warrior_black]
+defname=c_solen_infiltrator_warrior_black
+name=black solen infiltrator warrior
+id=c_solen_warrior_black
+sound=959
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=5, 15
+armor=40
+
+on=@create
+	npc=brain_monster
+	color=0453
+	str={206, 230}
+	dex={121, 145}
+	int={66, 90}
+	maxhits={96, 107}
+	resphysical={20, 35}
+	resfire={20, 35}
+	rescold={10, 25}
+	respoison={20, 35}
+	resenergy={10, 25}
+	magicresistance={80.0}
+	tactics={80.0}
+	wrestling={80.0}
+	fame=3000
+	karma=-3000
+
+on=@npcrestock
+	item=i_gold,{200 225}
+	item=random_jewel,{1 4}
+	item=i_zoogi_fungus,{3 13}
+	//item=i_picnic_basket
+
+
+[chardef 09d]
+defname=c_giant_black_widow
+name=giant black widow
+sound=0388 
+can=mt_walk|mt_run|mt_usehands
+dam=5, 17
+armor=24
+
+on=@create
+	npc=brain_monster
+	str={76, 100}
+	dex={96, 115}
+	int={36, 60}
+	maxhits={46, 60}
+	resphysical={20, 30}
+	resfire={10, 20}
+	rescold={10, 20}
+	respoison={50, 60}
+	resenergy={10, 20}
+	anatomy={30.3, 75.0}
+	poisoning={60.1, 80.0}
+	magicresistance={45.1, 60.0}
+	tactics={65.1, 80.0}
+	wrestling={70.1, 85.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	item=i_gold,{125 175}
+	item=i_reag_spider_silk,5
+	item=random_potion,2	//lesser
+	
+
+[chardef c_deathwatch_beetle_hatchling]
+defname=c_deathwatch_beetle_hatchling
+id=c_deathwatch_beetle
+name=deathwatch beetle hatchling
+sound=04F3
+can=mt_walk|mt_run|mt_usehands
+dam=2, 8
+
+on=@create
+	npc=brain_monster
+	str={26, 50}
+	dex={41, 52}
+	int={21, 30}
+	maxhits={51, 60}
+	Mana=20
+	resphysical={35, 40}
+	resfire={15, 30}
+	rescold={15, 30}
+	respoison={20, 40}
+	resenergy={20, 35}
+	wrestling={30.1, 40.0}
+	tactics={47.1, 57.0}
+	magicresistance={30.1, 38.0}
+	anatomy={20.1, 24.0}
+	fame=700
+	karma=-700
+
+on=@npcrestock
+	//item={random_first_circle 1 random_second_circle 1}
+	item=random_potion
+	item=random_reagent,3
+	item=random_armor
+
+
+[ITEMDEF 9743]		//note: is this needed?
+DEFNAME=i_pet_giantbeetle
+NAME=Giant Beetle
+
+[CHARDEF 0317]
+DEFNAME=c_giant_beetle
+NAME=Giant Beetle
+CAN=MT_WALK|MT_RUN
+soundidle=021d
+soundnotice=021d
+soundhit=0162
+soundgethit=0163
+sounddie=021d
+ICON=i_pet_giantbeetle
+dam=7, 20
+ARMOR=30
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+MOVERATE=40
+TEVENTS=e_horses
+//RESLEVEL=2
+//RESDISPDNID=c_horse_gray
+//RESDISPDNHUE=080c9
+CATEGORY=Monsters
+SUBSECTION=New Mounts
+DESCRIPTION=Giant Beetle
+
+ON=@Create
+	NPC=brain_animal
+	str={300}
+	dex={100}
+	int={500}
+	maxhits={200}
+	resphysical={30, 40}
+	resfire={20, 30}
+	rescold={20, 30}
+	respoison={20, 30}
+	resenergy={20, 30}
+	magicresistance={80.0}
+	tactics={100.0}
+	wrestling={100.0}
+	taming=29.1
+	fame=4000
+	karma=-4000
+
+[chardef 169]
+name=fire beetle
+defname=c_giant_beetle_fire
+can=mt_walk|mt_run|mt_equip|mt_usehands
+soundidle=021d
+soundnotice=021d
+soundhit=0162
+soundgethit=0163
+sounddie=021d
+dam=7, 20
+resources=16 i_ribs_raw
+
+on=@create
+	color=0489
+	npc=brain_monster
+	str={300}
+	dex={100}
+	int={500}
+	maxhits={200}
+	resphysical={40}
+	resfire={70, 75}
+	rescold={10}
+	respoison={30}
+	resenergy={30}
+	magicresistance={90.0}
+	tactics={100.0}
+	wrestling={100.0}
+	fame=4000
+	karma=-4000
+
+
+on=@npcrestock
+	item=i_reag_sulfur_ash,{15 25}
+	item=i_ingot_iron,2
+
+
+[chardef c_Solen_Infiltrator_Queen_Red]
+defname=c_Solen_Infiltrator_Queen_Red
+name=red solen infiltrator
+id=c_solen_queen_red
+sound=959
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=10, 15
+armor=50
+
+
+on=@create
+	npc=brain_monster
+	str={326, 350}
+	dex={141, 165}
+	int={96, 120}
+	maxhits={151, 162}
+	resphysical={30, 40}
+	resfire={30, 35}
+	rescold={25, 35}
+	respoison={35, 40}
+	resenergy={25, 30}
+	magicresistance={90.0}
+	tactics={90.0}
+	wrestling={90.0}
+	fame=6500
+	karma=-6500
+
+on=@npcrestock
+	item=i_gold,{250 300}
+	item=i_zoogi_fungus{4 16}
+	//item=i_picnic_basket
+
+
+[chardef c_Solen_Infiltrator_Warrior_red]
+defname= c_Solen_Infiltrator_Warrior_red
+name=red solen infiltrator
+id=c_solen_worker_red
+sound=959
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=5, 15
+armor=40
+
+on=@create
+	npc=brain_monster
+	str={206, 230}
+	dex={121, 145}
+	int={66, 90}
+	maxhits={96, 107}
+	resphysical={20, 35}
+	resfire={20, 35}
+	rescold={10, 25}
+	respoison={20, 35}
+	resenergy={10, 25}
+	magicresistance={80.0}
+	tactics={80.0}
+	wrestling={80.0}
+	fame=3000
+	karma=-3000
+
+on=@npcrestock
+	item=i_gold,{200 225}
+	item=random_jewel,{1 4}
+	item=i_zoogi_fungus,{3 13}
+	//item=i_picnic_basket
+
+[chardef 738]
+defname=c_Fire_Ant
+name=fire ant
+sound=846
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=15, 18
+
+on=@create
+	npc=brain_monster
+	str={225}
+	dex={108}
+	int={25}
+	maxhits={299}
+	resphysical={52}
+	resfire={96}
+	rescold={36}
+	respoison={40}
+	resenergy={36}
+	anatomy={8.7}
+	magicresistance={53.1}
+	tactics={77.2}
+	wrestling={75.4}
+	fame=5000
+	karma=-5000
+
+on=@npcrestock
+	item=i_gold,{299 299}
+	item=i_seared_fire_ant_goo
+	//item=i_treasure_map3,R99
+
+[chardef 726]
+defname=c_Kepetch
+name=kepetch
+sound=1545
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=7, 17
+resources=5 i_ribs_raw, 14 i_hide_spined,	//15 i_fur
+
+on=@create
+	npc=brain_monster
+	str={337, 354}
+	dex={184, 194}
+	int={32, 37}
+	maxhits={308, 366}
+	resphysical={55, 65}
+	resfire={40, 45}
+	rescold={45, 55}
+	respoison={55, 65}
+	resenergy={65, 75}
+	anatomy={119.7, 124.1}
+	magicresistance={89.9, 97.4}
+	tactics={117.4, 123.5}
+	wrestling={107.7, 113.9}
+	fame=6000
+	karma=-6000
+
+on=@npcrestock
+	item=i_gold,{149 200}
+	//item=tm_magic_items
+
+[chardef 730]
+defname=c_raptor
+name=raptor
+sound=1573
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=11, 17
+resources=7 i_ribs_raw, 11 i_hide_horned, 8 i_reag_dragon_blood
+
+on=@create
+	npc=brain_monster
+	str={404, 471}
+	dex={132, 155}
+	int={105, 145}
+	maxhits={343, 400}
+	resphysical={45, 50}
+	resfire={50, 60}
+	rescold={40, 50}
+	respoison={20, 30}
+	resenergy={30, 40}
+	magicresistance={75.1, 90.0}
+	tactics={75.1, 100.0}
+	wrestling={70.1, 95.1}
+	fame=7500
+	karma=-7500
+
+on=@npcrestock
+	item=i_gold,{400 500}
+	//item=tm_magic_items
+	item=i_raptor_teeth
+	item=i_pottery_fragments
+	item=i_raptor_claw
+	item=i_trasure_map3,R99
+
+[chardef 717]
+defname=c_clockwork_scorpion
+name=clockwork scorpion
+id=717
+sound=541
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=5, 10
+
+on=@create
+	npc=brain_monster
+	str={225, 245}
+	dex={80, 100}
+	int={30, 40}
+	maxhits={151, 210}
+	resphysical={80, 100}
+	resfire={20, 30}
+	rescold={60, 80}
+	respoison={100}
+	resenergy={10, 25}
+	magicresistance={30.1, 50.0}
+	poisoning={ 95.1, 100.0}
+	tactics={70.1, 90.0}
+	wrestling={50.1, 80.0}
+	fame=3500
+	karma=-3500
+
+on=@npcrestock
+	//fixme: need loot
+
+
+[chardef c_snake_coral]
+defname=c_snake_coral
+name=coral snake
+id=c_snake
+sound=0DB
+can=mt_walk|mt_run
+dam=5, 21
+armor=16
+
+on=@create
+	npc=brain_monster
+	color=021
+	str={205, 340}
+	dex={248, 300}
+	int={28, 35}
+	maxhits={132, 200}
+	maxmana={28, 35}
+	resphysical={42, 50}
+	resfire={5, 20}	resphysical={5, 20}
+	respoison={100}
+	resenergy={5, 20}
+	poisoning={ 99.7, 110.9}
+	magicresistance={98.1, 105.0}
+	tactics={82.0, 98.0}
+	wrestling={90.3, 105.0}
+	fame=300
+	karma=-300
+
+on=@npcrestock
+	item=i_gold,{250 350}
+	item=random_jewel,2
+	//item=tm_magic_items,{1 3},R99
+
+
+[chardef 714]
+defname=c_beetle_iron
+name=iron beetle
+sound=397
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=15, 20
+armor=38
+
+on=@create
+	npc=brain_monster
+	str={816, 883}
+	dex={68, 73}
+	int={40, 49}
+	maxhits={762, 830}
+	resphysical={55, 60}
+	resfire={20, 30}
+	rescold={20, 30}
+	respoison={30, 40}
+	resenergy={45, 55}
+	anatomy={80.1, 85.0}
+	magicresistance={125.1, 130.0}
+	tactics={90.1, 100.0}
+	wrestling={90.1, 110.0}
+	Mining={50.1, 70.0}
+	fame=15000
+	karma=-15000
+
+on=@npcrestock
+	item=i_undamaged_scales
+
+
+[chardef c_Kepetch_Ambusher]
+defname=c_Kepetch_Ambusher
+name=kepetch ambusher
+id=c_kepetch
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=7, 17
+armor=16
+resources=7 i_ribs_raw, 6 i_reag_dragon_blood, 13 i_hide_horned,	//1 i_fur
+
+on=@create
+	npc=brain_monster
+	str={440, 446}
+	dex={229, 254}
+	int={46, 46}
+	maxhits={533, 544}
+	resphysical={73, 95}
+	resfire={57, 70}
+	rescold={50, 60}
+	respoison={55, 65}
+	resenergy={70, 95}
+	anatomy={104.3, 114.1}
+	magicresistance={94.6, 97.4}
+	tactics={110.4, 123.5}
+	wrestling={107.3, 113.9}
+	stealth={125.0}
+	hiding={125.0}
+	fame=2500
+	karma=-2500
+
+on=@npcrestock
+	item=i_gold,{250 350}
+	//item=tm_magic_items
+	
+
+[chardef c_sentinel_spider]
+defname=c_sentinel_spider		
+name=Sentinel spider
+id=c_giant_black_widow
+sound=0388
+dam=15, 22
+armor=28
+
+on=@create
+	color=1141
+	npc=brain_monster
+	str={ 95, 100 }
+	dex={ 140, 145 }
+	int={ 40, 45 }
+	maxhits={ 260, 265 }
+	resphysical={45, 50 }
+	resFire={30, 35 }
+	resCold={30, 35 }
+	resPoison={70, 75 }
+	resEnergy={30, 35 }
+	Anatomy={85.0, 90.0 }
+	MagicResistance={88.5, 90.0 }
+	Tactics={102.9, 105.0 }
+	Wrestling={119.1, 120.0 }
+	Poisoning={101.0, 102.0 }
+	fame=775
+	karma=-775
+
+on=@npcrestock
+	
+
+[chardef 734]
+defname=c_slith
+name=slith
+can=mt_walk|mt_run
+dam=6, 24
+sound=219
+resources=10 i_hide, 6 i_reag_dragon_blood, 6 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	str={129, 136}
+	dex={72, 75}
+	int={12, 13}
+	maxhits={84, 85}
+	resphysical={35, 40}
+	resfire={35, 45}
+	respoison={25, 35}
+	resenergy={25, 30}
+	magicresistance={59.1, 63.5}
+	tactics={74.6, 76.4}
+	wrestling={62.0, 77.1}
+	fame=3000
+	karma=-3000
+
+on=@npcrestock
+	item=i_gold,{100 200}
+	//item=tm_magic_items
+	item=i_slith_tongue
+	item=i_slith_eye
+	item=i_pottery_fragments
+
+
+[chardef c_slith_stone]
+defname=c_slith_stone
+name=stone slith
+id=c_slith
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=6, 24
+sound=219
+resources=1 i_ribs_raw, 12 i_hide_spined, 6 i_reag_dragon_blood
+
+on=@create
+	npc=brain_monster
+	color=0835
+	str={250, 300}
+	dex={76, 90}
+	int={34, 69}
+	maxhits={154, 166}
+	maxstam={76, 90}
+	maxmana={34, 69}
+	resphysical={50, 55}
+	resfire={20, 30}
+	rescold={10, 20}
+	respoison={30, 40}
+	resenergy={30, 40}
+	magicresistance={86.8, 95.1}
+	tactics={82.6, 88.6}
+	wrestling={75.8, 87.4}
+	anatomy={0.0, 2.9}
+	fame=4000
+	karma=-4000
+
+on=@npcrestock
+	item=i_gold,{100 200}
+	item=magic_item,{1 2},R99
+	item=i_slith_tongue
+	item=i_pottery_fragments
+
+
+[chardef c_slith_toxic]
+defname=c_slith_toxic
+name=toxic slith
+id=c_slith
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=6, 24
+sound=219
+//resources=11 i_hide_horned, 6 i_reag_dragon_blood, 6 i_ribs_raw
+
+on=@create
+	npc=brain_monster
+	color=476
+	str={223, 306}
+	dex={231, 258}
+	int={30, 35}
+	maxhits={197, 215}
+	maxstam={231, 258}
+	resphysical={35, 45}
+	resfire={0, 9}
+	rescold={5, 10}
+	respoison={100, 100}
+	resenergy={5, 7}
+	magicresistance={95.4, 98.3}
+	tactics={85.5, 90.9}
+	wrestling={90.4, 95.1}
+	fame=7000
+	karma=-7000
+
+on=@npcrestock
+	item=i_gold,{400 500}
+	//item=tm_magic_items,{2 5},R99
+	item=i_toxic_venom_sac
+	item=i_slith_tongue
+	item=i_pottery_fragments
+	item=i_tattered_scroll
+
+[chardef 737]
+defname=c_Trapdoor_Spider
+name=trapdoor spider
+sound=1605
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=15, 18
+
+on=@create
+	npc=brain_monster
+	str={100, 104}
+	dex={162, 165}
+	int={29, 50}
+	maxhits={125, 144}
+	resphysical={0}
+	resfire={30, 35}
+	rescold={30, 35}
+	respoison={40, 45}
+	resenergy={95, 100}
+	anatomy={2.0, 3.8}
+	magicresistance={47.5, 57.9}
+	poisoning={ 70.5, 73.5}
+	tactics={73.3, 78.9}
+	wrestling={92.5, 94.6}
+	hiding={110.3, 119.9}
+	stealth={110.5, 119.6}
+	fame=2000
+	karma=-2000
+
+on=@npcrestock
+	item=i_gold,{250 350}
+	item=i_reag_spider_silk,8
+	//item=tm_magic_items,{1 4},R99
+	item=i_bottle_ichor
+	item=i_spider_carapace
+	item=i_tattered_scroll
+	//item=i_treasure_map2,R99
+
+
+[chardef 736]
+defname=c_Wolf_Spider
+name=Wolf spider
+sound=1605
+can=mt_walk|mt_run|mt_usehands
+dam=15, 18
+
+on=@create
+	npc=brain_monster
+	color=0
+	str={225, 268}
+	dex={145, 165}
+	int={285, 310}
+	maxhits={150, 160}
+	maxmana={285, 310}
+	maxstam={145, 165}
+	resphysical={30, 35}
+	resfire={20, 30}
+	rescold={25, 35}
+	respoison={100}
+	resenergy={25, 35}
+	anatomy={80.0, 90.0}
+	magicresistance={60.0, 75.0}
+	poisoning={ 62.3, 77.2}
+	tactics={84.1, 95.9}
+	wrestling={80.2, 90.0}
+	hiding={105.0, 110.0}
+	stealth={105.0, 110.0}
+
+on=@npcrestock
+	item=i_bottle_ichor
+	item=i_spider_carapace
+
+
+
+
+
+
+[EOF]
+
+
+
+
+
+
+
+
+
+
+
+
+

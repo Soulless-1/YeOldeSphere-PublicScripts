@@ -1,0 +1,205 @@
+//NPC Artificial Intelligence by Soulless v0.5
+//v1.5
+//4:08 AM 2/29/2020
+
+
+
+
+//////////////////////////////
+// NPCai Memory item
+
+
+// Spellcaster
+// Can be fizzled, will not cast spells like poison,weaken,etc repetitively.
+// Will summon conjured monsters, but only one at a time (conjured monsters can't conjure other monsters)
+
+//todo
+// dispel conjured monsters attacking them
+// dispel buffed players attacking them, or polymorphed players
+
+
+[itemdef i_npcai]			//this is what controls their actions such as fighting, healing, helping others, and looting
+id=i_flesh_brain
+name=NPCai
+type=t_eq_script
+layer=layer_special
+
+[events e_npcai]
+
+
+on=@click
+speechcoloroverride=
+//message @03b2,3,0,0 [SID 6.7]
+
+on=@npclookatchar
+//if someone else isnt aready attacking this npc
+//if i am not looting something
+//if i am not running somewhere
+
+//say looking at <src.name>
+
+if (<action> == 067) || (<action>==06d) || (<action>==-1) || (<action>==1102)  || (<action>==116)	//wandering or idle or traveling
+  if (<npcai_isenemy <src>>)	
+    attack <src>
+    return 0
+  endif
+endif
+
+if  (<ishuman> || <iself> || <isgargoyle>) && (<isally <src>>)
+  if (<src.tag0.needs_help>)
+    if (<cancast s_greater_heal> && <mana> >= <serv.spell.s_greater_heal.manause>) 
+      actarg1=29
+      act=<src>	
+      actprv=<src>
+      action=25	
+      src.tag0.needs_help=
+
+    elseif (<cancast s_heal> && <mana> >= <serv.spell.s_heal.manause>) 
+      actarg1=4		
+      act=<src>	
+      actprv=<src>
+      action=25	
+      src.tag0.needs_help=
+
+    elseif (<findid.i_bandage> && <distance <src>> <= 3 && !<findid.i_applying_bandage>)  
+      f_bandage_target <src>
+
+    endif
+  endif
+endif
+
+on=@spellcast
+local.wop=1
+
+on=@npcactfight
+local.health=<muldiv <hits>,100,<maxhits>>
+local.stamina=<muldiv <stam>,100,<maxstam>>
+local.mana=<muldiv <mana>,100,<maxmana>>
+
+//Mages should always be putting distance between themselves and enemies
+//archers/bowers should be moving back to the perfect distance
+//mages should go through deadly spell rotations to destroy enemies
+//all npcs should try to coordinate targets of interest 
+//use different levels of cure potion for different poisons
+//use explosion potion if you have it
+//help allies if we can, magery, bandage, attack their target
+
+if (<local.health> < 85)	//always apply a bandage if i have one when damaged 15%
+  if (<findid.i_bandage>) && !(<findid.i_applying_bandage>)
+    trysrc <uid> bandageself
+  endif
+endif
+
+if (<flags>&statf_poisoned)	//drink cure potion if im poisoned
+  if (<findid.i_potion_cure>)
+    useitem <findid.i_potion_cure>
+  endif
+endif
+
+if (<magery> >= 450)	//don't run out of mana if you are a spellcaster
+  if (<local.mana> < 50)
+    if (<findid.i_potion_mana>)
+      useitem <findid.i_potion_mana>
+    //elseif (<findid.i_mana_crystal>)	//mana crystal first if you have one, save potion delay
+      //useitem <findid.i_mana_crystal>  
+    endif
+  endif
+endif
+
+if !(<findlayer.50>)	//use a potion if i'm able to
+  if (<local.health> <  40)
+    if (<findid.i_potion_healgreat>)
+      useitem <findid.i_potion_healgreat>
+    endif
+  endif
+  if (<local.health> <  60)
+    if (<findid.i_potion_heal>)
+      useitem <findid.i_potion_heal>
+    endif
+  endif
+  if (<local.health> <  80)
+    if (<findid.i_potion_healless>)
+      useitem <findid.i_potion_healless>
+    endif
+  endif
+endif
+
+//cancast heal, do that shit here
+//cancast cure? do that shit here
+//also think about buffing yourself
+
+if (<ishuman>) || (<iself>) || (<isgargoyle>)
+  if (<local.health> < 40)	//less than 40% after healing, call for help
+    if (<tag0.needs_help> < 1)
+      dorand 3
+        say Help me, I am in great peril!
+        say Quick help, I am in need!
+        say I require assistance!
+      enddo
+    endif
+    tag0.needs_help += 1
+  endif
+  if (<local.health> < 15)	//less than 10% flee
+    if (<tag0.fleeing> < 1)
+      dorand 3
+        say I have to flee!
+        say Run away! Run away!
+        say I'm falling back! 
+      enddo
+    endif
+    tag0.fleeing += 1
+    argn2=-100
+  endif
+endif
+
+ON=@SpellSelect	//lets not cast spells that are already active on the player
+if (<argn3>==01) && (<act.isvalid>) && (<act.ischar>)	//only if we're selecting a spell and have a target
+  if (<act.findid.i_rune_clumsy> && <argn1>==1)			//don't cast spells on targets that already have that spell active
+    return 1
+  elseif (<act.findid.i_rune_feeblemind> && <argn1>==3) 
+    return 1
+  elseif (<act.findid.i_rune_weaken> && <argn1>==8)
+    return 1
+  elseif (<act.findid.i_rune_curse>) && (<argn1>==1 || <argn1>==3 || <argn1>==8)
+    return 1
+  elseif (<act.findid.i_rune_poison>) && (<argn1>==20)		
+    return 1
+  elseif (<act.findid.i_rune_curse>) && (<argn1>==27)
+    return 1
+  elseif (<act.findid.i_rune_paralyze>) && (<argn1>==38)	
+    return 1
+  elseif (<serv.spell.<argn1>.flags>&spellflag_summon)   
+    if (<flags>&statf_conjured) 
+      return 1		//lets not have summoned monsters summoning monsters who summon monsters 
+    elseif (<findid.i_memory_recently_summoned>)
+      return 1		//only summon one of these if the duration of the old one ran out
+    else
+      serv.newitem i_memory_recently_summoned
+      new.timer <f_avgvalue <serv.spell.<argn1>.duration>>
+      equip <new>
+    endif
+  endif
+  if !(<R2>)	//sometimes do these actions
+    if !(strcmpi(<act.action>,magery))
+      argn1=5		//fizle casters with a magic arrow
+    endif
+  endif
+endif
+
+on=@kill
+//say loot <argo.name>
+
+[itemdef i_memory_recently_summoned]
+id=i_pet_dog
+name=Recently Summoned Something
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+
+
+[EOF]
+

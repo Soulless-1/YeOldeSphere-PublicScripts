@@ -1,0 +1,223 @@
+//http://uo.stratics.com/content/skills/animallore_archive.shtml
+//http://www.uoguide.com/Animal_Lore
+//1:44 AM 3/27/2018
+
+//todo: check barding difficulty calc accuracy
+//add flags for era-settings to get rid of extra stuff?
+
+[defname animal_lore_settings]
+animal_lore_era		1		//1=renaissance, 2=AOS+
+
+
+[SKILL 2]
+DEFNAME=SKILL_ANIMAL_LORE
+KEY=AnimalLore
+TITLE=Naturalist
+FLAGS=skf_scripted
+PROMPT_MSG=What animal should I look at?
+DELAY=3.0,1.0
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+STAT_STR=0
+STAT_INT=125
+STAT_DEX= 0
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=50
+
+on=@start
+//act = target 
+//actprv = none
+
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> >= 12)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <act>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(strcmpi(<act.account>,storm))
+  src.sysmessage You're pretty sure <act.sex He/She> is an animal, but you're not sure what kind...
+  return 1
+elseif !(<act.ischar>)
+  src.sysmessage That's not an animal!
+  return 1
+elseif (<act.npc> != brain_animal) && (<act.npc> != brain_monster) && (<act.npc> != brain_dragon) 
+  src.sysmessage That's not an animal!
+  return 1
+elseif !(<act.owner>) && (<src.animallore> < 1000)
+  src.sysmessage At your skill level, you can only lore tamed creatures.
+  return 1
+endif
+
+if !(<src.f_skillsucceed animallore>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+
+return 0
+
+ON=@Fail
+src.sysmessage You can't think of anything off hand.
+
+ON=@Abort
+src.sysmessage You stop trying to understand the creature.
+
+on=@success
+if (<act.owner> == <src>)
+  if (<act.bonded>)
+    src.sysmessage This pet is already bonded with you.
+  //elseif (<src.taming> < <act.taming>)
+    //src.sysmessage You lack the skill to establish a bond with this pet.
+  elseif !(<act.bonded>) && !(<act.findid.i_pet_bonding>)
+    src.sysmessage You should try feeding your pet to begin to bond with it.
+  elseif !(<act.bonded>) && (<act.findid.i_pet_bonding>)
+    local.n=<eval (604800-(<serv.rticks>-<act.findid.i_pet_bonding.tag0.timestamp>))>
+    local.d=<eval (<local.n>/86500)>
+    local.h=<eval (((<local.n>/60)/60)-(<local.d>*24))>
+    src.sysmessage You must spend more time with your pet. Time remaining: <qval (<local.n> <= 86400)?<local.h> hours:<local.d> days <local.h> hours>.
+  endif
+endif
+
+src.dialogclose d_animal_lore
+act.sdialog d_animal_lore
+return 0
+
+[dialog d_animal_lore]
+200,100
+
+page 0
+resizepic 0 0 9380 300 300
+dhtmlgump 45 5 200 25 0 0 <def0.center><def.big><def.bfont_blue><name>
+
+page 1		//attributes
+gumppic 45 40 2091
+gumppic 25 55 2086
+dhtmlgump 45 52 200 20 0 0 <def.bfont_dcyan>Attributes
+dhtmlgump 55 70 200 160 0 0 Hits<def.br>Stamina<def.br>Mana<def.br>Strength<def.br>Dexterity<def.br>Intelligence<def.br>Barding Difficulty
+dhtmlgump 55 70 200 160 0 0 <def.div_right><hits>/<maxhits><def.br><stamina>/<maxstam><def.br><mana>/<maxmana><def.br><str><def.br><dex><def.br><int><def.br><dtag0.base_difficulty>
+gumppic 25 200 2086
+dhtmlgump 45 197 200 160 0 0 <def.bfont_dcyan>Loyalty Rating
+dhtmlgump 55 215 200 160 0 0 <f_loyalty_rating>
+gumppic 45 240 2091
+button 205 280 5603 5607 0 7 
+button 230 280 5601 5605 0 <qval (<def0.animal_lore_era>==1)?5:2>
+
+page 2			//regen stuff
+gumppic 45 40 2091
+gumppic 25 55 2086
+dhtmlgump 45 52 200 20 0 0 <def.bfont_dcyan>Attributes
+dhtmlgump 55 70 200 160 0 0 Hit Point Regeneration<def.br>Stamina Regeneration<def.br>Mana Regeneration
+dhtmlgump 55 70 200 160 0 0 <def.div_right>---<def.br>---<def.br>---
+gumppic 45 240 2091
+button 205 280 5603 5607 0 1 
+button 230 280 5601 5605 0 3
+
+page 3			//resistances
+gumppic 45 40 2091
+gumppic 25 55 2086
+dhtmlgump 45 52 200 20 0 0 <def.bfont_dcyan>Resistances
+dhtmlgump 55 70 200 160 0 0 Physical<def.br>Fire<def.br>Cold<def.br>Poison<def.br>Energy
+dhtmlgump 55 70 200 160 0 0 <def.div_right><armor><def.br><def.bfont_lred><resfire><def.br><def.bfont_blue><rescold><def.br><def.bfont_green><respoison><def.br><def.bfont_lpurple><resenergy>
+gumppic 45 240 2091
+button 205 280 5603 5607 0 2 
+button 230 280 5601 5605 0 4
+
+page 4			//damage
+gumppic 45 40 2091
+gumppic 25 55 2086
+dhtmlgump 45 52 200 20 0 0 <def.bfont_dcyan>Damage
+dhtmlgump 55 70 200 160 0 0 Physical<def.br>Fire<def.br>Cold<def.br>Poison<def.br>Energy<def.br>Base Damage
+dhtmlgump 55 70 200 160 0 0 <def.div_right>---<def.br><def.bfont_lred>---<def.br><def.bfont_blue>---<def.br><def.bfont_green>---<def.br><def.bfont_lpurple>---<def.br><def.bfont_black><strarg <dam>>-<streat <dam>>
+gumppic 45 240 2091
+button 205 280 5603 5607 0 3
+button 230 280 5601 5605 0 5
+
+
+page 5			//skills
+gumppic 45 40 2091
+gumppic 25 55 2086
+dhtmlgump 45 52 200 20 0 0 <def.bfont_dcyan>Combat Ratings
+dhtmlgump 55 70 200 160 0 0 Wrestling<def.br>Tactics<def.br>Resisting Spells<def.br>Anatomy<def.br>Healing<def.br>Poisoning<def.br>Detecting Hidden<def.br>Hiding<def.br>Parrying
+dhtmlgump 55 70 200 160 0 0 <def.div_right><wrestling><def.br><tactics><def.br><magicresistance><def.br><anatomy><def.br><healing><def.br><poisoning><def.br><detectinghidden><def.br><hiding><def.br><parrying>
+gumppic 45 240 2091
+button 205 280 5603 5607 0 <qval (<def0.animal_lore_era>==1)?1:4>
+button 230 280 5601 5605 0 <qval (<def0.animal_lore_era>==1)?7:6>
+
+page 6			//magic skills
+gumppic 45 40 2091
+gumppic 25 55 2086		
+dhtmlgump 45 52 200 20 0 0 <def.bfont_dcyan>Lore & Knowledge	//some of this was commented out to avoid console errors for undefined skills
+//dhtmlgump 55 70 200 160 0 0 Magery<def.br>Eval Intelligence<def.br>Meditation<def.br>Necromancy<def.br>Spirit Speak<def.br>Mysticism<def.br>Focus<def.br>Spellweaving<def.br>Discordance
+//dhtmlgump 55 70 200 160 0 0 <def.div_right><magery><def.br><evaluatingintel><def.br><meditation><def.br><necromancy><def.br><spiritspeak><def.br><mysticism><def.br><focus><def.br><spellweaving><def.br><provocation>
+gumppic 45 240 2091
+button 205 280 5603 5607 0 5
+button 230 280 5601 5605 0 7
+
+page 7			//magic skills +
+gumppic 45 40 2091
+gumppic 25 55 2086
+dhtmlgump 45 52 200 20 0 0 <def.bfont_dcyan>Lore & Knowledge
+if (<def0.animal_lore_era> == 1)
+  dhtmlgump 55 70 200 160 0 0 Magery<def.br>Eval Intelligence<def.br>Meditation
+  dhtmlgump 55 70 200 160 0 0 <def.div_right><magery><def.br><evaluatingintel><def.br><meditation>
+else
+  dhtmlgump 55 70 200 160 0 0 Bushido<def.br>Ninjitsu<def.br>Chivalry
+  dhtmlgump 55 70 200 160 0 0 <def.div_right><bushido><def.br><ninjitsu><def.br><chivalry>
+endif
+gumppic 25 125 2086
+dhtmlgump 45 122 200 20 0 0 <def.bfont_dcyan>Preferred Foods
+dhtmlgump 55 140 220 160 0 0 <f_preferred_foods>
+gumppic 25 160 2086
+dhtmlgump 45 157 200 20 0 0 <def.bfont_dcyan>Pack Instincts
+dhtmlgump 55 175 200 160 0 0 none
+gumppic 25 195 2086
+dhtmlgump 45 192 200 20 0 0 <def.bfont_dcyan>Pet Slots
+dhtmlgump 55 210 200 160 0 0 <qval (<taming>)?<qval (<controlslots>)?<controlslots>:none>:N/A>
+dhtmlgump 55 210 200 160 0 0 <def.div_right>Requires: <qval (<taming>)?<taming>:N/A>
+gumppic 45 240 2091
+button 205 280 5603 5607 0 <qval (<def0.animal_lore_era>==1)?5:6>
+button 230 280 5601 5605 0 1
+  
+[function f_preferred_foods]	
+args=<foodtype>
+if !(<args>)
+  return none
+endif
+args=0,<explode " _",<args>>
+for n 1 <eval ((<argv>-1)/3)>
+  local.food .= ", <argv[<eval (<local.n>*3)>]>"
+endfor
+local.food=<streat <local.food>>
+return <local.food>
+
+[function f_loyalty_rating]
+if (<maxfood>)
+  local.loyalty=<muldiv <food>,100,<maxfood>>
+  local.loyalty /= 10
+  if (<local.loyalty> > 10)
+    local.loyalty=10
+  endif
+endif
+doswitch <local.loyalty>
+  local.msg=Confused
+  local.msg=Extremely Unhappy
+  local.msg=Rather unhappy
+  local.msg=Unhappy
+  local.msg=Content, I suppose
+  local.msg=Content
+  local.msg=Happy
+  local.msg=Rather Happy
+  local.msg=Very Happy
+  local.msg=Extremely happy
+  local.msg=Wonderfully happy
+enddo
+return <local.msg>
+
+
+
+
+
+[EOF]

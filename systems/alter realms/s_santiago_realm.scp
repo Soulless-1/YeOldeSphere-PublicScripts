@@ -1,0 +1,1006 @@
+//Astral Realms by Soulless
+//9:24 PM 10/18/2023
+//v1.0 
+
+//these are settings that will be used in certain regions of the world, to mimmic other shards or playstyles that people desire.
+//created due to the overwhelming interest in the Santiago shard's rulests we will override stuff with events here. 
+
+[defname alter_realms_settings]
+alter_realm0_name		Santiago			//name of the alter realm
+alter_realm0_event		e_santiago_pvp			//the event that is added to players
+alter_realm0_enter_gate		4306,950,10,0			//where is the gate to enter?
+alter_realm0_enter_coords	2466,544,0,1			//where does it take you?
+alter_realm0_leave_gate		2466,544,0,1			//where is the gate to leave?
+alter_realm0_leave_coords	4306,950,10,0			//where does it take you?
+
+alter_realm0_spell1_defname      s_clumsy
+alter_realm0_spell1_name         Clumsy
+alter_realm0_spell1_sound        snd_spell_clumsy
+alter_realm0_spell1_runes        UJ
+alter_realm0_spell1_cast_time    0.7
+alter_realm0_spell1_resources    i_reag_blood_moss,i_reag_nightshade
+alter_realm0_spell1_rune_item    i_rune_clumsy
+alter_realm0_spell1_scroll_item  i_scroll_clumsy
+alter_realm0_spell1_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|spellflag_resist
+alter_realm0_spell1_effect_id    i_fx_curse
+alter_realm0_spell1_effect       5,10
+alter_realm0_spell1_duration     2*60.0,3*60.0
+alter_realm0_spell1_manause      4
+alter_realm0_spell1_skillreq     magery 10.0
+alter_realm0_spell1_interrupt    100.0,100.0
+
+alter_realm0_spell2_defname      s_create_food
+alter_realm0_spell2_name         Create Food
+alter_realm0_spell2_sound        snd_spell_create_food
+alter_realm0_spell2_runes        IMY
+alter_realm0_spell2_cast_time    4.5
+alter_realm0_spell2_resources    i_reag_garlic,i_reag_ginseng,i_reag_mandrake_root
+alter_realm0_spell2_rune_item    i_rune_create_food
+alter_realm0_spell2_scroll_item  i_scroll_create_food
+alter_realm0_spell2_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_fx_targ|spellflag_playeronly
+alter_realm0_spell2_effect_id    0
+alter_realm0_spell2_effect       0
+alter_realm0_spell2_duration     0.0
+alter_realm0_spell2_manause      25
+alter_realm0_spell2_skillreq     magery 10.0
+alter_realm0_spell2_interrupt    100.0,100.0
+
+alter_realm0_spell3_defname      s_feeblemind
+alter_realm0_spell3_name         Feeblemind
+alter_realm0_spell3_sound        snd_spell_feeblemind
+alter_realm0_spell3_runes        RW
+alter_realm0_spell3_cast_time    0.7
+alter_realm0_spell3_resources    i_reag_ginseng,i_reag_nightshade
+alter_realm0_spell3_rune_item    i_rune_feeblemind
+alter_realm0_spell3_scroll_item  i_scroll_feeblemind
+alter_realm0_spell3_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|spellflag_resist
+alter_realm0_spell3_effect_id    i_fx_curse
+alter_realm0_spell3_effect       5,10
+alter_realm0_spell3_duration     2*60.0,3*60.0
+alter_realm0_spell3_manause      4
+alter_realm0_spell3_skillreq     magery 10.0
+alter_realm0_spell3_interrupt    100.0,100.0
+
+alter_realm0_spell4_defname      s_heal
+alter_realm0_spell4_name         Heal
+alter_realm0_spell4_sound        snd_spell_heal
+alter_realm0_spell4_runes        IM
+alter_realm0_spell4_cast_time    1.5
+alter_realm0_spell4_resources    i_reag_garlic,i_reag_ginseng,i_reag_spider_silk
+alter_realm0_spell4_rune_item    i_rune_heal
+alter_realm0_spell4_scroll_item  i_scroll_heal
+alter_realm0_spell4_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell4_effect_id    i_fx_heal_effect
+alter_realm0_spell4_effect       1,5
+alter_realm0_spell4_duration     0.0
+alter_realm0_spell4_manause      4
+alter_realm0_spell4_skillreq     magery 10.0
+alter_realm0_spell4_interrupt    100.0,100.0
+
+alter_realm0_spell5_defname      s_magic_arrow
+alter_realm0_spell5_name         Magic Arrow
+alter_realm0_spell5_sound        snd_spell_magic_arrow
+alter_realm0_spell5_runes        IPY
+alter_realm0_spell5_cast_time    0.7
+alter_realm0_spell5_resources    i_reag_sulfur_ash
+alter_realm0_spell5_rune_item    i_rune_magic_arrow
+alter_realm0_spell5_scroll_item  i_scroll_magic_arrow
+alter_realm0_spell5_flags        spellflag_dir_anim|spellflag_targ_item|spellflag_targ_char|spellflag_harm|spellflag_damage|spellflag_fx_bolt|spellflag_resist
+alter_realm0_spell5_effect_id    i_fx_fireball_small
+alter_realm0_spell5_effect       2,5
+alter_realm0_spell5_duration     0.0
+alter_realm0_spell5_manause      4
+alter_realm0_spell5_skillreq     magery 10.0
+alter_realm0_spell5_interrupt    100.0,100.0
+
+alter_realm0_spell6_defname      s_night_sight
+alter_realm0_spell6_name         Night Sight
+alter_realm0_spell6_sound        snd_spell_night_sight
+alter_realm0_spell6_runes        IL
+alter_realm0_spell6_cast_time    0.5
+alter_realm0_spell6_resources    i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell6_rune_item    i_rune_night_sight
+alter_realm0_spell6_scroll_item  i_scroll_night_sight
+alter_realm0_spell6_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell6_effect_id    i_fx_heal_effect
+alter_realm0_spell6_effect       0
+alter_realm0_spell6_duration     3*60.0,10*60.0
+alter_realm0_spell6_manause      4
+alter_realm0_spell6_skillreq     magery 10.0
+alter_realm0_spell6_interrupt    100.0,100.0
+
+alter_realm0_spell7_defname      s_reactive_armor
+alter_realm0_spell7_name         Reactive Armor
+alter_realm0_spell7_sound        snd_spell_reactive_armor
+alter_realm0_spell7_runes        FS
+alter_realm0_spell7_cast_time    1.5
+alter_realm0_spell7_resources    i_reag_garlic,i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell7_rune_item    i_rune_reactive_armor
+alter_realm0_spell7_scroll_item  i_scroll_reactive_armor
+alter_realm0_spell7_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell7_effect_id    i_fx_heal_effect
+alter_realm0_spell7_effect       2.0,10.0
+alter_realm0_spell7_duration     3*60.0,5*60.0
+alter_realm0_spell7_manause      4
+alter_realm0_spell7_skillreq     magery 10.0
+alter_realm0_spell7_interrupt    100.0,100.0
+
+alter_realm0_spell8_defname      s_weaken
+alter_realm0_spell8_name         Weaken
+alter_realm0_spell8_sound        snd_spell_weaken
+alter_realm0_spell8_runes        DM
+alter_realm0_spell8_cast_time    0.7
+alter_realm0_spell8_resources    i_reag_garlic,i_reag_nightshade
+alter_realm0_spell8_rune_item    i_rune_weaken
+alter_realm0_spell8_scroll_item  i_scroll_weaken
+alter_realm0_spell8_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|spellflag_resist
+alter_realm0_spell8_effect_id    i_fx_curse
+alter_realm0_spell8_effect       5,16
+alter_realm0_spell8_duration     2*60.0,3*60.0
+alter_realm0_spell8_manause      4
+alter_realm0_spell8_skillreq     magery 10.0
+alter_realm0_spell8_interrupt    100.0,100.0
+
+alter_realm0_spell9_defname      s_agility
+alter_realm0_spell9_name         Agility
+alter_realm0_spell9_sound        snd_spell_agility
+alter_realm0_spell9_runes        EU
+alter_realm0_spell9_cast_time    1.0
+alter_realm0_spell9_resources    i_reag_blood_moss,i_reag_mandrake_root
+alter_realm0_spell9_rune_item    i_rune_agility
+alter_realm0_spell9_scroll_item  i_scroll_agility
+alter_realm0_spell9_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell9_effect_id    i_fx_bless_effect
+alter_realm0_spell9_effect       5,20
+alter_realm0_spell9_duration     2*60.0,3*60.0
+alter_realm0_spell9_manause      6
+alter_realm0_spell9_skillreq     magery 20.0
+alter_realm0_spell9_interrupt    100.0,100.0
+
+alter_realm0_spell10_defname      s_cunning
+alter_realm0_spell10_name         Cunning
+alter_realm0_spell10_sound        snd_spell_cunning
+alter_realm0_spell10_runes        UW
+alter_realm0_spell10_cast_time    1.0
+alter_realm0_spell10_resources    i_reag_mandrake_root,i_reag_nightshade
+alter_realm0_spell10_rune_item    i_rune_cunning
+alter_realm0_spell10_scroll_item  i_scroll_cunning
+alter_realm0_spell10_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly|spellflag_resist
+alter_realm0_spell10_effect_id    i_fx_bless_effect
+alter_realm0_spell10_effect       5,20
+alter_realm0_spell10_duration     2*60.0,3*60.0
+alter_realm0_spell10_manause      6
+alter_realm0_spell10_skillreq     magery 20.0
+alter_realm0_spell10_interrupt    100.0,100.0
+
+alter_realm0_spell11_defname      s_cure
+alter_realm0_spell11_name         Cure
+alter_realm0_spell11_sound        snd_spell_cure
+alter_realm0_spell11_runes        AN
+alter_realm0_spell11_cast_time    1.0
+alter_realm0_spell11_resources    i_reag_garlic,i_reag_ginseng
+alter_realm0_spell11_rune_item    i_rune_cure
+alter_realm0_spell11_scroll_item  i_scroll_cure
+alter_realm0_spell11_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell11_effect_id    i_fx_heal_effect
+alter_realm0_spell11_effect       0
+alter_realm0_spell11_duration     0.0
+alter_realm0_spell11_manause      6
+alter_realm0_spell11_skillreq     magery 20.0
+alter_realm0_spell11_interrupt    100.0,100.0
+
+alter_realm0_spell12_defname      s_harm
+alter_realm0_spell12_name         Harm
+alter_realm0_spell12_sound        snd_spell_harm
+alter_realm0_spell12_runes        AM
+alter_realm0_spell12_cast_time    1.2
+alter_realm0_spell12_resources    i_reag_nightshade,i_reag_spider_silk
+alter_realm0_spell12_rune_item    i_rune_harm
+alter_realm0_spell12_scroll_item  i_scroll_harm
+alter_realm0_spell12_flags        spellflag_dir_anim|spellflag_targ_item|spellflag_targ_char|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_resist
+alter_realm0_spell12_effect_id    i_fx_curse
+alter_realm0_spell12_effect       4,8
+alter_realm0_spell12_duration     0.0
+alter_realm0_spell12_manause      8
+alter_realm0_spell12_skillreq     magery 20.0
+alter_realm0_spell12_interrupt    100.0,100.0
+
+alter_realm0_spell13_defname      s_magic_trap
+alter_realm0_spell13_name         Magic Trap
+alter_realm0_spell13_sound        snd_spell_magic_trap
+alter_realm0_spell13_runes        IJ
+alter_realm0_spell13_cast_time    0.8
+alter_realm0_spell13_resources    i_reag_garlic,i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell13_rune_item    i_rune_magic_trap
+alter_realm0_spell13_scroll_item  i_scroll_magic_trap
+alter_realm0_spell13_flags        spellflag_dir_anim|spellflag_targ_item|spellflag_playeronly
+alter_realm0_spell13_effect_id    0
+alter_realm0_spell13_effect       0
+alter_realm0_spell13_duration     0.0
+alter_realm0_spell13_manause      6
+alter_realm0_spell13_skillreq     magery 200.0
+alter_realm0_spell13_interrupt    100.0,100.0
+
+alter_realm0_spell14_defname      s_magic_untrap
+alter_realm0_spell14_name         Magic Untrap
+alter_realm0_spell14_sound        snd_spell_magic_untrap
+alter_realm0_spell14_runes        AJ
+alter_realm0_spell14_cast_time    0.8
+alter_realm0_spell14_resources    i_reag_blood_moss,i_reag_sulfur_ash
+alter_realm0_spell14_rune_item    i_rune_magic_untrap
+alter_realm0_spell14_scroll_item  i_scroll_magic_untrap
+alter_realm0_spell14_flags        spellflag_dir_anim|spellflag_targ_item|spellflag_playeronly
+alter_realm0_spell14_effect_id    0
+alter_realm0_spell14_effect       0
+alter_realm0_spell14_duration     0.0
+alter_realm0_spell14_manause      6
+alter_realm0_spell14_skillreq     magery 200.0
+alter_realm0_spell14_interrupt    100.0,100.0
+
+alter_realm0_spell15_defname      s_protection
+alter_realm0_spell15_name         Protection
+alter_realm0_spell15_sound        snd_spell_protection
+alter_realm0_spell15_runes        US
+alter_realm0_spell15_cast_time    1.0
+alter_realm0_spell15_resources    i_reag_garlic,i_reag_ginseng,i_reag_sulfur_ash
+alter_realm0_spell15_rune_item    i_rune_protection
+alter_realm0_spell15_scroll_item  i_scroll_protection
+alter_realm0_spell15_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell15_effect_id    i_fx_bless_effect
+alter_realm0_spell15_effect       2,10
+alter_realm0_spell15_duration     3*60.0,5*60.0
+alter_realm0_spell15_manause      6
+alter_realm0_spell15_skillreq     magery 20.0
+alter_realm0_spell15_interrupt    100.0,100.0
+
+alter_realm0_spell16_defname      s_strength
+alter_realm0_spell16_name         Strength
+alter_realm0_spell16_sound        snd_spell_strength
+alter_realm0_spell16_runes        UM
+alter_realm0_spell16_cast_time    1.0
+alter_realm0_spell16_resources    i_reag_mandrake_root,i_reag_nightshade
+alter_realm0_spell16_rune_item    i_rune_strength
+alter_realm0_spell16_scroll_item  i_scroll_strength
+alter_realm0_spell16_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell16_effect_id    i_fx_bless_effect
+alter_realm0_spell16_effect       5,15
+alter_realm0_spell16_duration     2*60.0,3*60.0
+alter_realm0_spell16_manause      6
+alter_realm0_spell16_skillreq     magery 20.0
+alter_realm0_spell16_interrupt    100.0,100.0
+
+alter_realm0_spell17_defname      s_bless
+alter_realm0_spell17_name         Bless
+alter_realm0_spell17_sound        snd_spell_bless
+alter_realm0_spell17_runes        RS
+alter_realm0_spell17_cast_time    1.5
+alter_realm0_spell17_resources    i_reag_garlic,i_reag_mandrake_root
+alter_realm0_spell17_rune_item    i_rune_bless
+alter_realm0_spell17_scroll_item  i_scroll_bless
+alter_realm0_spell17_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell17_effect_id    i_fx_bless_effect
+alter_realm0_spell17_effect       5,15
+alter_realm0_spell17_duration     2*60.0,3*60.0
+alter_realm0_spell17_manause      9
+alter_realm0_spell17_skillreq     magery 30.0
+alter_realm0_spell17_interrupt    100.0,100.0
+
+alter_realm0_spell18_defname      s_fireball
+alter_realm0_spell18_name         Fireball
+alter_realm0_spell18_sound        snd_spell_fireball
+alter_realm0_spell18_runes        VF
+alter_realm0_spell18_cast_time    1.5
+alter_realm0_spell18_resources    i_reag_black_pearl
+alter_realm0_spell18_rune_item    i_rune_fireball
+alter_realm0_spell18_scroll_item  i_scroll_fireball
+alter_realm0_spell18_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_harm|spellflag_damage|spellflag_fx_bolt|spellflag_resist
+alter_realm0_spell18_effect_id    i_fx_fireball
+alter_realm0_spell18_effect       10,18
+alter_realm0_spell18_duration     0.0
+alter_realm0_spell18_manause      9
+alter_realm0_spell18_skillreq     magery 30.0
+alter_realm0_spell18_interrupt    100.0,100.0
+
+alter_realm0_spell19_defname      s_magic_lock
+alter_realm0_spell19_name         Magic Lock
+alter_realm0_spell19_sound        snd_spell_magic_lock
+alter_realm0_spell19_runes        AP
+alter_realm0_spell19_cast_time    1.0
+alter_realm0_spell19_resources    i_reag_blood_moss,i_reag_garlic,i_reag_sulfur_ash
+alter_realm0_spell19_rune_item    i_rune_magic_lock
+alter_realm0_spell19_scroll_item  i_scroll_magic_lock
+alter_realm0_spell19_flags        spellflag_dir_anim|spellflag_targ_item|spellflag_playeronly
+alter_realm0_spell19_effect_id    0
+alter_realm0_spell19_effect       0
+alter_realm0_spell19_duration     0.0
+alter_realm0_spell19_manause      9
+alter_realm0_spell19_skillreq     magery 300.0
+alter_realm0_spell19_interrupt    100.0,100.0
+
+alter_realm0_spell20_defname      s_poison
+alter_realm0_spell20_name         Poison
+alter_realm0_spell20_sound        snd_spell_poison
+alter_realm0_spell20_runes        IN
+alter_realm0_spell20_cast_time    1.5
+alter_realm0_spell20_resources    i_reag_nightshade
+alter_realm0_spell20_rune_item    i_rune_poison
+alter_realm0_spell20_scroll_item  i_scroll_poison
+alter_realm0_spell20_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_harm|spellflag_fx_targ|spellflag_resist
+alter_realm0_spell20_effect_id    i_fx_curse
+alter_realm0_spell20_effect       0	// 100,750
+alter_realm0_spell20_duration     1.0,15.0
+alter_realm0_spell20_manause      9
+alter_realm0_spell20_skillreq     magery 30.0
+alter_realm0_spell20_interrupt    100.0,100.0
+
+alter_realm0_spell21_defname      s_telekinesis
+alter_realm0_spell21_name         Telekinesis
+alter_realm0_spell21_sound        snd_spell_telekinesis
+alter_realm0_spell21_runes        opy
+alter_realm0_spell21_cast_time    2.0
+alter_realm0_spell21_resources    i_reag_blood_moss,i_reag_mandrake_root
+alter_realm0_spell21_rune_item    i_rune_telekinesis
+alter_realm0_spell21_scroll_item  i_scroll_telekinesis
+alter_realm0_spell21_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_fx_targ|spellflag_playeronly
+alter_realm0_spell21_effect_id    0
+alter_realm0_spell21_effect       0
+alter_realm0_spell21_duration     0.0
+alter_realm0_spell21_manause      9
+alter_realm0_spell21_skillreq     magery 30.0
+alter_realm0_spell21_interrupt    100.0,100.0
+
+alter_realm0_spell22_defname      s_teleport
+alter_realm0_spell22_name         Teleport
+alter_realm0_spell22_sound        snd_spell_teleport
+alter_realm0_spell22_runes        rp
+alter_realm0_spell22_cast_time    2.5
+alter_realm0_spell22_resources    i_reag_blood_moss,i_reag_mandrake_root
+alter_realm0_spell22_rune_item    i_rune_teleport
+alter_realm0_spell22_scroll_item  i_scroll_teleport
+alter_realm0_spell22_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_playeronly
+alter_realm0_spell22_effect_id    0
+alter_realm0_spell22_effect       0
+alter_realm0_spell22_duration     0.0
+alter_realm0_spell22_manause      9
+alter_realm0_spell22_skillreq     magery 30.0
+alter_realm0_spell22_interrupt    100.0,100.0
+
+alter_realm0_spell23_defname      s_unlock
+alter_realm0_spell23_name         Magic Unlock
+alter_realm0_spell23_sound        snd_spell_unlock
+alter_realm0_spell23_runes        ep
+alter_realm0_spell23_cast_time    1.0
+alter_realm0_spell23_resources    i_reag_blood_moss,i_reag_sulfur_ash
+alter_realm0_spell23_rune_item    i_rune_unlock
+alter_realm0_spell23_scroll_item  i_scroll_unlock
+alter_realm0_spell23_flags        spellflag_dir_anim|spellflag_targ_item|spellflag_fx_targ|spellflag_playeronly
+alter_realm0_spell23_effect_id    0
+alter_realm0_spell23_effect       0
+alter_realm0_spell23_duration     0.0
+alter_realm0_spell23_manause      9
+alter_realm0_spell23_skillreq     magery 300.0
+alter_realm0_spell23_interrupt    100.0,100.0
+
+alter_realm0_spell24_defname      s_wall_of_stone
+alter_realm0_spell24_name         Wall of Stone
+alter_realm0_spell24_sound        snd_spell_wall_of_stone
+alter_realm0_spell24_runes        isy
+alter_realm0_spell24_cast_time    2.0
+alter_realm0_spell24_resources    i_reag_blood_moss,i_reag_garlic
+alter_realm0_spell24_rune_item    i_rune_wall_of_stone
+alter_realm0_spell24_scroll_item  i_scroll_wall_of_stone
+alter_realm0_spell24_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly
+alter_realm0_spell24_effect_id    0
+alter_realm0_spell24_effect       0
+alter_realm0_spell24_duration     30.0,90.0
+alter_realm0_spell24_manause      25
+alter_realm0_spell24_skillreq     magery 30.0
+alter_realm0_spell24_interrupt    100.0,100.0
+
+alter_realm0_spell25_defname      s_archcure
+alter_realm0_spell25_name         Arch Cure
+alter_realm0_spell25_sound        snd_spell_archcure
+alter_realm0_spell25_runes        van
+alter_realm0_spell25_cast_time    2.0
+alter_realm0_spell25_resources    i_reag_garlic,i_reag_ginseng,i_reag_mandrake_root
+alter_realm0_spell25_rune_item    i_rune_archcure
+alter_realm0_spell25_scroll_item  i_scroll_archcure
+alter_realm0_spell25_flags        spellflag_fx_targ|spellflag_good|spellflag_playeronly|spellflag_area
+alter_realm0_spell25_effect_id    i_fx_heal_effect
+alter_realm0_spell25_effect       0
+alter_realm0_spell25_duration     0.0
+alter_realm0_spell25_manause      11
+alter_realm0_spell25_skillreq     magery 40.0
+alter_realm0_spell25_interrupt    100.0,100.0
+
+alter_realm0_spell26_defname      s_archprotection
+alter_realm0_spell26_name         Arch Protection
+alter_realm0_spell26_sound        snd_spell_archprotection
+alter_realm0_spell26_runes        vus
+alter_realm0_spell26_cast_time    2.0
+alter_realm0_spell26_resources    i_reag_garlic,i_reag_ginseng,i_reag_mandrake_root,i_reag_sulfur_ash
+alter_realm0_spell26_rune_item    i_rune_archprotection
+alter_realm0_spell26_scroll_item  i_scroll_archprotection
+alter_realm0_spell26_flags        spellflag_fx_targ|spellflag_good|spellflag_playeronly|spellflag_area
+alter_realm0_spell26_effect_id    i_fx_bless_effect
+alter_realm0_spell26_effect       5,15
+alter_realm0_spell26_duration     0
+alter_realm0_spell26_manause      11
+alter_realm0_spell26_skillreq     magery 120.0
+alter_realm0_spell26_interrupt    100.0,100.0
+
+alter_realm0_spell27_defname      s_curse
+alter_realm0_spell27_name         Curse
+alter_realm0_spell27_sound        snd_spell_curse
+alter_realm0_spell27_runes        ds
+alter_realm0_spell27_cast_time    2.3
+alter_realm0_spell27_resources    i_reag_garlic,i_reag_nightshade,i_reag_sulfur_ash
+alter_realm0_spell27_rune_item    i_rune_curse
+alter_realm0_spell27_scroll_item  i_scroll_curse
+alter_realm0_spell27_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|spellflag_resist
+alter_realm0_spell27_effect_id    i_fx_curse
+alter_realm0_spell27_effect       5,15
+alter_realm0_spell27_duration     10.0,60.0
+alter_realm0_spell27_manause      11
+alter_realm0_spell27_skillreq     magery 40.0
+alter_realm0_spell27_interrupt    100.0,100.0
+
+alter_realm0_spell28_defname      s_fire_field
+alter_realm0_spell28_name         Fire Field
+alter_realm0_spell28_sound        snd_spell_fire_field
+alter_realm0_spell28_runes        ifg
+alter_realm0_spell28_cast_time    4
+alter_realm0_spell28_resources    i_reag_black_pearl,i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell28_rune_item    i_rune_fire_field
+alter_realm0_spell28_scroll_item  i_scroll_fire_field
+alter_realm0_spell28_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly//|spellflag_resist
+alter_realm0_spell28_effect_id    0
+alter_realm0_spell28_effect       1,6
+alter_realm0_spell28_duration     10.0,20.0
+alter_realm0_spell28_manause      25
+alter_realm0_spell28_skillreq     magery 40.0
+alter_realm0_spell28_interrupt    100.0,100.0
+
+alter_realm0_spell29_defname      s_greater_heal
+alter_realm0_spell29_name         Greater Heal
+alter_realm0_spell29_sound        snd_spell_greater_heal
+alter_realm0_spell29_runes        ivm
+alter_realm0_spell29_cast_time    3.0
+alter_realm0_spell29_resources    i_reag_garlic,i_reag_ginseng,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell29_rune_item    i_rune_greater_heal
+alter_realm0_spell29_scroll_item  i_scroll_greater_heal
+alter_realm0_spell29_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell29_effect_id    i_fx_heal_effect
+alter_realm0_spell29_effect       20,40
+alter_realm0_spell29_duration     0.0
+alter_realm0_spell29_manause      11
+alter_realm0_spell29_skillreq     magery 40.0
+alter_realm0_spell29_interrupt    100.0,100.0
+
+alter_realm0_spell30_defname      s_lightning
+alter_realm0_spell30_name         Lightning
+alter_realm0_spell30_sound        snd_spell_lightning
+alter_realm0_spell30_runes        pog
+alter_realm0_spell30_cast_time    2.2
+alter_realm0_spell30_resources    i_reag_mandrake_root,i_reag_sulfur_ash
+alter_realm0_spell30_rune_item    i_rune_lightning
+alter_realm0_spell30_scroll_item  i_scroll_lightning
+alter_realm0_spell30_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_fx_targ|spellflag_harm|spellflag_damage|spellflag_resist
+alter_realm0_spell30_effect_id    0
+alter_realm0_spell30_effect       10,20
+alter_realm0_spell30_duration     0.0
+alter_realm0_spell30_manause      11
+alter_realm0_spell30_skillreq     magery 40.0
+alter_realm0_spell30_interrupt    100.0,100.0
+
+alter_realm0_spell31_defname      s_mana_drain
+alter_realm0_spell31_name         Mana Drain
+alter_realm0_spell31_sound        snd_spell_mana_drain
+alter_realm0_spell31_runes        OR
+alter_realm0_spell31_cast_time    2.3
+alter_realm0_spell31_resources    i_reag_black_pearl,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell31_rune_item    i_rune_mana_drain
+alter_realm0_spell31_scroll_item  i_scroll_mana_drain
+alter_realm0_spell31_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|SPELLFLAG_RESIST
+alter_realm0_spell31_effect_id    i_fx_curse
+alter_realm0_spell31_effect       0
+alter_realm0_spell31_duration     0.0
+alter_realm0_spell31_manause      11
+alter_realm0_spell31_skillreq     magery 40.0
+alter_realm0_spell31_interrupt    100.0,100.0
+
+alter_realm0_spell32_defname      s_recall
+alter_realm0_spell32_name         Recall
+alter_realm0_spell32_sound        snd_spell_recall
+alter_realm0_spell32_runes        KOP
+alter_realm0_spell32_cast_time    4.0
+alter_realm0_spell32_resources    i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root
+alter_realm0_spell32_rune_item    i_rune_recall
+alter_realm0_spell32_scroll_item  i_scroll_recall
+alter_realm0_spell32_flags        spellflag_targ_item|spellflag_playeronly
+alter_realm0_spell32_effect_id    0
+alter_realm0_spell32_effect       0
+alter_realm0_spell32_duration     0.0
+alter_realm0_spell32_manause      11
+alter_realm0_spell32_skillreq     magery 40.0
+alter_realm0_spell32_interrupt    100.0,100.0
+
+alter_realm0_spell33_defname      s_blade_spirits
+alter_realm0_spell33_name         Blade Spirit
+alter_realm0_spell33_sound        snd_spell_blade_spirits
+alter_realm0_spell33_runes        IHJY
+alter_realm0_spell33_cast_time    5.0
+alter_realm0_spell33_resources    i_reag_black_pearl,i_reag_mandrake_root,i_reag_nightshade
+alter_realm0_spell33_rune_item    i_rune_blade_spirits
+alter_realm0_spell33_scroll_item  i_scroll_blade_spirits
+alter_realm0_spell33_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_summon
+alter_realm0_spell33_effect_id    0
+alter_realm0_spell33_effect       0
+alter_realm0_spell33_duration     60.0,2*60.0
+alter_realm0_spell33_manause      40
+alter_realm0_spell33_skillreq     magery 50.0
+alter_realm0_spell33_interrupt    100.0,100.0
+
+alter_realm0_spell34_defname      s_dispel_field
+alter_realm0_spell34_name         Dispel Field
+alter_realm0_spell34_sound        snd_spell_dispel_field
+alter_realm0_spell34_runes        AG
+alter_realm0_spell34_cast_time    2.5
+alter_realm0_spell34_resources    i_reag_black_pearl,i_reag_garlic,i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell34_rune_item    i_rune_dispel_field
+alter_realm0_spell34_scroll_item  i_scroll_dispel_field
+alter_realm0_spell34_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_playeronly
+alter_realm0_spell34_effect_id    0
+alter_realm0_spell34_effect       0
+alter_realm0_spell34_duration     0.0
+alter_realm0_spell34_manause      14
+alter_realm0_spell34_skillreq     magery 50.0
+alter_realm0_spell34_interrupt    100.0,100.0
+
+alter_realm0_spell35_defname      s_incognito
+alter_realm0_spell35_name         Incognito
+alter_realm0_spell35_sound        snd_spell_incognito
+alter_realm0_spell35_runes        KIE
+alter_realm0_spell35_cast_time    2.5
+alter_realm0_spell35_resources    i_reag_blood_moss,i_reag_garlic,i_reag_nightshade
+alter_realm0_spell35_rune_item    i_rune_incognito
+alter_realm0_spell35_scroll_item  i_scroll_incognito
+alter_realm0_spell35_flags        spellflag_playeronly
+alter_realm0_spell35_effect_id    0
+alter_realm0_spell35_effect       0
+alter_realm0_spell35_duration     60.0,120.0
+alter_realm0_spell35_manause      14
+alter_realm0_spell35_skillreq     magery 50.0
+alter_realm0_spell35_interrupt    100.0,100.0
+
+alter_realm0_spell36_defname      s_magic_reflection
+alter_realm0_spell36_name         Magic Reflection
+alter_realm0_spell36_sound        snd_spell_magic_reflection
+alter_realm0_spell36_runes        IJS
+alter_realm0_spell36_cast_time    2.5
+alter_realm0_spell36_resources    i_reag_garlic,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell36_rune_item    i_rune_magic_reflection
+alter_realm0_spell36_scroll_item  i_scroll_magic_reflection
+alter_realm0_spell36_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell36_effect_id    i_fx_bless_effect
+alter_realm0_spell36_effect       0
+alter_realm0_spell36_duration     4*60.0,8*60.0
+alter_realm0_spell36_manause      14
+alter_realm0_spell36_skillreq     magery 50.0
+alter_realm0_spell36_interrupt    100.0,100.0
+
+alter_realm0_spell37_defname      s_mind_blast
+alter_realm0_spell37_name         Mind Blast
+alter_realm0_spell37_sound        snd_spell_mind_blast
+alter_realm0_spell37_runes        PCW
+alter_realm0_spell37_cast_time    2.5
+alter_realm0_spell37_resources    i_reag_black_pearl,i_reag_mandrake_root,i_reag_nightshade,i_reag_sulfur_ash
+alter_realm0_spell37_rune_item    i_rune_mind_blast
+alter_realm0_spell37_scroll_item  i_scroll_mind_blast
+alter_realm0_spell37_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_nounparalyze|SPELLFLAG_RESIST
+alter_realm0_spell37_effect_id    i_fx_curse
+alter_realm0_spell37_effect       15,25
+alter_realm0_spell37_duration     0.0
+alter_realm0_spell37_manause      14
+alter_realm0_spell37_skillreq     magery 50.0
+alter_realm0_spell37_interrupt    100.0,100.0
+
+alter_realm0_spell38_defname      s_paralyze
+alter_realm0_spell38_name         Paralyze
+alter_realm0_spell38_sound        snd_spell_paralyze
+alter_realm0_spell38_runes        AEP
+alter_realm0_spell38_cast_time    2.5
+alter_realm0_spell38_resources    i_reag_garlic,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell38_rune_item    i_rune_paralyze
+alter_realm0_spell38_scroll_item  i_scroll_paralyze
+alter_realm0_spell38_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|SPELLFLAG_RESIST
+alter_realm0_spell38_effect_id    i_fx_curse
+alter_realm0_spell38_effect       0
+alter_realm0_spell38_duration     10.0,15.0
+alter_realm0_spell38_manause      24
+alter_realm0_spell38_skillreq     magery 50.0
+alter_realm0_spell38_interrupt    100.0,100.0
+
+alter_realm0_spell39_defname      s_poison_field
+alter_realm0_spell39_name         Poison Field
+alter_realm0_spell39_sound        snd_SPELL_POISON_FIELD
+alter_realm0_spell39_runes        ING
+alter_realm0_spell39_cast_time    40
+alter_realm0_spell39_resources    i_reag_black_pearl,i_reag_nightshade,i_reag_spider_silk
+alter_realm0_spell39_rune_item    i_rune_POISON_FIELD
+alter_realm0_spell39_scroll_item  i_scroll_POISON_FIELD
+alter_realm0_spell39_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly|SPELLFLAG_RESIST
+alter_realm0_spell39_effect_id    i_fx_curse
+alter_realm0_spell39_effect       1,10
+alter_realm0_spell39_duration     10.0,20.0
+alter_realm0_spell39_manause      14
+alter_realm0_spell39_skillreq     magery 50.0
+alter_realm0_spell39_interrupt    100.0,100.0
+
+alter_realm0_spell40_defname      s_summon_creature
+alter_realm0_spell40_name         Summon Creature
+alter_realm0_spell40_sound        snd_spell_summon_creature
+alter_realm0_spell40_runes        KX
+alter_realm0_spell40_cast_time    5.5
+alter_realm0_spell40_resources    i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell40_rune_item    i_rune_summon_creature
+alter_realm0_spell40_scroll_item  i_scroll_summon_creature
+alter_realm0_spell40_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_summon|spellflag_playeronly
+alter_realm0_spell40_effect_id    0
+alter_realm0_spell40_effect       0
+alter_realm0_spell40_duration     3*60.0,5*60.0
+alter_realm0_spell40_manause
+
+alter_realm0_spell41_defname      s_dispel
+alter_realm0_spell41_name         Dispel
+alter_realm0_spell41_sound        snd_spell_dispel
+alter_realm0_spell41_runes        AO
+alter_realm0_spell41_cast_time    3.0
+alter_realm0_spell41_resources    i_reag_garlic,i_reag_mandrake_root,i_reag_sulfur_ash
+alter_realm0_spell41_rune_item    i_rune_dispel
+alter_realm0_spell41_scroll_item  i_scroll_dispel
+alter_realm0_spell41_flags        spellflag_dir_anim|spellflag_targ_char
+alter_realm0_spell41_effect_id    0
+alter_realm0_spell41_effect       0
+alter_realm0_spell41_duration     0.0
+alter_realm0_spell41_manause      20
+alter_realm0_spell41_skillreq     magery 60.0
+alter_realm0_spell41_interrupt    100.0,100.0
+
+alter_realm0_spell42_defname      s_energy_bolt
+alter_realm0_spell42_name         Energy Bolt
+alter_realm0_spell42_sound        snd_spell_energy_bolt
+alter_realm0_spell42_runes        CP
+alter_realm0_spell42_cast_time    3.0
+alter_realm0_spell42_resources    i_reag_black_pearl,i_reag_nightshade
+alter_realm0_spell42_rune_item    i_rune_energy_bolt
+alter_realm0_spell42_scroll_item  i_scroll_energy_bolt
+alter_realm0_spell42_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_harm|spellflag_damage|spellflag_fx_bolt|SPELLFLAG_RESIST
+alter_realm0_spell42_effect_id    i_fx_ebolt
+alter_realm0_spell42_effect       30,40
+alter_realm0_spell42_duration     0.0
+alter_realm0_spell42_manause      20
+alter_realm0_spell42_skillreq     magery 60.0
+alter_realm0_spell42_interrupt    100.0,100.0
+
+alter_realm0_spell43_defname      s_explosion
+alter_realm0_spell43_name         Explosion
+alter_realm0_spell43_sound        snd_spell_explosion
+alter_realm0_spell43_runes        VOF
+alter_realm0_spell43_cast_time    3.0
+alter_realm0_spell43_resources    i_reag_blood_moss,i_reag_mandrake_root
+alter_realm0_spell43_rune_item    i_rune_explosion
+alter_realm0_spell43_scroll_item  i_scroll_explosion
+alter_realm0_spell43_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_harm|spellflag_damage|spellflag_fx_targ|SPELLFLAG_RESIST
+alter_realm0_spell43_effect_id    i_fx_explode
+alter_realm0_spell43_effect       20,40
+alter_realm0_spell43_duration     0.0
+alter_realm0_spell43_manause      20
+alter_realm0_spell43_skillreq     magery 60.0
+alter_realm0_spell43_interrupt    100.0,100.0
+
+alter_realm0_spell44_defname      s_invisibility
+alter_realm0_spell44_name         Invisibility
+alter_realm0_spell44_sound        snd_spell_invisibility
+alter_realm0_spell44_runes        ALX
+alter_realm0_spell44_cast_time    3.0
+alter_realm0_spell44_resources    i_reag_blood_moss,i_reag_nightshade
+alter_realm0_spell44_rune_item    i_rune_invisibility
+alter_realm0_spell44_scroll_item  i_scroll_invisibility
+alter_realm0_spell44_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_good|spellflag_playeronly
+alter_realm0_spell44_effect_id    0
+alter_realm0_spell44_effect       0
+alter_realm0_spell44_duration     3*60.0,5*60.0
+alter_realm0_spell44_manause      20
+alter_realm0_spell44_skillreq     magery 60.0
+alter_realm0_spell44_interrupt    100.0,100.0
+
+alter_realm0_spell45_defname      s_mark
+alter_realm0_spell45_name         Mark
+alter_realm0_spell45_sound        snd_spell_mark
+alter_realm0_spell45_runes        KPY
+alter_realm0_spell45_cast_time    3.0
+alter_realm0_spell45_resources    i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root
+alter_realm0_spell45_rune_item    i_rune_mark
+alter_realm0_spell45_scroll_item  i_scroll_mark
+alter_realm0_spell45_flags        spellflag_targ_item|spellflag_playeronly
+alter_realm0_spell45_effect_id    0
+alter_realm0_spell45_effect       1,10
+alter_realm0_spell45_duration     0.0
+alter_realm0_spell45_manause      20
+alter_realm0_spell45_skillreq     magery 60.0
+alter_realm0_spell45_interrupt    100.0,100.0
+
+alter_realm0_spell46_defname      s_mass_curse
+alter_realm0_spell46_name         Mass Curse
+alter_realm0_spell46_sound        snd_spell_mass_curse
+alter_realm0_spell46_runes        VDS
+alter_realm0_spell46_cast_time    4.8
+alter_realm0_spell46_resources    i_reag_garlic,i_reag_mandrake_root,i_reag_nightshade,i_reag_sulfur_ash
+alter_realm0_spell46_rune_item    i_rune_mass_curse
+alter_realm0_spell46_scroll_item  i_scroll_mass_curse
+alter_realm0_spell46_flags        spellflag_harm|spellflag_fx_targ|spellflag_playeronly|spellflag_area|spellflag_nounparalyze|SPELLFLAG_RESIST
+alter_realm0_spell46_effect_id    i_fx_curse
+alter_realm0_spell46_effect       1,5
+alter_realm0_spell46_duration     0.0
+alter_realm0_spell46_manause      20
+alter_realm0_spell46_skillreq     magery 60.0
+alter_realm0_spell46_interrupt    100.0,100.0
+
+alter_realm0_spell47_defname      s_paralyzation_field
+alter_realm0_spell47_name         Paralyze Field
+alter_realm0_spell47_sound        snd_spell_paralyze_field
+alter_realm0_spell47_runes        IEG
+alter_realm0_spell47_cast_time    3.5
+alter_realm0_spell47_resources    i_reag_black_pearl,i_reag_ginseng,i_reag_spider_silk
+alter_realm0_spell47_rune_item    i_rune_paralyze_field
+alter_realm0_spell47_scroll_item  i_scroll_paralyze_field
+alter_realm0_spell47_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly|spellflag_nounparalyze|SPELLFLAG_RESIST
+alter_realm0_spell47_effect_id    i_fx_curse
+alter_realm0_spell47_effect       0
+alter_realm0_spell47_duration     20.0,30.0
+alter_realm0_spell47_manause      20
+alter_realm0_spell47_skillreq     magery 60.0
+alter_realm0_spell47_interrupt    100.0,100.0
+
+alter_realm0_spell48_defname      s_reveal
+alter_realm0_spell48_name         Reveal
+alter_realm0_spell48_sound        snd_spell_reveal
+alter_realm0_spell48_runes        WQ
+alter_realm0_spell48_cast_time    3.0
+alter_realm0_spell48_resources    i_reag_blood_moss,i_reag_sulfur_ash
+alter_realm0_spell48_rune_item    i_rune_reveal
+alter_realm0_spell48_scroll_item  i_scroll_reveal
+alter_realm0_spell48_flags        spellflag_area
+alter_realm0_spell48_effect_id    0
+alter_realm0_spell48_effect       0
+alter_realm0_spell48_duration     0.0
+alter_realm0_spell48_manause      20
+alter_realm0_spell48_skillreq     magery 60.0
+alter_realm0_spell48_interrupt    100.0,100.0
+
+alter_realm0_spell49_defname      s_chain_lightning
+alter_realm0_spell49_name         Chain Lightning
+alter_realm0_spell49_sound        snd_spell_chain_lightning
+alter_realm0_spell49_runes        VOG
+alter_realm0_spell49_cast_time    4.0
+alter_realm0_spell49_resources    i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root,i_reag_sulfur_ash
+alter_realm0_spell49_rune_item    i_rune_chain_lightning
+alter_realm0_spell49_scroll_item  i_scroll_chain_lightning
+alter_realm0_spell49_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_area|spellflag_playeronly|SPELLFLAG_RESIST
+alter_realm0_spell49_effect_id    0
+alter_realm0_spell49_effect       10,20
+alter_realm0_spell49_duration     0.0
+alter_realm0_spell49_manause      50
+alter_realm0_spell49_skillreq     magery 70.0
+alter_realm0_spell49_interrupt    100.0,100.0
+
+alter_realm0_spell50_defname      s_energy_field
+alter_realm0_spell50_name         Energy Field
+alter_realm0_spell50_sound        snd_spell_energy_field
+alter_realm0_spell50_runes        ISG
+alter_realm0_spell50_cast_time    3.5
+alter_realm0_spell50_resources    i_reag_black_pearl,i_reag_mandrake_root,i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell50_rune_item    i_rune_energy_field
+alter_realm0_spell50_scroll_item  i_scroll_energy_field
+alter_realm0_spell50_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly
+alter_realm0_spell50_effect_id    0
+alter_realm0_spell50_effect       0
+alter_realm0_spell50_duration     40.0,90.0
+alter_realm0_spell50_manause      40
+alter_realm0_spell50_skillreq     magery 70.0
+alter_realm0_spell50_interrupt    100.0,100.0
+
+alter_realm0_spell51_defname      s_flamestrike
+alter_realm0_spell51_name         Flamestrike
+alter_realm0_spell51_sound        snd_spell_flamestrike
+alter_realm0_spell51_runes        KVF
+alter_realm0_spell51_cast_time    3.5
+alter_realm0_spell51_resources    i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell51_rune_item    i_rune_flamestrike
+alter_realm0_spell51_scroll_item  i_scroll_flamestrike
+alter_realm0_spell51_flags        spellflag_dir_anim|spellflag_targ_obj|spellflag_harm|spellflag_damage|spellflag_fx_targ|SPELLFLAG_RESIST
+alter_realm0_spell51_effect_id    i_fire_column
+alter_realm0_spell51_effect       35,50
+alter_realm0_spell51_duration     0.0
+alter_realm0_spell51_manause      40
+alter_realm0_spell51_skillreq     magery 70.0
+alter_realm0_spell51_interrupt    100.0,100.0
+
+alter_realm0_spell52_defname      s_gate_travel
+alter_realm0_spell52_name         Gate Travel
+alter_realm0_spell52_sound        snd_spell_gate_travel
+alter_realm0_spell52_runes        VRP
+alter_realm0_spell52_cast_time    4.0
+alter_realm0_spell52_resources    i_reag_black_pearl,i_reag_mandrake_root,i_reag_sulfur_ash
+alter_realm0_spell52_rune_item    i_rune_gate_travel
+alter_realm0_spell52_scroll_item  i_scroll_gate_travel
+alter_realm0_spell52_flags        spellflag_targ_item|spellflag_playeronly
+alter_realm0_spell52_effect_id    i_moongate_blue_fx
+alter_realm0_spell52_effect       0
+alter_realm0_spell52_duration     15.0
+alter_realm0_spell52_manause      40
+alter_realm0_spell52_skillreq     magery 70.0
+alter_realm0_spell52_interrupt    100.0,100.0
+
+alter_realm0_spell53_defname      s_mana_vampire
+alter_realm0_spell53_name         Mana Vampire
+alter_realm0_spell53_sound        snd_spell_mana_vampire
+alter_realm0_spell53_runes        OS
+alter_realm0_spell53_cast_time    5.0
+alter_realm0_spell53_resources    i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell53_rune_item    i_rune_mana_vampire
+alter_realm0_spell53_scroll_item  i_scroll_mana_vampire
+alter_realm0_spell53_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_harm|spellflag_fx_targ|spellflag_nounparalyze|SPELLFLAG_RESIST
+alter_realm0_spell53_effect_id    i_fx_curse
+alter_realm0_spell53_effect       0
+alter_realm0_spell53_duration     0.0
+alter_realm0_spell53_manause      40
+alter_realm0_spell53_skillreq     magery 70.0
+alter_realm0_spell53_interrupt    100.0,100.0
+
+alter_realm0_spell54_defname      s_mass_dispel
+alter_realm0_spell54_name         Mass Dispel
+alter_realm0_spell54_sound        snd_spell_mass_dispel
+alter_realm0_spell54_runes        VAO
+alter_realm0_spell54_cast_time    3.5
+alter_realm0_spell54_resources    i_reag_black_pearl,i_reag_garlic,i_reag_mandrake_root,i_reag_sulfur_ash
+alter_realm0_spell54_rune_item    i_rune_mass_dispel
+alter_realm0_spell54_scroll_item  i_scroll_mass_dispel
+alter_realm0_spell54_flags        spellflag_fx_targ|spellflag_area
+alter_realm0_spell54_effect_id    i_fx_sparkle_2
+alter_realm0_spell54_effect       0
+alter_realm0_spell54_duration     0.0
+alter_realm0_spell54_manause      40
+alter_realm0_spell54_skillreq     magery 70.0
+alter_realm0_spell54_interrupt    100.0,100.0
+
+alter_realm0_spell55_defname      s_meteor_swarm
+alter_realm0_spell55_name         Meteor Swarm
+alter_realm0_spell55_sound        snd_spell_meteor_swarm
+alter_realm0_spell55_runes        FKDY
+alter_realm0_spell55_cast_time    4.0
+alter_realm0_spell55_resources    i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk,i_reag_sulfur_ash
+alter_realm0_spell55_rune_item    i_rune_meteor_swarm
+alter_realm0_spell55_scroll_item  i_scroll_meteor_swarm
+alter_realm0_spell55_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_damage|spellflag_area|spellflag_fx_targ|spellflag_playeronly|SPELLFLAG_RESIST
+alter_realm0_spell55_effect_id    0
+alter_realm0_spell55_effect       35,50
+alter_realm0_spell55_duration     0.0
+alter_realm0_spell55_manause      40
+alter_realm0_spell55_skillreq     magery 70.0
+alter_realm0_spell55_interrupt    100.0,100.0
+
+alter_realm0_spell56_defname      s_polymorph
+alter_realm0_spell56_name         Polymorph
+alter_realm0_spell56_sound        snd_spell_polymorph
+alter_realm0_spell56_runes        VYR
+alter_realm0_spell56_cast_time    6.5
+alter_realm0_spell56_resources    i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell56_rune_item    i_rune_polymorph
+alter_realm0_spell56_scroll_item  i_scroll_polymorph
+alter_realm0_spell56_flags        spellflag_fx_targ|spellflag_playeronly
+alter_realm0_spell56_effect_id    0
+alter_realm0_spell56_effect       0
+alter_realm0_spell56_duration     5*60.0,8*60.0
+alter_realm0_spell56_manause      40
+alter_realm0_spell56_skillreq     magery 70.0
+alter_realm0_spell56_interrupt    100.0,100.0
+
+alter_realm0_spell57_defname      s_earthquake
+alter_realm0_spell57_name         Earthquake
+alter_realm0_spell57_sound        snd_spell_earthquake
+alter_realm0_spell57_runes        IVP
+alter_realm0_spell57_cast_time    4.3
+alter_realm0_spell57_resources    i_reag_blood_moss,i_reag_ginseng,i_reag_mandrake_root,i_reag_sulfur_ash
+alter_realm0_spell57_rune_item    i_rune_earthquake
+alter_realm0_spell57_scroll_item  i_scroll_earthquake
+alter_realm0_spell57_flags        spellflag_harm|spellflag_damage|spellflag_area|spellflag_fx_targ|spellflag_playeronly|SPELLFLAG_RESIST
+alter_realm0_spell57_effect_id    i_fx_smoke
+alter_realm0_spell57_effect       30,45
+alter_realm0_spell57_duration     30.0
+alter_realm0_spell57_manause      50
+alter_realm0_spell57_skillreq     magery 80.0
+alter_realm0_spell57_interrupt    100.0,100.0
+
+alter_realm0_spell58_defname      s_energy_vortex
+alter_realm0_spell58_name         Energy Vortex
+alter_realm0_spell58_sound        snd_spell_energy_vortex
+alter_realm0_spell58_runes        VCP
+alter_realm0_spell58_cast_time    7.0
+alter_realm0_spell58_resources    i_reag_black_pearl,i_reag_blood_moss,i_reag_mandrake_root,i_reag_nightshade
+alter_realm0_spell58_rune_item    i_rune_energy_vortex
+alter_realm0_spell58_scroll_item  i_scroll_energy_vortex
+alter_realm0_spell58_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_harm|spellflag_summon
+alter_realm0_spell58_effect_id    0
+alter_realm0_spell58_effect       0
+alter_realm0_spell58_duration     60.0,90.0
+alter_realm0_spell58_manause      50
+alter_realm0_spell58_skillreq     magery 80.0
+alter_realm0_spell58_interrupt    100.0,100.0
+
+alter_realm0_spell59_defname      s_resurrection
+alter_realm0_spell59_name         Resurrection
+alter_realm0_spell59_sound        snd_spell_resurrection
+alter_realm0_spell59_runes        AC
+alter_realm0_spell59_cast_time    4.3
+alter_realm0_spell59_resources    i_reag_blood_moss,i_reag_garlic,i_reag_ginseng
+alter_realm0_spell59_rune_item    i_rune_resurrection
+alter_realm0_spell59_scroll_item  i_scroll_resurrection
+alter_realm0_spell59_flags        spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly
+alter_realm0_spell59_effect_id    i_fx_sparkle
+alter_realm0_spell59_effect       0
+alter_realm0_spell59_duration     0.0
+alter_realm0_spell59_manause      50
+alter_realm0_spell59_skillreq     magery 80.0
+alter_realm0_spell59_interrupt    100.0,100.0
+
+alter_realm0_spell60_defname      s_summon_elem_air
+alter_realm0_spell60_name         Air Elemental
+alter_realm0_spell60_sound        snd_spell_summon_elem_air
+alter_realm0_spell60_runes        KVXH
+alter_realm0_spell60_cast_time    4.3
+alter_realm0_spell60_resources    i_reag_blood_moss,i_reag_mandrake_root,i_reag_spider_silk
+alter_realm0_spell60_rune_item    i_rune_summon_elem_air
+alter_realm0_spell60_scroll_item  i_scroll_summon_elem_air
+alter_realm0_spell60_flags        spellflag_dir_anim|spellflag_targ_xyz|spellflag_summon
+alter_realm0_spell60_effect_id    0
+alter_realm0_spell60_effect       0
+alter_realm0_spell60_duration     2*60.0,3*60.0
+alter_realm0_spell60_manause      50
+alter_realm0_spell60_skillreq     magery 80.0
+alter_realm0_spell60_interrupt	  100.0,100.0
+
+
+[itemef i_alter_realm_gate]
+defname=i_alter_realm_gate
+name=Alter Realm Gate
+id=i_moongate_blue
+type=t_script
+
+on=@create
+attr=010
+
+on=@step
+
+
+[regiontype r_alter_realm_santiago]	//this region event needs to be added manually onto the region you're using
+
+on=@enter
+if !(<src.isevent.e_alter_realm_santiago>) && !(<src.isgm>)		//you must use a gate to get here
+  src.sysmessage You may not enter this area in such a manner!
+  return 1
+endif
+src.message You have entered the Santiago style gameplay area, be aware mechanics operate differently here.
+
+on=@leave
+if (<src.isevent.e_alter_realm_santiago>) && !(<src.isgm>)		//you muse us a gate to get here
+  src.sysmessage You may not leave this area in such a manner!
+  return 1
+endif
+src.message You are leaving the Santiago style gameplay area, standard mechanics are in effect again.
+
+
+
+
+[EOF]

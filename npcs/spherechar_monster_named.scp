@@ -1,0 +1,9 @@
+//All named monsters should be held in this file
+//3:32 AM 4/1/2018
+
+[chardef c_spherechar_monster_named_poop]
+id=c_man
+name=poop
+
+
+[EOF]

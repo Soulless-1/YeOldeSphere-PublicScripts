@@ -1,0 +1,107 @@
+//https://uo.stratics.com/content/skills/detecthidden.shtml
+//5:22 PM 3/27/2018
+
+//todo add trap detection
+
+[SKILL 14]
+DEFNAME=Skill_DetectHidden
+KEY=DetectingHidden
+TITLE=Scout
+FLAGS=skf_scripted
+PROMPT_MSG=Where will you search?
+DELAY=3.0,2.0
+STAT_STR=15
+STAT_INT=125
+STAT_DEX=20
+BONUS_STR=0
+BONUS_DEX=20
+BONUS_INT=80
+BONUS_STATS=25
+ADV_RATE=1.0,1.0,1.0    //2.5,50.0,200.0
+
+on=@select
+targetfg f_detecting_hidden_targ 
+src.sysmessage Where will you search?
+return 1
+
+on=@start
+//act = target
+//actprv = none
+//actp = targ xyz
+
+if (<src.distance <actp>> >= 12)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <actp>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+endif
+
+ref1=<region.uid>
+if !(<npc>) && (<ref1.isvalid>)
+  if (<ref1.f_house_isfriend>)	//can always detect hidden at house if you're a friend
+    actdiff=0  
+  endif 
+else
+  if !(<src.f_skillsucceed detectinghidden>) 
+    src.actdiff=65535		//way beyond what anyone would have
+  else
+    src.actdiff=0
+  endif
+endif
+
+return 0
+
+ON=@Fail
+src.sysmessage You can see nothing hidden there.
+
+ON=@Abort
+src.sysmessage You stop looking for anything hidden.
+
+on=@success
+ref1=<region.uid>
+if (<ref1.isvalid>) && (<ref1.f_house_isfriend>)
+  local.radius=22
+else
+  local.radius=<eval (<src.detectinghidden>/10)>
+endif
+
+forchars <local.radius>
+  if !(<isgm>) 
+    if (<flags>&statf_hidden)
+      local.chance=<eval ((<src.detectinghidden>+<R200>)-100)>
+      local.difficulty=<eval ((<hiding>+<R200>)-100)>
+      if (<local.chance> > <local.difficulty>)
+        flags &=~ statf_hidden
+        update
+        sysmessage You have been revealed!
+        src.sysmessage You have found <name>
+        local.detected=1
+      endif
+    elseif (<flags>&statf_invisible)
+      flags &=~ statf_invisible
+      update
+      sysmessage You have been revealed!
+      src.sysmessage You have found <name>
+      local.detected=1
+    endif
+  endif
+endfor
+
+foritems <local.radius>	//fixme add trap detection
+  //Detect Trap % Success = (Detecting Hidden - 80) / (100 - 80)
+  //If Detect Trap % Success >= Random(0,100)
+  //REVEAL TRAP!
+endfor
+
+if !(<local.detected>)
+  src.sysmessage You can see nothing hidden here.
+endif
+
+[function f_detecting_hidden_targ]
+actp=<targp>
+action=DetectingHidden
+
+
+
+[EOF]

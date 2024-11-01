@@ -1,0 +1,458 @@
+//Fishing System By Soulless.
+//V1.0
+//10:31 PM 2/23/2019
+
+[defname sos_bottles]
+sos_chest_decay		60*60*3							//how many minutes does a chest stay spawned
+sos_message_lvl1		Modern,{c_sea_serpent 1 c_elem_water 1 c_kraken 1},{1 3}	//name,guardians,guardian amount
+sos_message_lvl2		Aged,{c_sea_serpent 1 c_elem_water 1 c_kraken 1},{2 5}	
+sos_message_lvl3		Anqitue,{c_sea_serpent 1 c_elem_water 1 c_kraken 1},{3 7}	
+sos_message_lvl4		Ancient,{c_sea_serpent 1 c_elem_water 1 c_kraken 1},{4 9}						
+
+////////////////////////////
+// The Fishing Tool
+
+[typedef t_sos_fishing_tool]	//add this to fishing poles
+
+on=@targon_ground
+if (<src.findlayer.25>)
+  src.sysmessage You can't fish while riding.
+  return 1
+endif
+serv.newitem i_memory
+ref1=<new>
+ref1.p=<src.targp>
+if (<ref1.f_found_sos_chest>)
+  src.f_fishup_treasure <ref1.f_found_sos_chest>
+  ref1.remove
+  return 1
+endif
+ref1.remove
+return 0
+
+[function f_found_sos_chest]
+local.search_distance=<eval (<src.fishing>/250)>
+if (<local.search_distance> > 6)
+  local.search_distance=6
+endif
+foritems <local.search_distance>
+  if (<baseid>==i_sos_tile)
+    return <uid>
+  endif
+endfor
+return 0
+
+////////////////////////////////////////////
+// SOS Bottle containing the message
+
+[itemdef i_sos_bottle]
+defname=i_sos_bottle
+name=Message in a Bottle
+id=i_bottle_ale
+type=t_script
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You can't use this where it is
+  return 1
+endif
+
+if !(<R25>)
+  serv.newitem i_sos_message_ancient,1,<topobj.findlayer.21>
+else
+  serv.newitem i_sos_message,1,<topobj.findlayer.21>
+endif
+
+new.message The coordinates are scribbled inside. Grab a fishing pole and go recover it.
+src.sound 04f
+consume
+return 1
+
+/////////////////////////
+// The SOS Messages
+
+[itemdef i_sos_message]
+defname=i_sos_message
+name=Waterstained SOS
+id=i_map_rolled
+type=t_sos_message
+
+on=@create
+more1={1 3 2 2 3 1}	//level of map 1 is most likely, 3 is least likely
+doswitch <more1>
+  name=Modern <name>
+  name=Aged <name>
+  name=Antique <name>
+enddo
+
+[itemdef i_sos_message_ancient]
+defname=i_sos_message_ancient
+name=Ancient Waterstained SOS
+id=i_map_rolled
+type=t_sos_message
+
+on=@create
+color=0481
+more1=4		//always level 4 (ancient)
+
+
+///////////////////////////////
+// Locating the Sunken Chest
+
+[typedef t_sos_message]
+
+on=@create
+timestamp=<serv.time>	//track creation date.
+
+on=@dclick
+if (<more1> >= 4) // Ancient SOS Message
+  if !(<src.isgm>)
+    src.sysmessage Ancient SOS Messages not active yet, please be patient
+    return 1
+  endif
+endif
+
+if (<topobj.uid> != <src>) && !(<src.isgm>)
+  src.sysmessage You can't use this where it is.  
+  return 1
+elseif !(<more1>)
+  src.sysmessage This sos chest has already been found.
+  return 1
+elseif (<timestamp> <= 0)
+  src.sysmessage This sos message is so old that it disintegrates in your hands, the treasure is likely gone.
+  remove
+  return 1
+endif
+
+if !(<morep>)
+  ref1=<uid>
+  while (!<local.locationfound>)		
+    local.Posx=<R1,5119>
+    local.Posy=<R1,4095>
+    serv.newnpc c_man_invisible
+    ref2=<new.uid>
+    ref2.p=<local.posx>,<local.posy>
+    ref2.z
+    if (<serv.uid.<ref2>.isneartype t_water 1>) && (!<serv.uid.<ref2>.isneartype t_grass 5>) && (!<serv.uid.<ref2>.isneartype t_sand 5>) && (!<serv.uid.<ref2>.region.guarded>)
+      ref1.morep=<ref2.p.x>,<ref2.p.y>,<ref2.p.z>
+      ref1.tag0.coords=<ref2.sextantp>
+      serv.newitem=i_sos_tile
+      new.timestamp=<serv.time>
+      new.more1=<ref1.more1>	//set the level on the fishing tile
+      new.link=<ref1>
+      ref1.link=<new>
+      new.name=Level <new.dmore1> SOS Tile
+      new.p=<ref2.p>
+      local.locationfound=1
+    endif
+    ref2.remove
+  endwhile
+endif
+
+sdialog d_sos_message
+return 1
+
+[dialog d_sos_message]	
+100,50
+
+page 0
+resizepic 60 60 2520 350 320
+dtext 190 70 1263 SOS Message
+dhtmlgump 95 100 280 170 1 1 This message is hastily scribbled by a passenger aboard a sinking ship. While it is probably to late to save the passengers and crew, perhaps some treasure went down with the ship The message gives the ship's last known sextant co-ordinates.
+button 90 315 4014 4015 1 0 0
+dtext 130 315 1263 Okay
+dtext 90 290 1000 <tag0.coords>
+
+if (<src.isgm>)	//button to teleport GM to sunken chest
+  button 230 290 1209 1210 1 0 1
+endif
+
+[dialog d_sos_message button]
+
+onbutton=1
+if (<src.isgm>)
+  src.go <link.p> 	//<morep>
+endif
+
+[itemdef i_sos_tile]
+id=i_water
+name=SOS Message Tile
+type=t_script
+
+on=@create
+attr=attr_move_never|attr_invis
+color=026
+
+on=@click
+message <qval (<link.topobj.ischar>)?<link.topobj.name>:Unknown owner>'s <name> 
+return 1
+
+
+//////////////////////////////////////
+///  Fishing up the treasure
+
+[function f_fishup_treasure]
+if (<src.findid.i_sos_fishing>)
+  sysmessage You are already fishing for the treasure.
+  return 1
+endif
+serv.newitem i_sos_fishing
+new.link=<args>
+new.morep=<src.p.x>,<src.p.y>
+equip <new>
+
+[itemdef i_sos_fishing]
+name=fishing for treasure
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+more1=5
+topobj.sysmessage You begin to fish the treasure up.
+timer=1
+
+on=@timer
+if (<topobj.findlayer.25>)
+  topobj.sysmessage You can't fish while riding.
+  remove
+  return 1
+elseif (<topobj.p.x><topobj.p.y> != <morex><morey>) || (<topobj.flags>&statf_war)			//can't move while fishing for treasure
+  topobj.sysmessage You stop fishing for the treasure.
+  remove
+  return 1
+endif
+
+if (<topobj.flags>&statf_hidden) || (<topobj.flags>&statf_invisible)	//dont let them be hidden/invis when trying to fish up treasure
+  topobj.flags &= ~statf_hidden		
+  topobj.flags &= ~statf_invisible
+  topobj.sysmessage You have been revealed.
+  topobj.update
+endif
+
+if !(<R25>) || (<topobj.isgm>)
+  topobj.f_recover_sos_chest <link>
+  topobj.sysmessage You recover up the sunken treasure.
+  remove
+  return 1
+endif
+
+topobj.anim 11
+topobj.sound 027
+//local.d=<eval (<topobj.fishing>/250)>
+//local.d=<eval <local.d>-(<local.d>*2)>,<local.d>
+local.d={1 3}
+effectLocation <eval <link.p.x>+{<local.d>}>,<eval <link.p.y>+{<local.d>}>,<eval <link.p.z>+1>,2,0352d,1,128,0,0,0
+timer=2
+topobj.sysmessage Fishing...
+return 1
+
+[function f_recover_sos_chest]		//the chest has been found, fish it up
+ref1=<argn>
+args=<def0.sos_message_lvl<ref1.link.dmore1>> 
+
+serv.newitem random_chest
+ref2=<new>
+ref2.name Flooded <new.name>
+ref2.events=+t_sos_chest
+ref2.attr=attr_decay | attr_move_never
+ref2.more1=<ref1.link.more1>		//set treasure level	
+ref2.morez=<argv[2]>			//set max guardians spawnable
+ref2.f_stock_sos_chest_decorations
+ref2.f_stock_sos_chest_specials
+ref2.f_stock_treasure_chest<ref2.dmore1>
+ref2.timer=60*60*3
+ref2.p=<ref1.p>
+ref2.z=<z>
+ref2.f_sos_chest_spawn_guardians <eval <ref2.morez>/2>	//spawn half the guardians for the first wave
+ref2.f_sos_fishing_effect
+ref1.link.more1=0	//clear out all the info on the sos message
+ref1.link.name=Completed <ref1.link.name>
+ref1.link.link=04fffffff
+ref1.remove
+sound 026
+
+[function f_sos_fishing_effect]
+serv.newitem i_memory	
+new.attr=attr_decay
+new.more1=32
+new.morez=<z>
+z -= 8
+new.timerms=10
+new.type=t_sos_chest_effect
+new.link=<uid>
+new.p=<p>
+
+[typedef t_sos_chest_effect]
+
+on=@timer
+if (<more1> <= 0) || !(<link.isvalid>)
+  remove
+  return 1
+endif
+sound {025 027}
+//local.effect_id={01fa3 1 01fa8 1 01fad 1 01fb2 1 01fb7 1 01fbc 1 01fc1 1 01fc6 1}
+if (<distance <link>> > 0)
+  effectLocation <p.x>,<p.y>,<eval <morez>+(<morem>/16)>,2,0352d,1,128,0,0,0	
+endif
+more2 += 1
+if (<more2> >= 4)
+  link.z += 1
+  more2=
+endif
+movenear <link> 2
+more1 -= 1
+morem += 1
+timerms 250
+return 1
+
+[function f_sos_chest_spawn_guardians]
+local.amount=<args>
+args=<def0.sos_message_lvl<dmore1>>
+for <local.amount>
+    serv.newnpc <argv[1]>
+    new.events=+e_sos_chest_guardian
+    new.canmask |= mt_passwalls 
+    new.tag0.sos_chest=<uid>
+    new.p=<p>
+    new.movenear <uid> 5
+    new.home=<p>
+    new.homedist=5
+    morez -= 1		//total guardians
+    morem += 1		//spawned guardians
+endfor
+
+[events e_sos_chest_guardian]
+
+on=@click
+message @027 <name> [ Guardian ]
+return 1
+
+on=@death
+//uid.<tag0.sos_chest>.morem -= 1	//this is handled on=@destroy already
+
+on=@destroy
+uid.<tag0.sos_chest>.morem -= 1
+
+////////////////////////////////
+// The Sunken Chest
+
+[typedef t_sos_chest]
+
+on=@dclick
+if (<morem>)	//guardians present
+  src.sysmessage You must kill the nearby guardians first
+  return 1
+endif
+
+on=@pickup_self		//spawn guardians when players remove items from the chest (if any are left)
+if (<morem>)	//guardians present
+  src.sysmessage You must kill the nearby guardians first
+  return 1
+endif
+if (<morez> >= 1) && !(<R3>)		//can spawn another guardian
+  f_sos_chest_spawn_guardians 1		//spawn one more
+  close					//chest snaps shut!
+  return 1
+endif
+if (<ref2.isvalid>) && (<ref2.isevent.t_sos_chest>)
+  ref2.events=-t_sos_chest
+endif
+
+
+
+on=@destroy
+ref1=<uid>
+forchars 20
+  if (<isevent.e_sos_chest_guardian>) && (<tag0.sos_chest>==<ref1>)
+    remove
+  endif
+endfor
+
+//////////////////////////////////
+// Stocking the Sunken Chest
+
+[function f_sos_chest_additem]	//command usage : itemid,amount,odds,rolls,function
+for <argv[3]>
+  if (<argv[2]> <= 0) || !(<R<argv[2]>>) 
+    serv.newitem <argv[0]>,<argv[1]>,<uid>
+    if !(<isempty <argv[4]>>)	//function
+      new.<argv[4]>
+    endif
+  endif
+endfor
+
+[function f_stock_sos_chest_decorations]	//these are in all sunk chests
+//decorative items (common)
+f_sos_chest_additem random_footwear,1,15,1			
+f_sos_chest_additem i_skull_cap 1 i_hat_tricorne 1},1,15,1	
+f_sos_chest_additem random_pillows,1,15,1			
+f_sos_chest_additem random_shells,1,15,1
+f_sos_chest_additem {01eb1 01eb4},1,15,1		//barrel staves
+f_sos_chest_additem i_barrel_unfinished,1,15,1						
+f_sos_chest_additem random_bones,1,15,1
+f_sos_chest_additem random_skulls,1,15,1
+f_sos_chest_additem i_chair_stool_bar,1,15,1
+f_sos_chest_additem i_candelabra,1,15,1
+f_sos_chest_additem 0c1f,1,15,1				//broken clock
+f_sos_chest_additem random_paintings,1,15,1
+f_sos_chest_additem {014f7 014f8},1,15,1		//anchor
+f_sos_chest_additem tm_shipwreck_furniture,1,15,1
+//anchor chain, porthole, and ship in a bottle missing
+//decorative items (uncommon)
+f_sos_chest_additem i_fish_raw_head_pile,1,30,1
+f_sos_chest_additem {01e2a 01e2b},1,30,1		//standing oars
+f_sos_chest_additem i_bureau_unfinished,1,30,1		
+f_sos_chest_additem i_table_leg_unfinished_3,1,30,1
+//decorative items (rare)
+//Yellow Polkadot Bikini Top missing
+
+[function f_stock_sos_chest_specials]
+f_sos_chest_additem i_fishing_net_special,1,60,1
+f_sos_chest_additem {01ea5 01ea6},1,60,1	//large fishing net
+
+[function f_stock_sos_chest1]	//Modern Sunken Chest
+//standard loot
+f_sos_chest_additem i_gold,{4000 5000},1,1
+f_sos_chest_additem random_jewel,{1 3},1,20
+f_sos_chest_additem random_reagent,{1 3},1,20
+f_sos_chest_additem random_scroll,{1 3},1,9
+f_sos_chest_additem i_magic_wand,1,5,3
+f_sos_chest_additem random_rare_armor_mid,1,5,3
+f_sos_chest_additem random_rare_weapon_mid,1,5,3
+f_sos_chest_additem i_enchanted_jewelry,1,5,3
+
+[function f_stock_sos_chest2]	//Aged Sunken Chest
+f_sos_chest_additem i_gold,{5000 6000},1,1
+f_sos_chest_additem random_jewel,{1 3},1,25
+f_sos_chest_additem random_reagent,{1 3},1,25
+f_sos_chest_additem random_scroll,{1 3},1,12
+f_sos_chest_additem i_magic_wand,1,5,4
+f_sos_chest_additem random_rare_armor_mid,1,5,4
+f_sos_chest_additem random_rare_weapon_mid,1,5,4
+f_sos_chest_additem i_enchanted_jewelry,1,5,4
+
+[function f_stock_sos_chest3]	//Antique Sunken Chest
+f_sos_chest_additem i_gold,{6000 7000},1,1
+f_sos_chest_additem random_jewel,{1 3},1,30
+f_sos_chest_additem random_reagent,{1 3},1,30
+f_sos_chest_additem random_scroll,{1 3},1,15
+f_sos_chest_additem i_magic_wand,1,5,5
+f_sos_chest_additem random_rare_armor_mid,1,5,5
+f_sos_chest_additem random_rare_weapon_mid,1,5,5
+f_sos_chest_additem i_enchanted_jewelry,1,5,5
+
+[function f_stock_sos_chest4]	//Ancient Sunken Chest
+color 0b99	
+f_sos_chest_additem i_gold,{8000 9000},1,1
+f_sos_chest_additem random_jewel,{1 3},1,40
+f_sos_chest_additem random_reagent,{1 3},1,40
+f_sos_chest_additem random_scroll,{1 3},1,21
+f_sos_chest_additem i_magic_wand,1,5,7
+f_sos_chest_additem random_rare_armor_great,1,5,7
+f_sos_chest_additem random_rare_weapon_great,1,5,7
+f_sos_chest_additem random_rare_armor_ultra,1,5,7
+f_sos_chest_additem random_rare_weapon_ultra,1,5,7
+f_sos_chest_additem i_enchanted_jewelry,1,5,7
+
+[EOF]

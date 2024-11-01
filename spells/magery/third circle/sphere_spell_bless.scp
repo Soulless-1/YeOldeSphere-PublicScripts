@@ -1,0 +1,32 @@
+[SPELL 17]
+DEFNAME=s_bless
+NAME=Bless
+SOUND=snd_spell_bless
+RUNES=RS
+CAST_TIME=1.3
+RESOURCES=i_reag_garlic,i_reag_mandrake_root
+RUNE_ITEM=i_rune_bless
+SCROLL_ITEM=i_scroll_bless
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly|spellflag_bless
+EFFECT_ID=i_fx_bless_effect
+EFFECT=5,10
+LAYER=layer_spell_stats
+DURATION=2*60.0,3*60.0
+MANAUSE=9
+SKILLREQ=MAGERY 20.0
+INTERRUPT=100.0,100.0
+
+//Temporarily raise all your target's Stats. The effectiveness of this spell is based on the caster's Magery
+//Formula: [Magery/10, rounded down = # of stat points gained] (ie: at 85 magery, your Bless spell would add 8 Strength, Dexterity, and Intelligence to your stats for the duration of the spell)
+on=@effect
+consume i_rune_strength
+consume i_rune_agility
+consume i_rune_cunning
+consume i_rune_bless
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval (<local.spell_strength>/10)/10>
+
+
+
+[EOF]

@@ -1,0 +1,919 @@
+//Faction Dialogs go here
+//11:02 AM 1/12/2020
+
+
+[dialog d_faction_signup]
+200,100
+
+page 0
+ref1=<var0.faction_<dmore1>_leader>
+resizepic 10 10 9200 400 350 
+args=<def0.faction_<dmore1>_colors>
+dtext 140 30 <eval <argv[0]>-1> <strtoupper <def0.faction_<dmore1>>>	//503
+dtext 30 60 62 Lead By : <qval <ref1>?<ref1.name>:Currently there is no leadership>
+dtext 30 80 62 Tithe Rate : <dvar0.faction_<dmore1>_tithe>%
+button 70 110 4024 4025 1 0 1
+dtext 105 110 0 JOIN THIS FACTION
+dhtmlgump 50 140 350 300 0 0 <def0.faction_<dmore1>_desc>
+
+
+[dialog d_faction_signup button]
+
+onbutton=0
+
+onbutton=1
+src.f_faction_join <more1>	
+
+
+
+
+[dialog d_faction_main]
+50,0
+
+page 0
+resizepic 150 100 9200 400 350
+
+page 1
+ref1=<var0.faction_<dmore1>_leader>
+args=<def0.faction_<dmore1>_colors>
+dtext 295 120 <eval <argv[0]>-1> <strtoupper <def0.faction_<dmore1>>>	//503
+dtext 170 160 62 Led by : <qval <ref1>?<ref1.name>:Currently there is no leadership>
+dtext 170 180 62 Tithe Rate : <var0.faction_<dmore1>_tithe>% 	//(max to players)
+dtext 170 200 62 Traps Placed : <var0.faction_<dmore1>_traps>
+
+
+button 170 245 4005 4007 0 2
+dtext 210 245 0 CITY STATUS
+
+button 170 270 4005 4007 0 3
+dtext 210 270 0 STATISTICS
+
+if (!<isempty <src.tag.faction_merchant_title>>)
+  button 170 295 4005 4007 1 0 7
+  dtext 210 295 0 UNDECLARE FACTION MERCHANT
+else
+  button 170 295 4005 4007 0 4
+  dtext 210 295 0 DECLARE FACTION MERCHANT
+endif
+
+button 170 320 4005 4007 1 0 40
+dtext 210 320 0 VOTE FOR LEADERSHIP
+
+if (<ref1>==<src>) || (<src.isgm>)	//i am the faction officer or GM
+  button 170 345 4005 4007 0 6
+else
+  gumppic 170 345 4022
+endif
+dtext 210 345 0 COMMANDER OPTIONS
+
+
+button 170 370 4005 4007 1 0 9999
+dtext 210 370 0 LEAVE THIS FACTION
+
+
+page 2
+dtext 280 120 0 CITY STATUS
+for 0 7
+  args=<def0.faction_controlled_town_<dlocal._for>>
+  ref1=<var0.faction_town_sigil_<dlocal._for>>
+  gumppic 175 <eval 155+(<local._for>*25)>  <qval (<ref1.more2l>==3)?2360:2361>
+  dtext 190 <eval 150+(<local._for>*25)> 0 <strtoupper <argv[1]>>
+  dtext 340 <eval 150+(<local._for>*25)> 0 : <qval (<var0.faction_control_<argv[0]>>)?<def0.faction_<var0.faction_control_<argv[0]>>>:Uncontrolled>
+endfor
+
+gumppic 205 360 2361
+dtext 225 355 0 Sigil may be recaptured
+gumppic 205 385 2360
+dtext 225 380 0 Sigil may not be recaptured
+
+button 200 410 4014 4016 0 1
+dtext 235 410 0 BACK
+
+page 3
+dtext 280 120 0 STATISTICS
+button 200 410 4014 4016 0 1
+dtext 225 190 0 Name : <src.name>
+dtext 225 230 0 Rank :  <src.dtag0.faction_rank>
+dtext 225 270 0 Rank :  <src.tag0.faction_title>
+dtext 225 310 0 Score : <src.f_faction_get_score>%
+dtext 235 410 0 BACK
+
+page 4
+dtext 250 120 0 MERCHANT OPTIONS
+dtext 180 160 0 Select the title you wish to display
+
+button 170 185 4005 4007 1 0 1
+dtext 210 185 0 SCRIBE
+button 170 210 4005 4007 1 0 2
+dtext 210 210 0 CARPENTER
+button 170 235 4005 4007 1 0 3
+dtext 210 235 0 TINKER
+button 170 260 4005 4007 1 0 4
+dtext 210 260 0 BLACKSMITH
+button 170 285 4005 4007 1 0 5
+dtext 210 285 0 BOWYER
+button 170 310 4005 4007 1 0 6
+dtext 210 310 0 TAILOR
+
+button 200 410 4014 4016 0 1
+dtext 235 410 0 BACK
+
+
+page 5		//current standings			
+
+dtext 240 120 0 CURRENT STANDINGS
+
+for 0 9
+  ref1=<serv.list.faction_<src.dtag0.faction>_nominee.<dlocal._for>>
+  if (<ref1>)
+    button 185 <eval 150+(<local._for>*20)> 2360 2361 1 0 <eval <local._for>+8>
+    dtext 210 <eval 145+(<local._for>*20)> 0 <ref1.name>
+    dtext 375 <eval 145+(<local._for>*20)> 62 <ref1.tag0.faction_votes>
+  endif
+endfor
+
+
+dhtmlgump 180 350 350 200 0 0 Any faction member with rank 6 or higher rank may campaign for faction leadership. Votes will be tallied at the end of the voting week by the faction coordinator.
+
+button 200 410 4014 4016 0 1
+dtext 235 410 0 BACK
+
+page 6		//COMMANDER OPTIONS
+dtext 250 120 0 COMMANDER OPTIONS
+dtext 170 160 62 Tithe Rate : <var0.faction_<dmore1>_tithe>%
+dtext 170 180 62 Silver Available : <dvar0.faction_<dmore1>_silver>
+
+button 170 210 4005 4007 0 7
+dtext 210 210 0 CHANGE TITHE RATE
+
+button 170 235 4005 4007 0 8
+dtext 210 235 0 TRANSFER CREDITS
+
+button 200 410 4014 4016 0 1
+dtext 235 410 0 BACK
+
+page 7
+dtext 250 120 0 CHANGE TITHE RATE
+dtext 170 155 0 Select the % for new tithe rate
+
+for 0 10
+  button 170 <eval 180+<local._for>*20> 4005 4007 1 0 <eval 21+<local._for>>
+  dtext 210 <eval 180+<local._for>*20> 0 <eval 10*<local._for>>% 
+endfor
+dtext 245 180 0 (max to players)
+dtext 245 280 0 (half players, half faction)
+dtext 245 380 0 (max to faction)
+
+button 200 410 4014 4016 0 6
+dtext 235 410 0 BACK
+
+page 8
+dtext 250 120 0 TRANSFER CREDITS
+dtext 175 160 0 Select a town to transfer 10,000 credits to
+
+for 0 7
+  args=<def0.faction_controlled_town_<dlocal._for>>
+  button 170 <eval 185+(25*<local._for>)> 4005 4007 1 0 <eval 32+<local._for>>
+  dtext 210 <eval 185+(25*<local._for>)> 0 <strtoupper <argv[1]>>
+endfor
+
+
+button 200 410 4014 4016 0 6
+dtext 235 410 0 BACK
+
+
+[dialog d_faction_main button]
+
+onbutton=1,6
+if !(<isempty <tag.faction_merchent_rank>>)
+  src.sysmessage You must leave your other merchant rank first!
+  return 1
+endif
+doswitch <eval <argn1>-1>
+  args=inscription,Scribe  
+  args=carpentry,Carpenter
+  args=tinkering,Tinker
+  args=blacksmithing,Blacksmith
+  args=bowcraft,Bowyer
+  args=tailoring,Tailor
+enddo
+if (<src.<argv[0]>> < 1000)
+  src.sysmessage You lack the skill to be this merchant
+  return 1
+endif
+src.tag0.faction_merchant_title=<argv[1]>
+src.sysmessage You now have the faction title of <src.tag0.faction_merchant_title>
+
+
+onbutton=7
+src.tag0.faction_merchant_title=
+src.sysmessage Your merchant title has been removed.
+
+
+onbutton=8,18
+if (<serv.list.faction_<src.dtag0.faction>_voted.findelem "<src.account.lastip>"> != -1)
+  src.sysmessage You have already voted for faction leader
+  //sdialog d_faction_main 5
+  return 1
+endif
+argn1 -= 8
+ref1=<serv.list.faction_<src.dtag0.faction>_nominee.<dargn1>>
+ref1.tag0.faction_votes += 1
+serv.list.faction_<src.dtag0.faction>_voted.add "<src.account.lastip>"
+src.sysmessage You have cast your vote in favor of <ref1.name>.
+//sdialog d_faction_main 5
+
+
+onbutton=21,31
+if (<var0.faction_<dmore1>_tithe_adjusted>)
+  src.sysmessage You can only adjust the tithe rate once a day.
+  return 1
+endif
+argn -= 21
+var0.faction_<dmore1>_tithe=<eval <argn1>*10>
+var0.faction_<dmore1>_tithe_adjusted=<serv.rtime>
+src.sysmessage You have set the tithe rate to : <dvar0.faction_<dmore1>_tithe>%
+
+onbutton=32,39
+argn1 -= 32
+args=<def0.faction_controlled_town_<dargn1>>
+if (<var0.faction_control_<argv[0]>> != <src.tag0.faction>)
+  src.sysmessage Your faction does not control that town
+  return 1
+elseif (<var0.faction_<dmore1>_silver> < 1000)
+  src.sysmessage You do not have enough silver to transfer.
+  return 1
+endif
+
+var0.faction_<dmore1>_silver -= 10000
+var0.faction_<src.dtag0.faction>_<argv[0]>_silver += 10000
+src.sysmessage You've transfered 10,000 silver to <argv[1]>.
+src.sound 032
+
+onbutton=40
+sdialog d_faction_main
+sdialog d_faction_campaign
+
+onbutton=9999 
+if (<src.guild>) && (<src.guild.masteruid> != <src>)
+  src.sysmessage You cannot leave this faction until your guildmaster has done so first.
+  return 1
+elseif (<src.findid.i_faction_leaving>)
+  src.sysmessage You are already in the proecss of leaving your faction.
+  return 1
+endif
+dialog d_faction_leave
+
+[dialog d_faction_campaign]		//not completed
+0,0                                   
+
+resizepic 200 150 9200 390 175        
+//resizepic 210 160 3000 370 155        
+dtext 300 170 0 <def0.faction_<src.tag0.faction>>    
+
+
+if (<more2>==0) 
+  dtext 220 190 0 A new election campaign is pending.
+  if (<timer> < 86400)
+    dtext 220 210 0 Election campaigning begins tonight.
+  else
+    dtext 220 210 0 Days until next election : <eval (((<timer>/24)/60)/60)+1> 
+  endif
+
+elseif (<more2>==1)      
+  dtext 220 190 0 There is an election campaign in progress         
+  if (<timer> < 86400) 
+    dtext 220 210 0 Campaign in progress. Voting begins tonight.  
+  else
+    dtext 220 210 0 Days to go : <eval (((<timer>/24)/60)/60)+1> 
+  endif
+  if (<serv.list.faction_<src.dtag0.faction>_nominee.count> >= 10)
+    dtext 220 250 0 The voting list is full 
+  elseif (<src.tag0.faction_rank> >= 6) || (<src.isgm>)
+    dtext 220 250 0 You are fully edligable to run for office.
+  endif
+  button 355 285 4005 4007 1 0 1         
+  dtext 390 285 0 CAMPAIGN FOR LEADERSHIP    	
+ 
+elseif (<more2>==2)
+  dtext 220 190 0 There is an election vote in progress.
+  dtext 220 210 0 Days to go : <eval (((<timer>/24)/60)/60)+1> 
+  button 355 285 4005 4007 1 0 2         
+  dtext 390 285 0 VOTE FOR LEADERSHIP	 
+endif
+            
+button 220 285 4017 4019 1 0 0                
+dtext 255 285 0 CANCEL
+
+
+[dialog d_faction_campaign button]
+
+onbutton=1
+if (<serv.list.faction_<src.dtag0.faction>_nominee.count> >= 10)
+  src.sysmessage The voting list is full.
+  return 1
+elseif (<src.tag0.faction_rank> < 6)
+  src.sysmessage You must have a higher rank to run for office
+  return 1
+elseif (<serv.list.faction_<src.dtag0.faction>_nominee.findelem <src>> != -1)
+  src.sysmessage You are already campaigning for faction leader.
+  return 1
+endif
+serv.list.faction_<src.dtag0.faction>_nominee.add <src>
+src.sysmessage You are now campaigning for faction leader.
+
+onbutton=2
+dialogclose d_faction_main
+sdialog d_faction_main 5
+
+[dialog d_faction_leave]
+
+150,50
+resizepic 150 100 9200 240 190
+if (<var0.faction_<src.dtag0.faction>_leader>==<src>) || (<tag0.faction_officer>)
+  dtext 185 145 0 You are an elected official!
+endif
+dtext 190 165 0 Are you sure you want
+dtext 190 185 0 to leave this faction?
+
+button 210 220 4005 4007 1 0 1
+dtext 210 240 0 OK
+
+button 285 220 4017 4019 1 0 0
+dtext 280 240 0 CANCEL
+
+[dialog d_faction_leave button]
+
+onbutton=1
+if (<src.findid.i_faction_leaving>)
+  src.sysmessage You are already in the process of leaving this faction
+  return 1
+endif
+
+
+if (<src.guild>) && (<src.guild.masteruid> == <src>) 
+  src.guild.allmembers -1,sysmessage @68,0,1 You and your guild will officially be out of the faction in <eval (((<def0.factions_leave_time>/24)/60)/60)> days.
+else
+  src.sysmessage You will officially be out of the faction in <eval (((<def0.factions_leave_time>/24)/60)/60)> days.
+endif
+serv.newitem i_faction_leaving
+src.equip <new>
+new.timer=<def0.factions_leave_time>	
+
+
+
+///////////////////////////////////
+// Faction Townstone For Leader
+
+[dialog d_faction_town_stone_leader]
+150,50
+page 0
+resizepic 10 10 9200 360 270
+//resizepic 20 20 3000 340 250
+dtext 65 35 0 TOWN STONE FOR <strtoupper <region.name>>
+
+button 35 65 4007 4008 1 0 1
+dtext 75 65 0 Hire Sheriff
+
+button 35 100 4007 4008 1 0 2
+dtext 75 100 0 Hire Finance Minister
+
+button 35 135 4007 4008 1 0 3
+dtext 75 135 0 Fire Sheriff
+
+button 35 170 4007 4008 1 0 4
+dtext 75 170 0 Fire Finance Mininster
+
+button 35 235 4007 248 1 0 0
+dtext 75 235 0 EXIT
+
+
+[dialog d_faction_town_stone_leader button]
+
+onbutton=1
+targetf f_faction_hire_sheriff <uid>
+src.sysmessage Who would you like to hire as Sheriff of <region.name>?
+
+onbutton=2
+targetf f_faction_hire_finance_minister <uid>
+src.sysmessage Who would you like to hire as Finance Minister of <region.name>?
+
+onbutton=3
+ref1=<var0.faction_<src.dtag0.faction>_<region.defname>_sheriff>
+if !(<ref1>)
+  src.sysmessage There is no Sheriff to fire.
+  return 1
+endif
+var0.faction_<src.dtag0.faction>_<region.defname>_sheriff=
+serv.list.faction_<src.dtag0.faction>_officer.<serv.list.faction_<src.dtag0.faction>_officer.findelem <ref1>>.remove
+src.sysmessage You have fired <ref1.name> from the position of Sherrif.
+ref1.tag0.faction_officer=
+ref1.sysmessage You have been fired from the position of Sheriff of <region.name>
+
+onbutton=4
+ref1=<var0.faction_<src.dtag0.faction>_<region.defname>_finance_minister>
+if !(<ref1>)
+  src.sysmessage There is no Finance Minister to fire.
+  return 1
+endif
+var0.faction_<src.dtag0.faction>_<region.defname>_finance_minister=
+serv.list.faction_<src.dtag0.faction>_officer.<serv.list.faction_<src.dtag0.faction>_officer.findelem <ref1>>.remove
+src.sysmessage You have fired <ref1.name> from the position of Finance Minister.
+ref1.tag0.faction_officer=
+ref1.sysmessage You have been fired from the position of Finance Minister of <region.name>
+
+
+///////////////////////////////////
+// Faction Townstone For Sheriff
+
+[dialog d_faction_town_stone_sheriff]            
+0,0                                  
+
+resizepic 200 150 9200 325 410      
+//resizepic 210 160 3000 305 390       
+
+page 1                               
+dtext 245 170 0 SHERIFF OPTIONS
+
+button 220 235 4005 4007 0 2        
+dtext 255 235 0 HIRE GUARDS
+
+button 220 260 4005 4007 0 7         
+dtext 255 260 0 VIEW FINANCES
+
+button 220 510 4017 4019 1 0 0       
+dtext 255 510 0 EXIT
+
+
+//forloop and pull from defs for different guards       
+page 2       
+
+doswitch <eval (<src.tag0.faction>-1)>                      
+  args=Henchman,Mercenary,Knight,Paladin
+  args=Henchman,Mercenary,Sorcerer,Wizard
+  args=Henchman,Mercenary,Berserker,Dragoon
+  args=Henchman,Mercenary,Deathknight,Necromancer
+enddo
+
+dtext 245 170 0 HIRE GUARDS
+
+button 220 235 4005 4007 0 3          
+tilepic 250 235 5123                 
+dtext 315 235 0 <argv[0]>
+
+button 220 300 4005 4007 0 4          
+tilepic 200 300 3938                 
+dtext 315 300 0 <argv[1]>
+
+button 220 365 4005 4007 0 5          
+doswitch <eval (<src.tag0.faction>-1)>     
+  tilepic 230 365 00f4d        //brit           
+  tilepic 210 365 00e89		//mages
+  tilepic 250 365 00f4b		//minax
+  tilepic 250 365 00f45		//sl
+enddo               
+dtext 315 365 0 <argv[2]>
+
+button 220 430 4005 4007 0 6
+doswitch <eval (<src.tag0.faction>-1)>
+  tilepic 210 430 0143f                  
+  tilepic 210 430 013f8
+  tilepic 250 430 01439
+  tilepic 210 430 013f8
+enddo
+dtext 315 430 0 <argv[3]>
+
+button 220 510 4014 4016 0 1         
+dtext 255 510 0 Previous Page
+
+for g 0 3	                    
+page <eval (<local.g>+3)>
+doswitch <local.g>
+  tilepic 210 180 5123       
+  tilepic 170 180 3938    
+  begin
+    doswitch <eval (<src.tag0.faction>-1)>     
+      tilepic 190 180 00f4d     	//brit           
+      tilepic 190 180 00e89		//mages
+      tilepic 220 180 00f4b		//minax
+      tilepic 220 180 00f45		//sl
+    enddo 
+  end
+  begin
+    doswitch <eval (<src.tag0.faction>-1)>
+      tilepic 180 180 0143f        	//brit            
+      tilepic 180 180 013f8		//mages
+      tilepic 220 180 01439		//minax
+      tilepic 180 180 013f8		//sl
+    enddo
+  end
+enddo
+            
+dtext 280 180 0 <argv[<dlocal.g>]>
+dtext 225 250 0 You have : 
+local.count=<serv.list.faction_<src.dtag0.faction>_<region.defname>_<argv[<dlocal.g>]>.count>
+local.count=<qval (<local.count> < 0)?0:<local.count>>
+dtext 440 250 026 <local.count>
+
+dtext 225 280 0 Maximum : 
+dtext 440 280 012a 10               
+
+dtext 225 310 0 Cost : 
+dtext 440 310 044 <serv.chardef.c_h_faction_guard_<argv[<dlocal.g>]>.hiredaywage>         
+
+dtext 225 340 0 Daily Pay : 
+dtext 440 340 037 <eval (<serv.chardef.c_h_faction_guard_<argv[<dlocal.g>]>.hiredaywage>/2)>                 
+
+dtext 225 370 0 Current Silver: 
+dtext 440 370 044 <var0.faction_<src.dtag0.faction>_<region.defname>_silver>
+
+dtext 225 400 0 Current Payroll : 
+dtext 440 400 044 <var0.faction_<src.dtag0.faction>_<region.defname>_sheriff_upkeep>
+
+button 220 450 4005 4007 1 0 <eval (<local.g>+1)>        // Hire guard button
+dtext 255 450 0 Hire <argv[<dlocal.g>]>
+
+button 220 510 4014 4016 0 2          
+dtext 255 510 0 BACK
+endfor
+
+
+page 7                               
+
+dtext 245 170 0 FINANCE STATEMENT
+
+dtext 220 220 0 Current total money for town :                  
+dtext 220 240 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_silver>                    
+
+dtext 220 270 0 Finane Minister Upkeep :               
+dtext 220 290 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_finance_minister_upkeep>                  
+
+dtext 220 320 0 Sheriff Upkeep :               
+dtext 220 340 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_sheriff_upkeep>                   
+
+dtext 220 370 0 Town Income :                  
+dtext 220 390 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_income>   	//fixme: how to calculate? 
+
+dtext 220 420 0 Net Cash Flow Per Day           
+dtext 220 440 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_cash_flow>        	//fixme: how to calculate?            
+
+button 220 510 4014 4016 0 1         
+dtext 255 510 0 BACK               
+
+[dialog d_faction_town_stone_sheriff button]
+
+onbutton=1,4
+local.g = <eval (<argn1>-1)>
+doswitch <eval (<src.tag0.faction>-1)>                      
+  args=Henchman,Mercenary,Knight,Paladin
+  args=Henchman,Mercenary,Sorcerer,Wizard
+  args=Henchman,Mercenary,Berserker,Dragoon
+  args=Henchman,Mercenary,Deathknight,Necromancer
+enddo
+
+if (<var0.faction_control_<region.defname>> != <src.tag0.faction>)
+  src.sysmessage Your faction does not own this town.
+  return 1
+elseif (<var0.faction_<src.dtag0.faction>_<region.defname>_silver> < <serv.chardef.c_h_faction_guard_<argv[<dlocal.g>]>.hiredaywage>)
+  src.sysmessage Your town does not have enough silver for this purchase.
+  return 1
+elseif (<serv.list.faction_<src.dtag0.faction>_<region.defname>_<argv[<dlocal.g>]>.count> >= 10)
+  src.sysmessage You cannot hire more <argv[<dlocal.g>]>.
+  return 1
+endif
+src.f_faction_place_guard <uid>,<argv[<dlocal.g>]>	//stone,guard chardef
+
+
+
+////////////////////////////////////////
+// Faction Townstone For Finance Minister
+
+[dialog d_faction_town_stone_finance_minister]
+0,0
+
+page 0
+resizepic 150 100 9200 325 410      
+//resizepic 160 110 3000 305 390     
+
+page 1
+ 
+dtext 200 125 0 FINANCE MINISTER
+
+button 175 175 4005 4006 0 2        
+dtext 215 175 0 CHANGE PRICES
+
+button 175 200 4005 4006 0 3       
+dtext 215 200 0 BUY SHOPKEEPERS
+
+button 175 225 4005 4006 0 9      
+dtext 215 225 0 VIEW FINANCES
+
+page 2
+dtext 200 125 0 CHANGE PRICES
+
+local.price=-30
+for 1 6
+  radio 185 <eval (175+<local.y>)> 208 209 <qval (<var0.faction_<src.dtag0.faction>_<src.region.defname>_prices>==<local.price>)?1:0> <local._for>        
+  dtext 215 <eval (175+<local.y>)> 026 <dlocal.price>% 
+  local.price += 5
+  local.y += 30
+endfor
+radio 185 355 208 209 <qval (<var0.faction_<src.dtag0.faction>_<src.region.defname>_prices>==0)?1:0> 7      
+dtext 215 355 0 Normal
+local.price=10
+//local.price=50
+local.y=
+for 1 6
+  radio 335 <eval (175+<local.y>)> 208 209 <qval (<var0.faction_<src.dtag0.faction>_<src.region.defname>_prices>==<local.price>)?1:0> <eval (<local._for>+7)>       
+  dtext 365 <eval (175+<local.y>)> 012a + <dlocal.price>%
+  local.price += 10
+  //local.price += 50	
+  local.y += 30
+endfor
+
+button 175 430 4005 4006 1 0 1    
+dtext 215 430 0 SET PRICES
+
+button 175 460 4014 4016 0 1       
+dtext 215 460 0 BACK                  
+
+page 3
+
+args=Bottle,Wood,Ore,Reagent,Horsebreeder
+   
+dtext 200 125 0 HIRE VENDORS
+
+button 175 175 4005 4006 0 4  
+tilepic 203 175 3854
+dtext 235 175 0 Bottle Vendor
+
+button 175 215 4005 4006 0 5   
+tilepic 203 215 7127
+dtext 235 215 0 Wooden Board Vendor
+
+button 175 255 4005 4006 0 6   
+tilepic 200 255 6584
+dtext 235 255 0 Iron Ore Vendor
+
+button 175 295 4005 4006 0 7  
+tilepic 198 295 3976
+dtext 235 295 0 Reagent Vendor
+
+button 175 335 4005 4006 0 8    
+tilepic 208 328 8413
+dtext 235 335 0 Horse Breeder 
+
+button 175 460 4014 4016 0 1       
+dtext 215 460 0 BACK               
+
+for v 0 4
+
+page <eval (<local.v>+4)>
+doswitch <local.v>
+  tilepic 180 135 3854
+  tilepic 180 135 7127
+  tilepic 180 135 6584
+  tilepic 180 135 3976
+  tilepic 180 135 8413
+enddo
+dtext 230 130 0 <argv[<dlocal.v>]> Vendor
+
+local.count=<serv.list.faction_<src.dtag0.faction>_<region.defname>_<argv[<dlocal.v>]>.count>
+local.count=<qval (<local.count> < 0)?0:<local.count>>
+dtext 180 210 0 You have : 
+dtext 395 210 026 <local.count>
+
+dtext 180 240 0 Maximum : 
+dtext 395 240 012a 10               
+
+dtext 180 270 0 Cost : 
+dtext 395 270 044 <serv.chardef.c_h_faction_vendor_<argv[<dlocal.v>]>.hiredaywage>         
+
+dtext 180 300 0 Daily Pay : 
+dtext 395 300 037 <eval <serv.chardef.c_h_faction_vendor_<argv[<dlocal.v>]>.hiredaywage>/2>                 
+
+dtext 180 330 0 Current Silver: 
+dtext 395 330 044 <var0.faction_<src.dtag0.faction>_<region.defname>_silver>
+
+dtext 180 360 0 Current Payroll : 
+dtext 395 360 044 <var0.faction_<src.dtag0.faction>_<region.defname>_sheriff_upkeep>
+
+
+button 175 410 4005 4007 1 0 <eval (<local.v>+2)>        // Hire vendor button
+dtext 215 410 0 Hire <argv[<dlocal.v>]> Vendor
+
+button 175 460 4014 4016 0 3          
+dtext 215 460 0 BACK
+
+endfor
+
+page 9     
+dtext 200 125 0 VIEW FINANCES               
+
+dtext 190 160 0 Current total money for town :
+dtext 190 180 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_silver>             
+
+dtext 190 210 0 Finance Minister Upkeep :
+dtext 190 230 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_finance_minister_upkeep>               
+
+dtext 190 260 0 Sheriff Upkeep :
+dtext 190 280 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_sheriff_upkeep>            
+
+dtext 190 310 0 Town Income :
+dtext 190 330 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_income>               
+
+dtext 190 360 0 Net Cash flow per day :
+dtext 190 380 044 <var0.faction_<src.dtag0.faction>_<src.region.defname>_cash_flow>             
+
+button 175 460 4014 4016 0 1       
+dtext 215 460 0 BACK      
+
+[dialog d_faction_town_stone_finance_minister button]        
+
+onbutton=1	//change prices
+if (<argchkid> <= 7)
+  local.price=-35
+  local.price += <eval (<argchkid>*5)>
+else
+  local.price += <eval ((<argchkid>-7)*10)>
+  //local.price += <eval ((<argchkid>-7)*50)>
+endif
+var0.faction_<src.dtag0.faction>_<src.region.defname>_prices=<local.price>
+region.tag0.vendormarkup=<local.price>
+region.restock
+
+onbutton=2,6	//vendors
+local.v = <eval (<argn1>-2)>
+args=Bottle,Wood,Ore,Reagent,Horsebreeder
+
+if (<var0.faction_control_<region.defname>> != <src.tag0.faction>)
+  src.sysmessage Your faction does not own this town.
+  return 1
+elseif (<var0.faction_<src.dtag0.faction>_<region.defname>_silver> < <serv.chardef.c_h_faction_vendor_<argv[<dlocal.v>]>.hiredaywage>)
+  src.sysmessage Your town does not have enough silver for this purchase.
+  return 1
+elseif (<serv.list.faction_<src.dtag0.faction>_<region.defname>_<argv[<dlocal.v>]>.count> >= 10)
+  src.sysmessage You cannot hire more <argv[<dlocal.v>]>.
+  return 1
+endif
+src.f_faction_place_vendor <uid>,<argv[<dlocal.v>]>	//stone,vendor type
+
+[dialog d_faction_horse_breeder]       
+0,0                                   
+
+resizepic 190 120 9200 375 400     
+resizepic 200 130 3000 355 50        
+resizepic 200 185 3000 355 50       
+dtext 210 135 995 Hail, <src.sex Milord/Milady> <src.name>!
+dtext 210 155 0 Feel free to customize my status, <src.sex sir/madam>!
+dtext 210 190 0 Current fees: 1000 silver pieces
+dtext 210 210 0 Vendor Popularity: Not available
+
+button 210 245 4005 4006 1 0 1        
+dtext 245 245 0 Dismiss Vendor
+
+button 210 270 4005 4006 1 0 2       
+dtext 245 270 0 Raise Current Fees
+
+resizepic 200 300 3000 355 25        
+
+doswitch <tag0.faction_sellto>
+  dtext 210 303 0 I currently sell all factions.
+  dtext 210 303 0 I currently sell True Britannians only.
+  dtext 210 303 0 I currently sell Minax faction only.
+  dtext 210 303 0 I currently sell Shadowlords only.
+  dtext 210 303 0 I currently sell Council of Mages only.
+enddo
+
+button 210 335 4005 4006 1 0 3      
+dtext 245 335 0 Sell horses to True Britannians only
+
+button 210 360 4005 4006 1 0 4        
+dtext 245 360 0 Sell horses to Minax faction only
+
+button 210 385 4005 4006 1 0 5        // Shadow Only Button
+dtext 245 385 0 Sell horses to Shadowlords only
+
+button 210 410 4005 4006 1 0 6        // Mages Only Button
+dtext 245 410 0 Sell horses to Council of Mages only
+
+button 210 435 4005 4006 1 0 7        // All Factions Button
+dtext 245 435 0 Sell horses to all factions
+
+button 210 480 4005 4006 1 0 0        // CANCEL Button
+dtext 245 480 0 CANCEL
+
+[dialog d_faction_horse_breeder button]
+
+
+[dialog d_faction_buy_horse]
+100,100
+
+page 0
+
+resizepic 10 10 5054 320 280 
+resizepic 20 20 3000 300 260 
+
+dhtmlgump 30 30 300 25 0 0 <def0.faction_<src.dtag0.faction>>
+
+dhtmlgump 30 60 300 25 0 0  Purchase a Faction War Horse
+
+tilepic 80 120 03FFE
+
+tilepic 160 120 0EF2
+dtext 200 122 03E3 500
+
+tilepic 160 150 0EEF
+dtext 200 152 03E3 3000
+
+dhtmlgump 65 210 200 25 0 0 CONTINUE
+button 30 210 4005 4007 1 0 1
+
+dhtmlgump 65 240 200 25 0 0  CANCEL
+button 30 240 4005 4007 1 0 0
+
+[dialog d_faction_buy_horse button]
+
+onbutton=0
+message Thank you, Come again!
+
+onbutton=1
+if !(<src.isgm>)
+  if (<src.rescount i_coin_silver> < 500) 
+    message You do not have enough silver.
+    return 1
+  elseif (<src.rescount i_gold> < 3000) 
+    message You do not have enough gold.
+    return 1
+  endif
+endif
+src.consume i_coin_silver 500
+src.consume i_gold 500
+args=<def0.faction_<src.dtag0.faction>_warhorse>
+doswitch <eval (<src.tag0.faction>-1)>
+  serv.newnpc=c_faction_horse_true_britannians
+  serv.newnpc=c_faction_horse_council_of_mages
+  serv.newnpc=c_faction_horse_minax
+  serv.newnpc=c_faction_horse_shadowlords
+enddo
+new.tag0.faction=<src.tag0.faction>
+new.p=<src.p>
+new.setowner <src>
+src.sound 036
+
+[dialog d_faction_crafting_imbue]
+200,100
+
+page 0
+
+resizepic 10 10 9200 340 280
+resizepic 20 20 9350 320 260
+dtext 30 30 0 Imbue with Faction Properties?
+
+dtext 30 70 0 Item Quality:
+dtext 180 70 0 Average
+
+dtext 30 90 0 Item Cost : 
+dtext 180 90 034 1000
+
+dtext 30 110 0 Your Silver : 
+dtext 180 110 034 2400
+
+args=<def0.faction_<src.dtag0.faction>_colors>
+radio 35 150 210 211 1 1
+dtext 60 150 <eval (<argv[0]>-1)> *****
+dtext 170 150 0 Primary Color
+
+radio 35 170 210 211 0 2
+dtext 60 170 <eval (<argv[1]>-1)> *****
+dtext 170 170 0 Secondary Color
+
+button 35 220 4005 4005 1 0 1
+dtext 75 220 0 CONTINUE
+
+button 35 250 4005 4005 1 0 0
+dtext 75 250 0 CANCEL
+
+[DIALOG d_faction_crafting_imbue button]
+
+onbutton=0,1
+events=-t_faction_imbue_prompt	
+if (<argn1>==1)
+  if (<src.rescount i_coin_silver> < 1000)
+    src.sysmessage You do not have enough silver coins.
+  else
+    args=<def0.faction_<src.dtag0.faction>_colors>
+    src.consume i_coin_silver 1000
+    src.f_faction_imbue_item <uid>,<src.ctag0.crafting_tool>,<qval (<argchkid>==1)?<argv[0]>:<argv[1]>> //imbue the item if they select yes
+  endif
+endif
+if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  topobj.timerf 1,sdialog d_crafting_menu_details	
+else
+  topobj.timerf 1,sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+endif
+
+
+[EOF]
+
+

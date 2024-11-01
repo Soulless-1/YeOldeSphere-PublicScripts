@@ -1,0 +1,66 @@
+//Inscription is taken care of in scripts/custom/systems/crafting/
+//2:34 AM 3/27/2018
+
+[SKILL 23]
+DEFNAME=Skill_Inscription
+KEY=Inscription
+TITLE=Scribe
+FLAGS=skf_craft
+PROMPT_MSG=
+DELAY=1.0	//6.0
+STAT_STR=15
+STAT_INT=125
+STAT_DEX=15
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=10
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+VALUES=1,30,200
+
+ON=@Select
+src.sysmessage You must use a scribe's pen.
+return 1
+
+ON=@Start
+local.CraftStrokeCnt=5
+actioneffect=50			//how much resources are lost if we fail 
+local.successchance=<f_crafting_success_chance <actarg2.baseid>>
+if (<R0,1000> > <local.successchance>) && !(<isgm>)	//failed to craft the item
+  actdiff=65535
+else
+  actdiff=0
+endif
+
+ON=@Stroke		
+ref1=<actprv>		//tool
+local.anim=33
+if !(<ref1.isvalid>) || (<ref1.topobj> != <src>)
+  src.ctag0.<src.ctag0.crafting_skill>_notice=The tool must be on your person to use.
+  src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+  src.sdialog d_crafting_menu <src.ctag0.crafting_lastpage>	
+  return 1
+endif
+
+ON=@Abort
+src.ctag0.<src.ctag0.crafting_skill>_notice=You scribble on the scroll a bit, but fail to finish it.
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+src.sdialog d_crafting_menu
+
+ON=@Fail
+src.ctag0.<src.ctag0.crafting_skill>_notice=You fail to inscribe the scroll, and the scroll is ruined.
+src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+if !(<isempty <def.crafting_inscription_emote_fail>>)
+  src.emote <def0.crafting_inscription_emote_fail>
+endfor
+src.sdialog d_crafting_menu
+
+ON=@Success		//if you succeed @makeitem was called, we're going to use that instead for more control
+//src.ctag0.<src.ctag0.crafting_skill>_notice=You successfully craft the item.
+//src.sysmessage <src.ctag0.<src.ctag0.crafting_skill>_notice>
+if !(<isempty <def.crafting_inscription_emote_success>>)
+  src.emote <def0.crafting_inscription_emote_success>
+endfor
+//src.sdialog d_crafting_menu
+
+[EOF]

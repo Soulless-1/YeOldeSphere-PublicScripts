@@ -1,0 +1,130 @@
+
+//////////////////////////////
+// Waypoint Navigation
+
+
+[itemdef i_waypoint_navigation]
+id=i_map
+name=Waypoint Navigation
+type=t_eq_script
+layer=layer_special
+//more1l = waypoint # we're going to
+//more1h = direction through waypoint array; 1 = forwards, 2 = backwards	
+//more2l = waypoint we came from
+//more2h = NOT USED/ direction we used to be going?
+//morex = 0 walking; 1 running
+//morey = time it should take to arrive
+//morez = 0 waypoint navigation disabled; 1 enabled
+//morem = the time in seconds we've spent getting to the waypoint
+//link = an alternate route we can go
+
+on=@create
+timer=2
+morez=1		//turn waypoint nav on when first created
+
+on=@equip
+timerf 0,src.f_setup_waypoint_navigation
+
+on=@timer
+ref1=<topobj>
+//serv.log <ref1.name> heading to waypoint <more1l> going <qval (<more1h>==1)?forwards:backwards>
+if (<serv.list.waypoints_<tag0.waypoint>.count> != -1) && !(<ref1.incombat>) && (<ref1.action> != magery)
+  local.WaypointsTotal=<serv.list.waypoints_<tag0.waypoint>.count>	//add later to find the CLOSEST NOT THE FIRST IN THE LIST
+
+  ref2=<serv.list.waypoints_<tag0.waypoint>.<dmore1l>>  //uid of the waypoint we're headed to
+  ref3=<serv.list.waypoints_<tag0.waypoint>.<dmore2l>>	//uid of the waypoint we're coming from
+
+  if !(<ref2.isvalid>)	//no waypoint found
+    serv.log No waypoint found for <topobj.name>(<topobj>) in <topobj.region.name>(<p>)
+    //topobj.remove
+    timer=1		
+    return 1
+  endif
+
+ 
+  if (<morey>) && (<morem> >= <morey>)	//20 seconds should be enough time to make it to the next waypoint
+
+    //ref1.p=<ref2.p>
+    local.waypointnew=<more2l>
+    local.waypointold=<more1l>
+    more1l=<local.waypointnew>
+    more2l=<local.waypointold>
+    more1h=<qval (<more1h>==1)?2:1>
+    morem=
+    //serv.log <ref1.name>(<ref1>) heading from wp<dmore1l> to wp<more2l> in <tag0.waypoint> took to long, teleported them.
+    serv.log <ref1.name>(<ref1>) got stuck in <ref1.region.name>(<ref1.p>) trying to navigate to waypoint <local.oldwaypoint>. Going to <local.newwaypoint now>
+  endif
+
+  if (<ref1.distance <ref2.p>> < 2)
+    if (<ref2.tag0.linger>)	//this should be something like morex,morey,morez,morem that will determine what kind of waypoint node it is
+    endif
+
+    morem=			//reset the time we've spent traveling
+    more2l=<more1l>		//keep track of the old waypoint
+    
+    if (<ref2.link.isvalid>) && !(<tag0.nobacktrack>) && !(<R2>) && !((<ref2.link.tag0.restrictedto>) && (<ref2.link.tag0.restrictedto> != <ref1.baseid>))
+      tag0.nobacktrack=1
+      tag0.waypoint=<ref2.link.tag0.waypoints_group>
+      local.WaypointsTotal=<serv.list.waypoints_<ref2.link.tag0.waypoints_group>.count>	//we're changing our waypoint total
+      more1l=<serv.list.waypoints_<ref2.link.tag0.waypoints_group>.findelem <ref2.link>>
+      //more1h=<qval (<eval (<more1l>+1)>==<local.WaypointsTotal>)?2:1>	
+      more1h=<qval (<eval (<more1l>+1)>==<local.WaypointsTotal>)?2:<qval (<more1l>==0)?1:<R1,2>>>
+      ref2.color=0fd
+      ref2=<ref2.link>
+      ref2.color=040
+    else			//keep going on our current path
+      ref2.color=<qval (<ref2.link>==04fffffff)?03e9:0fd>
+      if (<more1h>==1) 		//traveling forwards on the path
+        more1l += 1
+        if (<eval <more1l>+1> >= <local.WaypointsTotal>)	//reached end, bo back the other way
+          more1h=2
+          //morey=
+        endif
+      elseif (<more1h>==2)		//travel backwards on the path
+        more1l -= 1
+        if (<eval (<more1l>-1)> < 0)	//reached begining, go back the other way now
+          more1h=1
+          //morey=
+        endif
+      endif
+      ref2=<serv.list.waypoints_<tag0.waypoint>.<dmore1l>>
+      ref2.color=040
+      tag0.nobacktrack=
+    endif
+    morey=<eval (<ref1.distance <ref2>>)>		//time it should take us to arrive
+  endif
+  morem += 1						//keeping track of how long it takes to get to this waypoint
+
+  //if (<ref1.action> != 116) && (<ref1.action> != 102)	//not running or walking somewhere already
+   ref1.home=<ref2.p>
+    ref1.homedist=
+    if (<ref1.distance <ref2>> > 5)	//(<R1,100> < <morex>)	//morex is the chance that this npc will run
+      ref1.runto <ref2.p>
+    else
+      ref1.goto <ref2.p>
+    endif
+  //endif
+
+  //ref1.canmask |= can_o_nosleep 	//just tag the npc specifically	//this should just be on the npcs chardef
+  //ref1.sector.flags |= secf_nosleep	//this should be a flag specifically on NPCs, not sectors
+
+endif
+
+timer=1		//always counting down, always checking unless otherwise specified in the NPC AI script
+return 1
+
+[events e_waypoint_navigation]
+
+on=@npcactwander
+say wandering
+
+on=@npcactfollow
+
+on=@npcactfight
+
+
+
+
+
+[eof]
+

@@ -1,0 +1,257 @@
+//Stables by Soulless
+//v1.0
+//2:35 PM 2/13/2019
+//CHANGE THIS TO LAYER 26 SAFE STORAGE
+
+[defname stable_settlings]
+stables_account_access		1		//0=character stables, 1=account stables	//this just means access, if you delete a char with pets they will not be on the account anymore
+stables_max_pets		18		//maximum amount of pets one can stable
+stables_cost			30		//the cost to stalbe a pet
+
+[dialog d_stables]
+200,100
+
+page 0
+
+resizepic 10 10 9200 520 400
+resizepic 20 20 3000 500 380
+
+dtext 215 20 1263 Stable System
+
+page <argn1>
+
+if (<argn1> > 0)
+  button 35 365 4015 4016 1 0 <eval (65000+(<argn1>-1>))>
+endif
+
+local.type=<qval (<def0.stables_account_access>)?src.account.name:src>	//player stables or account stables?
+local.count=<serv.list.stables_<<local.type>>.count>	//how many total pets are stabled?
+
+if (<local.count> >= 1)
+  for n <eval (<local.count>-1)> 0 
+    ref1=<serv.list.stables_<<local.type>>.<dlocal.n>>	
+    if !(<ref1.isvalid>) 
+      serv.list.stables_<<local.type>>.<dlocal.n>.remove
+    else
+      ref2=<ref1.more2>	//this is the actual NPC
+      if !(<ref2.isvalid>) && !(<ref2.ischar>) || !(<ref2.npc>)
+        serv.list.stables_<<local.type>>.<dlocal.n>.remove
+        serv.log <src.name>'s stables had an invaid NPC listed (<ref2.baseid> <ref2>)
+      else
+        resizepic <eval (40+(<local.x>*75))> <eval (60+(<local.y>*100))> 3000 75 75
+        tilepic <eval (50+(<local.x>*75))> <eval (65+(<local.y>*100))> <ref1.id>
+
+        local.hits=<muldiv <ref2.hits>,100,<ref2.maxhits>>
+        local.food=<muldiv <ref2.food>,100,<ref2.maxfood>>
+
+        gumppictiled <eval (45+(<local.x>*75))> <eval (95+(<local.y>*100))> <muldiv <local.hits>,11,100> 12 0938
+        dtext <eval (58+(<local.x>*75))> <eval (95+(<local.y>*100))> 1000 <dlocal.hits>%
+        gumppictiled <eval (45+(<local.x>*75))> <eval (108+(<local.y>*100))> <muldiv <local.food>,11,100> 12 093a
+        dtext <eval (58+(<local.x>*75))> <eval (108+(<local.y>*100))> 1000 <dlocal.food>%
+        local.ismine=<qval (<ref1.isvalid> && <ref1.cont> == <src.findlayer.27>)?1:0>
+        dcroppedtext <eval (45+(<local.x>*75))> <eval (118+(<local.y>*100))> 70 25 <qval (<local.ismine>)?1000:03b2> <ref1.name>
+        if (<local.ismine>)  
+          button <eval (45+(<local.x>*75))> <eval (135+(<local.y>*100))> 4015 4016 1 0 <eval ((<local.n>*(<argn1>+1))+1)>
+          button <eval (75+(<local.x>*75))> <eval (135+(<local.y>*100))> 4018 4019 1 0 <eval ((<local.n>*(<argn1>+1))+5000)>
+        endif
+        local.x += 1
+      endif
+    endif
+    if (<local.x> >= 6)	//go one row down
+      local.y += 1
+      local.x=
+    endif
+
+    if (<local.n> >= 17)		//if there is enough pets to have another page
+      button 475 365 4006 4007 1 0 <eval (65000+(<argn1>+1))>
+    endif
+  endfor
+endif
+
+
+button 200 375 4006 4007 1 0 70001
+dtext 240 378 1263 Stable a pet
+
+
+gumppic 390 384 0938 
+dtext 405 380 1000 Health
+gumppic 450 384 093a 
+dtext 465 380 1000 Food
+
+[dialog d_stables button]
+
+onbutton=1,2000			//retrieve pet
+argn -= 1
+local.type=<qval (<def0.stables_account_access>)?src.account.name:src>
+ref1=<serv.list.stables_<<local.type>>.<dargn>>
+if (<eval (<ref1.controlslots>+<src.curfollower>)> > <src.maxfollower>)
+  src.sysmessage <ref1.name> remained in the stables because you have too many followers.
+  return 1
+endif
+ref1.p=<src.p>
+ref1.cont=<src.findlayer.21>
+//src.f_follower_add <ref1.more2>
+src.dclick <ref1>
+serv.list.stables_<<local.type>>.<dargn>.remove
+//sdialog d_stables
+
+onbutton=5000,7000		//delete pet
+argn -= 5000
+local.type=<qval (<def0.stables_account_access>)?src.account.name:src>
+ref1=<serv.list.stables_<<local.type>>.<dargn>>
+//sysmessage <ref1.name> removed from your stables.
+//ref1.remove
+//serv.list.stables_<<local.type>>.<dargn>.remove
+src.ctag0.stables_remove=<dargn>
+sdialog d_stables_remove_confirm
+
+onbutton=60000,70000		//page left and right
+argn1 -= 65000
+sdialog d_stables <argn1>
+
+onbutton=70001
+local.type=<qval (<def0.stables_account_access>)?src.account.name:src>
+if (<def0.stables_max_pets>) && (<serv.list.stables_<<local.type>>.count> >= <def0.stables_max_pets>)
+  src.sysmessage There is no more room in the stables for another pet.
+  return 1
+endif
+src.targetf stable_pet <uid>		//send uid of the stabler
+say I charge <def0.stables_cost> gold per pet for a real week's stable time. I will withdraw it from thy bank account. Which animal wouldst thou like to stable here?
+
+
+
+//////////////////////////
+// Confirm Remove Dialog
+
+
+[dialog d_stables_remove_confirm]
+200,100
+
+page 0
+
+resizepic 10 10 9200 220 200
+resizepic 20 20 3000 200 180
+local.type=<qval (<def0.stables_account_access>)?src.account.name:src>
+ref1=<serv.list.stables_<<local.type>>.<src.dctag0.stables_remove>>
+dtext 65 35 0 Release <ref1.name>?
+
+resizepic 85 60 3000 75 75
+tilepic 95 70 <ref1.id>
+
+button 30 160 4006 4007 1 0 0
+dtext 65 160 1000 CANCEL
+
+button 140 160 4006 4007 1 0 1
+dtext 175 160 1000 OKAY
+
+
+
+[dialog d_stables_remove_confirm button]
+
+onbutton=0
+src.sysmessage Removal canceled.
+sdialog d_stables
+
+onbutton=1
+local.type=<qval (<def0.stables_account_access>)?src.account.name:src>
+ref1=<serv.list.stables_<<local.type>>.<src.dctag0.stables_remove>>
+src.sysmessage <ref1.name> removed from the stables <qval (<ref1.baseid> != i_pet_dog)?.: and sent to a happy place where dogs can run free.>
+serv.list.stables_<<local.type>>.<src.dctag0.stables_remove>.remove
+ref1.remove
+sdialog d_stables
+
+
+
+/////////////////////////
+// Functions 
+
+
+[function stable_pet]
+
+ref1=<argo>
+ref2=<args>
+local.type=<qval (<def0.stables_account_access>)?src.account.name:src>
+if !(<ref1.ischar>)
+  ref2.say You cannot stable that.
+  return 1
+elseif (<ref1.isplayer>)
+  ref2.say HA HA HA! Sorry, I am not an inn.
+  return 1
+elseif (<ref1.owner> != <uid>)  
+  ref2.say You do not own that pet!
+  return 1
+elseif (<ref1.flags>&statf_conjured)
+  ref2.say I can not stable summoned creatures.
+  return 1
+elseif (<ref1.flags>&statf_dead)
+  ref2.say Living pets only, please.
+  return 1
+elseif (<ref1.findlayer.21.isvalid>) && (<ref1.findlayer.21.count> > 0) && !((<ref1.findlayer.21.count> == 1) && (<ref1.findid.i_spellbook>))
+  ref2.say You need to unload your pet.
+  return 1
+elseif (<def0.stables_max_pets>) && (<serv.list.stables_<<local.type>>.count> >= <def0.stables_max_pets>)
+  ref2.say You have too many pets in the stables!
+  return 1
+elseif (<gold> < <def0.stables_cost>)
+  ref2.say But thou hast not the funds in thy bank account!
+  return 1
+endif
+gold -= <def0.stables_cost>
+local.bonded=<ref1.bonded>
+f_follower_remove <ref1>
+ref1.shrink
+local.type=<qval (<def0.stables_account_access>)?account.name:uid>
+ref1=<hval <ref1.actarg1>&~030000000>
+ref1.tag0.stabled_servtime=<serv.time>
+serv.list.stables_<<local.type>>.add <ref1>
+if !(<findlayer.27>)
+  serv.newitem i_stable_box	//player doesnt have a stable box, so add one on them
+  equip <new>
+endif
+ref1.morem=<local.bonded>
+ref1.cont=<findlayer.27>
+ref1.update
+findlayer.27.timer=300
+sdialog d_stables
+ref2.say Very well, thy pet is stabled. Thou mayst recover it by saying 'stable' again to me. In one real world week, I shall sell it off if it is not claimed. 
+
+
+
+//////////////////////////
+// Itemdefs for Stables
+
+[itemdef i_stable_box]
+name=Stable Box
+id=i_crate_lg
+type=t_container
+layer=27
+tdata2=04a
+
+on=@timer
+if (<count>)
+  forcont <uid> 0
+    ref1=<more2>	//more2 is the ID of the pet
+    if (<ref1.isvalid>) && (<ref1.ischar>) 
+      if (<ref1.hits> < <ref1.maxhits>)
+        ref1.hits += 5
+        if (<ref1.hits> > <ref1.maxhits>)
+          ref1.hits=<ref1.maxhits>
+        endif
+      endif
+      if (<ref1.food> < <ref1.maxfood>)
+        ref1.food += 1
+      endif
+    endif
+ endfor 
+ timer=300
+endif
+return 1
+
+
+
+
+[eof]
+
+
+
+

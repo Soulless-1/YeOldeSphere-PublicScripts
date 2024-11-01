@@ -1,0 +1,141 @@
+//Welcome Dialog by Soulless
+//v1.0
+//Animated chest opening dialog to welcome player to the server
+//v2.0
+
+[defname welcome_dialog_settings]
+welcome_dialog_animated		1	//animated dialog or go straight to the information inside?
+
+[function welcome]
+consume i_welcome_memory
+dialogclose d_welcome
+tag0.flags_player &=~ <def0.flags_player_acceptedterms>
+serv.newitem i_welcome_memory
+new.link=<uid>
+new.equip
+new.timerms=500
+
+[itemdef i_welcome_memory]
+defname=i_welcome_memory
+id=i_memory
+name=Welcome to the shard
+type=t_eq_script
+layer=layer_special
+
+on=@equip
+trysrc <link> dialog d_welcome
+
+on=@timer
+if !(<link.isvalid>) || !(<link.isonline>) 
+  remove
+  return 1
+endif
+if (<more1> <12) && (<def0.welcome_dialog_animated>)
+  more1 += 1
+  trysrc <link> dialogclose d_welcome
+  trysrc <link> dialog d_welcome
+endif
+timerms=100
+return 1
+
+[dialog d_welcome]
+25,25
+nomove
+noclose
+
+page 0
+resizepic 40 40 2620 660 500
+gumppic 50 50 1415
+ref1=<src.findid.i_welcome_memory>
+if (<ref1>) && (<ref1.more1> < 12) && (<def0.welcome_dialog_animated>)
+  gumppic 50 50 <eval 1400+<ref1.more1>>
+  return 0
+endif
+gumppic 50 50 1414
+
+
+resizepic 190 115 3000 375 36
+dtext 215 125 1263 Welcome to <serv.servname>, A Return To The Basics!
+button 200 151 05 05 1 0 98
+button 310 151 05 05 1 0 99
+button 430 151 05 05 1 0 100
+dhtmlgump 140 150 460 25 1 0 <def.center><def.bfont_blue><def.u>yeoldesphere.com<def.ue> | <def.u>yeoldesphere.com\codex<def.ue> | <def.u>discord<def.ue>	
+
+page 1
+dhtmlgump 150 180 450 300 0 0 <def.center><def.bfont_white>This shard is an attempt to create a SphereServer experience which is true to the early era of SphereServer and Ultima Online emulation. The server version is <serv.version> but we are aiming at replicating the mechanics and feel of 55i and official servers from 1998-2004<def.br><def.br>Systems will emulate OSI official servers and behavior from that time period but several core mechanics will be those from Sphereserver: casting while moving, LOS/fizzle based magery, skill delay before skill firing, etc.
+button 560 390 4006 4007 0 02
+dtext 525 390 1263 Next
+
+page 2
+dhtmlgump 150 180 450 300 0 0 <def.center><def.bfont_lgreen>Stat & Skill Gain:<def.bfont_white><def.br>Characters here will progress in the standard method, you will gain skill as you use them. Stats will increase whilst using skills associated with that particular stat.<def.br><def.bfont_lgreen>Limits:<def.br><def.bfont_white>The starting skillmax is <fval <serv.skillclass.0.skillsum>>, each individual skillcap is <fval <serv.skillclass.0.alchemy>> which can be increased to 120.0. A starting max of <serv.skillclass.0.statsum> stats with a max of <serv.skillclass.0.str> in each stat which can be increased to 120.<def.br><def.bfont_lgreen>Ruleset:<def.br><def.bfont_white>No precast, move while casting, preskill delay, regeants required, mana required, felucca only, no safe zones
+button 150 390 4015 4016  0 1
+dtext 185 390 1263 Previous
+button 560 390 4006 4007 0 03
+dtext 525 390 1263 Next
+
+page 3
+dhtmlgump 150 180 450 300 0 0 <def.center><def.bfont_lgreen>Custom Content:<def.br><def.bfont_white>Currently efforts are underway to complete everything from the T2A/Renaissance eras and that is a priority. Once things are properly implemented from those eras we will continue to expand on the systems and behaviors that are tried and true. <def.br><def.br> Additional considerations for entirely new systems as well, things such as experience and talent systems to further customize each characters template/class, and provide a deeper gameplay experience. New dungeons with new monsters and loot. After we finish current implementation details on these systems will be forthcoming.
+button 150 390 4015 4016  0 2
+dtext 185 390 1263 Previous
+button 560 390 4006 4007 0 04
+dtext 525 390 1263 Next
+
+page 4
+dhtmlgump 150 180 450 300 0 0 <def.center><def.bfont_lgreen>Rules & Conduct <def.br><def.bfont_white>  The complete rules can be accessed at the website <serv.url>/rules. Please be sure to read them in their entirety. If you have any questions please ask on discord for clarification. <def.br><def.bfont_lgreen>Problems? <def.br><def.bfont_white>If you have any questions or problems try these things:<def.br><def.bfont_lgreen>1.<def.bfont_white> Ask the other players, remember to be polite.<def.br><def.bfont_lgreen>2.<def.bfont_white> Check out the wiki at <serv.url>/codex. <def.br><def.bfont_lgreen>3.<def.bfont_white> Discord is the best way to interact with the community. <def.br><def.bfont_lgreen>4.<def.bfont_white> Finally, you can ingame request GM assistance. Access your character profile by pressing ALT-P, and press the HELP button.
+button 150 390 4015 4016  0 3
+dtext 185 390 1263 Previous
+resizepic 240 382 3000 270 35
+checkbox 480 390 02342 02343 0 1
+dtext 255 390 025 I agree to the terms and conditions
+button 560 390 4012 4013 1 0 1
+dtext 520 390 1263 Okay
+
+[dialog d_welcome button]
+
+onbutton=1
+if !(<argchk[1]>)
+  dialogclose d_welcome_must_accept_terms
+  trysrc <link> dialog d_welcome 4
+  trysrc <link> dialog d_welcome_must_accept_terms
+  link.sysmessage,message You must accept the terms and conditions to continue
+  return 1
+endif
+
+dialogclose d_welcome_must_accept_terms
+link.tag0.flags_player |= <def0.flags_player_acceptedterms>
+link.message @044 Welcome to Ye Olde Sphere!
+serv.newitem i_newplayer_pack,1,<link.findlayer.21>
+new.link=<link>
+remove
+
+
+onbutton=98
+link.timerf 2,weblink www.yeoldesphere.com
+link.sysmessage Opening web broswer...
+trysrc <link> dialog d_welcome 1
+return 1
+
+onbutton=99
+link.timerf 2,weblink www.yeoldesphere.com/codex
+link.sysmessage Opening web broswer...
+trysrc <link> dialog d_welcome 1
+return 1
+
+onbutton=100
+link.timerf 2,weblink www.discord.gg/5wcdHNb
+link.sysmessage Opening web broswer...
+trysrc <link> dialog d_welcome 1
+return 1
+
+[dialog d_welcome_must_accept_terms]
+25,25
+nomove 
+noclose
+
+gumppic 465 410 4500 37
+
+
+
+
+
+[EOF]

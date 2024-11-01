@@ -1,0 +1,990 @@
+//All dragon type monsters should go in here
+//2:09 AM 4/17/2018
+
+[chardef 46]
+DEFNAME=c_wyrm_ancient
+DEFNAME2=c_dragon_wyrm
+NAME=Ancient Wyrm
+SOUND=362
+ICON=i_pet_dragon
+dam=29, 35
+armor=70
+resources=40 i_hide_barbed,19 i_ribs_raw, 12 i_dragon_scale_black
+CAN=MT_USEHANDS|MT_WALK|MT_FLY|MT_RUN
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman,t_corpse
+MOVERATE=50
+//RESDISPDNID=c_dragon_red
+//RESLEVEL=2
+//RESDISPDNHUE=0455
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Ancient Wyrm
+
+ON=@Create
+	color=0455
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={1096, 1185}
+	dex={86, 175}
+	int={686, 775}
+	maxhits={658, 711}
+	resphysical={65, 75}
+	resfire={80, 90}
+	rescold={70, 80}
+	respoison={60, 70}
+	resenergy={60, 70}
+	evaluatingintel={80.1, 100.0}
+	magery={80.1, 100.0}
+	meditation={52.5, 75.0}
+	magicresistance={100.5, 150.0}
+	tactics={97.6, 100.0}
+	wrestling={97.6, 100.0}
+	fame=22500
+	karma=-22500
+        make_spellcaster 4,8
+
+ON=@NpcRestock
+	item=i_gold,{1600 1800}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+[CHARDEF 01011]
+DEFNAME=c_wyrm_ice
+DEFNAME2=c_dragon_ice
+NAME=Ice Wyrm
+ID=c_dragon_red
+SOUND=362
+ICON=i_pet_dragon
+CAN=MT_WALK|MT_FLY|MT_RUN
+dam=29, 35
+armor=70
+resources=40 i_hide_barbed,19 i_ribs_raw, 12 i_dragon_scale_white
+FOODTYPE=80 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Ice Wyrm
+
+on=@create
+    tag.controlslots=5
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	color=0480
+	str={1096, 1185}
+	dex={86, 175}
+	int={686, 775}
+	maxhits={658, 711}
+	resphysical={65, 75}
+	resfire={80, 90}
+	rescold={70, 80}
+	respoison={60, 70}
+	resenergy={60, 70}
+	evaluatingintel={80.1, 100.0}
+	magery={80.1, 100.0}
+	meditation={52.5, 75.0}
+	magicresistance={100.5, 150.0}
+	tactics={97.6, 100.0}
+	wrestling={97.6, 100.0}
+	fame=22500
+	karma=-22500
+	make_spellcaster 1,7
+
+ON=@NpcRestock
+	item=i_gold,{1600 1800}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+[chardef 106]
+defname=c_wyrm_shadow
+defname2=c_dragon_wyrm_shadow
+name=a shadow wyrm
+sound=362
+can=mt_walk|mt_run|mt_fly
+dam=29, 35
+armor=70
+resources=20 i_hide_barbed, 10 i_ribs_raw, 10 i_dragon_scale_black
+FOODTYPE=80 t_meat_raw
+icon=i_pet_dragon
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Shadow Wyrm
+
+on=@create
+    tag.controlslots=5
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={898, 1030}
+	dex={68, 200}
+	int={488, 620}
+	maxhits={558, 599}
+	resfire={50, 60}
+	rescold={45, 55}
+	respoison={20, 30}
+	resenergy={50, 60}
+	evaluatingintel={80.1, 100.0}
+	magery={80.1, 100.0}
+	meditation={52.5, 75.0}
+	magicresistance={100.3, 130.0}
+	tactics={97.6, 100.0}
+	wrestling={97.6, 100.0}
+	detectinghidden={90.0, 100.0}
+	necromancy={80.0, 90.0}
+	spiritspeak={100.0, 105.0}
+	fame=22500
+	karma=-22500
+    make_spellcaster 4,8
+	
+ON=@NpcRestock
+	item=i_gold,{1550 1800}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+[chardef 0b4]
+defname=c_wyrm_white
+defname2=c_dragon_wyrm_white
+name=a white wyrm
+sound=362
+can=mt_walk|mt_run|mt_fly
+dam=17, 25
+armor=64
+resources=20 i_hide_barbed, 19 i_ribs_raw, 9 i_dragon_scale_white
+FOODTYPE=80 t_meat_raw
+icon=i_pet_dragon
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=White Wyrm
+
+
+on=@create
+	tag.controlslots=3
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={721, 760}
+	dex={101, 130}
+	int={386, 425}
+	maxhits={433, 456}
+	resfire={15, 25}
+	rescold={80, 90}
+	respoison={40, 50}
+	resenergy={40, 50}
+	evaluatingintel={99.1, 100.0}
+	magery={99.1, 100.0}
+	magicresistance={99.1, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={90.1, 100.0}
+	taming=96.3
+	fame=18000
+	karma=-18000
+        make_spellcaster 1,7
+	
+ON=@NpcRestock
+	item=i_gold,{1200 1400}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+
+[CHARDEF 0c]
+DEFNAME=c_dragon_green
+NAME=Dragon	//#NAMES_DRAGON the Dragon
+SOUND=362
+ICON=i_pet_DRAGON
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+dam=16, 22
+armor=60
+RESOURCES=19 i_ribs_raw, 20 i_hide_barbed, 7 i_dragon_scale_green, 8 i_reag_dragon_blood
+FOODTYPE=80 t_meat_raw,t_gem
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+TEVENTS=e_carnivores3
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Dragon (Green)
+
+ON=@Create
+	tag.controlslots=2
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={796, 825}
+	dex={86, 105}
+	int={436, 475}
+	maxhits={478, 495}
+	resphysical={55, 65}
+	resfire={60, 70}
+	rescold={30, 40}
+	respoison={25, 35}
+	resenergy={35, 45}
+	evaluatingintel={30.1, 40.0}
+	magery={30.1, 40.0}
+	magicresistance={99.1, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={90.1, 92.5}
+	taming=93.9
+	fame=15000
+	karma=-15000
+	make_spellcaster 6
+	
+ON=@NPCRestock
+	item=i_gold,{1000 1200}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+
+[CHARDEF c_dragon_green_greater]
+DEFNAME=c_dragon_green_greater
+NAME=Greater Dragon	
+ID=c_dragon_green
+SOUND=362
+ICON=i_pet_DRAGON
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+dam=24, 33
+armor=85
+RESOURCES=19 i_ribs_raw, 30 i_hide_barbed, 7 i_dragon_scale_green, 8 i_reag_dragon_blood
+FOODTYPE=80 t_meat_raw,t_gem
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+TEVENTS=e_carnivores3
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Greater Dragon (Green)
+
+ON=@Create
+	tag.controlslots=4
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={1025, 1425}
+	dex={81, 148}
+	int={475, 675}
+	maxhits={1000, 2000}
+	resphysical={55, 65}
+	resfire={60, 70}
+	rescold={30, 40}
+	respoison={25, 35}
+	resenergy={35, 45}
+	meditation=0
+	evaluatingintel={110.0, 140.0}
+	magery={110.0, 140.0}
+	magicresistance={110.0, 140.0}
+	tactics={110.0, 140.0}
+	wrestling={115.0, 145.0}
+	taming=104.7
+	fame=22000;
+	karma=-15000
+	make_spellcaster 6
+	
+ON=@NPCRestock
+	item=i_gold,{1520 1920}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+
+
+[CHARDEF 03b]
+DEFNAME=c_dragon_red
+NAME=Dragon	//#NAMES_DRAGON the Dragon
+SOUND=362
+ICON=i_pet_DRAGON
+ANIM=03f9c7f
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+dam=16, 22
+armor=60
+RESOURCES=19 i_ribs_raw, 20 i_hide_barbed, 7 i_dragon_scale_red, 8 i_reag_dragon_blood
+FOODTYPE=80 t_meat_raw,t_gem
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Dragon (Red)
+
+ON=@Create
+	tag.controlslots=2
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={796, 825}
+	dex={86, 105}
+	int={436, 475}
+	maxhits={478, 495}
+	resphysical={55, 65}
+	resfire={60, 70}
+	rescold={30, 40}
+	respoison={25, 35}
+	resenergy={35, 45}
+	evaluatingintel={30.1, 40.0}
+	magery={30.1, 40.0}
+	magicresistance={99.1, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={90.1, 92.5}
+	taming=93.9
+	fame=15000
+	karma=-15000
+
+ON=@NPCRestock
+	item=i_gold,{1000 1200}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+
+[CHARDEF c_dragon_red_greater]
+DEFNAME=c_dragon_red_greater
+NAME=Greater Dragon	
+ID=c_dragon_red
+SOUND=362
+ICON=i_pet_DRAGON
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+dam=24, 33
+armor=85
+RESOURCES=19 i_ribs_raw, 30 i_hide_barbed, 7 i_dragon_scale_red, 8 i_reag_dragon_blood
+FOODTYPE=80 t_meat_raw,t_gem
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+TEVENTS=e_carnivores3
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Greater Dragon (Red)
+
+ON=@Create
+	tag.controlslots=5
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={1025, 1425}
+	dex={81, 148}
+	int={475, 675}
+	maxhits={1000, 2000}
+	resphysical={55, 65}
+	resfire={60, 70}
+	rescold={30, 40}
+	respoison={25, 35}
+	resenergy={35, 45}
+	meditation=0
+	evaluatingintel={110.0, 140.0}
+	magery={110.0, 140.0}
+	magicresistance={110.0, 140.0}
+	tactics={110.0, 140.0}
+	wrestling={115.0, 145.0}
+	taming=104.7
+	fame=22000;
+	karma=-15000
+	make_spellcaster 6
+	
+ON=@NPCRestock
+	item=i_gold,{1520 1920}
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+
+
+[CHARDEF 60]
+defname=c_drake_gray
+DEFNAME2=c_dragon_small_black
+NAME=Drake	//#NAMES_DRAGON the Drake
+SOUND=362
+ICON=i_pet_DRAGON
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+dam=11, 17
+armor=46
+RESOURCES=20 i_hide_horned, 10 i_ribs_raw, 6 i_dragon_scale_yellow, 8 i_reag_dragon_blood
+FOODTYPE=25 t_meat_raw,t_gem
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake (Gray)
+
+ON=@Create
+	tag.controlslots=2
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={401, 430}
+	dex={133, 152}
+	int={101, 140}
+	maxhits={241, 258}
+	resphysical={45, 50}
+	resfire={50, 60}
+	rescold={40, 50}
+	respoison={20, 30}
+	resenergy={30, 40}
+	magicresistance={65.1, 80.0}
+	tactics={65.1, 90.0}
+	wrestling={65.1, 80.0}
+	taming=84.3
+	fame=5500
+	karma=-5500
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+[CHARDEF 61]
+defname=c_drake_red
+DEFNAME2=c_dragon_small_red
+NAME=Drake	//#NAMES_DRAGON the Drake
+SOUND=362
+ICON=i_pet_DRAGON
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+dam=11, 17
+armor=46
+RESOURCES=20 i_hide_horned, 10 i_ribs_raw, 6 i_dragon_scale_yellow, 8 i_reag_dragon_blood
+FOODTYPE=25 t_meat_raw,t_gem
+DESIRES=i_gold
+AVERSIONS=r_water,r_civilization
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Drake (Red)
+
+on=@create
+	tag.controlslots=2
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={401, 430}
+	dex={133, 152}
+	int={101, 140}
+	maxhits={241, 258}
+	resphysical={45, 50}
+	resfire={50, 60}
+	rescold={40, 50}
+	respoison={20, 30}
+	resenergy={30, 40}
+	magicresistance={65.1, 80.0}
+	tactics={65.1, 90.0}
+	wrestling={65.1, 80.0}
+	taming=84.3
+	fame=5500
+	karma=-5500
+
+
+ON=@NPCRestock
+	item=i_gold,{275 325}
+	item=random_reagent
+	item=random_reagent
+	item=random_reagent
+	//item=random_second_circle
+	//item=random_second_circle
+	//item=tm_magic_items	//todo
+	//item=i_treasure_map2,R99
+
+[CHARDEF 62]
+DEFNAME=c_wyvern
+NAME=Wyvern
+sound=362
+dam=8, 19
+armor=40
+CAN=MT_WALK|MT_FLY//|MT_FIRE_IMMUNE
+RESOURCES=20 i_hide_horned, 10 i_ribs_raw
+FOODTYPE=25 t_meat_raw
+DESIRES=i_gold
+AVERSIONS=r_civilization,r_water
+CATEGORY=Monsters
+SUBSECTION=Dragons and Drakes
+DESCRIPTION=Wyvern
+
+ON=@Create
+	npc=brain_monster  //brain_dragon
+	str={202, 240}
+	dex={153, 172}
+	int={51, 90}
+	maxhits={125, 141}
+	resphysical={35, 45}
+	resfire={30, 40}
+	rescold={20, 30}
+	respoison={90, 100}
+	resenergy={30, 40}
+	poisoning={60.1, 80.0}
+	magicresistance={65.1, 80.0}
+	tactics={65.1, 90.0}
+	wrestling={65.1, 80.0}
+	fame=4000
+	karma=-4000
+
+ON=@NPCRestock
+	item=i_gold,{175 225}
+	item=i_potion_poisonless
+	//item={random_fourth_circle 1 random_fifth_circle 1}
+
+[chardef 104]
+defname=c_dragon_skeletal
+defname2=c_skeletal_dragon
+name=Skeletal Dragon
+SOUND=0488
+ICON=i_pet_dragon
+dam=29, 35
+armor=80
+RESOURCES=19 i_ribs_raw,20 i_hide_barbed
+CAN=MT_WALK|MT_USEHANDS|MT_FLY
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=50
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Skeletal Dragon
+
+ON=@Create
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={898, 1030}
+	dex={68, 200}
+	int={488, 620}
+	maxhits={558, 599}
+	resphysical={75, 80}
+	resfire={40, 60}
+	rescold={40, 60}
+	respoison={70, 80}
+	resenergy={40, 60}
+	evaluatingintel={80.1, 100.0}
+	magery={80.1, 100.0}
+	magicresistance={100.3, 130.0}
+	tactics={97.6, 100.0}
+	wrestling={97.6, 100.0}
+	necromancy={120.1, 130.0}
+	spiritspeak={120.1, 130.0}
+	fame=22500
+	karma=-22500
+	
+ON=@NpcRestock
+	ITEM=i_gold,{1600 1800}
+	ITEM=random_jewel
+	ITEM=random_jewel
+	ITEM=random_jewel
+	ITEM=random_jewel
+	ITEM=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map5,R99
+
+
+[chardef c_skeletal_drake]
+defname=c_skeletal_drake
+id=104
+name=Skeletal Drake
+sound=0488
+can=mt_walk|mt_fly|mt_usehands
+armor=75, 80
+dam=29,35
+
+on=@create
+	npc=brain_monster
+        Str={600, 700}
+   	Dex={70, 100}
+	Int={300, 400}
+	Maxhits={300, 400}
+	ResPhysical={75, 80}
+	ResFire={40, 60}
+	ResCold={40, 60}
+	ResPoison={70, 80}
+	ResEnergy={40, 60}
+	EvaluatingIntel={45, 60}
+	Magery={50, 65}
+	MagicResistance={75, 90}
+	Tactics={70, 85}
+	Wrestling={60, 75}
+	Fame = 15000
+	Karma = -15000
+
+[chardef 103]
+defname=c_dragon_serpentine
+defname2=c_serpentine_dragon
+name=Serpentine Dragon
+SOUND=362
+ICON=i_pet_dragon
+dam=5, 12
+armor=36
+RESOURCES=19 i_ribs_raw,20 i_hide_barbed, 6 random_dragon_scales_wb
+CAN=MT_WALK|MT_USEHANDS
+MOVERATE=40
+FOODTYPE=40 t_meat_raw
+DESIRES=i_gold,e_notoriety,e_horses,c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESDISPDNID=c_man
+//RESLEVEL=2
+//RESDISPDNHUE=33
+CATEGORY=New Monsters
+SUBSECTION=LBR
+DESCRIPTION=Serpentine Dragon
+
+ON=@Create
+  	events=+e_dragon_breathe
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={111, 140}
+	dex={201, 220}
+	int={1001, 1040}
+	maxhits={480}
+	resphysical={35, 40}
+	resfire={25, 35}
+	rescold={25, 35}
+	respoison={25, 35}
+	resenergy={25, 35}
+	evaluatingintel={100.1, 110.0}
+	magery={110.1, 120.0}
+	meditation={100.0}
+	magicresistance={100.0}
+	tactics={50.1, 60.0}
+	wrestling={30.1, 100.0}
+	detectinghidden={100.0}
+	//taming=108.0
+	fame=15000
+	karma=15000
+
+ON=@NpcRestock
+	ITEM=i_gold,{900 1100}
+	ITEM=random_jewel
+	ITEM=random_jewel
+	//item=tm_magic_items
+	//item=i_treasure_map4,R99
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+
+[chardef 0109]
+defname=c_Hydra
+name=Hydra
+sound=016a
+ICON=i_worldgem_bit
+dam=21, 26
+ARMOR=30
+RESOURCES=40 i_hide, 19 i_ribs_raw, 8 i_reag_dragon_blood
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+CAN=MT_WALK
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_man
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Hydra
+
+ON=@Create
+	npc=brain_monster  //brain_dragon
+ 	//events=+e_dragon_scales
+	str={801, 828}
+	dex={105, 118}
+	int={102, 120}
+	maxhits={1484, 1500}
+	resphysical={65, 75}
+	resfire={70, 81}
+	rescold={25, 35}
+	respoison={35, 43}
+	resenergy={36, 45}
+	wrestling={103.5, 117.4}
+	tactics={100.1, 109.8}
+	magicresistance={85.5, 96.4}
+	anatomy={75.4, 79.8}
+	fame=22000
+	karma=-22000
+
+ON=@NpcRestock
+	item=i_gold,{1600 1800}
+	//item=tm_magic_items
+	//item=i_hydra_scale
+	//item=i_thorvalds_medallion
+	//item=i_pet_parrot
+
+[chardef c_hydra_crystal]
+defname=c_hydra_crystal
+name=crystal hydra
+id=c_hydra
+sound=016A
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=21, 26
+
+on=@create
+	color=047E
+ 	//events=+e_dragon_scales
+	npc=brain_monster  //brain_dragon
+	str={800, 830}
+	dex={100, 120}
+	int={100, 120}
+	maxhits={1450, 1500}
+	//resphysical={65, 75}
+	resfire={20, 30}
+	rescold={80, 100}
+	respoison={35, 45}
+	resenergy={80, 100}
+	wrestling={100.0, 120.0}
+	tactics={100.0, 110.0}
+	magicresistance={80.0, 100.0}
+	anatomy={70.0, 80.0}
+	fame=17000
+	karma=-17000
+
+ON=@NpcRestock
+	item=i_gold,{1600 1800}
+	//item=tm_magic_items
+	//item=i_hydra_scale
+	//item=i_thorvalds_medallion
+	//item=i_pet_parrot
+
+
+[chardef 276]
+name=Reptalon
+defname=c_reptalon
+ICON=i_pet_dragon
+sound=016a
+dam=21, 28
+ARMOR=30
+RESOURCES=
+CAN=MT_WALK|MT_RUN
+FOODTYPE=55 i_ribs_raw
+DESIRES=c_man,c_woman
+AVERSIONS=e_carnivores3
+//RESLEVEL=5
+//RESDISPDNHUE=33
+//RESDISPDNID=c_horse_gray
+CATEGORY=New Monsters
+SUBSECTION=ML
+DESCRIPTION=Reptalon (Chimera)
+
+ON=@Create
+	tag.controlslots=3
+	npc=brain_monster  //brain_dragon
+	str={1001, 1025}
+	dex={152, 164}
+	int={251, 289}
+	maxhits={833, 931}
+	resphysical={53, 64}
+	resfire={35, 45}
+	rescold={36, 45}
+	respoison={52, 63}
+	resenergy={71, 83}
+	wrestling={101.5, 118.2}
+	tactics={101.7, 108.2}
+	magicresistance={76.4, 89.9}
+	anatomy={56.4, 59.7}
+	taming=101.1
+
+ON=@NPCRestock
+	item=i_gold,{1500 1650}
+	//item=tm_magic_items
+	item=spellweaving_scrolls
+
+[ITEMDEF 10090]
+DEFNAME=i_pet_hiryu
+NAME=Hiryu
+
+[CHARDEF 243]
+DEFNAME=c_hiryu
+NAME=Hiryu
+SOUND=04FB
+ICON=i_pet_hiryu
+dam=20, 30
+ARMOR=20
+RESOURCES=60 i_hide, 16 i_ribs_raw
+CAN=MT_WALK|MT_RUN
+FOODTYPE=55 i_ribs_raw
+DESIRES=c_man,c_woman
+AVERSIONS=e_carnivores3
+MOVERATE=40
+//RESDISPDNID=c_horse_gray
+//RESLEVEL=4
+//RESDISPDNHUE=08386
+TEVENTS=e_horses
+CATEGORY=Monsters
+SUBSECTION=SE
+DESCRIPTION=Hiryu
+
+ON=@Create
+	tag.controlslots=3
+	npc=brain_monster  //brain_dragon
+	str={1201, 1410}
+	dex={171, 270}
+	int={301, 325}
+	maxhits={901, 1100}
+	maxmana={60}
+	resphysical={55, 70}
+	resfire={70, 90}
+	rescold={15, 25}
+	respoison={40, 50}
+	resenergy={40, 50}
+	anatomy={75.1, 80.0}
+	magicresistance={85.1, 100.0}
+	tactics={100.1, 110.0}
+	wrestling={100.1, 120.0}
+	taming=98.7
+	fame=18000
+	karma=-18000
+
+on=@npcrestock
+	item=i_gold,{1500 1900}
+	//item=tm_magic_items
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=i_seed_bonsai	//fixme
+	//item=i_seed_fragrant
+	//item=i_seed_peculiar
+
+[chardef c_Hiryu_lesser]
+defname=c_Hiryu_lesser
+name=a lesser hiryu
+id=c_hiryu
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=18, 23
+
+on=@create
+	npc=brain_monster  //brain_dragon
+	str={301, 410}
+	dex={171, 270}
+	int={301, 325}
+	maxhits={401, 600}
+	maxmana={60}
+	resphysical={45, 70}
+	resfire={60, 80}
+	rescold={5, 15}
+	respoison={30, 40}
+	resenergy={30, 40}
+	anatomy={75.1, 80.0}
+	magicresistance={85.1, 100.0}
+	tactics={100.1, 110.0}
+	wrestling={100.1, 120.0}
+	taming=98.7
+	fame=10000
+	karma=-10000
+
+on=@npcrestock
+	item=i_gold,{1000 1200}
+	//item=tm_magic_items
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	item=random_jewel
+	//item=i_treasure_map3,R99
+	item=i_seed_bonsai
+
+[chardef 733]
+defname=c_Skree
+name=skree
+sound=1585
+can=mt_walk|mt_run|mt_fly|mt_usehands
+dam=5, 7
+resources=3 i_bird_raw, 6 i_hide
+
+on=@create
+	tag.controlslots=3
+	npc=brain_monster  //brain_dragon
+	str={297, 330}
+	dex={96, 124}
+	int={188, 260}
+	maxhits={205, 300}
+	resphysical={55, 65}
+	resfire={45, 55}
+	rescold={25, 40}
+	respoison={55, 65}
+	resenergy={25, 40}
+	evaluatingintel={90.6, 100.0}
+	magery={90.2, 114.2}
+	meditation={65.3, 75.0}
+	magicresistance={75.1, 90.0}
+	tactics={20.2, 24.7}
+	wrestling={20.2, 34.8}
+	Mysticism={20.1, 35.0}
+	taming=95.1
+	fame=2000
+	karma=-2000
+
+on=@npcrestock
+	item=i_gold,{50 100}
+	item=random_reagents_mysticism
+	//ITEM=random_scroll_mysticisim
+
+[chardef 718]
+defname=c_Fairy_Dragon
+name=Fairy Dragon
+sound=362
+can=mt_walk|mt_run|mt_equip|mt_usehands
+dam=15, 18
+armor=39
+resources=
+
+
+on=@create
+	npc=brain_monster  //brain_dragon
+	str={512, 558}
+	dex={95, 105}
+	int={455, 501}
+	maxhits={398, 403}
+	resphysical={16, 30}
+	resfire={41, 44}
+	rescold={40, 49}
+	respoison={40, 49}
+	resenergy={45, 47}
+	magicresistance={99.1, 100.0}
+	tactics={60.6, 68.2}
+	wrestling={90.1, 92.5}
+	Mysticism={101.8, 108.3}
+	fame=15000
+	karma=-15000
+
+on=@npcrestock
+	item=i_gold,{1500 1600}
+	item=i_draconian_orb	//fixme
+	item=i_fey_wings
+	item=i_fairy_dragon_wings
+	item=i_fairy_dust
+	//item=i_treasure_map3,R99
+
+
+[EOF]

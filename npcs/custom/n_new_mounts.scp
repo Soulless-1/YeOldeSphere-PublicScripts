@@ -1,0 +1,326 @@
+//New Mounts by Soulless
+//v1.0
+//4:45 AM 1/28/2022
+
+///////////////////////////////
+// Ice Steed breathes a firebolt
+
+[chardef c_icesteed]
+defname=c_icesteed
+defname2=c_icebronco
+id=c_horse_tan		//116 - nightmare
+name=Ice Steed
+sound=0a8
+icon=i_pet_horse_brown_dk
+dam=16, 26
+armor=60
+resources=i_hide_barbed 10, i_ribs_raw 5
+can=mt_walk|mt_run
+foodtype=35 t_meat_raw
+desires=i_gold
+aversions=r_civilization,r_water
+category=Monsters
+subsection=New Mounts
+description=Ice Steed
+
+on=@create
+	tag0.controlslots=3
+	color=08d3
+	npc=brain_monster
+	str={496, 525}
+	dex={86, 105}
+	int={86, 125}
+	maxhits={398, 415}
+	//resphysical={55, 65}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={20, 30}
+	evaluatingintel={10.4, 50.0}
+	magery={10.4, 50.0}
+	magicresistance={85.3, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={80.5, 92.5}
+	taming=105.1
+	fame=14000
+	karma=-14000
+
+on=@npcrestock
+	item=i_reag_sulfur_ash
+	item=i_gold,{400 500}
+	item=random_lower_scroll 
+	item=random_potion
+
+on=@npcactfight	//should breathe fire every 15 seconds
+if (<distance <src.p>> < 20) && (<canseelos <src>>) && (<cansee <src>>)
+  local.lastbreathe=<eval (<serv.time>-<tag0.lastbreathedfire>)>
+  if (<local.lastbreathe> >= 150)	//every 15.0 seconds
+    tag0.lastbreathedfire=<serv.time>
+    act=<src>
+    actprv=<uid>
+    actarg1=201
+    action=25
+    return 1
+  endif
+endif
+
+
+////////////////////////////////////
+// Hellsteed Shoots a Firebolt
+
+[chardef c_firesteed]
+defname=c_firesteed
+defname2=c_hellsteed
+id=c_horse_tan		//116 - nightmare
+name=Fire Steed
+sound=0a8
+icon=i_pet_horse_brown_dk
+dam=16, 26
+armor=60
+resources=i_hide_barbed 10, i_ribs_raw 5
+can=mt_walk|mt_run
+foodtype=35 t_meat_raw
+desires=i_gold
+aversions=r_civilization,r_water
+category=Monsters
+subsection=New Mounts
+description=Fire Steed
+
+on=@create
+	tag0.controlslots=3
+	color=0873
+	npc=brain_monster
+	str={496, 525}
+	dex={86, 105}
+	int={86, 125}
+	maxhits={398, 415}
+	//resphysical={55, 65}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={20, 30}
+	evaluatingintel={10.4, 50.0}
+	magery={10.4, 50.0}
+	magicresistance={85.3, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={80.5, 92.5}
+	taming=105.1
+	fame=14000
+	karma=-14000
+
+on=@npcrestock
+	item=i_reag_sulfur_ash
+	item=i_gold,{400 500}
+	item=random_lower_scroll 
+	item=random_potion
+
+on=@npcactfight	//should breathe fire every 15 seconds
+if (<distance <src.p>> < 20) && (<canseelos <src>>) && (<cansee <src>>)
+  local.lastbreathe=<eval (<serv.time>-<tag0.lastbreathedfire>)>
+  if (<local.lastbreathe> >= 150)	//every 15.0 seconds
+    tag0.lastbreathedfire=<serv.time>
+    act=<src>
+    actprv=<uid>
+    actarg1=200
+    action=25
+    return 1
+  endif
+endif
+
+
+
+///////////////////////////
+// Plague Steed applies Deadly Poison
+
+[chardef c_plaguesteed]
+defname=c_plaguesteed
+defname2=c_plaguenag
+id=c_horse_tan		//116 - nightmare
+name=Plague Steed
+sound=0a8
+icon=i_pet_horse_brown_dk
+dam=16, 26
+armor=60
+resources=i_hide_barbed 10, i_ribs_raw 5
+can=mt_walk|mt_run
+foodtype=35 t_meat_raw
+desires=i_gold
+aversions=r_civilization,r_water
+category=Monsters
+subsection=New Mounts
+description=Plague Steed
+
+on=@create
+	tag0.controlslots=3
+	color=055a
+	npc=brain_monster
+	str={496, 525}
+	dex={86, 105}
+	int={86, 125}
+	maxhits={398, 415}
+	//resphysical={55, 65}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={20, 30}
+	evaluatingintel={10.4, 50.0}
+	magery={10.4, 50.0}
+	magicresistance={85.3, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={80.5, 92.5}
+	poisoning={90.0 110.0}
+	taming=110.1
+	fame=14000
+	karma=-14000
+
+on=@npcrestock
+	item=i_reag_sulfur_ash
+	item=i_gold,{400 500}
+	item=random_lower_scroll 
+	item=random_potion
+
+on=@npcactfight	//should breathe fire every 15 seconds
+if (<distance <src.p>> < 20) && (<canseelos <src>>) && (<cansee <src>>)
+  local.lastbreathe=<eval (<serv.time>-<tag0.lastbreathedfire>)>
+  if (<local.lastbreathe> >= 150)	//every 15.0 seconds
+    tag0.lastbreathedfire=<serv.time>
+    act=<src>
+    actprv=<uid>
+    actarg1=202
+    action=25
+    return 1
+  endif
+endif
+
+
+
+////////////////////////////////////
+// Llama of Supreme Evilness
+
+[chardef c_llama_supreme_evilness]
+defname=c_llama_supreme_evilness
+id=c_llama
+name=Llama of Supreme Evilness
+sound=03f3
+icon=i_pet_llama
+dam=16,26
+armor=80
+resources=i_hide_barbed 10, i_ribs_raw 5
+can=mt_walk|mt_run
+foodtype=35 t_meat_raw
+desires=i_gold
+aversions=r_civilization,r_water
+category=Monsters
+subsection=New Mounts
+description=Llama of Supreme Evilness
+
+on=@create
+	tag0.controlslots=3
+	color=055e
+	npc=brain_monster
+	str={596, 625}
+	dex={186, 205}
+	int={186, 225}
+	maxhits={498, 515}
+	//resphysical={55, 65}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={20, 30}
+	evaluatingintel={10.4, 50.0}
+	magery={100.4, 150.0}
+	magicresistance={85.3, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={80.5, 92.5}
+	//poisoning=90.0
+	taming=115.1
+	fame=14000
+	karma=-14000
+	make_spellcaster 6,8
+
+on=@npcrestock
+	item=i_reag_sulfur_ash
+	item=i_gold,{400 500}
+	item=random_lower_scroll 
+	item=random_potion
+
+on=@npcactfight			//should breathe fire every 15 seconds
+if (<distance <src.p>> < 20) && (<canseelos <src>>) && (<cansee <src>>)
+  local.lastbreathe=<eval (<serv.time>-<tag0.lastbreathedfire>)>
+  if (<local.lastbreathe> >= 150)	//every 15.0 seconds
+    tag0.lastbreathedfire=<serv.time>
+    act=<src>
+    actprv=<uid>
+    actarg1=203
+    action=25
+    return 1
+  endif
+endif
+
+
+////////////////////////////////////
+// Llama of Supreme Evilness
+
+[chardef c_headless_horsemans_steed]
+defname=c_headless_horsemans_steed
+id=c_horse_tan
+name=Headless Horsemans Steed
+sound=03f3
+icon=i_pet_horse
+dam=16,26
+armor=80
+resources=i_hide_barbed 10, i_ribs_raw 5
+can=mt_walk|mt_run
+foodtype=35 t_meat_raw
+desires=i_gold
+aversions=r_civilization,r_water
+category=Monsters
+subsection=New Mounts
+description=Headless Horsmeans Steed
+
+on=@create
+	tag0.controlslots=3
+	color=0455
+	npc=brain_monster
+	str={596, 625}
+	dex={186, 205}
+	int={186, 225}
+	maxhits={498, 515}
+	//resphysical={55, 65}
+	resfire={30, 40}
+	rescold={30, 40}
+	respoison={30, 40}
+	resenergy={20, 30}
+	evaluatingintel={10.4, 50.0}
+	magery={100.4, 150.0}
+	magicresistance={85.3, 100.0}
+	tactics={97.6, 100.0}
+	wrestling={80.5, 92.5}
+	//poisoning=90.0
+	taming=115.1
+	fame=14000
+	karma=-14000
+	make_spellcaster 6,8
+
+on=@npcrestock
+	item=i_reag_sulfur_ash
+	item=i_gold,{400 500}
+	item=random_lower_scroll 
+	item=random_potion
+
+on=@npcactfight			//should breathe fire every 15 seconds
+if (<distance <src.p>> < 20) && (<canseelos <src>>) && (<cansee <src>>)
+  local.lastbreathe=<eval (<serv.time>-<tag0.lastbreathedfire>)>
+  if (<local.lastbreathe> >= 150)	//every 15.0 seconds
+    tag0.lastbreathedfire=<serv.time>
+    act=<src>
+    actprv=<uid>
+    actarg1=203
+    action=25
+    return 1
+  endif
+endif
+
+
+
+[EOF]

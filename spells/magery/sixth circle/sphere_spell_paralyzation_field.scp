@@ -1,0 +1,31 @@
+[SPELL 47]
+DEFNAME=s_paralyzation_field
+NAME=Paralyze Field
+SOUND=0
+RUNES=IEG
+CAST_TIME=2.0
+RESOURCES=i_reag_black_pearl,i_reag_ginseng,i_reag_spider_silk
+RUNE_ITEM=i_rune_paralyze_field
+SCROLL_ITEM=i_scroll_paralyze_field
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_damage|spellflag_fx_targ|spellflag_field|spellflag_playeronly|spellflag_nounparalyze|spellflag_resist //spellflag_harm <-- can be reflected
+EFFECT_ID=i_fx_heal_effect
+EFFECT=0
+LAYER=layer_spell_paralyze
+DURATION=1*30.0,2*30.0
+MANAUSE=20
+SKILLREQ=MAGERY 50.0
+INTERRUPT=100.0,100.0
+
+//Creates a 5 tile wide, paralyzing field which Paralyzes anything that walks into it.
+ON=@Success
+LOCAL.FieldWidth=5
+sound 020b
+
+ON=@Effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.damagetype=(<def.dam_general>|<def.dam_magic>)
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<muldiv <local.damagemodifier>,<local.effect>,100>
+sound snd_spell_paralyze_field
+
+[EOF]

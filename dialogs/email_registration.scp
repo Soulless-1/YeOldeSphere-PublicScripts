@@ -1,0 +1,44 @@
+//Email Registration by Soulless
+//v1.0
+//11:15 PM 9/9/2017
+
+[function email]
+sdialog d_email_registration
+
+[dialog d_email_registration]
+100,100
+resizepic 0 0 5054 345 165
+checkertrans 12 13 320 140
+dhtmlgump 17 17 310 50 1 0 Please take a moment and register your e-mail address with us for future updates.
+resizepic 17 75 9350 310 30
+dhtmlgump 20 80 50 30 0 0 E-Mail :
+dtextentrylimited 75 80 250 15 0 0 40 <account.tag.email>
+button 30 125  242 243 1 0 0
+button 250 125 248 249 1 0 1
+
+[dialog d_email_registration button]
+onbutton=1
+
+if !(strlen <argtxt[0]>) || (<isempty <argtxt[0]>>)
+  sysmessage Email field can not be empty
+  dialog d_email_registration
+  return 1
+elseif !(strmatch(*@*,<argtxt[0]>)) || (!(strmatch(*.com,<argtxt[0]>)) && !(strmatch(*.net,<argtxt[0]>)))
+  sysmessage That is not a valid email address
+  dialog d_email_registration
+  return 1
+endif
+
+//for 0 <eval <serv.accounts>-1>
+//local.email=<serv.account.<local._for>.tag0.email>
+  //if (strmatch(<argtxt[0]>,<local.email>))
+    //sysmessage That email has already been registered to another account
+    //sdialog d_email_registration
+    //return 1
+  //endif
+//endfor
+
+sysmessage Thank you <name>, The email address <argtxt[0]> has been linked to account <account.name>
+account.tag.email <argtxt[0]>
+
+[EOF]

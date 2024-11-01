@@ -1,0 +1,30 @@
+[SPELL 54]
+DEFNAME=s_mass_dispel
+NAME=Mass Dispel
+SOUND=0
+RUNES=VAO
+CAST_TIME=2.3
+RESOURCES=i_reag_black_pearl,i_reag_garlic,i_reag_mandrake_root,i_reag_sulfur_ash
+RUNE_ITEM=i_rune_mass_dispel
+SCROLL_ITEM=i_scroll_mass_dispel
+FLAGS=spellflag_dir_anim|spellflag_targ_xyz|spellflag_area
+EFFECT_ID=0
+EFFECT=0
+DURATION=0.0
+MANAUSE=40
+SKILLREQ=MAGERY 60.0
+INTERRUPT=100.0,100.0
+
+//Mass Dispel is just like Dispel expect it targets an area, instead of one individual target.
+ON=@Success
+local.arearadius=8
+
+on=@effect
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+if !(<ischar>) || ((<ischar>) && !(<flags>&statf_conjured))
+  return 1
+endif
+
+
+[EOF]

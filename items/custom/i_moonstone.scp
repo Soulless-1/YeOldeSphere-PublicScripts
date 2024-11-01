@@ -1,0 +1,87 @@
+[itemdef i_moonstone_felucca]
+defname=i_moonstone_felucca
+id=0f8b	//pumice
+name=felucca moonstone
+type=t_moonstone
+
+on=@create
+color=03e9
+morem=0
+
+[itemdef i_moonstone_trammel]
+defname=i_moonstone_trammel
+id=0f8b	//pumice
+name=trammel moonstone
+type=t_moonstone
+
+on=@create
+color=03e9
+morem=1
+
+[typedef t_moonstone]
+
+on=@click
+src.sysmessage The stone's substance shifts as you examine it.
+color=colors_all
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage That must be in your pack for you to use it.
+  return 1
+elseif (<src.findlayer.25.isvalid>)
+  src.sysmessage You cannot bury a stone while you sit on a mount.
+  return 1
+elseif (<src.p.m> == <morem>)	
+  src.sysmessage you cannot bury the stone here.
+  return 1
+elseif (<src.region.flags>&region_flag_guarded) || (<src.region.flags>&region_flag_nobuilding) 
+  src.sysmessage You cannot bury the stone here.
+  return 1
+endif
+
+src.anim 32
+p=<src.p>
+z += 1	
+morep=<src.p.x>,<src.p.y>,<src.p.z>,<morem>
+update
+attr=010
+more2=18
+timer=1
+timerf 3,message The stone settles into the ground.
+return 1
+
+on=@timer
+more2 -= 1
+if (<more2> <= 6)
+  z -= 1
+  if !(<more2>)
+    serv.newitem i_moongate_blue
+    ref1=<new>
+    new.type=t_telepad
+    new.attr=0b
+    new.timer=60
+    new.color=<qval (<color> != 0)?<color>:<colors_all>>
+    local.color=<new.color>
+    new.p=<morex>,<morey>,<morez>,<p.m>
+    serv.newitem i_moongate_blue
+    new.type=t_telepad
+    new.attr=0b
+    new.timer=60
+    new.color=<local.color>
+    new.p=<morex>,<morey>,<morez>,<morem>
+    new.link=<ref1>
+    ref1.link=<new>
+    sound=snd_spell_gate_travel
+    remove
+  endif
+endif
+timer=1
+return 1
+
+3
+10
+15
+
+[EOF]
+
+

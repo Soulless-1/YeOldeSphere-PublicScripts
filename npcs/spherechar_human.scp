@@ -1,0 +1,3780 @@
+ 
+[CHARDEF 0190]
+DEFNAME=c_man
+Name=Man
+ICON=i_pet_MAN
+sound=-1	//0154
+soundnotice=-1
+soundidle=-1
+soundhit=013a,013d
+soundgethit=0154,0159
+//sounddie=015a,015d
+sounddie=0423,0427
+dam=1,4
+CAN=MT_EQUIP|MT_WALK|MT_RUN|MT_USEHANDS
+RESOURCES=i_flesh_head, i_flesh_torso, i_flesh_right_arm, i_flesh_left_arm, i_flesh_left_leg, i_flesh_right_leg, i_blood_2
+FOODTYPE=15 t_food, t_fruit
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+//SHELTER=r_house
+BLOODCOLOR=0
+TSPEECH=spk_human_prime
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+DESCRIPTION=Man
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+
+ON=@Create
+	NPC=brain_human
+	COLOR=colors_skin
+	FENCING={15.0 38.0}
+	PARRYING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={15.0 38.0}
+	TACTICS={15.0 38.0}
+
+[CHARDEF 0191]
+DEFNAME=c_woman
+NAME=Woman
+CAN=MT_EQUIP|MT_WALK|MT_RUN|MT_FEMALE|MT_USEHANDS
+ICON=i_pet_woman
+sound=-1	//014b
+soundnotice=-1
+soundidle=-1
+soundhit=013a,013d
+soundgethit=014b,014f
+//sounddie=0150,0153
+sounddie=0314,0317
+dam=1,4
+RESOURCES=i_flesh_head_2, i_flesh_torso, i_flesh_right_arm, i_flesh_left_arm, i_flesh_left_leg, i_flesh_right_leg, i_blood_2
+FOODTYPE=15 t_food,t_fruit
+//SHELTER=r_house
+AVERSIONS=t_TRAP,t_eerie_stuff
+DESIRES=i_gold,e_notoriety
+BLOODCOLOR=0
+TSPEECH=spk_human_prime
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+DESCRIPTION=Woman
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+
+ON=@Create
+	NPC=brain_human
+	COLOR=colors_skin
+	FENCING={15.0 38.0}
+	PARRYING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={15.0 38.0}
+	TACTICS={15.0 38.0}
+
+[CHARDEF 0192]
+//Ghost robe is not automatic !
+//DEFNAME2=GHOSTMAN
+DEFNAME=c_ghost_man
+NAME=Ghost
+ICON=i_pet_MAN
+CAN=MT_EQUIP|MT_WALK|MT_RUN|MT_GHOST
+RESOURCES=
+FOODTYPE=
+//SHELTER=r_house
+AVERSIONS=t_TRAP,t_eerie_stuff
+DESIRES=i_gold,e_notoriety
+DESCRIPTION=Ghost
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+
+ON=@Create
+	NPC=brain_human
+	FENCING={15.0 38.0}
+	PARRYING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={15.0 38.0}
+	TACTICS={15.0 38.0}
+
+[CHARDEF 0193]
+//Ghost robe is not automatic !
+//DEFNAME2=GHOSTWOMAN
+DEFNAME=c_ghost_woman
+NAME=Ghost
+ICON=i_pet_woman
+CAN=MT_EQUIP|MT_WALK|MT_RUN|MT_GHOST|MT_FEMALE
+RESOURCES=8 i_ribs_raw
+FOODTYPE=
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+DESCRIPTION=Ghost Woman
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+
+ON=@Create
+	NPC=brain_human
+	FENCING={15.0 38.0}
+	PARRYING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={15.0 38.0}
+	TACTICS={15.0 38.0}
+
+[CHARDEF 01a4]
+//Male Kid (Blond Hair) (not in t2a)
+//NOTE: NOT in T2a !
+DEFNAME=c_child_mb
+NAME=Child
+RESOURCES=4 t_food
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+ICON=i_pet_MAN
+FOODTYPE=15 t_food,t_fruit
+DESIRES=i_gold,e_notoriety
+//SHELTER=r_house
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+DESCRIPTION=Child (Blond)
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+
+ON=@Create
+	NPC=brain_human
+	FENCING={8.0 19.0}
+	PARRYING={8.0 19.0}
+	SWORDSMANSHIP={8.0 19.0}
+	WRESTLING={8.0 19.0}
+	MACEFIGHTING={8.0 19.0}
+	MAGICRESISTANCE={8.0 19.0}
+	TACTICS={8.0 19.0}
+
+[CHARDEF 01a5]
+//Male Kid (Dark Hair)
+//NOTE: NOT in T2a !
+DEFNAME=c_child_md
+NAME=Child
+CAN=MT_WALK|MT_RUN|MT_USEHANDS
+ICON=i_pet_MAN
+FOODTYPE=15 t_food,t_fruit
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety
+RESOURCES=4 i_ribs_raw
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+DESCRIPTION=Child (Brunette)
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+
+ON=@Create
+	NPC=brain_human
+	FENCING={8.0 19.0}
+	PARRYING={8.0 19.0}
+	SWORDSMANSHIP={8.0 19.0}
+	WRESTLING={8.0 19.0}
+	MACEFIGHTING={8.0 19.0}
+	MAGICRESISTANCE={8.0 19.0}
+	TACTICS={8.0 19.0}
+
+[CHARDEF 01a6]
+//Female Kid (Blond Hair) (toddler)
+//NOTE: NOT in T2a !
+DEFNAME=c_child_fb
+NAME=Child
+CAN=MT_WALK|MT_RUN|MT_FEMALE|MT_USEHANDS
+ICON=i_pet_woman
+FOODTYPE=15 t_food,t_fruit
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety
+RESOURCES=4 i_ribs_raw
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+DESCRIPTION=Child (Female Blonde)
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+BLOODCOLOR=0
+
+ON=@Create
+	NPC=brain_human
+	FENCING={8.0 19.0}
+	PARRYING={8.0 19.0}
+	SWORDSMANSHIP={8.0 19.0}
+	WRESTLING={8.0 19.0}
+	MACEFIGHTING={8.0 19.0}
+	MAGICRESISTANCE={8.0 19.0}
+	TACTICS={8.0 19.0}
+
+[CHARDEF 01a7]
+//Female Kid (Dark Hair)
+//NOTE: NOT in T2a !
+DEFNAME=c_child_fd
+NAME=Child
+CAN=MT_WALK|MT_RUN|MT_FEMALE|MT_USEHANDS
+ICON=i_pet_woman
+FOODTYPE=15 t_food,t_fruit
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety
+RESOURCES=4 i_ribs_raw
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+DESCRIPTION=Child (Female Brunette)
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+BLOODCOLOR=0
+
+ON=@Create
+	NPC=brain_human
+	FENCING={8.0 19.0}
+	PARRYING={8.0 19.0}
+	SWORDSMANSHIP={8.0 19.0}
+	WRESTLING={8.0 19.0}
+	MACEFIGHTING={8.0 19.0}
+	MAGICRESISTANCE={8.0 19.0}
+	TACTICS={8.0 19.0}
+
+[CHARDEF 01a8]
+//Use this as our invis man id.
+DEFNAME=c_man_invisible
+DEFNAME2=c_man_invis
+NAME=Man
+CAN=MT_EQUIP|MT_WALK|MT_RUN|MT_USEHANDS
+ICON=i_pet_MAN
+RESOURCES=4 i_ribs_raw
+FOODTYPE=15 t_food,t_fruit
+DESIRES=i_gold,e_notoriety
+//SHELTER=r_house
+AVERSIONS=t_TRAP,t_eerie_stuff
+//TSPEECH=spk_human_prime
+//TSPEECH=spk_human_default
+DESCRIPTION=Man (Invis)
+SUBSECTION=Miscellaneous
+CATEGORY=Civilized
+
+ON=@Create
+	STR=1
+	DEX=1
+	INT=1
+	NPC=brain_human
+	FENCING={8.0 19.0}
+	PARRYING={8.0 19.0}
+	SWORDSMANSHIP={8.0 19.0}
+	WRESTLING={8.0 19.0}
+	MACEFIGHTING={8.0 19.0}
+	MAGICRESISTANCE={8.0 19.0}
+	TACTICS={8.0 19.0}
+
+// [CHARDEF 0410]
+[CHARDEF C_H_ACTOR]
+DEFNAME=C_H_ACTOR
+NAME=#NAMES_HUMANMALE the Actor
+ID=C_MAN
+TSPEECH=spk_human_prime
+TSPEECH=jobactor
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Arts & Music
+DESCRIPTION=Actor (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={21 35}
+	DEX={26 40}
+	INT={26 40}
+	MUSICIANSHIP={50.0 70.0}
+	PEACEMAKING={50.0 70.0}
+	SWORDSMANSHIP={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=BRAIN_HUMAN
+	NEED=i_gold
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0411]
+[CHARDEF C_H_ACTOR_F]
+DEFNAME=C_H_ACTOR_F
+NAME=#NAMES_HUMANFEMALE the Actor
+ID=C_WOMAN
+//DAM=
+armor=
+TSPEECH=spk_human_prime
+TSPEECH=jobactor
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Arts & Music
+DESCRIPTION=Actor (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={21 35}
+	DEX={26 40}
+	INT={26 40}
+	MUSICIANSHIP={50.0 70.0}
+	PEACEMAKING={50.0 70.0}
+	SWORDSMANSHIP={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=BRAIN_HUMAN
+	NEED=i_gold
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0414]
+[CHARDEF C_H_ARTIST]
+DEFNAME=C_H_ARTIST
+NAME=#NAMES_HUMANMALE the Artist
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobArtist
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Arts & Music
+DESCRIPTION=Artist (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={16 30}
+	DEX={31 45}
+	INT={16 30}
+	ANATOMY={50.0 70.0}
+	FENCING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=BRAIN_HUMAN
+	NEED=i_gold
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=i_apron_half
+	COLOR=colors_all
+	ITEM=random_coin_purse
+	ITEM=i_PALETTE
+
+// [CHARDEF 0415]
+[CHARDEF C_H_ARTIST_F]
+DEFNAME=C_H_ARTIST_F
+NAME=#NAMES_HUMANFEMALE the Artist
+ID=C_WOMAN
+//DAM=
+armor=
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobartist
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Arts & Music
+DESCRIPTION=Artist (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={16 30}
+	DEX={31 45}
+	INT={16 30}
+	ANATOMY={50.0 70.0}
+	FENCING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=BRAIN_HUMAN
+	NEED=i_gold
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=i_apron_half
+	COLOR=colors_all
+	ITEM=random_coin_purse
+	ITEM=i_PALETTE
+
+
+// [CHARDEF 0434]
+[CHARDEF C_H_GAMBLER]
+DEFNAME=C_H_GAMBLER
+NAME=#NAMES_HUMANMALE the Gambler
+ID=C_MAN
+HIREDAYWAGE=40
+//DAM=
+armor=
+DESIRES=i_gold,e_notoriety,jobgambler
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobgambler
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Gambler (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={31 45}
+	DEX={51 65}
+	INT={56 70}
+	EVALUATINGINTEL={45.0 68.0}
+	ItemID={35.0 58.0}
+	SNOOPING={55.0 78.0}
+	STEALING={35.0 58.0}
+	FENCING={15.0 38.0}
+	PARRYING={25.0 48.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=random_footwear
+	ITEM=random_dagger
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0435]
+[CHARDEF C_H_GAMBLER_F]
+DEFNAME=C_H_GAMBLER_F
+NAME=#NAMES_HUMANFEMALE the Gambler
+ID=C_WOMAN
+HIREDAYWAGE=40
+DESIRES=i_gold,e_notoriety,jobgambler
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobgambler
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Gambler (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={31 45}
+	DEX={51 65}
+	INT={56 70}
+	EVALUATINGINTEL={45.0 68.0}
+	ItemID={35.0 58.0}
+	SNOOPING={55.0 78.0}
+	STEALING={35.0 58.0}
+	FENCING={15.0 38.0}
+	PARRYING={25.0 48.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=random_footwear
+	ITEM=random_dagger
+	ITEM=random_coin_purse
+
+ON=@PersonalSpace
+argn1=0
+argn2=1
+
+// [CHARDEF 0438]
+[CHARDEF C_H_GUARD]
+//Male GUARD
+DEFNAME=C_H_GUARD
+NAME=#NAMES_HUMANMALE the Guard
+ID=C_MAN
+DAM=15,20
+ARMOR=20
+DESIRES=i_gold
+//SHELTER=r_civilization,r_GUARDPOST
+//AVERSIONS=ANYONE WITH NEGATIVITY (SHOWS AGGRESION)
+TSPEECH=spk_human_prime
+TSPEECH=jobGuard
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_guards
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Guard (male)
+
+ON=@Create
+	npc=brain_guard
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	DETECTINGHIDDEN={90.0 100.0}
+	FORENSICS={90.0 100.0}
+	FENCING={90.0 100.0}
+	PARRYING={90.0 100.0}
+	SWORDSMANSHIP={90.0 100.0}
+	WRESTLING={90.0 100.0}
+	MACEFIGHTING={90.0 100.0}
+	MAGICRESISTANCE={90.0 100.0}
+	TACTICS={90.0 100.0}
+	//STANDARD GUARD EQUIPMENT=PLATE ARMOR,i_halberd
+	//BLACKTHORN GUARD EQUIPMENT=PLATE ARMOR,RED OVER-ARMOR,DOUBLE BATTLE AXE,CHAOS SHIELD
+	//LORDBRITISH GUARD EQUIPMENT=PLATE ARMOR,BLUE OVER-ARMOR,VIKING SWORD,ORDER SHIELD
+	ITEMNEWBIE=i_lantern
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_platemail_chest
+	ITEM=i_platemail_leggings
+	ITEM=i_platemail_arms
+	ITEM=random_over_armor
+	COLOR=colors_all
+	ITEM=i_halberd
+	ITEM=random_coin_purse
+
+ON=@NPCRefuseItem
+	SAY I cannot be bribed. be gone.
+	return 1
+
+ON=@PersonalSpace
+argn1=0
+argn2=1
+
+// [CHARDEF 0439]
+[CHARDEF c_h_guard_f]
+//Female GUARD
+DEFNAME=c_h_guard_f
+NAME=#NAMES_HUMANFEMALE the Guard
+ID=C_WOMAN
+DAM=15,20
+ARMOR=20
+DESIRES=i_gold
+//SHELTER=r_civilization,r_GUARDPOST
+//AVERSIONS=ANYONE WITH NEGATIVITY (SHOWS AGGRESION)
+TSPEECH=spk_human_prime
+TSPEECH=jobGuard
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_guards
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Guard (female)
+
+ON=@Create
+	npc=brain_guard
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	DETECTINGHIDDEN={90.0 100.0}
+	FORENSICS={90.0 100.0}
+	FENCING={90.0 100.0}
+	PARRYING={90.0 100.0}
+	SWORDSMANSHIP={90.0 100.0}
+	WRESTLING={90.0 100.0}
+	MACEFIGHTING={90.0 100.0}
+	MAGICRESISTANCE={90.0 100.0}
+	TACTICS={90.0 100.0}
+	//STANDARD GUARD EQUIPMENT=PLATE ARMOR,i_halberd
+	//BLACKTHORN GUARD EQUIPMENT=PLATE ARMOR,RED OVER-ARMOR,DOUBLE BATTLE AXE,CHAOS SHIELD
+	//LORDBRITISH GUARD EQUIPMENT=PLATE ARMOR,BLUE OVER-ARMOR,VIKING SWORD,ORDER SHIELD
+	ITEMNEWBIE=i_lantern
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=i_armor_female_plate
+	ITEM=i_armor_female_skirt
+	ITEM=i_halberd
+	ITEM=random_coin_purse
+
+ON=@NPCRefuseItem
+	SAY I cannot be bribed. be gone.
+	return 1
+
+ON=@PersonalSpace
+argn1=0
+argn2=1
+
+// [CHARDEF C_H_GUARD_ORDER]
+[CHARDEF C_H_GUARD_ORDER]
+//Male GUARD
+NAME=#NAMES_HUMANMALE the Order Guard
+ID=C_MAN
+DAM=15,20
+ARMOR=20
+DESIRES=i_gold
+//SHELTER=r_civilization,r_GUARDPOST
+//AVERSIONS=ANYONE WITH NEGATIVITY (SHOWS AGGRESION)
+TSPEECH=spk_human_prime
+TSPEECH=jobGuard
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_guards
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Order Guard (male)
+
+ON=@Create
+	npc=brain_guard
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	DETECTINGHIDDEN={90.0 100.0}
+	FORENSICS={90.0 100.0}
+	FENCING={90.0 100.0}
+	PARRYING={90.0 100.0}
+	SWORDSMANSHIP={90.0 100.0}
+	WRESTLING={90.0 100.0}
+	MACEFIGHTING={90.0 100.0}
+	MAGICRESISTANCE={90.0 100.0}
+	TACTICS={90.0 100.0}
+	//STANDARD GUARD EQUIPMENT=PLATE ARMOR,i_halberd
+	//BLACKTHORN GUARD EQUIPMENT=PLATE ARMOR,RED OVER-ARMOR,DOUBLE BATTLE AXE,CHAOS SHIELD
+	//LORDBRITISH GUARD EQUIPMENT=PLATE ARMOR,BLUE OVER-ARMOR,VIKING SWORD,ORDER SHIELD
+	ITEMNEWBIE=i_lantern
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_platemail_chest
+	ITEM=i_platemail_leggings
+	ITEM=i_platemail_arms
+	ITEM=i_cape
+	COLOR=colors_blue
+	ITEM=i_sword_viking
+	ITEM=i_shield_order
+	ITEM=random_coin_purse
+	ITEM=i_mt_horse_gray	// on horse.
+
+
+ON=@NPCRefuseItem
+	SAY I cannot be bribed. be gone.
+	return 1
+
+ON=@PersonalSpace
+argn1=0
+argn2=1
+
+// [CHARDEF c_H_GUARD_ORDER_F]
+[CHARDEF C_H_GUARD_ORDER_F]
+//Female ORDER GUARD
+NAME=#NAMES_HUMANFEMALE the Order Guard
+ID=C_WOMAN
+DAM=15,20
+ARMOR=20
+DESIRES=i_gold
+//SHELTER=r_civilization,r_GUARDPOST
+//AVERSIONS=ANYONE WITH NEGATIVITY (SHOWS AGGRESION)
+TSPEECH=spk_human_prime
+TSPEECH=jobGuard
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_guards
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Order Guard (female)
+
+ON=@Create
+	npc=brain_guard
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	DETECTINGHIDDEN={90.0 100.0}
+	FORENSICS={90.0 100.0}
+	FENCING={90.0 100.0}
+	PARRYING={90.0 100.0}
+	SWORDSMANSHIP={90.0 100.0}
+	WRESTLING={90.0 100.0}
+	MACEFIGHTING={90.0 100.0}
+	MAGICRESISTANCE={90.0 100.0}
+	TACTICS={90.0 100.0}
+	//STANDARD GUARD EQUIPMENT=PLATE ARMOR,i_halberd
+	//BLACKTHORN GUARD EQUIPMENT=PLATE ARMOR,RED OVER-ARMOR,DOUBLE BATTLE AXE,CHAOS SHIELD
+	//LORDBRITISH GUARD EQUIPMENT=PLATE ARMOR,BLUE OVER-ARMOR,VIKING SWORD,ORDER SHIELD
+	ITEMNEWBIE=i_lantern
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_armor_female_plate
+	ITEM=i_platemail_leggings
+	ITEM=i_platemail_arms
+	ITEM=i_cape
+	COLOR=colors_blue
+	ITEM=random_skirt
+	COLOR=colors_blue
+	ITEM=i_sword_viking
+	ITEM=i_shield_order
+	ITEM=random_coin_purse
+	ITEM=i_mt_horse_gray	// on horse.
+
+ON=@NPCRefuseItem
+	SAY I cannot be bribed. be gone.
+	return 1
+
+ON=@PersonalSpace
+argn1=0
+argn2=1
+
+// [CHARDEF C_H_GUARD_CHAOS]
+[CHARDEF C_H_GUARD_CHAOS]
+//Male GUARD
+NAME=#NAMES_HUMANMALE the Chaos Guard
+ID=C_MAN
+DAM=15,20
+ARMOR=20
+DESIRES=i_gold
+//SHELTER=r_civilization,r_GUARDPOST
+//AVERSIONS=ANYONE WITH NEGATIVITY (SHOWS AGGRESION)
+TSPEECH=spk_human_prime
+TSPEECH=jobGuard
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_guards
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Chaos Guard (male)
+
+ON=@Create
+	npc=brain_guard
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	DETECTINGHIDDEN={90.0 100.0}
+	FORENSICS={90.0 100.0}
+	FENCING={90.0 100.0}
+	PARRYING={90.0 100.0}
+	SWORDSMANSHIP={90.0 100.0}
+	WRESTLING={90.0 100.0}
+	MACEFIGHTING={90.0 100.0}
+	MAGICRESISTANCE={90.0 100.0}
+	TACTICS={90.0 100.0}
+	//STANDARD GUARD EQUIPMENT=PLATE ARMOR,i_halberd
+	//BLACKTHORN GUARD EQUIPMENT=PLATE ARMOR,RED OVER-ARMOR,DOUBLE BATTLE AXE,CHAOS SHIELD
+	//LORDBRITISH GUARD EQUIPMENT=PLATE ARMOR,BLUE OVER-ARMOR,VIKING SWORD,ORDER SHIELD
+	ITEMNEWBIE=i_lantern
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_platemail_chest
+	ITEM=i_platemail_leggings
+	ITEM=i_platemail_arms
+	ITEM=i_cape
+	COLOR=colors_red
+	ITEM=random_over_armor
+	COLOR=colors_red
+	ITEM=i_sword_viking
+	ITEM=i_shield_chaos
+	ITEM=random_coin_purse
+	ITEM=i_mt_horse_gray	// on horse.
+
+
+ON=@NPCRefuseItem
+	SAY I cannot be bribed. be gone.
+	return 1
+
+ON=@PersonalSpace
+argn1=0
+argn2=1
+
+// [CHARDEF C_H_GUARD_CHAOS]
+[CHARDEF C_H_GUARD_CHAOS_F]
+//Female CHAOS GUARD
+NAME=#NAMES_HUMANFEMALE the Chaos Guard
+ID=C_WOMAN
+DAM=15,20
+ARMOR=20
+DESIRES=i_gold
+//SHELTER=r_civilization,r_GUARDPOST
+//AVERSIONS=ANYONE WITH NEGATIVITY (SHOWS AGGRESION)
+TSPEECH=spk_human_prime
+TSPEECH=jobGuard
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_guards
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Chaos Guard (female)
+
+ON=@Create
+	npc=brain_guard
+	//ALIGNMENT=GOOD
+	COLOR=colors_skin
+	STR={151 165}
+	DEX={151 165}
+	INT={151 165}
+	DETECTINGHIDDEN={90.0 100.0}
+	FORENSICS={90.0 100.0}
+	FENCING={90.0 100.0}
+	PARRYING={90.0 100.0}
+	SWORDSMANSHIP={90.0 100.0}
+	WRESTLING={90.0 100.0}
+	MACEFIGHTING={90.0 100.0}
+	MAGICRESISTANCE={90.0 100.0}
+	TACTICS={90.0 100.0}
+	//STANDARD GUARD EQUIPMENT=PLATE ARMOR,i_halberd
+	//BLACKTHORN GUARD EQUIPMENT=PLATE ARMOR,RED OVER-ARMOR,DOUBLE BATTLE AXE,CHAOS SHIELD
+	//LORDBRITISH GUARD EQUIPMENT=PLATE ARMOR,BLUE OVER-ARMOR,VIKING SWORD,ORDER SHIELD
+	ITEMNEWBIE=i_lantern
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_armor_female_plate
+	ITEM=i_platemail_leggings
+	ITEM=i_platemail_arms
+	ITEM=i_cape
+	COLOR=colors_red
+	ITEM=random_skirt
+	COLOR=colors_red
+	ITEM=i_sword_viking
+	ITEM=i_shield_chaos
+	ITEM=random_coin_purse
+	ITEM=i_mt_horse_gray	// on horse.
+
+ON=@NPCRefuseItem
+	SAY I cannot be bribed. be gone.
+	return 1
+
+ON=@PersonalSpace
+argn1=0
+argn2=1
+
+// [CHARDEF 0440]
+[CHARDEF C_H_GYPSY]
+DEFNAME=C_H_GYPSY
+NAME=#NAMES_HUMANMALE the Gypsy
+ID=C_MAN
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety,t_crystal_ball
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobGypsy
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Gypsy (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={51 65}
+	INT={61 75}
+	BEGGING={45.0 68.0}
+	HIDING={45.0 68.0}
+	LOCKPICKING={45.0 68.0}
+	STEALING={45.0 68.0}
+	CAMPING={45.0 68.0}
+	ItemID={45.0 68.0}
+	SNOOPING={45.0 68.0}
+	FENCING={15.0 38.0}
+	PARRYING={35.0 58.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={35.0 58.0}
+	TACTICS={35.0 58.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=i_pants_short
+	COLOR=colors_all
+	ITEM=i_bandana
+	COLOR=colors_blue
+	ITEM=random_footwear
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0441]
+[CHARDEF C_H_GYPSY_F]
+DEFNAME=C_H_GYPSY_F
+NAME=#NAMES_HUMANFEMALE the Gypsy
+ID=C_WOMAN
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety,t_crystal_ball
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobGypsy
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Gypsy (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={51 65}
+	INT={61 75}
+	BEGGING={45.0 68.0}
+	HIDING={45.0 68.0}
+	LOCKPICKING={45.0 68.0}
+	STEALING={45.0 68.0}
+	CAMPING={45.0 68.0}
+	ItemID={45.0 68.0}
+	SNOOPING={45.0 68.0}
+	FENCING={15.0 38.0}
+	PARRYING={35.0 58.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={35.0 58.0}
+	TACTICS={35.0 58.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=i_bandana
+	COLOR=colors_blue
+	ITEM=random_footwear
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0444]
+[CHARDEF C_H_JAILOR]
+DEFNAME=C_H_JAILOR
+NAME=#NAMES_HUMANMALE the Jailor
+ID=C_MAN
+AVERSIONS=t_TRAP
+DESIRES=i_gold,e_notoriety
+//SHELTER=r_JAIL
+TSPEECH=spk_human_prime
+TSPEECH=jobjailor
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Jailor (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={96 110}
+	INT={71 85}
+	FENCING={15.0 38.0}
+	PARRYING={75.0 98.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={75.0 98.0}
+	TACTICS={75.0 98.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_chainmail_tunic
+	ITEM=i_chainmail_leggings
+	ITEM=i_shield_round_bronze
+	ITEM=i_boots_calf
+	COLOR=colors_neutral
+	ITEM=i_sword_long
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0445]
+[CHARDEF C_H_JAILOR_F]
+DEFNAME=C_H_JAILOR_F
+NAME=#NAMES_HUMANFEMALE the Jailor
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP
+//SHELTER=r_JAIL
+TSPEECH=spk_human_prime
+TSPEECH=jobjailor
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Jailor (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={96 110}
+	INT={71 85}
+	FENCING={15.0 38.0}
+	PARRYING={75.0 98.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={75.0 98.0}
+	TACTICS={75.0 98.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_chainmail_tunic
+	ITEM=i_chainmail_leggings
+	ITEM=i_shield_round_bronze
+	ITEM=i_boots_calf
+	COLOR=colors_neutral
+	ITEM=i_sword_long
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0446]
+[CHARDEF C_H_JUDGE]
+DEFNAME=C_H_JUDGE
+NAME=#NAMES_HUMANMALE the Judge
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobjudge
+TSPEECH=jobparliament
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Judge (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={66 80}
+	DEX={61 75}
+	INT={76 90}
+	EVALUATINGINTEL={65.0 88.0}
+	FORENSICS={50.0 70.0}
+	FENCING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={55.0 78.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=i_hair_buns
+	COLOR=colors_gray
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_black
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0447]
+[CHARDEF C_H_JUDGE_F]
+DEFNAME=C_H_JUDGE_F
+NAME=#NAMES_HUMANFEMALE the Judge
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobjudge
+TSPEECH=jobparliament
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Guards & Law
+DESCRIPTION=Judge (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={66 80}
+	DEX={61 75}
+	INT={76 90}
+	EVALUATINGINTEL={65.0 88.0}
+	FORENSICS={50.0 70.0}
+	FENCING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={55.0 78.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=i_hair_buns
+	COLOR=colors_gray
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_black
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0448]
+[CHARDEF C_H_MAGINCIA_COUNCIL]
+DEFNAME=C_H_MAGINCIA_COUNCIL
+NAME=#NAMES_HUMANMALE the Magincia Council Member
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobMaginCouncil
+TSPEECH=jobparliament
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Magincia Town Members
+DESCRIPTION=Magincia Council Member (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={41 55}
+	INT={41 55}
+	EVALUATINGINTEL={45.0 65.0}
+	FENCING={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=i_pants_long
+	COLOR=colors_all
+	ITEM=i_SASH
+	COLOR=colors_red
+	ITEM=i_boots_calf
+	COLOR=colors_neutral
+	ITEM=i_sword_long
+	ITEM=backpack_loaded
+
+
+// [CHARDEF 0449]
+[CHARDEF C_H_MAGINCIA_COUNCIL_F]
+DEFNAME=C_H_MAGINCIA_COUNCIL_F
+NAME=#NAMES_HUMANFEMALE the Magincia Council Member
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobMaginCouncil
+TSPEECH=jobparliament
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Magincia Town Members
+DESCRIPTION=Magincia Council Member (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={41 55}
+	INT={41 55}
+	FENCING={15.0 38.0}
+	PARRYING={25.0 48.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	EVALUATINGINTEL={45.0 65.0}
+	MAGICRESISTANCE={25.0 48.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=i_SASH
+	COLOR=colors_red
+	ITEM=i_boots_calf
+	COLOR=colors_neutral
+	ITEM=i_sword_long
+	ITEM=backpack_loaded
+
+
+// [CHARDEF 0450]
+[CHARDEF C_H_MAGINCIA_SERVANT]
+DEFNAME=C_H_MAGINCIA_SERVANT
+NAME=#NAMES_HUMANMALE the Magincia Servant
+ID=C_MAN
+HIREDAYWAGE=20
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobServant
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Magincia Town Members
+DESCRIPTION=Magincia Servant (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={16 30}
+	DEX={21 35}
+	INT={26 40}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	ITEM=i_sandals
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0451]
+[CHARDEF C_H_MAGINCIA_SERVANT_F]
+DEFNAME=C_H_MAGINCIA_SERVANT_F
+NAME=#NAMES_HUMANFEMALE the Magincia Servant
+ID=C_WOMAN
+HIREDAYWAGE=20
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobServant
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Magincia Town Members
+DESCRIPTION=Magincia Servant (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={16 30}
+	DEX={21 35}
+	INT={26 40}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=i_skirt_long
+	ITEM=i_sandals
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0452]
+[CHARDEF C_H_MAYOR]
+DEFNAME=C_H_MAYOR
+NAME=#NAMES_HUMANMALE the Mayor
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobmayor
+TSPEECH=jobparliament
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Mayor (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={36 50}
+	DEX={36 50}
+	INT={51 65}
+	EVALUATINGINTEL={25.0 48.0}
+	FENCING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=i_pants_long
+	COLOR=colors_all
+	ITEM=random_boots
+	ITEM=i_SASH
+	COLOR=colors_red
+	ITEM=backpack_rich
+
+
+// [CHARDEF 0453]
+[CHARDEF C_H_MAYOR_F]
+DEFNAME=C_H_MAYOR_F
+NAME=#NAMES_HUMANFEMALE the Mayor
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobmayor
+TSPEECH=jobparliament
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Mayor (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={36 50}
+	DEX={36 50}
+	INT={51 65}
+	EVALUATINGINTEL={25.0 48.0}
+	FENCING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_dress_plain
+	COLOR=colors_all
+	ITEM=random_boots
+	ITEM=i_SASH
+	COLOR=colors_red
+	ITEM=backpack_rich
+
+
+// [CHARDEF 0458]
+[CHARDEF C_H_MONK]
+DEFNAME=C_H_MONK
+NAME=#NAMES_HUMANMALE the Monk
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobmonk
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Religious
+DESCRIPTION=Monk (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={21 35}
+	DEX={36 50}
+	INT={41 55}
+	EVALUATINGINTEL={55.0 78.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_neutral
+	ITEM=i_sandals
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0459]
+[CHARDEF C_H_MONK_F]
+DEFNAME=C_H_MONK_F
+NAME=#NAMES_HUMANFEMALE the Monk
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobmonk
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Religious
+DESCRIPTION=Monk (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={21 35}
+	DEX={36 50}
+	INT={41 55}
+	EVALUATINGINTEL={55.0 78.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_neutral
+	ITEM=i_sandals
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0460]
+[CHARDEF C_H_NOBLE]
+DEFNAME=C_H_NOBLE
+NAME=#NAMES_HUMANMALE the Noble
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+TSPEECH=spk_human_prime
+TSPEECH=jobNoble
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Noble (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={31 45}
+	DEX={41 55}
+	INT={51 65}
+	FENCING={15.0 38.0}
+	PARRYING={25.0 48.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={25.0 48.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=i_pants_long
+	COLOR=colors_all
+	ITEM=i_cape
+	COLOR=colors_all
+	ITEM=i_SASH
+	COLOR=colors_all
+	ITEM=random_boots
+	ITEM=i_sword_long
+	ITEM=backpack_loaded
+
+
+// [CHARDEF 0461]
+[CHARDEF C_H_NOBLE_F]
+DEFNAME=C_H_NOBLE_F
+NAME=#NAMES_HUMANFEMALE the Noble
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+TSPEECH=spk_human_prime
+TSPEECH=jobNoble
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Noble (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={31 45}
+	DEX={41 55}
+	INT={51 65}
+	FENCING={15.0 38.0}
+	PARRYING={25.0 48.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	MAGICRESISTANCE={25.0 48.0}
+	TACTICS={25.0 48.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_dress_full
+	COLOR=colors_neutral
+	ITEM=i_cape
+	COLOR=colors_all
+	ITEM=i_SASH
+	COLOR=colors_all
+	ITEM=random_boots
+	ITEM=i_sword_long
+	ITEM=backpack_loaded
+
+
+// [CHARDEF 0462]
+[CHARDEF C_H_CASHUAL]
+DEFNAME=C_H_CASHUAL
+NAME=#NAMES_HUMANMALE the Ocllo Cashual
+ID=C_MAN
+DESIRES=i_gold,t_wand,t_reagent,t_bone,e_notoriety,t_book
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobCASHUAL
+TSPEECH=spk_shopkeep
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Ocllo Town Members
+DESCRIPTION=Ocllo Casual (male)
+
+ON=@Create
+	NPC=brain_vendor
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={71 85}
+	INT={86 100}
+	ALCHEMY={55.0 78.0}
+	INSCRIPTION={50.0 65.0}
+	MAGERY={86.0 100.0}
+	TasteID={55.0 78.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={15.0 38.0}
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_red
+	ITEM=i_sandals
+	ITEM=random_coin_purse
+	SELL=i_rune_marker,{2 10}
+	SELL=RANDOM_POTION,{12 20}
+	SELL=RANDOM_REAGENT,{12 20}
+	SELL=i_spellbook,{3 14}
+	BUY=RANDOM_POTION,{12 20}
+	BUY=RANDOM_REAGENT,{12 20}
+
+
+// [CHARDEF 0463]
+[CHARDEF C_H_CASHUAL_F]
+DEFNAME=C_H_CASHUAL_F
+NAME=#NAMES_HUMANFEMALE the Ocllo Cashual
+ID=C_WOMAN
+DESIRES=i_gold,t_wand,t_reagent,t_bone,e_notoriety,t_book
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobCASHUAL
+TSPEECH=spk_shopkeep
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Ocllo Town Members
+DESCRIPTION=Ocllo Casual (female)
+
+ON=@Create
+	NPC=brain_vendor
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={71 85}
+	INT={86 100}
+	ALCHEMY={55.0 78.0}
+	INSCRIPTION={50.0 65.0}
+	MAGERY={86.0 100.0}
+	TasteID={55.0 78.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={15.0 38.0}
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_red
+	ITEM=i_sandals
+	ITEM=random_coin_purse
+	SELL=i_rune_marker,{2 10}
+	SELL=RANDOM_POTION,{12 20}
+	SELL=RANDOM_REAGENT,{12 20}
+	SELL=i_spellbook,{3 14}
+	BUY=RANDOM_POTION,{12 20}
+	BUY=RANDOM_REAGENT,{12 20}
+
+
+// [CHARDEF 0464]
+[CHARDEF C_H_PRIEST]
+DEFNAME=C_H_PRIEST
+NAME=#NAMES_HUMANMALE the Priest
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobpriest
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Religious
+DESCRIPTION=Priest (male)
+
+ON=@Create
+	//f_pat_random
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={51 65}
+	INT={61 75}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={35.0 58.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_gray
+	ITEM=i_sandals
+	ITEM=random_coin_purse
+
+// [CHARDEF 0465]
+[CHARDEF C_H_PRIESTESS_F]
+DEFNAME=C_H_PRIESTESS_F
+NAME=#NAMES_HUMANFEMALE the Priestess
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobpriest
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Religious
+DESCRIPTION=Priestess (female)
+
+ON=@Create
+	//f_pat_random
+	COLOR=colors_skin
+	STR={41 55}
+	DEX={51 65}
+	INT={61 75}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={35.0 58.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_gray
+	ITEM=i_sandals
+	ITEM=random_coin_purse
+
+// [CHARDEF 0466]
+[CHARDEF C_H_OCLLORUNNER]
+DEFNAME=C_H_OCLLORUNNER
+NAME=#NAMES_HUMANMALE the Ocllo Runner
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobrunner
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Ocllo Town Members
+DESCRIPTION=Ocllo Runner (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={31 45}
+	INT={16 30}
+	FENCING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=i_pants_short
+	COLOR=colors_all
+	ITEM=i_sandals
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0467]
+[CHARDEF C_H_OCLLORUNNER_F]
+DEFNAME=C_H_OCLLORUNNER_F
+NAME=#NAMES_HUMANFEMALE the Ocllo Runner
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobrunner
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Ocllo Town Members
+DESCRIPTION=Ocllo Runner (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={31 45}
+	INT={16 30}
+	FENCING={15.0 38.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=i_sandals
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0468]
+[CHARDEF C_H_PEASANT]
+DEFNAME=C_H_PEASANT
+NAME=#NAMES_HUMANMALE the Peasant
+ID=C_MAN
+HIREDAYWAGE=10
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+TSPEECH=spk_human_prime
+TSPEECH=joblaborer
+TSPEECH=jobPEASANT
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Peasant (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	NEED=i_gold
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0469]
+[CHARDEF C_H_PEASANT_F]
+DEFNAME=C_H_PEASANT_F
+NAME=#NAMES_HUMANFEMALE the Peasant
+ID=C_WOMAN
+HIREDAYWAGE=10
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff,e_carnivores3
+TSPEECH=spk_human_prime
+TSPEECH=joblaborer
+TSPEECH=jobPEASANT
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Peasant (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	NEED=i_gold
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0470]
+[CHARDEF C_H_PIRATE]
+DEFNAME=C_H_PIRATE
+NAME=#NAMES_HUMANMALE the Pirate
+ID=C_MAN
+HIREDAYWAGE=70
+DESIRES=i_gold,e_notoriety,jobpirate,T_GEM
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobpirate
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Outlaws & Rogues
+DESCRIPTION=Pirate (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={ 86 100 }
+	DEX={ 86 100 }
+	INT={ 71 85 }
+	FENCING={ 25.0 48.0 }
+	PARRYING={65.0 88.0}
+	SWORDSMANSHIP={55.0 78.0}
+	WRESTLING={45.0 68.0}
+	MACEFIGHTING={25.0 48.0}
+	TACTICS={65.0 88.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_CUTLASS
+	ITEM={ i_bandana 1 i_skull_cap 1 }
+	COLOR=colors_red
+	ITEM=i_boots_thigh
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0471]
+[CHARDEF C_H_PIRATE_F]
+DEFNAME=C_H_PIRATE_F
+NAME=#NAMES_HUMANFEMALE the Pirate
+ID=C_WOMAN
+HIREDAYWAGE=70
+DESIRES=i_gold,e_notoriety,jobpirate,T_GEM
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobpirate
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Outlaws & Rogues
+DESCRIPTION=Pirate (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={86 100}
+	INT={71 85}
+	FENCING={25.0 48.0}
+	PARRYING={65.0 88.0}
+	SWORDSMANSHIP={55.0 78.0}
+	WRESTLING={45.0 68.0}
+	MACEFIGHTING={25.0 48.0}
+	TACTICS={65.0 88.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=i_CUTLASS
+	ITEM={ i_bandana 1 i_skull_cap 1 }
+	COLOR=colors_red
+	ITEM=i_boots_thigh
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0472]
+[CHARDEF C_H_PRISONER]
+DEFNAME=C_H_PRISONER
+NAME=#NAMES_HUMANMALE the Prisoner
+ID=C_MAN
+//SHELTER=r_JAIL
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobprisoner
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Outlaws & Rogues
+DESCRIPTION=Prisoner (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={11 25}
+	DEX={11 25}
+	INT={31 45}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_pants_short
+	COLOR=colors_all
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0473]
+[CHARDEF C_H_PRISONER_F]
+DEFNAME=C_H_PRISONER_F
+NAME=#NAMES_HUMANFEMALE the Prisoner
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+//SHELTER=r_JAIL
+TSPEECH=spk_human_prime
+TSPEECH=jobprisoner
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Outlaws & Rogues
+DESCRIPTION=Prisoner (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={11 25}
+	DEX={11 25}
+	INT={31 45}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0478]
+[CHARDEF C_H_SCULPTOR]
+DEFNAME=C_H_SCULPTOR
+NAME=#NAMES_HUMANMALE the Sculptor
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobSculptor
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Arts & Music
+DESCRIPTION=Sculptor (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={16 30}
+	DEX={26 40}
+	INT={21 35}
+	ANATOMY={35.0 55.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0479]
+[CHARDEF C_H_SCULPTOR_F]
+DEFNAME=C_H_SCULPTOR_F
+NAME=#NAMES_HUMANFEMALE the Sculptor
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobSculptor
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Arts & Music
+DESCRIPTION=Sculptor (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={16 30}
+	DEX={26 40}
+	INT={21 35}
+	ANATOMY={35.0 55.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0494]
+[CHARDEF C_H_MAGE]
+DEFNAME=C_H_MAGE
+NAME=#NAMES_HUMANMALE the Mage
+ID=C_MAN
+DESIRES=i_gold,t_wand,t_reagent
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobMage
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Mage (male) (Non Shopkeeper)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={71 85}
+	INT={86 100}
+	//SPELLCIRCLES=7-8
+	INSCRIPTION={50.0 65.0}
+	MEDITATION={75.0 100.0}
+	MAGERY={86.0 100.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	make_spellcaster 3,7
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_all
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0495]
+[CHARDEF C_H_MAGE_F]
+DEFNAME=C_H_MAGE_F
+NAME=#NAMES_HUMANFEMALE the Mage
+ID=C_WOMAN
+DESIRES=i_gold,t_wand,t_reagent
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobMage
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Mage (female) (Non Shopkeeper)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={71 85}
+	INT={86 100}
+	//SPELLCIRCLES=7-8
+	MEDITATION={75.0 100.0}
+	INSCRIPTION={50.0 65.0}
+	MAGERY={86.0 100.0}
+	WRESTLING={15.0 38.0}
+	MAGICRESISTANCE={65.0 88.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+    make_spellcaster 3,7
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_all
+	ITEM=random_shoes
+	COLOR=colors_all
+	ITEM=random_coin_purse
+
+// [CHARDEF 0518]
+[CHARDEF C_H_HEAL_WANDER]
+//Male HEALER NON-SHOPKEEPER
+DEFNAME=C_H_HEAL_WANDER
+NAME=#NAMES_HUMANMALE the Healer
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobHealerWander
+TSPEECH=jobHealer
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_healer
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Healer (male) (Non Shopkeeper)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={71 85}
+	DEX={81 95}
+	INT={86 100}
+	CAMPING={35.0 58.0}
+	FISHING={35.0 58.0}
+	ANATOMY={55.0 78.0}
+	FORENSICS={35.0 58.0}
+	HEALING={55.0 78.0}
+	SPIRITSPEAK={55.0 78.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 35.0}
+	NPC=brain_healer
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_yellow
+	ITEM=i_sandals
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0519]
+[CHARDEF C_H_HEAL_WANDER_F]
+DEFNAME=C_H_HEAL_WANDER_F
+NAME=#NAMES_HUMANFEMALE the Healer
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobHealerWander
+TSPEECH=jobHealer
+TSPEECH=spk_rehello
+TSPEECH=spk_needs
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+TEVENTS=e_healer
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Healer (female) (Non Shopkeeper)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={71 85}
+	DEX={81 95}
+	INT={86 100}
+	CAMPING={35.0 58.0}
+	FISHING={35.0 58.0}
+	ANATOMY={55.0 78.0}
+	FORENSICS={35.0 58.0}
+	HEALING={55.0 78.0}
+	SPIRITSPEAK={55.0 78.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 35.0}
+	NPC=brain_healer
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_robe
+	COLOR=colors_yellow
+	ITEM=i_sandals
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0530]
+[CHARDEF C_H_SAILOR]
+DEFNAME=C_H_SAILOR
+NAME=#NAMES_HUMANMALE Sailor
+ID=C_MAN
+HIREDAYWAGE=50
+DESIRES=i_gold,e_notoriety,t_SHIP,jobSailor
+AVERSIONS=t_TRAP,t_eerie_stuff
+//SHELTER=r_docks,r_water
+TSPEECH=spk_human_prime
+TSPEECH=jobSailor
+TSPEECH=spk_rehello
+TSPEECH=spk_needs
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Sailor (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={66 80}
+	DEX={66 80}
+	INT={41 55}
+	FISHING={35.0 55.0}
+	FENCING={15.0 38.0}
+	PARRYING={45.0 68.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={45.0 68.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	ITEM=random_pants
+	ITEM=i_CUTLASS
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0531]
+[CHARDEF C_H_SAILOR_F]
+DEFNAME=C_H_SAILOR_F
+NAME=#NAMES_HUMANFEMALE the Sailor
+ID=C_WOMAN
+HIREDAYWAGE=50
+DESIRES=i_gold,e_notoriety,t_SHIP,jobSailor
+AVERSIONS=t_TRAP,t_eerie_stuff
+//SHELTER=r_docks,r_water
+TSPEECH=spk_human_prime
+TSPEECH=jobSailor
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Sailor (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={66 80}
+	DEX={66 80}
+	INT={41 55}
+	FISHING={35.0 55.0}
+	FENCING={15.0 38.0}
+	PARRYING={45.0 68.0}
+	SWORDSMANSHIP={15.0 38.0}
+	WRESTLING={15.0 38.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={45.0 68.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	ITEM=random_pants
+	ITEM=i_CUTLASS
+	ITEM=random_shoes
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+
+// [CHARDEF 0542]
+[CHARDEF C_H_RANGER]
+DEFNAME=C_H_RANGER
+NAME=#NAMES_HUMANMALE the Ranger
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobRanger
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Ranger (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={71 85}
+	DEX={76 90}
+	INT={61 75}
+	ANIMALLORE={55.0 78.0}
+	ARCHERY={55.0 78.0}
+	CAMPING={55.0 78.0}
+	HERDING={45.0 68.0}
+	HIDING={45.0 68.0}
+	TRACKING={45.0 68.0}
+	FENCING={35.0 58.0}
+	PARRYING={65.0 88.0}
+	SWORDSMANSHIP={35.0 58.0}
+	WRESTLING={35.0 58.0}
+	TACTICS={65.0 88.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_green
+	ITEM=random_pants
+	COLOR=colors_brown
+	ITEM=random_footwear
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+	ITEM=i_bow
+	ITEM=i_arrow,{5 20}
+
+
+// [CHARDEF 0543]
+[CHARDEF C_H_RANGER_F]
+DEFNAME=C_H_RANGER_F
+NAME=#NAMES_HUMANFEMALE the Ranger
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobRanger
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Ranger (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={71 85}
+	DEX={76 90}
+	INT={61 75}
+	ANIMALLORE={55.0 78.0}
+	ARCHERY={55.0 78.0}
+	CAMPING={55.0 78.0}
+	HERDING={45.0 68.0}
+	HIDING={45.0 68.0}
+	TRACKING={45.0 68.0}
+	FENCING={35.0 58.0}
+	PARRYING={65.0 88.0}
+	SWORDSMANSHIP={35.0 58.0}
+	WRESTLING={35.0 58.0}
+	TACTICS={65.0 88.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_green
+	ITEM=random_skirt
+	COLOR=colors_brown
+	ITEM=random_footwear
+	COLOR=colors_neutral
+	ITEM=random_coin_purse
+	ITEM=i_bow
+	ITEM=i_arrow,{5 20}
+
+
+// [CHARDEF 0558]
+[CHARDEF C_H_BEGGER]
+DEFNAME=C_H_BEGGER
+NAME=#NAMES_HUMANMALE the Beggar
+ID=C_MAN
+HIREDAYWAGE=10
+//SHELTER=r_house
+DESIRES=i_gold
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobBeggar
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Beggar (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	BEGGING={55.0 78.0}
+	SNOOPING={35.0 50.0}
+	STEALING={35.0 50.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=i_pants_short
+	COLOR=colors_all
+	ITEM=i_sandals
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0559]
+[CHARDEF C_H_BEGGER_F]
+DEFNAME=C_H_BEGGER_F
+NAME=#NAMES_HUMANFEMALE the Beggar
+ID=C_WOMAN
+HIREDAYWAGE=10
+//SHELTER=r_house
+DESIRES=i_gold
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobBeggar
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Beggar (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={26 40}
+	DEX={21 35}
+	INT={16 30}
+	BEGGING={55.0 78.0}
+	SNOOPING={35.0 50.0}
+	STEALING={35.0 50.0}
+	WRESTLING={15.0 38.0}
+	TACTICS={15.0 38.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=i_sandals
+	ITEM=backpack_poor
+
+
+// [CHARDEF 0560]
+[CHARDEF C_H_THIEF]
+DEFNAME=C_H_THIEF
+NAME=#NAMES_HUMANMALE the Thief
+ID=C_MAN
+HIREDAYWAGE=60
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety,T_GEM
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobThief
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Thief (male)
+
+
+ON=@Create
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={86 100}
+	INT={71 85}
+	STEALTH={50.0 70.0}
+	DETECTINGHIDDEN={35.0 58.0}
+	HIDING={45.0 68.0}
+	LOCKPICKING={35.0 58.0}
+	POISONING={35.0 58.0}
+	SNOOPING={45.0 68.0}
+	STEALING={55.0 70.0}
+	FENCING={55.0 78.0}
+	PARRYING={55.0 78.0}
+	SWORDSMANSHIP={35.0 58.0}
+	WRESTLING={25.0 48.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={35.0 50.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_pants
+	COLOR=colors_all
+	ITEM=random_footwear
+	ITEM=random_dagger
+	ITEM=random_coin_purse
+	ITEM=i_lockpick
+
+
+// [CHARDEF 0561]
+[CHARDEF C_H_THIEF_F]
+DEFNAME=C_H_THIEF_F
+NAME=#NAMES_HUMANFEMALE the Thief
+ID=C_WOMAN
+HIREDAYWAGE=60
+//SHELTER=r_house
+DESIRES=i_gold,e_notoriety,T_GEM
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobThief
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Scavenge
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Villagers
+DESCRIPTION=Thief (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={61 75}
+	DEX={86 100}
+	INT={71 85}
+	STEALTH={50.0 70.0}
+	DETECTINGHIDDEN={35.0 58.0}
+	HIDING={45.0 68.0}
+	LOCKPICKING={35.0 58.0}
+	POISONING={35.0 58.0}
+	SNOOPING={45.0 68.0}
+	STEALING={55.0 70.0}
+	FENCING={55.0 78.0}
+	PARRYING={55.0 78.0}
+	SWORDSMANSHIP={35.0 58.0}
+	WRESTLING={25.0 48.0}
+	MACEFIGHTING={15.0 38.0}
+	TACTICS={35.0 50.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_plain
+	COLOR=colors_all
+	ITEM=random_skirt
+	COLOR=colors_all
+	ITEM=random_footwear
+	ITEM=random_dagger
+	ITEM=random_coin_purse
+	ITEM=i_lockpick
+
+
+// [CHARDEF 0564]
+[CHARDEF C_H_FIGHTER]
+DEFNAME=C_H_FIGHTER
+NAME=#NAMES_HUMANMALE the Fighter
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Fighter (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={81 95}
+	INT={61 75}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_ringmail_tunic
+	ITEM=i_ringmail_leggings
+	ITEM=i_ringmail_sleeves
+	ITEM=i_ringmail_gloves
+	ITEM=i_chainmail_coif
+	ITEM=i_leather_gorget
+	ITEM=i_shield_wood
+	ITEM=i_sword_broad
+	ITEM=i_boots_calf
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0565]
+[CHARDEF C_H_FIGHTER_F]
+DEFNAME=C_H_FIGHTER_F
+NAME=#NAMES_HUMANFEMALE the Fighter
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Fighter (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={81 95}
+	INT={61 75}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_ringmail_tunic
+	ITEM=i_ringmail_leggings
+	ITEM=i_ringmail_sleeves
+	ITEM=i_ringmail_gloves
+	ITEM=i_chainmail_coif
+	ITEM=i_leather_gorget
+	ITEM=i_shield_wood
+	ITEM=i_boots_calf
+	ITEM=i_sword_broad
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0566]
+[CHARDEF C_H_WARRIOR]
+DEFNAME=C_H_WARRIOR
+NAME=#NAMES_HUMANMALE the Warrior
+ID=C_MAN
+HIREDAYWAGE=60
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Warrior (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={81 95}
+	INT={61 75}
+	ARMSLORE={50.0 70.0}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_ringmail_tunic
+	ITEM=i_ringmail_leggings
+	ITEM=i_ringmail_sleeves
+	ITEM=i_ringmail_gloves
+	ITEM=i_chainmail_coif
+	ITEM=i_leather_gorget
+	ITEM=i_shield_wood
+	ITEM=i_boots_calf
+	ITEM=i_sword_broad
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0567]
+[CHARDEF C_H_WARRIOR_F]
+DEFNAME=C_H_WARRIOR_F
+NAME=#NAMES_HUMANFEMALE the Warrior
+ID=C_WOMAN
+HIREDAYWAGE=60
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Warrior (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={81 95}
+	INT={61 75}
+	ARMSLORE={50.0 70.0}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_ringmail_tunic
+	ITEM=i_ringmail_leggings
+	ITEM=i_ringmail_sleeves
+	ITEM=i_ringmail_gloves
+	ITEM=i_chainmail_coif
+	ITEM=i_leather_gorget
+	ITEM=i_boots_calf
+	ITEM=i_shield_wood
+	ITEM=i_sword_broad
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0568]
+[CHARDEF C_H_MERCENARY]
+DEFNAME=C_H_MERCENARY
+NAME=#NAMES_HUMANMALE the Mercenary
+ID=C_MAN
+HIREDAYWAGE=70
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Mercenary (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={76 90}
+	INT={61 75}
+	POISONING={35.0 55.0}
+	ARMSLORE={50.0 70.0}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=i_mt_horse_tan
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=random_chest_armor
+	ITEM=random_leg_armor
+	ITEM=random_gloves
+	ITEM=random_head_armor
+	ITEM=random_shield
+	ITEM=random_gorget
+	ITEM=i_boots_calf
+	ITEM=random_weapon
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0569]
+[CHARDEF C_H_MERCENARY_F]
+DEFNAME=C_H_MERCENARY_F
+NAME=#NAMES_HUMANFEMALE the Mercenary
+ID=C_WOMAN
+HIREDAYWAGE=70
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Mercenary (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 100}
+	DEX={76 90}
+	INT={61 75}
+	POISONING={35.0 55.0}
+	ARMSLORE={50.0 70.0}
+	FENCING={50.0 70.0}
+	PARRYING={50.0 70.0}
+	SWORDSMANSHIP={50.0 70.0}
+	WRESTLING={50.0 70.0}
+	MACEFIGHTING={50.0 70.0}
+	TACTICS={50.0 70.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_shirt_fancy
+	COLOR=colors_all
+	ITEM=random_chest_armor
+	ITEM=random_leg_armor
+	ITEM=random_gloves
+	ITEM=random_head_armor
+	ITEM=random_shield
+	ITEM=random_gorget
+	ITEM=random_weapon
+	ITEM=i_boots_calf
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0570]
+[CHARDEF C_H_PALADIN]
+DEFNAME=C_H_PALADIN
+NAME=#NAMES_HUMANMALE the Paladin
+ID=C_MAN
+HIREDAYWAGE=80
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobPaladin
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Paladin (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={96 110}
+	INT={96 110}
+	ARMSLORE={52.0 75.0}
+	FENCING={45.0 68.0}
+	PARRYING={55.0 75.0}
+	SWORDSMANSHIP={65.0 88.0}
+	WRESTLING={55.0 78.0}
+	MACEFIGHTING={45.0 68.0}
+	MAGICRESISTANCE={35.0 55.0}
+	TACTICS={55.0 75.0}
+	HEALING={55.0 75.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_platemail_chest
+	ITEM=i_platemail_leggings
+	ITEM=i_platemail_arms
+	ITEM=i_platemail_gloves
+	ITEM=i_platemail_gorget
+	ITEM=random_helmet
+	ITEM=random_over_armor
+	ITEM=i_shield_kite_metal
+	ITEM=i_sword_viking
+	ITEM=random_boots
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0571]
+[CHARDEF C_H_PALADIN_F]
+// female paladins ?
+DEFNAME=C_H_PALADIN_F
+NAME=#NAMES_HUMANFEMALE the Paladin
+ID=C_WOMAN
+HIREDAYWAGE=80
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobPaladin
+TSPEECH=jobWarrior
+TSPEECH=jobFighter
+TSPEECH=spk_rehello
+TSPEECH=spk_needs
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Paladin (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={96 110}
+	INT={96 110}
+	ARMSLORE={52.0 75.0}
+	FENCING={45.0 68.0}
+	PARRYING={55.0 75.0}
+	SWORDSMANSHIP={65.0 88.0}
+	WRESTLING={55.0 78.0}
+	MACEFIGHTING={45.0 68.0}
+	MAGICRESISTANCE={35.0 55.0}
+	TACTICS={55.0 75.0}
+	HEALING={55.0 75.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_platemail_chest
+	ITEM=i_platemail_leggings
+	ITEM=i_platemail_arms
+	ITEM=i_platemail_gloves
+	ITEM=i_platemail_gorget
+	ITEM=random_helmet
+	ITEM=random_over_armor
+	ITEM=i_shield_kite_metal
+	ITEM=i_sword_viking
+	ITEM=random_boots
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0572]
+[CHARDEF C_H_WEAPONSTRAINER]
+DEFNAME=C_H_WEAPONSTRAINER
+NAME=#NAMES_HUMANMALE the Weapons Trainer
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobWeaponstrainer
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Weapons Trainer (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={91 105}
+	INT={71 85}
+	FENCING={67.0 90.0}
+	PARRYING={75.0 98.0}
+	SWORDSMANSHIP={67.0 90.0}
+	WRESTLING={67.0 90.0}
+	MACEFIGHTING={67.0 90.0}
+	TACTICS={75.0 98.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_studded_tunic
+	ITEM=i_studded_leggings
+	ITEM=i_STUDDED_SLEEVES
+	ITEM=i_studded_gloves
+	ITEM=random_boots
+	ITEM=random_coin_purse
+
+
+// [CHARDEF 0573]
+[CHARDEF C_H_WEAPONSTRAINER_F]
+DEFNAME=C_H_WEAPONSTRAINER_F
+NAME=#NAMES_HUMANFEMALE the Weapons Trainer
+ID=C_WOMAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobWeaponstrainer
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Weapons Trainer (female)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={96 110}
+	DEX={91 105}
+	INT={71 85}
+	FENCING={67.0 90.0}
+	PARRYING={75.0 98.0}
+	SWORDSMANSHIP={67.0 90.0}
+	WRESTLING={67.0 90.0}
+	MACEFIGHTING={67.0 90.0}
+	TACTICS={75.0 98.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_female_hair
+	COLOR=colors_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_studded_tunic
+	ITEM=i_studded_leggings
+	ITEM=i_STUDDED_SLEEVES
+	ITEM=i_studded_gloves
+	ITEM=random_boots
+	ITEM=random_coin_purse
+
+
+// [CHARDEF C_H_FIGHT_OVERSEER]
+[CHARDEF C_H_FIGHT_OVERSEER]
+// Gladiator Overseer
+NAME=#NAMES_HUMANMALE the Overseer
+ID=C_MAN
+DESIRES=i_gold,e_notoriety
+AVERSIONS=t_TRAP,t_eerie_stuff
+TSPEECH=spk_human_prime
+TSPEECH=jobOverseer
+TSPEECH=jobFighter
+TSPEECH=spk_needs
+TSPEECH=spk_rehello
+TSPEECH=spk_human_default
+TEVENTS=e_Human_HearUnk
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_ConvInit
+TEVENTS=e_Human_Greet
+TEVENTS=e_Human_Space
+TEVENTS=e_Human_Refuse
+TEVENTS=e_Human_Environ
+CATEGORY=Civilized
+SUBSECTION=Fighters
+DESCRIPTION=Fighter (male)
+
+ON=@Create
+	COLOR=colors_skin
+	STR={86 110}
+	DEX={81 95}
+	INT={61 75}
+	FENCING={50.0 95.0}
+	PARRYING={50.0 95.0}
+	SWORDSMANSHIP={70.0 95.0}
+	WRESTLING={70.0 95.0}
+	MACEFIGHTING={70.0 95.0}
+	TACTICS={50.0 95.0}
+	NPC=brain_human
+	ITEMNEWBIE=random_male_hair
+	COLOR=colors_hair
+	ITEMNEWBIE=random_facial_hair
+	COLOR=match_hair
+
+ON=@NPCRestock
+	ITEM=RANDOM_LIGHT
+	ITEM=i_ringmail_tunic
+	ITEM=i_ringmail_leggings
+	ITEM=i_ringmail_sleeves
+	ITEM=i_ringmail_gloves
+	ITEM=i_chainmail_coif
+	ITEM=i_leather_gorget
+	ITEM=i_shield_wood
+	ITEM=i_sword_broad
+	ITEM=i_boots_calf
+	ITEM=random_coin_purse
+
+[EOF]

@@ -1,0 +1,164 @@
+//Donation Stone by By Soulless
+//v1.0
+//Lets players spend their donation coints on rewards
+
+[defname donation_stone_items]
+
+				//itemdef,title,gem cost,descirption
+donation_stone_item0		i_deed_personal_statue,Personal Statue,3400,This personal statue writ will allow you to place a statue with the likeness of you anywhere in the world you'd be able to place a standard multi. You can update this statue to your appearance any time.
+donation_stone_item1		
+donation_stone_item2		
+
+
+////////////////////////
+//Donation Stone
+
+
+[itemdef i_donation_gem]
+defname=i_donation_gem
+id=0f29	//diamond
+name=Donation Gem
+type=t_script
+
+on=@create
+attr=attr_newbie
+color=0554
+
+on=@dclick
+src.sysmessage Redeem these at the donation stone
+return 1
+
+[function f_give_donation_gems]
+//automatically give donation gems to user
+if (<isempty <argv[0]>>)
+  serv.log arg0 must not be empty
+  return 1
+endif
+for 0 <eval <serv.accounts>-1>
+  local.account=<serv.account.<local._for>.name>
+  local.email=<serv.account.<local._for>.tag0.email>
+  if !(strcmpi(<argv[0]>,<local.email>))
+    serv.account.<local.account>.tag0.donation_gems += <argv[1]>
+    serv.log account <local.account> (<local.email>) was tagged with  <argv[1]> donation gems on <serv.rtime>
+    return 1
+  endif
+endfor
+
+[itemdef i_donation_reward_stone]
+defname=i_donation_reward_stone
+name=Donation Reward Stone
+id=i_guildstone
+type=t_normal
+
+ON=@Create
+attr=010
+color=0562
+
+on=@dclick
+if !(<src.isgm>)
+  message In progress, please be patient
+  return 1
+endif
+sdialog d_donation_stone
+sdialog d_donation_thanks
+return 1
+
+[dialog d_donation_stone]
+200,50
+
+page 0
+resizepic 10 10 9270 390 370
+
+dtext 130 35 1263 <serv.servname> Donation Stone
+dtext 160 50 1000 Select a reward
+
+dtext 80 340 1263 You have <src.rescount i_donation_gem> Donation Gems.
+button 297 340 2443 2444 1 0 9999
+dtext 300 340 044 Get Gems
+
+
+while !<isempty <def.donation_stone_item<dlocal.n>>>
+  local.p += 1
+  page <local.p>
+  for 0 12
+    if !(<isempty <def.donation_stone_item<dlocal.n>>>)
+      args=<def.donation_stone_item<dlocal.n>>
+      button 35  <eval 80+(<local.y>*20)> 2510 2511 1 0 <eval <local.n> +1000>
+      dtext 38 <eval 79+(<local.y>*20)> 44 ?
+      button 60 <eval 80+(<local.y>*20)> 1209 1210 1 0 <eval <local.n> +1>
+      dtext 80 <eval 78+(<local.y>*20)> 1263 <argv[1]>	//<serv.itemdef.<def0.donation_stone_item<dlocal.n>>.name>
+      dtext 250 <eval 78+(<local.y>*20)> 1000 <argv[2]> gems
+      local.y += 1
+      local.n += 1 
+      if <local.y> > 12
+        local.y=
+        button 350 345 4006 4007 0 <eval <local.p>+1>	//forward one page
+      endif
+    endif
+  endfor
+  if (<local.p> > 1)
+    button 40 345 4015 4016 0 <eval <local.p>-1>	//backward one page
+  endif
+endwhile
+
+[dialog d_donation_stone button]
+
+onbutton=1,999
+argn -= 1
+args=<def0.donation_stone_item<dargn>>
+if (<src.rescount i_donation_gem> < <argv[2]>)
+  src.sysmessage You do not have enough donation gems to cover this purchase.
+  return 1
+endif
+src.consume <argv[2]> i_donation_gem
+
+
+serv.newitem <argv[0]>
+  if (<new.type> != t_container)
+    new.attr=attr_newbie
+  endif
+new.link=<src>
+new.bounce <src>
+src.sound 247
+sdialog d_donation_stone
+
+onbutton=1000,1999
+argn -= 1000
+sdialog d_donation_stone
+dialog d_donation_stone_details <dargn>
+
+
+onbutton=9999
+src.sysmessage Currently we're not taking automated donations, thank you for your interest. Please inquire further with Soulless via Discord for more information.
+return 1
+
+src.sysmessage Opening donation page...
+src.timerf 2,weblink www.yeoldesphere.com/donations
+
+[dialog d_donation_stone_details]
+150,50
+page 0
+
+page <argn1>
+args=<def0.donation_stone_item<dargn1>>
+resizepic 65 10 9270 240 240
+resizepic 75 20 3000 220 220
+dtext 100 30 1264 <argv[1]> Details
+dhtmlgump 90 50 200 190 0 1 <def0.bfont_black><argv[3]>
+
+
+[dialog d_donation_thanks]
+225,100
+
+page 0
+gumppic 10 10 1228
+dtext 55 15 1263 Thank you to the community
+dhtmlgump 45 45 325 400 0 0 Hello <src.name>!<def.center>I want to say a quick thank you for your support and being a part of this community. I am proud of the work we've accomplished together and look forward to everything that we can achieve in the future. Any monetary donations to this server are very appreciated and used solely for the purposes of continued administration and development. Again thank you so much for your commitment and being a part of this project.<def.br><def.div_right>Respectfully, Soulless
+button 355 275 4018 4019 1 0 0 
+
+
+
+
+
+
+[EOF]

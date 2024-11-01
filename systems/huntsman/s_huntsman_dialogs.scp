@@ -1,0 +1,341 @@
+//Huntsman/Mondains Horde System by Soulless
+//v1.0
+//12:29 PM 1/16/2022
+
+[DIALOG d_huntsman_guild_menu]
+
+50,50
+page 0
+resizepic 20 20 9380 750 425
+dtext 310 25 1263 The Huntsman Guild
+button 45 70 2151 2152 0 2
+dtext 85 75 1000 Buy Contracts
+button 60 90 2151 2152 0 3
+dtext 100 95 1000 Open Cache
+button 45 110 2151 2152 0 4
+dtext 85 115 1000 Purchase Supplies
+if (<src.isgm>)
+  button 60 130 2151 2152 0 5		//these guys should do a % damage of their master, increasing by about 2 % for each level
+  dtext 100 135 1000 Hire Hunter
+  button 45 150 2151 2152 0 6
+  dtext 85 155 1000 Upgrade Hunter
+endif
+
+gumppictiled 230 60 10 350 2091
+
+button 655 420 247 248 1 0 0	//okay
+button 65 420 241 242 1 0 0	//cancel
+
+page 1
+dhtmlgump 320 60 325 345 0 0  Hail <src.name>, <def.br><def.br>        Mondain's Horde seeks to take over Britannia and we're unable to fight them alone for much longer. We need champions to help find a way to defeat Mondain once and for all. Purchase one of our bounty contracts on higher ranking members of Mondain's Horde and seek your target out. They will likely have a cache of treasure that will serve our guild well, bring the cache you find back to us and we will break the spell that seals it. Guard yourself in your mission, Mondain's minions are powerful.
+dtext 490 331 1263 Ruler of Britannia,
+dtext 530 348 1263 Lord British
+gumppic 460 350 52
+  
+page 2
+dtext 256 56 1263 Contract Tiers : 
+
+for 1 5
+  button <eval 285+(<local._for>*75)> 50 2151 2153 1 0 <dlocal._for>
+  dtext <eval 320+(<local._for>*75)> 55 1000 Lvl <dlocal._for>
+endfor
+
+local.contract_level=<src.ctag0.viewing_huntsman_contracts>
+local.contract_level=<qval (<local.contract_level> <= 0)?1:<local.contract_level>>
+src.ctag.viewing_huntsman_contract_checksum=<eval (<serv.list.mondains_horde<dlocal.contract_level>.0>+<serv.list.mondains_horde<dlocal.contract_level>.<serv.list.mondains_horde<dlocal.contract_level>.count>>)><serv.list.mondains_horde<dlocal.contract_level>.count>
+gumppic <eval 285+(<local.contract_level>*75)> 50 2153
+gumppictiled 245 80 475 10 2091
+
+for h 11 0	//<eval <serv.list.mondains_horde<dlocal.contract_level>.count>-1>
+  ref1=<serv.list.mondains_horde<dlocal.contract_level>.<dlocal.h>>
+  if (<ref1>) 
+    if !(<ref1.isvalid>) || !(<ref1.ischar>) || !(<ref1.isevent.e_mondains_horde>)
+      serv.log <ref1> is an invalid entry on 'list.mondains_horde<dlocal.contract_level>', removing it!
+      serv.list.mondains_horde<dlocal.contract_level>.<dlocal.h>.remove
+    else
+      if (strcmpi(<ref1.job>,<ref1.name>))
+        local.hasname=1
+      endif
+      button 250 <eval 107+<local.y>> 2117 2118 1 0 <eval 10+(<serv.list.mondains_horde<dlocal.contract_level>.findelem <ref1>>)>
+      dtext 270 <eval 105+<local.y>> 1000 Lvl <dlocal.contract_level> <ref1.job> Contract <qval (<local.hasname>)?(<ref1.name>) :>	//- <ref1.region.name>
+      dtext 625 <eval 105+<local.y>> 030 <eval (<ref1.tag0.base_difficulty>*9)>gp
+      local.y += 25
+      local.hasname=
+    endif
+  endif
+endfor
+if (<eval <serv.time>-<src.findid.i_npc_guild_huntsman.tag.last_contract_buytime>> < <eval (<def0.huntsman_contract_buywait>*10)>) && (<src.isgm>)
+  dtext 400 420 33 Next Purchase : <eval (((<def0.huntsman_contract_buywait>*10)-(<serv.time>-<src.findid.i_npc_guild_huntsman.tag.last_contract_buytime>)/10)/60> mins
+endif
+
+page 3
+local.x=
+local.y=
+dtext 425 55 1263 Open Horde Cache
+gumppictiled 245 80 475 10 2091
+if (<serv.list.huntsman_<src>_caches.count> <= 0)
+  dtext 250 105 1000 You don't have a horde cache to open right now. 
+  dtext 250 125 1000 Turn one into the Huntsman Guildmaster.
+  button 250 167 2117 2118 1 0 6
+  dtext 275 165 1000 Add a horde cache
+
+else
+  for c <eval <serv.list.huntsman_<src>_caches.count>-1> 0
+    ref1=<serv.list.huntsman_<src>_caches.<dlocal.c>>
+    if !(<ref1.isvalid>)	
+      serv.list.huntsman_<src>_caches.<dlocal.c>.remove     	//remove invalid caches from the menu
+    else
+      local.time_elapsed=<eval (<ref1.more2>-<ref1.timer>)>
+      local.progress=<muldiv <local.time_elapsed>,100,<ref1.more2>>
+      local.progress=<qval (100 < <local.progress>)?100:<local.progress>>
+      local.progress_bar=<eval <local.progress>+(<local.progress>/10)>
+      resizepic <eval 245+<local.x>> <eval 95+<local.y>> 9200 120 105
+      dtext <eval 265+<local.x>> <eval 95+<local.y>> 1263 Level <ref1.dmorey> Cache
+      tilepichue <eval 280+<local.x>> <eval 115+<local.y>> <serv.itemdef.<ref1.dispid>.id> <eval <ref1.color>>
+      gumppictiled <eval 250+<local.x>> <eval 165+<local.y>> 110 11 2057
+      gumppictiled <eval 250+<local.x>> <eval 165+<local.y>> <eval <local.progress_bar>> 11 2056
+      dtext <eval 290+<local.x>> <eval 160+<local.y>> 1000 <eval <local.progress>>%
+      dtext <eval 280+<local.x>> <eval 180+<local.y>> <qval (<local.progress> < 100)?33:1263> <qval (<local.progress> < 100)?<eval <ref1.timer>/60> min:Open Cache>
+      if (<local.progress> >= 100) || (<src.isgm>) 
+        button <eval 255+<local.x>> <eval 182+<local.y>> 2117 2118 1 0 <eval (10000+<local.c>)>
+      endif
+      local.x += 122
+    endif
+    if (<local.x> >= 488)
+      local.y += 107
+      local.x=
+    endif
+  endfor
+endif
+
+page 4
+local.s=
+local.x=
+local.y=
+dtext 400 55 1263 Purchase huntsman Supplies
+gumppictiled 245 80 475 10 2091
+while !(<isempty <def.huntsman_supply<dlocal.s>>>)
+  args=<def0.huntsman_supply<dlocal.s>>
+  button 250 <eval 107+<local.y>> 2117 2118 1 0 <eval (<local.s>+10101)>
+  dtext 270 <eval 105+<local.y>> 1000 <argv[1]>x <serv.itemdef.<argv[0]>.name>
+  dtext 625 <eval 105+<local.y>> 030 <argv[2]>gp
+  local.y += 20
+  local.s += 1
+endwhile
+
+page 5
+local.h=
+local.x=
+local.y=
+dtext 425 55 1263 Hire Huntsman Ally
+gumppictiled 245 80 475 10 2091
+while !(<isempty <def.huntsman_hunter<dlocal.h>>>)
+  args=<def0.huntsman_hunter<dlocal.h>>
+  button 250 <eval 107+<local.y>> 2117 2118 1 0 0
+  dtext 270 <eval 105+<local.y>> 1000 <serv.chardef.<argv[0]>.job>
+  dtext 625 <eval 105+<local.y>> 030 <argv[1]>gp
+  local.y += 20
+  local.h += 1
+endwhile
+
+page 6
+local.y=
+dtext 420 55 1263 Level Huntsman Ally
+gumppictiled 245 80 475 10 2091
+while !(<isempty <def.huntsman_hunter_level<dlocal.h>>>)
+  args=<def0.huntsman_hunter_level<dlocal.h>>
+  button 250 <eval 107+<local.y>> 2117 2118 1 0 0
+  dtext 270 <eval 105+<local.y>> 1000 <argv[0]>
+  dtext 625 <eval 105+<local.y>> 10 <argv[1]> exp
+  local.y += 20
+  local.h += 1
+endwhile
+
+[DIALOG d_huntsman_guild_menu button]
+
+onbutton=1,5
+src.ctag.viewing_huntsman_contracts=<argn1>
+sdialog d_huntsman_guild_menu 2
+
+onbutton=6
+src.ctag0.huntsman=<uid>
+src.targetf f_huntsman_dialog_add_cache
+src.sysmessage Select the horde cache to add
+
+onbutton=10,1000	//buy contract
+argn1 -= 10
+local.contract_level=<src.ctag0.viewing_huntsman_contracts>
+local.checksum=<src.ctag0.viewing_huntsman_contract_checksum>
+local.listsum=<eval (<serv.list.mondains_horde<dlocal.contract_level>.0>+<serv.list.mondains_horde<dlocal.contract_level>.<serv.list.mondains_horde<dlocal.contract_level>.count>>)><serv.list.mondains_horde<dlocal.contract_level>.count>
+
+ref1=<serv.list.mondains_horde<dlocal.contract_level>.<argn1>>	//UID of the horde monster
+
+if !(<ref1.isvalid>) || !(<ref1.ischar>) || !(<ref1.isevent.e_mondains_horde>)
+  src.sysmessage Looks like that contract is no longer available.
+  sdialog d_huntsman_guild_menu 2
+  return 1
+elseif (<local.checksum> != <local.listsum>)
+  src.sysmessage Your order cannot be fulfilled, please try again.
+  sdialog d_huntsman_guild_menu 2
+  return 1
+elseif (<eval <serv.time>-<src.findid.i_npc_guild_huntsman.tag.last_contract_buytime>> < <eval (<def0.huntsman_contract_buywait>*10)>) && !(<src.isgm>) 	//one hour between buying contracts
+  src.sysmessage You cannot buy another contract right now.
+  sdialog d_huntsman_guild_menu 2
+  return 1
+endif
+
+local.contract_cost=<eval (<ref1.tag0.base_difficulty>*9)>
+if (<src.gold> < <local.contract_cost>) && !(<src.isgm>)
+  src.sysmessage You cannot afford that
+  sdialog d_huntsman_guild_menu 2
+  return 1
+endif
+src.findid.i_npc_guild_huntsman.tag.last_contract_buytime=<serv.time>
+src.gold -= <local.contract_cost>
+f_hunstman_generate_contract <ref1>
+
+onbutton=10000,10100	//open cache
+argn1 -= 10000
+ref1=<serv.list.huntsman_<src>_caches.<argn1>>
+local.time_elapsed=<eval (<ref1.more2>-<ref1.timer>)>
+local.progress=<muldiv <local.time_elapsed>,100,<ref1.more2>>
+local.progress=<qval (100 < <local.progress>)?100:<local.progress>>
+if (<local.progress> < 100) && !(<src.isgm>)
+  src.sysmessage That cache is not ready to open yet
+  sdialog d_huntsman_guild_menu 3
+  return 1
+endif
+serv.list.huntsman_<src>_caches.<argn1>.remove
+ref1.id=i_backpack
+ref1.events=-t_mondains_horde_cache
+ref1.timer=-1
+//serv.log <src.name> opened a level <ref1.dmorey> cache
+for 0 <ref1.morem>
+  serv.newitem i_bag,1,<ref1>
+  ref2=<new>
+  serv.newitem { random_armor 1 random_weapon 1 },1,<ref2>
+  if (<ref1.morex> >= 101)
+    new.f_make_magic_<qval (<new.isarmor>)?armor:weapon>2 <eval <ref1.morey>*20>	//second tier magic items
+  else
+    new.f_make_magic_<qval (<new.isarmor>)?armor:weapon> <eval <ref1.morey>*20>		//original magic items
+  endif
+  //serv.log <new.name>(<new>) was placed inside the reward bag(<ref1>) 
+endfor
+//serv.log a total of <ref1.count> items were placed in the reward bag.
+ref1.bounce <src.findlayer.21>
+sdialog d_huntsman_guild_menu 3
+
+onbutton=10101,10200
+argn1 -= 10101
+args=<def0.huntsman_supply<dargn1>>
+if !(<src.gold> >= <argv[2]>)
+  src.sysmessage You cannot afford that
+  sdialog d_huntsman_guild_menu 4
+  return 1
+elseif (<eval <serv.time>-<src.findid.i_npc_guild_huntsman.tag.last_supply_buytime>> < <eval (<def0.huntsman_supply_buywait>*10)>) && !(<src.isgm>) 	//one hour between buying contracts
+  src.sysmessage You cannot purchase supplies again so soon.
+  sdialog d_huntsman_guild_menu 4
+  return 1
+endif
+src.findid.i_npc_guild_huntsman.tag.last_supply_buytime=<serv.time>
+src.gold -= <argv[2]>
+serv.newitem <argv[0]>,<argv[1]>,<src.findlayer.21>
+sound {036 037}
+sdialog d_huntsman_guild_menu 4
+
+
+//////////////////////////
+// Huntsman Contract
+
+[dialog d_huntsman_contract]
+150,150
+page 0
+ref1=<more2>
+if (strcmpi(<ref1.job>,<ref1.name>))
+  local.hasname=1
+endif
+resizepic 10 10 9380 325 200
+dtext 110 15 1263 Huntsman Contract
+dhtmlgump 45 40 260 135 0 0 A contract for a <ref1.job> <qval (<local.hasname>)?named <ref1.name>:> in <ref1.region.name>. Seek this vile monster out and put it to the blade, retrieve their horde cache and bring it to a Huntmaster, we will begin unbinding the spell that seals it and reveal what's inside.
+button 35 190 1209 1210 1 0 1
+dtext 55 187 1000 Abandon Contract
+dtext 205 187 0 -The Huntmaster
+
+
+[dialog d_huntsman_contract button]
+
+onbutton=0
+src.consume i_huntsman_gump_arrow
+
+onbutton=1
+ref1=<more2>
+if (strcmpi(<ref1.job>,<ref1.name>))
+  local.hasname=1
+endif
+src.sysmessage You have abandoned the contract on <ref1.job> <qval (<local.hasname>)?(<ref1.name>):>
+ref1.remove
+remove
+
+//////////////////////////////
+// Huntsman on the spot offer
+
+[dialog d_huntsman_spot_offer_notif]
+10,10
+page 0
+
+resizepic 10 10 2620 90 50
+gumppictiled 20 20 70 30 2624
+checkertrans 20 20 70 30
+button 20 20 30 30 1 0 1
+gumppic 20 20 30 1756
+dtext 28 15 1000 Contract
+dtext 30 28 1000 Avaialble
+
+[dialog d_huntsman_spot_offer_notif button]
+
+onbutton=1
+ref1=<uid>
+if !(<ref1.isvalid>) 
+  src.sysmessage Contract no longer available
+  return 1
+endif
+f_dialog_anim_slide_down 50,50,10,10,9380,325,200,d_huntsman_spot_offer
+
+[dialog d_huntsman_spot_offer]
+50,50
+page 0
+resizepic 10 10 9380 325 200
+dtext 100 15 1263 Huntsman Contract Offer
+dhtmlgump 45 40 260 135 0 0 Huntsman <src.name>,<def.br> Thou hath ventured upon <def0.mondains_horde_rank<dtag0.mondains_horde_rank>> <name> of Mondain's horde, and has't the opportunity to purchase a contract on them, doth thy accept?
+button 40 150 4018 4019 1 0 0
+dtext 80 150 1000 Decline
+button 220 150 4006 4007 1 0 1
+dtext 260 150 1000 Accept
+
+dtext 205 187 0 -The Huntmaster
+
+[dialog d_huntsman_spot_offer button]
+
+
+onbutton=1
+ref1=<uid>
+
+if !(<ref1.isvalid>) || !(<ref1.ischar>) || !(<ref1.isevent.e_mondains_horde>) || (<serv.list.mondains_horde<ref1.tag0.mondains_horde_rank>.findelem <ref1>> == -1)
+  src.sysmessage Looks like that contract is no longer available.
+  return 1
+endif
+
+local.contract_cost=<eval (<ref1.tag0.base_difficulty>*9)>
+if (<src.gold> < <local.contract_cost>) && !(<src.isgm>)
+  src.sysmessage You cannot afford that
+  sdialog d_huntsman_guild_menu 2
+  return 1
+endif
+src.findid.i_npc_guild_huntsman.tag.last_contract_buytime=<serv.time>
+src.gold -= <local.contract_cost>
+src.f_hunstman_generate_contract <ref1>
+
+
+
+
+[EOF]

@@ -1,0 +1,288 @@
+//House System by Soulless
+//v2.0
+//4:48 AM 10/14/2023
+//Thanks to XuN for adding such great hardcoded support making this script much easier :) 
+
+//add house for sale option
+//add option to place house for sale if property taxes go upaid
+//add changing house foundation for the custom houses
+//fix colors to get rid of pure black ones
+//make changing locks actually work, right now it just issues a new key
+
+//TODO: must not be a able to shop from a vendor at a house youre banned at (You can't shop from this home as you have been banned from this establishment.)
+//
+
+
+[defname house_system_settings]
+house_menu_era			2		//0=custom, 1=T2A, 2=Renaissnace, 3=Modern
+house_can_decay			0		//how many days without being refreshed will a house stand (default 30)
+house_decay_showtime		2		//0=don't show message, 1=show decay message, 2=show decay message and time left
+house_private_public		1		//switch house between private and public?
+house_private_noentry		0		//if your house is private, are people blocked from entry?
+house_guild_noentry		0		//can you not enter a guild house?
+house_storage_era		2		//0=custom, 1=T2A, 2=Renaissnace, 3=Modern
+house_storage_limit		1		//is there a maximum amount of storage for a house?
+house_storage_expansion		0		//allow players to increase their storage to this %. (default 60)
+house_lock_secure_limit		1		//limit the amount of lockdowns and secure containers a house can have
+house_allow_custom		1		//let players use the house customization to build
+house_change_sign		1		//let the players pick a custom house sign
+house_colored_signs		1		//lets the player select a color for their sign
+house_account_ownership		1		//if all players on an account are considered house owners
+house_keyless_doors		1		//doors will have access settings rather than keys
+house_can_bank			0		//friends and up can use the bank command in their house.
+house_friends_max		20		//how many friends can be on a house	//make this unlimited?
+house_coowners_max		8		//max amount of coowners allowed on a house
+house_items_decay		0		//items placed on the ground by friends but not locked down/secured will decay?
+house_switchwipe_lists		1		//do house access & ban lists get wiped when it's switched between public & private? 	(do we need this?) 
+house_sign_inside_only		1		//can only use your house sign from inside the house
+house_courtyard_recall		1		//can recall into coutyards? (castle only)
+house_courtyard_gate		1		//allow gates at house courtyards? (castle only)
+house_corpse_decay		60		//how many minutes till a friendly corpse decays in a house. (once opened reverts to standard corpse decay)
+house_placement_time		1*24*60		//minutes you must wait to place another house once a house placement is confirmed (default 7*24*60)
+house_placement_t2a		0		//allow placement in the lost lands?
+house_placement_ilshenar	0		//allow placement in the ilshenar facet? 
+
+//vendor settings do we need these? should be controlled in the vendor system yes? 
+
+//Taxes&Fees	//just things to eat up players money and make gold more valuable
+house_property_tax		0		//Cost in % of total house value for maintenance to keep it from collapsing, only works when house_can_decay is enabled. 
+house_redeed_fee		0		//Cost in % of the total house value to redeed.
+house_redeed_refund		0		//do you get a refund for any upgrades when redeeding?
+house_redeed_crate		0		//move items into a crate and place in bank when redeeding?
+house_demolish			1		//allow a user to demolish their house?
+house_demolish_refund		0		//% of money you get back from demolishing a house.
+
+[defname house_sign_posts]
+house_signpost_1 9
+house_signpost_2 29
+house_signpost_3 54
+house_signpost_4 90
+house_signpost_5 147
+house_signpost_6 169
+house_signpost_7 177
+house_signpost_8 204
+house_signpost_9 251
+house_signpost_10 257
+house_signpost_11 263
+house_signpost_12 298
+house_signpost_13 347
+house_signpost_14 424
+house_signpost_15 441
+house_signpost_16 466
+house_signpost_17 514
+house_signpost_18 600
+house_signpost_19 601
+house_signpost_20 602
+house_signpost_21 603
+house_signpost_22 660
+house_signpost_23 666
+house_signpost_24 672
+house_signpost_25 898
+house_signpost_26 970
+house_signpost_27 974
+house_signpost_28 982
+
+[defname house_sign_colors]
+house_sign_color_1 06d6
+house_sign_color_2 07ad
+house_sign_color_3 0641
+house_sign_color_4 0975
+house_sign_color_5 07a1
+house_sign_color_6 0770
+house_sign_color_7 079c
+house_sign_color_8 0455
+house_sign_color_9 0796
+house_sign_color_10 0665
+house_sign_color_11 07d1
+house_sign_color_12 0400
+house_sign_color_13 0750
+house_sign_color_14 0515
+house_sign_color_15 04de
+house_sign_color_16 0538
+house_sign_color_17 079b
+house_sign_color_18 04ab
+house_sign_color_19 04a9
+house_sign_color_20 04aa
+house_sign_color_21 0157
+house_sign_color_22 0676
+house_sign_color_23 0157
+house_sign_color_24 0235
+house_sign_color_25 06c0
+house_sign_color_26 04ac
+house_sign_color_27 0473
+house_sign_color_28 02e9
+house_sign_color_29 04a8
+house_sign_color_30 0490
+
+[defname house_available]		//Avaible houses on House Placement Tool
+house_classic_1			"m_stone_and_plaster_house"
+house_classic_2			"m_field_stone_house"
+house_classic_3			"m_small_brick_house"
+house_classic_4			"m_wooden_house"
+house_classic_5			"m_wood_and_plaster_house"
+house_classic_6			"m_thatched_roof_cottage"
+house_classic_7			"m_small_stone_workshop"
+house_classic_8			"m_small_marble_workshop"
+house_classic_9			"m_small_stone_tower"
+house_classic_10		"m_two_story_log_cabin"
+house_classic_11		"m_sandstone_house_with_patio"
+house_classic_12		"m_two_story_villa"
+house_classic_13		"m_brick_house"
+house_classic_14		"m_two_story_wood_and_plaster_house"
+house_classic_15		"m_two_story_stone_and_plaster_house"
+house_classic_16		"m_large_house_with_patio"
+house_classic_17		"m_marble_house_with_patio"
+house_classic_18		"m_tower"
+house_classic_19		"m_small_stone_keep"
+house_classic_20		"m_castle"
+
+house_custom_2story_1		"m_foundation_7x7"
+house_custom_2story_2		"m_foundation_7x8"
+house_custom_2story_3		"m_foundation_7x9"
+house_custom_2story_4		"m_foundation_7x10"
+house_custom_2story_5		"m_foundation_7x11"
+house_custom_2story_6		"m_foundation_7x12"
+house_custom_2story_7		"m_foundation_8x7"
+house_custom_2story_8		"m_foundation_8x8"
+house_custom_2story_9		"m_foundation_8x9"
+house_custom_2story_10		"m_foundation_8x10"
+house_custom_2story_11		"m_foundation_8x11"
+house_custom_2story_12		"m_foundation_8x12"
+house_custom_2story_13		"m_foundation_8x13"
+house_custom_2story_14		"m_foundation_9x7"
+house_custom_2story_15		"m_foundation_9x8"
+house_custom_2story_16		"m_foundation_9x9"
+house_custom_2story_17		"m_foundation_9x10"
+house_custom_2story_18		"m_foundation_9x11"
+house_custom_2story_19		"m_foundation_9x12"
+house_custom_2story_20		"m_foundation_9x13"
+house_custom_2story_21		"m_foundation_10x7"
+house_custom_2story_22		"m_foundation_10x8"
+house_custom_2story_23		"m_foundation_10x9"
+house_custom_2story_24		"m_foundation_10x10"
+house_custom_2story_25		"m_foundation_10x11"
+house_custom_2story_26		"m_foundation_10x12"
+house_custom_2story_27		"m_foundation_10x13"
+house_custom_2story_28		"m_foundation_11x7"
+house_custom_2story_29		"m_foundation_11x8"
+house_custom_2story_30		"m_foundation_11x9"
+house_custom_2story_31		"m_foundation_11x10"
+house_custom_2story_32		"m_foundation_11x11"
+house_custom_2story_33		"m_foundation_11x12"
+house_custom_2story_34		"m_foundation_11x13"
+house_custom_2story_35		"m_foundation_12x7"
+house_custom_2story_36		"m_foundation_12x8"
+house_custom_2story_37		"m_foundation_12x9"
+house_custom_2story_38		"m_foundation_12x10"
+house_custom_2story_39		"m_foundation_12x11"
+house_custom_2story_40		"m_foundation_12x12"
+house_custom_2story_41		"m_foundation_12x13"
+house_custom_2story_42		"m_foundation_13x8"
+house_custom_2story_43		"m_foundation_13x9"
+house_custom_2story_44		"m_foundation_13x10"
+house_custom_2story_45		"m_foundation_13x11"
+house_custom_2story_46		"m_foundation_13x12"
+house_custom_2story_47		"m_foundation_13x13"
+
+house_custom_3story_1		"m_foundation_9x14"
+house_custom_3story_2		"m_foundation_10x14"
+house_custom_3story_3		"m_foundation_10x15"
+house_custom_3story_4		"m_foundation_11x14"
+house_custom_3story_5		"m_foundation_11x15"
+house_custom_3story_6		"m_foundation_11x16"
+house_custom_3story_7		"m_foundation_12x14"
+house_custom_3story_8		"m_foundation_12x15"
+house_custom_3story_9		"m_foundation_12x16"
+house_custom_3story_10		"m_foundation_12x17"
+house_custom_3story_11		"m_foundation_13x14"
+house_custom_3story_12		"m_foundation_13x15"
+house_custom_3story_13		"m_foundation_13x16"
+house_custom_3story_14		"m_foundation_13x17"
+house_custom_3story_15		"m_foundation_13x18"
+house_custom_3story_16		"m_foundation_14x9"
+house_custom_3story_17		"m_foundation_14x10"
+house_custom_3story_18		"m_foundation_14x11"
+house_custom_3story_19		"m_foundation_14x12"
+house_custom_3story_20		"m_foundation_14x13"
+house_custom_3story_21		"m_foundation_14x14"
+house_custom_3story_22		"m_foundation_14x15"
+house_custom_3story_23		"m_foundation_14x16"
+house_custom_3story_24		"m_foundation_14x17"
+house_custom_3story_25		"m_foundation_14x18"
+house_custom_3story_26		"m_foundation_15x10"
+house_custom_3story_27		"m_foundation_15x11"
+house_custom_3story_28		"m_foundation_15x12"
+house_custom_3story_29		"m_foundation_15x13"
+house_custom_3story_30		"m_foundation_15x14"
+house_custom_3story_31		"m_foundation_15x15"
+house_custom_3story_32		"m_foundation_15x16"
+house_custom_3story_33		"m_foundation_15x17"
+house_custom_3story_34		"m_foundation_15x18"
+house_custom_3story_35		"m_foundation_16x11"
+house_custom_3story_36		"m_foundation_16x12"
+house_custom_3story_37		"m_foundation_16x13"
+house_custom_3story_38		"m_foundation_16x14"
+house_custom_3story_39		"m_foundation_16x15"
+house_custom_3story_40		"m_foundation_16x16"
+house_custom_3story_41		"m_foundation_16x17"
+house_custom_3story_42		"m_foundation_16x18"
+house_custom_3story_43		"m_foundation_17x12"
+house_custom_3story_44		"m_foundation_17x13"
+house_custom_3story_45		"m_foundation_17x14"
+house_custom_3story_46		"m_foundation_17x15"
+house_custom_3story_47		"m_foundation_17x16"
+house_custom_3story_48		"m_foundation_17x17"
+house_custom_3story_49		"m_foundation_17x18"
+house_custom_3story_50		"m_foundation_18x13"
+house_custom_3story_51		"m_foundation_18x14"
+house_custom_3story_52		"m_foundation_18x15"
+house_custom_3story_53		"m_foundation_18x16"
+house_custom_3story_54		"m_foundation_18x17"
+house_custom_3story_55		"m_foundation_18x18"
+
+[defname house_access_level]
+house_access_owner      = 0
+house_access_coowner    = 1
+house_access_friend     = 2
+house_access_guild      = 3
+house_access_all        = 4
+
+[defname house_container_access_level]
+house_container_access_all       = 0
+house_container_access_friend    = 1
+house_container_access_coowner   = 2
+house_container_access_owner   	 = 3
+
+[defname house_types]
+house_private	= 0
+house_public	= 1
+house_guild	= 2
+
+[DEFNAME house_transfer_types]
+transfer_nothing	= 0	// Do not transfer any item to the Moving Crate, the crate will still be moved if uid is given.
+transfer_all		= 01	// Transfer LockDowns, Addons and every other item found inside a house that is not a component of it.
+transfer_lockdowns	= 02	// Transfer LockDowns.
+transfer_addon		= 04	// Transfer Addons.
+transfer_secured	= 08	// Transfer Secured Containers.
+
+[DEFNAME house_privs]
+hp_none         = 0
+hp_owner        = 1
+hp_coowner      = 2
+hp_friend       = 3
+hp_accessonly   = 4
+hp_ban          = 5
+hp_vendor       = 6
+hp_guild        = 7
+
+[defname house_decay_stages]
+house_decay_stage0	Like New
+house_decay_stage1	Slightly Worn
+house_decay_stage2	Somewhat Worn
+house_decay_stage3	Fairly Worn
+house_decay_stage4	Greatly Worn
+house_decay_stage5	In Danger Of Collapsing
+house_decay_stage6	Demolation Pending
+house_decay_stage7	Ageless
+
+[EOF]

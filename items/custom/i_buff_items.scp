@@ -1,0 +1,21 @@
+//Buff Items by Soulless
+//v1.0
+//2:28 AM 1/31/2023
+
+[itemdef i_roast_dragons]
+defname=i_roast_dragons
+name=dragons roast
+id=i_bowl_stew_lg
+type=t_food
+skillmake=cooking 995
+resources=i_ribs_raw 19,i_reag_dragon_blood 4,i_bottle_ale 1
+
+on=@create
+morex=s_buff_hitchance
+
+
+
+[EOF]
+
+
+

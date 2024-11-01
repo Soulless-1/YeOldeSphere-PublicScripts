@@ -1,0 +1,102 @@
+//Help Menu by Soulless
+//v1.0
+//8:38 PM 8/8/2018
+
+[plevel 1]
+help
+commands
+
+[function help]
+sdialog d_gmpage
+
+[function HelpPage]
+sdialog d_gmpage
+
+[DIALOG d_gmpage]
+100,100
+
+resizepic 0 0 9200 590 450 //Stone background
+resizepic 10 10 9350 570 430	//White paper background
+
+dtext 100 20 1263 Hello <src.name>, Welcome to the <serv.name> Help Menu
+
+
+resizepic 40 65 2620 175 315 // Gold trimmed box
+gumppic 40 120 12 1015
+gumppic 40 120 50987 99
+
+
+
+button 60 85 1210 1209 1 0 1
+dtext 80 80 1000 Server Information
+
+button 60 110 1210 1209 1 0 2
+dtext 80 105 1000 Server Version
+
+button 60 135 1210 1209 1 0 3
+dtext 80 130 1000 Server Website
+
+
+dhtmlgump 230 80 270 40 0 0 1) Another player is harrassing you and you need to contact a gm.
+button 520 85 4006 4007 1 0 4
+
+dhtmlgump 230 120 270 40 0 0 2) You need to contact a admin for a problem a gm can't help with.
+button 520 125 4006 4007 1 0 5
+
+dhtmlgump 230 160 270 40 0 0 3) Report a bug/issue that you have discovered while playing.
+button 520 165 4006 4007 1 0 6
+
+dhtmlgump 230 200 270 40 0 0 4) My character is stuck and I need to teleport to a town.
+button 520 205 4006 4007 1 0 7
+
+dhtmlgump 230 240 270 40 0 0 5) Other page a gm for reasons not listed above.
+button 520 245 4006 4007 1 0 8
+
+dhtmlgump 230 280 270 40 0 0 6) Open player command list.
+button 520 285 4006 4007 1 0 9
+
+if (<src.tag0.young>)
+  dtext 220 320 1263 7) Manually revoke your young player status.
+  button 500 325 4024 4023 1 0 10
+endif
+
+dtext 450 410 1263 CLOSE
+button 500 410 4006 4007 1 0 9000
+
+//dtext 60 360 1263 Repeated pages or abuse of this system will get you jailed or banned.
+
+
+[dialog d_gmpage button]
+
+onbutton=1
+src.information
+
+onbutton=2
+src.version
+
+onbutton=3
+src.weblink <serv.url>
+
+onbutton=4,6
+//src.gmpage
+src.sdialog d_player_page
+
+onbutton=7
+src.iamstuck
+
+onbutton=8
+//src.gmpage
+src.sdialog d_player_page
+
+onbutton=9
+src.commands
+
+onbutton=10
+sdialog d_renounce_young_status
+
+onbutton=9000	//closing menu
+
+
+[eof]
+
+

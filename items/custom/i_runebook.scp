@@ -1,0 +1,465 @@
+//Runebook 1.5
+//Scripted by Soulless
+//uses spheres internal functions for recall/gate and just prevents skillcheck and consumption of reags/ mana for runebook charge
+
+//runebooks can only have 16 charges
+//runebooks are only charged by the recall scroll
+
+//toadd: 7 seconds between recalls using the charges?
+
+
+[itemdef 022c5]
+defname=i_runebook
+name=runebook
+type=t_rune
+skillmake=inscription 45.0
+resources=1 i_scroll_recall, 1 i_scroll_gate_travel, 1 i_rune_marker, 8 i_scroll_blank
+value=212
+weight=1
+tdata2=043
+tevents=+t_runebook
+category=Other 
+subsection=Books
+description=Runebook 
+
+on=@create
+attr=attr_newbie|attr_blessed|attr_magic
+color=045e
+more2l=5
+more2h=16
+
+[typedef t_runebook]
+
+//on=@click
+//name=a <qval (<tag0.runes> <= 0)?Blank:> Runebook
+
+on=@dclick
+if (<topobj.ischar>) && (<topobj> != <src>) && !(<src.isgm>) 
+  src.sysmessage You can't use this where it is
+  return 1
+endif
+attr |= attr_newbie
+src.dialogclose d_runebook
+dialog d_runebook
+src.soundp 055
+return 1
+
+on=@spelleffect
+type=t_rune
+//timerf 0,morep=<tag0.default_location>	//always reset it back to default location (shouldnt be needed now, we're using a special runemarker)
+
+on=@dropon_self
+/////ADD CHARGE TO THE RUNEBOOK
+if (<argo.baseid>==i_scroll_recall) 	//|| (<argo.baseid>==i_scroll_gate_travel)
+  if (<more2l> >= <more2h>)
+    src.sysmessage This runebook can hold no more charges.
+    return 1
+  endif
+
+  //local.charges += <eval (<argo.amount> * <qval <argo.baseid>==i_scroll_recall?1:2>)>		//gate scrolls worth two charges
+  local.charges=<argo.amount>
+  if (<eval (<local.charges>+<more2l>)> > <more2h>)
+    local.charges=<eval (<more2h>-<more2l>)>
+  endif
+  //local.charges=<eval (<local.charges>/<qval (<argo.baseid>==i_scroll_recall)?1:2>)>
+
+  more2l += <local.charges>
+  argo.consume=<local.charges>
+  src.sysmessage you've added <dlocal.charges> charges to the runebook.
+  return 1
+endif
+
+/////ADD RUNE TO THE RUNEBOOK
+if (<argo.type> != t_rune) || (<argo.baseid>==i_runebook)		//can only hold runes (not a runebook which is technically a rune)
+  src.sysmessage Can't add this to the runebook
+  return 1
+endif
+
+if !(<argo.morep>) || (<argo.morex> == -1) || (<argo.morey> == -1)		//runes must have a marked location
+  src.sysmessage That rune does not have a marked location.
+  return 1
+endif
+
+if (<tag0.runes> >= 16)
+  src.sysmessage The runebook is full
+  return 1
+endif
+
+for 16
+  if (<isempty <tag.rune<dlocal._for>>>)
+    tag0.rune<dlocal._for>=<argo.name>,<argo.morep>
+    tag0.runes += 1
+    src.sysmessage You scribe the rune into slot <dlocal._for>
+    argo.remove
+    return 1
+  endif
+endfor
+
+[dialog d_runebook]
+200,200
+
+page 0
+	
+gumppic 10 10 2200 	//runebook background
+
+dtext 50 42 0 Charges:      <dmore2l>	//charges
+for 8
+  gumppic <eval 30+(<local._for>*16)> 53 58
+endfor
+
+dtext 200 42 0 Max Charges:   <dmore2h>		//max charges
+for 8
+  gumppic <eval 180+(<local._for>*16)> 53 58
+endfor
+
+for 1 8		//rune page buttons
+  button <eval <qval <local._for> < 5?5:30>+(<local._for>*35)> 187 22<eval 24+<local._for>> 22<eval 24+<local._for>> 0 <eval <local._for>+1>
+endfor
+
+page 1
+
+button 60 17 2472 2473 1 0 1		//rename button
+dtext 90 22 0 Rename book
+
+dcroppedtext 205 20 90 15 0 <qval (<isempty <tag.runebook_name>>)?:<tag.runebook_name>>
+
+button 305 15 2206 2206 0 2		//page forward
+
+for 1 16		//list of runes
+  button <qval <local._for> < 9?40:200> <eval 50+((<local._for>-<qval <local._for> < 9?0:8>)*15)> 2104 2103 1 0 <eval <local._for>+1>
+  args=<tag0.rune<dlocal._for>>
+  if (<isempty <tag.rune<dlocal._for>>>) 	//empty
+    dtext <qval <local._for> < 9?55:215> <eval 45+((<local._for>-<qval <local._for> < 9?0:8>)*15)> 0 Empty
+  elseif !(<argv[1]>) || !(<argv[2]>) || (<argv[1]> == -1) || (<argv[2]> == -1)	//invalid coords or unmarked rune (this has happened before)
+    tag0.rune<dlocal._for>=
+    tag0.runes -= 1
+    serv.newitem i_rune_marker
+    new.name=<argv[0]>
+    new.morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+    new.bounce <src>
+    src.sysmessage Invalid rune found in slot <dlocal._for>, dropping <argv[0]>.
+    dtext <qval <local._for> < 9?55:215> <eval 45+((<local._for>-<qval <local._for> < 9?0:8>)*15)> 0 Empty
+    serv.log removing invalid rune #<dlocal._for> from runebook <uid>: <args>
+  else						//properly marked rune
+    dcroppedtext <qval <local._for> < 9?55:215> <eval 45+((<local._for>-<qval <local._for> < 9?0:8>)*15)> 110 15 <f_get_facet_hue <argv[4]>> <argv[0]>
+  endif
+endfor
+
+
+////PAGE 2,9
+for 2 9
+page <local._for>
+
+button 35 15 2205 2205 0 <eval (<local._for>-1)>		//page back
+
+//FIRST RUNE ON PAGE
+dtext 80 15 0 Page <eval ((<local._for>*2)-3)>		//page listing
+button 75 35 2361 2361 1 0 <eval (500+(<local._for>*2)-3)> 
+dtext 90 30 0 Set Default
+args=<tag0.rune<eval ((<local._for>*2)-3)>>
+if (<isempty <tag.rune<eval ((<local._for>*2)-3)>>>)	//only list the run if its in the runebook
+  dtext 55 60 0 Empty
+else
+  button 40 65 2104 2103 2 0 <eval ((<local._for>*2)-2)>
+  dcroppedtext 55 60 110 15 <f_get_facet_hue <argv[4]>> <argv[0]>
+  dhtmlgump 50 78 130 40 0 0 <sextantp <argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>>
+  button 45 112 0985 0986 1 0 <eval (400+(<local._for>*2)-3)> 			//drop first rune
+  dtext 60 110 0 Drop Rune
+
+  button 45 140 2271 2271 1 0 <eval (100+(<local._for>*2)-3)>   			//recall
+  button 115 140 2291 2291 1 0 <eval (200+(<local._for>*2)-3)> 
+  //button 45 135 2103 2104 1 0 <eval (100+(<local._for>*2)-3)>
+  //dtext 60 130 0 Recall 
+  //button 45 155 2103 2104 1 0 <eval (200+(<local._for>*2)-3)>
+  //dtext 60 150 0 Gate Travel
+  //button 45 175 2103 2104 1 0 <eval (300+(<local._for>*2)-3)>
+  //dtext 60 170 0 Sacred Journey
+endif
+
+//SECOND RUNE ON PAGE
+dtext 250 15 0 Page <eval (<local._for>*2)-2>		//page listing
+button 225 35 2361 2361 1 0 <eval (500+(<local._for>*2)-2)> 
+dtext 240 30 0 Set Default
+args=<tag0.rune<eval ((<local._for>*2)-2)>>
+if (<isempty <tag.rune<eval ((<local._for>*2)-2)>>>)		//only list the run if its in the runebook
+  dtext 215 60 0 Empty
+else
+  button 200 65 2104 2103 2 0 <eval ((<local._for>*2)-1)>
+  dcroppedtext 215 60 110 15 <f_get_facet_hue <argv[4]>> <argv[0]>
+  dhtmlgump 210 78 130 40 0 0 <sextantp <argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>>
+  button 205 112 0985 0986 1 0 <eval (400+(<local._for>*2)-2)>  			//drop second rune
+  dtext 220 110 0 Drop Rune
+
+  button 210 140 2271 2271 1 0 <eval (100+(<local._for>*2)-2)>   			//recall
+  button 280 140 2291 2291 1 0 <eval (200+(<local._for>*2)-2)> 
+  //button 205 135 2103 2104 1 0 <eval (100+(<local._for>*2)-2)> 
+  //dtext 220 130 0 Recall
+  //button 205 155 2103 2104 1 0 <eval (200+(<local._for>*2)-2)> 
+  //dtext 220 150 0 Gate Travel
+  //button 205 175 2103 2104 1 0 <eval (300+(<local._for>*2)-2)> 
+  //dtext 220 170 0 Sacred Journey
+endif
+
+if (<local._for> < 9)
+  button 305 15 2206 2206 0 <eval <local._for>+1>	//page forward
+endif
+endfor
+
+
+[dialog d_runebook button]
+
+onbutton=1		//rename runebook
+src.sysmessage What would you like to name this runebook?
+src.ctag.runebook=<uid>
+promptconsole f_runebook_rename
+	
+onbutton=2,17		//use a charge
+if !(<more2l>) 
+  src.sysmessage There are no charges left on that item.
+  return 1
+endif
+argn1 -= 1
+args=<tag0.rune<dargn1>>
+serv.newitem i_rune_marker_special		
+new.morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>	
+new.equip
+new.timer=<eval (<serv.spell.32.cast_time>/10)+1>
+src.act=<new>	//set act to newly created rune marker
+src.events=+e_using_runebook_charge
+src.ctag0.runebook=<uid>
+//morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+//src.act=<uid>	//set act to runebook itself
+src.act=<new>	//set act to newly created rune marker
+src.actarg1=32		//set spell to recall
+src.actprv=<src>
+src.action=25		//set action to magery
+src.act.more1=50
+
+onbutton=100,116 	//use recall spell
+if !(<src.isgm>) 
+  if (<src.magery> < <serv.spell.32.skillreq>) 
+    src.sysmessage That is beyond your ability.
+    return 1
+  elseif !(<src.findtype.t_spellbook>) 
+    src.sysmessage You don't have a spellbook handy.
+    return 1
+  elseif !(<src.findtype.t_spellbook.more1>&080000000)
+    src.sysmessage The spell is not in your spellbook.
+    return 1
+  elseif (<src.mana> < <serv.spell.32.manause>)
+    src.sysmessage You lack sufficient mana for this spell.
+    return 1
+  elseif !(<src.restest <serv.spell.32.resources>>) 
+    args=<serv.spell.32.resources>
+    for r 1 <argv>
+      if !(<src.restest <serv.spell.32.resources.<dlocal.r>.key>>)
+        args=<serv.itemdef.<serv.spell.32.resources.<dlocal.r>.key>.name>
+      endif
+    endfor
+    src.sysmessage You lack the <args> for this spell.
+    return 1
+  endif
+endif
+argn1 -= 100
+args=<tag0.rune<dargn1>>
+serv.newitem i_rune_marker_special
+new.morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>	
+new.equip
+new.timer=<eval (<serv.spell.32.cast_time>/10)+1>
+src.act=<new>	//set act to newly created rune marker
+//morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+//src.act=<uid>	//set act to the rune itself
+src.actarg1=32		//set spell to recall
+src.actprv=<src>
+src.action=25		//set action to magery
+src.act.more1=50
+
+onbutton=200,216	//use gate spell
+if !(<src.isgm>) 
+  if (<src.magery> < <serv.spell.52.skillreq>) 
+    src.sysmessage That is beyond your ability.
+    return 1
+  elseif !(<src.findtype.t_spellbook>) 
+    src.sysmessage You don't have a spellbook handy.
+    return 1
+  elseif !(<src.findtype.t_spellbook.more2>&080000)
+    src.sysmessage The spell is not in your spellbook.
+    return 1
+  elseif (<src.mana> < <serv.spell.52.manause>)
+    src.sysmessage You lack sufficient mana for this spell.
+    return 1
+  elseif !(<src.restest <serv.spell.52.resources>>) 
+    args=<serv.spell.52.resources>
+    for r 1 <argv>
+      if !(<src.restest <serv.spell.52.resources.<dlocal.r>.key>>)
+        args=<serv.itemdef.<serv.spell.52.resources.<dlocal.r>.key>.name>
+      endif
+    endfor
+    src.sysmessage You lack the <args> for this spell.
+    return 1
+  endif
+endif
+argn1 -= 200
+args=<tag0.rune<dargn1>>
+serv.newitem i_rune_marker_special
+new.morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+new.equip
+new.timer=<eval (<serv.spell.32.cast_time>/10)+1>
+//morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+//src.act=<uid>	//set act to the runebook itself
+src.act=<new>	//set act to newly created rune marker
+src.actarg1=52		//set spell to gate
+src.actprv=<src>
+src.action=25		//set action to magery
+src.act.more1=50
+
+
+onbutton=300,316
+//sacred journey....
+
+onbutton 400,416		//create and drop a rune
+if (<topobj> != <src>)
+  src.sysmessage You must have the runebook on you.
+  return 1
+endif
+argn1 -= 400
+local.r=<argn1>			//keep track of the rune
+args=<tag0.rune<dargn1>>
+tag0.rune<dlocal.r>=
+tag0.runes -= 1
+if (<tag0.runes> < 0)
+  tag0.runes=0
+endif
+serv.newitem i_rune_marker
+new.name=<argv[0]>
+new.morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+new.bounce <src>
+new.resendtooltip
+
+onbutton=500,516
+argn1 -= 500
+sdialog d_runebook <eval ((<argn1>+1)/2)+1>
+args=<tag0.rune<dargn1>>
+tag0.default_location=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+morep=<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>
+src.sysmessage You have set the default location to <args>
+
+
+[typedef t_remove_rune_oncast]
+
+on=@spelleffect
+remove
+
+on=@timer	//just incase there is a timer that removes it
+remove
+return 1
+
+[events e_using_runebook_charge]	//sets spell difficulty to 0 and skips reagent and mana consumption
+
+on=@spellcast
+argn2=0
+
+on=@spellselect		//do not consume mana or reagents when using runebook charges
+ref1=<qval (<argo.ischar>)?<argo.ctag0.runebook>:>
+if (<ref1.isvalid>) 
+  argn2=0
+  ref1.more2l -= 1
+  argo.ctag0.runebook=
+  argo.events=-e_using_runebook_charge
+  return 6
+endif
+
+on=@spellfail
+argo.events=-e_using_runebook_charge
+
+[function f_runebook_rename]
+ref1=<ctag0.runebook>
+src.ctag.runebook=
+if (<isempty <args>>) || (<isnum <args>>)
+  sysmessage The name entered was either invalid or empty.
+  return 1
+endif
+
+ref1.tag0.runebook_name=<args>
+sysmessage Runebook renamed to <args>
+
+
+/////////////////////
+//Recall Runes
+
+[ITEMDEF 01f14]
+//recall rune
+//DEFNAME2=RUNE
+//DEFNAME2=MARKER_TALISMAN_1
+DEFNAME=i_rune_marker
+TYPE=T_RUNE
+VALUE={16 20}
+//RESOURCES=
+WEIGHT=1
+CATEGORY=Provisions - Alchemy & Magic
+SUBSECTION=Magical Items
+DESCRIPTION=Recall Rune
+DUPELIST=01f15,01f16,01f17
+
+[typedef t_rune]
+
+ON=@Create
+more1=50
+
+on=@spelleffect
+more1=50
+
+on=@dclick
+if (<topobj> != <src.uid>)
+  src.sysmessage That must be in your pack for you to use it.
+  return 1
+endif
+
+src.ctag.rune=<uid>
+src.sysmessage Please enter a description for this marked object:
+src.promptconsole f_rune_rename
+return 1
+
+[function f_rune_rename]
+ref1=<src.ctag0.rune>
+src.ctag.rune=
+
+if !(<ref1.isvalid>) || !(<ref1.morep>)
+ sysmessage This rune is not yet marked.
+ return 1
+//elseif (<isempty <args>>) || (<isnum <args>>)
+  //sysmessage The name entered was either invalid or empty. Rune names can not be a number
+  //return 1
+endif
+
+ref1.name="<args>"
+src.sysmessage The etching on the rune has been changed.
+
+[function f_get_facet_hue]
+if (<isempty <args>>)
+  return 81
+elseif (<args>==1)
+  return 10
+elseif (<args>==3)
+  return 1102
+elseif (<args>==4)
+  return 1154
+elseif (<args>==5)
+  return 028
+endif
+
+[itemdef i_rune_marker_special]
+id=i_memory
+type=t_eq_script	//t_rune_marker
+layer=layer_special
+name=Runebook Recall/Gate
+
+on=@spelleffect
+type=t_rune
+
+on=@timer
+remove
+return 1
+
+
+[EOF]

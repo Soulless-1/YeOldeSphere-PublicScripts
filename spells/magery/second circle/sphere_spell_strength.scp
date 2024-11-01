@@ -1,0 +1,30 @@
+[SPELL 16]
+DEFNAME=s_strength
+NAME=Strength
+SOUND=snd_spell_strength
+RUNES=UM
+CAST_TIME=1.0
+RESOURCES=i_reag_mandrake_root,i_reag_nightshade
+RUNE_ITEM=i_rune_strength
+SCROLL_ITEM=i_scroll_strength
+FLAGS=spellflag_dir_anim|spellflag_targ_char|spellflag_fx_targ|spellflag_good|spellflag_playeronly|spellflag_bless
+EFFECT_ID=i_fx_sparkle
+EFFECT=5,15
+LAYER=layer_spell_stats
+DURATION=2*60.0,3*60.0
+MANAUSE=6
+SKILLREQ=MAGERY 10.0
+INTERRUPT=100.0,100.0
+
+//Temporarily raise your target's strength. The effectiveness of this spell is based on the caster's Magery
+//[Magery/10, rounded down = # of stat points gained] (ie: at 85 magery, your Strength spell would add 8 Strength for the duration of the spell.)
+on=@effect
+consume i_rune_strength
+ref1=<qval (!<argo>)?<src>:<argo>>
+local.spell_strength=<ref1.f_spell_get_strength>
+local.effect=<eval (<local.spell_strength>/10)/10>
+if (<ref1.isitem>) && (<ref1.type>==t_potion) && (<serv.itemdef.<ref1.baseid>.tag0.cooldown> >= 0)
+  timerf 0,src.findlayer.50.timer=<serv.itemdef.<ref1.baseid>.tag0.cooldown>
+endif
+
+[EOF]

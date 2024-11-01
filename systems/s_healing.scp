@@ -1,0 +1,418 @@
+//Healing System by Soulless
+//v1.0
+//2:35 PM 4/5/2018
+//add other things to this? maybe festering or bleeding wounds
+
+//do we want to use the internal skill and triggers to control bandaging? 
+//if so it would mean that you can only do healing by itself, and you cannot heal while swinging a weapon or casting a spell
+
+
+//when resurrecting someones bonded pet:
+// The owner has been asked to sanctify the resurrection.
+// Neither the owner or friends of the pet are nearby to sanctify the resurrection.
+
+//fail messages?:
+// You fail to resurrect the creature.
+
+
+[defname Healing_system_settings]
+healing_isaction			0	//use skill based action version of healing? (you can't do another action while using the healing action)
+healing_era				2	//era to use for healing mechanics, 1=T2A, 2=Renaissance
+healing_self_timer			150	//base timer for healing self (T2A Only) (these are all in 10th decimal)
+healing_other_timer			50	//base timer for healing others (T2A Only)	
+healing_self_cure_timer			180	//base timer for curing yourself (T2A Only)
+healing_other_cure_timer		60	//base timer for curing others (T2A Only)
+healing_res_timer			100	//base timer for resurrection (T2A Only)
+
+healing_resurrect			800	//can resurrect ghosts at what healing and anatomy skill% (0 = disabled)
+healing_cure				600	//healing can cure poisons at what healing and anatomy skill% (0 = disabled)
+healing_interrupt			0	//healing can be interrupted (stopped entirely on damage)
+healing_fingers_slip			1	//fingers can slip when damaged (healing decreased by 33%)
+healing_fingers_slip_pvm		1	//amount of damage for an NPC to cause fingers slipping (26 default) (0 = disable)
+healing_fingers_slip_pvp		1	//amount of damage for a player to cause fingers slipping (19 default) (0 = disable)
+healing_through_poison			0	//healing carries through poison
+healing_bloody_bandage			1	//players receive bloody bandage? 0=never, 1=failure, 2=always
+healing_bloody_bandage_chance		25	//what % chance will bloody bandage be given
+
+
+[plevel 1]
+bandageself
+
+[typedef t_bandage]
+
+on=@dclick
+if (<topobj> != <src>)
+  src.sysmessage You cannot use those where they are.
+  return 1
+elseif (<src.findid.i_applying_bandage>) && (<src.findid.i_applying_bandage.timer> != -1)
+  //src.sysmessage You must wait to perform another action.
+  //src.sysmessage You are already bandaging <qval (<src.findid.i_applying_bandage.link>==<src>)?yourself:someone>.
+  src.sysmessage You are already applying a bandage.
+  return 1
+endif
+src.consume i_applying_bandage		//get rid of any old ones
+src.sysmessage Who will you use the bandages on?
+target
+return 1
+
+on=@targon_item
+src.sysmessage Bandages cannot be used on that.
+return 1
+
+on=@targon_char
+if (<def0.healing_isaction>)	//this is here so we can keep the healing skill in line with ALL other skills using the action on the shard.
+  src.act=<src.targ>	//patient
+  src.actprv=<uid>	//the bandages
+  src.action=17		//healing skill	
+  return 1
+elseif (<src.flags>&statf_freeze)
+  src.sysmessage You can't do much in your current state.
+  return 1
+elseif !(<src.targ.canseelos>)
+  src.sysmessage They cannot be seen.
+  return 1
+elseif (<src.distance <src.targ>> > 2)
+  src.sysmessage That is too far away.
+  return 1
+elseif (<src.targ.hits> >= <src.targ.maxhits>) && !(<src.targ.flags>&statf_poisoned) && !(<src.targ.flags>&statf_dead)
+  src.sysmessage That being is not damaged.	//that target does not require healing.
+  return 1
+elseif ((<tag0.young>) && !(<src.targ.tag0.young>)) || (<src.notogetflag <src.targ>> == 5) 	//young player bandaging player, or enemy (orange)
+  src.sysmessage You cannot perform beneficial acts on your target.
+  return 1
+elseif (<src.notogetflag <src.targ>> == 5)	//cannot cast beneficial spells on an enemy
+  if (<serv.spell.<argn1>.flags>&spellflag_good) || (<serv.spell.<argn1>.flags>&spellflag_bless) || (<serv.spell.<argn1>.flags>&spellflag_heal)
+    src.sysmessage You cannot perform beneficial acts on your target.
+    return 1
+  endif
+elseif (<src.targ.flags>&statf_poisoned) && (<src.targ.hits> >= <src.targ.maxhits>)	//they are just poisoned
+  if !(<def0.healing_cure>) || (<src.<qval <src.targ.ishumanoid>?healing:veterinary>> < <def0.healing_cure>) || (<src.anatomy> < <def0.healing_cure>)
+    src.sysmessage You are unable to cure <qval <src.targ>==<src>?yourself:your patient>.
+    return 1
+  endif
+elseif (<src.targ.flags>&statf_dead)
+  if !(<def0.healing_resurrect>) || (<src.<qval <src.targ.ishumanoid>?healing:veterinary>> < <def0.healing_resurrect>) || (<src.anatomy> < <def0.healing_resurrect>)
+    src.sysmessage You are unable to resurrect <qval <src.targ>==<src>?yourself:your patient>.
+    return 1
+  endif
+elseif (<src.targ.flags>&statf_dead) && !(<src.targ.f_resurrect_location_valid>)
+  src.sysmessage Target cannot be resurrected at that location.
+  src.targ.sysmessage Thou can not be resurrected there!
+  return 1
+//elseif (in khaldun)
+//src.sysmessage The veil of death in this area is too strong and resists thy efforts to restore life.
+//return 1
+endif
+
+//src.emote <qval (<src.targ>==<src>)?apply a bandage:apply a bandage to <src.targ.name>>
+src.say @025,3,0,0 *<qval (<src.targ>==<src>)?applying bandage:applying bandage to <src.targ.name>>*
+if (<src.targ> != <src>) 
+  if (<src.targ.notogetflag <src>> >= 4) && (<src.targ.notogetflag <src>> <= 6)
+    src.criminal	
+  endif
+endif
+
+src.events=+e_bandaging
+//src.sysmessage You begin applying a bandage to<qval <src.targ>==<src>? yourself: <src.targ.name>>.
+src.sysmessage You begin applying the bandages.
+if (<src.targ> != <src>)
+  src.targ.sysmessage <src.name> : Attempting to heal you.
+endif
+src.consume i_applying_bandage
+serv.newitem i_applying_bandage
+consume 1 i_bandage
+//local.min_delay=<qval (<src.targ>==<src>)?90:30>	//minimum time for healing self and others
+//local.max_delay=<qval (<src.targ>==<src>)?125:50>	//maximum time for healing self and others
+new.timerd=<src.f_bandaging_delay <src.targ>>
+//new.timerd=<qval (<new.timerd> < <local.min_delay>)?<local.min_delay>:<new.timerd>>		//cannot exceed certain healing delays
+local.n=<eval ((<qval <src.targ.ishumanoid>?<src.anatomy>:<src.animallore>>/6)+(<qval <src.targ.ishumanoid>?<src.healing>:<src.veterinary>>/6))+3>
+local.x=<eval ((<qval <src.targ.ishumanoid>?<src.anatomy>:<src.animallore>>/6)+(<qval <src.targ.ishumanoid>?<src.healing>:<src.veterinary>>/3))+10>
+new.morex=<R<local.n>/10,<local.x>/10>
+new.link=<src.targ>
+src.equip <new>
+return 1
+
+[itemdef i_applying_bandage]
+defname=i_applying_bandage
+id=i_bandage
+name=Applying Bandage
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+topobj.events=-e_bandaging
+
+if !(<link.isvalid>) || !(<topobj.isvalid>) || !(<topobj.isonline>)
+  remove
+  return 1
+elseif !(<topobj.canseelos <link>>)
+  topobj.sysmessage You cannot see your target.
+  remove
+  return 1
+elseif (<topobj.flags>&statf_dead)	//died before finishing
+  if !(<link.f_resurrect_location_valid>)
+    topobj.sysmessage Target cannot be resurrected at that location.
+    link.sysmessage Thou can not be resurrected there!
+    return 1
+  endif
+  topobj.sysmessage You were unable to finish your work before you died.
+  remove
+  return 1
+elseif (<topobj.distance <link>> > 2)
+  topobj.sysmessage You did not stay close enough to heal your patient!
+  remove
+  return 1
+
+endif
+
+local.healingskill1=<qval <link.ishumanoid>?healing:veterinary>
+local.healingskill2=<qval <link.ishumanoid>?anatomy:animallore>
+
+if !(<topobj.f_skillsucceed <qval <link.ishumanoid>?healing:veterinary>>)	//check for success
+  color=1	//failed
+endif
+
+if (<color> >= 1) 	//failed
+  //topobj.sysmessage You fail to bandage <qval <link>==<topobj>?yourself:<link.name>>.
+  topobj.sysmessage You apply the bandages, but they barely help.
+  if (<def0.healing_bloody_bandage> == 1)	//do fail gives a bloody bandage if we're not healing through poison? 
+    if (<R1,100> <= <def0.healing_bloody_bandage_chance>)		//at what chance?
+      serv.newitem i_bandage_bloody
+      topobj.bounce <new>
+    endif
+  endif
+else
+  //PROFUSE BLEEDING
+  if (<link.findid.i_profusive_bleeding>) && (<R1,100> <= 80)	//80% chance
+    findid.i_profusive_bleeding.remove
+    if (<link> != <topobj>)
+      topobj.sysmessage You have healed the targets profuse bleeding!
+    endif
+    link.sysmessage Your wound is no longer bleeding profusely!
+  endif
+  //VICIOUS BITE
+  if (<link.findid.i_vicious_bite>) && (<R1,100> <= 80)	//80% chance
+    link.findid.i_vicious_bite.remove
+    if (<link> != <topobj>)
+      topobj.sysmessage You have healed the target's vicious bite!
+    endif
+    link.sysmessage Your vicious bite has been healed!
+  endif
+  //FESTERING WOUND
+  if (<link.findid.i_festering_wound>) && (<R1,100> <= 80)	//80% chance
+    findid.i_festering_wound.remove
+    if (<link> != <topobj>)
+      topobj.sysmessage You have healed the target's festering wound!
+    endif
+    link.sysmessage Your wound is no longer festering!
+  endif
+  //CURING
+  if (<link.flags>&statf_poisoned) && (<def0.healing_cure>)
+    local.cure_chance=<topobj.f_bandaging_cure_chance <link>>
+    if (<topobj.<qval <link.ishumanoid>?healing:veterinary>> < <def0.healing_cure>) || (<topobj.anatomy> < <def0.healing_cure>) || (<R1,100> > <local.cure_chance>)
+      topobj.sysmessage You failed to cure <qval <link>==<topobj>?yourself:<link.name>>
+      if !(<def0.healing_through_poison>) && (<def0.healing_bloody_bandage> == 1)	//do fail gives a bloody bandage if we're not healing through poison? 
+        if (<R1,100> <= <def0.healing_bloody_bandage_chance>)		//at what chance?
+          serv.newitem i_bandage_bloody
+          topobj.bounce <new>
+        endif
+      endif
+    else
+      link.consume i_rune_poison
+      if (<link> != <topobj>)
+        topobj.sysmessage You have cured the target of all poisons!
+      endif
+      link.sysmessage You have been cured of all poisons!
+    endif
+    if !(<def0.healing_through_poison>)	//can't heal through poison, stop here
+      remove
+      return 1
+    endif
+  //RESURRECTING
+  elseif (<link.flags>&statf_dead) && (<def0.healing_resurrect>)
+    local.resurrect_chance=<topobj.f_bandaging_resurrect_chance <link>>
+    //serv.log <local.resurrect_chance>
+    //serv.log (<topobj.<qval <link.ishumanoid>?healing:veterinary>> < <def0.healing_resurrect>) || (<topobj.anatomy> < <def0.healing_resurrect>) || (<R1,100> > <local.resurrect_chance>)
+    if (<topobj.<qval <link.ishumanoid>?healing:veterinary>> < <def0.healing_resurrect>) || (<topobj.anatomy> < <def0.healing_resurrect>) || (<R1,100> > <local.resurrect_chance>)	//resurrecting
+      topobj.sysmessage You failed to resurrect <link.name>.
+      if (<def0.healing_bloody_bandage> == 1)	//do we get bloody bandages on failing to resurrect
+        if (<R1,100> <= <def0.healing_bloody_bandage_chance>)		//at what chance do bloody bandages happen?
+          serv.newitem i_bandage_bloody
+          topobj.bounce <new>
+        endif
+      endif
+    else
+      link.resurrect
+      topobj.sysmessage You are able to resurrect your patient.
+    endif
+    remove
+    return 1
+  //HEALING
+  else
+    local.patient_damage=<eval (<link.maxhits>-<link.hits>)>
+    link.hits += <morex>
+    if (<link.hits> > <link.maxhits>)
+      local.overhealed=<eval (<link.hits>-<link.maxhits>)>
+      link.hits=<link.maxhits>
+    endif
+    local.damage_healed=<eval (<morex>-<local.overhealed>)>
+    if (<link.hits> == <link.maxhits>) 
+      topobj.sysmessage You heal what little damage your patient had.
+    elseif (<morex> <= 1)	
+      topobj.sysmessage You apply the bandages, but they barely help.
+      if (<def0.healing_bloody_bandage> == 1)	//do fail gives a bloody bandage if we're not healing through poison? 
+        if (<R1,100> <= <def0.healing_bloody_bandage_chance>)		//at what chance?
+          serv.newitem i_bandage_bloody
+        topobj.bounce <new>
+      endif
+    endif
+    else
+      topobj.sysmessage You finish applying the bandages.
+      //topobj.sysmessage Some damage was healed : <local.damage_healed>
+      //topobj.sysmessage you have healed <qval (<link>==<topobj>)?yourself:<link.name>> for <dlocal.damage_healed> health.
+    endif
+  endif
+endif
+if ((<color>) && (<def0.healing_bloody_bandage> == 1)) || (<def0.healing_bloody_bandage> == 2)		//do we get a bandage for success?
+  if (<R1,100> <= <def0.healing_bloody_bandage_chance>)			//what chance is it to get that bandage?
+    serv.newitem i_bandage_bloody
+    topobj.bounce <new>
+  endif
+endif
+topobj.skillgain <qval (<link.ishumanoid>)?anatomy:animallore>
+topobj.skillgain <qval (<link.ishumanoid>)?healing:veterinary>
+topobj.sound 057	
+remove
+return 1
+
+[typedef t_bandage_blood]
+
+on=@targon_char
+src.sysmessage You must use water to clean bloody bandages.
+return 1
+
+on=@targon_item
+if (<src.distance <src.targ>> >= 4)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <src.targ>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(<src.targ.type>==t_water) && !(<src.targ.type>==t_water_wash) && !(<src.targ.baseid>==i_pitcher_water) && !(<src.targ.baseid>==i_wash_basin) && !(<src.targ.baseid>==i_barrel_water) 
+  src.sysmessage You must use water to clean bloody bandages.
+  return 1
+endif
+src.sound 37
+src.sysmessage You clean the bloody bandages and place them in your pack.
+serv.newitem i_bandage,<amount>,<src.findlayer.21>
+remove
+
+on=@targon_ground
+if (<src.distance <src.targp>> >= 4)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <src.targp>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif (<argn1>) && !(<serv.itemdef.<argn1>.type>==t_water)
+  src.sysmessage You must use water to clean bloody bandages.
+  return 1
+endif
+src.sound 37
+src.sysmessage You clean the bloody bandages and place them in your pack.
+serv.newitem i_bandage,<amount>,<src.findlayer.21>
+remove
+
+[function bandageself]
+if (<flags>&statf_dead)
+  sysmessage You cannot do that right now.
+  return 1
+elseif (<flags>&statf_freeze) || (<flags>&statf_stone)
+  sysmessage You can't reach that.
+  return 1
+elseif !(<findid.i_bandage>)
+  sysmessage You do not have any clean bandages.
+  return 1 
+elseif (<hits> >= <maxhits>) && !(<flags>&statf_poisoned) 
+  sysmessage You do not require healing.
+  return 1
+elseif (<findid.i_applying_bandage>) && (<findid.i_applying_bandage.timer> != -1)
+  //sysmessage You must wait to perform another action.
+  //sysmessage You are already bandaging yourself.
+  sysmessage You are already applying a bandage.
+  return 1
+endif
+
+consume i_applying_bandage
+consume i_bandage
+sysmessage You begin applying a bandage
+//emote apply a bandage
+say @025,3,0,0 *applying bandage*
+events=+e_bandaging
+serv.newitem i_applying_bandage
+local.min_delay=90	//min delay for healing bandaging self
+new.timerd=<src.f_bandaging_delay <src>>
+new.timerd=<qval (<new.timderd> < <local.min_delay>)?<local.min_delay>:<new.timerd>>		//cannot exceed certain healing delays
+local.n=<eval ((<anatomy>/6)+(<healing>/6))+3>
+local.x=<eval ((<anatomy>/6)+(<healing>/3))+10>
+new.morex=<R<local.n>/10,<local.x>/10>
+new.link=<uid>
+equip <new>
+return 1
+
+[events e_bandaging]
+
+on=@gethit
+if (<findid.i_applying_bandage.isvalid>) 
+  if (<def0.healing_interrupt>)
+    consume i_applying_bandage
+    sysmessage Your healing was interrupted.
+  elseif (<def0.healing_fingers_slip>)
+    if ((<src.npc>) && (<argn1> >= <def0.healing_fingers_slip_pvm>)) || (!(<src.npc>) && (<argn1> >= <def0.healing_fingers_slip_pvp>))
+      findid.i_applying_bandage.morex -= <muldiv 33,<findid.i_applying_bandage.morex>,100>  
+      sysmessage Your fingers slip!
+    endif
+  endif
+endif
+
+[function f_bandaging_cure_chance]
+return 80	//remove this to use the below formula
+ref1=<args>	//char that is poisoned
+if (<ref1.isvalid>) 
+  local.x=<eval (((<healing>+<anatomy>)/10)-100)*25>
+  local.y=<eval (<ref1.poisonstrength>)*20)+1>
+  local.x=<eval <local.x>/<local.y>>
+  return <local.x>
+endif
+return 0
+
+[function f_bandaging_resurrect_chance]
+return 25
+
+[function f_bandaging_delay]
+ref1=<args>	//bandaging target
+if (<ref1.isvalid>)
+  if (<def0.healing_era>==1)	//T2A bandage delay
+    if (<ref1.findid.i_rune_posison>)	//poisoned
+      return <qval (<ref1>==<src>)?<def0.healing_self_cure_timer>:<def0.healing_other_cure_timer>>
+    elseif (<ref1.flags>&statf_dead)	//dead
+      return <def0.healing_res_timer>
+    else					//regular healing
+      return <qval (<ref1>==<src>)?<def0.healing_self_timer>:<def0.healing_other_timer>>
+    endif
+  elseif (<def0.healing_era>==2)	//Renaissance era bandage delay
+    //Formula: 8 Seconds + (0.5 Seconds * (120 - Dexterity / 10)
+    if (<ref1.flags>&statf_dead)	//dead
+      return=<eval (10-(<dex>/25))>
+    else				//all other bandaging
+      local.delay=<fval (80+(5*((120-<dex>)/10)))>
+      if (<ref1> != <src>)
+        local.delay /= 2
+      endif
+      return <local.delay>
+    endif
+  endif
+endif
+return 0
+
+[EOF]

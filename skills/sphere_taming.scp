@@ -1,0 +1,219 @@
+[SKILL 35]
+DEFNAME=Skill_Taming
+KEY=Taming
+TITLE=Animal Tamer
+FLAGS=skf_scripted 	//<-- this one can't be scripted or the strokes dont work right...
+PROMPT_MSG=Tame which animal?
+DELAY=12.0	//2.0
+STAT_STR=30
+STAT_INT=40
+STAT_DEX=125
+BONUS_STR=30
+BONUS_DEX=10
+BONUS_INT=60
+BONUS_STATS=20
+ADV_RATE=1.0,1.0,1.0    //10.0,200.0,800.0
+
+//http://web.archive.org/web/20000831175231fw_/http://uo.stratics.com/strat/tamer.shtml
+
+
+on=@start
+//act = target
+//actprv = none
+local.strokes=1
+if !(<act.isvalid>) 
+  return 1
+elseif (<src.distance <act>> > 5)
+  src.sysmessage That is too far away.
+  return 1
+elseif !(<src.canseelos <act>>)
+  src.sysmessage Target cannot be seen.
+  return 1
+elseif !(<act.f_can_tame>)
+  act.message That cannot be tamed.
+  return 1
+elseif (<act.owner>)
+  act.message That animal looks tame already.
+  return 1
+//elseif (<act.ownercount> >= 5)
+  //src.sysmessage This animal has had too many owners and is too upset for you to tame.
+  //return 1
+elseif (<act.taming> > 291) && (<src.taming> < <act.taming>)
+  act.message You have no chance of taming this creature.
+  return 1
+elseif (<act.tag0.faction>)
+  if !(<src.tag0.faction>) || (<src.tag0.faction> != <act.tag0.faction>)
+    src.sysmessage You cannot tame this creature.
+  endif
+elseif (<eval (<src.curfollower>+<act.controlslots>)> > <src.maxfollower>)
+  src.sysmessage You have too many followers to tame that creature.
+  return 1
+//elseif (<act.findid.i_taming_angered>)
+  //sysmessage That creature is too angry at the moment.
+  //return 1
+elseif (<act.ismonster>) && (<R20>)		//&& !(<act.findid.i_calmed>)  <--- this is incorrect to add this
+  act.message You seem to anger the beast.
+  //serv.newitem i_taming_angered
+  //new.timer=1
+  //act.equip <new>
+  //act.attack <src>
+  return 1
+endif
+
+local.chance=<src.f_taming_successchance <act>>
+if (<local.chance> < <R1,1000>) && !(<src.isgm>)
+  src.actdiff=65535
+else
+  src.actdiff=0
+endif
+
+act.f_irritatedby <src>		//needed for newbies trying to take advantage of young system
+src.consume i_taming
+serv.newitem i_taming
+new.link=<act>
+new.equip <src>
+src.message @058,3,0,0 *You start to tame the creature.*
+
+ON=@Fail
+src.consume i_taming
+src.sysmessage You fail to tame the creature.
+
+ON=@Abort
+src.consume i_taming
+src.sysmessage You give up trying to tame the creature.
+src.timerf stop,f_taming_talk
+
+on=@success
+if !(<act.isvalid>) || !(<act.ischar>) 
+  action=-1
+  return 1
+endif
+act.setowner <src>
+args=<act.tag0.recent_owners>
+if !(<args>) && (<act.isvalid>) && (<act.findlayer.21.isvalid>)	//if it never had previous owners remove items in it's backpack
+  act.findlayer.21.remove
+  serv.newitem i_backpack
+  act.equip <new>
+endif
+if (<argv[0]>==<src>)
+  act.message It remembers you and accepts you once more as it's master.
+else
+  act.message It seems to accept you as master.	  
+endif
+if (<act.f_tamedby <src>> > 5) how many times has this char tamed the pet?
+  src.sysmessage That wasn't even challenging.
+endif
+act.tag0.recent_owners=<src>,<argv[0]>,<argv[1]>,<argv[2]>,<argv[3]>
+
+on=@gain
+src.skillgain animallore
+local.chance=<src.f_taming_successchance <act>>
+if (<local.chance> >= 1000) 
+  //src.sysmessage That wasn't even challenging
+  //return 1
+elseif !(<act.isvalid>) || (<act.f_tamedby <src>> > 3)
+  //src.sysmessage That wasn't even challenging 
+  return 1
+endif
+
+[function f_taming_minskill]	
+local.minskill=<taming>
+local.owners=<ownercount>
+local.minskill += <eval (<local.owners>*60)>
+return <local.minskill>
+
+[function f_taming_successchance]	//args = target obj
+ref1=<args>	//npc we're taming
+local.skillvalue=<taming>
+local.minskill=<ref1.f_taming_minskill>
+local.success=<eval (((<local.skillvalue>-<local.minskill>)+1)*2)>
+return <local.success>
+
+[itemdef i_taming]
+name=Taming
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@create
+more1=4
+timer=3
+
+on=@timer
+if (<more1> <= 0) || !(<topobj.isvalid>) || !(<topobj.ischar>) || !(<topobj.isonline>)
+  remove
+  return 1
+elseif (<link.isvalid>) && (<topobj.distance <link>> > 5)
+  topobj.sysmessage That is too far away.
+  topobj.action=-1
+  remove
+  return 1
+elseif !(<topobj.canseelos <link>>)
+  topobj.sysmessage Target cannot be seen.
+  topobj.action=-1
+  remove
+  return 1
+elseif (<link.owner>) && (<link.owner> != <topobj>)
+  trysrc <topobj> link.message That animal looks tame already.
+  topobj.action=-1
+  remove
+  return 1
+endif
+
+topobj.f_taming_talk
+
+more1 -= 1
+timer=3
+return 1
+
+[function f_taming_talk]
+dorand 11
+  say Come here...
+  say I promise to take good care of you.
+  say Here...
+  say Don't be afraid.
+  say It would be mutually beneficial if we were to join forces.
+  say I've always wanted a pet like you.
+  say I've been searching for a companion like you. 
+  say Nice...
+  say If you accompany me, we will protect one another.
+  say Will you travel with me noble creature?
+  say I can protect you from the dangers of this world.
+enddo
+
+[function f_tamedby]	
+ref1=<args>	//the player
+args=<tag0.recent_owners>
+for n 0 <eval (<argv>-1)>
+  if !(<isempty <argv[<dlocal.n>]>>) && (<argv[<dlocal.n>]> != 0)
+    if (<argv[<dlocal.n>]>==<ref1>)
+      local.x += 1
+    endif
+  endif
+endfor
+return <local.x>
+
+[function f_can_tame]
+if (<isitem>) 
+  return 0
+elseif (<isplayer>) || (<ishumanoid>) || (<flags>&statf_invul) || (<flags>&statf_invisible) || (<flags>&statf_sleeping) || (<flags>&statf_stone) || (<flags>&statf_hidden) || (<flags>&statf_conjured)
+  return 0
+elseif ((<npc>==brain_monster) || (<npc>==brain_dragon) || (<npc>==brain_animal)) && (<taming> <= 0)
+  return 0
+elseif (<isevent.e_champion_spawn_monster>) || (<isevent.e_champion_boss>)
+  return 0
+endif
+return 1
+
+[itemdef i_taming_angered]
+defname=i_taming_angered
+name=Angered by Tamer
+id=i_memory
+type=t_eq_script
+layer=layer_special
+
+on=@timer
+remove
+return 1
+
+[EOF]

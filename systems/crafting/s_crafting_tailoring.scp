@@ -1,0 +1,284 @@
+
+[defname crafting_Tailoring]
+crafting_Tailoring_flags 	02|04|08		//01=recycle 02=repair 04=exceptional 08=mark 010=enchance 020=experience 040=equip tool
+crafting_tailoring_anim 	33
+crafting_tailoring_sound	0248,0
+crafting_tailoring_sound2	0
+crafting_tailoring_tool		t_tool_tailoring
+
+
+crafting_tailoring_resource0	i_hides_cut
+crafting_tailoring_resource0_0	i_hides_cut
+crafting_tailoring_resource0_1	i_hides_cut_spined		
+crafting_tailoring_resource0_2	i_hides_cut_horned		
+crafting_tailoring_resource0_3	i_hides_cut_barbed
+crafting_tailoring_resource0_4
+
+crafting_tailoring_resource1	i_reag_bone
+crafting_tailoring_resource1_0  i_reag_bone
+crafting_tailoring_resource1_1	i_reag_bone_haunted	//skeletons, bone knights, bone mages
+crafting_tailoring_resource1_2	i_reag_bone_brutish	//orcs, lizardman, ratman
+crafting_tailoring_resource1_3	i_reag_bone_giants	//trolls, ogres, ettins
+crafting_tailoring_resource1_4	
+
+//crafting_tailoring_resource2	i_cloth
+//crafting_tailoring_resource2_0	i_cloth
+//crafting_tailoring_resource2_1	i_cloth_weaved_amber
+//crafting_tailoring_resource2_2	i_cloth_weaved_citrine
+//crafting_tailoring_resource2_3	i_cloth_weaved_ruby
+//crafting_tailoring_resource2_4	i_cloth_weaved_tourmaline
+//crafting_tailoring_resource2_5	i_cloth_weaved_amethyst
+//crafting_tailoring_resource2_6	i_cloth_weaved_emerald
+//crafting_tailoring_resource2_7	i_cloth_weaved_sapphire
+//crafting_tailoring_resource2_8	i_cloth_weaved_star_sapphire
+//crafting_tailoring_resource2_9	i_cloth_weaved_diamond
+
+crafting_tailoring_0_name LAST TEN		//this will be generated as people craft
+
+crafting_tailoring_1_name FOOTWEAR
+crafting_tailoring_1_resource_replace	1
+crafting_tailoring_1_0 i_sandals
+crafting_tailoring_1_1 i_shoes_plain
+crafting_tailoring_1_2 i_boots_calf
+crafting_tailoring_1_3 i_boots_thigh
+
+crafting_tailoring_2_name SHIRTS
+crafting_tailoring_2_resource_replace	1
+crafting_tailoring_2_0 i_shirt_plain
+crafting_tailoring_2_1 i_shirt_fancy
+crafting_tailoring_2_2 i_doublet
+crafting_tailoring_2_3 i_jester_suit
+crafting_tailoring_2_4 i_tunic
+crafting_tailoring_2_5 i_surcoat
+crafting_tailoring_2_6 i_robe
+crafting_tailoring_2_7 i_dress_plain
+crafting_tailoring_2_8 i_dress_full
+crafting_tailoring_2_9 i_cape
+crafting_tailoring_2_10 i_sash
+crafting_tailoring_2_11 i_hooded_shroud
+
+crafting_tailoring_3_name LEGWEAR
+crafting_tailoring_3_resource_replace	1
+crafting_tailoring_3_0 i_pants_short
+crafting_tailoring_3_1 i_pants_long
+crafting_tailoring_3_2 i_skirt_long
+crafting_tailoring_3_3 i_kilt
+
+crafting_tailoring_4_name HEADGEAR
+crafting_tailoring_4_resource_replace	1
+crafting_tailoring_4_0 i_bandana
+crafting_tailoring_4_1 i_skull_cap
+crafting_tailoring_4_2 i_hat_floppy
+crafting_tailoring_4_3 i_hat_wide_brim
+crafting_tailoring_4_4 i_hat_feather
+crafting_tailoring_4_5 i_hat_tricorne
+crafting_tailoring_4_6 i_hat_straw_tall
+crafting_tailoring_4_7 i_hat_straw
+crafting_tailoring_4_8 i_bonnet
+crafting_tailoring_4_9 i_hat_jester
+crafting_tailoring_4_10 i_hat_wizards
+crafting_tailoring_4_11 i_mask_blue
+crafting_tailoring_4_12 i_mask_tribal_red
+
+crafting_tailoring_5_name MISC
+crafting_tailoring_5_resource_replace	1
+crafting_tailoring_5_0 i_apron_half
+crafting_tailoring_5_1 i_apron_full
+crafting_tailoring_5_2 i_cloth_oil
+
+crafting_tailoring_6_name CONTAINERS
+crafting_tailoring_6_0 i_pouch
+crafting_tailoring_6_1 i_bag
+crafting_tailoring_6_2 i_backpack
+crafting_tailoring_6_3 i_basket_2
+crafting_tailoring_6_4 i_basket
+crafting_tailoring_6_5 i_basket_square
+crafting_tailoring_6_6 i_basket_bushel
+
+crafting_tailoring_7_name LEATHER
+crafting_tailoring_7_resource_replace	1
+crafting_tailoring_7_0 i_leather_cap
+crafting_tailoring_7_1 i_leather_gorget
+crafting_tailoring_7_2 i_leather_sleeves
+crafting_tailoring_7_3 i_leather_tunic
+crafting_tailoring_7_4 i_leather_gloves
+crafting_tailoring_7_5 i_leather_leggings
+crafting_tailoring_7_6 i_armor_female_shorts
+crafting_tailoring_7_7 i_armor_female_leather
+crafting_tailoring_7_8 i_armor_female_skirt
+crafting_tailoring_7_9 i_armor_female_bustier
+
+crafting_tailoring_8_name STUDDED
+crafting_tailoring_8_resource_replace	1
+crafting_tailoring_8_0 i_studded_gloves
+crafting_tailoring_8_1 i_studded_gorget
+crafting_tailoring_8_2 i_studded_sleeves
+crafting_tailoring_8_3 i_studded_tunic
+crafting_tailoring_8_4 i_studded_leggings
+crafting_tailoring_8_5 i_armor_female_bustier_studded
+crafting_tailoring_8_6 i_armor_female_studded
+
+crafting_tailoring_9_name BONE
+crafting_tailoring_9_resource_replace	1
+crafting_tailoring_9_0 i_bone_gloves
+crafting_tailoring_9_1 i_bone_arms
+crafting_tailoring_9_2 i_bone_chest
+crafting_tailoring_9_3 i_bone_leggings
+crafting_tailoring_9_4 i_bone_helmet
+
+crafting_tailoring_10_name //WEAVED CLOTH
+crafting_tailoring_10_0 //i_cloth_weaved_amber
+crafting_tailoring_10_1 //i_cloth_weaved_citrine
+crafting_tailoring_10_2 //i_cloth_weaved_ruby
+crafting_tailoring_10_3 //i_cloth_weaved_tourmaline
+crafting_tailoring_10_4 //i_cloth_weaved_emerald
+crafting_tailoring_10_5 //i_cloth_weaved_amethyst
+crafting_tailoring_10_6 //i_cloth_weaved_sapphire
+crafting_tailoring_10_7 //i_cloth_weaved_star_sapphire
+crafting_tailoring_10_8 //i_cloth_weaved_diamond
+
+////////////////////////////
+// Apply Gemmed Cloth Attrs
+
+[function f_tailoring_apply_i_cloth]
+
+[function f_tailoring_apply_i_cloth_weaved_amber]
+ref1=<args>
+name=amber weaved <name>
+color=color_cloth_weaved_amber
+modar=1
+maxhits += 2
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_amber
+
+[function f_tailoring_apply_i_cloth_weaved_citrine]
+ref1=<args>
+name=citrine weaved <name>
+color=color_cloth_weaved_citrine
+modar=2
+maxhits += 4
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_citrine
+
+[function f_tailoring_apply_i_cloth_weaved_ruby]
+ref1=<args>
+name=ruby weaved <name>
+color=color_cloth_weaved_ruby
+modar=3
+maxhits += 6
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_ruby
+
+[function f_tailoring_apply_i_cloth_weaved_tourmaline]
+ref1=<args>
+name=tourmaline weaved <name>
+color=color_cloth_weaved_tourmaline
+modar=4
+maxhits += 8
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_tourmaline
+
+[function f_tailoring_apply_i_cloth_weaved_amethyst]
+ref1=<args>
+name=amethyst weaved <name>
+color=color_cloth_weaved_amethyst
+modar=5
+maxhits += 10
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_amethyst
+
+[function f_tailoring_apply_i_cloth_weaved_emerald]
+ref1=<args>
+name=emerald weaved <name>
+color=color_cloth_weaved_emerald
+modar=6
+maxhits += 12
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_emerald
+
+[function f_tailoring_apply_i_cloth_weaved_sapphire]
+ref1=<args>
+name=sapphire weaved <name>
+color=color_cloth_weaved_sapphire
+modar=7
+maxhits += 14
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_sapphire
+
+[function f_tailoring_apply_i_cloth_weaved_star_sapphire]
+ref1=<args>
+name=star_sapphire weaved <name>
+color=color_cloth_weaved_star_sapphire
+modar=8
+maxhits += 16
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_star_sapphire
+
+[function f_tailoring_apply_i_cloth_weaved_diamond]
+ref1=<args>
+name=diamond weaved <name>
+color=color_cloth_weaved_diamond
+modar=9
+maxhits += 18
+hits=<maxhits>
+tag.matoverride_i_cloth=i_cloth_weaved_diamond
+
+
+////////////////////////////
+// Apply Hide Attrs
+
+[function f_tailoring_apply_i_hides_cut]
+
+[function f_tailoring_apply_i_hide]
+
+[function f_tailoring_apply_i_hides_cut_spined]
+name=spined <name>
+color=color_h_spined
+modar += 6
+maxhits += 16
+hits=<maxhits>
+tag.matoverride_i_hides_cut=i_hides_cut_spined
+
+[function f_tailoring_apply_i_hide_spined]
+f_tailoring_apply_i_hides_cut_spined
+
+[function f_tailoring_apply_i_hides_cut_horned]
+name=horned <name>
+color=color_h_horned
+modar += 14
+maxhits += 32
+hits=<maxhits>
+tag.matoverride_i_hides_cut=i_hides_cut_horned
+
+[function f_tailoring_apply_i_hide_horned]
+f_tailoring_apply_i_hides_cut_horned
+
+[function f_tailoring_apply_i_hides_cut_barbed]
+name=barbed <name>
+color=color_h_barbed
+modar += 22
+maxhits += 48
+hits=<maxhits>
+tag.matoverride_i_hides_cut=i_hides_cut_barbed
+
+[function f_tailoring_apply_i_hide_barbed]
+f_tailoring_apply_i_hides_cut_barbed
+
+///////////////////////////////
+// Tailoring Post Craft
+
+[function f_tailoring_prerequisite]
+return 1	//can always tailor
+
+[function f_tailoring_pre_craft]
+
+[function f_tailoring_post_craft]
+//if (<tag0.crafting_details>)		//take us back to the details menu if that's where clicked from
+  //topobj.sdialog d_crafting_menu_details	
+//else
+  //topobj.sdialog d_crafting_menu <topobj.ctag0.crafting_lastpage>
+//endif
+
+
+
+[EOF]

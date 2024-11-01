@@ -1,0 +1,22 @@
+[itemdef 02683]
+defname=i_hooded_shroud
+name=Hooded Shroud
+weight=1
+type=t_clothing
+layer=layer_robe
+dupelist=02684
+skillmake=tailoring 90.0, i_sewing_kit 
+resources=20 i_cloth,1 i_thread 
+
+category=GM Items
+subsection=Shrouds
+description=Hooded Shroud
+
+on=@create
+color=0455
+hitpoints {25 75}
+
+[itemdef 02684]
+dupeitem=02683
+
+[EOF]
